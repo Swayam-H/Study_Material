@@ -951,22 +951,22 @@ which is decreasing for $x\ge5$, so $c = \frac{f(5)}{g(5)} = \frac53$. Accept if
 
 # Lecture 17: Sure and almost sure convergence, the SLLN and the sample mean (Deck B, slides 11 to 19)
 
-**Big picture.** L16 ended with a question: what should "$X_n\to X$" mean when every $X_n$ is random? For numbers and for functions we already know what convergence means. The trick of this lecture is to reuse that knowledge, by remembering one fact from L1:
+**Where we are.** L16 left us with a question: what does "$X_n\to X$" even mean when every $X_n$ is random? We already know what convergence means for numbers and for functions. The good news is that we can just reuse that, because of one fact from L1:
 
-> A random variable is just a **function** $X:\Omega\to\mathbb R$. The randomness is all in *which* outcome $\omega$ nature picks.
+> A random variable is just a **function** $X:\Omega\to\mathbb R$. All the randomness is in which $\omega$ gets picked.
 
-So once nature picks $\omega$, the whole sequence $X_1(\omega), X_2(\omega), X_3(\omega),\dots$ is an ordinary sequence of numbers, and we can ask whether it converges. This lecture gives the two answers that work **outcome by outcome**:
+So once $\omega$ is fixed, $X_1(\omega), X_2(\omega), X_3(\omega),\dots$ is a plain old sequence of numbers, and we can ask if it converges. We'll call this sequence the **path** of $\omega$.
 
-- **Sure convergence:** the sequence of numbers converges to $X(\omega)$ for *every* outcome $\omega$.
-- **Almost sure convergence:** it converges for all outcomes except a set of *probability 0*.
+This lecture gives two ways of using that idea:
 
-Then come three things built on these ideas:
+- **Sure convergence:** the path converges to $X(\omega)$ for *every* $\omega$.
+- **Almost sure convergence:** the path converges for every $\omega$ except a set of $\omega$'s with *probability 0*.
 
-1. The headline example, the **strong law of large numbers** (SLLN). It is the theorem behind Monte Carlo (L15) and behind using the sample mean as an estimator.
-2. The main tool for proving almost sure convergence, the **Borel–Cantelli** criterion.
-3. A warning: almost sure convergence does **not** force the means $E[X_n]$ to converge.
+After that we get:
 
-A picture worth keeping in mind for the whole lecture: think of each $\omega$ as one "universe" or one run of an experiment. Each universe produces its own path $n\mapsto X_n(\omega)$. Sure convergence asks every path to converge. Almost sure convergence lets a few paths misbehave, as long as together those paths carry no probability.
+1. the **strong law of large numbers** (SLLN), the big example of almost sure convergence, which is also why Monte Carlo (L15) works;
+2. the **Borel–Cantelli** criterion, the main tool for proving almost sure convergence;
+3. a warning: almost sure convergence does **not** make $E[X_n]$ converge.
 
 ## Part A: the slides
 
@@ -974,74 +974,71 @@ A picture worth keeping in mind for the whole lecture: think of each $\omega$ as
 
 > **On the slide.** Convergence of $X_n\to X$. $X$ could even be a deterministic number. The $X_n$'s could be dependent on each other. Each $X_n$ could have a different law (pmf/pdf).
 
-This repeats the last slide of L16 (see the examples there). The three bullets are warnings about how general the setting is:
+Same as the last slide of L16 (examples there). The point of the three bullets is that the setting is very general:
 
-- **The limit may be a constant.** Most famous limits are constants: the SLLN limit is the number $\mu$. A constant $c$ is still a random variable, namely the function $X(\omega) = c$ for every $\omega$.
-- **The $X_n$ may be dependent.** In fact they usually are. For example $\hat\mu_n$ and $\hat\mu_{n+1}$ share $n$ of their data points. So no theorem in this lecture may quietly assume independence unless it says so.
-- **The laws may change with $n$.** For example $X_n\sim\mathcal N(0, \frac1n)$ gets narrower with $n$.
+- The limit can be a constant. In fact it usually is: in the SLLN the limit is the number $\mu$. A constant $c$ is still a random variable, it's just the function that equals $c$ for every $\omega$.
+- The $X_n$ can depend on each other, and usually do. For example $\hat\mu_n$ and $\hat\mu_{n+1}$ share $n$ data points. So don't assume independence unless a theorem says so.
+- Each $X_n$ can have its own distribution, like $X_n\sim\mathcal N(0,\frac1n)$, which gets narrower as $n$ grows.
 
-One thing is *not* allowed to vary: all the $X_n$ and $X$ live on the **same** sample space $\Omega$. Without that, "$X_n(\omega)$ versus $X(\omega)$" would make no sense. (L18's convergence in distribution is the one mode that drops this requirement.)
+What can't change: all the $X_n$ and $X$ live on the **same** $\Omega$. Otherwise comparing $X_n(\omega)$ with $X(\omega)$ makes no sense. (Convergence in distribution in L18 is the one mode that drops this.)
 
 ### Slide 12/30: Pointwise or sure convergence
 
 > **On the slide.** *$\{X_n, n\ge0\}$ converges to $X$ pointwise or surely if for all $\omega\in\Omega$ we have $\lim_{n\to\infty}X_n(\omega) = X(\omega)$.* Example: $\Omega = \{H, T\}$,
 > $$X_n = \begin{cases}\frac1n & \text{if }\omega = H\\ 1 + \frac1n & \text{if } \omega = T\end{cases}\qquad\text{and}\qquad X = \begin{cases}0 & \text{if } \omega = H\\ 1 & \text{if }\omega = T.\end{cases}$$
 
-**The idea.** This is slide 8 of L16 (pointwise convergence of functions) applied to the functions $X_n:\Omega\to\mathbb R$. Fix an outcome, look at the sequence of numbers it produces, and check that it converges to the right number. Do this for every outcome.
+This is just pointwise convergence of functions (L16 slide 8), where the functions happen to be $X_n:\Omega\to\mathbb R$. Fix $\omega$, look at its path, check it goes to $X(\omega)$. Do that for every $\omega$.
 
-Written with $\epsilon$ and $N$, as in L16:
-$$\text{for every }\omega\in\Omega\text{ and every }\epsilon>0,\ \text{there is } N(\epsilon,\omega)\text{ with } |X_n(\omega) - X(\omega)|<\epsilon\ \text{for all } n>N(\epsilon,\omega).$$
-The $N$ is allowed to depend on $\omega$, exactly as in pointwise convergence of functions.
+In $\epsilon$–$N$ form:
+$$\text{for every }\omega\in\Omega\text{ and every }\epsilon>0,\ \exists\, N(\epsilon,\omega)\text{ such that } |X_n(\omega) - X(\omega)|<\epsilon\ \text{for all } n>N(\epsilon,\omega).$$
+$N$ is allowed to depend on $\omega$, same as pointwise convergence of functions.
 
-**Probability plays no role.** Notice that $P$ does not appear anywhere in the definition. It is a statement about functions only. That is the reason for the name "sure": no matter what happens, the sequence converges.
+Notice that $P$ doesn't show up anywhere in this definition. It's purely about functions. That's why it's called "sure": whatever outcome you get, the path converges.
 
-**The example.** One coin toss decides everything, and there are only two outcomes, so we can check both by hand.
+**The example.** One toss decides everything, and there are only two outcomes, so just check both.
 
-- **If $\omega = H$:** the realized sequence is $1, \frac12, \frac13, \dots$, which tends to $0 = X(H)$. ✓
-- **If $\omega = T$:** the realized sequence is $2, \frac32, \frac43, \dots$, which tends to $1 = X(T)$. ✓
+- $\omega = H$: the path is $1, \frac12, \frac13, \dots\to0 = X(H)$. ✓
+- $\omega = T$: the path is $2, \frac32, \frac43, \dots\to1 = X(T)$. ✓
 
-Every outcome gives a sequence converging to the right limit, so $X_n\to X$ surely.
+Both paths converge to the right value, so $X_n\to X$ surely.
 
-**Even uniform.** Here $|X_n(\omega) - X(\omega)| = \frac1n$ for *both* outcomes, so the same $N = \frac1\epsilon$ works for every $\omega$. The convergence is uniform on $\Omega$ (L16 slide 9).
+It's actually even uniform: $|X_n(\omega) - X(\omega)| = \frac1n$ for both outcomes, so $N = \frac1\epsilon$ works for every $\omega$ (L16 slide 9).
 
-**Note the structure.** $X_n = X + \frac1n$. The randomness is decided once, by the toss, and after that the sequence slides deterministically towards $X$. Whether the coin is fair, or lands heads with probability $0.999$, changes nothing. This is a second way to see that sure convergence ignores probabilities.
+Also notice $X_n = X + \frac1n$. The toss happens once, and after that the path just slides towards $X$. It doesn't matter at all whether the coin is fair. Another way to see that sure convergence doesn't care about probabilities.
 
 ### Slide 13/30: Almost sure convergence
 
 > **On the slide.** *$X_n$ converges to $X$ almost surely if $P\big(\omega\in\Omega: \lim_{n\to\infty}X_n(\omega) = X(\omega)\big) = 1$.* The set of outcomes where convergence does not happen has measure 0: $P\{\omega\in\Omega:\lim_n X_n(\omega)\ne X(\omega)\} = 0$. Example: $\Omega = [0,1]$, pick a number uniformly in $[0,1]$. Let $X_n(\omega) = \omega^n$ and $X(\omega) = 0$ for all $\omega$. $X_n(\omega)\to X(\omega)$ for $\omega\in[0,1)$. $X_n(\omega)\not\to X(\omega)$ for $\omega = 1$, and $\mathbb P\{\omega = 1\}$ [$= 0$]. This is almost sure convergence as $\mathbb P\{[0,1)\} = 1$.
 
-(The slide's line "and $\mathbb P\{\omega = 1\}$" is missing "$= 0$".)
+(The slide is missing "$= 0$" after $\mathbb P\{\omega = 1\}$.)
 
-**Why we need something weaker than sure.** Sure convergence is too strict for probability. A single strange outcome, one that will essentially never occur, can ruin it. Almost sure convergence says: let such outcomes misbehave, as long as their total probability is zero.
+Sure convergence is too strict. One weird $\omega$ that basically never happens can break it. Almost sure convergence fixes this: some paths are allowed to misbehave, as long as all of them together have probability 0.
 
-**Reading the definition.** Collect all the "lucky" outcomes, the ones whose path converges to the right limit, into one event:
+Put all the "good" $\omega$'s (the ones whose path converges to the right thing) into one set:
 $$C = \{\omega : X_n(\omega)\to X(\omega)\}.$$
 Then
 $$\boxed{X_n\xrightarrow{a.s.}X\quad\iff\quad P(C) = 1\quad\iff\quad P(C^c) = 0}$$
-Unlucky outcomes ($C^c$) may exist. They just carry no probability. Other names and notation: $X_n\to X$ *with probability 1* (w.p.1), or *a.s.*
+Bad $\omega$'s can exist, they just have no probability. You'll also see this written as "with probability 1" (w.p.1) or just "a.s.".
 
-**The example, step by step.** This is the function $x^n$ from L16 slide 8, now viewed as a random variable: nature picks $\omega$ uniformly in $[0,1]$, and $X_n(\omega) = \omega^n$.
+**The example.** It's $x^n$ from L16 slide 8, except now $\omega$ is picked uniformly from $[0,1]$ and $X_n(\omega) = \omega^n$.
 
-- **If $\omega\in[0,1)$:** $\omega^n\to0$, because a number of size less than 1 shrinks geometrically when you keep multiplying it by itself. For example $\omega = 0.9$ gives $0.9, 0.81, 0.729,\dots\to0$. These outcomes are lucky.
-- **If $\omega = 1$:** $1^n = 1$ for every $n$, which does not tend to 0. This outcome is unlucky.
-- **So** $C = [0,1)$. Under the uniform distribution a single point has probability 0, so $P(C) = 1 - P(\{1\}) = 1 - 0 = 1$.
+- $\omega\in[0,1)$: $\omega^n\to0$, since a number below 1 keeps shrinking when you multiply it by itself (e.g. $0.9, 0.81, 0.729, \dots$). Good.
+- $\omega = 1$: $1^n = 1$ forever, never gets to 0. Bad.
+- So $C = [0,1)$, and since a single point has probability 0 under the uniform, $P(C) = 1 - 0 = 1$.
 
-Hence $X_n\xrightarrow{a.s.}0$. But $X_n$ does **not** converge to 0 surely, because of the single outcome $\omega = 1$.
+So $X_n\xrightarrow{a.s.}0$, but **not** surely, because of $\omega = 1$.
 
-**Sure versus almost sure.**
+**Sure vs almost sure.** Sure $\Rightarrow$ almost sure (if every $\omega$ is good, $C = \Omega$ and $P(\Omega) = 1$). The converse is false (the example above).
 
-- **Sure $\Rightarrow$ almost sure.** If every outcome is lucky then $C = \Omega$, and $P(\Omega) = 1$.
-- **Almost sure $\not\Rightarrow$ sure.** The example above.
+In probability we basically always use almost sure. If you change a random variable on a probability-0 set, no probability, expectation or distribution changes. So caring about those sets would mean caring about something you can't even detect. That's why sure convergence pretty much disappears after this slide.
 
-In probability, almost sure is the natural notion. Changing random variables on an event of probability 0 changes no probability, no expectation and no distribution, so a theory that cared about such events would be caring about something invisible. That is why sure convergence is rarely used after this slide.
-
-**A useful equivalent form (needed on slide 18).** What does "the path converges" mean for one $\omega$? By the $\epsilon$–$N$ definition: for every $\epsilon>0$, the path is within $\epsilon$ of $X(\omega)$ from some time on. So
+**Another way to write it (we need this on slide 18).** For a single $\omega$, "the path converges" means: for every $\epsilon>0$, the path is within $\epsilon$ of $X(\omega)$ from some point on. So
 $$X_n\xrightarrow{a.s.}X\iff\text{with probability 1, for every } \epsilon>0,\ |X_n - X|<\epsilon\ \text{for all large enough } n.$$
-Turn it around and look at the bad events $E_n(\epsilon) = \{|X_n - X|\ge\epsilon\}$. "Within $\epsilon$ for all large $n$" means "only finitely many $E_n(\epsilon)$ happen". So, equivalently,
+Now flip it and look at the bad events $E_n(\epsilon) = \{|X_n - X|\ge\epsilon\}$. "Within $\epsilon$ for all large $n$" is the same as "only finitely many $E_n(\epsilon)$ happen". So:
 $$X_n\xrightarrow{a.s.}X\iff\text{for each }\epsilon>0,\quad P\big(E_n(\epsilon)\ \text{happens for infinitely many } n\big) = 0 .$$
-(The step "for every $\epsilon$" can be moved outside the probability because it is enough to check the countably many values $\epsilon = 1, \frac12, \frac13,\dots$, and a countable union of probability-0 events still has probability 0. Slide 18 uses exactly this.)
+(Why can "for every $\epsilon$" move outside the $P$? It's enough to check $\epsilon = 1, \frac12, \frac13,\dots$, which is countably many, and a countable union of probability-0 sets still has probability 0. Slide 18 uses exactly this trick.)
 
-So almost sure convergence is about the **whole tail of the path**: deviations of size $\epsilon$ must eventually stop *for good*. Keep this in mind, because L18's convergence in probability only asks that deviations become *rare at each fixed time*, which is weaker.
+So a.s. convergence is about the **entire tail** of the path: the $\epsilon$-sized mistakes have to stop *for good*. Remember this, because convergence in probability in L18 only asks that mistakes get *rare at each fixed $n$*, which is weaker.
 
 ### Slide 14/30: Example 2, the strong law of large numbers
 
@@ -1049,62 +1046,62 @@ So almost sure convergence is about the **whole tail of the path**: deviations o
 
 $$\boxed{X_1, X_2, \dots \text{ i.i.d.},\ E|X_1|<\infty,\ \mu = E[X_1]\quad\Longrightarrow\quad\hat\mu_n = \frac{S_n}{n}\xrightarrow{a.s.}\mu}$$
 
-**In words.** Average more and more i.i.d. copies of a random quantity, and the running average settles down to the true mean, along essentially every possible run of the experiment.
+So: keep averaging i.i.d. copies and the running average settles at the true mean, on basically every path.
 
-**The exact hypothesis.** The mean must exist and be finite, $E|X_1|<\infty$. No finite variance is needed for the theorem (the short proof in B12 below assumes more, which makes the proof easier, not the theorem truer).
+The exact condition is that the mean is finite, $E|X_1|<\infty$. You don't need a finite variance. (The short proof in B12 assumes more than that, but only to make the proof easier.)
 
-**What is $\omega$ and $\Omega$? (the blue question).** This question is the heart of the slide. The SLLN talks about the limit of $\frac{S_n}{n}$ as $n\to\infty$, so it is a statement about the **whole infinite sequence** of tosses. An outcome must therefore record all of them, not just one toss.
+**What are $\omega$ and $\Omega$? (the blue question).** This is the important part of the slide. The SLLN is about $\frac{S_n}{n}$ as $n\to\infty$, so it's a statement about the **whole infinite sequence** of tosses. That means one outcome has to be the entire infinite sequence, not one toss.
 
-- **An outcome $\omega$** is one infinite sequence of tosses, for example $\omega = (H, T, T, H, H, \dots)$.
-- **The sample space** is the set of all such sequences:
+- One outcome is an infinite sequence of tosses, like $\omega = (H, T, T, H, H, \dots)$.
+- The sample space is all such sequences:
 $$\Omega = \{H, T\}^{\mathbb N} = \{(\omega_1, \omega_2, \dots) : \omega_i\in\{H, T\}\}.$$
-This set is uncountable (like the binary expansions of numbers in $[0,1]$).
-- **The random variables** just read off coordinates: $X_i(\omega) = 1$ if $\omega_i = H$, and $0$ otherwise. Then $S_n(\omega)$ is the number of $H$'s among the first $n$ coordinates, and $\frac{S_n(\omega)}{n}$ is the fraction of heads so far.
+This is uncountable (same idea as binary expansions of numbers in $[0,1]$).
+- The random variables just read off the coordinates: $X_i(\omega) = 1$ if $\omega_i = H$, else $0$. So $S_n(\omega)$ = number of $H$'s in the first $n$ spots, and $\frac{S_n(\omega)}{n}$ = fraction of heads so far.
 
-With this set-up, the SLLN says precisely
-$$P\Big(\Big\{\omega : \frac{S_n(\omega)}{n}\to\mu\Big\}\Big) = 1 .$$
-That is the definition of slide 13, with $X_n$ replaced by $\frac{S_n}{n}$ and $X$ by the constant $\mu$.
+With this, the SLLN says exactly
+$$P\Big(\Big\{\omega : \frac{S_n(\omega)}{n}\to\mu\Big\}\Big) = 1 ,$$
+which is slide 13's definition with $\frac{S_n}{n}$ in place of $X_n$ and the constant $\mu$ in place of $X$.
 
-**The unlucky outcomes.** They really exist.
+**Bad $\omega$'s do exist.**
 
-- $\omega = (H, H, H, \dots)$ has $\frac{S_n}{n} = 1$ for every $n$. So it is unlucky whenever $\mu<1$.
-- The block sequence from L16 (blocks of $H$'s and $T$'s whose lengths keep doubling) makes $\frac{S_n}{n}$ swing up and down forever, so it has no limit at all.
+- $\omega = (H, H, H, \dots)$ gives $\frac{S_n}{n} = 1$ for all $n$. Bad whenever $\mu<1$.
+- The block sequence from L16 (blocks of $H$'s and $T$'s with doubling lengths) makes $\frac{S_n}{n}$ swing up and down forever, so no limit at all.
 
-In fact there are uncountably many unlucky sequences, and yet their total probability is 0.
+There are actually uncountably many bad sequences. Their total probability is still 0.
 
-**"Probability 0" does not mean "impossible".** For $0<\mu<1$, *every* single sequence has probability 0. Reason: the probability that the first $n$ tosses match a given pattern is a product of $n$ factors, each at most $\max(\mu, 1-\mu)<1$, so it is at most $\max(\mu, 1-\mu)^n\to0$. So the all-heads sequence is no "less possible" than any other single sequence. What the SLLN says is that the *set* of sequences with the wrong frequency of heads is negligible.
+**Probability 0 isn't the same as impossible.** For $0<\mu<1$, *every* single sequence has probability 0. The chance that the first $n$ tosses match a fixed pattern is a product of $n$ factors, each at most $\max(\mu, 1-\mu)<1$, so it's at most $\max(\mu, 1-\mu)^n\to0$. So all-heads isn't "less possible" than any other particular sequence. What the SLLN says is that the *set* of sequences with the wrong fraction of heads is negligible.
 
-**Why the SLLN matters in this course.**
+**Why we care in this course.**
 
-- **Monte Carlo (L15 slide 17).** The values $g(U_1), g(U_2),\dots$ are i.i.d. with finite mean $\theta = \int_0^1 g$. So their average converges to $\theta$ with probability 1. This is why Monte Carlo works.
-- **Probability as long-run frequency.** Take $X_i = \mathbf 1\{A \text{ happens on trial } i\}$. Then $E[X_i] = P(A)$, and the fraction of trials on which $A$ happens converges to $P(A)$ almost surely. The intuitive "frequency" meaning of probability becomes a theorem.
+- **Monte Carlo (L15 slide 17).** $g(U_1), g(U_2),\dots$ are i.i.d. with finite mean $\theta = \int_0^1 g$, so their average goes to $\theta$ with probability 1. That's literally why Monte Carlo works.
+- **Probability = long-run frequency.** Take $X_i = \mathbf 1\{A \text{ happens on trial } i\}$. Then $E[X_i] = P(A)$, so the fraction of trials where $A$ happens goes to $P(A)$ almost surely. The "frequency" idea of probability is now a theorem.
 - **The sample mean as an estimator** (slide 15).
 
-**When it fails.** Without a finite mean the SLLN can fail. For i.i.d. standard Cauchy samples, $\frac{S_n}{n}$ is again standard Cauchy for every $n$ (a known property of the Cauchy distribution). Averaging does not shrink the spread at all, so the running mean never settles down. This is the simulation of L15 Part B, B10.
+**When it breaks.** No finite mean, no SLLN (in general). For i.i.d. standard Cauchy, $\frac{S_n}{n}$ is again standard Cauchy for every $n$ (a known Cauchy property). Averaging doesn't shrink the spread at all, so the running mean never settles. This is the simulation from L15 Part B, B10.
 
 ### Slide 15/30: Detour, the sample mean as an estimator
 
 > **On the slide.** Now that we know $\frac{S_n}{n}\to\mu$, we can use $\hat\mu_n := \frac{S_n}{n}$ as an "estimator" for the mean, especially when the underlying distribution is not known. The estimator $\hat\mu_n$ is a random variable. What is its CDF? What are its mean and variance? $\hat\mu_n$ is an "unbiased estimator" since $E[\hat\mu_n] = \mu$. $\operatorname{Var}(\hat\mu_n) = \frac{\sigma^2}{n}$. We will soon see the CLT, which will tell us the CDF of $\hat\mu_n$ without any information on the law of the $X_i$.
 
-**The set-up.** You do not know the distribution of the data, and you want its mean $\mu$. The SLLN suggests the obvious recipe: average your data. The slide calls $\hat\mu_n$ an *estimator*, a formula that turns data into a guess. (L21 develops estimators properly.)
+Say we don't know the distribution and want $\mu$. The SLLN basically tells us what to do: average the data. An *estimator* is just a formula that turns data into a guess. (L21 does estimators properly.)
 
-**The estimator is random.** Each data set gives one number $\hat\mu_n(\omega)$. Collect a fresh data set and you get a different number. So $\hat\mu_n$ is a random variable, and it makes sense to ask about its mean, its variance and its distribution. These describe how good the recipe is *before* you see the data.
+The key thing: $\hat\mu_n$ is itself random. One data set gives one value $\hat\mu_n(\omega)$, a different data set gives a different value. So it has a mean, a variance and a distribution, and those tell us how good the estimator is.
 
-**Its mean.** Use linearity of expectation. Note that this step needs no independence at all:
+**Mean.** Linearity of expectation, no independence needed:
 $$E[\hat\mu_n] = E\Big[\frac1n\sum_{i=1}^nX_i\Big] = \frac1n\sum_{i=1}^nE[X_i] = \frac1n\cdot n\mu = \mu .$$
-An estimator whose expected value equals the quantity it estimates is called **unbiased**. It may be off on any particular data set, but it is right on average: it does not systematically over- or under-shoot.
+When the expected value of an estimator equals the thing it estimates, we call it **unbiased**. It can be off for a given data set, but on average it's right, it doesn't lean too high or too low.
 
-**Its variance.** Two steps. First pull out the constant $\frac1n$ using $\operatorname{Var}(aY) = a^2\operatorname{Var}(Y)$; it comes out squared. Then use independence: variances of independent variables add (toolkit fact 5), and each $X_i$ has variance $\sigma^2$.
+**Variance.** Pull out $\frac1n$ (it comes out squared, since $\operatorname{Var}(aY) = a^2\operatorname{Var}(Y)$), then use that variances of independent variables add (toolkit fact 5):
 $$\operatorname{Var}(\hat\mu_n) = \frac{1}{n^2}\operatorname{Var}\Big(\sum_{i=1}^nX_i\Big) = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n} .$$
-(Here we do need independence, or at least that the $X_i$ are uncorrelated. Without it, covariance terms would appear.)
+This step *does* need independence (or at least uncorrelated $X_i$). Otherwise covariance terms show up.
 
 $$\boxed{E[\hat\mu_n] = \mu,\qquad\operatorname{Var}(\hat\mu_n) = \frac{\sigma^2}{n},\qquad\operatorname{SD}(\hat\mu_n) = \frac{\sigma}{\sqrt n}}$$
 
-**Reading the result.** The estimator is centred on the truth, and its spread shrinks like $\frac{\sigma}{\sqrt n}$, called the **standard error**. Because of the square root, accuracy is expensive: to halve the typical error you need four times as much data, and for one more correct decimal digit you need a hundred times as much.
+So the estimator is centred at $\mu$ and its spread, the **standard error** $\frac{\sigma}{\sqrt n}$, shrinks with $n$. Because of the square root it shrinks slowly: halving the error needs $4\times$ the data, and one more correct decimal place needs $100\times$.
 
-*Example.* A coin with $P(H) = \mu$ has $\sigma^2 = \mu(1-\mu)\le\frac14$. With $n = 10{,}000$ tosses, $\operatorname{SD}(\hat\mu_n)\le\frac{1/2}{100} = 0.005$. So the observed fraction of heads is typically within about half a percentage point of $\mu$.
+For example, Bernoulli$(\mu)$ data has $\sigma^2 = \mu(1-\mu)\le\frac14$, so with $n = 10^4$ we get $\operatorname{SD}(\hat\mu_n)\le\frac{1/2}{100} = 0.005$.
 
-**What is its CDF?** The exact answer depends on the law of the $X_i$, and it is known only in special cases. These come from the MGF results of L14, since $S_n = n\hat\mu_n$ is a sum of i.i.d. variables:
+**What's the CDF?** Exactly, it depends on the distribution of $X_i$, and we only know it in special cases. These come from L14's MGF results, since $S_n = n\hat\mu_n$ is a sum of i.i.d. variables:
 
 | $X_i$ | distribution of $S_n = n\hat\mu_n$ | (from) |
 |---|---|---|
@@ -1113,9 +1110,9 @@ $$\boxed{E[\hat\mu_n] = \mu,\qquad\operatorname{Var}(\hat\mu_n) = \frac{\sigma^2
 | Exp$(\lambda)$ | Gamma$(n, \lambda)$ | L14 slide 6 |
 | $\mathcal N(\mu, \sigma^2)$ | $\mathcal N(n\mu, n\sigma^2)$ | L14 slide 5 |
 
-For a general distribution there is no closed form. The CLT (L18) gives the approximate answer in *every* case, which is what the slide promises:
+In general there's no closed form. The CLT (L18) gives an approximate answer that works for *any* distribution, which is what the slide is hinting at:
 $$\hat\mu_n\approx\mathcal N\Big(\mu, \frac{\sigma^2}{n}\Big)\quad\text{for large } n .$$
-Notice that the mean and variance in this approximation are exactly the ones we just computed.
+Same mean and variance as we just computed.
 
 ### Slide 16/30: Detour, the incremental formula for the sample mean
 
@@ -1123,322 +1120,316 @@ Notice that the mean and variance in this approximation are exactly the ones we 
 > $$\hat\mu_{n+1} = \hat\mu_n + \frac{1}{n+1}\big[X_{n+1} - \hat\mu_n\big].$$
 > Such averaging formulas are used extensively in reinforcement learning.
 
-**The question.** Data arrives one point at a time (a sensor, a game being played, a website's visitors). You want the current average after every new point. Do you have to add everything up again each time?
+The question: data comes in one point at a time, and you want the updated average after each one. Do you really have to re-add everything every time?
 
-**Derivation.** No. The old mean already "remembers" the old sum, because $S_n = n\hat\mu_n$. So:
+No, because the old mean already "contains" the old sum: $S_n = n\hat\mu_n$. So
 
-1. The new sum is the old sum plus the new point: $S_{n+1} = S_n + X_{n+1} = n\hat\mu_n + X_{n+1}$.
-2. Divide by $n+1$, and write $n\hat\mu_n$ as $(n+1)\hat\mu_n - \hat\mu_n$ so that a whole $\hat\mu_n$ splits off:
+1. $S_{n+1} = S_n + X_{n+1} = n\hat\mu_n + X_{n+1}$,
+2. divide by $n+1$, and write $n\hat\mu_n = (n+1)\hat\mu_n - \hat\mu_n$ so a full $\hat\mu_n$ splits off:
 $$\hat\mu_{n+1} = \frac{n\hat\mu_n + X_{n+1}}{n+1} = \frac{(n+1)\hat\mu_n - \hat\mu_n + X_{n+1}}{n+1} = \hat\mu_n + \frac{1}{n+1}\big(X_{n+1} - \hat\mu_n\big).$$
 
 $$\boxed{\hat\mu_{n+1} = \hat\mu_n + \frac{1}{n+1}\big(X_{n+1} - \hat\mu_n\big)}$$
 
-**Reading it.**
-$$\text{new estimate} = \text{old estimate} + \text{step size}\times(\text{new observation} - \text{old estimate}).$$
+How to read it: new estimate = old estimate + (step size) $\times$ (new point $-$ old estimate).
 
-- The bracket $X_{n+1} - \hat\mu_n$ is the **surprise**: how far the new data point is from what you expected.
-- The estimate moves a fraction $\frac{1}{n+1}$ of the way towards the new point. If the point is above the current mean, the mean goes up, and vice versa.
-- As $n$ grows the steps shrink. One extra data point barely moves an average of a million points. So the estimate settles down, consistent with the SLLN.
+- $X_{n+1} - \hat\mu_n$ is how far the new point is from what we currently think the mean is.
+- We move $\frac{1}{n+1}$ of the way towards the new point. New point above the mean, mean goes up, and vice versa.
+- The steps get smaller as $n$ grows (one more point barely changes an average of a million points), so the estimate settles down, which matches the SLLN.
 
-**Why it is useful.** The naive way stores all the data and costs $O(n)$ work per update. The incremental way stores two numbers ($\hat\mu_n$ and $n$) and costs $O(1)$ per update.
+Why bother? The naive way stores all the data and does $O(n)$ work per update. The incremental way stores just $\hat\mu_n$ and $n$, and does $O(1)$ work.
 
-**The reinforcement-learning connection.** In RL, value estimates are updated as
-$$Q\leftarrow Q + \alpha\,(\text{target} - Q).$$
-With $\alpha = \frac{1}{n+1}$ this is exactly the running mean. With a constant $\alpha$ (say $0.1$) every old observation's weight gets multiplied by $1-\alpha$ at each step, so the estimate becomes an **exponentially weighted average**. It forgets old data, which is what you want when the environment changes over time.
+The RL remark on the slide: RL updates look like $Q\leftarrow Q + \alpha\,(\text{target} - Q)$. With $\alpha = \frac{1}{n+1}$ that's exactly our running mean. With a fixed $\alpha$, each old point's weight gets multiplied by $1-\alpha$ every step, so you get an exponentially weighted average that slowly forgets old data.
 
-**Quick example.** Data $4, 8, 6, 10$:
+**Quick check.** Data $4, 8, 6, 10$:
 
-- $\hat\mu_1 = 4$ (the first point).
-- $\hat\mu_2 = 4 + \frac12(8 - 4) = 6$.
-- $\hat\mu_3 = 6 + \frac13(6 - 6) = 6$. The new point equals the mean, so there is no surprise and no change.
-- $\hat\mu_4 = 6 + \frac14(10 - 6) = 7$.
+- $\hat\mu_1 = 4$
+- $\hat\mu_2 = 4 + \frac12(8 - 4) = 6$
+- $\hat\mu_3 = 6 + \frac13(6 - 6) = 6$ (new point equals the mean, so nothing changes)
+- $\hat\mu_4 = 6 + \frac14(10 - 6) = 7$
 
-Check: $\frac{4 + 8 + 6 + 10}{4} = 7$. ✓
+And $\frac{4 + 8 + 6 + 10}{4} = 7$. ✓
 
 ### Slide 17/30: Recap, modes of convergence
 
 > **On the slide.** Sure convergence (box). Almost sure convergence (box). SLLN: $\{X_n\}$ i.i.d. with mean $\mu$ and $S_n = \sum X_i$; then $\hat\mu_n := \frac{S_n}{n}\to\mu$ a.s. The estimator $\hat\mu_n$ has mean $\mu$ and variance $\frac{\sigma^2}{n}$. $\hat\mu_{n+1} = \hat\mu_n + \frac1{n+1}[X_{n+1} - \hat\mu_n]$.
 
-Nothing new on this slide. The summary so far:
+Nothing new. So far:
 
-- **Sure** = every path converges. **Almost sure** = the paths that fail have probability 0. Sure $\Rightarrow$ almost sure, not conversely.
-- **The SLLN** is an almost sure statement about the sample mean.
-- **The sample mean** is unbiased with variance $\frac{\sigma^2}{n}$, and it can be updated in $O(1)$ time.
+- **Sure:** every path converges. **Almost sure:** the paths that don't converge have probability 0. Sure $\Rightarrow$ a.s., not the other way.
+- **SLLN** is an a.s. statement about the sample mean.
+- **Sample mean:** unbiased, variance $\frac{\sigma^2}{n}$, and can be updated in $O(1)$.
 
 ### Slide 18/30: The Borel–Cantelli lemma
 
 > **On the slide.** *Self-study: Theorem 7.5 (probabilitycourse.com). Consider a sequence of random variables $X_1, X_2, \dots$. If for all $\epsilon$ we have $\sum_{n=1}^\infty P(|X_n - X|>\epsilon)<\infty$, then $X_n\to X$ a.s.* This is only a sufficient condition for almost sure convergence! Thm 7.6 (HW) gives necessary and sufficient conditions. Lots of problems in probabilitycourse; practice them!
 
-**The problem it solves.** Checking almost sure convergence straight from the definition means finding the set $C$ of lucky outcomes and computing its probability. That is easy when $\Omega = [0,1]$ and the formula is explicit (slide 13), but usually it is hopeless. Theorem 7.5 replaces it with something you *can* compute: the probabilities $P(|X_n - X|>\epsilon)$ at each single time $n$.
+Proving a.s. convergence straight from the definition means finding the set $C$ and computing $P(C)$. That's fine when $\Omega = [0,1]$ and everything is explicit (slide 13), but most of the time you can't do it. Theorem 7.5 lets you work with something much easier: $P(|X_n - X|>\epsilon)$ at each single $n$.
 
 $$\boxed{\sum_{n=1}^\infty P(|X_n - X|>\epsilon)<\infty\ \ \text{for every } \epsilon>0\quad\Longrightarrow\quad X_n\xrightarrow{a.s.}X}$$
 
-**In words.** If the chances of an $\epsilon$-sized mistake shrink fast enough to be *summable*, for every $\epsilon$, then the sequence converges almost surely. Summable means, for example, like $\frac1{n^2}$, $\frac1{n^{1.01}}$ or $e^{-n}$, but not like $\frac1n$.
+So if the chance of being off by more than $\epsilon$ shrinks fast enough that the sum is finite (like $\frac1{n^2}$, $\frac1{n^{1.01}}$, $e^{-n}$, but **not** $\frac1n$), for every $\epsilon$, then you get a.s. convergence.
 
-**Intuition.** $\sum_nP(E_n)$ is the *expected number* of bad events, because $\sum_nP(E_n) = E\big[\sum_n\mathbf 1_{E_n}\big]$. If the expected number of mistakes is finite, then the actual number of mistakes is finite with probability 1. Finitely many mistakes means that after the last one, the sequence stays within $\epsilon$ for good.
+Why you'd expect this: $\sum_nP(E_n) = E\big[\sum_n\mathbf 1_{E_n}\big]$ is the *expected number* of bad events. If that's finite, the actual number of bad events is finite with probability 1. Finitely many mistakes means after the last one, the path stays within $\epsilon$ forever.
 
-**Why it is true (the self-study proof).** Fix $\epsilon$ and let $E_n = \{|X_n - X|>\epsilon\}$ be the bad event at time $n$.
+**Proof (the self-study part).** Fix $\epsilon$, and let $E_n = \{|X_n - X|>\epsilon\}$.
 
-1. **The tail is small.** For any starting time $m$, the union bound (toolkit fact 8) gives
-$$P\Big(\bigcup_{n\ge m}E_n\Big)\le\sum_{n\ge m}P(E_n).$$
-The right side is the tail of a convergent series, so it goes to 0 as $m\to\infty$.
-2. **"Infinitely often" has probability 0.** Suppose $E_n$ happens for infinitely many $n$. Then whatever $m$ you pick, some $E_n$ with $n\ge m$ happens. So the event "$E_n$ infinitely often" is contained in $\bigcup_{n\ge m}E_n$ *for every* $m$, and
+1. **The tail is small.** For any $m$, by the union bound (toolkit fact 8),
+$$P\Big(\bigcup_{n\ge m}E_n\Big)\le\sum_{n\ge m}P(E_n),$$
+and the right side is the tail of a convergent series, so it goes to 0 as $m\to\infty$.
+2. **Infinitely many $E_n$ has probability 0.** If infinitely many $E_n$ happen, then for any $m$ at least one $E_n$ with $n\ge m$ happens. So "$E_n$ infinitely often" sits inside $\bigcup_{n\ge m}E_n$ for *every* $m$:
 $$P(E_n\ \text{infinitely often})\le P\Big(\bigcup_{n\ge m}E_n\Big)\quad\text{for every } m .$$
-Let $m\to\infty$: by step 1 the right side tends to 0, so the left side is 0. This step on its own is the **(first) Borel–Cantelli lemma**:
+Let $m\to\infty$, the right side goes to 0 by step 1, so the left side is 0. This step by itself is the **(first) Borel–Cantelli lemma**:
 $$\boxed{\sum_nP(E_n)<\infty\quad\Longrightarrow\quad P(E_n\ \text{infinitely often}) = 0}$$
-In words: with probability 1, only finitely many of the $E_n$ happen.
-3. **From one $\epsilon$ to all of them.** Step 2 says: with probability 1, $|X_n - X|\le\epsilon$ for all large $n$. Do this for $\epsilon = 1, \frac12, \frac13, \dots$. Each value gives an exceptional event of probability 0, and a countable union of probability-0 events has probability 0. So with probability 1, the statement holds for every $\epsilon = \frac1k$ simultaneously. Since any $\epsilon>0$ is bigger than some $\frac1k$, that is exactly $X_n(\omega)\to X(\omega)$. $\square$
+i.e. with probability 1, only finitely many $E_n$ happen.
+3. **All $\epsilon$ at once.** Step 2 gives: with probability 1, $|X_n - X|\le\epsilon$ for all large $n$. Do this for $\epsilon = 1, \frac12, \frac13, \dots$. Each one has a probability-0 exception, and countably many probability-0 sets together still have probability 0. So with probability 1 it works for every $\epsilon = \frac1k$ at the same time. Any $\epsilon>0$ is bigger than some $\frac1k$, so that's exactly $X_n(\omega)\to X(\omega)$. $\square$
 
-**Notice what was not used.** Nowhere did we need the $X_n$ to be independent. Theorem 7.5 works for any dependence structure. (Contrast the second Borel–Cantelli lemma below.)
+Note that independence was never used. Theorem 7.5 works no matter how the $X_n$ depend on each other. (Compare the second Borel–Cantelli lemma below, which does need it.)
 
-**Only sufficient.** Slide 19's example converges almost surely although $\sum_nP(|X_n|>\epsilon) = \sum\frac1n = \infty$. So the condition can fail while the conclusion still holds. A divergent sum tells you nothing on its own.
+**It's only sufficient.** In slide 19's example, $\sum_nP(|X_n|>\epsilon) = \sum\frac1n = \infty$, but $X_n\to0$ a.s. anyway. So if the sum diverges, Theorem 7.5 just tells you nothing.
 
-**Theorem 7.6 (the HW): a necessary and sufficient condition.** For $\epsilon>0$ define
+**Theorem 7.6 (the HW): necessary and sufficient.** For $\epsilon>0$ let
 $$A_m = \{|X_n - X|<\epsilon\ \text{for all } n\ge m\},$$
-the event that from time $m$ on, the path stays within $\epsilon$ of $X$ *forever*. Then
+the event that from time $m$ onwards the path stays within $\epsilon$ of $X$ *forever*. Then
 $$\boxed{X_n\xrightarrow{a.s.}X\iff\lim_{m\to\infty}P(A_m) = 1\ \ \text{for every }\epsilon>0}$$
 
-Compare with Theorem 7.5: there we looked at one time $n$ at a time. Here $A_m$ involves the **whole future** after time $m$. That is exactly what almost sure convergence is about (slide 13), which is why this condition is both necessary and sufficient.
+The difference from 7.5: there we looked at one $n$ at a time, here $A_m$ looks at the **whole future** after $m$. That's exactly what a.s. convergence is about (slide 13), which is why this one goes both ways.
 
 *Proof.*
 
-- **The events grow.** $A_1\subseteq A_2\subseteq\cdots$, because if you stay close from time $m$ on, you certainly stay close from time $m+1$ on.
-- **Their union** $\bigcup_mA_m$ is the event "from some time on, always within $\epsilon$", that is, "eventually always within $\epsilon$".
-- **Continuity of probability** for an increasing sequence of events (toolkit fact 8) gives
+- $A_1\subseteq A_2\subseteq\cdots$, since staying close from time $m$ on means you also stay close from $m+1$ on.
+- $\bigcup_mA_m$ = "from some point on, always within $\epsilon$" = "eventually always within $\epsilon$".
+- Continuity of probability for increasing events (toolkit fact 8):
 $$\lim_{m\to\infty}P(A_m) = P\Big(\bigcup_mA_m\Big) = P(\text{eventually always within }\epsilon).$$
 
-($\Rightarrow$) On the event $C$ where $X_n\to X$, the path is eventually within $\epsilon$. So $C\subseteq\bigcup_mA_m$, and since $P(C) = 1$, the limit is 1.
+($\Rightarrow$) If $\omega\in C$ (its path converges), the path is eventually within $\epsilon$. So $C\subseteq\bigcup_mA_m$, and $P(C) = 1$ forces the limit to be 1.
 
-($\Leftarrow$) Suppose the limit is 1 for each $\epsilon = \frac1k$. Then each event "eventually within $\frac1k$" has probability 1. Intersect these countably many probability-1 events; the intersection still has probability 1. On it, for every $k$ the path is eventually within $\frac1k$, so it converges. $\square$
+($\Leftarrow$) If the limit is 1 for each $\epsilon = \frac1k$, each event "eventually within $\frac1k$" has probability 1. Intersect these countably many probability-1 events, still probability 1. On the intersection the path is eventually within $\frac1k$ for every $k$, i.e. it converges. $\square$
 
-**How to use Theorem 7.6 in practice.** Compute $P(A_m)$, or bound it. This is especially easy when the sequence is *monotone* or *absorbing* (once it reaches the limit, it stays there): then $A_m$ reduces to a single event at time $m$. See slide 19 and B5.
+**Using 7.6 in practice.** Compute or bound $P(A_m)$. This is really easy when the path gets *stuck* once it reaches the limit (once it's 0 it stays 0): then $A_m$ is just one event at time $m$. See slide 19 and B5.
 
-**A companion fact: the second Borel–Cantelli lemma.**
+**The second Borel–Cantelli lemma.**
 $$\boxed{E_n\ \text{independent and}\ \sum_nP(E_n) = \infty\quad\Longrightarrow\quad P(E_n\ \text{infinitely often}) = 1}$$
-In words: if the events are independent and their expected number is infinite, then infinitely many of them really happen. This is the tool for proving that a sequence does *not* converge almost surely. Independence is essential here; slide 19 shows that without it the conclusion can fail. It is used on slide 20 (L18) and in Part B.
+If the events are independent and the expected number of them is infinite, then infinitely many actually happen. This is what you use to show a sequence does *not* converge a.s. Independence really matters here, slide 19 shows the conclusion can fail without it. It comes up on slide 20 (L18) and in Part B.
 
 ### Slide 19/30: Another example of a.s. convergence
 
 > **On the slide.** Consider a uniform random variable $U$ and define $X_n = n\mathbf 1_{\{U\le\frac1n\}}$: $X_n = n$ when $U\le\frac1n$ and $X_n = 0$ otherwise. Given a realization of $U$, what can you say about the sequence $\{X_n\}$? Once an $X_n$ is zero, all higher-indexed variables are also zero! This happens for all realizations other than $U = 0$. In that case, since $0\le\frac1n$ for all $n$, the $X_n$'s run off to infinity and we don't see convergence to 0. But $P(U = 0) = 0$. Does $E[X_n]\to0$? *Almost sure convergence does not imply that the means converge!*
 
-**The key structural point.** There is only **one** random number $U$, drawn once. Every $X_n$ is a function of that same $U$. So the $X_n$ are heavily dependent, and the outcome is $\omega = U$ itself.
+The important thing here: there's only **one** $U$, drawn once, and every $X_n$ is a function of it. So the $X_n$ are very dependent, and the outcome is basically just $\omega = U$.
 
-**The realized sequences.** Fix $U = u$ and follow the path.
+Fix $U = u$ and follow the path.
 
-- **If $u>0$:** the condition $u\le\frac1n$ means $n\le\frac1u$. So $X_n = n$ for $n\le\frac1u$, and $X_n = 0$ for every $n>\frac1u$. The thresholds $\frac1n$ shrink, so once $\frac1n$ drops below $u$ it stays below, and once $X_n$ is 0 it stays 0.
+- $u>0$: $u\le\frac1n$ means $n\le\frac1u$. So $X_n = n$ while $n\le\frac1u$, and $X_n = 0$ after that. The thresholds $\frac1n$ only go down, so once $\frac1n<u$ it stays that way, and once $X_n = 0$ it stays $0$.
+- $u = 0$: $0\le\frac1n$ always, so $X_n = n$ forever and the path blows up.
 
-| $u$ | the path $X_1, X_2, X_3, \dots$ |
+| $u$ | path $X_1, X_2, X_3, \dots$ |
 |---|---|
 | $0.6$ | $1, 0, 0, 0, \dots$ |
 | $0.3$ | $1, 2, 3, 0, 0, \dots$ |
 | $0.01$ | $1, 2, \dots, 100, 0, 0, \dots$ |
 | $0$ | $1, 2, 3, 4, \dots\to\infty$ |
 
-- **If $u = 0$:** $0\le\frac1n$ for every $n$, so $X_n = n$ forever and the path runs off to infinity.
+The only bad outcome is $u = 0$, and $P(U = 0) = 0$, so $X_n\xrightarrow{a.s.}0$. (Not surely though, because of $u = 0$.)
 
-The only unlucky outcome is $u = 0$, and $P(U = 0) = 0$. So $X_n\xrightarrow{a.s.}0$. (It is not sure convergence, because of $u = 0$.)
-
-**The means.** $X_n$ takes only two values, $n$ and $0$, so
-$$E[X_n] = n\cdot P\Big(U\le\frac1n\Big) + 0 = n\cdot\frac1n = 1\quad\text{for every } n .$$
-Hence
+**The means.** $X_n$ is either $n$ or $0$, so
+$$E[X_n] = n\cdot P\Big(U\le\frac1n\Big) + 0 = n\cdot\frac1n = 1\quad\text{for every } n,$$
+which gives
 $$E[X_n] = 1\not\to0 = E\big[\lim_n X_n\big] .$$
 
-**Why the means do not follow.** Each $X_n$ is 0 with probability $1 - \frac1n$, but takes the huge value $n$ with the small probability $\frac1n$. The product of "huge" and "rare" stays at exactly 1, so the rare big value keeps the mean at 1. This is often called **mass escaping to infinity**.
+**Why don't the means follow?** Each $X_n$ is 0 with probability $1-\frac1n$, but it's the huge value $n$ with the tiny probability $\frac1n$. Huge $\times$ tiny is exactly 1, so the mean stays at 1. People call this **mass escaping to infinity**.
 
-Almost sure convergence cannot see this, because it looks at each outcome separately. For each fixed $u>0$ the big values stop after time $\frac1u$. But the outcomes that still have a big value at time $n$ (those with $u\le\frac1n$) have a value so large that they keep the average up. Convergence in mean (L18) is the mode that does control this, and it fails here: $E|X_n - 0| = 1\not\to0$.
+A.s. convergence can't see this because it looks at one $\omega$ at a time. For a fixed $u>0$ the big values stop after $\frac1u$ steps. But at any time $n$, the $\omega$'s that still have a big value (those with $u\le\frac1n$) have such a big value that they hold the average up. Convergence in mean (L18) is the mode that catches this, and it fails here: $E|X_n - 0| = 1\not\to0$.
 
-**Connection with slide 18.**
+**Link with slide 18.**
 
-- **Theorem 7.5 cannot be used.** For $0<\epsilon<1$, $P(|X_n|>\epsilon) = P(U\le\frac1n) = \frac1n$, and $\sum_n\frac1n = \infty$. And yet $X_n\to0$ a.s. This is the counterexample showing Theorem 7.5 is only sufficient.
-- **Theorem 7.6 does work.** Because the path is absorbed at 0, staying at 0 from time $m$ on is the same as being 0 at time $m$:
+- 7.5 is no use: for $0<\epsilon<1$, $P(|X_n|>\epsilon) = P(U\le\frac1n) = \frac1n$, and $\sum\frac1n = \infty$. Yet $X_n\to0$ a.s. This is the example showing 7.5 is only sufficient.
+- 7.6 works: since the path gets stuck at 0, being 0 from time $m$ on is the same as being 0 at time $m$:
 $$A_m = \{X_n = 0\ \text{for all } n\ge m\} = \Big\{U>\frac1m\Big\},\qquad P(A_m) = 1 - \frac1m\to1 .\ ✓$$
-- **The second Borel–Cantelli lemma does not apply.** The events $\{U\le\frac1n\}$ have a divergent sum, but they are *nested*, not independent. That is exactly why infinitely many of them do not happen.
+- Second Borel–Cantelli doesn't apply: the events $\{U\le\frac1n\}$ have a divergent sum, but they're *nested*, not independent. That's exactly why infinitely many of them don't happen.
 
-**Coming next.** The same formula with *independent* uniforms $U_n$ (a fresh one for each $n$) behaves completely differently. That is the next slide, at the start of L18.
+Next slide (start of L18) uses the same formula with *independent* $U_n$, one fresh uniform per $n$, and things change completely.
 
 ## Part B: extra worked examples and problems
 
-**How to attack "does $X_n$ converge almost surely?"** Almost every problem below uses one of four routes. Try them in this order.
+**General plan for "does $X_n\to X$ a.s.?"** Pretty much every problem here is one of these:
 
-1. **Look at the paths directly.** If $\Omega$ is simple (a coin toss, a uniform $U$ on $[0,1]$), fix $\omega$, find the path $X_n(\omega)$, and find the set of outcomes where it fails. Is its probability 0?
-2. **Theorem 7.5 (summable tails).** Compute $P(|X_n - X|>\epsilon)$ and check whether its sum is finite. If yes, you are done, and no independence is needed. If the sum diverges, this route tells you nothing.
-3. **Theorem 7.6, or a monotone/absorbing structure.** Compute $P(A_m)$. Easy when the path, once at the limit, stays there.
-4. **To prove failure:** find an event of positive probability on which the path does not converge, or use the second Borel–Cantelli lemma (needs independence).
+1. If $\Omega$ is simple (one coin toss, one uniform on $[0,1]$), just fix $\omega$, work out the path, and find where it fails. Is that set probability 0?
+2. Compute $P(|X_n - X|>\epsilon)$ and check if the sum is finite. If yes, Theorem 7.5 finishes it (no independence needed). If the sum diverges, this tells you nothing.
+3. Compute $P(A_m)$ for Theorem 7.6. Easy when the path gets stuck at its limit.
+4. To show it *fails*: find a positive-probability set where the path doesn't converge, or use second Borel–Cantelli (needs independence).
 
-And for limits built from averages: **the SLLN plus "continuous functions of a.s. limits are a.s. limits"** (B9).
+For limits of averages: SLLN, plus the fact that continuous functions of a.s. limits are a.s. limits (B9).
 
 ---
 
 **B1 (probabilitycourse 7.2.7, Example 1).** A fair coin is tossed once. $X_n = \frac{n}{n+1}$ if $H$, and $X_n = (-1)^n$ if $T$. Does $X_n$ converge almost surely?
 
-*Solution.* **Route 1:** there are only two outcomes, so look at both paths.
+*Solution.* Only two outcomes, so look at both paths.
 
-- **On $H$:** $\frac12, \frac23, \frac34, \dots\to1$. Converges.
-- **On $T$:** $-1, 1, -1, 1,\dots$ oscillates forever. No limit.
+- $H$: $\frac12, \frac23, \frac34, \dots\to1$. Converges.
+- $T$: $-1, 1, -1, 1,\dots$ keeps flipping, no limit.
 
-So the set of outcomes where the path converges at all is $\{H\}$, with $P(\lim X_n = 1) = P(H) = \frac12$. For almost sure convergence this set needs probability 1, and $\frac12<1$. So $X_n$ does **not** converge almost surely, to $1$ or to anything else.
+So the path converges only on $\{H\}$, and $P(\lim X_n = 1) = P(H) = \frac12$. We'd need this to be 1. It's $\frac12$, so $X_n$ does **not** converge a.s. (to 1 or to anything else).
 
-*Takeaway.* A failure set is only harmless if it has probability 0. Here the bad outcome $T$ has probability $\frac12$, which is far from negligible.
+The bad set is fine only if it has probability 0. Here it has probability $\frac12$.
 
 **B2 (probabilitycourse 7.2.7, Example 2).** $\Omega = [0,1]$ with the uniform probability. $X_n(s) = 1$ if $0\le s<\frac{n+1}{2n}$ and 0 otherwise; $X(s) = 1$ if $0\le s<\frac12$ and 0 otherwise. Show $X_n\xrightarrow{a.s.}X$.
 
-*Solution.* **Route 1.** First understand the threshold:
+*Solution.* First rewrite the cutoff:
 $$\frac{n+1}{2n} = \frac12 + \frac{1}{2n},$$
-which decreases to $\frac12$ from above. So $X_n$ is the indicator of an interval $[0, \frac12 + \frac1{2n})$ that shrinks down to $[0, \frac12]$. Now fix $s$ and split into three cases.
+which decreases down to $\frac12$. So $X_n$ is the indicator of $[0, \frac12 + \frac1{2n})$, an interval shrinking to $[0, \frac12]$. Now three cases for $s$:
 
-- **$s<\frac12$:** $s$ is below every threshold, so $X_n(s) = 1 = X(s)$ for all $n$. ✓
-- **$s>\frac12$:** $X_n(s) = 0 = X(s)$ as soon as the threshold drops to $s$ or below, that is, $\frac12 + \frac{1}{2n}\le s$, which rearranges to $n\ge\frac{1}{2s - 1}$. After that time it stays 0. ✓
-- **$s = \frac12$:** $\frac12<\frac12 + \frac1{2n}$ always, so $X_n(\frac12) = 1$ for all $n$, but $X(\frac12) = 0$. ✗
+- $s<\frac12$: $s$ is below every cutoff, so $X_n(s) = 1 = X(s)$ for all $n$. ✓
+- $s>\frac12$: once the cutoff drops to $s$ or below, i.e. $\frac12 + \frac{1}{2n}\le s$, i.e. $n\ge\frac{1}{2s - 1}$, we get $X_n(s) = 0 = X(s)$, and it stays 0. ✓
+- $s = \frac12$: $\frac12<\frac12 + \frac1{2n}$ always, so $X_n(\frac12) = 1$ for all $n$, but $X(\frac12) = 0$. ✗
 
-The failure set is the single point $\{\frac12\}$, of probability 0, so $X_n\to X$ almost surely (but not surely).
+The bad set is just $\{\frac12\}$, which has probability 0. So $X_n\to X$ a.s. (but not surely).
 
-*Takeaway.* The limiting interval is $[0,\frac12]$ but $X$ is defined with $[0, \frac12)$. The mismatch at one endpoint is exactly what "almost" forgives.
+The whole issue is the endpoint: the intervals shrink to $[0,\frac12]$, but $X$ uses $[0,\frac12)$. "Almost" lets us ignore that one point.
 
 **B3 (probabilitycourse 7.2.7, Example 3).** $X_n = \pm\frac1n$ with probability $\frac12$ each. Show $X_n\xrightarrow{a.s.}0$.
 
-*Solution.* **Route 2.** Whatever the sign, $|X_n| = \frac1n$. So for a fixed $\epsilon>0$,
+*Solution.* Whatever the sign is, $|X_n| = \frac1n$. So for fixed $\epsilon>0$,
 $$P(|X_n|>\epsilon) = P\Big(\frac1n>\epsilon\Big) = \begin{cases}1 & n<\frac1\epsilon\\ 0 & n\ge\frac1\epsilon .\end{cases}$$
-The series $\sum_nP(|X_n|>\epsilon)$ has at most $\lfloor\frac1\epsilon\rfloor$ non-zero terms, so it is finite, and Theorem 7.5 gives $X_n\xrightarrow{a.s.}0$.
+So $\sum_nP(|X_n|>\epsilon)$ has at most $\lfloor\frac1\epsilon\rfloor$ nonzero terms, so it's finite, and Theorem 7.5 gives $X_n\xrightarrow{a.s.}0$.
 
-*Takeaway.* Here the convergence is even sure: $|X_n(\omega)|\le\frac1n$ for every $\omega$, whatever the signs are and however they depend on each other. The randomness in the sign is irrelevant because the size is deterministic.
+Actually it's even sure convergence: $|X_n(\omega)|\le\frac1n$ for every $\omega$, whatever the signs are and however they depend on each other. The size isn't random at all, only the sign is.
 
 **B4 (probabilitycourse 7.2.7, Example 4; last year's HW8 Q1(b)).** $X_n$ independent, $X_n\sim$ Bernoulli$(\frac1n)$. Does $X_n\to0$ almost surely?
 
-*Solution.* The answer is **no**. Let's see why, and why the easy route fails first.
+*Solution.* **No.** First, 7.5 doesn't help: for $0<\epsilon<1$, $P(|X_n|>\epsilon) = P(X_n = 1) = \frac1n$, and $\sum\frac1n = \infty$.
 
-**Route 2 fails.** For $0<\epsilon<1$, $P(|X_n|>\epsilon) = P(X_n = 1) = \frac1n$, and $\sum_n\frac1n = \infty$. Theorem 7.5 says nothing.
-
-**Route 3.** Since $X_n\in\{0,1\}$, for $0<\epsilon<1$ being within $\epsilon$ of 0 means being 0. So
+So use 7.6. Since $X_n\in\{0,1\}$, being within $\epsilon<1$ of 0 just means being 0:
 $$A_m = \{X_n = 0\ \text{for all } n\ge m\}.$$
-We cannot compute an infinite product directly, so bound it. For any $N\ge m$, $A_m$ is contained in the finite event "$X_m = \dots = X_N = 0$". By independence, the probability of that event is a product:
-$$P(A_m)\le P(X_m = 0,\dots,X_N = 0) = \Big(1 - \frac1m\Big)\cdots\Big(1 - \frac1N\Big) = \frac{m-1}{m}\cdot\frac{m}{m+1}\cdots\frac{N-1}{N}.$$
-The product **telescopes**: each numerator cancels the previous denominator, leaving $\frac{m-1}{N}$. This holds for every $N\ge m$, and $\frac{m-1}{N}\to0$ as $N\to\infty$. So $P(A_m) = 0$ for every $m$, and
+We can't directly handle "for all $n\ge m$", so bound it by a finite piece. For any $N\ge m$, $A_m\subseteq\{X_m = \dots = X_N = 0\}$, and by independence that's a product:
+$$P(A_m)\le P(X_m = 0,\dots,X_N = 0) = \Big(1 - \frac1m\Big)\cdots\Big(1 - \frac1N\Big) = \frac{m-1}{m}\cdot\frac{m}{m+1}\cdots\frac{N-1}{N} = \frac{m-1}{N}.$$
+(It telescopes: each numerator cancels the denominator before it.) This works for every $N\ge m$, and $\frac{m-1}{N}\to0$ as $N\to\infty$. So $P(A_m) = 0$ for every $m$, and
 $$\lim_{m\to\infty}P(A_m) = 0\ne1 .$$
-By Theorem 7.6 there is **no** almost sure convergence. In fact, with probability 1 the sequence contains infinitely many 1s: whatever $m$ you pick, a 1 appears after time $m$.
+By 7.6, **no** a.s. convergence. In fact, with probability 1 there are infinitely many 1s: no matter how far out you go, another 1 shows up.
 
-**One-line alternative (route 4).** The events $\{X_n = 1\}$ are independent and $\sum\frac1n = \infty$, so by the second Borel–Cantelli lemma infinitely many of them happen, with probability 1.
+Shortcut: the events $\{X_n = 1\}$ are independent with $\sum\frac1n = \infty$, so second Borel–Cantelli says infinitely many happen, with probability 1. Done in one line.
 
-*Takeaway: compare with slide 19.* In both examples $P(X_n\ne0) = \frac1n$. The marginal laws are the same! The difference is the dependence. On slide 19 the events $\{U\le\frac1n\}$ are nested (all driven by one $U$), so the 1s stop. Here they are independent, so the 1s keep coming back forever. Almost sure convergence depends on the *joint* behaviour of the sequence, not just the law of each $X_n$.
+Compare with slide 19. In both, $P(X_n\ne0) = \frac1n$, so each $X_n$ has the same distribution! The only difference is how they depend on each other. On slide 19 the events $\{U\le\frac1n\}$ are nested (all from one $U$), so the nonzero values stop. Here they're independent, so they keep coming back. A.s. convergence depends on the *joint* behaviour, not just each $X_n$ separately.
 
 **B5 (last year's HW8 Q10 and HW7 Q4).** $Y_n\sim$ Bernoulli$(\frac{n}{n+1})$ independent, and $X_{n+1} = Y_1Y_2\cdots Y_n$. Show $X_n\xrightarrow{a.s.}0$ (and hence in probability).
 
-*Solution.* **Step 1: the probability of a 1.** A product of 0s and 1s is 1 only if every factor is 1. By independence,
-$$P(X_{n+1} = 1) = \prod_{k=1}^nP(Y_k = 1) = \prod_{k=1}^n\frac{k}{k+1} = \frac12\cdot\frac23\cdots\frac{n}{n+1} = \frac{1}{n+1}\to0 .$$
-(Again the product telescopes.) So $P(X_n = 1) = \frac1n$.
+*Solution.* A product of 0s and 1s is 1 only if every factor is 1. By independence,
+$$P(X_{n+1} = 1) = \prod_{k=1}^nP(Y_k = 1) = \prod_{k=1}^n\frac{k}{k+1} = \frac12\cdot\frac23\cdots\frac{n}{n+1} = \frac{1}{n+1}\to0 ,$$
+telescoping again. So $P(X_n = 1) = \frac1n$.
 
-**Step 2: the path is absorbing.** Each step multiplies by $Y_n\in\{0,1\}$, so the sequence can only stay or drop. Once it hits 0, it is 0 forever. (It looks like $1,1,1,\dots,1,0,0,0,\dots$)
+Each step multiplies by $Y_n\in\{0,1\}$, so the path can only stay the same or drop to 0, and once it's 0 it's 0 forever. Paths look like $1,1,\dots,1,0,0,0,\dots$
 
-**Step 3: Route 3.** Because of absorption, staying at 0 from time $m$ on is the same as being 0 at time $m$:
+So the path gets stuck at 0, and being 0 from time $m$ on is the same as being 0 at time $m$:
 $$A_m = \{X_n = 0\ \text{for all } n\ge m\} = \{X_m = 0\},\qquad P(A_m) = 1 - \frac1m\to1 .$$
-By Theorem 7.6, $X_n\to0$ almost surely.
+By 7.6, $X_n\to0$ a.s.
 
-**Equivalent view.** The only way to avoid convergence is $Y_k = 1$ for every $k$. That event is inside $\{X_{n+1} = 1\}$ for every $n$, so its probability is at most $\frac{1}{n+1}$ for every $n$, hence 0.
+Another way to see it: the only way to never converge is $Y_k = 1$ for every $k$. That event is inside $\{X_{n+1} = 1\}$ for every $n$, so its probability is at most $\frac{1}{n+1}$ for all $n$, i.e. 0.
 
-*Takeaway.* Once more $\sum_nP(X_n = 1) = \sum\frac1n = \infty$, so Theorem 7.5 is no help. This is the same situation as slide 19, not B4: the events $\{X_n = 1\}$ are nested (each one implies all the earlier ones), not independent. Nested events with a divergent sum can still give almost sure convergence.
+Again $\sum_nP(X_n = 1) = \sum\frac1n = \infty$, so 7.5 can't do it. This one is like slide 19, not B4: the events $\{X_n = 1\}$ are nested (each one implies all the earlier ones). Nested events can have a divergent sum and still give a.s. convergence.
 
 **B6 (probabilitycourse 7.2.8, Problem 2).** $X_1, X_2, \dots$ i.i.d. $\mathcal U(0,1)$ and $Y_n = \min(X_1, \dots, X_n)$. Show $Y_n\xrightarrow{a.s.}0$.
 
-*Solution.* **Route 2.** The minimum is above $\epsilon$ exactly when *every* $X_i$ is above $\epsilon$ (L13's trick for minima). For $0<\epsilon<1$, by independence,
+*Solution.* The min is above $\epsilon$ exactly when *all* the $X_i$ are above $\epsilon$ (the usual min trick from L13). For $0<\epsilon<1$, by independence,
 $$P(Y_n>\epsilon) = P(X_1>\epsilon,\dots,X_n>\epsilon) = (1-\epsilon)^n .$$
-This is a geometric series with ratio $1-\epsilon<1$:
+That's geometric with ratio $1-\epsilon<1$:
 $$\sum_{n=1}^\infty(1-\epsilon)^n = \frac{1-\epsilon}{\epsilon}<\infty .$$
-So Theorem 7.5 gives $Y_n\to0$ almost surely. (For $\epsilon\ge1$ the probabilities are all 0, so there is nothing to check.)
+So 7.5 gives $Y_n\to0$ a.s. (For $\epsilon\ge1$ the probabilities are all 0 anyway.)
 
-*Takeaway.* Geometric decay is always summable. Also note $Y_n$ is non-increasing, so route 3 would work too: $A_m = \{Y_m<\epsilon\}$ (once below $\epsilon$, the minimum stays below), and $P(A_m) = 1 - (1-\epsilon)^m\to1$.
+Geometric decay is always summable, so that's an easy win. You could also use 7.6 here since $Y_n$ only goes down: once below $\epsilon$ it stays below, so $A_m = \{Y_m<\epsilon\}$ and $P(A_m) = 1 - (1-\epsilon)^m\to1$.
 
 **B7 (probabilitycourse 7.2.8, Problem 3).** $X_n\sim\mathcal N(0,\frac1n)$. Show $X_n\xrightarrow{a.s.}0$.
 
-*Solution.* **Route 2.** First standardize: $X_n$ has the same law as $\frac{Z}{\sqrt n}$ with $Z\sim\mathcal N(0,1)$. So
+*Solution.* Standardize: $X_n$ has the same distribution as $\frac{Z}{\sqrt n}$ with $Z\sim\mathcal N(0,1)$. So
 $$P(|X_n|>\epsilon) = P\big(|Z|>\epsilon\sqrt n\big) = 2\big(1 - \Phi(\epsilon\sqrt n)\big).$$
-We cannot sum $\Phi$ values exactly, so bound them. Use the Gaussian tail bound $1 - \Phi(x)\le\frac12e^{-x^2/2}$ for $x\ge0$, with $x = \epsilon\sqrt n$, so $x^2 = \epsilon^2n$:
-$$\sum_nP(|X_n|>\epsilon)\le\sum_n2\cdot\frac12e^{-\epsilon^2n/2} = \sum_n\big(e^{-\epsilon^2/2}\big)^n<\infty .$$
-This is a geometric series with ratio $e^{-\epsilon^2/2}<1$. Theorem 7.5 gives almost sure convergence.
+We can't sum $\Phi$'s exactly, so bound them with the Gaussian tail bound $1 - \Phi(x)\le\frac12e^{-x^2/2}$ for $x\ge0$. With $x = \epsilon\sqrt n$, $x^2 = \epsilon^2n$:
+$$\sum_nP(|X_n|>\epsilon)\le\sum_n2\cdot\frac12e^{-\epsilon^2n/2} = \sum_n\big(e^{-\epsilon^2/2}\big)^n<\infty ,$$
+geometric with ratio $e^{-\epsilon^2/2}<1$. So 7.5 gives a.s. convergence.
 
-*Takeaway.* The problem never said how the $X_n$ depend on each other, and it did not need to: Theorem 7.5 never uses independence. Also, Chebyshev alone would only give $P(|X_n|>\epsilon)\le\frac{1}{n\epsilon^2}$, whose sum diverges, so you really need the stronger Gaussian tail here.
+The question never says how the $X_n$ depend on each other, and we didn't need it, since 7.5 doesn't use independence. Also, Chebyshev only gives $P(|X_n|>\epsilon)\le\frac{1}{n\epsilon^2}$, and that sum diverges, so you really do need the Gaussian tail here.
 
 **B8 (probabilitycourse 7.2.8, Problem 4).** On $\Omega = [0,1]$ with uniform probability, $X_n(s) = \frac{n}{n+1}s + (1-s)^n$ and $X(s) = s$. Show $X_n\xrightarrow{a.s.}X$.
 
-*Solution.* **Route 1.** Fix $s$ and take the two terms separately.
+*Solution.* Fix $s$ and handle the two terms separately.
 
-- **First term:** $\frac{n}{n+1}\to1$, so $\frac{n}{n+1}s\to s$ for every $s$.
-- **Second term:** $(1-s)^n$. If $0<s\le1$ then $0\le1-s<1$, so $(1-s)^n\to0$ (as in slide 13). If $s = 0$ then $(1-s)^n = 1$ for every $n$.
+- $\frac{n}{n+1}\to1$, so $\frac{n}{n+1}s\to s$ for every $s$.
+- $(1-s)^n$: if $0<s\le1$ then $0\le1-s<1$, so $(1-s)^n\to0$ (same as slide 13). If $s = 0$ it's $1^n = 1$ forever.
 
-So for $0<s\le1$, $X_n(s)\to s + 0 = s = X(s)$. ✓ At $s = 0$, $X_n(0) = 0 + 1 = 1$ for all $n$, so $X_n(0)\to1\ne0 = X(0)$. ✗
+So for $0<s\le1$, $X_n(s)\to s + 0 = s = X(s)$. ✓ At $s = 0$, $X_n(0) = 0 + 1 = 1$ for all $n$, so it goes to $1\ne0 = X(0)$. ✗
 
-The failure set is $\{0\}$, which has probability 0, so $X_n\xrightarrow{a.s.}X$.
+The bad set is $\{0\}$, probability 0, so $X_n\xrightarrow{a.s.}X$.
 
 **B9 (Bertsekas Problem 13; last year's Tutorial 8 Q7).** (a) If $X_n\to a$ and $Y_n\to b$ almost surely, show $X_n + Y_n\to a + b$ almost surely. (b) Find $\lim_{n\to\infty}\frac{\sum_{i=1}^nX_i^2}{\sum_{i=1}^nX_i}$ for i.i.d. $X_i\sim\mathcal U[0,1]$.
 
-*Solution.* (a) **The idea:** throw away the bad outcomes of both sequences at once; what is left is still probability 1, and on it everything is ordinary real analysis.
+*Solution.* (a) Idea: throw out the bad $\omega$'s of both sequences together. What's left still has probability 1, and on it everything is just normal real analysis.
 
 - Let $A = \{X_n\not\to a\}$ and $B = \{Y_n\not\to b\}$. Both have probability 0.
-- For any $\omega$ outside $A\cup B$, both $X_n(\omega)\to a$ and $Y_n(\omega)\to b$ are ordinary convergent sequences of numbers, so their sum converges to $a + b$ (limit of a sum of real sequences).
-- So the failure set of $X_n + Y_n$ is inside $A\cup B$, and $P(A\cup B)\le P(A) + P(B) = 0$.
+- For $\omega\notin A\cup B$, $X_n(\omega)\to a$ and $Y_n(\omega)\to b$ are ordinary convergent sequences, so the sum goes to $a + b$.
+- So $X_n + Y_n$ can only fail on $A\cup B$, and $P(A\cup B)\le P(A) + P(B) = 0$.
 
-The same argument works for products, for ratios (when $b\ne0$), and for any continuous function $g$: $g(X_n, Y_n)\to g(a, b)$ almost surely. This is the "continuous mapping" property of almost sure convergence.
+Same argument works for products, ratios (if $b\ne0$), and any continuous $g$: $g(X_n, Y_n)\to g(a, b)$ a.s.
 
-(b) **The trick:** a ratio of two sums is a ratio of two averages, because the $\frac1n$'s cancel:
+(b) Trick: a ratio of sums is a ratio of averages, because the $\frac1n$'s cancel:
 $$\frac{\sum_{i=1}^nX_i^2}{\sum_{i=1}^nX_i} = \frac{\frac1n\sum_{i=1}^nX_i^2}{\frac1n\sum_{i=1}^nX_i}.$$
-Now apply the SLLN twice.
+Now SLLN on top and bottom:
 
-- **Top:** the $X_i^2$ are i.i.d. with mean $E[X^2] = \int_0^1x^2\,dx = \frac13$, so $\frac1n\sum X_i^2\xrightarrow{a.s.}\frac13$.
-- **Bottom:** $\frac1n\sum X_i\xrightarrow{a.s.}E[X] = \frac12$.
+- top: the $X_i^2$ are i.i.d. with mean $E[X^2] = \int_0^1x^2\,dx = \frac13$, so $\frac1n\sum X_i^2\xrightarrow{a.s.}\frac13$;
+- bottom: $\frac1n\sum X_i\xrightarrow{a.s.}E[X] = \frac12$.
 
-By (a) applied to the ratio $g(x, y) = \frac xy$, which is continuous at $(\frac13, \frac12)$ since $\frac12\ne0$:
+$g(x, y) = \frac xy$ is continuous at $(\frac13, \frac12)$ since $\frac12\ne0$, so by (a)
 $$\frac{\sum X_i^2}{\sum X_i}\xrightarrow{a.s.}\frac{1/3}{1/2} = \frac23 .$$
 
 **B10 (Bertsekas Problem 14).** $X_i$ i.i.d. and $Y_i$ i.i.d., with finite means and $E[Y]\ne0$. Does $Z_n = \frac{X_1 + \dots + X_n}{Y_1 + \dots + Y_n}$ converge almost surely?
 
-*Solution.* Yes, by the same trick as B9(b). Divide top and bottom by $n$:
+*Solution.* Yes, same trick as B9(b). Divide top and bottom by $n$:
 $$Z_n = \frac{(X_1 + \dots + X_n)/n}{(Y_1 + \dots + Y_n)/n}.$$
-By the SLLN the top tends to $E[X]$ and the bottom to $E[Y]$, almost surely. Since $E[Y]\ne0$, the ratio is continuous at the limit, and B9(a) gives
+SLLN: top $\to E[X]$, bottom $\to E[Y]$, a.s. Since $E[Y]\ne0$ the ratio is continuous there, so by B9(a)
 $$Z_n\xrightarrow{a.s.}\frac{E[X]}{E[Y]} .$$
-*Note.* No independence between the two sequences is needed. Each SLLN uses only the i.i.d. property *within* its own sequence, and B9(a) never needs independence (it only combines two probability-1 events).
+The two sequences don't need to be independent of each other. Each SLLN only uses i.i.d. *within* its own sequence, and B9(a) just combines two probability-1 events.
 
 **B11 (exam-style contrast with slide 19).** Let $U_1, U_2, \dots$ be **independent** uniforms and $X_n = n^2\mathbf 1\{U_n\le\frac1{n^2}\}$. Does $X_n\to0$ almost surely? What is $E[X_n]$?
 
-*Solution.* **Almost sure convergence (route 2).** For $0<\epsilon<1$,
+*Solution.* For $0<\epsilon<1$,
 $$P(|X_n|>\epsilon) = P\Big(U_n\le\frac1{n^2}\Big) = \frac1{n^2},\qquad\sum_n\frac1{n^2} = \frac{\pi^2}6<\infty .$$
-By Theorem 7.5, $X_n\to0$ almost surely. This holds even though the $U_n$ are independent: the bad events are now rare enough that, with probability 1, only finitely many happen.
+So 7.5 gives $X_n\to0$ a.s., even with independent $U_n$. The bad events are now rare enough that only finitely many happen.
 
-**The means.** $E[X_n] = n^2\cdot P(U_n\le\frac1{n^2}) = n^2\cdot\frac1{n^2} = 1$ for every $n$. So again the means stay at 1 while the limit is 0.
+Means: $E[X_n] = n^2\cdot P(U_n\le\frac1{n^2}) = n^2\cdot\frac1{n^2} = 1$ for all $n$. So once again the means sit at 1 while the limit is 0.
 
-*Takeaway: three cases side by side.*
+All three cases next to each other:
 
-| set-up | $P(X_n\ne0)$ | a.s. to 0? | reason |
+| set-up | $P(X_n\ne0)$ | a.s. to 0? | why |
 |---|---|---|---|
-| one $U$: $n\mathbf 1\{U\le\frac1n\}$ (slide 19) | $\frac1n$ | yes | nested events (Thm 7.6) |
+| one $U$: $n\mathbf 1\{U\le\frac1n\}$ (slide 19) | $\frac1n$ | yes | nested events (7.6) |
 | independent $U_n$: $n\mathbf 1\{U_n\le\frac1n\}$ (L18 slide 20) | $\frac1n$ | **no** | independent, $\sum\frac1n = \infty$ (2nd B–C) |
-| independent $U_n$: $n^2\mathbf 1\{U_n\le\frac1{n^2}\}$ (this) | $\frac1{n^2}$ | yes | $\sum\frac1{n^2}<\infty$ (Thm 7.5) |
+| independent $U_n$: $n^2\mathbf 1\{U_n\le\frac1{n^2}\}$ (this one) | $\frac1{n^2}$ | yes | $\sum\frac1{n^2}<\infty$ (7.5) |
 
 In all three, $E[X_n] = 1\not\to0$.
 
-**B12 (Bertsekas Problems 16 and 18, optional): the SLLN with a finite fourth moment.** This is the standard short proof. It assumes more than the theorem needs, namely $E[X_i^4]<\infty$, and (after subtracting the mean from every $X_i$) $E[X_i] = 0$, so we must show $\frac{S_n}{n}\to0$.
+**B12 (Bertsekas Problems 16 and 18, optional): the SLLN with a finite fourth moment.** The standard short proof. It assumes more than the theorem needs: $E[X_i^4]<\infty$. Subtract the mean from every $X_i$ first, so $E[X_i] = 0$ and we need to show $\frac{S_n}{n}\to0$.
 
-1. **A criterion (Problem 16).** *If $Y_n\ge0$ and $\sum_nE[Y_n]<\infty$, then $Y_n\to0$ almost surely.*
-   Reason: the $Y_n$ are non-negative, so we may swap sum and expectation: $E\big[\sum_nY_n\big] = \sum_nE[Y_n]<\infty$. A random variable with finite mean is finite with probability 1, so $\sum_nY_n<\infty$ with probability 1. And the terms of a convergent series tend to 0.
-2. **The fourth moment of the sum.** Expand
+1. **A criterion (Problem 16).** *If $Y_n\ge0$ and $\sum_nE[Y_n]<\infty$, then $Y_n\to0$ a.s.*
+   Why: the $Y_n$ are nonnegative, so sum and expectation can be swapped, $E\big[\sum_nY_n\big] = \sum_nE[Y_n]<\infty$. A random variable with finite mean is finite with probability 1, so $\sum_nY_n<\infty$ with probability 1. And the terms of a convergent series go to 0.
+2. **Fourth moment of the sum.** Expand
 $$E[S_n^4] = E\Big[\Big(\sum_iX_i\Big)^4\Big] = \sum_{i,j,k,l}E[X_iX_jX_kX_l].$$
-   Look at which terms survive.
-   - If some index appears **exactly once**, say $i$ differs from $j, k, l$, then by independence $E[X_iX_jX_kX_l] = E[X_i]\,E[X_jX_kX_l] = 0$.
-   - **All four equal** ($i = j = k = l$): $n$ terms, each $E[X^4]$.
-   - **Two distinct indices, each appearing twice:** choose which of the 3 ways to pair up the four positions ($\{1,2\}\{3,4\}$, $\{1,3\}\{2,4\}$, $\{1,4\}\{2,3\}$), then the two values $i\ne j$ in order, $n(n-1)$ ways. That is $3n(n-1)$ terms, each $E[X_i^2]E[X_j^2] = (E[X^2])^2\le E[X^4]$.
+   Which terms survive?
+   - If some index shows up **exactly once** (say $i$ is different from $j, k, l$), independence gives $E[X_iX_jX_kX_l] = E[X_i]\,E[X_jX_kX_l] = 0$.
+   - All four equal: $n$ terms, each $E[X^4]$.
+   - Two different indices, each twice: 3 ways to pair up the four slots ($\{1,2\}\{3,4\}$, $\{1,3\}\{2,4\}$, $\{1,4\}\{2,3\}$), times $n(n-1)$ ordered choices of $i\ne j$. That's $3n(n-1)$ terms, each $E[X_i^2]E[X_j^2] = (E[X^2])^2\le E[X^4]$.
 
-   So $E[S_n^4]\le\big(n + 3n(n-1)\big)E[X^4]\le3n^2E[X^4]$. That is, $E[S_n^4]\le Cn^2$ with $C = 3E[X^4]$ (as in Bertsekas). The point is the growth rate: $n^2$, not the $n^4$ you would get if there were no cancellation.
-3. **Apply the criterion** to $Y_n = \big(\frac{S_n}{n}\big)^4\ge0$:
+   So $E[S_n^4]\le\big(n + 3n(n-1)\big)E[X^4]\le3n^2E[X^4]$, i.e. $E[S_n^4]\le Cn^2$ with $C = 3E[X^4]$ (as in Bertsekas). What matters is that it grows like $n^2$, not $n^4$, thanks to all the cancelling.
+3. **Use the criterion** on $Y_n = \big(\frac{S_n}{n}\big)^4\ge0$:
 $$\sum_nE[Y_n] = \sum_n\frac{E[S_n^4]}{n^4}\le\sum_n\frac{Cn^2}{n^4} = C\sum_n\frac1{n^2}<\infty .$$
-   So $\big(\frac{S_n}n\big)^4\to0$ almost surely, and taking fourth roots, $\frac{S_n}{n}\to0$ almost surely. $\square$
+   So $\big(\frac{S_n}n\big)^4\to0$ a.s., and taking fourth roots, $\frac{S_n}{n}\to0$ a.s. $\square$
 
-*Why the fourth power?* With the second moment you only get $E\big[(\frac{S_n}{n})^2\big] = \frac{\sigma^2}{n}$, and $\sum\frac1n = \infty$, so the criterion fails. That route gives only the *weak* law (L18). The fourth power buys the extra factor of $\frac1n$ needed to make the series converge.
+Why the fourth power and not the second? With the second moment you get $E\big[(\frac{S_n}{n})^2\big] = \frac{\sigma^2}{n}$, and $\sum\frac1n = \infty$, so the criterion doesn't apply. That route only gets you the *weak* law (L18). The fourth power gives the extra $\frac1n$ that makes the sum converge.
 
 The general SLLN (finite mean only) needs a harder proof, which is beyond the course.
 
 **B13 (concept check).** True or false? (a) If $X_n\to X$ surely then $X_n\to X$ almost surely. (b) If $\sum_nP(|X_n|>\epsilon) = \infty$ for some $\epsilon$, then $X_n\not\to0$ almost surely. (c) If $X_n\xrightarrow{a.s.}X$ then $E[X_n]\to E[X]$.
 
 *Answers.*
-(a) **True.** If every path converges, then $C = \Omega$ and $P(C) = 1$.
-(b) **False in general.** Slide 19 and B5 are counterexamples: the sum is $\sum\frac1n = \infty$, yet $X_n\to0$ almost surely. Theorem 7.5 is only sufficient. The statement becomes true when the events $\{|X_n|>\epsilon\}$ are independent, by the second Borel–Cantelli lemma (as in B4).
-(c) **False.** Slide 19: $X_n\to0$ almost surely but $E[X_n] = 1$ for all $n$. The rare huge values ("mass escaping to infinity") keep the mean up.
+(a) **True.** Every path converges, so $C = \Omega$ and $P(C) = 1$.
+(b) **False in general.** Slide 19 and B5: the sum is $\sum\frac1n = \infty$, but $X_n\to0$ a.s. Theorem 7.5 is only sufficient. It becomes true if the events $\{|X_n|>\epsilon\}$ are independent, by second Borel–Cantelli (like B4).
+(c) **False.** Slide 19: $X_n\to0$ a.s. but $E[X_n] = 1$ for all $n$. The rare huge values keep the mean up.
 
 
 
