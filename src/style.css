@@ -618,22 +618,29 @@ body.is-focus .zen-hud:focus-within {
 .zh-swatch[data-t="sepia"] { background: #e8dec9; }
 .zh-swatch[data-t="dark"]  { background: #1c1917; }
 
-/* Paragraph Spotlight Mode (iA Writer / Readwise Reader Style) */
-body.is-focus.is-spotlight .prose > * {
-  opacity: 0.24;
+/* Paragraph Spotlight Mode (iA Writer / Readwise Reader Style)
+   Stops are .spot-u (paragraphs, equations, tables, callouts, and each list
+   item on its own). Headings dim too, but the current section's heading stays
+   half-lit (.spot-ctx). */
+body.is-focus.is-spotlight .prose .spot-u,
+body.is-focus.is-spotlight .prose > :is(h1, h2, h3, h4, h5, h6, hr) {
+  opacity: 0.22;
   filter: grayscale(35%);
-  transition: opacity .22s ease, filter .22s ease, transform .22s ease, border-color .22s ease, background-color .22s ease;
-  cursor: pointer;
+  transition: opacity .25s ease, filter .25s ease;
 }
-body.is-focus.is-spotlight .prose > *:hover {
-  opacity: 0.58;
+body.is-focus.is-spotlight .prose .spot-u { cursor: pointer; }
+body.is-focus.is-spotlight .prose .spot-u:not(.spot-active):hover { opacity: 0.5; }
+body.is-focus.is-spotlight .prose > .spot-ctx {
+  opacity: 0.62;
+  filter: none;
 }
-body.is-focus.is-spotlight .prose > *.spot-active {
-  opacity: 1 !important;
-  filter: none !important;
+body.is-focus.is-spotlight .prose .spot-u.spot-active {
+  opacity: 1;
+  filter: none;
+  cursor: auto;
   position: relative;
 }
-body.is-focus.is-spotlight .prose > *.spot-active::before {
+body.is-focus.is-spotlight .prose .spot-u.spot-active::before {
   content: "";
   position: absolute;
   left: -18px;
@@ -642,6 +649,19 @@ body.is-focus.is-spotlight .prose > *.spot-active::before {
   width: 3px;
   border-radius: 2px;
   background: var(--accent);
+}
+/* List items: put the bar left of the bullet, not over it */
+body.is-focus.is-spotlight .prose li.spot-u.spot-active::before { left: calc(-1.4em - 14px); }
+/* Callouts already have a left rule; don't stack a second bar on it */
+body.is-focus.is-spotlight .prose blockquote.spot-u.spot-active::before { display: none; }
+.zh-count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.is-focus.is-spotlight .prose .spot-u,
+  body.is-focus.is-spotlight .prose > * { transition: none; }
 }
 
 /* Equation & Proof Zoom Lightbox ("Chalkboard Modal" on Double-Click or Zoom Button) */

@@ -193,29 +193,100 @@
   // and Equation/Proof Zoom Lightbox)
   // ==========================================================================
   var focusBtn = $('focus-btn'), zenHud = null, hudTimer = null;
-  var spotBlocks = [], spotIdx = 0;
+  var spotBlocks = [], spotIdx = 0, spotHeads = [], spotProgUntil = 0, spotScrollTimer = null;
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Spotlight units: each paragraph, equation, table, callout or solution is one
+  // stop, and lists are split so every bullet is its own stop. Headings are not
+  // stops (stepping onto a bare heading is a wasted keypress); the heading of
+  // the current section stays half-lit instead, so you keep your bearings.
   function collectSpotBlocks() {
     var prose = document.querySelector('.note .prose');
     if (!prose) return [];
-    return $$(':scope > *', prose).filter(function (el) {
-      return el.tagName !== 'HR' && el.offsetHeight > 0;
+    var out = [];
+    spotHeads = [];
+    $$(':scope > *', prose).forEach(function (el) {
+      if (el.offsetHeight === 0 || el.tagName === 'HR') return;
+      if (/^H[1-6]$/.test(el.tagName)) { spotHeads.push(el); return; }
+      if (el.tagName === 'UL' || el.tagName === 'OL') {
+        $$(':scope > li', el).forEach(function (li) {
+          if (li.offsetHeight > 0) { li.classList.add('spot-u'); out.push(li); }
+        });
+        return;
+      }
+      el.classList.add('spot-u');
+      out.push(el);
     });
+    return out;
+  }
+
+  function spotScrollTo(top) {
+    spotProgUntil = Date.now() + (reduceMotion ? 150 : 900);
+    window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  function paintSpotCounter() {
+    var zhSp = $('zh-spot');
+    if (!zhSp) return;
+    var on = document.body.classList.contains('is-spotlight') && spotBlocks.length;
+    zhSp.innerHTML = 'Spotlight' + (on ? ' <span class="zh-count">' + (spotIdx + 1) + '/' + spotBlocks.length + '</span>' : '') + ' <kbd>s</kbd>';
   }
 
   function setSpotActive(idx, scrollLock) {
     if (!spotBlocks.length) spotBlocks = collectSpotBlocks();
     if (!spotBlocks.length) return;
     spotIdx = Math.max(0, Math.min(spotBlocks.length - 1, idx));
-    spotBlocks.forEach(function (el, k) {
-      el.classList.toggle('spot-active', k === spotIdx);
-    });
-    if (scrollLock !== false) {
-      var target = spotBlocks[spotIdx];
-      var rect = target.getBoundingClientRect();
-      var desiredTop = window.innerHeight * 0.36;
-      window.scrollTo({ top: window.scrollY + rect.top - desiredTop, behavior: 'smooth' });
+    var target = spotBlocks[spotIdx];
+    $$('.spot-active, .spot-ctx').forEach(function (el) { el.classList.remove('spot-active', 'spot-ctx'); });
+    target.classList.add('spot-active');
+    // Half-light the heading this block sits under
+    var head = null;
+    for (var h = 0; h < spotHeads.length; h++) {
+      if (spotHeads[h].compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) head = spotHeads[h];
+      else break;
     }
+    if (head) head.classList.add('spot-ctx');
+    if (scrollLock !== false) {
+      var rect = target.getBoundingClientRect();
+      var vh = window.innerHeight;
+      // Short blocks sit on the reading line; tall ones start near the top so
+      // as much of them as possible is visible.
+      var desiredTop = rect.height > vh * 0.55 ? vh * 0.12 : vh * 0.36;
+      spotScrollTo(window.scrollY + rect.top - desiredTop);
+    }
+    paintSpotCounter();
+  }
+
+  // j / k: move one block, but read through a tall block (a long proof, an
+  // open solution, a big table) a screen at a time before leaving it.
+  function spotStep(dir) {
+    if (!spotBlocks.length) spotBlocks = collectSpotBlocks();
+    var cur = spotBlocks[spotIdx];
+    if (cur) {
+      var r = cur.getBoundingClientRect(), vh = window.innerHeight, pad = vh * 0.1;
+      if (dir > 0 && r.height > vh * 0.55 && r.bottom > vh - pad + 12) {
+        spotScrollTo(window.scrollY + Math.min(vh * 0.6, r.bottom - (vh - pad)));
+        return;
+      }
+      if (dir < 0 && r.height > vh * 0.55 && r.top < pad - 12) {
+        spotScrollTo(window.scrollY - Math.min(vh * 0.6, pad - r.top));
+        return;
+      }
+    }
+    setSpotActive(spotIdx + dir, true);
+  }
+
+  // The block under the reading line (36% down the screen), or the nearest one
+  // if the line falls in a gap between blocks.
+  function spotNearestLine() {
+    var anchorY = window.innerHeight * 0.36, best = 0, bestDist = 1e9;
+    for (var k = 0; k < spotBlocks.length; k++) {
+      var r = spotBlocks[k].getBoundingClientRect();
+      var d = r.top > anchorY ? r.top - anchorY : r.bottom < anchorY ? anchorY - r.bottom : 0;
+      if (d < bestDist) { bestDist = d; best = k; }
+      if (r.top > anchorY + bestDist) break;
+    }
+    return best;
   }
 
   function setSpotlight(on) {
@@ -226,18 +297,38 @@
     if (zhSp) zhSp.classList.toggle('on', isOn);
     if (isOn) {
       spotBlocks = collectSpotBlocks();
-      // Find block closest to 36% viewport height
-      var best = 0, bestDist = 1e9;
-      var anchorY = window.innerHeight * 0.36;
-      spotBlocks.forEach(function (el, k) {
-        var d = Math.abs(el.getBoundingClientRect().top - anchorY);
-        if (d < bestDist) { bestDist = d; best = k; }
-      });
-      setSpotActive(best, false);
+      setSpotActive(spotNearestLine(), false);
     } else {
-      $$('.spot-active').forEach(function (el) { el.classList.remove('spot-active'); });
+      $$('.spot-active, .spot-ctx').forEach(function (el) { el.classList.remove('spot-active', 'spot-ctx'); });
     }
+    paintSpotCounter();
   }
+
+  // When you scroll yourself (wheel, trackpad, scrollbar, touch), the spotlight
+  // follows the reading line instead of leaving the whole page dimmed.
+  addEventListener('scroll', function () {
+    if (!document.body.classList.contains('is-spotlight') || Date.now() < spotProgUntil) return;
+    clearTimeout(spotScrollTimer);
+    spotScrollTimer = setTimeout(function () {
+      if (Date.now() < spotProgUntil || !document.body.classList.contains('is-spotlight')) return;
+      var cur = spotBlocks[spotIdx];
+      if (cur) {
+        var r = cur.getBoundingClientRect(), y = window.innerHeight * 0.36;
+        if (r.top <= y && r.bottom >= y) return; // still on the reading line
+      }
+      setSpotActive(spotNearestLine(), false);
+    }, 90);
+  }, { passive: true });
+
+  // Opening or closing a solution changes which blocks exist and their sizes
+  document.addEventListener('toggle', function (ev) {
+    if (!document.body.classList.contains('is-spotlight')) return;
+    if (!ev.target.closest || !ev.target.closest('.note .prose')) return;
+    var keep = spotBlocks[spotIdx];
+    spotBlocks = collectSpotBlocks();
+    var i = spotBlocks.indexOf(keep);
+    if (i >= 0) { spotIdx = i; paintSpotCounter(); }
+  }, true);
 
   function toggleNativeFullscreen() {
     if (!document.fullscreenElement) {
@@ -355,9 +446,10 @@
   if (mainProse) {
     mainProse.addEventListener('click', function (ev) {
       if (!document.body.classList.contains('is-spotlight')) return;
-      var block = ev.target.closest('.note .prose > *');
-      if (!block) return;
+      if (ev.target.closest('a, button, summary, input, textarea')) return;
       if (!spotBlocks.length) spotBlocks = collectSpotBlocks();
+      var block = ev.target.closest('.spot-u');
+      if (!block) return;
       var idx = spotBlocks.indexOf(block);
       if (idx >= 0) setSpotActive(idx, true);
     });
@@ -871,15 +963,21 @@
       toggleNativeFullscreen();
       return;
     }
-    if (ev.key === 's' && document.body.classList.contains('is-focus')) {
+    if (ev.key === 's' && (document.body.classList.contains('is-focus') || (focusBtn && mainProse))) {
       ev.preventDefault();
+      // Outside Zen, `s` goes straight into Zen with the spotlight on
+      if (!document.body.classList.contains('is-focus')) {
+        setFocus(true);
+        if (!document.body.classList.contains('is-spotlight')) setSpotlight(true);
+        return;
+      }
       setSpotlight(!document.body.classList.contains('is-spotlight'));
       return;
     }
     if ((ev.key === 'j' || ev.key === 'k') && document.body.classList.contains('is-focus')) {
       ev.preventDefault();
       if (!document.body.classList.contains('is-spotlight')) setSpotlight(true);
-      else setSpotActive(spotIdx + (ev.key === 'j' ? 1 : -1), true);
+      else spotStep(ev.key === 'j' ? 1 : -1);
       return;
     }
     if (ev.key === 'Enter' && document.body.classList.contains('is-spotlight')) {
