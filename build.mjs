@@ -413,7 +413,7 @@ ${fontsLink}
       <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
       <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
     </div>
-    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)">✎ Notes</button>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
     <div class="settings">
       <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
       <div class="settings-pop" id="settings-pop" hidden>

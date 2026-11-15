@@ -2008,7 +2008,8 @@ details.sol > :last-child:not(summary) { margin-bottom: 8px; }
 
 @media (max-width: 560px) {
   .top { gap: 8px; }
-  .brand-text { display: none; }
+  .brand-text, .brand-title, .brand-sep, .brand-sub, .scratch-label { display: none; }
+  .brand { gap: 0; }
   .top-actions { gap: 6px; }
   .search input { padding-right: 12px; }
 }
