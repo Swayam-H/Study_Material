@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
-<link rel="stylesheet" href="assets/style.css?v=mwhkm9qi">
+<link rel="stylesheet" href="assets/style.css?v=mwhmuczq">
 </head>
 <body data-root="" data-page="" class="is-home">
 <div class="read-bar" id="read-bar"></div>
@@ -21,7 +21,7 @@
     <span class="brand-mark" aria-hidden="true">∑</span>
     <span class="brand-title">Course Notes</span>
     <span class="brand-sep">·</span>
-    <span class="brand-sub">MA6.101 Monograph</span>
+    <span class="brand-sub">Monsoon 2026</span>
   </a>
   <div class="search">
     <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
@@ -73,53 +73,22 @@
   <main class="main"><div class="home">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Monograph &amp; Problem Compendium · MA6.101 Monsoon 2026</p>
+        <p class="eyebrow">Monsoon 2026 · 1 course live · 5 coming soon</p>
         <h1>Course Notes</h1>
-        <p class="lede">Lecture notes, cheat sheets and revision, with the math rendered properly.</p>
+        <p class="lede">Notes, practice problems and formula sheets for this semester's courses, with the math rendered properly.</p>
         <div class="hero-actions">
           <a class="btn primary" id="resume-btn" href="pns/l1-l8/how-to-use-this-document.html">Start reading</a>
-          <a class="btn" id="random-btn" href="pns/practice.html#random">Random problem</a>
-          <a class="btn" href="pns/formulas.html">Formula sheet</a>
+          <a class="btn" href="#courses">All courses</a>
         </div>
       </div>
     </section>
     <section class="stats" id="stats">
       <div class="stat-item"><b id="st-ch">0 / 41</b><span>Chapters read</span></div>
-      <div class="stat-item"><b id="st-pr">0 / 252</b><span>Problems solved</span></div>
+      <div class="stat-item"><b id="st-pr" data-total="252">0 / 252</b><span>Problems solved</span></div>
       <div class="stat-item"><b id="st-rv">0</b><span>Marked for review</span></div>
       <div class="stat-item"><b id="st-sv">0</b><span>Bookmarked sections</span></div>
     </section>
-    <section class="dist-lab" aria-label="Interactive standard normal tail explorer">
-      <div class="dist-lab-head">
-        <span class="dist-lab-title">Interactive Standard Normal Tail Table — Z ~ N(0, 1)</span>
-        <span class="dist-lab-readout" id="z-readout">Φ(1.20) = 0.8849 · P(Z ≥ 1.20) = 0.1151</span>
-      </div>
-      <div class="dist-lab-grid">
-        <div><svg class="bell" viewBox="0 0 320 96" role="img" aria-label="Interactive standard normal density">
-    <line class="bell-grid" x1="0" y1="49.0" x2="320" y2="49.0" stroke-dasharray="2 3"/>
-    <line class="bell-grid" x1="160.0" y1="10" x2="160.0" y2="86" stroke-dasharray="2 3"/>
-    <polygon class="bell-tail" id="bell-tail-poly" points="216.5,86 216.5,50.0 220.2,53.4 224.0,56.7 227.8,59.8 231.5,62.7 235.3,65.4 239.1,68.0 242.8,70.3 246.6,72.4 250.4,74.3 254.1,76.0 257.9,77.5 261.6,78.8 265.4,80.0 269.2,81.0 272.9,81.8 276.7,82.6 280.5,83.2 284.2,83.7 288.0,84.2 291.8,84.5 295.5,84.8 299.3,85.1 303.1,85.3 306.8,85.4 310.6,85.6 314.4,85.7 318.1,85.7 320.0,86"/>
-    <line class="bell-cut" id="bell-cut-line" x1="216.5" y1="50.0" x2="216.5" y2="86"/>
-    <polyline class="bell-curve" fill="none" points="0.0,85.8 3.8,85.7 7.5,85.6 11.3,85.5 15.1,85.4 18.8,85.2 22.6,85.0 26.4,84.7 30.1,84.4 33.9,84.0 37.6,83.5 41.4,82.9 45.2,82.2 48.9,81.4 52.7,80.5 56.5,79.4 60.2,78.2 64.0,76.8 67.8,75.2 71.5,73.4 75.3,71.4 79.1,69.1 82.8,66.7 86.6,64.1 90.4,61.2 94.1,58.2 97.9,55.0 101.6,51.7 105.4,48.2 109.2,44.7 112.9,41.1 116.7,37.5 120.5,34.0 124.2,30.6 128.0,27.3 131.8,24.2 135.5,21.4 139.3,18.8 143.1,16.6 146.8,14.8 150.6,13.5 154.4,12.5 158.1,12.1 161.9,12.1 165.6,12.5 169.4,13.5 173.2,14.8 176.9,16.6 180.7,18.8 184.5,21.4 188.2,24.2 192.0,27.3 195.8,30.6 199.5,34.0 203.3,37.5 207.1,41.1 210.8,44.7 214.6,48.2 218.4,51.7 222.1,55.0 225.9,58.2 229.6,61.2 233.4,64.1 237.2,66.7 240.9,69.1 244.7,71.4 248.5,73.4 252.2,75.2 256.0,76.8 259.8,78.2 263.5,79.4 267.3,80.5 271.1,81.4 274.8,82.2 278.6,82.9 282.4,83.5 286.1,84.0 289.9,84.4 293.6,84.7 297.4,85.0 301.2,85.2 304.9,85.4 308.7,85.5 312.5,85.6 316.2,85.7 320.0,85.8"/>
-    <line class="bell-axis" x1="0" y1="86" x2="320" y2="86"/>
-    <line class="bell-axis" x1="160.0" y1="86" x2="160.0" y2="90"/>
-  </svg></div>
-        <div class="dist-controls">
-          <div class="dist-ctrl">
-            <label for="z-slider"><span>Threshold z</span><b id="z-val">+1.20</b></label>
-            <input type="range" id="z-slider" min="-3.0" max="3.0" step="0.01" value="1.20">
-          </div>
-          <div class="dist-presets">
-            <button type="button" data-z-set="0">z = 0</button>
-            <button type="button" data-z-set="1.0">1σ (1.00)</button>
-            <button type="button" data-z-set="1.645">90% (1.645)</button>
-            <button type="button" data-z-set="1.96">95% (1.96)</button>
-            <button type="button" data-z-set="2.576">99% (2.58)</button>
-          </div>
-        </div>
-      </div>
-    </section>
-    <h2 class="sec-title">Course Volumes</h2>
+    <h2 class="sec-title" id="courses">Courses</h2>
     <div class="course-grid"><article class="course-card" data-course="pns">
       <a class="course-main" href="pns/index.html">
         <div class="course-meta">MA6.101 · Monsoon 2026</div>
@@ -128,13 +97,48 @@
         <div class="bar"><i data-bar-for="pns/" data-total="41"></i></div>
         <div class="course-foot">
           <span data-count-text="pns/" data-total="41">0 of 41 chapters read</span>
-          <span>7 note sets · 252 problems · 123 boxed formulas</span>
+          <span>7 note sets · 252 problems · 123 formulas</span>
         </div>
       </a>
       <div class="course-actions">
-        <a href="pns/index.html">Syllabus &amp; Notes (41)</a>
-        <a href="pns/practice.html">Problem Bank (252)</a>
-        <a href="pns/formulas.html">Formula Compendium (123)</a>
+        <a href="pns/index.html">Notes (41)</a>
+        <a href="pns/practice.html">Problems (252)</a>
+        <a href="pns/formulas.html">Formulas (123)</a>
+      </div>
+    </article><article class="course-card soon" aria-label="AAD, notes coming soon">
+      <div class="course-main">
+        <div class="course-meta">Monsoon 2026</div>
+        <h2>AAD</h2>
+        <p>Notes for this course will appear here once they are added.</p>
+        <div class="course-foot"><span class="soon-pill">Coming soon</span></div>
+      </div>
+    </article><article class="course-card soon" aria-label="Automata, notes coming soon">
+      <div class="course-main">
+        <div class="course-meta">Monsoon 2026</div>
+        <h2>Automata</h2>
+        <p>Notes for this course will appear here once they are added.</p>
+        <div class="course-foot"><span class="soon-pill">Coming soon</span></div>
+      </div>
+    </article><article class="course-card soon" aria-label="DnA, notes coming soon">
+      <div class="course-main">
+        <div class="course-meta">Monsoon 2026</div>
+        <h2>DnA</h2>
+        <p>Notes for this course will appear here once they are added.</p>
+        <div class="course-foot"><span class="soon-pill">Coming soon</span></div>
+      </div>
+    </article><article class="course-card soon" aria-label="ESW, notes coming soon">
+      <div class="course-main">
+        <div class="course-meta">Monsoon 2026</div>
+        <h2>ESW</h2>
+        <p>Notes for this course will appear here once they are added.</p>
+        <div class="course-foot"><span class="soon-pill">Coming soon</span></div>
+      </div>
+    </article><article class="course-card soon" aria-label="Science-1, notes coming soon">
+      <div class="course-main">
+        <div class="course-meta">Monsoon 2026</div>
+        <h2>Science-1</h2>
+        <p>Notes for this course will appear here once they are added.</p>
+        <div class="course-foot"><span class="soon-pill">Coming soon</span></div>
       </div>
     </article></div>
     <div id="saved-box"></div>
@@ -164,6 +168,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="assets/app.js?v=mwhkm9qi" defer></script>
+<script src="assets/app.js?v=mwhmuczq" defer></script>
 </body>
 </html>

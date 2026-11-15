@@ -581,7 +581,7 @@
       m.courses.forEach(function (c) { total += c.nChapters; nd += countDone(c.slug + '/'); });
       var np = 0, nr = 0; for (var k in probs) { if (probs[k] === 'done') np++; else if (probs[k] === 'review') nr++; }
       if ($('st-ch')) $('st-ch').textContent = nd + ' / ' + total;
-      if ($('st-pr')) $('st-pr').textContent = np + ' / 252';
+      if ($('st-pr')) $('st-pr').textContent = np + ' / ' + ($('st-pr').dataset.total || '');
       if ($('st-rv')) $('st-rv').textContent = nr;
       if ($('st-sv')) $('st-sv').textContent = saved.length;
       var last = store.get('notes:last', null), id = last && (last.id || last);
@@ -593,7 +593,10 @@
         return '<a href="' + esc(s.u) + '"><b>★ ' + esc(s.t.replace(/[★☆]/g, '')) + '</b><span>' + esc(s.c) + '</span></a>';
       }).join('') + '</div>';
     }).catch(function () {});
+  }
 
+  // ---------- Interactive normal tail table (on course pages that include it) ----------
+  {
     var zSlider = $('z-slider'), zVal = $('z-val'), zReadout = $('z-readout'), tailPoly = $('bell-tail-poly'), cutLine = $('bell-cut-line');
     if (zSlider && tailPoly && cutLine) {
       var normCdf = function (x) {

@@ -400,7 +400,7 @@ ${fontsLink}
     <span class="brand-mark" aria-hidden="true">∑</span>
     <span class="brand-title">${esc(site.title)}</span>
     <span class="brand-sep">·</span>
-    <span class="brand-sub">MA6.101 Monograph</span>
+    <span class="brand-sub">${esc(site.term || 'Study desk')}</span>
   </a>
   <div class="search">
     <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
@@ -504,50 +504,8 @@ fs.writeFileSync(path.join(OUT, 'manifest.webmanifest'), JSON.stringify({
 }));
 fs.writeFileSync(path.join(OUT, 'assets', 'search.js'), 'window.NOTES_SEARCH=' + JSON.stringify(searchIndex) + ';');
 
-// home (filled in by app.js from saved progress)
-{
-  let cards = '';
-  for (const c of courses) {
-    const n = c.docs.reduce((a, d) => a + d.chapters.length, 0);
-    cards += `<article class="course-card" data-course="${c.slug}">
-      <a class="course-main" href="${c.slug}/index.html">
-        <div class="course-meta">${esc([c.code, c.term].filter(Boolean).join(' · '))}</div>
-        <h2>${esc(c.title)}</h2>
-        <p>${esc(c.blurb || '')}</p>
-        <div class="bar"><i data-bar-for="${c.slug}/" data-total="${n}"></i></div>
-        <div class="course-foot">
-          <span data-count-text="${c.slug}/" data-total="${n}">0 of ${n} chapters read</span>
-          <span>${c.docs.length} note sets · ${c.problems.length} problems · ${c.formulas.length} boxed formulas</span>
-        </div>
-      </a>
-      <div class="course-actions">
-        <a href="${c.slug}/index.html">Syllabus &amp; Notes (${n})</a>
-        <a href="${c.slug}/practice.html">Problem Bank (${c.problems.length})</a>
-        <a href="${c.slug}/formulas.html">Formula Compendium (${c.formulas.length})</a>
-      </div>
-    </article>`;
-  }
-  const c0 = courses[0];
-  const body = `<div class="home">
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Monograph &amp; Problem Compendium · ${c0 ? esc(c0.code + ' ' + c0.term) : ''}</p>
-        <h1>${esc(site.title)}</h1>
-        <p class="lede">${esc(site.tagline)}</p>
-        <div class="hero-actions">
-          <a class="btn primary" id="resume-btn" href="${c0 ? c0.docs[0].chapters[0].id + '.html' : '#'}">Start reading</a>
-          <a class="btn" id="random-btn" href="${c0 ? c0.slug + '/practice.html#random' : '#'}">Random problem</a>
-          ${c0 ? `<a class="btn" href="${c0.slug}/formulas.html">Formula sheet</a>` : ''}
-        </div>
-      </div>
-    </section>
-    <section class="stats" id="stats">
-      <div class="stat-item"><b id="st-ch">0 / 41</b><span>Chapters read</span></div>
-      <div class="stat-item"><b id="st-pr">0 / 252</b><span>Problems solved</span></div>
-      <div class="stat-item"><b id="st-rv">0</b><span>Marked for review</span></div>
-      <div class="stat-item"><b id="st-sv">0</b><span>Bookmarked sections</span></div>
-    </section>
-    <section class="dist-lab" aria-label="Interactive standard normal tail explorer">
+// home: every course, active ones first, then the ones still to come (content/site.json "upcoming")
+const distLab = () => `<section class="dist-lab" aria-label="Interactive standard normal tail explorer">
       <div class="dist-lab-head">
         <span class="dist-lab-title">Interactive Standard Normal Tail Table — Z ~ N(0, 1)</span>
         <span class="dist-lab-readout" id="z-readout">Φ(1.20) = 0.8849 · P(Z ≥ 1.20) = 0.1151</span>
@@ -568,8 +526,62 @@ fs.writeFileSync(path.join(OUT, 'assets', 'search.js'), 'window.NOTES_SEARCH=' +
           </div>
         </div>
       </div>
+    </section>`;
+{
+  let cards = '';
+  for (const c of courses) {
+    const n = c.docs.reduce((a, d) => a + d.chapters.length, 0);
+    cards += `<article class="course-card" data-course="${c.slug}">
+      <a class="course-main" href="${c.slug}/index.html">
+        <div class="course-meta">${esc([c.code, c.term].filter(Boolean).join(' · '))}</div>
+        <h2>${esc(c.title)}</h2>
+        <p>${esc(c.blurb || '')}</p>
+        <div class="bar"><i data-bar-for="${c.slug}/" data-total="${n}"></i></div>
+        <div class="course-foot">
+          <span data-count-text="${c.slug}/" data-total="${n}">0 of ${n} chapters read</span>
+          <span>${c.docs.length} note sets · ${c.problems.length} problems · ${c.formulas.length} formulas</span>
+        </div>
+      </a>
+      <div class="course-actions">
+        <a href="${c.slug}/index.html">Notes (${n})</a>
+        <a href="${c.slug}/practice.html">Problems (${c.problems.length})</a>
+        <a href="${c.slug}/formulas.html">Formulas (${c.formulas.length})</a>
+      </div>
+    </article>`;
+  }
+  for (const u of site.upcoming || []) {
+    cards += `<article class="course-card soon" aria-label="${esc(u.title)}, notes coming soon">
+      <div class="course-main">
+        <div class="course-meta">${esc([u.code, u.term || site.term].filter(Boolean).join(' · '))}</div>
+        <h2>${esc(u.title)}</h2>
+        <p>${esc(u.blurb || 'Notes for this course will appear here once they are added.')}</p>
+        <div class="course-foot"><span class="soon-pill">Coming soon</span></div>
+      </div>
+    </article>`;
+  }
+  const c0 = courses[0];
+  const nAll = courses.reduce((a, c) => a + c.docs.reduce((b, d) => b + d.chapters.length, 0), 0);
+  const pAll = courses.reduce((a, c) => a + c.problems.length, 0);
+  const nSoon = (site.upcoming || []).length;
+  const body = `<div class="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">${esc(site.term || 'Study desk')} · ${courses.length} ${courses.length === 1 ? 'course' : 'courses'} live${nSoon ? ` · ${nSoon} coming soon` : ''}</p>
+        <h1>${esc(site.title)}</h1>
+        <p class="lede">${esc(site.tagline)}</p>
+        <div class="hero-actions">
+          <a class="btn primary" id="resume-btn" href="${c0 ? c0.docs[0].chapters[0].id + '.html' : '#courses'}">${c0 ? 'Start reading' : 'See courses'}</a>
+          <a class="btn" href="#courses">All courses</a>
+        </div>
+      </div>
     </section>
-    <h2 class="sec-title">Course Volumes</h2>
+    <section class="stats" id="stats">
+      <div class="stat-item"><b id="st-ch">0 / ${nAll}</b><span>Chapters read</span></div>
+      <div class="stat-item"><b id="st-pr" data-total="${pAll}">0 / ${pAll}</b><span>Problems solved</span></div>
+      <div class="stat-item"><b id="st-rv">0</b><span>Marked for review</span></div>
+      <div class="stat-item"><b id="st-sv">0</b><span>Bookmarked sections</span></div>
+    </section>
+    <h2 class="sec-title" id="courses">Courses</h2>
     <div class="course-grid">${cards}</div>
     <div id="saved-box"></div>
   </div>`;
@@ -582,7 +594,7 @@ for (const c of courses) {
   const nCh = c.docs.reduce((a, d) => a + d.chapters.length, 0);
   meta.courses.push({ slug: c.slug, title: c.title, nProblems: c.problems.length, nFormulas: c.formulas.length, nChapters: nCh, first: c.docs[0].chapters[0].id });
   let h = `<div class="course-page"><p class="eyebrow">${esc([c.code, c.term].filter(Boolean).join(' · '))}</p><h1>${esc(c.title)}</h1><p class="lede">${esc(c.blurb || '')}</p>
-    <div class="tool-row"><a class="tool" href="practice.html"><b>Practice problem bank (${c.problems.length})</b><span>Worked problems from lectures, homework, tutorials, and past exams with List and Flashcard Deck modes</span></a><a class="tool" href="formulas.html"><b>Formula compendium (${c.formulas.length})</b><span>Every boxed theorem, identity, and distribution result indexed in lecture order with 1-click LaTeX copy</span></a></div>`;
+    ${(c.extras || []).includes('normal-table') ? distLab() : ''}<div class="tool-row"><a class="tool" href="practice.html"><b>Practice problem bank (${c.problems.length})</b><span>Worked problems from lectures, homework, tutorials, and past exams with List and Flashcard Deck modes</span></a><a class="tool" href="formulas.html"><b>Formula compendium (${c.formulas.length})</b><span>Every boxed theorem, identity, and distribution result indexed in lecture order with 1-click LaTeX copy</span></a></div>`;
   for (const d of c.docs) {
     h += `<section class="doc-block"><div class="doc-head"><div><h2>${esc(d.title)}</h2>${d.about ? `<p>${inline(d.about)}</p>` : ''}</div><div class="doc-side"><span class="progress-text" data-count-text="${c.slug}/${d.slug}/" data-total="${d.chapters.length}" data-short="1"></span>${d.pdf ? `<a class="pdf-link" href="pdf/${encodeURI(d.pdf)}" target="_blank" rel="noopener">PDF ↗</a>` : ''}</div></div><div class="bar thin"><i data-bar-for="${c.slug}/${d.slug}/" data-total="${d.chapters.length}"></i></div><ol class="chapter-list">`;
     for (const ch of d.chapters) {

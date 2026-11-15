@@ -13,8 +13,9 @@ Live at **https://swayam-h.github.io/Study_Material/**. The site is built into `
 Notes are Markdown files with LaTeX math (`$...$` inline, `$$...$$` display) under `content/`.
 
 1. To edit a note, change its `.md` file in `content/<course>/`.
-2. To add a course, create `content/<course-slug>/course.json` (copy `content/pns/course.json`) and put the Markdown files next to it. Every `# Heading` becomes its own page; `##` and `###` headings become the page outline and search entries.
-3. Rebuild and push:
+2. Courses that aren't added yet are listed under `upcoming` in `content/site.json` and show as "Coming soon" cards on the home page. When you add one, delete it from that list.
+3. To add a course, create `content/<course-slug>/course.json` (copy `content/pns/course.json`) and put the Markdown files next to it. Every `# Heading` becomes its own page; `##` and `###` headings become the page outline and search entries.
+4. Rebuild and deploy:
 
 ```
 npm install

@@ -1,1 +1,22 @@
-{ "title": "Course Notes", "tagline": "Lecture notes, cheat sheets and revision, with the math rendered properly." }
+{
+  "title": "Course Notes",
+  "tagline": "Notes, practice problems and formula sheets for this semester's courses, with the math rendered properly.",
+  "term": "Monsoon 2026",
+  "upcoming": [
+    {
+      "title": "AAD"
+    },
+    {
+      "title": "Automata"
+    },
+    {
+      "title": "DnA"
+    },
+    {
+      "title": "ESW"
+    },
+    {
+      "title": "Science-1"
+    }
+  ]
+}

@@ -2023,3 +2023,17 @@ details.sol > :last-child:not(summary) { margin-bottom: 8px; }
   body { background: #fff; color: #000; }
   details.sol > summary { display: none; }
 }
+
+/* Home: courses that are not added yet */
+.course-card.soon { border-style: dashed; background: transparent; }
+.course-card.soon .course-main { cursor: default; }
+.course-card.soon h2 { color: var(--ink-2); }
+.course-card.soon p { color: var(--ink-3); }
+.soon-pill { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px; font: 500 11px var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); }
+.course-page .dist-lab { margin: 24px 0 8px; }
+.course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 14px; }
+.course-grid .course-card:not(.soon) { grid-column: 1 / -1; }
+.course-card.soon .course-main { padding: 16px 18px; }
+.course-card.soon h2 { font-size: 19px; margin-bottom: 4px; }
+.course-card.soon p { font-size: 14.5px; }
+.course-card.soon .course-foot { margin-top: 12px; }
