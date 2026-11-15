@@ -94,6 +94,19 @@
     if (d) { d.open = true; el.scrollIntoView(); }
   }
   addEventListener('hashchange', revealHash); revealHash();
+  // web fonts and math load after the browser's first jump to #anchor and push it off screen; jump again once they are in
+  if (location.hash) {
+    var rejump = function () {
+      var el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (el && Math.abs(el.getBoundingClientRect().top - 90) > 60) el.scrollIntoView();
+    };
+    var userMoved = false;
+    addEventListener('wheel', function () { userMoved = true; }, { once: true, passive: true });
+    addEventListener('touchmove', function () { userMoved = true; }, { once: true, passive: true });
+    var later = function () { if (!userMoved) rejump(); };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    addEventListener('load', later);
+  }
 
   // ---------- mobile nav ----------
   var side = $('side'), scrim = $('scrim'), menu = $('menu-btn');
@@ -267,6 +280,7 @@
     $('f-random').addEventListener('click', random);
     var start = function () { if (location.hash === '#random') random(); else render(); };
     if (window.NOTES_PROBLEMS) start(); else addEventListener('load', start);
+    addEventListener('hashchange', function () { if (location.hash === '#random' && window.NOTES_PROBLEMS) random(); });
   }
 
   // ---------- search ----------
