@@ -7,6 +7,7 @@ Live at **https://swayam-h.github.io/Study_Material/**. The site is built into `
 ## Courses
 
 - **Probability and Statistics** (MA6.101, Monsoon 2026)
+- **Operating Systems and Networks** (CS3.301, Monsoon 2026)
 
 ## Editing notes or adding a course
 

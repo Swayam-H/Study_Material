@@ -1,0 +1,14 @@
+{
+  "title": "Operating Systems and Networks",
+  "code": "CS3.301",
+  "term": "Monsoon 2026",
+  "blurb": "CPU and memory virtualization, networking and the transport layer, concurrency, locks and semaphores.",
+  "docs": [
+    {
+      "slug": "topics",
+      "file": "topics.md",
+      "title": "Topic map, Lectures 1 to 17",
+      "about": "Every topic with its lecture slides and book chapters"
+    }
+  ]
+}
