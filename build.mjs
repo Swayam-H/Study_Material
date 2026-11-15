@@ -81,12 +81,14 @@ function mathBlock(state, startLine, endLine, silent) {
   return true;
 }
 
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 const md = new MarkdownIt({ html: false, linkify: true, typographer: false });
 md.inline.ruler.before('escape', 'math_inline', mathInline);
 md.block.ruler.before('fence', 'math_block', mathBlock, { alt: ['paragraph', 'reference', 'blockquote', 'list'] });
 md.renderer.rules.math_inline = (t, i) => renderMath(t[i].content, false);
-md.renderer.rules.math_display = (t, i) => `<span class="math-d">${renderMath(t[i].content, true)}</span>`;
-md.renderer.rules.math_block = (t, i) => `<div class="math-d">${renderMath(t[i].content, true)}</div>\n`;
+md.renderer.rules.math_display = (t, i) => `<span class="math-d" data-tex="${esc(t[i].content.trim())}">${renderMath(t[i].content, true)}</span>`;
+md.renderer.rules.math_block = (t, i) => `<div class="math-d" data-tex="${esc(t[i].content.trim())}">${renderMath(t[i].content, true)}</div>\n`;
 md.renderer.rules.table_open = () => '<div class="table-wrap"><table>\n';
 md.renderer.rules.table_close = () => '</table></div>\n';
 const defaultLink = md.renderer.rules.link_open || ((t, i, o, e, s) => s.renderToken(t, i, o));
@@ -97,7 +99,6 @@ md.renderer.rules.link_open = (t, i, o, e, s) => {
 };
 
 // ---------- helpers ----------
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const plain = s => s.replace(/\$([^$]+)\$/g, '$1').replace(/\\[a-zA-Z]+\s?/g, '').replace(/[*_`{}]/g, '').replace(/\s+/g, ' ').trim();
 const slugify = s => plain(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'section';
 const inline = s => md.renderInline(s);
@@ -248,7 +249,6 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
       const sub = fm[1].match(/^subtitle:\s*"?(.*?)"?\s*$/m);
       if (sub && !doc.about) doc.about = sub[1];
     }
-    // split into chapters at H1 (outside fences)
     const lines = src.split('\n');
     const parts = [];
     let cur = { title: null, lines: [] }, fence = false;
@@ -294,7 +294,6 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
         course.formulaSeen.add(f.tex.trim());
         course.formulas.push({ ...f, ch: id, chTitle, doc });
       }
-      // wrap solutions in <details>
       const TokenC = tokens.length ? tokens[0].constructor : null;
       const out = [];
       tokens.forEach((tk, i) => {
@@ -303,7 +302,6 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
         if (study.after[i]) { const h = new TokenC('html_block', '', 0); h.content = study.after[i]; out.push(h); }
       });
       let html = fix(md.renderer.render(out, md.options, {}));
-      // search entries: one per H2 section
       const secs = [];
       let sec = { id: '', text: '', buf: [] }, f2 = false;
       const ids = outline;
@@ -330,37 +328,24 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
 }
 
 // ---------- templates ----------
-const fontsLink = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">';
+const fontsLink = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">';
 const BUILD = Date.now().toString(36);
 
-function bellSvg() {
-  const W = 360, H = 104, pts = [];
+function bellSvgInteractive() {
+  const W = 320, H = 96, pts = [];
   const f = x => Math.exp(-x * x / 2);
-  const X = x => ((x + 3.4) / 6.8) * W, Y = y => H - 14 - y * (H - 28);
+  const X = x => ((x + 3.4) / 6.8) * W, Y = y => H - 10 - y * (H - 22);
   for (let x = -3.4; x <= 3.401; x += 0.08) pts.push(`${X(x).toFixed(1)},${Y(f(x)).toFixed(1)}`);
   const tail = [];
-  for (let x = 1.15; x <= 3.401; x += 0.08) tail.push(`${X(x).toFixed(1)},${Y(f(x)).toFixed(1)}`);
-  const area = [`0.0,${Y(0)}`, ...pts, `${W.toFixed(1)},${Y(0)}`].join(' ');
-  return `<svg class="bell" viewBox="0 0 ${W} ${H}" role="img" aria-label="Normal density with the right tail shaded">
-    <defs>
-      <linearGradient id="bell-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.18"/>
-        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.0"/>
-      </linearGradient>
-      <linearGradient id="tail-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.42"/>
-        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.08"/>
-      </linearGradient>
-    </defs>
-    <line class="bell-grid" x1="0" y1="${Y(0.5).toFixed(1)}" x2="${W}" y2="${Y(0.5).toFixed(1)}" stroke-dasharray="3 4"/>
-    <line class="bell-grid" x1="${X(0).toFixed(1)}" y1="12" x2="${X(0).toFixed(1)}" y2="${Y(0)}" stroke-dasharray="3 4"/>
-    <polygon class="bell-area" points="${area}" fill="url(#bell-grad)"/>
-    <polygon class="bell-tail" points="${X(1.15).toFixed(1)},${Y(0)} ${tail.join(' ')} ${X(3.4).toFixed(1)},${Y(0)}" fill="url(#tail-grad)"/>
-    <line class="bell-cut" x1="${X(1.15).toFixed(1)}" y1="${Y(f(1.15)).toFixed(1)}" x2="${X(1.15).toFixed(1)}" y2="${Y(0)}"/>
+  for (let x = 1.2; x <= 3.401; x += 0.08) tail.push(`${X(x).toFixed(1)},${Y(f(x)).toFixed(1)}`);
+  return `<svg class="bell" viewBox="0 0 ${W} ${H}" role="img" aria-label="Interactive standard normal density">
+    <line class="bell-grid" x1="0" y1="${Y(0.5).toFixed(1)}" x2="${W}" y2="${Y(0.5).toFixed(1)}" stroke-dasharray="2 3"/>
+    <line class="bell-grid" x1="${X(0).toFixed(1)}" y1="10" x2="${X(0).toFixed(1)}" y2="${Y(0)}" stroke-dasharray="2 3"/>
+    <polygon class="bell-tail" id="bell-tail-poly" points="${X(1.2).toFixed(1)},${Y(0)} ${tail.join(' ')} ${X(3.4).toFixed(1)},${Y(0)}"/>
+    <line class="bell-cut" id="bell-cut-line" x1="${X(1.2).toFixed(1)}" y1="${Y(f(1.2)).toFixed(1)}" x2="${X(1.2).toFixed(1)}" y2="${Y(0)}"/>
     <polyline class="bell-curve" fill="none" points="${pts.join(' ')}"/>
-    <circle class="bell-dot" cx="${X(0).toFixed(1)}" cy="${Y(1).toFixed(1)}" r="3.5"/>
-    <circle class="bell-dot tail-dot" cx="${X(1.15).toFixed(1)}" cy="${Y(f(1.15)).toFixed(1)}" r="3.5"/>
     <line class="bell-axis" x1="0" y1="${Y(0)}" x2="${W}" y2="${Y(0)}"/>
+    <line class="bell-axis" x1="${X(0).toFixed(1)}" y1="${Y(0)}" x2="${X(0).toFixed(1)}" y2="${Y(0) + 4}"/>
   </svg>`;
 }
 
@@ -369,20 +354,10 @@ function sidebar(root, active) {
   for (const c of courses) {
     h += `<div class="nav-course">
       <div class="nav-course-head">
-        <span class="nav-course-kicker">${esc([c.code, c.term].filter(Boolean).join(' · ') || 'Course')}</span>
+        <span class="nav-course-kicker">${esc([c.code, c.term].filter(Boolean).join(' · '))}</span>
         <a class="nav-course-title" href="${root}${c.slug}/index.html">${esc(c.title)}</a>
       </div>`;
-    h += `<div class="nav-tools">
-      <a class="${active && active.tool === 'practice' && active.course === c ? 'current' : ''}" href="${root}${c.slug}/practice.html">
-        <span class="nt-label"><svg class="nt-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8.5l3.2 3.2 7.8-7.8"/></svg>Practice</span>
-        <b>${c.problems.length}</b>
-      </a>
-      <a class="${active && active.tool === 'formulas' && active.course === c ? 'current' : ''}" href="${root}${c.slug}/formulas.html">
-        <span class="nt-label"><svg class="nt-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2.5H4l4.5 5.5L4 13.5h8"/></svg>Formulas</span>
-        <b>${c.formulas.length}</b>
-      </a>
-    </div>`;
-    h += `<div class="nav-groups">`;
+    h += `<div class="nav-tools"><a class="${active && active.tool === 'practice' && active.course === c ? 'current' : ''}" href="${root}${c.slug}/practice.html">Practice <b>${c.problems.length}</b></a><a class="${active && active.tool === 'formulas' && active.course === c ? 'current' : ''}" href="${root}${c.slug}/formulas.html">Formulas <b>${c.formulas.length}</b></a></div><div class="nav-groups">`;
     for (const d of c.docs) {
       const open = active && active.doc === d ? ' open' : '';
       if (d.chapters.length === 1) {
@@ -407,12 +382,12 @@ function page({ root, title, body, active, pageId = '', outline = '', cls = '' }
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#3730a3">
+<meta name="theme-color" content="#9a3412">
 <title>${esc(title)}</title>
 <link rel="manifest" href="${root}manifest.webmanifest">
 <link rel="icon" href="${root}assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${root}assets/icon-192.png">
-<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px')}catch(e){}</script>
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 ${fontsLink}
 <link rel="stylesheet" href="${root}assets/katex/katex.min.css">
 <link rel="stylesheet" href="${root}assets/style.css?v=${BUILD}">
@@ -420,40 +395,50 @@ ${fontsLink}
 <body data-root="${root}" data-page="${pageId}" class="${cls}">
 <div class="read-bar" id="read-bar"></div>
 <header class="top">
-  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
-  </button>
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
   <a class="brand" href="${root}index.html">
     <span class="brand-mark" aria-hidden="true">∑</span>
-    <span class="brand-text">
-      <span class="brand-title">${esc(site.title)}</span>
-      <span class="brand-sub">MA6.101 · Study Desk</span>
-    </span>
+    <span class="brand-title">${esc(site.title)}</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">MA6.101 Monograph</span>
   </a>
   <div class="search">
     <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
-    <input id="search-input" type="search" placeholder="Search lectures, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
     <kbd>/</kbd>
     <div class="search-results" id="search-results" hidden></div>
   </div>
   <div class="top-actions">
-    <button class="icon-btn theme-quick" id="theme-quick" type="button" aria-label="Toggle color theme" title="Toggle Light / Dark theme">
-      <svg class="ico-sun" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="3.6"/><path d="M10 2.2v2M10 15.8v2M2.2 10h2M15.8 10h2M4.5 4.5l1.4 1.4M14.1 14.1l1.4 1.4M15.5 4.5l-1.4 1.4M5.9 14.1l-1.4 1.4"/></svg>
-      <svg class="ico-moon" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16.2 12.4A6.8 6.8 0 0 1 7.6 3.8a6.8 6.8 0 1 0 8.6 8.6Z"/></svg>
-    </button>
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)">✎ Notes</button>
     <div class="settings">
-      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Reading preferences">Aa</button>
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
       <div class="settings-pop" id="settings-pop" hidden>
-        <div class="settings-head">Reading Preferences</div>
-        <p>Text size</p>
-        <div class="seg" id="size-seg"><button data-size="16">S</button><button data-size="18">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
-        <p>Appearance</p>
-        <div class="seg" id="theme-seg"><button data-theme-set="">Auto</button><button data-theme-set="light">Light</button><button data-theme-set="dark">Dark</button></div>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
         <p>Default solutions</p>
         <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
-        <p>Offline library</p>
-        <button class="btn wide" id="offline-btn" type="button">Save everything for offline</button>
-        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>n</kbd> next · <kbd>p</kbd> prev · <kbd>f</kbd> focus</p>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
       </div>
     </div>
   </div>
@@ -463,6 +448,27 @@ ${fontsLink}
   <main class="main">${body}</main>
   ${outline}
 </div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
 <script src="${root}assets/app.js?v=${BUILD}" defer></script>
@@ -493,7 +499,7 @@ fs.writeFileSync(path.join(OUT, 'sw.js'), fs.readFileSync(path.join(ROOT, 'src',
 fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
 fs.writeFileSync(path.join(OUT, 'manifest.webmanifest'), JSON.stringify({
   name: site.title, short_name: 'Notes', start_url: './index.html', scope: './', display: 'standalone',
-  background_color: '#f8f7f4', theme_color: '#3730a3',
+  background_color: '#f6f3ec', theme_color: '#9a3412',
   icons: [{ src: 'assets/icon-192.png', sizes: '192x192', type: 'image/png' }, { src: 'assets/icon-512.png', sizes: '512x512', type: 'image/png' }, { src: 'assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }]
 }));
 fs.writeFileSync(path.join(OUT, 'assets', 'search.js'), 'window.NOTES_SEARCH=' + JSON.stringify(searchIndex) + ';');
@@ -503,40 +509,21 @@ fs.writeFileSync(path.join(OUT, 'assets', 'search.js'), 'window.NOTES_SEARCH=' +
   let cards = '';
   for (const c of courses) {
     const n = c.docs.reduce((a, d) => a + d.chapters.length, 0);
-    let mods = '<div class="course-modules">';
-    for (const d of c.docs) {
-      const firstCh = d.chapters[0];
-      mods += `<a class="mod-pill" href="${firstCh.id}.html">
-        <span class="mod-title">${esc(d.title)}</span>
-        <span class="mod-count">${d.chapters.length} ${d.chapters.length === 1 ? 'part' : 'parts'}</span>
-      </a>`;
-    }
-    mods += '</div>';
     cards += `<article class="course-card" data-course="${c.slug}">
-      <div class="course-main">
-        <div class="course-card-top">
-          <div class="course-card-info">
-            <div class="course-meta"><span class="badge-code">${esc(c.code || 'COURSE')}</span><span>${esc(c.term || '')}</span></div>
-            <h2><a href="${c.slug}/index.html">${esc(c.title)}</a></h2>
-            <p>${esc(c.blurb || '')}</p>
-          </div>
-          <a class="course-art" href="${c.slug}/index.html" aria-label="${esc(c.title)} overview">
-            ${bellSvg()}
-          </a>
+      <a class="course-main" href="${c.slug}/index.html">
+        <div class="course-meta">${esc([c.code, c.term].filter(Boolean).join(' · '))}</div>
+        <h2>${esc(c.title)}</h2>
+        <p>${esc(c.blurb || '')}</p>
+        <div class="bar"><i data-bar-for="${c.slug}/" data-total="${n}"></i></div>
+        <div class="course-foot">
+          <span data-count-text="${c.slug}/" data-total="${n}">0 of ${n} chapters read</span>
+          <span>${c.docs.length} note sets · ${c.problems.length} problems · ${c.formulas.length} boxed formulas</span>
         </div>
-        ${mods}
-        <div class="course-prog">
-          <div class="bar"><i data-bar-for="${c.slug}/" data-total="${n}"></i></div>
-          <div class="course-foot">
-            <span data-count-text="${c.slug}/" data-total="${n}">0 of ${n} chapters done</span>
-            <span class="course-metrics">${c.docs.length} modules · ${c.problems.length} problems · ${c.formulas.length} formulas</span>
-          </div>
-        </div>
-      </div>
+      </a>
       <div class="course-actions">
-        <a href="${c.slug}/index.html"><span>Syllabus &amp; Notes</span><small>${n} chapters →</small></a>
-        <a href="${c.slug}/practice.html"><span>Problem Bank</span><small>${c.problems.length} worked →</small></a>
-        <a href="${c.slug}/formulas.html"><span>Formula Bank</span><small>${c.formulas.length} boxed →</small></a>
+        <a href="${c.slug}/index.html">Syllabus &amp; Notes (${n})</a>
+        <a href="${c.slug}/practice.html">Problem Bank (${c.problems.length})</a>
+        <a href="${c.slug}/formulas.html">Formula Compendium (${c.formulas.length})</a>
       </div>
     </article>`;
   }
@@ -544,55 +531,45 @@ fs.writeFileSync(path.join(OUT, 'assets', 'search.js'), 'window.NOTES_SEARCH=' +
   const body = `<div class="home">
     <section class="hero">
       <div class="hero-copy">
-        <div class="eyebrow-row">
-          <span class="eyebrow-pill"><span class="pulse-dot"></span>Interactive Study Sanctuary</span>
-          ${c0 ? `<span class="eyebrow-meta">${esc(c0.code)} · ${esc(c0.term)}</span>` : ''}
-        </div>
+        <p class="eyebrow">Monograph &amp; Problem Compendium · ${c0 ? esc(c0.code + ' ' + c0.term) : ''}</p>
         <h1>${esc(site.title)}</h1>
         <p class="lede">${esc(site.tagline)}</p>
         <div class="hero-actions">
           <a class="btn primary" id="resume-btn" href="${c0 ? c0.docs[0].chapters[0].id + '.html' : '#'}">Start reading</a>
           <a class="btn" id="random-btn" href="${c0 ? c0.slug + '/practice.html#random' : '#'}">Random problem</a>
-          ${c0 ? `<a class="btn ghost" href="${c0.slug}/formulas.html">Formula sheet</a>` : ''}
+          ${c0 ? `<a class="btn" href="${c0.slug}/formulas.html">Formula sheet</a>` : ''}
         </div>
-      </div>
-      <div class="ring-card">
-        <div class="ring-wrap">
-          <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
-            <circle class="ring-bg" cx="60" cy="60" r="52"/>
-            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/>
-          </svg>
-          <div class="ring-text"><b id="ring-pct">0%</b><span>completed</span></div>
-        </div>
-        <div class="ring-caption">Overall Mastery</div>
       </div>
     </section>
     <section class="stats" id="stats">
-      <div class="stat-card">
-        <div class="stat-top"><span class="stat-label">Reading Progress</span><span class="stat-ico stat-ico-ch">📖</span></div>
-        <b id="st-ch">0</b>
-        <span>chapters completed</span>
+      <div class="stat-item"><b id="st-ch">0 / 41</b><span>Chapters read</span></div>
+      <div class="stat-item"><b id="st-pr">0 / 252</b><span>Problems solved</span></div>
+      <div class="stat-item"><b id="st-rv">0</b><span>Marked for review</span></div>
+      <div class="stat-item"><b id="st-sv">0</b><span>Bookmarked sections</span></div>
+    </section>
+    <section class="dist-lab" aria-label="Interactive standard normal tail explorer">
+      <div class="dist-lab-head">
+        <span class="dist-lab-title">Interactive Standard Normal Tail Table — Z ~ N(0, 1)</span>
+        <span class="dist-lab-readout" id="z-readout">Φ(1.20) = 0.8849 · P(Z ≥ 1.20) = 0.1151</span>
       </div>
-      <div class="stat-card">
-        <div class="stat-top"><span class="stat-label">Practice Mastery</span><span class="stat-ico stat-ico-pr">✓</span></div>
-        <b id="st-pr">0</b>
-        <span>problems solved</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top"><span class="stat-label">Revision Queue</span><span class="stat-ico stat-ico-rv">↻</span></div>
-        <b id="st-rv">0</b>
-        <span>marked for review</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top"><span class="stat-label">Pinned Bookmarks</span><span class="stat-ico stat-ico-sv">★</span></div>
-        <b id="st-sv">0</b>
-        <span>saved sections</span>
+      <div class="dist-lab-grid">
+        <div>${bellSvgInteractive()}</div>
+        <div class="dist-controls">
+          <div class="dist-ctrl">
+            <label for="z-slider"><span>Threshold z</span><b id="z-val">+1.20</b></label>
+            <input type="range" id="z-slider" min="-3.0" max="3.0" step="0.01" value="1.20">
+          </div>
+          <div class="dist-presets">
+            <button type="button" data-z-set="0">z = 0</button>
+            <button type="button" data-z-set="1.0">1σ (1.00)</button>
+            <button type="button" data-z-set="1.645">90% (1.645)</button>
+            <button type="button" data-z-set="1.96">95% (1.96)</button>
+            <button type="button" data-z-set="2.576">99% (2.58)</button>
+          </div>
+        </div>
       </div>
     </section>
-    <div class="sec-head">
-      <h2 class="sec-title">Active Courses</h2>
-      <span class="sec-sub">Structured lecture notes, collapsible solutions &amp; derivations</span>
-    </div>
+    <h2 class="sec-title">Course Volumes</h2>
     <div class="course-grid">${cards}</div>
     <div id="saved-box"></div>
   </div>`;
@@ -603,55 +580,13 @@ const meta = { courses: [], titles: {} };
 for (const c of courses) {
   const root1 = '../';
   const nCh = c.docs.reduce((a, d) => a + d.chapters.length, 0);
-  const totalMin = c.docs.reduce((a, d) => a + d.chapters.reduce((b, ch) => b + ch.minutes, 0), 0);
   meta.courses.push({ slug: c.slug, title: c.title, nProblems: c.problems.length, nFormulas: c.formulas.length, nChapters: nCh, first: c.docs[0].chapters[0].id });
-  let h = `<div class="course-page">
-    <header class="course-hero">
-      <div class="eyebrow-row">
-        <span class="eyebrow-pill">${esc([c.code, c.term].filter(Boolean).join(' · '))}</span>
-        <span class="eyebrow-meta">${nCh} chapters · ~${Math.round(totalMin / 60)} hrs reading</span>
-      </div>
-      <h1>${esc(c.title)}</h1>
-      <p class="lede">${esc(c.blurb || '')}</p>
-      <div class="tool-row">
-        <a class="tool" href="practice.html">
-          <div class="tool-icon tool-icon-prac">✓</div>
-          <div class="tool-body">
-            <b>Practice Problem Bank <span>${c.problems.length} problems →</span></b>
-            <span>Worked problems from lectures, homework, tutorials &amp; exams with hidden solutions and status tracking</span>
-          </div>
-        </a>
-        <a class="tool" href="formulas.html">
-          <div class="tool-icon tool-icon-form">∑</div>
-          <div class="tool-body">
-            <b>Master Formula Sheet <span>${c.formulas.length} results →</span></b>
-            <span>Every boxed theorem, identity, and distribution result indexed in lecture order with instant filtering</span>
-          </div>
-        </a>
-      </div>
-    </header>`;
-  let modIdx = 0;
+  let h = `<div class="course-page"><p class="eyebrow">${esc([c.code, c.term].filter(Boolean).join(' · '))}</p><h1>${esc(c.title)}</h1><p class="lede">${esc(c.blurb || '')}</p>
+    <div class="tool-row"><a class="tool" href="practice.html"><b>Practice problem bank (${c.problems.length})</b><span>Worked problems from lectures, homework, tutorials, and past exams with List and Flashcard Deck modes</span></a><a class="tool" href="formulas.html"><b>Formula compendium (${c.formulas.length})</b><span>Every boxed theorem, identity, and distribution result indexed in lecture order with 1-click LaTeX copy</span></a></div>`;
   for (const d of c.docs) {
-    modIdx++;
-    const modMin = d.chapters.reduce((a, ch) => a + ch.minutes, 0);
-    const modProbs = d.chapters.reduce((a, ch) => a + ch.nProblems, 0);
-    h += `<section class="doc-block">
-      <div class="doc-head">
-        <div class="doc-title-wrap">
-          <span class="doc-num">Module 0${modIdx}</span>
-          <h2>${esc(d.title)}</h2>
-          ${d.about ? `<p>${inline(d.about)}</p>` : ''}
-        </div>
-        <div class="doc-side">
-          <span class="doc-stat-meta">${d.chapters.length} ${d.chapters.length === 1 ? 'chapter' : 'chapters'} · ${modMin} min${modProbs ? ` · ${modProbs} problems` : ''}</span>
-          <span class="progress-text" data-count-text="${c.slug}/${d.slug}/" data-total="${d.chapters.length}" data-short="1"></span>
-          ${d.pdf ? `<a class="pdf-link" href="pdf/${encodeURI(d.pdf)}" target="_blank" rel="noopener">PDF ↗</a>` : ''}
-        </div>
-      </div>
-      <div class="bar thin"><i data-bar-for="${c.slug}/${d.slug}/" data-total="${d.chapters.length}"></i></div>
-      <ol class="chapter-list">`;
+    h += `<section class="doc-block"><div class="doc-head"><div><h2>${esc(d.title)}</h2>${d.about ? `<p>${inline(d.about)}</p>` : ''}</div><div class="doc-side"><span class="progress-text" data-count-text="${c.slug}/${d.slug}/" data-total="${d.chapters.length}" data-short="1"></span>${d.pdf ? `<a class="pdf-link" href="pdf/${encodeURI(d.pdf)}" target="_blank" rel="noopener">PDF ↗</a>` : ''}</div></div><div class="bar thin"><i data-bar-for="${c.slug}/${d.slug}/" data-total="${d.chapters.length}"></i></div><ol class="chapter-list">`;
     for (const ch of d.chapters) {
-      h += `<li><a data-id="${ch.id}" href="${root1}${ch.id}.html"><span class="tick" aria-hidden="true"></span><span class="ch-text">${ch.kicker ? `<small>${esc(ch.kicker)}</small>` : ''}<span>${inline(ch.title)}</span></span><span class="ch-badges">${ch.nProblems ? `<span class="ch-prob">${ch.nProblems} ${ch.nProblems === 1 ? 'problem' : 'problems'}</span>` : ''}<span class="ch-min">${ch.minutes} min</span></span></a></li>`;
+      h += `<li><a data-id="${ch.id}" href="${root1}${ch.id}.html"><span class="tick" aria-hidden="true"></span><span class="ch-text">${ch.kicker ? `<small>${esc(ch.kicker)}</small>` : ''}<span>${inline(ch.title)}</span></span>${ch.nProblems ? `<span class="ch-prob">${ch.nProblems} problems</span>` : ''}<span class="ch-min">${ch.minutes} min</span></a></li>`;
     }
     h += '</ol></section>';
     if (d.pdf) {
@@ -668,23 +603,28 @@ for (const c of courses) {
   written.push(`${c.slug}/problems.js`);
   const pbody = `<div class="practice" data-course="${c.slug}">
     <nav class="crumbs"><a href="index.html">${esc(c.title)}</a><span>›</span><span>Practice</span></nav>
-    <header class="page-hero">
-      <div class="eyebrow-row"><span class="eyebrow-pill">Active Recall &amp; Problem Solving</span><span class="eyebrow-meta">${c.problems.length} Worked Problems</span></div>
-      <h1>Problem Bank</h1>
-      <p class="lede">${c.problems.length} worked problems pulled from the lecture notes, homework sets, tutorials, and past exams. Try each problem first, then reveal the step-by-step solution and log your mastery.</p>
-    </header>
-    <div class="practice-controls">
-      <div class="filters">
-        <label class="field"><span>Search problems</span><input id="f-q" type="search" placeholder="Filter by keyword, topic, or label (e.g. Bayes, B3, CLT)…" autocomplete="off"></label>
-        <label class="field"><span>Note set</span><select id="f-doc"><option value="">All note sets</option>${c.docs.filter(d => c.problems.some(p => p.d === d.slug)).map(d => `<option value="${d.slug}">${esc(d.title)}</option>`).join('')}</select></label>
-        <label class="field"><span>Status</span><select id="f-status"><option value="">Any status</option><option value="todo">Not attempted</option><option value="review">Review later</option><option value="done">Solved</option></select></label>
-        <button class="btn primary" id="f-random" type="button">🎲 Random problem</button>
+    <div class="practice-head-bar">
+      <div>
+        <p class="eyebrow">Practice &amp; Active Recall</p>
+        <h1>Problem bank</h1>
+        <p class="lede">${c.problems.length} worked problems pulled from the notes. Switch between List view and Anki-style Flashcard Deck mode.</p>
       </div>
-      <div class="chips" id="f-tags">${tagList.map(t => `<button type="button" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>
-      <div class="practice-bar-wrap">
-        <p class="result-count" id="p-count"></p>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="mode-switch" id="mode-switch">
+          <button type="button" data-mode="list" class="on">List View</button>
+          <button type="button" data-mode="deck">Flashcard Deck</button>
+        </div>
+        <button class="btn small" id="export-anki-probs" type="button" title="Download filtered problems as an Anki-importable TSV file">Export Anki TSV</button>
       </div>
     </div>
+    <div class="filters">
+      <label class="field"><span>Keyword or label</span><input id="f-q" type="search" placeholder="Search problem text, topic, or label (e.g. Bayes, B3, CLT)…" autocomplete="off"></label>
+      <label class="field"><span>Note set</span><select id="f-doc"><option value="">All note sets</option>${c.docs.filter(d => c.problems.some(p => p.d === d.slug)).map(d => `<option value="${d.slug}">${esc(d.title)}</option>`).join('')}</select></label>
+      <label class="field"><span>Status</span><select id="f-status"><option value="">Any status</option><option value="todo">Not attempted</option><option value="review">Review later</option><option value="done">Solved</option></select></label>
+      <button class="btn primary" id="f-random" type="button">Random pick</button>
+    </div>
+    <div class="chips" id="f-tags">${tagList.map(t => `<button type="button" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+    <p class="result-count" id="p-count"></p>
     <div id="p-list" class="p-list"><p class="search-empty">Loading problems…</p></div>
     <div class="more-row"><button class="btn" id="p-more" type="button" hidden>Show more</button></div>
   </div>
@@ -692,20 +632,21 @@ for (const c of courses) {
   write(`${c.slug}/practice.html`, page({ root: root1, title: `Practice · ${c.title}`, body: pbody, active: { tool: 'practice', course: c } }));
 
   // formulas
-  let fb = `<div class="formulas">
-    <nav class="crumbs"><a href="index.html">${esc(c.title)}</a><span>›</span><span>Formulas</span></nav>
-    <header class="page-hero">
-      <div class="eyebrow-row"><span class="eyebrow-pill">Quick Reference &amp; Derivations</span><span class="eyebrow-meta">${c.formulas.length} Boxed Results</span></div>
-      <h1>Master Formula Sheet</h1>
-      <p class="lede">${c.formulas.length} key theorems, identities, and boxed formulas collected across all lectures. Click any formula card to jump straight to its derivation and context in the notes.</p>
-    </header>
-    <div class="f-search-wrap">
-      <input class="f-filter" id="formula-filter" type="search" placeholder="Filter 123 formulas by lecture, theorem, or topic (e.g. Bayes, MGF, Gaussian, Markov, MLE)…" aria-label="Filter formulas">
-    </div>`;
+  let fb = `<div class="formulas"><nav class="crumbs"><a href="index.html">${esc(c.title)}</a><span>›</span><span>Formulas</span></nav>
+    <div class="practice-head-bar">
+      <div>
+        <p class="eyebrow">Formula Compendium</p>
+        <h1>Every boxed result</h1>
+        <p class="lede">${c.formulas.length} key formulas collected from the notes, in lecture order. Hover any formula to copy its LaTeX source, or click to jump to its derivation.</p>
+      </div>
+      <button class="btn small" id="export-anki-formulas" type="button" title="Export all 123 boxed formulas as an Anki flashcard TSV deck">Export Anki TSV</button>
+    </div>
+    <input class="f-filter" id="formula-filter" type="search" placeholder="Filter 123 formulas by lecture, theorem, or symbol (e.g. Bayes, MGF, Gaussian, Markov, MLE)…" aria-label="Filter formulas">`;
   let lastCh = '';
   for (const f of c.formulas) {
     if (f.ch !== lastCh) { if (lastCh) fb += '</div></section>'; fb += `<section class="f-group"><h2><a href="${root1}${f.ch}.html">${esc(f.chTitle)}</a></h2><div class="f-grid">`; lastCh = f.ch; }
-    fb += `<a class="f-card" href="${root1}${f.ch}.html${f.hid ? '#' + f.hid : ''}" data-text="${esc(plain(f.chTitle + ' ' + f.htext).toLowerCase())}"><div class="math-d">${renderMath(f.tex.replace(/\\boxed\s*/g, ''), true)}</div><span>${inline(f.htext || f.chTitle)}</span></a>`;
+    const cleanTex = f.tex.replace(/\\boxed\s*/g, '').trim();
+    fb += `<a class="f-card" href="${root1}${f.ch}.html${f.hid ? '#' + f.hid : ''}" data-text="${esc(plain(f.chTitle + ' ' + f.htext).toLowerCase())}" data-tex="${esc(cleanTex)}"><div class="math-d">${renderMath(cleanTex, true)}</div><span>${inline(f.htext || f.chTitle)}</span></a>`;
   }
   if (lastCh) fb += '</div></section>';
   fb += '</div>';
@@ -716,37 +657,27 @@ for (const c of courses) {
     const root = '../../';
     const prev = flat[i - 1], next = flat[i + 1];
     meta.titles[ch.id] = ch.full;
-    const nav = x => x ? `<a class="pn pn-${x === prev ? 'prev' : 'next'}" id="${x === prev ? 'prev-link' : 'next-link'}" href="${root}${x.ch.id}.html"><small>${x === prev ? '← Previous chapter' : 'Next chapter →'}</small><span>${x.ch.kicker ? esc(x.ch.kicker) + ': ' : ''}${inline(x.ch.title)}</span></a>` : '<span></span>';
-    const metaChips = [
-      ch.meta ? `<span class="meta-chip">${esc(ch.meta)}</span>` : '',
-      `<span class="meta-chip">⏱ ${ch.minutes} min read</span>`,
-      ch.nProblems ? `<span class="meta-chip accent">✓ ${ch.nProblems} practice ${ch.nProblems === 1 ? 'problem' : 'problems'}</span>` : ''
-    ].filter(Boolean).join('');
+    const nav = x => x ? `<a class="pn pn-${x === prev ? 'prev' : 'next'}" id="${x === prev ? 'prev-link' : 'next-link'}" href="${root}${x.ch.id}.html"><small>${x === prev ? '← Previous' : 'Next →'}</small><span>${x.ch.kicker ? esc(x.ch.kicker) + ': ' : ''}${inline(x.ch.title)}</span></a>` : '<span></span>';
     const body = `<article class="note">
       <nav class="crumbs"><a href="${root}${c.slug}/index.html">${esc(c.title)}</a><span>›</span><span>${esc(d.title)}</span></nav>
       <header class="note-head">
         ${ch.kicker ? `<p class="eyebrow">${esc(ch.kicker)}</p>` : ''}
         <h1>${inline(ch.title)}</h1>
-        <div class="note-meta">${metaChips}</div>
+        <p class="note-meta">${[ch.meta ? esc(ch.meta) : '', `${ch.minutes} min read`, ch.nProblems ? `${ch.nProblems} practice problems` : ''].filter(Boolean).join(' · ')}</p>
         <div class="note-tools">
           ${ch.hasSol ? '<button class="btn small" id="sol-toggle" type="button">Show all solutions</button>' : ''}
-          <button class="btn small ghost" id="focus-btn" type="button" title="Toggle distraction-free reading mode (Shortcut: f)">Focus mode</button>
-          ${ch.hasSol ? '<span class="hint">Solutions stay hidden until you click them.</span>' : ''}
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          ${ch.hasSol ? '<span class="hint">Solutions stay collapsed until you click them.</span>' : ''}
         </div>
       </header>
       <div class="prose">${ch.html}</div>
       <div class="done-row">
-        <div class="done-card">
-          <div class="done-copy">
-            <b>Finished reading this chapter?</b>
-            <span>Mark it complete to track your progress across ${esc(c.title)}.</span>
-          </div>
-          <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark as done</button>
-        </div>
+        <span class="done-label">End of ${esc(ch.kicker || ch.full)}</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
       </div>
       <nav class="prevnext">${nav(prev)}${nav(next)}</nav>
     </article>`;
-    const ol = ch.outline.length > 1 ? `<aside class="outline" aria-label="On this page"><div class="outline-inner"><p>On this page</p>${ch.outline.map(o => `<a class="l${o.level}" href="#${o.id}">${inline(o.text)}</a>`).join('')}</div></aside>` : '';
+    const ol = ch.outline.length > 1 ? `<aside class="outline" aria-label="On this page"><p>Contents</p>${ch.outline.map(o => `<a class="l${o.level}" href="#${o.id}">${inline(o.text)}</a>`).join('')}</aside>` : '';
     write(`${ch.id}.html`, page({ root, title: `${ch.full} · ${c.title}`, body, active: { doc: d, ch }, pageId: ch.id, outline: ol }));
   });
 }
