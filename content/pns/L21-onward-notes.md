@@ -6,9 +6,9 @@ date: "Monsoon 2026"
 
 # Before we start
 
-Hey. This doc covers everything after L20: the **statistics** half of the course. Up to L20 we were doing *probability*: someone hands you a model, you compute things about the data it produces. From L21 onward we flip it around. Someone hands you **data**, and you have to guess the model.
+These notes cover everything after L20: the **statistics** half of the course. Up to L20 we were doing *probability*: you're given a model and you work out things about the data it produces. From L21 on it's the other way round. You're given **data**, and you have to guess the model.
 
-I've kept this one less formal than the earlier notes. The difficulty is still exam-level: every derivation is done in full, and the worked problems are the kind that show up in quizzes and endsems. The difference is that I talk you through *why* each step happens, not just what it is.
+Same style as the L14–L20 notes: casual, but still exam-level. Every derivation is done in full, the worked problems are quiz/endsem type, and each step comes with the *why*, not just the *what*.
 
 **What's in here**
 
@@ -90,7 +90,7 @@ $$
 \boxed{B(\hat\Theta) = E[\hat\Theta] - \theta^*}
 $$
 
-Bias asks: *if I repeated the experiment a zillion times and averaged my estimates, would I land on the truth?* If yes ($B = 0$), the estimator is **unbiased**.
+Bias asks: *if I repeated the experiment over and over and averaged all my estimates, would I land on the truth?* If yes ($B = 0$), the estimator is **unbiased**.
 
 The slide then asks the key question: **are all unbiased estimators good?** Consider two estimators of the mean $\mu$:
 
@@ -111,9 +111,14 @@ $$
 \boxed{\text{MSE}(\hat\Theta) = E\big[(\hat\Theta - \theta^*)^2\big] = \text{Var}(\hat\Theta) + B(\hat\Theta)^2}
 $$
 
-**Why the decomposition holds.** This is exactly the identity $E[Y^2] = \text{Var}(Y) + (E[Y])^2$ with $Y = \hat\Theta - \theta^*$. Since $\theta^*$ is a constant, $\text{Var}(\hat\Theta - \theta^*) = \text{Var}(\hat\Theta)$, and $E[\hat\Theta - \theta^*] = B(\hat\Theta)$. Done. (Last year's Endsem Q10(b) asked for exactly this, with the "explain the tradeoff" part. Know it cold.)
+**Why the decomposition holds.** It's just the identity $E[Y^2] = \text{Var}(Y) + (E[Y])^2$ with $Y = \hat\Theta - \theta^*$. Two small facts finish it:
 
-**The punchline:** a *biased* estimator can beat an unbiased one if its variance is small enough. That's the bias–variance tradeoff, and it's a big deal in ML.
+- $\theta^*$ is a constant, and subtracting a constant doesn't change variance, so $\text{Var}(\hat\Theta - \theta^*) = \text{Var}(\hat\Theta)$.
+- $E[\hat\Theta - \theta^*] = E[\hat\Theta] - \theta^* = B(\hat\Theta)$, by definition.
+
+Plug both in and you get the box. So MSE = (how spread out the guesses are) + (how far off-centre they are)$^2$. (Last year's Endsem Q10(b) asked for exactly this, plus "explain the tradeoff". So learn this one properly.)
+
+**The point:** a *biased* estimator can beat an unbiased one, if its variance is small enough to make up for the bias. That's the bias–variance tradeoff.
 
 ### Slide 8 exercise: MSE of $\hat\Theta_1 = X_1$ and $\hat\Theta_2 = \hat\mu_n + 1$
 
@@ -338,8 +343,8 @@ Now compare:
 
 Two things worth noticing:
 
-1. The max-based estimators have MSE of order $1/n^2$, while $2\bar X$ is order $1/n$. The max is a *massively* better estimator. That's because for the uniform, the max carries all the information about $\theta$: the sample mean wastes it.
-2. The last row is the *best possible* multiple $cM$. Minimise $\text{MSE}(cM) = c^2 E[M^2] - 2c\theta E[M] + \theta^2$ over $c$: you get $c = \frac{E[M]\theta}{E[M^2]} = \frac{n+2}{n+1}$, with MSE $\frac{\theta^2}{(n+1)^2}$. It's slightly **biased**, and it **beats** the unbiased one. Bias–variance tradeoff, live.
+1. The max-based estimators have MSE of order $1/n^2$, while $2\bar X$ is only order $1/n$. So for large $n$ the max is far better. The reason: for the uniform, the max is what actually tells you where the top end $\theta$ is, and the sample mean blurs that information by averaging in all the small values.
+2. The last row is the *best possible* multiple $cM$. Minimise $\text{MSE}(cM) = c^2 E[M^2] - 2c\theta E[M] + \theta^2$ over $c$: you get $c = \frac{E[M]\theta}{E[M^2]} = \frac{n+2}{n+1}$, with MSE $\frac{\theta^2}{(n+1)^2}$. It's slightly **biased**, and it **beats** the unbiased one. That's the bias–variance tradeoff again, in an actual example.
 
 ## Slide 20: consistent but biased
 
@@ -452,7 +457,11 @@ $$
 
 Second derivative: $-n/\lambda^2 < 0$, so it's a max. Makes sense: the mean of Exp$(\lambda)$ is $1/\lambda$, so estimate the rate as 1 over the sample mean.
 
-*Twist:* is $\hat\lambda_{ML}$ unbiased? No! $E[1/\bar X] \ne 1/E[\bar X]$ (nonlinear function again). In fact $\sum X_i \sim \text{Gamma}(n, \lambda)$, and you can compute $E[n/\sum X_i] = \frac{n}{n-1}\lambda$. Biased high, but asymptotically unbiased, exactly as slide 23 promised.
+*Twist:* is $\hat\lambda_{ML}$ unbiased? No. $E[1/\bar X] \ne 1/E[\bar X]$ (a nonlinear function again). To get the actual value: $T = \sum X_i \sim \text{Gamma}(n, \lambda)$ (L14), so using the Gamma integral $\int_0^\infty t^{a-1}e^{-\lambda t}dt = \frac{\Gamma(a)}{\lambda^a}$,
+$$
+E\Big[\frac1T\Big] = \int_0^\infty\frac1t\cdot\frac{\lambda^n}{\Gamma(n)}t^{n-1}e^{-\lambda t}\,dt = \frac{\lambda^n}{\Gamma(n)}\cdot\frac{\Gamma(n-1)}{\lambda^{n-1}} = \frac{\lambda}{n-1}\qquad(n\ge2).
+$$
+So $E[\hat\lambda_{ML}] = E[n/T] = \frac{n}{n-1}\lambda$. Biased high, but the bias goes to 0, exactly as slide 23 promised.
 
 ### Bernoulli (slide 26)
 
@@ -463,7 +472,9 @@ $$
 \frac{d}{dp}\ln L = \frac{\sum x_i}{p} - \frac{n - \sum x_i}{1-p} = 0 \implies \boxed{\hat p_{ML} = \frac1n\sum x_i}
 $$
 
-The fraction of 1s. Unbiased and consistent.
+(To solve: cross-multiply, $(1-p)\sum x_i = p(n - \sum x_i)$, and the $p\sum x_i$ terms cancel, leaving $\sum x_i = np$.)
+
+The fraction of 1s. Unbiased ($E[\bar X] = p$) and consistent (SLLN).
 
 ### Uniform$(0,\theta)$ (slide 27) — the "don't differentiate" one
 
@@ -501,8 +512,13 @@ So the MLE of the variance divides by $n$: it's exactly $S^2$ from slide 16, whi
 
 ### Poisson (slide 30)
 
+Each term of the likelihood is $\frac{e^{-\lambda}\lambda^{x_i}}{x_i!}$, so
 $$
-\ln L(\lambda) = \sum(x_i\ln\lambda - \lambda - \ln x_i!) = n\bar x\ln\lambda - n\lambda + C, \qquad \frac{n\bar x}{\lambda} - n = 0 \implies \boxed{\hat\lambda_{ML} = \bar x}
+\ln L(\lambda) = \sum(x_i\ln\lambda - \lambda - \ln x_i!) = n\bar x\ln\lambda - n\lambda + C,
+$$
+where $C = -\sum\ln x_i!$ doesn't involve $\lambda$ and can be ignored. Differentiate:
+$$
+\frac{n\bar x}{\lambda} - n = 0 \implies \boxed{\hat\lambda_{ML} = \bar x}
 $$
 
 Unbiased, with $\text{MSE} = \text{Var}(\bar X) = \lambda/n$. (That's last year's Endsem Q6, practically verbatim.)
@@ -605,7 +621,7 @@ $$
 f_{\Theta\mid X}(\theta\mid k) = \frac{\theta^{k+\alpha-1}(1-\theta)^{n-k+\beta-1}}{B(k+\alpha,\, n-k+\beta)}.
 $$
 
-Same answer. (Side note: $f_X(k)$ is called the Beta–Binomial distribution. With a uniform prior, $f_X(k) = \binom nk B(k+1, n-k+1) = \binom nk\frac{k!(n-k)!}{(n+1)!} = \frac{1}{n+1}$: every $k$ from $0$ to $n$ is equally likely. Cute.)
+Same answer. (Side note: $f_X(k)$ is called the Beta–Binomial distribution. With a uniform prior, $f_X(k) = \binom nk B(k+1, n-k+1) = \binom nk\frac{k!(n-k)!}{(n+1)!} = \frac{1}{n+1}$, so every $k$ from $0$ to $n$ is equally likely.)
 
 **Read it with the "imaginary tosses" intuition:** you started with $\alpha - 1$ imaginary heads and $\beta - 1$ imaginary tails, then added $k$ real heads and $n-k$ real tails. The posterior just adds the counts. That's why conjugate priors are so convenient.
 
@@ -639,11 +655,17 @@ $$
 Q(\theta) = \sum(x_i - \theta)^2 + (\theta - \mu_0)^2 = (n+1)\theta^2 - 2\theta\Big(\sum x_i + \mu_0\Big) + \underbrace{\sum x_i^2 + \mu_0^2}_{\text{no }\theta}.
 $$
 
-Complete the square in $\theta$: with $m = \frac{\sum x_i + \mu_0}{n+1}$,
+Complete the square in $\theta$. Pull out the $(n+1)$:
+$$
+Q(\theta) = (n+1)\Big[\theta^2 - 2\theta m\Big] + \dots,\qquad m = \frac{\sum x_i + \mu_0}{n+1},
+$$
+and $\theta^2 - 2\theta m = (\theta - m)^2 - m^2$. The $-m^2$ doesn't involve $\theta$, so it joins the constant:
 
 $$
 Q(\theta) = (n+1)(\theta - m)^2 + \text{const}.
 $$
+
+Constants in the exponent just become constant factors in front, and those get absorbed into the normalisation.
 
 So
 
@@ -842,7 +864,7 @@ $$
 
 You said this one isn't a big deal for the exam, so here's just the storyline and the key formulas. The neat thing is that it's a reunion: every idea from L21–L24 shows up again.
 
-**The model.** Data pairs $(x_i, y_i)$ (e.g. hours studied, marks). We assume
+**The model.** Data pairs $(x_i, y_i)$. We assume
 
 $$
 Y_i = \beta_0^* + \beta_1^* x_i + \varepsilon_i, \qquad \varepsilon_i \text{ i.i.d.},\ E[\varepsilon_i] = 0,\ \text{Var}(\varepsilon_i) = \sigma^2.
@@ -926,9 +948,19 @@ This $\to 0$, so **consistent** (by the MSE theorem from slide 14).
 
 $X_i$ i.i.d. with mean $\mu$ and variance $\sigma^2$. Is $\hat\mu_{B,n} = \frac1n\sum_{i=1}^n\big(1 + \frac1i\big)X_i$ consistent?
 
-**Solution.** Bias: $E[\hat\mu_{B,n}] = \frac{\mu}{n}\sum\big(1 + \frac1i\big) = \mu\Big(1 + \frac{H_n}{n}\Big)$, where $H_n = 1 + \frac12 + \dots + \frac1n \approx \ln n$. So $B = \mu H_n/n \to 0$ (since $\ln n / n \to 0$).
+**Solution.** Use the MSE recipe: bias $\to0$ and variance $\to0$.
 
-Variance: $\text{Var} = \frac{\sigma^2}{n^2}\sum\big(1 + \frac1i\big)^2 \le \frac{\sigma^2}{n^2}\cdot 4n = \frac{4\sigma^2}{n} \to 0$.
+*Bias.* By linearity,
+$$
+E[\hat\mu_{B,n}] = \frac{1}{n}\sum_{i=1}^n\Big(1 + \frac1i\Big)\mu = \frac{\mu}{n}\Big(n + H_n\Big) = \mu\Big(1 + \frac{H_n}{n}\Big),
+$$
+where $H_n = 1 + \frac12 + \dots + \frac1n \approx \ln n$. So $B = \mu H_n/n \to 0$, since $\ln n$ grows much slower than $n$.
+
+*Variance.* The $X_i$ are independent, so the variances add, with each weight squared:
+$$
+\text{Var}(\hat\mu_{B,n}) = \frac{\sigma^2}{n^2}\sum_{i=1}^n\Big(1 + \frac1i\Big)^2 \le \frac{\sigma^2}{n^2}\cdot 4n = \frac{4\sigma^2}{n} \to 0,
+$$
+using $1 + \frac1i\le2$, so each squared weight is at most 4.
 
 So $\text{MSE}\to 0$, and it's **consistent** (just biased for every finite $n$). The plain sample mean is consistent too, of course.
 
@@ -996,13 +1028,13 @@ $$
 
 and $0$ otherwise. So $L$ is **flat** on a whole interval: *every* $\theta$ in $[\max x_i - 1, \min x_i]$ is an MLE. **The MLE is not unique.**
 
-Take $\hat\theta = \min_i X_i$. The min of $n$ Uniform$[\theta,\theta+1]$ variables is $\theta + (\text{min of } n \text{ Uniform}[0,1])$, and $E[\min \text{ of } n\ \mathcal U[0,1]] = \frac{1}{n+1}$. So $E[\hat\theta] = \theta + \frac{1}{n+1}$: **biased, but asymptotically unbiased**. And $P(\hat\theta - \theta \ge \epsilon) = (1 - \epsilon)^n \to 0$, so it's **consistent**. (Picking $\max X_i - 1$ gives bias $-\frac{1}{n+1}$; the midpoint $\frac{\min X_i + \max X_i - 1}{2}$ is unbiased by symmetry.)
+Take $\hat\theta = \min_i X_i$. Each $X_i = \theta + U_i$ with $U_i\sim\mathcal U[0,1]$, so $\min X_i = \theta + \min U_i$. For the min of $n$ uniforms, $P(\min U_i>t) = (1-t)^n$, so $E[\min U_i] = \int_0^1(1-t)^n\,dt = \frac{1}{n+1}$. So $E[\hat\theta] = \theta + \frac{1}{n+1}$: **biased, but asymptotically unbiased**. And $P(\hat\theta - \theta \ge \epsilon) = (1 - \epsilon)^n \to 0$, so it's **consistent**. (Picking $\max X_i - 1$ gives bias $-\frac{1}{n+1}$; the midpoint $\frac{\min X_i + \max X_i - 1}{2}$ is unbiased by symmetry.)
 
 ### Problem 7 [Tutorial 11 Q8] (subtle)
 
 $X_i$ i.i.d. Binomial$(m, \theta)$, $m$ known, $\theta\in(0,1)$. (a) Find the MLE of $\theta$. (b) Does the MLE of $1/\theta$ exist?
 
-**Solution.** (a) $\ln L = \big(\sum x_i\big)\ln\theta + \big(nm - \sum x_i\big)\ln(1-\theta) + C$, so $\hat\theta = \frac{\sum x_i}{nm} = \frac{\bar x}{m}$.
+**Solution.** (a) $\ln L = \big(\sum x_i\big)\ln\theta + \big(nm - \sum x_i\big)\ln(1-\theta) + C$. This is the Bernoulli calculation with $nm$ trials in total and $\sum x_i$ successes, so $\hat\theta = \frac{\sum x_i}{nm} = \frac{\bar x}{m}$.
 
 (b) If *all* $x_i = 0$ (which has positive probability), then $L(\theta) = (1-\theta)^{nm}$, which increases as $\theta \downarrow 0$. But $\theta = 0$ isn't in the parameter space $(0,1)$, so the supremum is never attained: **the MLE of $\theta$ doesn't exist** for that data, and neither does the MLE of $1/\theta$. (Whenever $\sum x_i > 0$, invariance gives $\widehat{1/\theta} = \frac{m}{\bar x}$.) The point: always check the maximiser lies in the allowed range.
 
@@ -1058,7 +1090,7 @@ CE: the Beta mean is $\frac{2}{5}$.
 
 ### Problem 12 [Tutorial 12 Q3] — Gaussian, unequal variances
 
-Rod length $\mu$; one measurement $x \sim\mathcal N(\mu, 1)$. Prior $\mu\sim\mathcal N(10, 1)$. You measure $x_1 = 12$. Posterior?
+Unknown mean $\mu$; one observation $x \sim\mathcal N(\mu, 1)$. Prior $\mu\sim\mathcal N(10, 1)$. You observe $x_1 = 12$. Posterior?
 
 **Solution.** Precisions add: $\frac{1}{\sigma^2_{\text{post}}} = \frac11 + \frac11 = 2$, so $\sigma^2_{\text{post}} = \frac12$. Mean: $\frac12\big(\frac{10}{1} + \frac{12}{1}\big) = 11$.
 
@@ -1070,7 +1102,7 @@ The prior and the single measurement are equally reliable, so the answer is half
 
 ### Problem 13 [Tutorial 12 Q4] — Gamma–Poisson with data
 
-Cars per hour $\sim$ Poisson$(\lambda)$, prior Gamma$(2, 1)$. Counts over 3 hours: $2, 3, 4$. Find the posterior, MAP and CE.
+$X_i \sim$ Poisson$(\lambda)$ i.i.d., prior Gamma$(2, 1)$. Three observations: $2, 3, 4$. Find the posterior, MAP and CE.
 
 **Solution.** $\sum x_i = 9$, $n = 3$, so the posterior is Gamma$(2 + 9,\ 1 + 3) = \text{Gamma}(11, 4)$.
 
@@ -1092,7 +1124,7 @@ $$
 
 ### Problem 15 [HW 12 P1] — truncated prior
 
-Bus waiting times are Exp$(\Theta)$. Prior: $f_\Theta(\theta) = 10\theta$ on $[0, 1/\sqrt5]$. (a) Alvin waits 30 min once. Find the posterior, MAP and CE. (b) Over five days he waits 30, 25, 15, 40, 20. Same questions.
+$X_i$ are Exp$(\Theta)$. Prior: $f_\Theta(\theta) = 10\theta$ on $[0, 1/\sqrt5]$. (a) One observation, $x = 30$. Find the posterior, MAP and CE. (b) Five observations: 30, 25, 15, 40, 20. Same questions.
 
 **Solution.** (a) Posterior $\propto 10\theta\cdot\theta e^{-30\theta} \propto \theta^2 e^{-30\theta}$ on $[0, 1/\sqrt5]$, normalised by $c = \int_0^{1/\sqrt5}\theta^2 e^{-30\theta}\,d\theta$.
 
@@ -1145,9 +1177,9 @@ Without a draw, the best you can do is guess, with error $\frac12$. One ball cut
 
 $X\sim\mathcal N(0,\sigma_X^2)$ is sent, and you receive $Y = aX + bW$, with $W\sim\mathcal N(0,\sigma_W^2)$ independent of $X$. Find the ML and MAP estimates of $X$ given $Y = y$.
 
-**Solution.** Given $X = x$, $Y\sim\mathcal N(ax, b^2\sigma_W^2)$.
+**Solution.** Given $X = x$, the only randomness left in $Y$ is $bW$, so $Y\sim\mathcal N(ax, b^2\sigma_W^2)$.
 
-ML: maximise $-\frac{(y - ax)^2}{2b^2\sigma_W^2}$, so $\hat x_{ML} = \frac ya$.
+ML: the log-likelihood is $-\frac{(y - ax)^2}{2b^2\sigma_W^2}$ plus a constant. That's largest (zero) when $y = ax$, so $\hat x_{ML} = \frac ya$.
 
 MAP: maximise $-\frac{(y-ax)^2}{2b^2\sigma_W^2} - \frac{x^2}{2\sigma_X^2}$. Differentiate:
 
@@ -1251,7 +1283,7 @@ Exam-style, roughly in increasing difficulty. Answers are below. Give each one a
 4. $X_1,\dots,X_n$ i.i.d. with pdf $f(x;\theta) = \frac{x}{\theta}e^{-x^2/(2\theta)}$, $x>0$ (Rayleigh). Find $\hat\theta_{ML}$. Is it unbiased? (Hint: $E[X^2] = 2\theta$.)
 5. A coin with a Beta$(2,2)$ prior on $P(H)$ shows 7 heads in 10 tosses. Find the posterior, then $\hat\theta_{ML}$, $\hat\theta_{MAP}$ and $\hat\theta_{CE}$, and order them.
 6. Show that for the Beta–Binomial model, the posterior mean is a weighted average of the prior mean and the MLE, and find the weights.
-7. Server requests per minute are Poisson$(\lambda)$, with a Gamma$(\alpha,\beta)$ prior. After observing $n$ minutes, the CE estimate equals the MLE exactly. What must be true of the data?
+7. $X_1,\dots,X_n$ are i.i.d. Poisson$(\lambda)$, with a Gamma$(\alpha,\beta)$ prior on $\lambda$. The CE estimate turns out to equal the MLE exactly. What must be true of the data?
 
 ### Answers
 
@@ -1269,6 +1301,3 @@ Exam-style, roughly in increasing difficulty. Answers are below. Give each one a
 
 **7.** $\frac{\alpha + \sum x_i}{\beta + n} = \bar x \iff \alpha + n\bar x = \beta\bar x + n\bar x\iff\bar x = \frac\alpha\beta$. The sample mean must equal the prior mean. (That's the weighted-average formula: if both things being averaged are equal, so is the average.)
 
----
-
-*Good luck. If any derivation here doesn't click, ask about it in chat and we'll go through it step by step.*
