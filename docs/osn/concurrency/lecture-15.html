@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Lecture 15: Locks · Operating Systems and Networks</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwi22u23">
+</head>
+<body data-root="../../" data-page="osn/concurrency/lecture-15" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>53</b></a><a class="" href="../../osn/formulas.html">Formulas <b>16</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc" open><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link current" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><a class="nav-link nav-single" data-id="osn/formula-sheet/formula-sheet-lectures-01-to-17" href="../../osn/formula-sheet/formula-sheet-lectures-01-to-17.html"><span>Formula sheet</span></a><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 17</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>252</b></a><a class="" href="../../pns/formulas.html">Formulas <b>127</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-skim" href="../../pns/l21-onward/part-6-linear-regression-skim.html"><span>Part 6 — Linear regression (skim)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../osn/index.html">Operating Systems and Networks</a><span>›</span><span>Lectures 14 to 17: concurrency</span></nav>
+      <header class="note-head">
+        <p class="eyebrow">Lecture 15</p>
+        <h1>Locks</h1>
+        <p class="note-meta">12 min read</p>
+        <div class="note-tools">
+          
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          
+        </div>
+      </header>
+      <div class="prose"><p><em>L15. OSTEP ch 28 (ch 29 for concurrent data structures), Silb 6.3-6.5. Tutorial 6 s11-13.</em></p>
+<p><strong>What a lock does (L15 s2-4).</strong> A lock is a variable that is either <strong>available</strong> (free) or <strong>acquired</strong> (held, by exactly one <em>owner</em> thread).</p>
+<ul>
+<li><code>lock()</code>: if the lock is free, take it and continue. Otherwise, do not return until it is free.</li>
+<li><code>unlock()</code>: make the lock free. If threads are waiting, one of them will eventually get it.</li>
+</ul>
+<p>Everything between <code>lock</code> and <code>unlock</code> behaves as if it were one atomic instruction. Threads are created by the programmer but scheduled by the OS in any order. Locks give back to the programmer a little control over that order.</p>
+<p><strong>POSIX mutex (L15 s5):</strong></p>
+<pre><code class="language-c">pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+pthread_mutex_lock(&amp;lock);
+balance = balance + 1;          // critical section
+pthread_mutex_unlock(&amp;lock);
+</code></pre>
+<ul>
+<li><strong>A mutex protects <em>data</em>, not code</strong> (Tutorial 6). Every thread that touches the data, <em>including readers</em>, must take the same mutex. A comment saying which variables each lock guards helps a lot.</li>
+<li><strong>Coarse-grained vs. fine-grained locking (L15 s6).</strong> With one big lock for everything, only one thread is ever in locked code. With separate locks for separate data (<code>lockA</code> for a list, <code>lockB</code> for a hash table), two threads can work on different structures at the same time.</li>
+</ul>
+<p>Tutorial 6 measured the counter fixed three ways. All three print the correct 2,000,000:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Time</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lock around each <code>counter++</code></td>
+<td>137 ms</td>
+<td>2 million lock/unlock pairs, nearly all contended</td>
+</tr>
+<tr>
+<td>Lock around the whole loop</td>
+<td>4 ms</td>
+<td>Fastest, but thread 2 cannot start until thread 1 has finished: no parallelism at all</td>
+</tr>
+<tr>
+<td><code>_Atomic long</code> counter</td>
+<td>28 ms</td>
+<td>One atomic instruction per increment; no locking</td>
+</tr>
+</tbody>
+</table></div>
+<p>The lesson: locks that are too coarse make the program sequential; locks that are too fine cost overhead on every operation.</p>
+<h2 id="building-a-lock">Building a lock</h2>
+<p><strong>How do we judge a lock? (L15 s8-9)</strong></p>
+<ol>
+<li><strong>Mutual exclusion:</strong> does it actually keep a second thread out? This is required.</li>
+<li><strong>Fairness:</strong> does every waiting thread eventually get the lock, or can one <strong>starve</strong>?</li>
+<li><strong>Performance:</strong> how much overhead does it add? Check three cases: no contention; many threads on one CPU; many threads on many CPUs.</li>
+</ol>
+<p><strong>Attempt 0: disable interrupts (L15 s10-11).</strong></p>
+<pre><code class="language-c">void lock()   { DisableInterrupts(); }
+void unlock() { EnableInterrupts(); }
+</code></pre>
+<p>With no interrupts there are no context switches, so the code runs atomically, at least on one CPU. It is simple but fails in practice:</p>
+<ol>
+<li><strong>It requires trust.</strong> A greedy program could call <code>lock()</code> and never give the CPU back; a buggy one could loop forever.</li>
+<li><strong>It does not work on multiprocessors.</strong> Threads on other CPUs keep running.</li>
+<li><strong>Interrupts get lost.</strong> If a disk completion is missed, the waiting process is never woken.</li>
+</ol>
+<p>Today it is used only inside the kernel, for very short sections.</p>
+<p><strong>Attempt 1: a flag with plain loads and stores (L15 s12-14). This is broken.</strong></p>
+<pre><code class="language-c">void lock(lock_t *m) {
+    while (m-&gt;flag == 1)   // TEST
+        ;                  // spin
+    m-&gt;flag = 1;           // SET
+}
+void unlock(lock_t *m) { m-&gt;flag = 0; }
+</code></pre>
+<p><strong>Problem 1: no mutual exclusion.</strong> Here is one bad interleaving, starting with flag = 0:</p>
+<ol>
+<li>T1 tests the flag and sees 0.</li>
+<li>An interrupt switches to T2.</li>
+<li>T2 tests the flag, sees 0, and sets it to 1.</li>
+<li>An interrupt switches back to T1.</li>
+<li>T1 sets the flag to 1 as well.</li>
+</ol>
+<p><strong>Both threads are now inside the critical section.</strong> The test and the set are two separate steps.</p>
+<p><strong>Problem 2: spin-waiting</strong> burns CPU time, and on one CPU the waiter cannot even make progress until it is switched out.</p>
+<p><strong>Fix: hardware atomic instructions.</strong> Each one below runs as <strong>a single indivisible step</strong>. The C code only describes what the hardware does.</p>
+<p><strong>Test-and-set (atomic exchange) (L15 s15-19).</strong></p>
+<pre><code class="language-c">int TestAndSet(int *old_ptr, int new) {
+    int old = *old_ptr;   // fetch the old value
+    *old_ptr = new;       // store the new value
+    return old;           // ...all in one atomic step
+}
+
+void lock(lock_t *lock) {
+    while (TestAndSet(&amp;lock-&gt;flag, 1) == 1)
+        ;                 // spin
+}
+void unlock(lock_t *lock) { lock-&gt;flag = 0; }
+</code></pre>
+<p>There are two cases:</p>
+<ul>
+<li><strong>The lock is free</strong> (flag = 0). TestAndSet returns 0, so the loop stops, and the flag is now 1. We own the lock.</li>
+<li><strong>The lock is held</strong> (flag = 1). TestAndSet returns 1 (and writes 1 over 1), so we keep spinning until the owner stores 0.</li>
+</ul>
+<p>Because the test and the set are one step, only one thread can ever see the 0. This is a <strong>spin lock</strong>.</p>
+<p>How it rates (L15 s18-19):</p>
+<ul>
+<li><strong>Correct:</strong> yes.</li>
+<li><strong>Fair:</strong> no. A spinning thread may lose every race and <strong>starve</strong>.</li>
+<li><strong>Performance on one CPU:</strong> terrible. If the holder is preempted, each of the N−1 other threads may spin through a whole time slice. Spin locks also need a <strong>preemptive</strong> scheduler; without one, a spinner never gives up the CPU.</li>
+<li><strong>Performance on many CPUs:</strong> reasonable when there are about as many threads as CPUs and critical sections are short. The waiter spins only briefly while the holder finishes on another CPU.</li>
+</ul>
+<p><strong>Compare-and-swap (CAS) (L15 s20-21).</strong> This is called compare-and-exchange on x86.</p>
+<pre><code class="language-c">int CompareAndSwap(int *ptr, int expected, int new) {
+    int original = *ptr;
+    if (original == expected)
+        *ptr = new;
+    return original;
+}
+void lock(lock_t *lock) {
+    while (CompareAndSwap(&amp;lock-&gt;flag, 0, 1) == 1)
+        ;   // spin
+}
+</code></pre>
+<p>It writes only if the value is what you expected. As a lock, it behaves exactly like test-and-set. CAS is more powerful in general, though: it is the basis of <strong>lock-free</strong> data structures.</p>
+<p><strong>Load-linked / store-conditional (LL/SC) (L15 s22-24).</strong> Used on MIPS, ARM, PowerPC and RISC-V.</p>
+<ul>
+<li><strong>LL</strong> loads a value and remembers the address.</li>
+<li><strong>SC</strong> stores <strong>only if nobody has written that address since the LL</strong>. It returns 1 on success and 0 on failure.</li>
+</ul>
+<pre><code class="language-c">void lock(lock_t *lock) {
+    while (1) {
+        while (LoadLinked(&amp;lock-&gt;flag) == 1)
+            ;                                      // spin until it looks free
+        if (StoreConditional(&amp;lock-&gt;flag, 1) == 1)
+            return;                                // we got it
+        // otherwise someone beat us: try again
+    }
+}
+// shorter version:
+// while (LoadLinked(&amp;lock-&gt;flag) || !StoreConditional(&amp;lock-&gt;flag, 1)) ;
+</code></pre>
+<p>If two threads both load 0, only the first SC succeeds. The second fails, because the flag was written after its LL, so it loops again.</p>
+<p><strong>Fetch-and-add and the ticket lock (L15 s25-27).</strong></p>
+<pre><code class="language-c">int FetchAndAdd(int *ptr) {
+    int old = *ptr;
+    *ptr = old + 1;
+    return old;
+}
+
+typedef struct { int ticket; int turn; } lock_t;   // both start at 0
+
+void lock(lock_t *lock) {
+    int myturn = FetchAndAdd(&amp;lock-&gt;ticket);   // take a number
+    while (lock-&gt;turn != myturn)
+        ;                                      // wait to be called
+}
+void unlock(lock_t *lock) {
+    lock-&gt;turn = lock-&gt;turn + 1;               // call the next number
+}
+</code></pre>
+<p>It works like the ticket machine at a deli counter: every thread gets a unique number, and they are served in order. <strong>It is fair:</strong> once a thread has a ticket, it is guaranteed to get the lock after the threads ahead of it. Test-and-set spinners could starve.</p>
+<h2 id="getting-the-os-to-help-stop-spinning">Getting the OS to help: stop spinning</h2>
+<p><strong>Yield (L15 s28-29).</strong> Instead of spinning, give up the CPU:</p>
+<pre><code class="language-c">void lock() {
+    while (TestAndSet(&amp;flag, 1) == 1)
+        yield();   // running -&gt; ready; let someone else run
+}
+</code></pre>
+<p>With 2 threads on 1 CPU, this works well: the waiter yields and the holder finishes. With <strong>100 threads</strong>, if the holder is preempted, the other 99 each run, find the lock held, and yield. That is 99 context switches, which is better than 99 wasted time slices but still costly. And <strong>starvation</strong> is still possible: an unlucky thread can keep yielding forever while others take the lock.</p>
+<p><strong>Sleeping in a queue: park and unpark (L15 s30-32).</strong> Keep an explicit <strong>queue</strong> of waiting threads, and put them to <strong>sleep</strong>:</p>
+<ul>
+<li><code>park()</code> puts the calling thread to sleep.</li>
+<li><code>unpark(tid)</code> wakes a particular thread.</li>
+</ul>
+<p>These come from Solaris. Linux has a similar mechanism called a <strong>futex</strong>.</p>
+<pre><code class="language-c">typedef struct { int flag; int guard; queue_t *q; } lock_t;
+
+void lock(lock_t *m) {
+    while (TestAndSet(&amp;m-&gt;guard, 1) == 1)
+        ;                          // short spin: guard protects flag and q
+    if (m-&gt;flag == 0) {
+        m-&gt;flag = 1;               // lock was free: take it
+        m-&gt;guard = 0;
+    } else {
+        queue_add(m-&gt;q, gettid()); // lock held: join the queue
+        m-&gt;guard = 0;
+        park();                    // and sleep
+    }
+}
+
+void unlock(lock_t *m) {
+    while (TestAndSet(&amp;m-&gt;guard, 1) == 1)
+        ;
+    if (queue_empty(m-&gt;q))
+        m-&gt;flag = 0;                    // nobody waiting: free the lock
+    else
+        unpark(queue_remove(m-&gt;q));     // hand the lock DIRECTLY to the next thread
+    m-&gt;guard = 0;
+}
+</code></pre>
+<p>Three details matter:</p>
+<ol>
+<li><strong>The guard</strong> is a tiny spin lock that protects only the flag and the queue for a few instructions. Spinning on it is cheap.</li>
+<li><strong>The lock is handed over directly.</strong> When there is a waiter, <code>unlock</code> leaves <code>flag = 1</code> and wakes the next thread. The flag never drops to 0 in between, so no other thread can sneak in. Waiters are served in FIFO order, so the lock is fair.</li>
+<li><strong>The wakeup/waiting race</strong> (OSTEP ch 28). Suppose a thread releases the guard and is interrupted just <em>before</em> it calls <code>park()</code>. If the holder runs <code>unpark()</code> at that moment, the wakeup comes before the sleep, and the thread then sleeps forever. Solaris fixes this with <code>setpark()</code>: the thread announces it is about to park, so an <code>unpark()</code> that arrives early makes the <code>park()</code> return immediately.</li>
+</ol>
+<p><strong>Priority inversion (L15 s33).</strong> This is a <em>correctness</em> problem with spin locks, not just a speed problem:</p>
+<ol>
+<li>Low-priority T1 takes a spin lock.</li>
+<li>High-priority T2 wakes up and spins on the same lock.</li>
+<li>The scheduler always prefers T2, so T1 never runs and never releases the lock. The system hangs.</li>
+</ol>
+<p>This happened on the Mars Pathfinder rover. There are three fixes:</p>
+<ul>
+<li>Avoid spin locks.</li>
+<li><strong>Priority inheritance:</strong> while T2 waits, T1 temporarily runs at T2's priority, so it can finish and release the lock.</li>
+<li>Give all threads the same priority.</li>
+</ul>
+<p><strong>Summary of lock designs (L15 s34).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lock</th>
+<th>Mutual exclusion</th>
+<th>Fair</th>
+<th>How it waits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plain flag (loads and stores)</td>
+<td><strong>No</strong></td>
+<td>No</td>
+<td>Spin</td>
+</tr>
+<tr>
+<td>Test-and-set / CAS / LL-SC</td>
+<td>Yes</td>
+<td>No</td>
+<td>Spin</td>
+</tr>
+<tr>
+<td>Ticket (fetch-and-add)</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+<td>Spin</td>
+</tr>
+<tr>
+<td>Test-and-set + yield</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yield</td>
+</tr>
+<tr>
+<td>Queue + park/unpark</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+<td><strong>Sleep</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Each design fixes a weakness of the one before it. Real systems use a <strong>two-phase lock</strong>: spin briefly in case the lock is released soon, then sleep. Linux's futex-based mutexes work this way.</p>
+<p><strong>Concurrent data structures (OSTEP ch 29), briefly.</strong></p>
+<ul>
+<li>A counter with one lock does not scale across CPUs. An <strong>approximate counter</strong> keeps a local count per CPU and adds it to the global count every S updates.</li>
+<li><strong>Hand-over-hand locking</strong> on a linked list (one lock per node) sounds good but is usually slower than one lock for the whole list.</li>
+<li>A <strong>hash table</strong> with one lock per bucket scales very well.</li>
+<li>The general advice: start with one big lock, and make it finer only if measurements show a problem.</li>
+</ul>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Lecture 15</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../osn/concurrency/lecture-14.html"><small>← Previous</small><span>Lecture 14: Threads and race conditions</span></a><a class="pn pn-next" id="next-link" href="../../osn/concurrency/lecture-16.html"><small>Next →</small><span>Lecture 16: Condition variables</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#building-a-lock">Building a lock</a><a class="l2" href="#getting-the-os-to-help-stop-spinning">Getting the OS to help: stop spinning</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwi22u23" defer></script>
+</body>
+</html>

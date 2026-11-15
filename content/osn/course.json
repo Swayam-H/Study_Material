@@ -5,6 +5,42 @@
   "blurb": "CPU and memory virtualization, networking and the transport layer, concurrency, locks and semaphores.",
   "docs": [
     {
+      "slug": "cpu",
+      "file": "cpu.md",
+      "title": "Lectures 1 to 7: processes and scheduling",
+      "about": "What an OS is, processes, fork/exec/wait, limited direct execution, FIFO to MLFQ and CFS"
+    },
+    {
+      "slug": "networking",
+      "file": "networking.md",
+      "title": "Lectures 8 and 9: networking",
+      "about": "Network parts, layering, sockets, UDP, TCP reliability, flow and congestion control"
+    },
+    {
+      "slug": "memory",
+      "file": "memory.md",
+      "title": "Lectures 10 to 13: memory",
+      "about": "Address spaces, malloc, base and bounds, segmentation, paging, TLB, multi-level tables, swapping, replacement"
+    },
+    {
+      "slug": "concurrency",
+      "file": "concurrency.md",
+      "title": "Lectures 14 to 17: concurrency",
+      "about": "Threads, races, locks, condition variables, semaphores, deadlock"
+    },
+    {
+      "slug": "formula-sheet",
+      "file": "formula-sheet.md",
+      "title": "Formula sheet",
+      "about": "Every calculation rule from the course on one page"
+    },
+    {
+      "slug": "mp2-theory",
+      "file": "mp2-theory.md",
+      "title": "Mini Project 2 theory",
+      "about": "tempest (HTTP over raw sockets), mastermind (UDP discovery, poll, reliable UDP), xv6 CoW fork and alarms, viva questions"
+    },
+    {
       "slug": "topics",
       "file": "topics.md",
       "title": "Topic map, Lectures 1 to 17",
