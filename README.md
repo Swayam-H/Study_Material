@@ -2,7 +2,7 @@
 
 A study app for my course notes: lecture-by-lecture reading, a practice problem bank with hidden solutions, a formula bank, search across everything, progress tracking, and properly rendered math. It installs as an app and works offline.
 
-The site lives in `docs/` and is served by GitHub Pages. You can also open `docs/index.html` directly in a browser, with no server needed.
+Live at **https://swayam-h.github.io/Study_Material/**. The site is built into `docs/`, and GitHub Pages serves a copy of that folder from the `gh-pages` branch. You can also open `docs/index.html` directly in a browser, with no server needed.
 
 ## Courses
 
@@ -18,8 +18,7 @@ Notes are Markdown files with LaTeX math (`$...$` inline, `$$...$$` display) und
 
 ```
 npm install
-node build.mjs
-git add -A && git commit -m "Update notes" && git push
+npm run deploy
 ```
 
 ## What the build finds automatically
