@@ -1,0 +1,15 @@
+{
+  "title": "Probability and Statistics",
+  "code": "MA6.101",
+  "term": "Monsoon 2026",
+  "blurb": "From sample spaces and the axioms to Gaussian vectors, estimation and Bayesian inference.",
+  "docs": [
+    { "slug": "l1-l8", "file": "L1-L8-notes.md", "title": "Lectures 1 to 8", "about": "Probability spaces, conditioning, counting, discrete and continuous random variables", "pdf": "L1-L8-notes.pdf" },
+    { "slug": "l9-l14", "file": "L9-L14-notes.md", "title": "Lectures 9 to 14", "about": "Mixed and joint distributions, covariance, conditioning, sums, MGFs", "pdf": "L9-L14-notes.pdf" },
+    { "slug": "l13-short", "file": "L13-notes.md", "title": "Lecture 13, short notes", "about": "Convolution, Bayes revisited, variance of sums" },
+    { "slug": "l14-l20", "file": "L14-L20-notes.md", "title": "Lectures 14 to 20", "about": "MGFs, simulation, convergence, LLN and CLT, random and Gaussian vectors", "pdf": "L14-L20-notes.pdf" },
+    { "slug": "l14-l20-cheatsheet", "file": "L14-L20-cheatsheet.md", "title": "Cheat sheet, Lectures 14 to 20", "about": "Every formula from L14 to L20 and the exam traps", "pdf": "L14-L20-cheatsheet.pdf" },
+    { "slug": "l21-onward", "file": "L21-onward-notes.md", "title": "Lectures 21 to 24 and linear regression", "about": "Point estimators, MLE, Bayesian inference, MAP", "pdf": "L21-onward-notes.pdf" },
+    { "slug": "midsem-revision", "file": "midsem-L1-L12.md", "title": "Midsem revision, Lectures 1 to 12", "about": "One-sitting recap of the midsem syllabus" }
+  ]
+}
