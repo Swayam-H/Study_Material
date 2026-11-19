@@ -172,6 +172,60 @@ $$
 - Derive the Compton shift in about 10 lines.
 - Explain why pair production needs a nucleus.
 
+# Formulas: Particle properties of waves
+
+## Light as a wave
+
+$$c = \frac{1}{\sqrt{\mu_0\varepsilon_0}} = \nu\lambda,\qquad \vec E = \vec E_0\,e^{i(kz - \omega t)}$$
+
+## Blackbody radiation
+
+$$\boxed{\frac{P}{A} = \sigma T^4,\qquad \lambda_\text{max}T = 2.898\times10^{-3}\ \text{m K}}\qquad(\sigma = 5.67\times10^{-8}\ \text{W m}^{-2}\text{K}^{-4})$$
+
+Planck: an oscillator of frequency $\nu$ has energies $E = nh\nu$, so
+
+$$\boxed{u(\nu)\,d\nu = \frac{8\pi h}{c^3}\,\frac{\nu^3\,d\nu}{e^{h\nu/kT} - 1}},\qquad \bar\varepsilon = \frac{h\nu}{e^{h\nu/kT} - 1}$$
+
+Limits: $h\nu \ll kT$ gives $\bar\varepsilon \to kT$ (Rayleigh–Jeans); $h\nu \gg kT$ gives $\bar\varepsilon \approx h\nu\,e^{-h\nu/kT}$.
+
+## Photoelectric effect
+
+$$\boxed{h\nu = KE_\text{max} + \phi,\qquad \phi = h\nu_0,\qquad eV_0 = KE_\text{max}}$$
+
+Photon: $E = h\nu = pc$, $p = h/\lambda$.
+
+## X-rays
+
+$$\boxed{\lambda_\text{min} = \frac{hc}{eV} = \frac{1.24\times10^{-6}\ \text{V m}}{V}},\qquad \boxed{2d\sin\theta = n\lambda}\quad(n = 1, 2, \dots)$$
+
+## Compton scattering
+
+Conserve $x$- and $y$-momentum and total energy (relativistic electron):
+
+$$\boxed{\lambda' - \lambda = \frac{h}{m_ec}(1 - \cos\phi) = \lambda_C(1 - \cos\phi),\qquad \lambda_C = 2.426\ \text{pm}}$$
+
+Maximum shift $2\lambda_C$ at $\phi = 180^\circ$; no shift at $\phi = 0$.
+
+## Pair production and absorption
+
+$$h\nu \ge 2m_ec^2 = 1.02\ \text{MeV},\qquad I = I_0\,e^{-\mu x}$$
+
+Photoelectric effect dominates at low energy, Compton at medium, pair production above a few MeV.
+
+## Photons and gravity
+
+$$m_\text{grav} = \frac{h\nu}{c^2},\qquad \frac{\Delta\nu}{\nu} \approx \frac{GM}{Rc^2}\ \text{(gravitational red shift)}$$
+
+## Constants
+
+| Quantity | Value |
+|---|---|
+| $hc$ | $1240\ \text{eV nm}$ |
+| $h$ | $4.14\times10^{-15}\ \text{eV s} = 6.63\times10^{-34}\ \text{J s}$ |
+| $m_ec^2$ | $0.511\ \text{MeV}$ |
+| $e$ | $1.602\times10^{-19}\ \text{C}$, so $1\ \text{eV} = 1.602\times10^{-19}\ \text{J}$ |
+| $k_B$ | $8.62\times10^{-5}\ \text{eV K}^{-1}$ |
+
 # Practice: Particle properties of waves
 
 31 questions with worked answers (tap a solution to open it). These follow the style of your past papers (2025 and 2026 midsems, Quiz-1, the `sci_midsem.pdf` thermo answers) and the homework list. Expect short "state / explain / show" items for 2–3 points, derivations for 4–6 points, and estimates with round numbers, because no calculator is allowed. Points are shown in brackets. Answers are in the next section; try each question first.

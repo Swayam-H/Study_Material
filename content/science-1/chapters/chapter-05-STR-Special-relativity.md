@@ -117,6 +117,79 @@ $$
 - Derive K = (γ − 1)mc², E² = p²c² + m²c⁴, and the classical limit.
 - Show the interval is invariant and classify intervals.
 
+# Formulas: Special relativity
+
+Frame $K'$ moves at $v$ along $+x$ of $K$, origins coincide at $t = t' = 0$.
+
+## Setup
+
+$$\boxed{\beta = \frac vc,\qquad \gamma = \frac{1}{\sqrt{1 - \beta^2}} \ge 1}$$
+
+| $\beta$ | 0.6 | 0.8 | 0.9 | 0.99 | 0.998 |
+|---|---|---|---|---|---|
+| $\gamma$ | 1.25 | $5/3$ | 2.29 | 7.09 | 15.8 |
+
+$$\gamma^2(1 - \beta^2) = 1,\qquad \gamma^2\beta^2 = \gamma^2 - 1,\qquad \gamma \approx 1 + \tfrac12\beta^2\ (\beta \ll 1)$$
+
+## Lorentz transformation
+
+$$\boxed{x' = \gamma(x - vt),\quad y' = y,\quad z' = z,\quad t' = \gamma\left(t - \frac{vx}{c^2}\right)}$$
+
+Inverse: swap primed and unprimed and put $v \to -v$. For events use differences:
+
+$$\Delta x' = \gamma(\Delta x - v\Delta t),\qquad \Delta t' = \gamma\left(\Delta t - \frac{v\Delta x}{c^2}\right)$$
+
+## Simultaneity, dilation, contraction
+
+$$\Delta t = 0\ \text{in } K \text{ with separation } \Delta x\ \Rightarrow\ \Delta t' = -\frac{\gamma v\Delta x}{c^2}$$
+
+$$\boxed{\Delta t = \gamma\,\Delta t_0}\qquad(\Delta t_0\ \text{proper time: both events at the same place})$$
+
+$$\boxed{L = \frac{L_0}{\gamma}}\qquad(L_0\ \text{proper length; along the motion only; ends measured simultaneously})$$
+
+Twin paradox: $t_\text{traveller} = t_\text{home}/\gamma$.
+
+## Velocity addition and Doppler
+
+$$\boxed{u = \frac{u' + v}{1 + u'v/c^2}},\qquad u_x' = \frac{u_x - v}{1 - u_xv/c^2},\qquad u_y' = \frac{u_y}{\gamma\left(1 - u_xv/c^2\right)}$$
+
+| Doppler (light) | Observed frequency |
+|---|---|
+| receding | $\nu = \nu_0\sqrt{\dfrac{1 - \beta}{1 + \beta}}$ |
+| approaching | $\nu = \nu_0\sqrt{\dfrac{1 + \beta}{1 - \beta}}$ |
+| transverse | $\nu = \nu_0/\gamma$ |
+| small $\beta$ | $\dfrac{\Delta\lambda}{\lambda} \approx \beta$ |
+
+At $\beta = 0.8$: receding $\nu_0/3$, approaching $3\nu_0$, transverse $0.6\,\nu_0$. Hubble: $v = H_0R$.
+
+## Momentum and energy
+
+$$\boxed{\vec p = \gamma m\vec u,\qquad E = \gamma mc^2,\qquad K = (\gamma - 1)mc^2,\qquad E^2 = (pc)^2 + (mc^2)^2}$$
+
+$$\beta = \frac{pc}{E},\qquad \gamma = \frac{E}{mc^2},\qquad \beta\gamma = \frac{p}{mc},\qquad K \approx \tfrac12 mu^2 + \tfrac38\frac{mu^4}{c^2}\ \ (u \ll c)$$
+
+A massless particle has $E = pc$ and speed $c$. $\vec F = d\vec p/dt$, which is **not** $m\vec a$.
+
+| Particle | Rest energy |
+|---|---|
+| electron | $0.511\ \text{MeV}$ |
+| proton | $938.3\ \text{MeV}$ |
+| $1\ \text{u}$ | $931.5\ \text{MeV}$ |
+
+## Spacetime interval
+
+$$\boxed{(\Delta s)^2 = \Delta x^2 + \Delta y^2 + \Delta z^2 - c^2\Delta t^2}\quad\text{(same in all frames; Beiser uses the opposite sign, so say which you use)}$$
+
+| Interval | Condition | Meaning |
+|---|---|---|
+| timelike | $\lvert c\Delta t\rvert > \lvert\Delta x\rvert$ | same place in some frame; causal link possible |
+| spacelike | $\lvert c\Delta t\rvert < \lvert\Delta x\rvert$ | simultaneous in some frame; no causal link |
+| lightlike | $\lvert c\Delta t\rvert = \lvert\Delta x\rvert$ | joined by a light signal |
+
+## Electromagnetism from relativity
+
+Line charge $\lambda$ and test charge $q$ at distance $d$: in $K$, $F = \dfrac{q\lambda}{2\pi\varepsilon_0 d}$. In $K'$, $\lambda' = \gamma\lambda$ and $F' = F/\gamma$ (the magnetic force cancels the excess electric force).
+
 # Practice: Special relativity
 
 27 questions with worked answers (tap a solution to open it). Points in brackets, in the style of the midsems. Use c = 3 × 10⁸ m/s = 300 m/μs. No calculator: the numbers are chosen to come out cleanly.
@@ -290,7 +363,6 @@ By how much does a clock on an aircraft (250 m/s) fall behind in a 10 h flight, 
 A light source of rest frequency ν₀, a distance l from an observer, moves at v perpendicular to the observer's line of sight. Find the apparent frequency.
 
 *Solution.* At the moment the source crosses the line of sight there is no motion along it, so there is no classical Doppler shift. Only time dilation remains: in the observer's frame the source's period is γT₀, so ν = ν₀/γ = ν₀√(1 − v²/c²), a red shift. The distance l doesn't enter. This transverse Doppler effect has no classical counterpart.
-
 
 # Reference: Special relativity quick sheet (Beiser ch. 1)
 

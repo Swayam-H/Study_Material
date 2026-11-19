@@ -170,6 +170,70 @@ $$
 - Explain qualitatively the finite well, tunnelling (T ≈ e^(−2k₂L)) and why it matters.
 - State the oscillator levels and zero-point energy and compare with the classical oscillator.
 
+# Formulas: Quantum mechanics
+
+## Schrödinger equation
+
+$$\boxed{i\hbar\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi}\qquad\text{(time-dependent, 1-D)}$$
+
+For $U = U(x)$ separate $\Psi = \psi(x)e^{-iEt/\hbar}$:
+
+$$\boxed{-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + U\psi = E\psi}\qquad\text{(steady-state)}$$
+
+Acceptable $\psi$: continuous, single-valued, normalisable ($\int|\Psi|^2dx = 1$), with $d\psi/dx$ continuous where $U$ is finite. Energy quantisation comes from these conditions alone.
+
+| Property | Statement |
+|---|---|
+| linearity | any sum of solutions is a solution, which gives interference |
+| stationary state | $\lvert\Psi\rvert^2 = \lvert\psi\rvert^2$, constant in time |
+
+## Expectation values and operators
+
+$$\langle x\rangle = \int x|\Psi|^2dx,\qquad \langle p\rangle = \int\Psi^*\left(-i\hbar\frac{\partial}{\partial x}\right)\Psi\,dx,\qquad \hat p = -i\hbar\frac{\partial}{\partial x}$$
+
+$e^{ikx}$ is an eigenfunction of $\hat p$ with $p = \hbar k$. $\sin kx$ is not (it is an equal mix of $+\hbar k$ and $-\hbar k$).
+
+## Particle in an infinite box (width $L$)
+
+$$\boxed{\psi_n = \sqrt{\frac2L}\sin\frac{n\pi x}{L},\qquad E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2},\qquad n = 1, 2, \dots}$$
+
+$\langle x\rangle = L/2$ for every state. Normalisation of $\psi = A x(L - x)$: $A = \sqrt{30/L^5}$.
+
+**3-D cubical box:**
+
+$$E = \frac{\pi^2\hbar^2}{2mL^2}\left(n_1^2 + n_2^2 + n_3^2\right)$$
+
+Levels at $3$ (1,1,1), $6$ (1,1,2) and permutations (3-fold), $9$ (1,2,2) and permutations (3-fold), in units of $\pi^2\hbar^2/2mL^2$.
+
+## Finite well
+
+Inside: $\psi = A\sin kx + B\cos kx$ with $k = \sqrt{2mE}/\hbar$. Outside ($E < U$): decaying exponentials with
+
+$$a = \frac{\sqrt{2m(U - E)}}{\hbar}$$
+
+Join $\psi$ and $d\psi/dx$ at each wall. Levels lie below those of an infinite well of the same width because $\psi$ leaks into the walls.
+
+## Tunnelling
+
+$$\boxed{T \approx e^{-2k_2L},\qquad k_2 = \frac{\sqrt{2m(U - E)}}{\hbar}}$$
+
+Doubling the width squares $T$; a heavier particle (larger $m$) tunnels far less.
+
+## Harmonic oscillator ($U = \tfrac12 kx^2$)
+
+$$\boxed{E_n = \left(n + \tfrac12\right)h\nu = \left(n + \tfrac12\right)\hbar\omega,\qquad n = 0, 1, 2, \dots}$$
+
+Zero-point energy $\tfrac12h\nu$; level spacing $h\nu$. Near any minimum $x_0$: $U \approx U(x_0) + \tfrac12U''(x_0)(x - x_0)^2$, so $k = U''(x_0)$.
+
+## Constants
+
+| Quantity | Value |
+|---|---|
+| $hc$ | $1240\ \text{eV nm}$ |
+| $\hbar c$ | $197\ \text{eV nm}$ |
+| $m_ec^2$ | $0.511\ \text{MeV}$ |
+| $h$ | $4.14\times10^{-15}\ \text{eV s}$ |
+
 # Practice: Quantum mechanics
 
 29 questions with worked answers (tap a solution to open it). The style follows your midsem papers and Quiz-1. Points are in brackets. Use hc = 1240 eV nm, ħc = 197 eV nm, mₑc² = 0.511 MeV, h = 4.14 × 10⁻¹⁵ eV s.

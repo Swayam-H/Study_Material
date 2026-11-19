@@ -165,6 +165,63 @@ The excited atom returns to lower levels in about 10⁻⁸ s, emitting photons.
 - Describe Franck–Hertz and what the 4.9 V dips mean.
 - Explain stimulated emission, population inversion, metastable states, and 3- vs 4-level lasers.
 
+# Formulas: Atomic structure
+
+## Classical orbit
+
+Coulomb force as centripetal force:
+
+$$\frac{mv^2}{r} = \frac{e^2}{4\pi\varepsilon_0r^2}\ \Rightarrow\ v = \frac{e}{\sqrt{4\pi\varepsilon_0mr}},\qquad E = KE + PE = -\frac{e^2}{8\pi\varepsilon_0r}$$
+
+$E < 0$ because the electron is bound.
+
+## Hydrogen spectrum
+
+$$\boxed{\frac1\lambda = R\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right),\qquad R = 1.097\times10^7\ \text{m}^{-1}}$$
+
+Series limit ($n_i \to \infty$): Lyman 91.2 nm, Balmer 365 nm.
+
+## Bohr atom
+
+Quantisation: standing electron waves, $2\pi r_n = n\lambda = nh/mv$, equivalently
+
+$$\boxed{L = mvr_n = n\hbar}$$
+
+$$\boxed{r_n = n^2a_0,\qquad a_0 = \frac{4\pi\varepsilon_0\hbar^2}{me^2} = 0.0529\ \text{nm}},\qquad v_n = \frac{\alpha c}{n},\ \ \alpha \approx \frac1{137}$$
+
+$$\boxed{E_n = -\frac{me^4}{8\varepsilon_0^2h^2}\frac{1}{n^2} = \frac{E_1}{n^2},\qquad E_1 = -13.6\ \text{eV}}$$
+
+Ionisation from the ground state needs 13.6 eV. A transition emits
+
+$$h\nu = E_i - E_f = -E_1\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right),\qquad R = \frac{-E_1}{hc} = \frac{me^4}{8\varepsilon_0^2ch^3}$$
+
+## Hydrogen-like ions (nuclear charge $Ze$)
+
+$$E_n = -\frac{13.6\,Z^2}{n^2}\ \text{eV},\qquad r_n = \frac{n^2a_0}{Z}$$
+
+## Reduced mass
+
+$$m' = \frac{mM}{m + M}$$
+
+Hydrogen: $m' = 0.99946\,m$ (energies shift by 0.05%). Positronium: $m' = m/2$, so all energies are halved.
+
+## Correspondence principle
+
+At large $n$ the frequency of the photon from $n \to n - 1$ approaches the classical orbital frequency $f = v/2\pi r$.
+
+## Excitation (Franck–Hertz)
+
+Mercury: the first excitation energy is $4.9$ eV, and the emitted light has $\lambda = hc/4.9\ \text{eV} = 253$ nm. This shows directly that atoms have discrete levels.
+
+## Constants
+
+| Quantity | Value |
+|---|---|
+| $hc$ | $1240\ \text{eV nm}$ |
+| $a_0$ | $0.0529\ \text{nm}$ |
+| hydrogen ground state | $-13.6\ \text{eV}$ |
+| $e$ | $1.602\times10^{-19}\ \text{C}$ |
+
 # Practice: Atomic structure
 
 31 questions with worked answers (tap a solution to open it). The style follows your midsem papers and Quiz-1. Points are in brackets. Use hc = 1240 eV nm, E₁ = −13.6 eV, a₀ = 0.053 nm, α ≈ 1/137.

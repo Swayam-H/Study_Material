@@ -1627,6 +1627,64 @@ $$
 - Read a phase diagram and apply F = C − P + 2.
 - Derive the Clapeyron equation and use Clausius–Clapeyron for Δ\_vapH or a boiling point.
 
+# Formulas: Second law, entropy and free energy
+
+## Engines and the second law
+
+$$\boxed{\eta = \frac{W}{Q_H} = 1 - \frac{Q_C}{Q_H},\qquad \eta_\text{Carnot} = 1 - \frac{T_C}{T_H}}\qquad \text{COP}_\text{fridge}^\text{max} = \frac{T_C}{T_H - T_C}$$
+
+## Entropy
+
+$$\boxed{dS = \frac{dq_\text{rev}}{T},\qquad \oint\frac{dq}{T} \le 0,\qquad \Delta S_\text{univ} \ge 0}\qquad S = k_B\ln W$$
+
+| Process | $\Delta S$ |
+|---|---|
+| heating at constant $p$ | $\displaystyle\int\frac{C_p}{T}dT = C_p\ln\frac{T_2}{T_1}$ (constant $C_p$) |
+| ideal gas, any path | $nC_V\ln\dfrac{T_2}{T_1} + nR\ln\dfrac{V_2}{V_1}$ |
+| isothermal ideal gas | $nR\ln\dfrac{V_2}{V_1}$ |
+| phase change at $T_\text{trs}$ | $\dfrac{\Delta_\text{trs}H}{T_\text{trs}}$ |
+| surroundings | $-\dfrac{q}{T_\text{surr}}$ |
+
+Free expansion into vacuum: $q = w = \Delta U = 0$ but $\Delta S_\text{gas} = nR\ln(V_2/V_1) > 0$.
+
+## Third law
+
+$$S(0) = 0\ \text{(perfect crystal)},\qquad S(T) = S(0) + \int_0^T\frac{C_p}{T}dT + \frac{\Delta_\text{fus}H}{T_f} + \cdots,\qquad C_p = aT^3\ \Rightarrow\ S = \frac{C_p}{3}$$
+
+$$\Delta_rS^\circ = \sum\nu S_m^\circ(\text{products}) - \sum\nu S_m^\circ(\text{reactants})$$
+
+## Helmholtz and Gibbs energies
+
+$$\boxed{A = U - TS,\qquad G = H - TS = A + pV,\qquad \Delta G = \Delta H - T\Delta S}$$
+
+| $\Delta H$ | $\Delta S$ | Spontaneous? |
+|---|---|---|
+| $< 0$ | $> 0$ | always |
+| $> 0$ | $< 0$ | never |
+| otherwise | | depends on $T$ (entropy wins at high $T$) |
+
+$\Delta A$ is the maximum total work and $\Delta G$ the maximum non-expansion work. $\Delta_rG^\circ = \sum\nu\Delta_fG^\circ(\text{products}) - \sum\nu\Delta_fG^\circ(\text{reactants})$.
+
+## Fundamental equations and Maxwell relations
+
+$$\boxed{dU = T\,dS - p\,dV,\quad dH = T\,dS + V\,dp,\quad dA = -S\,dT - p\,dV,\quad dG = -S\,dT + V\,dp}$$
+
+$$\left(\frac{\partial T}{\partial V}\right)_S = -\left(\frac{\partial p}{\partial S}\right)_V,\quad \left(\frac{\partial T}{\partial p}\right)_S = \left(\frac{\partial V}{\partial S}\right)_p,\quad \left(\frac{\partial S}{\partial V}\right)_T = \left(\frac{\partial p}{\partial T}\right)_V,\quad \left(\frac{\partial S}{\partial p}\right)_T = -\left(\frac{\partial V}{\partial T}\right)_p$$
+
+$$\left(\frac{\partial G}{\partial T}\right)_p = -S,\quad \left(\frac{\partial G}{\partial p}\right)_T = V,\quad \left(\frac{\partial (G/T)}{\partial T}\right)_p = -\frac{H}{T^2},\quad \pi_T = \left(\frac{\partial U}{\partial V}\right)_T = T\left(\frac{\partial p}{\partial T}\right)_V - p$$
+
+$\pi_T = 0$ for a perfect gas and $a/V_m^2$ for a van der Waals gas. Pressure dependence: $\Delta G \approx V_m\Delta p$ (condensed phase), $G_m(p) = G_m^\circ + RT\ln(p/p^\circ)$ (perfect gas).
+
+## Phases
+
+$$\boxed{F = C - P + 2},\qquad \mu = G_m,\qquad \left(\frac{\partial\mu}{\partial T}\right)_p = -S_m,\quad \left(\frac{\partial\mu}{\partial p}\right)_T = V_m$$
+
+For $C = 1$: one phase has $F = 2$ (area), two phases $F = 1$ (line), three phases $F = 0$ (point).
+
+$$\text{Clapeyron: }\frac{dp}{dT} = \frac{\Delta_\text{trs}H}{T\,\Delta_\text{trs}V},\qquad \boxed{\frac{d\ln p}{dT} = \frac{\Delta_\text{vap}H}{RT^2},\quad \ln\frac{p_2}{p_1} = -\frac{\Delta_\text{vap}H}{R}\left(\frac1{T_2} - \frac1{T_1}\right)}$$
+
+Trouton's rule: $\Delta_\text{vap}S \approx 85\ \text{J K}^{-1}\text{mol}^{-1}$.
+
 # Practice: Free energy and phases
 
 29 questions with worked answers (tap a solution to open it). Points in brackets. Items tagged with an Atkins code are from your HW list (sometimes with data filled in so they work without the tables). R = 8.314 J K⁻¹ mol⁻¹; RT at 298 K ≈ 2.48 kJ mol⁻¹.

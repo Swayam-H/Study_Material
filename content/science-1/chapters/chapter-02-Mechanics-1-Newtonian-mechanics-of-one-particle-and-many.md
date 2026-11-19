@@ -101,6 +101,78 @@ The course material section by section, in the order of the textbook, with the k
 - Derive the system results for P, L, T.
 - Solve rocket and falling-rope problems.
 
+# Formulas: Newtonian mechanics
+
+## One particle
+
+$$\boxed{\vec F = \frac{d\vec p}{dt} = m\vec a}\qquad\text{(law I defines inertial frames; law III: equal and opposite, along the line joining for central forces)}$$
+
+**Work and energy**
+
+$$W = \int_1^2 \vec F\cdot d\vec r = K_2 - K_1,\qquad K = \tfrac12 mv^2$$
+
+**Conservative force** (equivalent statements; then $K + U$ is constant):
+
+$$\boxed{\vec F = -\nabla U \iff \nabla\times\vec F = 0 \iff W\ \text{path-independent}}$$
+
+In two dimensions the test is $\dfrac{\partial F_y}{\partial x} = \dfrac{\partial F_x}{\partial y}$.
+
+**Angular momentum and torque**
+
+$$\vec L = \vec r\times\vec p,\qquad \vec N = \frac{d\vec L}{dt} = \vec r\times\vec F,\qquad \frac{dE}{dt} = \frac{\partial U}{\partial t}$$
+
+| Conserved when | Quantity |
+|---|---|
+| $\vec F\cdot\hat s = 0$ | momentum component along $\hat s$ |
+| $\vec N\cdot\hat s = 0$ (e.g. central force) | angular momentum component along $\hat s$ |
+| $U = U(\vec r)$, no explicit $t$ | energy $E$ |
+
+**Galilean transformation:** $\vec u' = \vec u - \vec v$, $t' = t$, $\vec F' = \vec F$.
+
+## Standard cases
+
+| Case | Result |
+|---|---|
+| Frictionless incline | $a = g\sin\theta,\quad N = mg\cos\theta$ |
+| Incline with kinetic friction $\mu$ | $a = g(\sin\theta - \mu\cos\theta)$ |
+| Falling with linear drag | $m\dot v = mg - kv,\quad v_t = \dfrac{mg}{k},\quad v = v_t\left(1 - e^{-kt/m}\right)$ |
+| Projectile | $x = v_0\cos\alpha\,t,\ \ y = v_0\sin\alpha\,t - \tfrac12 gt^2,\ \ R = \dfrac{v_0^2\sin 2\alpha}{g}$ |
+
+## Harmonic oscillator
+
+$$\boxed{\ddot x + \omega_0^2 x = 0,\quad \omega_0 = \sqrt{\frac km},\quad x = A\cos(\omega_0 t + \varphi)}$$
+
+First-order form and energy (phase-plane ellipses):
+
+$$\dot x = \frac pm,\quad \dot p = -kx,\qquad E = \frac{p^2}{2m} + \tfrac12 kx^2$$
+
+Non-dimensional form with $\tau = \omega_0 t$, $\xi = x/x_0$: $\ \xi'' + \xi = 0$ (no parameters left).
+
+**Small oscillations about a minimum $x_0$ of $U$:**
+
+$$\boxed{k_\text{eff} = U''(x_0),\qquad \omega = \sqrt{\frac{U''(x_0)}{m}}}$$
+
+## Systems of particles
+
+$$\boxed{\vec R = \frac{\sum_k m_k\vec r_k}{M},\qquad \vec P = \sum_k\vec p_k = M\dot{\vec R},\qquad \frac{d\vec P}{dt} = \vec F_\text{ext}}$$
+
+Internal forces cancel in pairs by the third law. Splitting about the centre of mass ($\vec r_k = \vec R + \vec r_k'$):
+
+$$\vec L = \vec R\times M\dot{\vec R} + \sum_k\vec r_k'\times\vec p_k',\qquad \frac{d\vec L}{dt} = \sum\vec N_\text{ext}$$
+
+$$T = \tfrac12 M\dot R^2 + \sum_k\tfrac12 m_k v_k'^2\qquad\text{(the cross term vanishes because } \textstyle\sum m_k\vec v_k' = 0)$$
+
+## Variable mass (rocket)
+
+With exhaust speed $u$ relative to the rocket:
+
+$$\boxed{m\frac{dv}{dt} = -u\frac{dm}{dt} + F_\text{ext}}$$
+
+| Situation | Result |
+|---|---|
+| Free space | $v = v_0 + u\ln\dfrac{m_0}{m}$ |
+| Vertical, burn rate $\alpha = -dm/dt$, gravity $g$ | $v = u\ln\dfrac{m_0}{m} - \dfrac{g(m_0 - m)}{\alpha}$; lift-off needs $u\alpha > m_0 g$ |
+| Rope falling onto a table | force on the table $= 3\rho g x$ once length $x$ has landed |
 # Practice: Newtonian mechanics of one particle and many
 
 22 questions with worked answers (tap a solution to open it). Points in brackets, midsem style.
@@ -242,4 +314,5 @@ A rocket in free space has u = 3 km/s. What mass ratio m₀/m gives 9 km/s? (e³
 Estimate the thrust needed to lift a 500 t rocket off the pad, and the burn rate if u = 3 km/s.
 
 *Solution.* Weight ≈ 5 × 10⁵ kg × 10 m/s² = 5 × 10⁶ N, so the thrust must exceed about 5 MN. Burn rate α > 5 × 10⁶/3000 ≈ 1.7 t/s.
+
 

@@ -88,6 +88,117 @@ $$
 - Describe the logistic map's behaviour against r and explain period doubling and chaos.
 - Write the LV equations, explain each term, find fixed points, Jacobian and eigenvalues, and interpret them.
 
+# Formulas: Scales, modelling and nonlinear dynamics
+
+Everything you need to write down in this chapter, with the condition under which each result holds.
+
+## Maps and fixed points
+
+A map takes the state at step $n$ to the state at step $n+1$. A fixed point is a state the map leaves unchanged, and it is stable when nearby states are pulled towards it.
+
+$$\boxed{x_{n+1} = f(x_n),\qquad x^* = f(x^*),\qquad \text{stable} \iff |f'(x^*)| < 1}$$
+
+Sign of the slope: $f'(x^*) > 0$ gives monotonic approach, $f'(x^*) < 0$ gives oscillating approach (the cobweb spirals).
+
+**Linear map** $x_{n+1} = mx_n + c$:
+
+$$\boxed{x^* = \frac{c}{1 - m}}$$
+
+| $m$ | Behaviour |
+|---|---|
+| $\lvert m\rvert < 1$ | converges to $x^*$ |
+| $\lvert m\rvert > 1$ | diverges |
+| $m = -1$ | 2-cycle |
+| $m = 1$ | no fixed point if $c \ne 0$; every point fixed if $c = 0$ |
+
+The constant $c$ never changes stability. Only $m$ does.
+
+## Logistic map
+
+$$\boxed{x_{n+1} = r\,x_n(1 - x_n),\qquad 0 < r \le 4}$$
+
+Fixed points and the slope that decides their stability:
+
+$$x^* = 0,\qquad x^* = 1 - \frac1r,\qquad f'(x) = r(1 - 2x)\ \Rightarrow\ f'(0) = r,\quad f'\!\left(1 - \tfrac1r\right) = 2 - r$$
+
+So $x^* = 0$ is stable for $r < 1$, and $x^* = 1 - 1/r$ is stable for $1 < r < 3$.
+
+| $r$ | What happens |
+|---|---|
+| $0 < r < 1$ | $x^* = 0$ stable (extinction) |
+| $r = 1$ | transcritical: the two fixed points swap stability |
+| $1 < r < 3$ | $x^* = 1 - 1/r$ stable; superstable at $r = 2$ because $f' = 0$ |
+| $r = 3$ | $f' = -1$: period doubling, a 2-cycle is born |
+| $3 < r < 1 + \sqrt6 \approx 3.449$ | stable 2-cycle |
+| up to $r_\infty \approx 3.570$ | cycles of 4, 8, 16, … |
+| $r > 3.570$ | chaos, with windows (period 3 near $3.83$) |
+| $r = 4$ | full chaos; $x = \sin^2\theta$ turns the map into $\theta \to 2\theta$ |
+
+2-cycle points are the roots of
+
+$$\boxed{x^2 - \left(1 + \frac1r\right)x + \frac{r+1}{r^2} = 0}$$
+
+whose discriminant $(r+1)(r-3)/r^2$ is positive only for $r > 3$.
+
+Period-doubling gaps shrink by the Feigenbaum ratio:
+
+$$\delta = \lim_{k\to\infty}\frac{r_k - r_{k-1}}{r_{k+1} - r_k} \approx 4.669$$
+
+Continuous analogue (logistic growth with carrying capacity $K$):
+
+$$\frac{dN}{dt} = rN\left(1 - \frac NK\right)$$
+
+## Lotka–Volterra predator–prey
+
+Prey $X$, predator $Y$:
+
+$$\boxed{\frac{dX}{dt} = \alpha X - \beta XY,\qquad \frac{dY}{dt} = \gamma XY - \delta Y}$$
+
+| Term | Meaning |
+|---|---|
+| $\alpha X$ | prey growth |
+| $\beta XY$ | prey eaten |
+| $\gamma XY$ | predator growth from food |
+| $\delta Y$ | predator death |
+
+**Fixed points:** $(0,0)$ and $\left(\dfrac{\delta}{\gamma},\dfrac{\alpha}{\beta}\right)$.
+
+**Jacobian:**
+
+$$J = \begin{pmatrix}\alpha - \beta Y & -\beta X\\ \gamma Y & \gamma X - \delta\end{pmatrix}$$
+
+At $(0,0)$ the eigenvalues are $\alpha$ and $-\delta$ (a saddle). At the coexistence point they are $\pm i\sqrt{\alpha\delta}$ (a centre), so the period of small oscillations is
+
+$$\boxed{T = \frac{2\pi}{\sqrt{\alpha\delta}}}$$
+
+**Reading eigenvalues:**
+
+| Eigenvalues | Fixed point |
+|---|---|
+| both real, negative | stable node |
+| both real, positive | unstable node |
+| real, opposite signs | saddle |
+| complex, $\text{Re} < 0$ | stable spiral |
+| complex, $\text{Re} > 0$ | unstable spiral |
+| purely imaginary | centre |
+
+**Non-dimensional form** with $x = \gamma X/\delta$, $y = \beta Y/\alpha$, $\tau = \alpha t$ (one parameter left, $a = \delta/\alpha$):
+
+$$\frac{dx}{d\tau} = x(1 - y),\qquad \frac{dy}{d\tau} = a\,y(x - 1)$$
+
+**Conserved quantity** (orbits are closed curves of constant $V$):
+
+$$V = \gamma X - \delta\ln X + \beta Y - \alpha\ln Y$$
+
+**Constant prey harvesting** at rate $h$: the fixed points move to $\left(\dfrac h\alpha, 0\right)$ and $\left(\dfrac\delta\gamma,\ \dfrac\alpha\beta - \dfrac{h\gamma}{\beta\delta}\right)$, and the coexistence point becomes an unstable spiral.
+
+## Estimating
+
+A Fermi estimate is a product of factors you can guess, kept to the right power of ten:
+
+$$\text{answer} \approx \prod_i (\text{guessable factor})_i$$
+
+To non-dimensionalise, scale each variable by a natural unit and count the parameters left over.
 # Practice: Scales, modelling and nonlinear dynamics
 
 21 questions with worked answers (tap a solution to open it). Points in brackets, Quiz-1 and midsem style.
@@ -223,4 +334,5 @@ How long would it take to walk from campus to the airport (about 30 km), and how
 Estimate the power needed by a hovering mosquito.
 
 *Solution.* A mosquito of about 2 mg must push air down to support its weight, 2 × 10⁻⁵ N. Inducing an airflow of order 1 m/s, the power is about weight × speed ≈ 2 × 10⁻⁵ W, a few tens of microwatts (allowing for inefficiency, about 10⁻⁴ W).
+
 

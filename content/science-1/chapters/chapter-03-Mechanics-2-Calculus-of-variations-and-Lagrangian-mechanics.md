@@ -105,6 +105,62 @@ $$
 - Explain cyclic coordinates and the symmetry–conservation link.
 - Compare Newton and Lagrange.
 
+# Formulas: Calculus of variations and Lagrangian mechanics
+
+## Euler equation
+
+To make $J = \int_{x_1}^{x_2} f(y, y'; x)\,dx$ stationary with fixed end points, vary $y \to y + \alpha\eta$ with $\eta(x_1) = \eta(x_2) = 0$, set $\partial J/\partial\alpha = 0$ at $\alpha = 0$, and integrate by parts:
+
+$$\boxed{\frac{\partial f}{\partial y} - \frac{d}{dx}\frac{\partial f}{\partial y'} = 0}$$
+
+Two shortcuts:
+
+$$\frac{\partial f}{\partial y} = 0\ \Rightarrow\ \frac{\partial f}{\partial y'} = \text{const},\qquad\qquad \frac{\partial f}{\partial x} = 0\ \Rightarrow\ f - y'\frac{\partial f}{\partial y'} = \text{const}$$
+
+| Problem | Integrand $f$ | Result |
+|---|---|---|
+| Shortest path in a plane | $\sqrt{1 + y'^2}$ | straight line |
+| Fermat's principle | $n(x, y)\sqrt{1 + y'^2}$ | Snell's law $n_1\sin\theta_1 = n_2\sin\theta_2$ |
+| Brachistochrone (MT E6.2) | $\dfrac{\sqrt{1 + y'^2}}{\sqrt{2gx}}$ | $\dfrac{y'^2}{x(1 + y'^2)} = \dfrac1{2a}$, cycloid $x = a(1 - \cos\phi),\ y = a(\phi - \sin\phi)$ |
+
+## Hamilton's principle and Lagrange's equations
+
+$$\boxed{S = \int_{t_1}^{t_2} L\,dt,\quad L = T - U,\qquad \delta S = 0 \iff \frac{d}{dt}\frac{\partial L}{\partial\dot q_k} = \frac{\partial L}{\partial q_k}}$$
+
+Degrees of freedom $= 3N - (\text{number of constraints})$. Recipe: choose $q$'s, write $T$ and $U$ in them, form $L$, apply the equation to each $q_k$. Constraint forces that do no work never appear.
+
+| System | Result |
+|---|---|
+| Simple pendulum (MT E7.2) | $L = \tfrac12 ml^2\dot\theta^2 + mgl\cos\theta$, giving $ml^2\ddot\theta = -mgl\sin\theta$; small $\theta$: $\omega^2 = g/l$ |
+| Wall of death, cone half-angle $\alpha$ (MT E7.4) | $mr^2\dot\theta$ constant; $\ddot r = r\dot\theta^2\sin^2\alpha - g\sin\alpha\cos\alpha$ |
+| Block on an incline rising at $\theta = \alpha t$ (MT P7.12) | $\ddot q = \alpha^2 q - g\sin\alpha t$; $L$ depends on $t$, so energy is not conserved |
+| Disk rolling down an incline (MT E7.9) | $\ddot y = \dfrac{g\sin\alpha}{1 + I/MR^2} = \tfrac23 g\sin\alpha$ for a uniform disk |
+
+## Constraints with multipliers
+
+For constraints $f_k(q, t) = 0$:
+
+$$\boxed{\frac{\partial L}{\partial q_j} - \frac{d}{dt}\frac{\partial L}{\partial\dot q_j} + \sum_k\lambda_k\frac{\partial f_k}{\partial q_j} = 0}$$
+
+The term $\lambda_k\,\partial f_k/\partial q_j$ is the generalised constraint force.
+
+## Symmetry and conservation
+
+| Symmetry | Conserved quantity |
+|---|---|
+| $q_k$ cyclic ($\partial L/\partial q_k = 0$) | $p_k = \dfrac{\partial L}{\partial\dot q_k}$ |
+| Time translation ($\partial L/\partial t = 0$) | $H = \sum_k\dot q_k p_k - L$ (equals $E$ for $L = \tfrac12 mv^2 - U(x)$) |
+| Space translation | linear momentum |
+| Rotation ($\delta\vec r = \delta\vec\theta\times\vec r$) | angular momentum $\vec r\times\vec p$ |
+
+## Newton against Lagrange
+
+| | Newton | Lagrange |
+|---|---|---|
+| Equation | $m\ddot x_k = F_k$ | $\dfrac{d}{dt}\dfrac{\partial L}{\partial\dot q_k} = \dfrac{\partial L}{\partial q_k}$ |
+| Coordinates | Cartesian | any generalised |
+| Works with | forces (vectors) | energies (scalars) |
+| Constraints | balance the constraint forces | built into the coordinates, or multipliers |
 # Practice: Calculus of variations and Lagrangian mechanics
 
 24 questions with worked answers (tap a solution to open it). Points in brackets, midsem style.
@@ -258,4 +314,5 @@ Find the acceleration of a uniform hoop (I = MR²) and a uniform disk rolling do
 Two blocks of mass M are joined by a light string; one is on a smooth table, the other hangs over a pulley. Find the acceleration.
 
 *Solution.* L = ½(2M)ẋ² + Mgx, so 2Mẍ = Mg and a = g/2.
+
 

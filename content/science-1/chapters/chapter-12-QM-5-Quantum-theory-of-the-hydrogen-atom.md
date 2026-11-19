@@ -153,6 +153,56 @@ $$
 - Explain why stationary states don't radiate and transitions do.
 - State the selection rules and decide whether a given transition is allowed.
 
+# Formulas: Quantum theory of the hydrogen atom
+
+## Setup
+
+$$U(r) = -\frac{e^2}{4\pi\varepsilon_0r}\ \text{(spherically symmetric)},\qquad -\frac{\hbar^2}{2m}\nabla^2\psi + U(r)\psi = E\psi$$
+
+Use spherical polar coordinates $(r, \theta, \phi)$ and separate:
+
+$$\boxed{\psi(r, \theta, \phi) = R(r)\,\Theta(\theta)\,\Phi(\phi)}$$
+
+| Equation | Condition | Quantum number |
+|---|---|---|
+| $\Phi(\phi)$ | single-valued, $\Phi = e^{im_l\phi}$ | $m_l$ (integer) |
+| $\Theta(\theta)$ | finite at $\theta = 0, \pi$ | $l \ge \lvert m_l\rvert$ |
+| $R(r)$ | $\to 0$ as $r \to \infty$ (bound) | $n > l$ |
+
+## Quantum numbers
+
+| Name | Symbol | Allowed values | Fixes |
+|---|---|---|---|
+| principal | $n$ | $1, 2, 3, \dots$ | energy |
+| orbital | $l$ | $0, 1, \dots, n - 1$ | size of $L$ |
+| magnetic | $m_l$ | $-l, \dots, +l$ | $L_z$ |
+
+For each $l$ there are $2l + 1$ values of $m_l$, so each $n$ has $\sum_{l=0}^{n-1}(2l + 1) = n^2$ states ($2n^2$ with spin). Letters: $l = 0, 1, 2, 3, 4 \to$ s, p, d, f, g.
+
+## Energy and angular momentum
+
+$$\boxed{E_n = -\frac{me^4}{32\pi^2\varepsilon_0^2\hbar^2}\frac{1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}}$$
+
+Energy depends only on $n$, so states with the same $n$ are degenerate (special to the $1/r$ potential).
+
+$$\boxed{L = \sqrt{l(l + 1)}\,\hbar,\qquad L_z = m_l\hbar,\qquad \cos\theta = \frac{m_l}{\sqrt{l(l + 1)}}}$$
+
+For $l = 2$: $L = \sqrt6\hbar$ and $L_z = -2\hbar, \dots, +2\hbar$ (5 orientations). Since $|m_l| \le l < \sqrt{l(l + 1)}$, $L$ can never point exactly along $z$. For $s$ states $L = 0$.
+
+## Probability density
+
+$$|\Phi|^2 = \text{constant},\qquad P(r)\,dr = r^2|R(r)|^2dr,\qquad \text{radial nodes} = n - l - 1$$
+
+1s: $R \propto e^{-r/a_0}$, so $P(r) \propto r^2e^{-2r/a_0}$ and the most probable radius is $a_0 = 0.0529$ nm. For $l = n - 1$ the most probable radius is $n^2a_0$.
+
+## Transitions
+
+$$h\nu = E_i - E_f,\qquad \nu = \frac{E_i - E_f}{h}\ \text{(frequency at which } |\Psi|^2 \text{ oscillates)}$$
+
+$$\boxed{\Delta l = \pm1,\qquad \Delta m_l = 0, \pm1,\qquad \Delta n\ \text{any}}$$
+
+A photon carries one unit of angular momentum. 2p $\to$ 1s and 3d $\to$ 2p are allowed. 2s $\to$ 1s ($\Delta l = 0$) and 3d $\to$ 1s ($\Delta l = 2$) are forbidden; 2s is metastable (about 0.1 s instead of $10^{-8}$ s).
+
 # Practice: Quantum theory of the hydrogen atom
 
 22 questions with worked answers (tap a solution to open it). These are mostly "explain" questions, since the professor wants understanding rather than derivations. Points are in brackets.
