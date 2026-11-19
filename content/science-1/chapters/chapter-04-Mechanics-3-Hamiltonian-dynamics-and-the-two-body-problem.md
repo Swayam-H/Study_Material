@@ -198,25 +198,64 @@ State Liouville's theorem and give two consequences.
 
 For the two-body problem, derive Kepler's second law.
 
-*Solution.* With θ cyclic in L = ½μ(ṙ² + r²θ̇²) − U(r), ℓ = μr²θ̇ is constant. The area swept in dt is dA = ½r·r dθ, so dA/dt = ½r²θ̇ = ℓ/2μ = constant.
+*Solution.* **Reduce to relative motion.** In the centre-of-mass frame
+
+$$L = \tfrac12\mu\left(\dot r^2 + r^2\dot\theta^2\right) - U(r)$$
+
+**$\theta$ is cyclic**, so Lagrange's equation gives a constant:
+
+$$\ell = \mu r^2\dot\theta = \text{constant}$$
+
+**Area swept.** In time $dt$ the radius vector sweeps a thin triangle of area $dA = \tfrac12r\cdot r\,d\theta$:
+
+$$\frac{dA}{dt} = \tfrac12r^2\dot\theta = \boxed{\frac\ell{2\mu}} = \text{constant}$$
+
+Equal areas in equal times: this holds for **any** central force, not only gravity.
 
 ### Problem 6 [Mechanics 3 · Recall · 2 pts]
 
 What is the reduced mass? Why can we set Ṙ = 0 and treat the relative motion as two-dimensional?
 
-*Solution.* μ = m₁m₂/(m₁ + m₂). R is cyclic, so total momentum MṘ is constant and we can choose the frame where Ṙ = 0. The angular momentum r × p is constant in direction, so r stays in the fixed plane perpendicular to it.
+*Solution.* **Reduced mass.** For two bodies, with $\mathbf r = \mathbf r_1 - \mathbf r_2$ and $M = m_1 + m_2$:
+
+$$\mu = \frac{m_1m_2}{m_1 + m_2}$$
+
+**Why $\dot{\mathbf R} = 0$.** The centre-of-mass coordinate $\mathbf R$ is cyclic (no external force), so $M\dot{\mathbf R}$ is constant. We are free to choose the inertial frame where $\dot{\mathbf R} = 0$.
+
+**Why the motion is planar.** For a central force $\mathbf L = \mathbf r\times\mathbf p$ is constant, and $\mathbf r\perp\mathbf L$ always, so $\mathbf r$ stays in a fixed plane. Two coordinates $(r,\theta)$ suffice.
 
 ### Problem 7 [Mechanics 3 · Recall · 3 pts]
 
 Explain the effective potential and the kinds of orbit for different total energies.
 
-*Solution.* E = ½μṙ² + U\_eff with U\_eff = ℓ²/2μr² + U(r): the angular kinetic energy acts as a repulsive barrier. E at the minimum: circle. Between the minimum and 0: bound orbit oscillating between r\_min and r\_max. E ≥ 0: unbound, comes in and escapes.
+*Solution.* **Radial energy.** Using $\dot\theta = \ell/\mu r^2$:
+
+$$E = \tfrac12\mu\dot r^2 + U_\text{eff}(r),\qquad U_\text{eff} = \frac{\ell^2}{2\mu r^2} + U(r)$$
+
+The $\ell^2/2\mu r^2$ term is the "centrifugal barrier": it keeps the particle from reaching $r = 0$ when $\ell\ne0$.
+
+**Orbits for gravity** ($U = -k/r$):
+
+| energy | orbit |
+|---|---|
+| $E = U_\text{eff,min}$ | circle |
+| $U_\text{eff,min} < E < 0$ | ellipse, between $r_\text{min}$ and $r_\text{max}$ |
+| $E = 0$ | parabola |
+| $E > 0$ | hyperbola (unbound) |
+
+**Common mistake.** $\dot r = 0$ at the turning points, not at $r = 0$.
 
 ### Problem 8 [Mechanics 3 · Recall · 2 pts]
 
 For which power-law potentials are bound orbits closed? Why is there no general solution of the three-body problem?
 
-*Solution.* Only U ∝ −1/r (gravity) and U ∝ r² (harmonic). Three bodies have too few conserved quantities to reduce the problem to integrals (it is non-integrable), and the motion is generally chaotic; only special configurations have exact solutions.
+*Solution.* **Closed bound orbits.** Bertrand's theorem: only two central potentials give closed orbits for all bound motion:
+
+$$U \propto -\frac1r\ \ (\text{gravity, Coulomb}),\qquad U \propto r^2\ \ (\text{harmonic oscillator})$$
+
+For other power laws the orbit precesses (the apsides rotate).
+
+**Three bodies.** Three bodies in 3-D have $9$ degrees of freedom. The known conserved quantities (energy, momentum, angular momentum, centre-of-mass motion) are too few to reduce the problem to integrals, and Poincaré showed there are no further analytic ones. The problem is non-integrable and generally chaotic; only special configurations (e.g. Lagrange's points) have exact solutions.
 
 ## B. Show or derive
 
@@ -224,55 +263,179 @@ For which power-law potentials are bound orbits closed? Why is there no general 
 
 For projectile motion write the Lagrangian and Hamiltonian, and the equations of motion in both formulations.
 
-*Solution.* L = ½m(ẋ² + ẏ²) − mgy. Lagrange: mẍ = 0, mÿ = −mg. pₓ = mẋ, p\_y = mẏ, H = (pₓ² + p\_y²)/2m + mgy. Hamilton: ẋ = pₓ/m, ṗₓ = 0; ẏ = p\_y/m, ṗ\_y = −mg. x is cyclic, so pₓ is conserved; H = E is conserved.
+*Solution.* **Lagrangian.**
+
+$$L = \tfrac12m(\dot x^2 + \dot y^2) - mgy$$
+
+**Lagrange's equations.**
+
+$$m\ddot x = 0,\qquad m\ddot y = -mg$$
+
+**Hamiltonian.** $p_x = m\dot x$, $p_y = m\dot y$:
+
+$$H = \sum p\dot q - L = \frac{p_x^2 + p_y^2}{2m} + mgy$$
+
+**Hamilton's equations.**
+
+$$\dot x = \frac{p_x}m,\quad \dot p_x = 0;\qquad \dot y = \frac{p_y}m,\quad \dot p_y = -mg$$
+
+Four first-order equations replace two second-order ones. $x$ is cyclic, so $p_x$ is conserved; $\partial H/\partial t = 0$, so $H = E$ is conserved.
 
 ### Problem 10 [Mechanics 3 · Derivation · 8 pts · 2026 midsem Q10] (hard)
 
 A charge q of mass m moves in a uniform field B = Bẑ, with A = ½B × r and L = ½mṙ² + qA·ṙ. Write L in Cartesian coordinates. Find the conjugate momenta; are they equal to mv? Construct the Hamiltonian. Comment.
 
-*Solution.* A = ½B(−y, x, 0), so L = ½m(ẋ² + ẏ² + ż²) + ½qB(xẏ − yẋ). pₓ = mẋ − ½qBy, p\_y = mẏ + ½qBx, p\_z = mż. Not equal to mv: the canonical momentum is mv + qA. H = p·v − L = ½mv² = \[(pₓ + ½qBy)² + (p\_y − ½qBx)² + p\_z²\]/2m. Comment: H is just the kinetic energy and is conserved, since the magnetic force does no work. The motion is a circle in the xy-plane at the cyclotron frequency qB/m, with uniform motion along z.
+*Solution.* **Lagrangian.** $\mathbf A = \tfrac12\mathbf B\times\mathbf r = \tfrac12B(-y, x, 0)$, so
+
+$$L = \tfrac12m(\dot x^2 + \dot y^2 + \dot z^2) + \tfrac12qB(x\dot y - y\dot x)$$
+
+**Conjugate momenta.**
+
+$$p_x = m\dot x - \tfrac12qBy,\qquad p_y = m\dot y + \tfrac12qBx,\qquad p_z = m\dot z$$
+
+These are **not** $m\mathbf v$: in general $\mathbf p = m\mathbf v + q\mathbf A$.
+
+**Hamiltonian.** $H = \mathbf p\cdot\mathbf v - L$. The magnetic term is linear in velocity and drops out:
+
+$$H = \tfrac12mv^2 = \boxed{\frac{(p_x + \tfrac12qBy)^2 + (p_y - \tfrac12qBx)^2 + p_z^2}{2m}}$$
+
+**Comment.** $H$ is just the kinetic energy and is conserved, because the magnetic force does no work. The motion is a circle in the $xy$-plane at the cyclotron frequency $\omega_c = qB/m$, drifting uniformly along $z$.
+
+**Common mistake.** Writing $H$ with $mv$ in place of $\mathbf p - q\mathbf A$: $H$ must be a function of $(\mathbf r,\mathbf p)$.
 
 ### Problem 11 [Mechanics 3 · Derivation · 4 pts · MT E7.11]
 
 A particle is confined to a cylinder of radius R and acted on by F = −kr. Find H and Hamilton's equations in cylindrical coordinates, and solve for θ(t) and z(t).
 
-*Solution.* T = ½m(R²θ̇² + ż²), U = ½k(R² + z²). p\_θ = mR²θ̇, p\_z = mż. H = p\_θ²/2mR² + p\_z²/2m + ½k(R² + z²). ṗ\_θ = 0, θ̇ = p\_θ/mR², so θ = ωt + θ₀ with ω constant. ṗ\_z = −kz, ż = p\_z/m, so z̈ = −(k/m)z and z = A cos(√(k/m) t + φ).
+*Solution.* **Coordinates.** On the cylinder $\mathbf r = (R\cos\theta, R\sin\theta, z)$, so
+
+$$T = \tfrac12m\left(R^2\dot\theta^2 + \dot z^2\right),\qquad U = \tfrac12kr^2 = \tfrac12k(R^2 + z^2)$$
+
+**Momenta.** $p_\theta = mR^2\dot\theta$, $p_z = m\dot z$.
+
+$$H = \frac{p_\theta^2}{2mR^2} + \frac{p_z^2}{2m} + \tfrac12k(R^2 + z^2)$$
+
+**Hamilton's equations.**
+
+$$\dot\theta = \frac{p_\theta}{mR^2},\quad \dot p_\theta = 0;\qquad \dot z = \frac{p_z}m,\quad \dot p_z = -kz$$
+
+**Solve.** $p_\theta$ is constant, so $\theta(t) = \omega t + \theta_0$ with $\omega = p_\theta/mR^2$. And $\ddot z = -(k/m)z$:
+
+$$\boxed{z(t) = A\cos\left(\sqrt{k/m}\,t + \varphi\right)}$$
+
+Uniform rotation around the cylinder, simple harmonic motion along it.
 
 ### Problem 12 [Mechanics 3 · Derivation · 3 pts]
 
 For a 1-D harmonic oscillator, write H and Hamilton's equations. Show that phase trajectories are ellipses and find their area.
 
-*Solution.* H = p²/2m + ½mω²x²; ẋ = p/m, ṗ = −mω²x. On H = E: x²/(2E/mω²) + p²/(2mE) = 1, an ellipse with semi-axes √(2E/mω²) and √(2mE). Area = π × product = 2πE/ω.
+*Solution.* **Hamiltonian and equations.**
+
+$$H = \frac{p^2}{2m} + \tfrac12m\omega^2x^2,\qquad \dot x = \frac pm,\quad \dot p = -m\omega^2x$$
+
+**Constant energy.** On $H = E$:
+
+$$\frac{x^2}{2E/m\omega^2} + \frac{p^2}{2mE} = 1$$
+
+an **ellipse** with semi-axes $a = \sqrt{2E/m\omega^2}$ (in $x$) and $b = \sqrt{2mE}$ (in $p$).
+
+**Area.**
+
+$$A = \pi ab = \pi\sqrt{\frac{2E}{m\omega^2}\cdot2mE} = \boxed{\frac{2\pi E}\omega}$$
+
+**Check.** $A = E\,T$ with period $T = 2\pi/\omega$; in quantum mechanics this area is $2\pi\hbar(n + \tfrac12)$.
 
 ### Problem 13 [Mechanics 3 · Derivation · 3 pts]
 
 Sketch the proof of Liouville's theorem.
 
-*Solution.* Treat the phase points as a fluid with velocity (q̇, ṗ). The rate of change of a volume is the integral of the divergence, Σ(∂q̇ₖ/∂qₖ + ∂ṗₖ/∂pₖ) = Σ(∂²H/∂qₖ∂pₖ − ∂²H/∂pₖ∂qₖ) = 0. So the flow is incompressible and volumes are constant.
+*Solution.* **Idea.** Let the points of a region of phase space flow with velocity $(\dot q_k, \dot p_k)$. The volume $V$ of the region changes at a rate given by the divergence of this flow:
+
+$$\frac{dV}{dt} = \int\nabla\cdot(\dot{\mathbf q},\dot{\mathbf p})\,dV$$
+
+**Compute the divergence** using Hamilton's equations $\dot q_k = \partial H/\partial p_k$, $\dot p_k = -\partial H/\partial q_k$:
+
+$$\sum_k\left(\frac{\partial\dot q_k}{\partial q_k} + \frac{\partial\dot p_k}{\partial p_k}\right) = \sum_k\left(\frac{\partial^2H}{\partial q_k\partial p_k} - \frac{\partial^2H}{\partial p_k\partial q_k}\right) = 0$$
+
+The flow is **incompressible**: phase-space volumes (and the density along a trajectory) are constant.
+
+**Consequences.** Dissipative systems must lose phase-space volume (so they are not Hamiltonian), and attractors are impossible in Hamiltonian flow.
 
 ### Problem 14 [Mechanics 3 · Derivation · 4 pts]
 
 Show that the two-body Lagrangian separates into centre-of-mass and relative parts, and find μ.
 
-*Solution.* r₁ = R + (m₂/M)r, r₂ = R − (m₁/M)r. T = ½m₁ṙ₁² + ½m₂ṙ₂² = ½MṘ² + ½(m₁m₂² + m₂m₁²)/M² ṙ² (the cross terms cancel) = ½MṘ² + ½μṙ², with μ = m₁m₂/M.
+*Solution.* **Coordinates.** Let $\mathbf R = (m_1\mathbf r_1 + m_2\mathbf r_2)/M$ and $\mathbf r = \mathbf r_1 - \mathbf r_2$. Then
+
+$$\mathbf r_1 = \mathbf R + \frac{m_2}M\mathbf r,\qquad \mathbf r_2 = \mathbf R - \frac{m_1}M\mathbf r$$
+
+**Kinetic energy.**
+
+$$T = \tfrac12m_1\left(\dot{\mathbf R} + \tfrac{m_2}M\dot{\mathbf r}\right)^2 + \tfrac12m_2\left(\dot{\mathbf R} - \tfrac{m_1}M\dot{\mathbf r}\right)^2$$
+
+The cross terms $\pm\dfrac{m_1m_2}M\dot{\mathbf R}\cdot\dot{\mathbf r}$ cancel, leaving
+
+$$T = \tfrac12M\dot{\mathbf R}^2 + \tfrac12\frac{m_1m_2^2 + m_2m_1^2}{M^2}\dot{\mathbf r}^2 = \tfrac12M\dot{\mathbf R}^2 + \tfrac12\mu\dot{\mathbf r}^2$$
+
+$$\boxed{\mu = \frac{m_1m_2}{m_1 + m_2}}$$
+
+With $U = U(|\mathbf r|)$, $L = \tfrac12M\dot{\mathbf R}^2 + \left[\tfrac12\mu\dot{\mathbf r}^2 - U(r)\right]$: two **independent** problems.
 
 ### Problem 15 [Mechanics 3 · Derivation · 4 pts]
 
 Derive the radial equation of motion and U\_eff for gravity. Find the radius of the circular orbit for a given ℓ.
 
-*Solution.* Lagrange for r: μr̈ = μrθ̇² − U′(r) = ℓ²/μr³ − U′(r). This is 1-D motion in U\_eff = ℓ²/2μr² − k/r. Circular orbit at dU\_eff/dr = 0: −ℓ²/μr³ + k/r² = 0, so r₀ = ℓ²/μk.
+*Solution.* **Radial equation.** From $L = \tfrac12\mu(\dot r^2 + r^2\dot\theta^2) - U(r)$:
+
+$$\mu\ddot r = \mu r\dot\theta^2 - U'(r) = \frac{\ell^2}{\mu r^3} - U'(r)$$
+
+using $\dot\theta = \ell/\mu r^2$. This is 1-D motion $\mu\ddot r = -dU_\text{eff}/dr$ with
+
+$$U_\text{eff} = \frac{\ell^2}{2\mu r^2} - \frac kr\quad(\text{gravity: } U = -k/r)$$
+
+**Circular orbit.** $\ddot r = 0$, that is $U_\text{eff}'(r_0) = 0$:
+
+$$-\frac{\ell^2}{\mu r_0^3} + \frac k{r_0^2} = 0\ \Rightarrow\ \boxed{r_0 = \frac{\ell^2}{\mu k}}$$
+
+**Check.** $U_\text{eff}'' > 0$ there, so it is a stable minimum.
 
 ### Problem 16 [Mechanics 3 · Derivation · 4 pts · MT ch 8 style]
 
 A particle moves in a central force along the spiral r = ke^(αθ). Find the force law.
 
-*Solution.* u = 1/r = e^(−αθ)/k, so d²u/dθ² = α²u. The orbit equation gives (1 + α²)u = −μF/(ℓ²u²), so F = −(ℓ²/μ)(1 + α²)/r³: an attractive inverse-cube force.
+*Solution.* **Use the orbit equation** for a central force $F(r)$, with $u = 1/r$:
+
+$$\frac{d^2u}{d\theta^2} + u = -\frac\mu{\ell^2u^2}F(1/u)$$
+
+**Spiral.** $r = ke^{\alpha\theta}$ gives $u = \dfrac1ke^{-\alpha\theta}$, so $\dfrac{d^2u}{d\theta^2} = \alpha^2u$.
+
+Substitute:
+
+$$(1 + \alpha^2)u = -\frac\mu{\ell^2u^2}F \Rightarrow F = -\frac{\ell^2}\mu(1 + \alpha^2)u^3$$
+
+$$\boxed{F(r) = -\frac{\ell^2(1 + \alpha^2)}{\mu\,r^3}}$$
+
+an **attractive inverse-cube** force.
 
 ### Problem 17 [Mechanics 3 · Derivation · 3 pts]
 
 Write the Hamiltonian and Hamilton's equations for a simple pendulum.
 
-*Solution.* L = ½ml²θ̇² + mgl cosθ; p\_θ = ml²θ̇; H = p\_θ²/2ml² − mgl cosθ. θ̇ = p\_θ/ml², ṗ\_θ = −mgl sinθ.
+*Solution.* **Lagrangian.** With $\theta$ from the downward vertical:
+
+$$L = \tfrac12ml^2\dot\theta^2 + mgl\cos\theta$$
+
+**Momentum.** $p_\theta = \dfrac{\partial L}{\partial\dot\theta} = ml^2\dot\theta$.
+
+**Hamiltonian.**
+
+$$H = p_\theta\dot\theta - L = \boxed{\frac{p_\theta^2}{2ml^2} - mgl\cos\theta}$$
+
+**Hamilton's equations.**
+
+$$\dot\theta = \frac{p_\theta}{ml^2},\qquad \dot p_\theta = -\frac{\partial H}{\partial\theta} = -mgl\sin\theta$$
+
+Combining them gives $\ddot\theta = -(g/l)\sin\theta$ ✓.
 
 ## C. Numericals
 

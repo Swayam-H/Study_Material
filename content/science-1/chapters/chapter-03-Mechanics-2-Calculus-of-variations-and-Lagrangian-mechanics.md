@@ -201,7 +201,15 @@ Why do constraint forces not appear in Lagrange's equations? When would you use 
 
 Explain how time, translation and rotation symmetry lead to conservation of energy, momentum and angular momentum.
 
-*Solution.* Time symmetry (∂L/∂t = 0) gives d/dt(Σq̇p − L) = 0: energy. Translation: L unchanged by δr with δv = 0 gives ∂L/∂x = 0, so pₓ is constant. Rotation: δL = 0 for δr = δθ × r gives d/dt(r × p) = 0.
+*Solution.* **Noether's idea.** A symmetry of $L$ gives a conserved quantity.
+
+| symmetry | $L$ unchanged under | conserved |
+|---|---|---|
+| time translation | $t \to t + \epsilon$ ($\partial L/\partial t = 0$) | energy, $H = \sum\dot q\,p - L$ |
+| space translation | $q \to q + \epsilon$ ($q$ cyclic) | momentum, $p = \partial L/\partial\dot q$ |
+| rotation | $\theta \to \theta + \epsilon$ ($\theta$ cyclic) | angular momentum, $\mathbf r\times\mathbf p$ |
+
+**Why a cyclic coordinate works.** If $\partial L/\partial q = 0$, Lagrange's equation gives $\dfrac{d}{dt}\dfrac{\partial L}{\partial\dot q} = 0$, so $p_q$ is constant.
 
 ### Problem 7 [Mechanics 2 · Recall · 2 pts]
 
@@ -215,91 +223,293 @@ How is calculus-of-variations optimisation different from ordinary function opti
 
 Derive the Euler equation for J = ∫f(y, y′; x) dx, and its second form when f has no explicit x.
 
-*Solution.* J(α) = ∫f(y + αη, y′ + αη′, x) dx. ∂J/∂α = ∫(f\_yη + f\_y′η′) dx. Integrate the second term by parts; boundary terms vanish since η = 0 at the ends: ∫(f\_y − d/dx f\_y′)η dx = 0 for all η, so f\_y = d/dx f\_y′. Second form: df/dx = y′f\_y + y″f\_y′ + f\_x = d/dx(y′f\_y′) + f\_x, so if f\_x = 0, f − y′f\_y′ = constant.
+*Solution.* **Setup.** Find $y(x)$ that makes $J = \int_{x_1}^{x_2}f(y, y';x)\,dx$ stationary, with the end points fixed.
+
+**Vary the path.** $y \to y + \alpha\eta(x)$ with $\eta(x_1) = \eta(x_2) = 0$:
+
+$$\frac{dJ}{d\alpha}\bigg|_{\alpha=0} = \int\left(\frac{\partial f}{\partial y}\eta + \frac{\partial f}{\partial y'}\eta'\right)dx = 0$$
+
+**Integrate the second term by parts.** The boundary term $\left[\dfrac{\partial f}{\partial y'}\eta\right]$ vanishes since $\eta = 0$ at the ends:
+
+$$\int\left(\frac{\partial f}{\partial y} - \frac d{dx}\frac{\partial f}{\partial y'}\right)\eta\,dx = 0$$
+
+This holds for every $\eta$, so
+
+$$\boxed{\frac{\partial f}{\partial y} - \frac d{dx}\frac{\partial f}{\partial y'} = 0}$$
+
+**Second form** (no explicit $x$). Expand
+
+$$\frac{df}{dx} = y'f_y + y''f_{y'} + f_x = \frac d{dx}\left(y'f_{y'}\right) + y'\left(f_y - \frac d{dx}f_{y'}\right) + f_x$$
+
+The bracket is zero by Euler's equation. If $f_x = 0$:
+
+$$\boxed{f - y'\frac{\partial f}{\partial y'} = \text{constant}}$$
 
 ### Problem 9 [Mechanics 2 · Derivation · 3 pts · 2026 midsem Q4]
 
 Show that Fermat's principle of least time leads to Snell's law.
 
-*Solution.* A at height a above the interface, B at depth b below, horizontal separation d, crossing at x. t = √(a² + x²)/v₁ + √(b² + (d − x)²)/v₂. dt/dx = x/(v₁√(a² + x²)) − (d − x)/(v₂√(b² + (d − x)²)) = sinθ₁/v₁ − sinθ₂/v₂ = 0. With v = c/n: n₁ sinθ₁ = n₂ sinθ₂.
+*Solution.* **Setup.** $A$ is a height $a$ above the interface, $B$ a depth $b$ below, horizontal separation $d$. Light crosses at $x$ (measured from below $A$), with speeds $v_1, v_2$.
+
+$$t(x) = \frac{\sqrt{a^2 + x^2}}{v_1} + \frac{\sqrt{b^2 + (d-x)^2}}{v_2}$$
+
+**Minimise.**
+
+$$\frac{dt}{dx} = \frac{x}{v_1\sqrt{a^2 + x^2}} - \frac{d - x}{v_2\sqrt{b^2 + (d-x)^2}} = \frac{\sin\theta_1}{v_1} - \frac{\sin\theta_2}{v_2} = 0$$
+
+where $\theta_1,\theta_2$ are the angles to the normal. With $v = c/n$:
+
+$$\boxed{n_1\sin\theta_1 = n_2\sin\theta_2}$$
+
+**Check.** Going into a slower medium ($n_2 > n_1$), $\theta_2 < \theta_1$: the ray bends toward the normal.
 
 ### Problem 10 [Mechanics 2 · Derivation · 2 pts]
 
 Show that the shortest path between two points in a plane is a straight line.
 
-*Solution.* f = √(1 + y′²) has no y, so ∂f/∂y′ = y′/√(1 + y′²) = constant, so y′ = constant: a straight line.
+*Solution.* **Path length.** $J = \int ds = \int\sqrt{1 + y'^2}\,dx$, so $f = \sqrt{1 + y'^2}$.
+
+**Euler's equation.** $f$ has no explicit $y$, so $\partial f/\partial y = 0$ and
+
+$$\frac{\partial f}{\partial y'} = \frac{y'}{\sqrt{1 + y'^2}} = \text{constant}$$
+
+This forces $y' = $ constant, so $y = mx + c$: a **straight line**.
 
 ### Problem 11 [Mechanics 2 · Derivation · 4 pts · MT E6.2]
 
 Set up the brachistochrone integral and show the curve satisfies y′²/\[x(1 + y′²)\] = constant.
 
-*Solution.* Speed after falling x from rest: v = √(2gx). Time = ∫ds/v = ∫√(1 + y′²)/√(2gx) dx. f has no y, so ∂f/∂y′ = y′/√(2gx(1 + y′²)) = constant. Squaring: y′²/\[x(1 + y′²)\] = 1/2a, whose solution is a cycloid.
+*Solution.* **Setup.** Take $x$ measured downward from the start, released from rest. Energy conservation gives the speed after falling $x$:
+
+$$v = \sqrt{2gx}$$
+
+**Time of descent.**
+
+$$T = \int\frac{ds}v = \int\frac{\sqrt{1 + y'^2}}{\sqrt{2gx}}\,dx,\qquad f = \sqrt{\frac{1 + y'^2}{2gx}}$$
+
+**Euler.** $f$ has no explicit $y$, so $\partial f/\partial y' = $ const:
+
+$$\frac{y'}{\sqrt{2gx(1 + y'^2)}} = \text{const} \Rightarrow \boxed{\frac{y'^2}{x(1 + y'^2)} = \frac1{2a}}$$
+
+(the constant is written $1/2a$ by convention). Solving this gives the **cycloid** $x = a(1 - \cos\theta)$, $y = a(\theta - \sin\theta)$.
 
 ### Problem 12 [Mechanics 2 · Derivation · 8 pts · 2026 midsem Q7] (hard)
 
 A double pendulum has point masses m₁, m₂ on massless rods l₁, l₂. Identify the generalised coordinates and degrees of freedom, construct L, and obtain the equations of motion.
 
-*Solution.* Coordinates θ₁, θ₂ from the vertical; 2 degrees of freedom. T = ½(m₁ + m₂)l₁²θ̇₁² + ½m₂l₂²θ̇₂² + m₂l₁l₂θ̇₁θ̇₂cos(θ₁ − θ₂). U = −(m₁ + m₂)gl₁cosθ₁ − m₂gl₂cosθ₂. E–L for θ₁: (m₁ + m₂)l₁²θ̈₁ + m₂l₁l₂θ̈₂cos(θ₁ − θ₂) + m₂l₁l₂θ̇₂²sin(θ₁ − θ₂) + (m₁ + m₂)gl₁sinθ₁ = 0. For θ₂: m₂l₂²θ̈₂ + m₂l₁l₂θ̈₁cos(θ₁ − θ₂) − m₂l₁l₂θ̇₁²sin(θ₁ − θ₂) + m₂gl₂sinθ₂ = 0.
+*Solution.* **Coordinates.** Two angles $\theta_1,\theta_2$ from the vertical: **2 degrees of freedom**.
+
+**Positions.**
+
+$$x_1 = l_1\sin\theta_1,\quad y_1 = -l_1\cos\theta_1;\qquad x_2 = x_1 + l_2\sin\theta_2,\quad y_2 = y_1 - l_2\cos\theta_2$$
+
+**Kinetic energy.** $v_2^2 = l_1^2\dot\theta_1^2 + l_2^2\dot\theta_2^2 + 2l_1l_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2)$, so
+
+$$T = \tfrac12(m_1 + m_2)l_1^2\dot\theta_1^2 + \tfrac12m_2l_2^2\dot\theta_2^2 + m_2l_1l_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2)$$
+
+$$U = -(m_1 + m_2)gl_1\cos\theta_1 - m_2gl_2\cos\theta_2,\qquad L = T - U$$
+
+**Lagrange's equations.**
+
+$$\theta_1:\ (m_1 + m_2)l_1^2\ddot\theta_1 + m_2l_1l_2\ddot\theta_2\cos(\theta_1 - \theta_2) + m_2l_1l_2\dot\theta_2^2\sin(\theta_1 - \theta_2) + (m_1 + m_2)gl_1\sin\theta_1 = 0$$
+
+$$\theta_2:\ m_2l_2^2\ddot\theta_2 + m_2l_1l_2\ddot\theta_1\cos(\theta_1 - \theta_2) - m_2l_1l_2\dot\theta_1^2\sin(\theta_1 - \theta_2) + m_2gl_2\sin\theta_2 = 0$$
+
+**Check.** For small angles with $m_2 \to 0$ the first equation reduces to a simple pendulum, $\ddot\theta_1 = -(g/l_1)\theta_1$ ✓.
 
 ### Problem 13 [Mechanics 2 · Derivation · 5 pts · 2025 midsem Q12]
 
 Repeat Q12 for two uniform rods of masses m₁, m₂ hinged together (no point masses). Only write L.
 
-*Solution.* Rod 1 rotates about the pivot: T₁ = (1/6)m₁l₁²θ̇₁². Rod 2: its centre moves with velocity from l₁θ̇₁ and (l₂/2)θ̇₂, plus rotation about its centre: T₂ = ½m₂\[l₁²θ̇₁² + (l₂²/4)θ̇₂² + l₁l₂θ̇₁θ̇₂cos(θ₁ − θ₂)\] + (1/24)m₂l₂²θ̇₂². U = −m₁g(l₁/2)cosθ₁ − m₂g(l₁cosθ₁ + (l₂/2)cosθ₂). L = T₁ + T₂ − U; the E–L equations follow as in Q12.
+*Solution.* **Rod 1** (pivot at its end): $I = \tfrac13m_1l_1^2$, so
+
+$$T_1 = \tfrac12\cdot\tfrac13m_1l_1^2\dot\theta_1^2 = \tfrac16m_1l_1^2\dot\theta_1^2$$
+
+**Rod 2.** Centre-of-mass velocity is the sum of $l_1\dot\theta_1$ (the hinge) and $\tfrac12l_2\dot\theta_2$ (about the hinge); the spin is about the rod's own centre with $I_\text{cm} = \tfrac1{12}m_2l_2^2$:
+
+$$T_2 = \tfrac12m_2\left[l_1^2\dot\theta_1^2 + \tfrac14l_2^2\dot\theta_2^2 + l_1l_2\dot\theta_1\dot\theta_2\cos(\theta_1 - \theta_2)\right] + \tfrac1{24}m_2l_2^2\dot\theta_2^2$$
+
+**Potential.** Heights of the two centres of mass:
+
+$$U = -m_1g\frac{l_1}2\cos\theta_1 - m_2g\left(l_1\cos\theta_1 + \frac{l_2}2\cos\theta_2\right)$$
+
+$$\boxed{L = T_1 + T_2 - U}$$
+
+**Common mistake.** Forgetting the extra rotational term $\tfrac1{24}m_2l_2^2\dot\theta_2^2$ for rod 2.
 
 ### Problem 14 [Mechanics 2 · Derivation · 4 pts · MT E7.4]
 
 A particle moves on the inside of a cone of half-angle α under gravity. Find L and the equations of motion. What is conserved?
 
-*Solution.* z = r cotα, v² = ṙ²csc²α + r²θ̇², U = mgr cotα. L = ½m(ṙ²csc²α + r²θ̇²) − mgr cotα. θ cyclic: mr²θ̇ = constant (angular momentum about the axis). r: mr̈ csc²α = mrθ̇² − mg cotα, i.e. r̈ = rθ̇²sin²α − g sinα cosα. Energy is also conserved.
+*Solution.* **Constraint.** On the cone, $z = r\cot\alpha$, so $\dot z = \dot r\cot\alpha$ and
+
+$$v^2 = \dot r^2 + r^2\dot\theta^2 + \dot z^2 = \dot r^2\csc^2\alpha + r^2\dot\theta^2$$
+
+$$L = \tfrac12m\left(\dot r^2\csc^2\alpha + r^2\dot\theta^2\right) - mgr\cot\alpha$$
+
+**Equations.**
+
+- $\theta$ is cyclic: $\dfrac d{dt}\left(mr^2\dot\theta\right) = 0 \Rightarrow \boxed{mr^2\dot\theta = \ell}$ (angular momentum about the axis).
+- $r$: $m\ddot r\csc^2\alpha = mr\dot\theta^2 - mg\cot\alpha$, so
+
+$$\boxed{\ddot r = r\dot\theta^2\sin^2\alpha - g\sin\alpha\cos\alpha}$$
+
+**Conserved.** $\ell$ (axial symmetry) and the energy $T + U$ (no explicit time).
 
 ### Problem 15 [Mechanics 2 · Derivation · 3 pts · MT P7.12, practice P19]
 
 A block slides on a smooth incline whose angle grows as θ = αt. Find the equation of motion. Is energy conserved?
 
-*Solution.* L = ½m(q̇² + q²α²) − mgq sinαt. E–L: q̈ = α²q − g sinαt. L depends explicitly on t (the plane is driven), so energy is not conserved.
+*Solution.* **Coordinate.** $q$ = distance down the incline, whose angle is $\theta = \alpha t$ (driven). The block sits at $(q\cos\alpha t,\ q\sin\alpha t)$, so its height is $q\sin\alpha t$ and the incline's rotation adds a transverse speed $q\alpha$:
+
+$$v^2 = \dot q^2 + q^2\alpha^2$$
+
+$$L = \tfrac12m\left(\dot q^2 + \alpha^2q^2\right) - mgq\sin\alpha t$$
+
+**Equation.** $m\ddot q = m\alpha^2q - mg\sin\alpha t$:
+
+$$\boxed{\ddot q = \alpha^2q - g\sin\alpha t}$$
+
+**Energy.** $L$ depends explicitly on $t$ (the incline is driven from outside), so $\partial L/\partial t \ne 0$ and $H$ is **not conserved**.
 
 ### Problem 16 [Mechanics 2 · Derivation · 4 pts · MT E7.9]
 
 A disk rolls without slipping down an incline of angle α. Using a Lagrange multiplier, find its acceleration and the friction force.
 
-*Solution.* L = ½Mẏ² + ½Iθ̇² + Mgy sinα, constraint y − Rθ = 0. Equations: Mg sinα − Mÿ + λ = 0, −Iθ̈ − λR = 0. With θ̈ = ÿ/R: λ = −Iÿ/R² and ÿ = g sinα/(1 + I/MR²). Uniform disk (I = ½MR²): ÿ = ⅔g sinα, friction |λ| = ⅓Mg sinα, acting up the slope.
+*Solution.* **Coordinates.** $y$ is the distance down the slope and $\theta$ the rotation angle; rolling without slipping means
+
+$$f = y - R\theta = 0$$
+
+$$L = \tfrac12M\dot y^2 + \tfrac12I\dot\theta^2 + Mgy\sin\alpha$$
+
+**Lagrange with a multiplier $\lambda$:** $\dfrac d{dt}\dfrac{\partial L}{\partial\dot q} - \dfrac{\partial L}{\partial q} = \lambda\dfrac{\partial f}{\partial q}$:
+
+$$y:\ M\ddot y - Mg\sin\alpha = \lambda,\qquad \theta:\ I\ddot\theta = -\lambda R$$
+
+**Eliminate.** With $\ddot\theta = \ddot y/R$: $\lambda = -I\ddot y/R^2$, so
+
+$$M\ddot y + \frac{I}{R^2}\ddot y = Mg\sin\alpha \Rightarrow \boxed{\ddot y = \frac{g\sin\alpha}{1 + I/MR^2}}$$
+
+**Uniform disk** ($I = \tfrac12MR^2$): $\ddot y = \tfrac23g\sin\alpha$, and the friction force is
+
+$$|\lambda| = \frac I{R^2}\ddot y = \boxed{\tfrac13Mg\sin\alpha}\quad(\text{up the slope})$$
+
+**Check.** Frictionless sliding would give $g\sin\alpha$; rolling is slower because energy also goes into rotation.
 
 ### Problem 17 [Mechanics 2 · Derivation · 3 pts · practice P20]
 
 A pendulum of length b hangs from a support accelerating horizontally at a. Find the equation of motion and the period of small oscillations.
 
-*Solution.* In the support's frame there is a pseudo-force −ma, so the effective gravity is √(g² + a²) at angle tan⁻¹(a/g) from the vertical. With φ measured from that direction: bφ̈ = −√(g² + a²) sinφ, period 2π√(b/√(g² + a²)). (Vertical acceleration upwards: g → g + a.)
+*Solution.* **Coordinates.** Let the support move with acceleration $a$, and $\theta$ the angle of the string from the vertical. Position of the bob:
+
+$$x = \tfrac12at^2 + b\sin\theta,\qquad y = -b\cos\theta$$
+
+$$L = \tfrac12mb^2\dot\theta^2 + mb\,at\,\dot\theta\cos\theta + \tfrac12ma^2t^2 + mgb\cos\theta$$
+
+**Lagrange's equation** (dropping terms that do not involve $\theta$):
+
+$$b\ddot\theta = -g\sin\theta - a\cos\theta$$
+
+**Equilibrium.** $\tan\theta_0 = -a/g$: the bob hangs back from the acceleration, at an angle $\tan^{-1}(a/g)$.
+
+**Small oscillations** about it behave like a pendulum in an effective gravity $g_\text{eff} = \sqrt{g^2 + a^2}$:
+
+$$\boxed{T = 2\pi\sqrt{\frac b{\sqrt{g^2 + a^2}}}}$$
+
+**Check.** $a = 0$ gives $2\pi\sqrt{b/g}$ ✓.
 
 ### Problem 18 [Mechanics 2 · Derivation · 3 pts · practice P22]
 
 A rope of mass m and length b lies on a smooth table with length z hanging over the edge. Find Lagrange's equation.
 
-*Solution.* T = ½mż² (the whole rope moves at ż); hanging part mass mz/b with centre at z/2 below the edge, so U = −mgz²/2b. E–L: mż̈ = mgz/b, so z̈ = (g/b)z: exponential run-away.
+*Solution.* **Coordinate.** $z$ = length hanging. The whole rope moves with speed $\dot z$.
+
+$$T = \tfrac12m\dot z^2$$
+
+**Potential.** The hanging part has mass $mz/b$ and its centre is $z/2$ below the table:
+
+$$U = -\frac{mz}b\,g\,\frac z2 = -\frac{mgz^2}{2b}$$
+
+$$L = \tfrac12m\dot z^2 + \frac{mgz^2}{2b}$$
+
+**Lagrange.** $m\ddot z = mgz/b$:
+
+$$\boxed{\ddot z = \frac gb\,z}$$
+
+The solution grows exponentially, $z \propto e^{\sqrt{g/b}\,t}$ (a runaway: more hanging means more pull).
 
 ### Problem 19 [Mechanics 2 · Derivation · 3 pts · practice P17]
 
 A particle moves in a plane under an attractive central force f = −Ar^(α−1). Find the Lagrange equations. Are angular momentum and energy conserved?
 
-*Solution.* U = (A/α)r^α (zero at the origin). L = ½m(ṙ² + r²θ̇²) − (A/α)r^α. θ: d/dt(mr²θ̇) = 0, angular momentum conserved. r: mr̈ − mrθ̇² + Ar^(α−1) = 0. L has no explicit t, so energy is conserved.
+*Solution.* **Potential.** From $f = -Ar^{\alpha-1} = -dU/dr$, with $U(0) = 0$:
+
+$$U = \frac A\alpha\,r^\alpha$$
+
+$$L = \tfrac12m\left(\dot r^2 + r^2\dot\theta^2\right) - \frac A\alpha r^\alpha$$
+
+**Equations.**
+
+- $\theta$: $\dfrac d{dt}\left(mr^2\dot\theta\right) = 0$, so **angular momentum is conserved**.
+- $r$: $m\ddot r - mr\dot\theta^2 + Ar^{\alpha-1} = 0$.
+
+**Energy.** $L$ has no explicit time dependence, so $T + U$ is **conserved** too.
 
 ### Problem 20 [Mechanics 2 · Derivation · 4 pts · slides HW]
 
 Show that if L is unchanged by any rotation δr = δθ × r, then r × p is conserved.
 
-*Solution.* δL = (∂L/∂r)·δr + (∂L/∂v)·δv = ṗ·(δθ × r) + p·(δθ × v), using E–L for ∂L/∂r. Cyclic permutation: δθ·(r × ṗ + v × p) = δθ·d/dt(r × p). δL = 0 for every δθ, so r × p is constant.
+*Solution.* **Infinitesimal rotation.** $\delta\mathbf r = \delta\boldsymbol\theta\times\mathbf r$ and $\delta\mathbf v = \delta\boldsymbol\theta\times\mathbf v$.
+
+$$\delta L = \frac{\partial L}{\partial\mathbf r}\cdot\delta\mathbf r + \frac{\partial L}{\partial\mathbf v}\cdot\delta\mathbf v = \dot{\mathbf p}\cdot(\delta\boldsymbol\theta\times\mathbf r) + \mathbf p\cdot(\delta\boldsymbol\theta\times\mathbf v)$$
+
+using Lagrange's equation $\partial L/\partial\mathbf r = \dot{\mathbf p}$.
+
+**Cyclic permutation of the triple product** ($\mathbf a\cdot(\mathbf b\times\mathbf c) = \mathbf b\cdot(\mathbf c\times\mathbf a)$):
+
+$$\delta L = \delta\boldsymbol\theta\cdot\left(\mathbf r\times\dot{\mathbf p} + \mathbf v\times\mathbf p\right) = \delta\boldsymbol\theta\cdot\frac d{dt}(\mathbf r\times\mathbf p)$$
+
+(the term $\mathbf v\times\mathbf p$ is zero). If $L$ is rotation-invariant, $\delta L = 0$ for every $\delta\boldsymbol\theta$, so $\mathbf r\times\mathbf p$ is **constant**.
 
 ### Problem 21 [Mechanics 2 · Derivation · 3 pts]
 
 Show that when ∂L/∂t = 0, H = Σq̇p − L is conserved, and that it equals T + U for L = ½mv² − U(x).
 
-*Solution.* dL/dt = Σ(∂L/∂q)q̇ + Σ(∂L/∂q̇)q̈ + ∂L/∂t. Using E–L, the first two terms are d/dt(Σq̇∂L/∂q̇). So d/dt(Σq̇p − L) = −∂L/∂t = 0. For L = ½mv² − U: Σq̇p = mv², so H = mv² − ½mv² + U = T + U.
+*Solution.* **Time derivative of $L$.**
+
+$$\frac{dL}{dt} = \sum\frac{\partial L}{\partial q}\dot q + \sum\frac{\partial L}{\partial\dot q}\ddot q + \frac{\partial L}{\partial t}$$
+
+**Use Lagrange's equation** $\partial L/\partial q = \dot p$. The first two sums combine into $\dfrac d{dt}\sum p\dot q$:
+
+$$\frac d{dt}\left(\sum p\dot q - L\right) = -\frac{\partial L}{\partial t}$$
+
+So $H = \sum p\dot q - L$ is **conserved** when $\partial L/\partial t = 0$.
+
+**For $L = \tfrac12mv^2 - U(x)$.** $p = mv$, so $\sum p\dot q = mv^2$:
+
+$$H = mv^2 - \tfrac12mv^2 + U = \tfrac12mv^2 + U = T + U$$
 
 ### Problem 22 [Mechanics 2 · Derivation · 5 pts · practice P30]
 
 A particle slides from rest at the top of a smooth sphere of radius R. Using a multiplier for r = R, find the normal force and the angle at which it leaves.
 
-*Solution.* L = ½m(ṙ² + r²θ̇²) − mgr cosθ, constraint r − R = 0. r-equation: mŕ − mrθ̇² + mg cosθ = λ, so with r = R: λ = mg cosθ − mRθ̇². Energy: Rθ̇² = 2g(1 − cosθ). So N = λ = mg(3cosθ − 2). It leaves when N = 0: cosθ = 2/3, θ ≈ 48°.
+*Solution.* **Coordinates.** $r,\theta$ with $\theta$ from the vertical; constraint $f = r - R = 0$.
+
+$$L = \tfrac12m\left(\dot r^2 + r^2\dot\theta^2\right) - mgr\cos\theta$$
+
+**$r$-equation with multiplier** ($\lambda$ is the outward constraint force): $m\ddot r - mr\dot\theta^2 + mg\cos\theta = \lambda$.
+
+On the surface ($r = R$, $\ddot r = 0$) the normal force is
+
+$$N = \lambda = mg\cos\theta - mR\dot\theta^2$$
+
+**Energy** (from rest at the top): $\tfrac12mR^2\dot\theta^2 = mgR(1 - \cos\theta) \Rightarrow R\dot\theta^2 = 2g(1 - \cos\theta)$.
+
+$$\boxed{N = mg(3\cos\theta - 2)}$$
+
+**Leaves the surface** when $N = 0$:
+
+$$\boxed{\cos\theta = \tfrac23,\quad \theta \approx 48^\circ}$$
 
 ## C. Short numericals
 
