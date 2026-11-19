@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Science-1 QM 4: Quantum mechanics · Science-1</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwn56a1c">
+</head>
+<body data-root="../../" data-page="science-1/qm-4/science-1-qm-4-quantum-mechanics" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>53</b></a><a class="" href="../../osn/formulas.html">Formulas <b>16</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><a class="nav-link nav-single" data-id="osn/formula-sheet/formula-sheet-lectures-01-to-17" href="../../osn/formula-sheet/formula-sheet-lectures-01-to-17.html"><span>Formula sheet</span></a><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 17</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>252</b></a><a class="" href="../../pns/formulas.html">Formulas <b>127</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-skim" href="../../pns/l21-onward/part-6-linear-regression-skim.html"><span>Part 6 — Linear regression (skim)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>0</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>6</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/endsem-map/science-1-endsem-topic-map" href="../../science-1/endsem-map/science-1-endsem-topic-map.html"><span>Endsem topic map</span></a><a class="nav-link nav-single" data-id="science-1/qm-1/science-1-qm-1-particle-properties-of-waves" href="../../science-1/qm-1/science-1-qm-1-particle-properties-of-waves.html"><span>QM 1: Particle properties of waves</span></a><a class="nav-link nav-single" data-id="science-1/qm-2/science-1-qm-2-wave-properties-of-particles" href="../../science-1/qm-2/science-1-qm-2-wave-properties-of-particles.html"><span>QM 2: Wave properties of particles</span></a><a class="nav-link nav-single" data-id="science-1/qm-3/science-1-qm-3-atomic-structure" href="../../science-1/qm-3/science-1-qm-3-atomic-structure.html"><span>QM 3: Atomic structure</span></a><a class="nav-link nav-single current" data-id="science-1/qm-4/science-1-qm-4-quantum-mechanics" href="../../science-1/qm-4/science-1-qm-4-quantum-mechanics.html"><span>QM 4: Quantum mechanics</span></a><a class="nav-link nav-single" data-id="science-1/qm-5/science-1-qm-5-quantum-theory-of-the-hydrogen-atom" href="../../science-1/qm-5/science-1-qm-5-quantum-theory-of-the-hydrogen-atom.html"><span>QM 5: Hydrogen atom</span></a><a class="nav-link nav-single" data-id="science-1/str/science-1-str-special-relativity" href="../../science-1/str/science-1-str-special-relativity.html"><span>Special relativity</span></a><a class="nav-link nav-single" data-id="science-1/thermo-5/science-1-thermo-5-free-energy-and-phases" href="../../science-1/thermo-5/science-1-thermo-5-free-energy-and-phases.html"><span>Thermo 5: Free energy and phases</span></a><a class="nav-link nav-single" data-id="science-1/mech-1/science-1-mechanics-1-newtonian-mechanics-of-one-particle-an" href="../../science-1/mech-1/science-1-mechanics-1-newtonian-mechanics-of-one-particle-an.html"><span>Mechanics 1: Newtonian mechanics</span></a><a class="nav-link nav-single" data-id="science-1/mech-2/science-1-mechanics-2-calculus-of-variations-and-lagrangian-" href="../../science-1/mech-2/science-1-mechanics-2-calculus-of-variations-and-lagrangian-.html"><span>Mechanics 2: Lagrangian mechanics</span></a><a class="nav-link nav-single" data-id="science-1/mech-3/science-1-mechanics-3-hamiltonian-dynamics-and-the-two-body-" href="../../science-1/mech-3/science-1-mechanics-3-hamiltonian-dynamics-and-the-two-body-.html"><span>Mechanics 3: Hamiltonian and two-body</span></a><a class="nav-link nav-single" data-id="science-1/intro-nonlinear/science-1-intro-scales-modelling-and-nonlinear-dynamics" href="../../science-1/intro-nonlinear/science-1-intro-scales-modelling-and-nonlinear-dynamics.html"><span>Intro, scales and nonlinear dynamics</span></a><a class="nav-link nav-single" data-id="science-1/thermo-notes/thermo-notes-for-quiz-2-atkins-11e-topics-1a-3b" href="../../science-1/thermo-notes/thermo-notes-for-quiz-2-atkins-11e-topics-1a-3b.html"><span>Thermodynamics study notes</span></a><a class="nav-link nav-single" data-id="science-1/gases/gases-atkins-11e-1a-1c-summary" href="../../science-1/gases/gases-atkins-11e-1a-1c-summary.html"><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link nav-single" data-id="science-1/first-law/first-law-atkins-11e-2a-2b-2e-teaching-notes" href="../../science-1/first-law/first-law-atkins-11e-2a-2b-2e-teaching-notes.html"><span>First law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link nav-single" data-id="science-1/thermochem/thermochemistry-and-state-functions-atkins-11e-2c-2d-teachin" href="../../science-1/thermochem/thermochemistry-and-state-functions-atkins-11e-2c-2d-teachin.html"><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link nav-single" data-id="science-1/second-law/second-law-and-entropy-atkins-11e-3a-3b-teaching-notes" href="../../science-1/second-law/second-law-and-entropy-atkins-11e-3a-3b-teaching-notes.html"><span>Second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link nav-single" data-id="science-1/relativity/special-relativity-sheet-beiser-ch-1-slides" href="../../science-1/relativity/special-relativity-sheet-beiser-ch-1-slides.html"><span>Special relativity sheet</span></a><a class="nav-link nav-single" data-id="science-1/cheatsheet/quiz-2-cheat-sheet-thermodynamics-atkins-11e-1a-3b" href="../../science-1/cheatsheet/quiz-2-cheat-sheet-thermodynamics-atkins-11e-1a-3b.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/formula-sheet/quiz-2-formula-sheet-thermodynamics-atkins-11e-1a-3b" href="../../science-1/formula-sheet/quiz-2-formula-sheet-thermodynamics-atkins-11e-1a-3b.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/definitions/quiz-2-definitions-sheet-thermodynamics-atkins-11e-1a-3b" href="../../science-1/definitions/quiz-2-definitions-sheet-thermodynamics-atkins-11e-1a-3b.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/practice/quiz-2-practice-questions-thermo-atkins-11e-1a-3b" href="../../science-1/practice/quiz-2-practice-questions-thermo-atkins-11e-1a-3b.html"><span>Thermodynamics practice questions</span></a><a class="nav-link nav-single" data-id="science-1/answer-key/quiz-2-answer-key-do-not-open-until-you-ve-attempted-quiz2-p" href="../../science-1/answer-key/quiz-2-answer-key-do-not-open-until-you-ve-attempted-quiz2-p.html"><span>Practice answer key</span></a><a class="nav-link nav-single" data-id="science-1/flashcards/quiz-2-flashcards-thermo" href="../../science-1/flashcards/quiz-2-flashcards-thermo.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../science-1/index.html">Science-1</a><span>›</span><span>QM 4: Quantum mechanics</span></nav>
+      <header class="note-head">
+        
+        <h1>Science-1 QM 4: Quantum mechanics</h1>
+        <p class="note-meta">25 min read</p>
+        <div class="note-tools">
+          
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          
+        </div>
+      </header>
+      <div class="prose"><p>The Schrödinger equation is to quantum mechanics what F = ma is to classical mechanics: you solve it with the right potential and boundary conditions, and the allowed wave functions and energies come out. This doc covers all of Beiser ch 5 (5.1–5.11, including the tunnel-effect appendix) and the slides <code>QM.tex:258</code> to <code>:443</code>.</p>
+<h2 id="explainer">Explainer</h2>
+<h3 id="the-wave-function">The wave function</h3>
+<p>Classical mechanics answers questions with certainties: given the initial position and velocity of a body and the forces on it, Newton's laws predict exactly where it will be at any later time. Quantum mechanics cannot do this, because the uncertainty principle forbids us to know the initial position and momentum exactly. What it predicts instead are probabilities. For a particle the central object is the wave function Ψ(x, t), and the probability of finding the particle between x and x + dx at time t is |Ψ|² dx. Since the particle must be somewhere, the integral of |Ψ|² over all space must equal one, and a wave function that satisfies this is said to be normalised. A wave function must also be single-valued and continuous, together with its first derivative, wherever the potential is finite. These requirements turn out to be what produces quantisation.</p>
+<h3 id="schro-dinger-s-equation">Schrödinger's equation</h3>
+<p>The wave function itself obeys an equation that plays the role Newton's second law plays in classical mechanics. Schrödinger's equation cannot be derived from anything more basic; it is a postulate, justified by the success of its predictions. It can, however, be made plausible. For a free particle the wave function should be a travelling wave Ψ = A e^(−i(ωt − kx)), with energy E = ħω and momentum p = ħk. Differentiating this twice with respect to x brings down a factor p², and differentiating once with respect to t brings down a factor E. Substituting these into the energy relation E = p²/2m + U gives the time-dependent Schrödinger equation, iħ ∂Ψ/∂t = −(ħ²/2m) ∂²Ψ/∂x² + UΨ. The equation is linear in Ψ, which means that if Ψ₁ and Ψ₂ are solutions, so is any combination of them. When two solutions are added, the probability density contains a cross term in addition to |Ψ₁|² and |Ψ₂|², and this interference term is what produces the bright and dark fringes in the double-slit experiment with electrons.</p>
+<h3 id="expectation-values-and-operators">Expectation values and operators</h3>
+<p>A quantum calculation does not predict the result of a single measurement, but it does predict the average of many. The expectation value of x is ⟨x⟩ = ∫ x|Ψ|² dx, the average position found if the measurement is repeated on many identically prepared particles. Other quantities are found in the same way with the help of operators. Momentum corresponds to the operator −iħ ∂/∂x, and energy to iħ ∂/∂t, and the expectation value of any quantity is obtained by sandwiching its operator between Ψ* and Ψ and integrating.</p>
+<h3 id="stationary-states">Stationary states</h3>
+<p>In most problems of interest the potential does not depend on time. The wave function can then be written as Ψ = ψ(x) e^(−iEt/ħ), and the time-dependent equation reduces to the steady-state Schrödinger equation for ψ(x) alone. For such a state |Ψ|² = |ψ|² does not change in time, which is why these are called stationary states. The steady-state equation generally has acceptable solutions only for certain values of E. These values are the eigenvalues of the energy, and the corresponding ψ are the eigenfunctions. Quantisation of energy is not put in by hand, as it was in the Bohr model; it emerges from the requirement that ψ be well behaved.</p>
+<h3 id="particle-in-a-box">Particle in a box</h3>
+<p>The simplest application is a particle in a box with infinitely high walls a distance L apart. Inside the box U = 0, and outside the particle can never be found, so ψ must vanish at the walls. The solutions are sine waves ψₙ = √(2/L) sin(nπx/L), and the allowed energies are Eₙ = n²π²ħ²/(2mL²), the same result obtained earlier by fitting de Broglie waves into the box. The probability density, however, now has a definite shape. In the ground state the particle is most likely to be found near the centre, while in the state n = 2 it is never found at the centre at all, behaviour quite unlike a classical particle, which is equally likely to be anywhere in the box.</p>
+<h3 id="finite-potential-well">Finite potential well</h3>
+<p>If the walls are of finite height U, the wave function no longer has to vanish at them. Outside the box, where E &lt; U, the solutions of the Schrödinger equation decay exponentially, and ψ leaks a short way into the walls. The particle therefore has a small probability of being found in a region where classical physics says it cannot go, and because the wave is less confined, the energy levels are slightly lower than in the infinite box. Only a finite number of bound states exist.</p>
+<h3 id="tunnelling">Tunnelling</h3>
+<p>The same exponential decay leads to tunnelling. When a particle meets a barrier of height U greater than its energy, the wave function decreases exponentially inside the barrier, but if the barrier is thin it has not fallen to zero by the far side, and a small transmitted wave emerges. The transmission probability is roughly T ≈ e^(−2κL), with κ = √(2m(U − E))/ħ, so it depends very sensitively on the barrier width and height. Tunnelling explains the alpha decay of nuclei and is the working principle of the scanning tunnelling microscope.</p>
+<h3 id="harmonic-oscillator">Harmonic oscillator</h3>
+<p>The last important system is the harmonic oscillator, in which the potential is U = ½kx². This describes any system vibrating about a stable equilibrium, such as the atoms in a molecule. Solving the Schrödinger equation gives energies Eₙ = (n + ½)hν, with n = 0, 1, 2, …. The levels are equally spaced by hν, as Planck had assumed for his oscillators, but there is an important difference: the lowest energy is not zero but ½hν. This zero-point energy is required by the uncertainty principle, since an oscillator at rest at the bottom of its well would have both a definite position and a definite momentum.</p>
+<h2 id="summary">Summary</h2>
+<h3 id="5-1-quantum-mechanics">5.1 Quantum mechanics</h3>
+<ul>
+<li>Classical mechanics is the limit of quantum mechanics for large masses and energies, where λ = h/p is tiny.</li>
+<li>The <strong>wave function Ψ(x, t)</strong> contains everything that can be known. |Ψ|² is the probability density (Born).</li>
+<li><strong>Normalisation:</strong> ∫|Ψ|² dV = 1 over all space.</li>
+<li><strong>A well-behaved Ψ must:</strong> (1) be continuous and single-valued; (2) have continuous derivative ∂Ψ/∂x wherever the potential is finite; (3) be normalisable, so Ψ → 0 as x → ±∞.</li>
+<li>Probability of finding the particle between x₁ and x₂ is ∫|Ψ|² dx from x₁ to x₂.</li>
+</ul>
+<h3 id="5-2-the-wave-equation">5.2 The wave equation</h3>
+<p>The classical wave equation is ∂²y/∂x² = (1/v²)∂²y/∂t². Its free-wave solutions can be written in complex form y = A e^(−iω(t − x/v)). For a physical wave only the real part matters, but for Ψ the complex form is essential.</p>
+<h3 id="5-3-schro-dinger-s-equation-time-dependent-form">5.3 Schrödinger's equation: time-dependent form</h3>
+<p><strong>Motivation</strong> (not a derivation; it is a postulate checked by experiment). Write a free-particle wave with E = ħω and p = ħk:</p>
+<pre><code class="language-latex">\Psi = A\,e^{-(i/\hbar)(Et - px)} \;\Rightarrow\; \frac{\partial^2\Psi}{\partial x^2} = -\frac{p^2}{\hbar^2}\Psi, \qquad \frac{\partial\Psi}{\partial t} = -\frac{iE}{\hbar}\Psi
+</code></pre>
+<p>Insert these into E = p²/2m + U and assume the result holds for any U:</p>
+<pre><code class="language-latex">i\hbar\,\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi
+</code></pre>
+<ul>
+<li>It is first order in time, so Ψ at one time fixes Ψ at all later times.</li>
+<li>It is <strong>linear</strong>: if Ψ₁ and Ψ₂ are solutions, so is a₁Ψ₁ + a₂Ψ₂.</li>
+<li>Ψ is necessarily complex (the i on the left).</li>
+<li>The slides give a second motivating route (<code>QM.tex:283</code>) and list these features at <code>:297</code>.</li>
+</ul>
+<h3 id="5-4-linearity-and-superposition">5.4 Linearity and superposition</h3>
+<p>If Ψ = Ψ₁ + Ψ₂, then |Ψ|² = |Ψ₁|² + |Ψ₂|² + 2 Re(Ψ₁*Ψ₂). The last term is the <strong>interference term</strong>, and it is what produces the double-slit fringes for electrons. <strong>Amplitudes add, not probabilities.</strong></p>
+<h3 id="5-5-expectation-values">5.5 Expectation values</h3>
+<p>The expectation value is the average of many measurements on identically prepared systems:</p>
+<pre><code class="language-latex">\langle x\rangle = \int_{-\infty}^{\infty} x\,|\Psi|^2\,dx, \qquad \langle G(x)\rangle = \int_{-\infty}^{\infty} \Psi^*\,G(x)\,\Psi\,dx
+</code></pre>
+<h3 id="5-6-operators">5.6 Operators</h3>
+<p>Quantities like momentum and energy become operators that act on Ψ:</p>
+<pre><code class="language-latex">\hat p = -i\hbar\,\frac{\partial}{\partial x}, \qquad \hat E = i\hbar\,\frac{\partial}{\partial t}, \qquad \hat H = -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + U
+</code></pre>
+<ul>
+<li>⟨p⟩ = ∫Ψ* (−iħ ∂/∂x) Ψ dx. Always put the operator between Ψ* and Ψ, in that order.</li>
+<li>The Schrödinger equation is just ÊΨ = ĤΨ: the energy operator equals the Hamiltonian.</li>
+</ul>
+<h3 id="5-7-schro-dinger-s-equation-steady-state-form">5.7 Schrödinger's equation: steady-state form</h3>
+<p>If U doesn't depend on time, separate Ψ(x, t) = ψ(x) e^(−iEt/ħ). Then |Ψ|² = |ψ|² doesn't change in time (a <strong>stationary state</strong>), and ψ obeys</p>
+<pre><code class="language-latex">\frac{d^2\psi}{dx^2} + \frac{2m}{\hbar^2}\,(E - U)\,\psi = 0
+</code></pre>
+<ul>
+<li>This is an <strong>eigenvalue equation</strong>, Ĥψ = Eψ. Acceptable (well-behaved) solutions exist only for certain energies Eₙ, the <strong>eigenvalues</strong>. The matching ψₙ are the <strong>eigenfunctions</strong>.</li>
+<li>Energy quantisation comes from requiring ψ to be well behaved, not from an extra postulate.</li>
+</ul>
+<h3 id="5-8-particle-in-a-box">5.8 Particle in a box</h3>
+<p>U = 0 for 0 &lt; x &lt; L, U = ∞ outside. ψ must be 0 at the walls.</p>
+<ul>
+<li>Inside, d²ψ/dx² = −k²ψ with k = √(2mE)/ħ, so ψ = A sin kx + B cos kx.</li>
+<li>ψ(0) = 0 gives B = 0. ψ(L) = 0 gives kL = nπ.</li>
+</ul>
+<pre><code class="language-latex">E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2}, \qquad \psi_n(x) = \sqrt{\frac{2}{L}}\,\sin\frac{n\pi x}{L}, \qquad n = 1, 2, 3, \dots
+</code></pre>
+<ul>
+<li>A = √(2/L) comes from normalisation, ∫₀ᴸ A² sin²(nπx/L) dx = A²L/2 = 1.</li>
+<li><strong>Probability density</strong> |ψₙ|²: for n = 1 the particle is most likely in the middle. For n = 2 it is never found at the middle (a node). Classically every position is equally likely; at large n the quantum density averages to that (correspondence).</li>
+<li>⟨x⟩ = L/2 for every n, by symmetry.</li>
+<li>ψₙ is not a momentum eigenfunction: sin kx is a mix of e^(ikx) and e^(−ikx), so p = ±ħk with equal chances and ⟨p⟩ = 0, while p² has the definite value 2mEₙ.</li>
+<li><strong>3-D box</strong> (<code>QM.tex:346</code>): E = (π²ħ²/2mL²)(n₁² + n₂² + n₃²) for a cube. Different (n₁, n₂, n₃) with the same sum have the same energy: <strong>degeneracy</strong>, e.g. (1,1,2), (1,2,1) and (2,1,1).</li>
+</ul>
+<h3 id="5-9-finite-potential-well">5.9 Finite potential well</h3>
+<p>Walls of finite height U. For E &lt; U, outside the well (E − U) &lt; 0, so the solutions are exponentials:</p>
+<pre><code class="language-latex">\psi = C e^{-ax}\ (x &gt; L), \qquad a = \frac{\sqrt{2m(U-E)}}{\hbar}
+</code></pre>
+<ul>
+<li>ψ and dψ/dx must match at the walls. The wave function <strong>penetrates the walls</strong>, decaying over a distance about 1/a.</li>
+<li>The wave is effectively a bit longer than in the infinite box, so <strong>each energy level is lower</strong>.</li>
+<li>There are only a finite number of bound states. Classically the particle could never be in the walls.</li>
+</ul>
+<h3 id="5-10-tunnel-effect">5.10 Tunnel effect</h3>
+<p>A particle with E &lt; U meets a barrier of height U and width L. Classically it always bounces back. Quantum mechanically ψ decays inside but is not zero at the far side, so there is a chance of getting through.</p>
+<pre><code class="language-latex">T \approx e^{-2k_2L}, \qquad k_2 = \frac{\sqrt{2m(U-E)}}{\hbar}
+</code></pre>
+<ul>
+<li>T falls <strong>exponentially</strong> with barrier width and with √(mass × energy deficit). A small change in L or U changes T by a large factor.</li>
+<li>Reflection probability R = 1 − T. Even for E &gt; U there is some reflection, unlike classical physics.</li>
+<li><strong>Examples:</strong> alpha decay (alphas tunnel out of the nucleus; Gamow, 1928), the tunnel diode, the scanning tunnelling microscope, fusion in the Sun, and ammonia inversion.</li>
+<li><strong>The appendix</strong> solves it exactly: write ψ in the three regions (incoming plus reflected wave, decaying plus growing exponential, transmitted wave), match ψ and dψ/dx at both edges, and get T = [1 + U² sinh²(k₂L)/(4E(U − E))]⁻¹. For a wide barrier (k₂L ≫ 1) this reduces to T ≈ e^(−2k₂L) up to a prefactor.</li>
+</ul>
+<h3 id="5-11-harmonic-oscillator">5.11 Harmonic oscillator</h3>
+<p>U = ½kx², so classically the frequency is ν = (1/2π)√(k/m). The Schrödinger equation has well-behaved solutions only for</p>
+<pre><code class="language-latex">E_n = \left(n + \tfrac12\right)h\nu, \qquad n = 0, 1, 2, \dots
+</code></pre>
+<ul>
+<li>The levels are <strong>evenly spaced</strong> by hν (Planck's assumption in 2.2 came close, but missed the ½).</li>
+<li><strong>Zero-point energy</strong> E₀ = ½hν. The oscillator is never at rest, which matches the uncertainty principle. It is why helium stays liquid at 0 K at normal pressure.</li>
+<li>ψₙ = (Hermite polynomial) × e^(−y²/2) with y a scaled x. ψ₀ is a Gaussian, most likely at x = 0.</li>
+<li><strong>Classical comparison:</strong> a classical oscillator spends most time at its turning points. The quantum ground state peaks at the centre and leaks past the turning points, but for large n |ψ|² approaches the classical distribution.</li>
+<li><strong>Use:</strong> molecular vibrations, atoms in solids. Any potential near a minimum looks like ½kx² (as in chunk 2).</li>
+</ul>
+<h3 id="what-to-be-able-to-do-without-notes">What to be able to do without notes</h3>
+<ul>
+<li>List the conditions for a well-behaved ψ.</li>
+<li>Write the time-dependent and steady-state Schrödinger equations, and motivate the first from a free-particle wave.</li>
+<li>Define and calculate expectation values; write the momentum and energy operators.</li>
+<li>Solve the infinite box completely: Eₙ, normalised ψₙ, sketch |ψₙ|², ⟨x⟩.</li>
+<li>Explain qualitatively the finite well, tunnelling (T ≈ e^(−2k₂L)) and why it matters.</li>
+<li>State the oscillator levels and zero-point energy and compare with the classical oscillator.</li>
+</ul>
+<h2 id="questions">Questions</h2>
+<p>The style follows your midsem papers and Quiz-1. Points are in brackets. Use hc = 1240 eV nm, ħc = 197 eV nm, mₑc² = 0.511 MeV, h = 4.14 × 10⁻¹⁵ eV s.</p>
+<h3 id="a-state-and-explain-2-3-points">A. State and explain (2–3 points)</h3>
+<ol>
+<li>(3) What conditions must a wave function satisfy to be physically acceptable? Why?</li>
+<li>(2) Write the time-dependent Schrödinger equation in one dimension and name each term.</li>
+<li>(2) Why must the wave function be complex?</li>
+<li>(2) What does the linearity of the Schrödinger equation imply? Why does it lead to interference?</li>
+<li>(2) What is an expectation value? Write ⟨x⟩ and ⟨p⟩.</li>
+<li>(2) What is a stationary state? Why is its probability density constant in time?</li>
+<li>(3) Explain how energy quantisation follows from the steady-state Schrödinger equation without any extra postulate.</li>
+<li>(2) Why are the energy levels of a finite well lower than those of an infinite well of the same width?</li>
+<li>(3) What is quantum tunnelling? Give two real examples.</li>
+<li>(2) What is zero-point energy? Why is it required by the uncertainty principle?</li>
+<li>(3) Compare the probability distribution of a quantum harmonic oscillator in its ground state with that of a classical oscillator of the same energy.</li>
+<li>(2) What is degeneracy? Give an example from the 3-D box.</li>
+</ol>
+<h3 id="b-derive-or-show-4-6-points">B. Derive or show (4–6 points)</h3>
+<ol start="13">
+<li>(4) Starting from a free-particle wave Ψ = Ae^(−(i/ħ)(Et − px)) and E = p²/2m + U, obtain the time-dependent Schrödinger equation.</li>
+<li>(4) Separate variables to obtain the steady-state Schrödinger equation from the time-dependent one when U = U(x).</li>
+<li>(6) Solve the Schrödinger equation for a particle in an infinite box of width L: find Eₙ, the normalised ψₙ, and sketch |ψₙ|² for n = 1, 2, 3.</li>
+<li>(3) Show that ⟨x⟩ = L/2 for every state of the infinite box.</li>
+<li>(3) Show that e^(ikx) is an eigenfunction of the momentum operator, and that sin kx is not. What does this say about the momentum of a particle in a box?</li>
+<li>(3) Normalise ψ(x) = Ax(L − x) for 0 ≤ x ≤ L (zero outside).</li>
+<li>(4) For the finite well, write the form of ψ inside and outside, and state the conditions used to join them.</li>
+<li>(4) Write the energy levels of a particle in a cubical 3-D box. Find the first three energy levels and their degeneracies.</li>
+</ol>
+<h3 id="c-numericals-without-a-calculator-3-points-each">C. Numericals without a calculator (3 points each)</h3>
+<ol start="21">
+<li>Find the ground-state energy of an electron in a box 1 nm wide.</li>
+<li>For a particle in a box, find the probability of finding it in the middle third of the box for n = 1 and n = 2. Compare with the classical answer.</li>
+<li>An electron with E = 1 eV meets a barrier 5 eV high and 0.5 nm wide. Estimate T. What happens to T if the width doubles?</li>
+<li>Repeat question 23 for a proton. Comment.</li>
+<li>A molecule vibrates at 10¹⁴ Hz. Find its zero-point energy and the spacing between levels, in eV.</li>
+<li>Find the wavelength of the photon emitted when an electron in a 1 nm box drops from n = 3 to n = 1.</li>
+</ol>
+<h3 id="d-estimate-and-discuss">D. Estimate and discuss</h3>
+<ol start="27">
+<li>(3) Explain why a scanning tunnelling microscope can sense height changes of about 0.01 nm.</li>
+<li>(3) Alpha particles of about 5 MeV escape from nuclei where the Coulomb barrier is about 30 MeV. Explain how, and why half-lives vary from microseconds to billions of years.</li>
+<li>(2) Explain why the harmonic oscillator is useful for any system near a stable equilibrium.</li>
+</ol>
+<h2 id="answer-key">Answer key</h2>
+<h3 id="a-state-and-explain">A. State and explain</h3>
+<ol>
+<li>Ψ must be continuous and single-valued, so the probability is unambiguous. ∂Ψ/∂x must be continuous where U is finite, or the second derivative in the equation would be infinite. Ψ must be normalisable (∫|Ψ|² = 1), so it must go to zero at infinity and the particle is somewhere.</li>
+<li>iħ ∂Ψ/∂t = −(ħ²/2m) ∂²Ψ/∂x² + UΨ. The left side is the energy operator acting on Ψ. On the right, the first term is the kinetic energy and the second the potential energy.</li>
+<li>The equation has i on one side and real terms on the other, so a real Ψ can't satisfy it for a moving particle. Only |Ψ|², which is real, is measurable.</li>
+<li>Any sum of solutions is a solution. The probability of a sum is |Ψ₁ + Ψ₂|², which contains the cross term 2 Re(Ψ₁*Ψ₂) that can add or cancel, giving interference.</li>
+<li>The average result of measuring a quantity on many identical systems. ⟨x⟩ = ∫x|Ψ|² dx and ⟨p⟩ = ∫Ψ*(−iħ ∂/∂x)Ψ dx.</li>
+<li>A state Ψ = ψ(x)e^(−iEt/ħ) with a definite energy. |Ψ|² = |ψ|²|e^(−iEt/ħ)|² = |ψ|², since the time factor has modulus 1.</li>
+<li>The steady-state equation has well-behaved solutions (continuous, finite, normalisable, meeting the boundary conditions) only for certain values of E. Those values are the energy levels. In the box, ψ(L) = 0 forces kL = nπ.</li>
+<li>ψ leaks into the walls, so the wave is effectively spread over a wider region. A longer wavelength means smaller momentum and lower energy.</li>
+<li>A particle passes through a barrier higher than its energy because ψ decays inside the barrier but is not zero at the far side. Examples: alpha decay, tunnel diode, STM, fusion in the Sun.</li>
+<li>The lowest energy of a bound system is above the bottom of the potential (½hν for an oscillator). A particle at rest at the bottom would have Δx = 0 and Δp = 0, which the uncertainty principle forbids.</li>
+<li>Quantum ground state: a Gaussian peaked at x = 0, with a small chance of being beyond the classical turning points. Classical: least likely at the centre (moving fastest) and most likely at the turning points, never beyond them. At large n the quantum distribution approaches the classical one.</li>
+<li>Different states with the same energy. In a cubical box, (1,1,2), (1,2,1) and (2,1,1) all have n₁² + n₂² + n₃² = 6, so that level is 3-fold degenerate.</li>
+</ol>
+<h3 id="b-derive-or-show">B. Derive or show</h3>
+<ol start="13">
+<li>∂²Ψ/∂x² = −(p²/ħ²)Ψ, so p²Ψ = −ħ² ∂²Ψ/∂x². Also ∂Ψ/∂t = −(iE/ħ)Ψ, so EΨ = iħ ∂Ψ/∂t. Multiply E = p²/2m + U by Ψ and substitute: iħ ∂Ψ/∂t = −(ħ²/2m)∂²Ψ/∂x² + UΨ. Then assume it holds for any U.</li>
+<li>Try Ψ = ψ(x)f(t). Dividing the equation by ψf gives iħ(1/f)(df/dt) = (1/ψ)[−(ħ²/2m)ψ″ + Uψ]. The left side depends only on t and the right only on x, so both equal a constant E. Then f = e^(−iEt/ħ) and ψ″ + (2m/ħ²)(E − U)ψ = 0.</li>
+<li>Inside, ψ″ = −k²ψ with k = √(2mE)/ħ, so ψ = A sin kx + B cos kx. ψ(0) = 0 gives B = 0. ψ(L) = 0 gives kL = nπ. So Eₙ = n²π²ħ²/2mL² = n²h²/8mL². Normalising: A² L/2 = 1, so ψₙ = √(2/L) sin(nπx/L). Sketch: |ψ₁|² is one hump; |ψ₂|² two humps with a zero at L/2; |ψ₃|² three humps with zeros at L/3 and 2L/3.</li>
+<li>|ψₙ|² is symmetric about x = L/2 (replace x by L − x and sin² is unchanged). So x − L/2 averages to zero and ⟨x⟩ = L/2.</li>
+<li>−iħ d/dx e^(ikx) = ħk e^(ikx), so it is an eigenfunction with p = ħk. −iħ d/dx sin kx = −iħk cos kx, which is not a multiple of sin kx. Since sin kx = (e^(ikx) − e^(−ikx))/2i, a particle in a box has p = +ħk or −ħk with equal probability, so ⟨p⟩ = 0.</li>
+<li>∫₀ᴸ x²(L − x)² dx = L⁵/30, so A = √(30/L⁵).</li>
+<li>Inside: ψ = A sin kx + B cos kx with k = √(2mE)/ħ. Outside: ψ = Ce^(ax) on the left and De^(−ax) on the right, with a = √(2m(U − E))/ħ. The growing exponentials are dropped so ψ stays finite. At each wall, ψ and dψ/dx must be continuous.</li>
+<li>E = (π²ħ²/2mL²)(n₁² + n₂² + n₃²). The first three levels are 3 units (1,1,1), not degenerate; 6 units (1,1,2) and its permutations, 3-fold; and 9 units (1,2,2) and its permutations, 3-fold.</li>
+</ol>
+<h3 id="c-numericals">C. Numericals</h3>
+<ol start="21">
+<li>E₁ = (1240)²/(8 × 0.511 × 10⁶ × 1²) eV ≈ 1.54 × 10⁶/4.09 × 10⁶ ≈ 0.38 eV.</li>
+<li>P = 1/3 − (1/2nπ)[sin(4nπ/3) − sin(2nπ/3)]. For n = 1: 1/3 + √3/2π ≈ 0.33 + 0.28 = 0.61. For n = 2: 1/3 − √3/4π ≈ 0.33 − 0.14 = 0.20. Classically it is 1/3 for every state, and the quantum answer tends to 1/3 at large n.</li>
+<li>k₂ = √(2mₑc²(U − E))/ħc = √(2 × 0.511 × 10⁶ × 4)/197 ≈ 2020/197 ≈ 10 nm⁻¹. 2k₂L ≈ 10, so T ≈ e⁻¹⁰ ≈ 5 × 10⁻⁵. Doubling L doubles the exponent: T ≈ e⁻²⁰ ≈ 2 × 10⁻⁹. T is squared, not halved.</li>
+<li>The proton is 1836 times heavier, so k₂ is √1836 ≈ 43 times larger and 2k₂L ≈ 430. T ≈ e⁻⁴³⁰, which is effectively zero. Tunnelling matters for light particles and thin barriers.</li>
+<li>hν = 4.14 × 10⁻¹⁵ × 10¹⁴ ≈ 0.41 eV, so the spacing is 0.41 eV and the zero-point energy is about 0.21 eV.</li>
+<li>E₃ − E₁ = 8E₁ ≈ 8 × 0.38 ≈ 3.0 eV, so λ ≈ 1240/3.0 ≈ 410 nm (violet).</li>
+</ol>
+<h3 id="d-estimate-and-discuss-2">D. Estimate and discuss</h3>
+<ol start="27">
+<li>Electrons tunnel across the vacuum gap between the tip and the surface, and T ≈ e^(−2k₂L) with k₂ ≈ 10 nm⁻¹ for a few eV. A change of 0.01 nm in L changes the exponent by 0.2, so the current changes by about 20%, which is easy to measure.</li>
+<li>The alpha particle tunnels through the Coulomb barrier. T depends exponentially on the barrier width and on √(U − E), and both change a lot with the alpha energy. So a small change in alpha energy (4 to 9 MeV) changes the decay rate by over 20 orders of magnitude (the Geiger–Nuttall law).</li>
+<li>Expand any U(x) about a minimum x₀: U ≈ U(x₀) + ½U″(x₀)(x − x₀)². The linear term vanishes at a minimum. So small oscillations of any system look like a harmonic oscillator with k = U″(x₀), for example molecular vibrations and atoms in solids.</li>
+</ol>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Science-1 QM 4: Quantum mechanics</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../science-1/qm-3/science-1-qm-3-atomic-structure.html"><small>← Previous</small><span>Science-1 QM 3: Atomic structure</span></a><a class="pn pn-next" id="next-link" href="../../science-1/qm-5/science-1-qm-5-quantum-theory-of-the-hydrogen-atom.html"><small>Next →</small><span>Science-1 QM 5: Quantum theory of the hydrogen atom</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#explainer">Explainer</a><a class="l3" href="#the-wave-function">The wave function</a><a class="l3" href="#schro-dinger-s-equation">Schrödinger's equation</a><a class="l3" href="#expectation-values-and-operators">Expectation values and operators</a><a class="l3" href="#stationary-states">Stationary states</a><a class="l3" href="#particle-in-a-box">Particle in a box</a><a class="l3" href="#finite-potential-well">Finite potential well</a><a class="l3" href="#tunnelling">Tunnelling</a><a class="l3" href="#harmonic-oscillator">Harmonic oscillator</a><a class="l2" href="#summary">Summary</a><a class="l3" href="#5-1-quantum-mechanics">5.1 Quantum mechanics</a><a class="l3" href="#5-2-the-wave-equation">5.2 The wave equation</a><a class="l3" href="#5-3-schro-dinger-s-equation-time-dependent-form">5.3 Schrödinger's equation: time-dependent form</a><a class="l3" href="#5-4-linearity-and-superposition">5.4 Linearity and superposition</a><a class="l3" href="#5-5-expectation-values">5.5 Expectation values</a><a class="l3" href="#5-6-operators">5.6 Operators</a><a class="l3" href="#5-7-schro-dinger-s-equation-steady-state-form">5.7 Schrödinger's equation: steady-state form</a><a class="l3" href="#5-8-particle-in-a-box">5.8 Particle in a box</a><a class="l3" href="#5-9-finite-potential-well">5.9 Finite potential well</a><a class="l3" href="#5-10-tunnel-effect">5.10 Tunnel effect</a><a class="l3" href="#5-11-harmonic-oscillator">5.11 Harmonic oscillator</a><a class="l3" href="#what-to-be-able-to-do-without-notes">What to be able to do without notes</a><a class="l2" href="#questions">Questions</a><a class="l3" href="#a-state-and-explain-2-3-points">A. State and explain (2–3 points)</a><a class="l3" href="#b-derive-or-show-4-6-points">B. Derive or show (4–6 points)</a><a class="l3" href="#c-numericals-without-a-calculator-3-points-each">C. Numericals without a calculator (3 points each)</a><a class="l3" href="#d-estimate-and-discuss">D. Estimate and discuss</a><a class="l2" href="#answer-key">Answer key</a><a class="l3" href="#a-state-and-explain">A. State and explain</a><a class="l3" href="#b-derive-or-show">B. Derive or show</a><a class="l3" href="#c-numericals">C. Numericals</a><a class="l3" href="#d-estimate-and-discuss-2">D. Estimate and discuss</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwn56a1c" defer></script>
+</body>
+</html>

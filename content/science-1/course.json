@@ -1,8 +1,80 @@
 {
   "title": "Science-1",
   "term": "Monsoon 2026",
-  "blurb": "Mechanics, special relativity, quantum and thermodynamics. Thermodynamics (Atkins 1A to 3B) and relativity notes so far.",
+  "blurb": "Mechanics, special relativity, quantum and thermodynamics: the endsem topic map and a study doc for each topic, plus the detailed thermodynamics notes, sheets and practice.",
   "docs": [
+    {
+      "slug": "endsem-map",
+      "file": "sd-00-Endsem-topic-map.md",
+      "title": "Endsem topic map",
+      "about": "The 12 endsem topics with every subtopic mapped to slides, textbook sections and homework"
+    },
+    {
+      "slug": "qm-1",
+      "file": "sd-01-QM-1-Particle-properties-of-waves.md",
+      "title": "QM 1: Particle properties of waves",
+      "about": "Blackbody radiation, photoelectric effect, X-rays, Compton scattering"
+    },
+    {
+      "slug": "qm-2",
+      "file": "sd-02-QM-2-Wave-properties-of-particles.md",
+      "title": "QM 2: Wave properties of particles",
+      "about": "de Broglie waves, Davisson–Germer, uncertainty principle, Bohr model, Franck–Hertz"
+    },
+    {
+      "slug": "qm-3",
+      "file": "sd-03-QM-3-Atomic-structure.md",
+      "title": "QM 3: Atomic structure",
+      "about": "Quantum numbers, Zeeman effect, spin–orbit, periodic table"
+    },
+    {
+      "slug": "qm-4",
+      "file": "sd-04-QM-4-Quantum-mechanics.md",
+      "title": "QM 4: Quantum mechanics",
+      "about": "Schrödinger equation, operators, particle in a box, harmonic oscillator, tunnelling"
+    },
+    {
+      "slug": "qm-5",
+      "file": "sd-05-QM-5-Quantum-theory-of-the-hydrogen-atom.md",
+      "title": "QM 5: Hydrogen atom",
+      "about": "Quantum theory of the hydrogen atom"
+    },
+    {
+      "slug": "str",
+      "file": "sd-06-STR-Special-relativity.md",
+      "title": "Special relativity",
+      "about": "Explainer and summary: Lorentz transform, time dilation, relativistic momentum and energy"
+    },
+    {
+      "slug": "thermo-5",
+      "file": "sd-07-Thermo-5-Free-energy-and-phases.md",
+      "title": "Thermo 5: Free energy and phases",
+      "about": "Gibbs and Helmholtz energies, Maxwell relations, phase equilibria"
+    },
+    {
+      "slug": "mech-1",
+      "file": "sd-08-Mechanics-1-Newtonian-mechanics-of-one-particle-and-many.md",
+      "title": "Mechanics 1: Newtonian mechanics",
+      "about": "One particle and systems of particles"
+    },
+    {
+      "slug": "mech-2",
+      "file": "sd-09-Mechanics-2-Calculus-of-variations-and-Lagrangian-mechanics.md",
+      "title": "Mechanics 2: Lagrangian mechanics",
+      "about": "Calculus of variations, Euler–Lagrange, constraints, symmetries"
+    },
+    {
+      "slug": "mech-3",
+      "file": "sd-10-Mechanics-3-Hamiltonian-dynamics-and-the-two-body-problem.md",
+      "title": "Mechanics 3: Hamiltonian and two-body",
+      "about": "Hamilton's equations, phase space, central forces and orbits"
+    },
+    {
+      "slug": "intro-nonlinear",
+      "file": "sd-11-Intro-Scales-modelling-and-nonlinear-dynamics.md",
+      "title": "Intro, scales and nonlinear dynamics",
+      "about": "Scales, modelling, logistic map, prey–predator"
+    },
     {
       "slug": "thermo-notes",
       "file": "10-thermo-quiz2-notes.md",

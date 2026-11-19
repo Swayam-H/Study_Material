@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Science-1 Mechanics 2: Calculus of variations and Lagrangian mechanics · Science-1</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwn56a1c">
+</head>
+<body data-root="../../" data-page="science-1/mech-2/science-1-mechanics-2-calculus-of-variations-and-lagrangian-" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>53</b></a><a class="" href="../../osn/formulas.html">Formulas <b>16</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><a class="nav-link nav-single" data-id="osn/formula-sheet/formula-sheet-lectures-01-to-17" href="../../osn/formula-sheet/formula-sheet-lectures-01-to-17.html"><span>Formula sheet</span></a><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 17</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>252</b></a><a class="" href="../../pns/formulas.html">Formulas <b>127</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-skim" href="../../pns/l21-onward/part-6-linear-regression-skim.html"><span>Part 6 — Linear regression (skim)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>0</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>6</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/endsem-map/science-1-endsem-topic-map" href="../../science-1/endsem-map/science-1-endsem-topic-map.html"><span>Endsem topic map</span></a><a class="nav-link nav-single" data-id="science-1/qm-1/science-1-qm-1-particle-properties-of-waves" href="../../science-1/qm-1/science-1-qm-1-particle-properties-of-waves.html"><span>QM 1: Particle properties of waves</span></a><a class="nav-link nav-single" data-id="science-1/qm-2/science-1-qm-2-wave-properties-of-particles" href="../../science-1/qm-2/science-1-qm-2-wave-properties-of-particles.html"><span>QM 2: Wave properties of particles</span></a><a class="nav-link nav-single" data-id="science-1/qm-3/science-1-qm-3-atomic-structure" href="../../science-1/qm-3/science-1-qm-3-atomic-structure.html"><span>QM 3: Atomic structure</span></a><a class="nav-link nav-single" data-id="science-1/qm-4/science-1-qm-4-quantum-mechanics" href="../../science-1/qm-4/science-1-qm-4-quantum-mechanics.html"><span>QM 4: Quantum mechanics</span></a><a class="nav-link nav-single" data-id="science-1/qm-5/science-1-qm-5-quantum-theory-of-the-hydrogen-atom" href="../../science-1/qm-5/science-1-qm-5-quantum-theory-of-the-hydrogen-atom.html"><span>QM 5: Hydrogen atom</span></a><a class="nav-link nav-single" data-id="science-1/str/science-1-str-special-relativity" href="../../science-1/str/science-1-str-special-relativity.html"><span>Special relativity</span></a><a class="nav-link nav-single" data-id="science-1/thermo-5/science-1-thermo-5-free-energy-and-phases" href="../../science-1/thermo-5/science-1-thermo-5-free-energy-and-phases.html"><span>Thermo 5: Free energy and phases</span></a><a class="nav-link nav-single" data-id="science-1/mech-1/science-1-mechanics-1-newtonian-mechanics-of-one-particle-an" href="../../science-1/mech-1/science-1-mechanics-1-newtonian-mechanics-of-one-particle-an.html"><span>Mechanics 1: Newtonian mechanics</span></a><a class="nav-link nav-single current" data-id="science-1/mech-2/science-1-mechanics-2-calculus-of-variations-and-lagrangian-" href="../../science-1/mech-2/science-1-mechanics-2-calculus-of-variations-and-lagrangian-.html"><span>Mechanics 2: Lagrangian mechanics</span></a><a class="nav-link nav-single" data-id="science-1/mech-3/science-1-mechanics-3-hamiltonian-dynamics-and-the-two-body-" href="../../science-1/mech-3/science-1-mechanics-3-hamiltonian-dynamics-and-the-two-body-.html"><span>Mechanics 3: Hamiltonian and two-body</span></a><a class="nav-link nav-single" data-id="science-1/intro-nonlinear/science-1-intro-scales-modelling-and-nonlinear-dynamics" href="../../science-1/intro-nonlinear/science-1-intro-scales-modelling-and-nonlinear-dynamics.html"><span>Intro, scales and nonlinear dynamics</span></a><a class="nav-link nav-single" data-id="science-1/thermo-notes/thermo-notes-for-quiz-2-atkins-11e-topics-1a-3b" href="../../science-1/thermo-notes/thermo-notes-for-quiz-2-atkins-11e-topics-1a-3b.html"><span>Thermodynamics study notes</span></a><a class="nav-link nav-single" data-id="science-1/gases/gases-atkins-11e-1a-1c-summary" href="../../science-1/gases/gases-atkins-11e-1a-1c-summary.html"><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link nav-single" data-id="science-1/first-law/first-law-atkins-11e-2a-2b-2e-teaching-notes" href="../../science-1/first-law/first-law-atkins-11e-2a-2b-2e-teaching-notes.html"><span>First law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link nav-single" data-id="science-1/thermochem/thermochemistry-and-state-functions-atkins-11e-2c-2d-teachin" href="../../science-1/thermochem/thermochemistry-and-state-functions-atkins-11e-2c-2d-teachin.html"><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link nav-single" data-id="science-1/second-law/second-law-and-entropy-atkins-11e-3a-3b-teaching-notes" href="../../science-1/second-law/second-law-and-entropy-atkins-11e-3a-3b-teaching-notes.html"><span>Second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link nav-single" data-id="science-1/relativity/special-relativity-sheet-beiser-ch-1-slides" href="../../science-1/relativity/special-relativity-sheet-beiser-ch-1-slides.html"><span>Special relativity sheet</span></a><a class="nav-link nav-single" data-id="science-1/cheatsheet/quiz-2-cheat-sheet-thermodynamics-atkins-11e-1a-3b" href="../../science-1/cheatsheet/quiz-2-cheat-sheet-thermodynamics-atkins-11e-1a-3b.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/formula-sheet/quiz-2-formula-sheet-thermodynamics-atkins-11e-1a-3b" href="../../science-1/formula-sheet/quiz-2-formula-sheet-thermodynamics-atkins-11e-1a-3b.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/definitions/quiz-2-definitions-sheet-thermodynamics-atkins-11e-1a-3b" href="../../science-1/definitions/quiz-2-definitions-sheet-thermodynamics-atkins-11e-1a-3b.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/practice/quiz-2-practice-questions-thermo-atkins-11e-1a-3b" href="../../science-1/practice/quiz-2-practice-questions-thermo-atkins-11e-1a-3b.html"><span>Thermodynamics practice questions</span></a><a class="nav-link nav-single" data-id="science-1/answer-key/quiz-2-answer-key-do-not-open-until-you-ve-attempted-quiz2-p" href="../../science-1/answer-key/quiz-2-answer-key-do-not-open-until-you-ve-attempted-quiz2-p.html"><span>Practice answer key</span></a><a class="nav-link nav-single" data-id="science-1/flashcards/quiz-2-flashcards-thermo" href="../../science-1/flashcards/quiz-2-flashcards-thermo.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../science-1/index.html">Science-1</a><span>›</span><span>Mechanics 2: Lagrangian mechanics</span></nav>
+      <header class="note-head">
+        
+        <h1>Science-1 Mechanics 2: Calculus of variations and Lagrangian mechanics</h1>
+        <p class="note-meta">21 min read</p>
+        <div class="note-tools">
+          
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          
+        </div>
+      </header>
+      <div class="prose"><p>Lagrangian mechanics replaces forces by a single scalar function L = T − U and a single principle, that the true motion makes the action stationary. The mathematics behind it is the calculus of variations. Sources: slides <code>Lagrangian.tex:1</code> to <code>:334</code>, MT ch 6–7, HW lectures 6–7 (MT E6.1–E6.5, E7.3–E7.17). Questions follow the 2025 midsem Q6 and Q12, the 2026 midsem Q2 and Q4–Q7, and Section C of the practice set.</p>
+<h2 id="explainer">Explainer</h2>
+<h3 id="describing-a-whole-path-at-once">Describing a whole path at once</h3>
+<p>Newton's laws are local in time. They tell us how the state of a system changes from one instant to the next, and the path is found by adding up these small steps. There is another way of looking at motion, in which the whole path is described at once by some property it has. Light gives the oldest example. Fermat proposed that light travelling from one point to another follows the path that takes the least time. Applied to light crossing from one medium into another, where its speed changes, this principle gives Snell's law of refraction directly. A mechanical example is the brachistochrone problem: along which curve does a bead slide, from rest under gravity, from one point to a lower one in the shortest time? The answer is not the straight line but a cycloid, which drops steeply at first to gain speed early.</p>
+<h3 id="the-calculus-of-variations">The calculus of variations</h3>
+<p>Such problems ask for the function y(x) that makes an integral J = ∫f(y, y′, x) dx stationary, with the end points held fixed. This is a different kind of optimisation from finding the minimum of a function, because the unknown is an entire curve. The method is to compare the true curve with nearby ones, y(x) + αη(x), where η is any smooth function that vanishes at the end points. For the true curve J must be stationary as α passes through zero. Differentiating under the integral and integrating the η′ term by parts, the boundary terms vanish and we are left with ∫[∂f/∂y − d/dx(∂f/∂y′)]η dx = 0. Since this must hold for every η, the bracket itself must vanish, giving the Euler equation ∂f/∂y − d/dx(∂f/∂y′) = 0. When f does not depend explicitly on x, a first integral follows at once: f − y′∂f/∂y′ is constant. This second form is often the quicker route, and it is the one used for the brachistochrone.</p>
+<h3 id="hamilton-s-principle">Hamilton's principle</h3>
+<p>Mechanics can be put in the same form. Hamilton's principle states that of all the paths a system could take between two configurations in a given time, the actual path is the one for which the action S = ∫L dt is stationary, where the Lagrangian L = T − U is the kinetic energy minus the potential energy. Applying the Euler equation with t in place of x gives the Euler–Lagrange equations, d/dt(∂L/∂q̇) = ∂L/∂q. For a single particle in Cartesian coordinates these are exactly Newton's equations mẍ = −∂U/∂x, so nothing new has been added to the physics. What has been gained is a far more convenient formulation.</p>
+<h3 id="generalised-coordinates-and-constraints">Generalised coordinates and constraints</h3>
+<p>The great advantage of the Lagrangian method is that the action is a scalar, and its stationary value does not depend on which coordinates are used to describe the path. Any set of independent quantities that fixes the configuration, called generalised coordinates, will do, and the Euler–Lagrange equations take the same form in all of them. The number of such coordinates is the number of degrees of freedom. A simple pendulum, for example, needs only the angle θ. Writing T = ½ml²θ̇² and U = −mgl cosθ gives the equation ml²θ̈ = −mgl sinθ at once, without ever mentioning the tension in the string. This is typical. Constraints that are built into the choice of coordinates never appear in the equations, and the forces that maintain them, which do no work, need not be found.</p>
+<p>The same method handles more complicated systems with little extra effort. For a particle moving on the inside of a cone, the &quot;wall of death&quot;, two coordinates r and θ suffice, and since θ does not appear in the Lagrangian the angular momentum about the axis is conserved. For a block on an incline whose angle increases at a steady rate, the Lagrangian depends explicitly on time, and the energy is then not conserved. For a double pendulum, two angles describe the system, and the Lagrangian leads directly to two coupled equations of motion, which would be laborious to obtain from free-body diagrams.</p>
+<p>Sometimes we want the constraint forces, or the constraint cannot conveniently be built into the coordinates. Then the constraint, written as an equation g(q) = 0, is added with a Lagrange multiplier λ, and the equations become ∂L/∂qⱼ − d/dt(∂L/∂q̇ⱼ) + λ∂g/∂qⱼ = 0. For a disk rolling without slipping down an incline, with the constraint y = Rθ, this gives the acceleration g sinα/(1 + I/MR²), and the size of λ is the friction force that enforces rolling.</p>
+<h3 id="symmetries-and-conservation-laws">Symmetries and conservation laws</h3>
+<p>The Lagrangian method shows clearly where conservation laws come from. If L does not contain a coordinate qₖ, that coordinate is called cyclic, and the Euler–Lagrange equation gives d/dt(∂L/∂q̇ₖ) = 0, so the conjugate momentum pₖ = ∂L/∂q̇ₖ is constant. Each such conservation law reflects a symmetry. If the Lagrangian is unchanged when the whole system is displaced in space, the total linear momentum is conserved. If it is unchanged when the system is rotated, the angular momentum is conserved. And if L does not depend explicitly on time, so that the laws are the same today as tomorrow, the quantity Σq̇ₖpₖ − L is conserved, which for ordinary systems is the total energy. Homogeneity of space, isotropy of space and homogeneity of time thus underlie the three great conservation laws of mechanics.</p>
+<h3 id="newton-and-lagrange-compared">Newton and Lagrange compared</h3>
+<p>Both formulations lead to second-order differential equations and describe exactly the same physics. Newton's method works with vector forces in Cartesian coordinates and handles constraints by finding and balancing the constraint forces. Lagrange's method works with two scalar energies in any convenient coordinates and handles constraints either by choosing coordinates that satisfy them automatically or by multipliers. The Lagrangian approach is usually simpler for constrained systems and is the natural starting point for the Hamiltonian formulation, for quantum mechanics and for field theory, while Newton's method remains the natural one for dissipative forces such as friction, which have no potential. The variational idea also reaches beyond physics: training a machine-learning model is itself the problem of choosing a function to minimise an integral of the error.</p>
+<h2 id="summary">Summary</h2>
+<h3 id="calculus-of-variations-mt-ch-6-lagrangian-tex-40">Calculus of variations (MT ch 6, <code>Lagrangian.tex:40</code>)</h3>
+<ul>
+<li>Find y(x) making J = ∫f(y, y′; x) dx stationary, end points fixed.</li>
+<li>Vary y → y + αη with η(x₁) = η(x₂) = 0; set ∂J/∂α = 0 at α = 0; integrate by parts.</li>
+</ul>
+<pre><code class="language-latex">\frac{\partial f}{\partial y} - \frac{d}{dx}\frac{\partial f}{\partial y'} = 0,\qquad \text{if } \frac{\partial f}{\partial x} = 0:\quad f - y'\frac{\partial f}{\partial y'} = \text{const}
+</code></pre>
+<ul>
+<li>If f has no y: ∂f/∂y′ = constant.</li>
+<li>Shortest path in a plane: f = √(1 + y′²), straight line.</li>
+<li>Brachistochrone (MT E6.2): T = ∫√(1 + y′²)/√(2gx) dx, gives y′²/[x(1 + y′²)] = 1/2a, a cycloid x = a(1 − cosφ), y = a(φ − sinφ).</li>
+<li>Fermat's least time gives Snell's law n₁ sinθ₁ = n₂ sinθ₂.</li>
+<li>Other examples: hanging chain (catenary), isoperimetric problem, ML training (minimise ∫[y − f_θ(x)]² dx).</li>
+</ul>
+<h3 id="hamilton-s-principle-and-lagrange-s-equations-mt-7-1-7-6">Hamilton's principle and Lagrange's equations (MT 7.1–7.6)</h3>
+<pre><code class="language-latex">S = \int_{t_1}^{t_2} L\,dt,\quad L = T - U,\qquad \delta S = 0 \iff \frac{d}{dt}\frac{\partial L}{\partial \dot q_k} = \frac{\partial L}{\partial q_k}
+</code></pre>
+<ul>
+<li>Generalised coordinates: any independent set fixing the configuration; number = degrees of freedom (3N minus number of constraints).</li>
+<li>Recipe: choose q's, write T and U in them, form L, apply E–L to each q.</li>
+<li>Constraint forces that do no work never appear.</li>
+</ul>
+<h3 id="worked-examples-from-the-slides">Worked examples from the slides</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>System</th>
+<th>Coordinates</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple pendulum (MT E7.2)</td>
+<td>θ</td>
+<td>ml²θ̈ = −mgl sinθ; small θ: ω² = g/l</td>
+</tr>
+<tr>
+<td>Wall of death, cone half-angle α (MT E7.4)</td>
+<td>r, θ</td>
+<td>mr²θ̇ constant; r̈ = rθ̇² sin²α − g sinα cosα (the slide drops g)</td>
+</tr>
+<tr>
+<td>Block on incline rising at θ = αt (MT P7.12)</td>
+<td>q along incline</td>
+<td>q̈ = α²q − g sinαt; L has explicit t, energy not conserved</td>
+</tr>
+<tr>
+<td>Disk rolling down incline (MT E7.9)</td>
+<td>y, θ with y = Rθ</td>
+<td>ÿ = g sinα/(1 + I/MR²) = ⅔g sinα for a uniform disk</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="constraints-with-multipliers-lagrangian-tex-259">Constraints with multipliers (<code>Lagrangian.tex:259</code>)</h3>
+<pre><code class="language-latex">\frac{\partial L}{\partial q_j} - \frac{d}{dt}\frac{\partial L}{\partial \dot q_j} + \sum_k \lambda_k \frac{\partial f_k}{\partial q_j} = 0,\qquad f_k(q, t) = 0
+</code></pre>
+<ul>
+<li>λₖ∂fₖ/∂qⱼ is the generalised constraint force.</li>
+</ul>
+<h3 id="symmetries-and-conservation-mt-7-9">Symmetries and conservation (MT 7.9)</h3>
+<ul>
+<li>Cyclic qₖ (∂L/∂qₖ = 0): pₖ = ∂L/∂q̇ₖ conserved.</li>
+<li>Time symmetry (∂L/∂t = 0): H = Σq̇ₖpₖ − L conserved; equals E for L = ½mv² − U(x).</li>
+<li>Translation symmetry: linear momentum conserved.</li>
+<li>Rotation symmetry (δr = δθ × r): angular momentum r × p conserved.</li>
+</ul>
+<h3 id="newton-vs-lagrange-lagrangian-tex-290">Newton vs Lagrange (<code>Lagrangian.tex:290</code>)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Newtonian</th>
+<th>Lagrangian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equation</td>
+<td>mẍₖ = Fₖ</td>
+<td>d/dt(∂L/∂q̇ₖ) = ∂L/∂qₖ</td>
+</tr>
+<tr>
+<td>Order</td>
+<td>second</td>
+<td>second</td>
+</tr>
+<tr>
+<td>Coordinates</td>
+<td>Cartesian (vectors)</td>
+<td>any generalised</td>
+</tr>
+<tr>
+<td>Interactions via</td>
+<td>forces</td>
+<td>energies (scalars)</td>
+</tr>
+<tr>
+<td>Constraints</td>
+<td>balance constraint forces</td>
+<td>built into coordinates, or multipliers</td>
+</tr>
+<tr>
+<td>Same physics</td>
+<td>yes</td>
+<td>yes; friction is awkward</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="what-to-be-able-to-do-without-notes">What to be able to do without notes</h3>
+<ul>
+<li>Derive the Euler equation and its second form; solve the shortest path, Snell's law, brachistochrone.</li>
+<li>State Hamilton's principle and write the action.</li>
+<li>Set up L for pendulum, double pendulum, cone, rising incline, rolling disk, accelerated support.</li>
+<li>Use a multiplier for a rolling or surface constraint.</li>
+<li>Explain cyclic coordinates and the symmetry–conservation link.</li>
+<li>Compare Newton and Lagrange.</li>
+</ul>
+<h2 id="questions">Questions</h2>
+<p>Points in brackets, midsem style.</p>
+<h3 id="a-state-and-explain-2-4-points">A. State and explain (2–4 points)</h3>
+<ol>
+<li>(3) What is Hamilton's principle? Write the mathematical expression for it. <em>(2026 midsem Q6)</em></li>
+<li>(3) What is the Lagrangian? For L({qᵢ}, {q̇ᵢ}, t), what happens when q₁ does not appear explicitly? <em>(2026 midsem Q2)</em></li>
+<li>(4) State the differences between Newtonian and Lagrangian mechanics. <em>(2025 Q6, 2026 Q5)</em></li>
+<li>(2) What are generalised coordinates and degrees of freedom? Give the number for a double pendulum in a plane.</li>
+<li>(2) Why do constraint forces not appear in Lagrange's equations? When would you use a Lagrange multiplier?</li>
+<li>(3) Explain how time, translation and rotation symmetry lead to conservation of energy, momentum and angular momentum.</li>
+<li>(2) How is calculus-of-variations optimisation different from ordinary function optimisation?</li>
+</ol>
+<h3 id="b-show-or-derive-3-8-points">B. Show or derive (3–8 points)</h3>
+<ol start="8">
+<li>(4) Derive the Euler equation for J = ∫f(y, y′; x) dx, and its second form when f has no explicit x.</li>
+<li>(3) Show that Fermat's principle of least time leads to Snell's law. <em>(2026 midsem Q4)</em></li>
+<li>(2) Show that the shortest path between two points in a plane is a straight line.</li>
+<li>(4) Set up the brachistochrone integral and show the curve satisfies y′²/[x(1 + y′²)] = constant. <em>(MT E6.2)</em></li>
+<li>(8) A double pendulum has point masses m₁, m₂ on massless rods l₁, l₂. Identify the generalised coordinates and degrees of freedom, construct L, and obtain the equations of motion. <em>(2026 midsem Q7)</em></li>
+<li>(5) Repeat Q12 for two uniform rods of masses m₁, m₂ hinged together (no point masses). Only write L. <em>(2025 midsem Q12)</em></li>
+<li>(4) A particle moves on the inside of a cone of half-angle α under gravity. Find L and the equations of motion. What is conserved? <em>(MT E7.4)</em></li>
+<li>(3) A block slides on a smooth incline whose angle grows as θ = αt. Find the equation of motion. Is energy conserved? <em>(MT P7.12, practice P19)</em></li>
+<li>(4) A disk rolls without slipping down an incline of angle α. Using a Lagrange multiplier, find its acceleration and the friction force. <em>(MT E7.9)</em></li>
+<li>(3) A pendulum of length b hangs from a support accelerating horizontally at a. Find the equation of motion and the period of small oscillations. <em>(practice P20)</em></li>
+<li>(3) A rope of mass m and length b lies on a smooth table with length z hanging over the edge. Find Lagrange's equation. <em>(practice P22)</em></li>
+<li>(3) A particle moves in a plane under an attractive central force f = −Ar^(α−1). Find the Lagrange equations. Are angular momentum and energy conserved? <em>(practice P17)</em></li>
+<li>(4) Show that if L is unchanged by any rotation δr = δθ × r, then r × p is conserved. <em>(slides HW)</em></li>
+<li>(3) Show that when ∂L/∂t = 0, H = Σq̇p − L is conserved, and that it equals T + U for L = ½mv² − U(x).</li>
+<li>(5) A particle slides from rest at the top of a smooth sphere of radius R. Using a multiplier for r = R, find the normal force and the angle at which it leaves. <em>(practice P30)</em></li>
+</ol>
+<h3 id="c-short-numericals">C. Short numericals</h3>
+<ol start="23">
+<li>(2) Find the acceleration of a uniform hoop (I = MR²) and a uniform disk rolling down a 30° incline.</li>
+<li>(2) Two blocks of mass M are joined by a light string; one is on a smooth table, the other hangs over a pulley. Find the acceleration. <em>(practice P18a)</em></li>
+</ol>
+<h2 id="answer-key">Answer key</h2>
+<h3 id="a-state-and-explain">A. State and explain</h3>
+<ol>
+<li>Of all paths a system could follow between two configurations in a fixed time interval, the actual path makes the action stationary: δ∫_{t₁}^{t₂} L(q, q̇, t) dt = 0, with L = T − U.</li>
+<li>L = T − U as a function of generalised coordinates, velocities and time. If q₁ is absent (cyclic), ∂L/∂q₁ = 0, so d/dt(∂L/∂q̇₁) = 0 and the conjugate momentum p₁ is conserved.</li>
+<li>Newton: vector forces, Cartesian coordinates, constraint forces must be found and balanced. Lagrange: scalar energies, any generalised coordinates, constraints built in or handled by multipliers; conservation laws appear through cyclic coordinates. Both give second-order equations and the same physics; Newton handles friction more naturally.</li>
+<li>Independent quantities that fix the configuration; their number is the number of degrees of freedom. Planar double pendulum: 2 (θ₁, θ₂), from 4 Cartesian coordinates minus 2 rod constraints.</li>
+<li>Ideal constraint forces do no work in displacements allowed by the constraint, so they drop out of the variation. Use a multiplier when you want the constraint force, or when the constraint is awkward to build into the coordinates (e.g. rolling y = Rθ, or r = R on a sphere).</li>
+<li>Time symmetry (∂L/∂t = 0) gives d/dt(Σq̇p − L) = 0: energy. Translation: L unchanged by δr with δv = 0 gives ∂L/∂x = 0, so pₓ is constant. Rotation: δL = 0 for δr = δθ × r gives d/dt(r × p) = 0.</li>
+<li>The unknown is a whole function y(x), a point in an infinite-dimensional space, and J depends on all its values; the stationarity condition is a differential equation rather than an algebraic one.</li>
+</ol>
+<h3 id="b-show-or-derive">B. Show or derive</h3>
+<ol start="8">
+<li>J(α) = ∫f(y + αη, y′ + αη′, x) dx. ∂J/∂α = ∫(f_yη + f_y′η′) dx. Integrate the second term by parts; boundary terms vanish since η = 0 at the ends: ∫(f_y − d/dx f_y′)η dx = 0 for all η, so f_y = d/dx f_y′. Second form: df/dx = y′f_y + y″f_y′ + f_x = d/dx(y′f_y′) + f_x, so if f_x = 0, f − y′f_y′ = constant.</li>
+<li>A at height a above the interface, B at depth b below, horizontal separation d, crossing at x. t = √(a² + x²)/v₁ + √(b² + (d − x)²)/v₂. dt/dx = x/(v₁√(a² + x²)) − (d − x)/(v₂√(b² + (d − x)²)) = sinθ₁/v₁ − sinθ₂/v₂ = 0. With v = c/n: n₁ sinθ₁ = n₂ sinθ₂.</li>
+<li>f = √(1 + y′²) has no y, so ∂f/∂y′ = y′/√(1 + y′²) = constant, so y′ = constant: a straight line.</li>
+<li>Speed after falling x from rest: v = √(2gx). Time = ∫ds/v = ∫√(1 + y′²)/√(2gx) dx. f has no y, so ∂f/∂y′ = y′/√(2gx(1 + y′²)) = constant. Squaring: y′²/[x(1 + y′²)] = 1/2a, whose solution is a cycloid.</li>
+<li>Coordinates θ₁, θ₂ from the vertical; 2 degrees of freedom. T = ½(m₁ + m₂)l₁²θ̇₁² + ½m₂l₂²θ̇₂² + m₂l₁l₂θ̇₁θ̇₂cos(θ₁ − θ₂). U = −(m₁ + m₂)gl₁cosθ₁ − m₂gl₂cosθ₂. E–L for θ₁: (m₁ + m₂)l₁²θ̈₁ + m₂l₁l₂θ̈₂cos(θ₁ − θ₂) + m₂l₁l₂θ̇₂²sin(θ₁ − θ₂) + (m₁ + m₂)gl₁sinθ₁ = 0. For θ₂: m₂l₂²θ̈₂ + m₂l₁l₂θ̈₁cos(θ₁ − θ₂) − m₂l₁l₂θ̇₁²sin(θ₁ − θ₂) + m₂gl₂sinθ₂ = 0.</li>
+<li>Rod 1 rotates about the pivot: T₁ = (1/6)m₁l₁²θ̇₁². Rod 2: its centre moves with velocity from l₁θ̇₁ and (l₂/2)θ̇₂, plus rotation about its centre: T₂ = ½m₂[l₁²θ̇₁² + (l₂²/4)θ̇₂² + l₁l₂θ̇₁θ̇₂cos(θ₁ − θ₂)] + (1/24)m₂l₂²θ̇₂². U = −m₁g(l₁/2)cosθ₁ − m₂g(l₁cosθ₁ + (l₂/2)cosθ₂). L = T₁ + T₂ − U; the E–L equations follow as in Q12.</li>
+<li>z = r cotα, v² = ṙ²csc²α + r²θ̇², U = mgr cotα. L = ½m(ṙ²csc²α + r²θ̇²) − mgr cotα. θ cyclic: mr²θ̇ = constant (angular momentum about the axis). r: mr̈ csc²α = mrθ̇² − mg cotα, i.e. r̈ = rθ̇²sin²α − g sinα cosα. Energy is also conserved.</li>
+<li>L = ½m(q̇² + q²α²) − mgq sinαt. E–L: q̈ = α²q − g sinαt. L depends explicitly on t (the plane is driven), so energy is not conserved.</li>
+<li>L = ½Mẏ² + ½Iθ̇² + Mgy sinα, constraint y − Rθ = 0. Equations: Mg sinα − Mÿ + λ = 0, −Iθ̈ − λR = 0. With θ̈ = ÿ/R: λ = −Iÿ/R² and ÿ = g sinα/(1 + I/MR²). Uniform disk (I = ½MR²): ÿ = ⅔g sinα, friction |λ| = ⅓Mg sinα, acting up the slope.</li>
+<li>In the support's frame there is a pseudo-force −ma, so the effective gravity is √(g² + a²) at angle tan⁻¹(a/g) from the vertical. With φ measured from that direction: bφ̈ = −√(g² + a²) sinφ, period 2π√(b/√(g² + a²)). (Vertical acceleration upwards: g → g + a.)</li>
+<li>T = ½mż² (the whole rope moves at ż); hanging part mass mz/b with centre at z/2 below the edge, so U = −mgz²/2b. E–L: mż̈ = mgz/b, so z̈ = (g/b)z: exponential run-away.</li>
+<li>U = (A/α)r^α (zero at the origin). L = ½m(ṙ² + r²θ̇²) − (A/α)r^α. θ: d/dt(mr²θ̇) = 0, angular momentum conserved. r: mr̈ − mrθ̇² + Ar^(α−1) = 0. L has no explicit t, so energy is conserved.</li>
+<li>δL = (∂L/∂r)·δr + (∂L/∂v)·δv = ṗ·(δθ × r) + p·(δθ × v), using E–L for ∂L/∂r. Cyclic permutation: δθ·(r × ṗ + v × p) = δθ·d/dt(r × p). δL = 0 for every δθ, so r × p is constant.</li>
+<li>dL/dt = Σ(∂L/∂q)q̇ + Σ(∂L/∂q̇)q̈ + ∂L/∂t. Using E–L, the first two terms are d/dt(Σq̇∂L/∂q̇). So d/dt(Σq̇p − L) = −∂L/∂t = 0. For L = ½mv² − U: Σq̇p = mv², so H = mv² − ½mv² + U = T + U.</li>
+<li>L = ½m(ṙ² + r²θ̇²) − mgr cosθ, constraint r − R = 0. r-equation: mŕ − mrθ̇² + mg cosθ = λ, so with r = R: λ = mg cosθ − mRθ̇². Energy: Rθ̇² = 2g(1 − cosθ). So N = λ = mg(3cosθ − 2). It leaves when N = 0: cosθ = 2/3, θ ≈ 48°.</li>
+</ol>
+<h3 id="c-short-numericals-2">C. Short numericals</h3>
+<ol start="23">
+<li>a = g sinα/(1 + I/MR²), with sin 30° = ½. Hoop: g/4. Disk: g/3.</li>
+<li>L = ½(2M)ẋ² + Mgx, so 2Mẍ = Mg and a = g/2.</li>
+</ol>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Science-1 Mechanics 2: Calculus of variations and Lagrangian mechanics</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../science-1/mech-1/science-1-mechanics-1-newtonian-mechanics-of-one-particle-an.html"><small>← Previous</small><span>Science-1 Mechanics 1: Newtonian mechanics of one particle and many</span></a><a class="pn pn-next" id="next-link" href="../../science-1/mech-3/science-1-mechanics-3-hamiltonian-dynamics-and-the-two-body-.html"><small>Next →</small><span>Science-1 Mechanics 3: Hamiltonian dynamics and the two-body problem</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#explainer">Explainer</a><a class="l3" href="#describing-a-whole-path-at-once">Describing a whole path at once</a><a class="l3" href="#the-calculus-of-variations">The calculus of variations</a><a class="l3" href="#hamilton-s-principle">Hamilton's principle</a><a class="l3" href="#generalised-coordinates-and-constraints">Generalised coordinates and constraints</a><a class="l3" href="#symmetries-and-conservation-laws">Symmetries and conservation laws</a><a class="l3" href="#newton-and-lagrange-compared">Newton and Lagrange compared</a><a class="l2" href="#summary">Summary</a><a class="l3" href="#calculus-of-variations-mt-ch-6-lagrangian-tex-40">Calculus of variations (MT ch 6, <code>Lagrangian.tex:40</code>)</a><a class="l3" href="#hamilton-s-principle-and-lagrange-s-equations-mt-7-1-7-6">Hamilton's principle and Lagrange's equations (MT 7.1–7.6)</a><a class="l3" href="#worked-examples-from-the-slides">Worked examples from the slides</a><a class="l3" href="#constraints-with-multipliers-lagrangian-tex-259">Constraints with multipliers (<code>Lagrangian.tex:259</code>)</a><a class="l3" href="#symmetries-and-conservation-mt-7-9">Symmetries and conservation (MT 7.9)</a><a class="l3" href="#newton-vs-lagrange-lagrangian-tex-290">Newton vs Lagrange (<code>Lagrangian.tex:290</code>)</a><a class="l3" href="#what-to-be-able-to-do-without-notes">What to be able to do without notes</a><a class="l2" href="#questions">Questions</a><a class="l3" href="#a-state-and-explain-2-4-points">A. State and explain (2–4 points)</a><a class="l3" href="#b-show-or-derive-3-8-points">B. Show or derive (3–8 points)</a><a class="l3" href="#c-short-numericals">C. Short numericals</a><a class="l2" href="#answer-key">Answer key</a><a class="l3" href="#a-state-and-explain">A. State and explain</a><a class="l3" href="#b-show-or-derive">B. Show or derive</a><a class="l3" href="#c-short-numericals-2">C. Short numericals</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwn56a1c" defer></script>
+</body>
+</html>
