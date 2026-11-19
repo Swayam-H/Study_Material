@@ -122,7 +122,7 @@ function splitTitle(raw) {
   if (m) { meta = (m[1] + m[2]).trim(); title = title.slice(0, m.index).trim(); }
   let kicker = '';
   const c = title.indexOf(': ');
-  if (c > 0 && c < 40 && /^(Lectures?|Part|Midsem)\b/.test(title)) { kicker = title.slice(0, c); title = title.slice(c + 2); }
+  if (c > 0 && c < 40 && /^(Lectures?|Part|Midsem|Learn|Reference|Practice|Sheet|Cards|Start here)\b/.test(title)) { kicker = title.slice(0, c); title = title.slice(c + 2); }
   title = title.charAt(0).toUpperCase() + title.slice(1);
   return { kicker, title, meta };
 }
@@ -135,6 +135,11 @@ function tagsOf(src, selfTest) {
   if (/Quiz/i.test(src)) t.push('Quiz');
   if (/midsem/i.test(src)) t.push('Midsem');
   if (/endsem/i.test(src)) t.push('Endsem');
+  if (/\bRecall\b/.test(src)) t.push('Recall');
+  if (/\bConcept\b/.test(src)) t.push('Concept');
+  if (/\bDerivation\b/.test(src)) t.push('Derivation');
+  if (/\bNumerical\b/.test(src)) t.push('Numerical');
+  if (/\bDiscussion\b/.test(src)) t.push('Discussion');
   if (/Bertsekas/i.test(src)) t.push('Bertsekas');
   if (/probabilitycourse/i.test(src)) t.push('probabilitycourse');
   if (!t.length) t.push('Other');

@@ -1,157 +1,116 @@
 {
   "title": "Science-1",
   "term": "Monsoon 2026",
-  "blurb": "Mechanics, special relativity, quantum and thermodynamics: the endsem topic map and a study doc for each topic, plus the detailed thermodynamics notes, sheets and practice.",
+  "blurb": "Mechanics, relativity, thermodynamics and quantum, arranged as 12 endsem chapters. Each chapter has the ideas topic by topic, a section-by-section reference, and practice questions with worked solutions.",
   "docs": [
     {
-      "slug": "endsem-map",
-      "file": "sd-00-Endsem-topic-map.md",
-      "title": "Endsem topic map",
-      "about": "The 12 endsem topics with every subtopic mapped to slides, textbook sections and homework"
+      "slug": "start-here",
+      "file": "chapters/start-here.md",
+      "title": "Start here: the endsem map",
+      "about": "The 12 endsem topics, what each covers, slides, textbook sections and homework for every subtopic, and the video list"
     },
     {
-      "slug": "qm-1",
-      "file": "sd-01-QM-1-Particle-properties-of-waves.md",
-      "title": "QM 1: Particle properties of waves",
+      "slug": "ch1-intro",
+      "file": "chapters/chapter-01-Intro-Scales-modelling-and-nonlinear-dynamics.md",
+      "title": "Chapter 1: Scales, modelling and nonlinear dynamics",
+      "about": "Orders of magnitude, non-dimensionalisation, the logistic map, fixed points and stability, prey–predator"
+    },
+    {
+      "slug": "ch2-newton",
+      "file": "chapters/chapter-02-Mechanics-1-Newtonian-mechanics-of-one-particle-and-many.md",
+      "title": "Chapter 2: Newtonian mechanics of one particle and many",
+      "about": "Newton's laws, work–energy, conservation laws, oscillations, systems of particles, variable mass"
+    },
+    {
+      "slug": "ch3-lagrange",
+      "file": "chapters/chapter-03-Mechanics-2-Calculus-of-variations-and-Lagrangian-mechanics.md",
+      "title": "Chapter 3: Calculus of variations and Lagrangian mechanics",
+      "about": "Brachistochrone, Euler–Lagrange equation, generalised coordinates, constraints, symmetries"
+    },
+    {
+      "slug": "ch4-hamilton",
+      "file": "chapters/chapter-04-Mechanics-3-Hamiltonian-dynamics-and-the-two-body-problem.md",
+      "title": "Chapter 4: Hamiltonian dynamics and the two-body problem",
+      "about": "Hamilton's equations, phase space, Liouville, reduced mass, effective potential, Kepler orbits"
+    },
+    {
+      "slug": "ch5-relativity",
+      "file": "chapters/chapter-05-STR-Special-relativity.md",
+      "title": "Chapter 5: Special relativity",
+      "about": "Postulates, Lorentz transformation, time dilation, length contraction, Doppler, relativistic momentum and energy"
+    },
+    {
+      "slug": "ch6-thermo1",
+      "file": "chapters/chapter-06-thermo1.md",
+      "title": "Chapter 6: Thermodynamics I: gases and the first law",
+      "about": "Perfect and real gases, kinetic theory, work, heat, internal energy, enthalpy, heat capacities, Joule–Thomson, thermochemistry"
+    },
+    {
+      "slug": "ch7-thermo2",
+      "file": "chapters/chapter-07-Thermo-5-Free-energy-and-phases.md",
+      "title": "Chapter 7: Thermodynamics II: second law, entropy and free energy",
+      "about": "Cycles and engines, Carnot, Clausius inequality, entropy, free energies, Maxwell relations, phases"
+    },
+    {
+      "slug": "ch8-qm1",
+      "file": "chapters/chapter-08-QM-1-Particle-properties-of-waves.md",
+      "title": "Chapter 8: Particle properties of waves",
       "about": "Blackbody radiation, photoelectric effect, X-rays, Compton scattering"
     },
     {
-      "slug": "qm-2",
-      "file": "sd-02-QM-2-Wave-properties-of-particles.md",
-      "title": "QM 2: Wave properties of particles",
+      "slug": "ch9-qm2",
+      "file": "chapters/chapter-09-QM-2-Wave-properties-of-particles.md",
+      "title": "Chapter 9: Wave properties of particles",
       "about": "de Broglie waves, Davisson–Germer, uncertainty principle, Bohr model, Franck–Hertz"
     },
     {
-      "slug": "qm-3",
-      "file": "sd-03-QM-3-Atomic-structure.md",
-      "title": "QM 3: Atomic structure",
-      "about": "Quantum numbers, Zeeman effect, spin–orbit, periodic table"
+      "slug": "ch10-qm3",
+      "file": "chapters/chapter-10-QM-3-Atomic-structure.md",
+      "title": "Chapter 10: Atomic structure",
+      "about": "Quantum numbers, spin, Zeeman effect, spin–orbit coupling, the periodic table"
     },
     {
-      "slug": "qm-4",
-      "file": "sd-04-QM-4-Quantum-mechanics.md",
-      "title": "QM 4: Quantum mechanics",
-      "about": "Schrödinger equation, operators, particle in a box, harmonic oscillator, tunnelling"
+      "slug": "ch11-qm4",
+      "file": "chapters/chapter-11-QM-4-Quantum-mechanics.md",
+      "title": "Chapter 11: Quantum mechanics",
+      "about": "Schrödinger equation, operators, particle in a box, finite well, tunnelling, harmonic oscillator"
     },
     {
-      "slug": "qm-5",
-      "file": "sd-05-QM-5-Quantum-theory-of-the-hydrogen-atom.md",
-      "title": "QM 5: Hydrogen atom",
-      "about": "Quantum theory of the hydrogen atom"
+      "slug": "ch12-qm5",
+      "file": "chapters/chapter-12-QM-5-Quantum-theory-of-the-hydrogen-atom.md",
+      "title": "Chapter 12: Quantum theory of the hydrogen atom",
+      "about": "The hydrogen atom in the Schrödinger picture"
     },
     {
-      "slug": "str",
-      "file": "sd-06-STR-Special-relativity.md",
-      "title": "Special relativity",
-      "about": "Explainer and summary: Lorentz transform, time dilation, relativistic momentum and energy"
+      "slug": "toolkit-practice",
+      "file": "chapters/toolkit-thermo-practice.md",
+      "title": "Practice set: thermodynamics",
+      "about": "42 mixed questions with worked solutions, from recall to numericals"
     },
     {
-      "slug": "thermo-5",
-      "file": "sd-07-Thermo-5-Free-energy-and-phases.md",
-      "title": "Thermo 5: Free energy and phases",
-      "about": "Gibbs and Helmholtz energies, Maxwell relations, phase equilibria"
-    },
-    {
-      "slug": "mech-1",
-      "file": "sd-08-Mechanics-1-Newtonian-mechanics-of-one-particle-and-many.md",
-      "title": "Mechanics 1: Newtonian mechanics",
-      "about": "One particle and systems of particles"
-    },
-    {
-      "slug": "mech-2",
-      "file": "sd-09-Mechanics-2-Calculus-of-variations-and-Lagrangian-mechanics.md",
-      "title": "Mechanics 2: Lagrangian mechanics",
-      "about": "Calculus of variations, Euler–Lagrange, constraints, symmetries"
-    },
-    {
-      "slug": "mech-3",
-      "file": "sd-10-Mechanics-3-Hamiltonian-dynamics-and-the-two-body-problem.md",
-      "title": "Mechanics 3: Hamiltonian and two-body",
-      "about": "Hamilton's equations, phase space, central forces and orbits"
-    },
-    {
-      "slug": "intro-nonlinear",
-      "file": "sd-11-Intro-Scales-modelling-and-nonlinear-dynamics.md",
-      "title": "Intro, scales and nonlinear dynamics",
-      "about": "Scales, modelling, logistic map, prey–predator"
-    },
-    {
-      "slug": "thermo-notes",
-      "file": "10-thermo-quiz2-notes.md",
-      "title": "Thermodynamics study notes",
-      "about": "Sign convention, perfect gas, kinetic theory, first law, enthalpy, heat capacities, second law and entropy, in one pass (Atkins 1A to 3B)"
-    },
-    {
-      "slug": "gases",
-      "file": "11-gases-1A-1C-summary.md",
-      "title": "Gases (Atkins 1A to 1C)",
-      "about": "Perfect gas, kinetic model, Maxwell–Boltzmann, real gases and van der Waals",
-      "pdf": "1-gases-1A-1C-summary.pdf"
-    },
-    {
-      "slug": "first-law",
-      "file": "12-first-law-2A-2B-2E.md",
-      "title": "First law (Atkins 2A, 2B, 2E)",
-      "about": "Work, heat, internal energy, enthalpy, adiabatic changes, with solved homework",
-      "pdf": "2-first-law-2A-2B-2E.pdf"
-    },
-    {
-      "slug": "thermochem",
-      "file": "13-thermochem-state-functions-2C-2D.md",
-      "title": "Thermochemistry and state functions (Atkins 2C, 2D)",
-      "about": "Standard enthalpies, Hess and Kirchhoff, exact differentials, Joule–Thomson, with solved homework",
-      "pdf": "3-thermochem-state-functions-2C-2D.pdf"
-    },
-    {
-      "slug": "second-law",
-      "file": "14-second-law-entropy-3A-3B.md",
-      "title": "Second law and entropy (Atkins 3A, 3B)",
-      "about": "Cycles and engines, Kelvin–Planck and Clausius, Carnot, Clausius inequality, entropy changes, Boltzmann",
-      "pdf": "4-second-law-entropy-3A-3B.pdf"
-    },
-    {
-      "slug": "relativity",
-      "file": "17-str-sheet.md",
-      "title": "Special relativity sheet",
-      "about": "Postulates, Lorentz transform, time dilation, length contraction, Doppler, relativistic momentum and energy (Beiser ch. 1 and slides)",
-      "pdf": "7-str-sheet.pdf"
-    },
-    {
-      "slug": "cheatsheet",
-      "file": "15-quiz2-cheatsheet.md",
+      "slug": "toolkit-cheatsheet",
+      "file": "chapters/toolkit-cheatsheet.md",
       "title": "Thermodynamics cheat sheet",
-      "about": "Everything from Atkins 1A to 3B on a few pages, mapped to the slides",
+      "about": "Atkins 1A to 3B on a few pages, mapped to the slides",
       "pdf": "5-quiz2-cheatsheet.pdf"
     },
     {
-      "slug": "formula-sheet",
-      "file": "16-quiz2-formula-sheet.md",
+      "slug": "toolkit-formulas",
+      "file": "chapters/toolkit-formulas.md",
       "title": "Thermodynamics formula sheet",
       "about": "Constants and every formula from 1A to 3B",
       "pdf": "6-quiz2-formula-sheet.pdf"
     },
     {
-      "slug": "definitions",
-      "file": "18-quiz2-definitions.md",
+      "slug": "toolkit-definitions",
+      "file": "chapters/toolkit-definitions.md",
       "title": "Thermodynamics definitions",
       "about": "Every term to state precisely in an exam",
       "pdf": "8-quiz2-definitions.pdf"
     },
     {
-      "slug": "practice",
-      "file": "quiz2-practice-questions.md",
-      "title": "Thermodynamics practice questions",
-      "about": "Recall, understanding and exam-style derivations; try these before opening the answer key"
-    },
-    {
-      "slug": "answer-key",
-      "file": "quiz2-answer-key.md",
-      "title": "Practice answer key",
-      "about": "Answers to the practice questions"
-    },
-    {
-      "slug": "flashcards",
-      "file": "quiz2-flashcards.md",
+      "slug": "toolkit-cards",
+      "file": "chapters/toolkit-flashcards.md",
       "title": "Thermodynamics flashcards",
       "about": "69 cards with an Anki import block"
     }
