@@ -3229,3 +3229,307 @@ $$
 | Joule–Thomson | H\_f = H\_i; μ = (∂T/∂p)\_H; ΔT ≈ μΔp | μ > 0 cools |
 | van der Waals μ | μ ≈ (2a/RT − b)/C\_p,m; T\_I = 2a/(Rb) | N₂: 0.25 K bar⁻¹, \~850 K (measured 621 K) |
 
+
+
+# Practice: Thermodynamics I: gases and the first law
+
+20 questions with worked answers (tap a solution to open it): recall, derivations and numericals for Atkins 1A to 2E. Do them on paper with a calculator, then open the solution. Constants: $R = 8.314$ J K$^{-1}$mol$^{-1}$ $= 0.08314$ L bar K$^{-1}$mol$^{-1}$.
+
+## A. State and explain
+
+### Problem 1 [Thermo 1 · Recall · 3 pts]
+
+State the first law, with the sign convention for $q$ and $w$. What is the difference between a state function and a path function?
+
+*Solution.* **First law.** The internal energy of an isolated system is constant; for a closed system
+
+$$\Delta U = q + w$$
+
+**Sign convention** (system's point of view): $q > 0$ when heat flows **into** the system, $w > 0$ when work is done **on** the system. So expansion work is $w = -P_\text{ext}\Delta V < 0$.
+
+| | **state function** | **path function** |
+|---|---|---|
+| depends on | only the current state | how the state was reached |
+| examples | $U$, $H$, $T$, $P$, $V$, $S$ | $q$, $w$ |
+| $\oint$ over a cycle | $0$ | usually not $0$ |
+
+**Common mistake.** $q$ and $w$ are not state functions, but their **sum** $\Delta U = q + w$ is.
+
+### Problem 2 [Thermo 1 · Recall · 2 pts]
+
+Define the enthalpy $H$. Why is $\Delta H = q_P$ for a process at constant pressure with only expansion work?
+
+*Solution.* **Definition.** $H = U + PV$.
+
+**At constant pressure** (expansion work only, $w = -P\Delta V$):
+
+$$\Delta U = q_P - P\Delta V\ \Rightarrow\ q_P = \Delta U + P\Delta V = \Delta(U + PV) = \Delta H$$
+
+So the heat absorbed at constant pressure equals the enthalpy change; that is why enthalpy is the natural quantity for open-air chemistry and why $C_P = (\partial H/\partial T)_P$.
+
+### Problem 3 [Thermo 1 · Concept · 2 pts]
+
+Why is $C_P$ larger than $C_V$ for a gas? How large is the difference for a perfect gas?
+
+*Solution.* **Reason.** At constant volume all the heat raises the internal energy. At constant pressure the gas also **expands**, doing work $P\Delta V$ against the surroundings, so more heat is needed for the same temperature rise.
+
+**Perfect gas:**
+
+$$C_{P,m} - C_{V,m} = R$$
+
+so $\gamma = C_P/C_V$ is $5/3$ (monatomic) or $7/5$ (diatomic at room temperature).
+
+**Check.** For a liquid or solid, $\Delta V$ is tiny, so $C_P\approx C_V$.
+
+### Problem 4 [Thermo 1 · Concept · 3 pts]
+
+Define the compressibility factor $Z$. What do $Z < 1$ and $Z > 1$ tell you about the intermolecular forces? What is the Boyle temperature?
+
+*Solution.* **Definition.**
+
+$$Z = \frac{PV_m}{RT}$$
+
+$Z = 1$ for a perfect gas at all $P$ and $T$.
+
+- **$Z < 1$:** attraction dominates; the molecules pull together, so the volume is smaller than the perfect-gas value (moderate pressures).
+- **$Z > 1$:** repulsion dominates; at high pressure the molecules' own volume makes the gas harder to compress.
+
+**Boyle temperature $T_B$.** The temperature at which $Z\to1$ with zero slope as $P\to0$ (attraction and repulsion cancel at low pressure). For a van der Waals gas $T_B = a/Rb$.
+
+**Example.** At room temperature N$_2$ has $Z < 1$ at moderate pressure but $Z > 1$ at very high pressure.
+
+### Problem 5 [Thermo 1 · Concept · 3 pts]
+
+What is the Joule–Thomson effect? Define $\mu_{JT}$ and the inversion temperature, and say what is conserved in the process.
+
+*Solution.* **The effect.** A gas forced slowly through a porous plug from high to low pressure (thermally insulated) changes temperature.
+
+**What is conserved.** The enthalpy: $H_f = H_i$ (the expansion is **isenthalpic**).
+
+**Definition.**
+
+$$\mu_{JT} = \left(\frac{\partial T}{\partial P}\right)_H$$
+
+Since the pressure falls ($\Delta P<0$), $\mu_{JT}>0$ means **cooling**.
+
+**Inversion temperature $T_I$.** The temperature at which $\mu_{JT}$ changes sign: below $T_I$ the gas cools on expansion, above it the gas warms. For a van der Waals gas $T_I = 2a/Rb$.
+
+**Use.** Liquefaction of gases (Linde process) and refrigeration.
+
+### Problem 6 [Thermo 1 · Recall · 3 pts]
+
+State Hess's law and define the standard enthalpy of formation. How is $\Delta_rH^\circ$ obtained from formation enthalpies?
+
+*Solution.* **Hess's law.** The enthalpy change of a reaction is the same whether it occurs in one step or in several, because $H$ is a state function.
+
+**Standard enthalpy of formation** $\Delta_fH^\circ$: the enthalpy change for forming **one mole** of a compound from its elements in their **reference states** (most stable form at $1$ bar and the stated temperature). For an element in its reference state, $\Delta_fH^\circ = 0$.
+
+**Reaction enthalpy:**
+
+$$\Delta_rH^\circ = \sum\nu\,\Delta_fH^\circ(\text{products}) - \sum\nu\,\Delta_fH^\circ(\text{reactants})$$
+
+with $\nu$ the stoichiometric coefficients.
+
+## B. Show or derive
+
+### Problem 7 [Thermo 1 · Derivation · 3 pts]
+
+Show that $C_{P,m} - C_{V,m} = R$ for a perfect gas.
+
+*Solution.* **Start** from $H = U + PV$ and, for a perfect gas, $PV = nRT$:
+
+$$H = U + nRT$$
+
+**Differentiate with respect to $T$.** For a perfect gas $U$ depends only on $T$, and so does $H$:
+
+$$\frac{dH}{dT} = \frac{dU}{dT} + nR\ \Rightarrow\ C_P = C_V + nR$$
+
+$$\boxed{C_{P,m} - C_{V,m} = R}$$
+
+**Meaning.** The extra $R$ per mole is the work done on the surroundings when one mole expands at constant pressure while its temperature rises by $1$ K.
+
+### Problem 8 [Thermo 1 · Derivation · 4 pts]
+
+Derive the work done by a perfect gas in a reversible isothermal expansion from $V_1$ to $V_2$. Why is it larger than the work done expanding against a constant external pressure equal to the final pressure?
+
+*Solution.* **Reversible isothermal.** The external pressure matches the gas pressure at every stage, $P_\text{ext} = P = nRT/V$:
+
+$$w = -\int_{V_1}^{V_2}P\,dV = -nRT\int_{V_1}^{V_2}\frac{dV}V = \boxed{-nRT\ln\frac{V_2}{V_1}}$$
+
+**Constant $P_\text{ext} = P_2 = nRT/V_2$** (irreversible):
+
+$$w = -P_2(V_2 - V_1) = -nRT\left(1 - \frac{V_1}{V_2}\right)$$
+
+**Compare.** Writing $x = V_2/V_1 > 1$, the reversible work has magnitude $nRT\ln x$ and the irreversible one $nRT(1 - 1/x)$. Since $\ln x > 1 - 1/x$ for $x > 1$, the reversible process does **more** work.
+
+**Reason.** A reversible expansion keeps $P_\text{ext}$ as large as possible at every stage, so the gas pushes against the biggest possible force. This is the **maximum** work; for compression it is the **minimum** work needed.
+
+### Problem 9 [Thermo 1 · Derivation · 4 pts]
+
+Show that for a reversible adiabatic expansion of a perfect gas the work done on the gas is $w = C_V(T_2 - T_1) = \dfrac{P_2V_2 - P_1V_1}{\gamma - 1}$.
+
+*Solution.* **First law with $q = 0$:** $\Delta U = w$. For a perfect gas $\Delta U = C_V\Delta T$ for **any** process, so
+
+$$w = C_V(T_2 - T_1)$$
+
+**In terms of $P$ and $V$.** Use $T = PV/nR$ and $C_V = nR/(\gamma - 1)$ (from $C_P - C_V = nR$ and $\gamma = C_P/C_V$):
+
+$$w = \frac{nR}{\gamma - 1}\cdot\frac{P_2V_2 - P_1V_1}{nR} = \boxed{\frac{P_2V_2 - P_1V_1}{\gamma - 1}}$$
+
+**Sign check.** In an expansion $T_2 < T_1$, so $w < 0$: the gas does work at the expense of its internal energy.
+
+### Problem 10 [Thermo 1 · Derivation · 3 pts]
+
+Show that $\Delta_rH = \Delta_rU + \Delta n_g RT$ for a reaction involving perfect gases at constant temperature, where $\Delta n_g$ is the change in the number of moles of gas.
+
+*Solution.* **Start** from $H = U + PV$, so for the reaction
+
+$$\Delta H = \Delta U + \Delta(PV)$$
+
+**Solids and liquids** have negligible molar volume, so $\Delta(PV)$ comes only from the gases. With $PV = n_gRT$ and constant $T$:
+
+$$\Delta(PV) = \Delta n_g\,RT$$
+
+$$\boxed{\Delta_rH = \Delta_rU + \Delta n_g\,RT}$$
+
+**Meaning.** $\Delta H$ and $\Delta U$ differ only when the amount of gas changes. If $\Delta n_g = 0$ they are equal.
+
+### Problem 11 [Thermo 1 · Derivation · 3 pts]
+
+Derive Kirchhoff's law for the temperature dependence of a reaction enthalpy.
+
+*Solution.* **For each substance** at constant pressure, $dH = C_P\,dT$, so
+
+$$H(T_2) - H(T_1) = \int_{T_1}^{T_2}C_P\,dT$$
+
+**Apply to products and reactants** and subtract (weighted by the stoichiometric coefficients):
+
+$$\Delta_rH(T_2) - \Delta_rH(T_1) = \int_{T_1}^{T_2}\Delta_rC_P\,dT,\qquad \Delta_rC_P = \sum\nu C_{P,m}(\text{products}) - \sum\nu C_{P,m}(\text{reactants})$$
+
+$$\boxed{\Delta_rH(T_2) = \Delta_rH(T_1) + \int_{T_1}^{T_2}\Delta_rC_P\,dT}$$
+
+If $\Delta_rC_P$ is constant, this is $\Delta_rH(T_1) + \Delta_rC_P\,(T_2 - T_1)$.
+
+## C. Short numericals
+
+### Problem 12 [Thermo 1 · Numerical · 4 pts]
+
+$1.00$ mol of a perfect gas at $300$ K expands isothermally from $5.00$ L to $20.0$ L. Find $w$ (a) if the expansion is reversible, (b) if it is against a constant external pressure equal to the final pressure.
+
+*Solution.* **Idea.** Reversible: $w = -nRT\ln(V_2/V_1)$. Irreversible: $w = -P_\text{ext}\Delta V$.
+
+**(a)** $w = -(1.00)(8.314)(300)\ln\dfrac{20.0}{5.00} = -2494\times1.386 = \boxed{-3458\ \text{J}}$
+
+**(b)** $P_2 = \dfrac{nRT}{V_2} = \dfrac{(8.314)(300)}{0.0200\ \text{m}^3} = 1.247\times10^5$ Pa, so
+
+$$w = -P_2\Delta V = -(1.247\times10^5)(0.0150) = \boxed{-1871\ \text{J}}$$
+
+**Check.** $\Delta U = 0$ in both cases (isothermal, perfect gas), so $q = -w$. The reversible path does about $1.8$ times more work, as expected.
+
+### Problem 13 [Thermo 1 · Numerical · 3 pts]
+
+A $50.0$ g piece of metal at $100\,^\circ$C is dropped into $100$ g of water at $20.0\,^\circ$C in an insulated container. The final temperature is $25.0\,^\circ$C. Find the specific heat capacity of the metal ($c_\text{water} = 4.18$ J g$^{-1}$K$^{-1}$).
+
+*Solution.* **Idea.** No heat is lost, so heat lost by the metal equals heat gained by the water.
+
+$$m_mc_m(100 - 25) = m_wc_w(25 - 20)$$
+
+$$c_m = \frac{(100)(4.18)(5.0)}{(50.0)(75.0)} = \frac{2090}{3750} = \boxed{0.557\ \text{J g}^{-1}\text{K}^{-1}}$$
+
+**Check.** About $0.56$ J g$^{-1}$K$^{-1}$ is typical of a metal like iron ($0.45$) or zinc ($0.39$), well below water, as it should be.
+
+### Problem 14 [Thermo 1 · Numerical · 4 pts]
+
+$2.00$ mol of helium (monatomic perfect gas) at $300$ K expands reversibly and adiabatically from $10.0$ L to $40.0$ L. Find $T_2$, $q$, $w$ and $\Delta U$.
+
+*Solution.* **Idea.** Reversible adiabatic: $TV^{\gamma-1}$ is constant with $\gamma = 5/3$, so $\gamma - 1 = 2/3$.
+
+$$T_2 = T_1\left(\frac{V_1}{V_2}\right)^{2/3} = 300\times\left(\frac14\right)^{2/3} = \frac{300}{2.52} = \boxed{119\ \text{K}}$$
+
+$$q = 0$$
+
+$$\Delta U = w = nC_V\Delta T = (2.00)(1.5)(8.314)(119 - 300) = \boxed{-4.51\ \text{kJ}}$$
+
+**Check.** The gas does work on the surroundings ($w<0$) and cools, as in an adiabatic expansion.
+
+### Problem 15 [Thermo 1 · Numerical · 3 pts]
+
+Use $\Delta_fH^\circ$ values (kJ mol$^{-1}$): CH$_4$(g) $-74.8$, CO$_2$(g) $-393.5$, H$_2$O(l) $-285.8$ to find $\Delta_rH^\circ$ for $\text{CH}_4 + 2\text{O}_2 \to \text{CO}_2 + 2\text{H}_2\text{O(l)}$, and the heat released when $8.0$ g of methane burns.
+
+*Solution.* **Idea.** $\Delta_rH^\circ = \sum\nu\Delta_fH^\circ(\text{products}) - \sum\nu\Delta_fH^\circ(\text{reactants})$. O$_2$ is an element in its reference state: $\Delta_fH^\circ = 0$.
+
+$$\Delta_rH^\circ = (-393.5) + 2(-285.8) - (-74.8) = -393.5 - 571.6 + 74.8 = \boxed{-890.3\ \text{kJ mol}^{-1}}$$
+
+**Heat from $8.0$ g.** $n = 8.0/16.0 = 0.50$ mol:
+
+$$q = 0.50\times890.3 = \boxed{445\ \text{kJ released}}$$
+
+**Check.** Strongly exothermic, as expected for combustion.
+
+### Problem 16 [Thermo 1 · Numerical · 3 pts]
+
+For the combustion in Problem 15 at $298$ K (with H$_2$O liquid), find $\Delta_rU^\circ$.
+
+*Solution.* **Idea.** $\Delta_rU = \Delta_rH - \Delta n_gRT$ (Problem 10).
+
+**Gas count:** reactants $\text{CH}_4 + 2\text{O}_2$ = $3$ mol gas; products $\text{CO}_2$ = $1$ mol gas (the water is liquid), so $\Delta n_g = 1 - 3 = -2$.
+
+$$\Delta_rU^\circ = -890.3 - (-2)(8.314\times10^{-3})(298) = -890.3 + 4.96 = \boxed{-885.3\ \text{kJ mol}^{-1}}$$
+
+**Comment.** $\Delta n_g<0$, so the gas shrinks and the atmosphere does work **on** the system: the heat at constant pressure ($|\Delta H|$) is larger than the heat at constant volume ($|\Delta U|$).
+
+### Problem 17 [Thermo 1 · Numerical · 4 pts]
+
+For $\text{N}_2 + 3\text{H}_2 \to 2\text{NH}_3$, $\Delta_rH^\circ(298\ \text{K}) = -92.2$ kJ mol$^{-1}$. With $C_{P,m}$ (J K$^{-1}$mol$^{-1}$): N$_2$ $29.1$, H$_2$ $28.8$, NH$_3$ $35.1$ (assumed constant), find $\Delta_rH^\circ$ at $500$ K.
+
+*Solution.* **Idea.** Kirchhoff: $\Delta_rH(T_2) = \Delta_rH(T_1) + \Delta_rC_P\,(T_2 - T_1)$.
+
+$$\Delta_rC_P = 2(35.1) - 29.1 - 3(28.8) = 70.2 - 29.1 - 86.4 = -45.3\ \text{J K}^{-1}\text{mol}^{-1}$$
+
+$$\Delta_rH^\circ(500) = -92.2 + (-45.3\times10^{-3})(500 - 298) = -92.2 - 9.15 = \boxed{-101.4\ \text{kJ mol}^{-1}}$$
+
+**Check.** The products have less heat capacity than the reactants, so the reaction becomes **more** exothermic as $T$ rises.
+
+### Problem 18 [Thermo 1 · Numerical · 4 pts]
+
+$1.00$ mol of CO$_2$ ($a = 3.640$ L$^2$ bar mol$^{-2}$, $b = 0.0427$ L mol$^{-1}$) occupies $1.00$ L at $300$ K. Find $P$ for a perfect gas and for a van der Waals gas, and $Z$.
+
+*Solution.* **Idea.** $RT = 0.08314\times300 = 24.94$ L bar mol$^{-1}$ and $V_m = 1.00$ L mol$^{-1}$.
+
+$$P_\text{ideal} = \frac{RT}{V_m} = \boxed{24.9\ \text{bar}}$$
+
+$$P_\text{vdW} = \frac{RT}{V_m - b} - \frac a{V_m^2} = \frac{24.94}{0.9573} - \frac{3.640}{1.00} = 26.05 - 3.64 = \boxed{22.4\ \text{bar}}$$
+
+$$Z = \frac{PV_m}{RT} = \frac{22.4}{24.94} = \boxed{0.90}$$
+
+**Comment.** $Z<1$: the attraction ($a$) dominates the repulsion ($b$) for CO$_2$, which is why it is easy to liquefy.
+
+### Problem 19 [Thermo 1 · Numerical · 3 pts]
+
+CO$_2$ at $300$ K is throttled from $12$ atm to $2$ atm. Given $\mu_{JT} = 1.1$ K atm$^{-1}$, estimate the temperature change. Is the final state warmer or cooler?
+
+*Solution.* **Idea.** For a small pressure change at constant enthalpy, $\Delta T \approx \mu_{JT}\Delta P$.
+
+$$\Delta P = 2 - 12 = -10\ \text{atm}$$
+
+$$\Delta T \approx (1.1\ \text{K atm}^{-1})(-10\ \text{atm}) = \boxed{-11\ \text{K}}$$
+
+**Answer.** The gas ends about $289$ K, **cooler** (since $\mu_{JT}>0$ at this temperature, which is below the inversion temperature).
+
+**Note.** $\mu_{JT}$ changes with $T$ and $P$, so this is an estimate; for a large drop one integrates.
+
+### Problem 20 [Thermo 1 · Numerical · 4 pts]
+
+$1.00$ mol of a perfect diatomic gas ($C_{V,m} = \tfrac52R$) is heated from $300$ K to $400$ K (a) at constant volume, (b) at constant pressure. Find $q$, $w$, $\Delta U$ and $\Delta H$ for each.
+
+*Solution.* **Idea.** For a perfect gas $\Delta U$ and $\Delta H$ depend only on $\Delta T$, whatever the path:
+
+$$\Delta U = nC_V\Delta T = \tfrac52(8.314)(100) = 2079\ \text{J},\qquad \Delta H = nC_P\Delta T = \tfrac72(8.314)(100) = 2910\ \text{J}$$
+
+**(a) Constant volume:** $w = 0$, $q_V = \Delta U = \boxed{2079\ \text{J}}$, $\Delta H = 2910$ J.
+
+**(b) Constant pressure:** $q_P = \Delta H = \boxed{2910\ \text{J}}$, and
+
+$$w = -P\Delta V = -nR\Delta T = \boxed{-831\ \text{J}}$$
+
+**Check.** $q + w = 2910 - 831 = 2079 = \Delta U$ ✓. The extra $831$ J of heat at constant pressure is the work done in expanding.
