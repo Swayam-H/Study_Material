@@ -82,6 +82,12 @@
       "about": "The hydrogen atom in the Schrödinger picture"
     },
     {
+      "slug": "mock-endsem",
+      "file": "chapters/toolkit-mock-endsem.md",
+      "title": "Practice: Mock endsem",
+      "about": "A 50-point, 120-minute paper across all 12 chapters, then the marking scheme, worked solutions and a score sheet by chapter"
+    },
+    {
       "slug": "toolkit-practice",
       "file": "chapters/toolkit-thermo-practice.md",
       "title": "Practice set: thermodynamics",
