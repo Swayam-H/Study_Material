@@ -319,19 +319,31 @@ Sketch the radial probability densities of 1s, 2s and 2p and mark their nodes.
 
 Find the energy of a 3d electron in hydrogen. Does it differ from a 3s electron? Why?
 
-*Solution.* E₃ = −13.6/9 ≈ −1.51 eV, the same for 3s, 3p and 3d. In hydrogen the energy depends only on n.
+*Solution.* **Idea.** In hydrogen, $E_n = -13.6/n^2$ eV depends only on $n$.
+
+$$E_3 = -\frac{13.6}{9} \approx \boxed{-1.51\ \text{eV}}$$
+
+The 3s, 3p and 3d states all have this energy: they are degenerate. This is special to the $1/r$ potential. (In atoms with more electrons, $l$ also affects the energy.)
 
 ### Problem 19 [QM 5 · Numerical · 3 pts]
 
 For a 1s electron, the probability of being found inside r = a₀ is 1 − 5e⁻². Evaluate it (e² ≈ 7.39) and comment.
 
-*Solution.* 5e⁻² ≈ 5/7.39 ≈ 0.68, so P ≈ 0.32. The electron is more likely to be found outside a₀ than inside it, even though a₀ is the single most probable radius, because the distribution has a long tail.
+*Solution.* **Idea.** The probability of being inside $a_0$ is $1 - 5e^{-2}$, so evaluate it.
+
+$$5e^{-2} \approx \frac{5}{7.39} \approx 0.68\ \Rightarrow\ P \approx 1 - 0.68 = \boxed{0.32}$$
+
+**Comment.** The electron is more likely to be found **outside** $a_0$ than inside it, even though $a_0$ is the single most probable radius. The radial distribution $P(r) \propto r^2e^{-2r/a_0}$ peaks at $a_0$ but has a long tail beyond it.
 
 ### Problem 20 [QM 5 · Numerical · 2 pts]
 
 A hydrogen atom is in a 4f state. Which states can it decay to directly?
 
-*Solution.* Δl = −1, so only to d states with lower energy: 3d. (4d is the same energy and 4f → 4d would not emit.)
+*Solution.* **Idea.** Selection rule $\Delta l = \pm1$ (a photon carries one unit of angular momentum), and the atom must go to a lower energy.
+
+4f has $l = 3$, so the final state needs $l = 2$ or $4$. $l = 4$ does not exist for $n \le 4$, and 4d is at the same energy (no photon). So the only direct decay is
+
+$$4f \to \boxed{3d}$$
 
 ## D. Discuss
 

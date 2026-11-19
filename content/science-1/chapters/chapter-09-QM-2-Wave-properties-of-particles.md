@@ -294,49 +294,87 @@ Using the relativistic relations E = γmc² and p = γmv, write the de Broglie w
 
 Find the de Broglie wavelength of an electron accelerated through 100 V.
 
-*Solution.* λ ≈ 1.226/√100 nm = 0.123 nm.
+*Solution.* **Idea.** For an electron accelerated through $V$ volts, $\lambda = h/\sqrt{2meV} \approx 1.226/\sqrt V$ nm.
+
+$$\lambda = \frac{1.226}{\sqrt{100}}\ \text{nm} = \boxed{0.123\ \text{nm}}$$
 
 ### Problem 18 [QM 2 · Numerical]
 
 Find the de Broglie wavelength of a 0.1 kg ball moving at 10 m/s, and compare it with the size of a proton (about 10⁻¹⁵ m).
 
-*Solution.* λ = 6.6 × 10⁻³⁴ / (0.1 × 10) = 6.6 × 10⁻³⁴ m, about 10¹⁹ times smaller than a proton.
+*Solution.* **Idea.** $\lambda = h/p = h/mv$.
+
+$$\lambda = \frac{6.6\times10^{-34}\ \text{J s}}{(0.1\ \text{kg})(10\ \text{m/s})} = \boxed{6.6\times10^{-34}\ \text{m}}$$
+
+Compared with a proton ($\sim10^{-15}$ m) it is about $10^{19}$ times smaller, so no wave effect could ever be seen for such a ball.
 
 ### Problem 19 [QM 2 · Numerical]
 
 In the Davisson–Germer experiment the electrons were accelerated through 54 V. Find their de Broglie wavelength.
 
-*Solution.* λ ≈ 1.226/√54 ≈ 1.226/7.35 ≈ 0.167 nm.
+*Solution.* **Idea.** Same formula as above, with $V = 54$ V.
+
+$$\lambda = \frac{1.226}{\sqrt{54}} = \frac{1.226}{7.35}\ \text{nm} = \boxed{0.167\ \text{nm}}$$
+
+This matches the diffraction result (0.165 nm), which confirmed matter waves.
 
 ### Problem 20 [QM 2 · Numerical]
 
 An electron is confined to a box 0.1 nm wide. Find E₁ and the energy of the photon emitted in the n = 2 → 1 transition.
 
-*Solution.* E₁ = (hc)²/(8mₑc²L²) = (1240)² / (8 × 0.511 × 10⁶ × 0.01) eV ≈ 38 eV. The 2 → 1 photon has 4E₁ − E₁ = 3E₁ ≈ 113 eV, in the far ultraviolet.
+*Solution.* **Idea.** $E_n = n^2h^2/8mL^2$. Write it as $E_1 = (hc)^2/(8\,m_ec^2L^2)$ so that all numbers are in eV and nm.
+
+$$E_1 = \frac{(1240\ \text{eV nm})^2}{8(0.511\times10^6\ \text{eV})(0.1\ \text{nm})^2} = \frac{1.54\times10^6}{4.09\times10^4} \approx \boxed{38\ \text{eV}}$$
+
+$$E_2 - E_1 = 4E_1 - E_1 = 3E_1 \approx \boxed{113\ \text{eV}}$$
+
+which is a far-ultraviolet photon ($\lambda = 1240/113 \approx 11$ nm).
 
 ### Problem 21 [QM 2 · Numerical]
 
 An electron is located within 0.1 nm. Estimate the minimum spread in its momentum and its minimum kinetic energy.
 
-*Solution.* Δp c ≥ ħc/2Δx = 197/0.2 ≈ 1 keV, so Δp ≈ 5 × 10⁻²⁵ kg m/s. KE ≈ (Δp c)²/2mₑc² = (985)²/(1.02 × 10⁶) ≈ 1 eV.
+*Solution.* **Idea.** Uncertainty principle $\Delta x\,\Delta p \ge \hbar/2$, then $KE \approx (\Delta p)^2/2m$.
+
+$$\Delta p\,c \ge \frac{\hbar c}{2\Delta x} = \frac{197\ \text{eV nm}}{2(0.1\ \text{nm})} \approx 985\ \text{eV}\ \Rightarrow\ \Delta p \approx 5\times10^{-25}\ \text{kg m/s}$$
+
+$$KE \approx \frac{(\Delta p\,c)^2}{2m_ec^2} = \frac{(985)^2}{1.02\times10^6} \approx \boxed{1\ \text{eV}}$$
+
+**Check.** Atomic energies are of order eV, as they should be for an electron confined to atomic size.
 
 ### Problem 22 [QM 2 · Numerical]
 
 A proton is confined to a nucleus of size 10⁻¹⁴ m. Estimate its minimum kinetic energy. Is this a reasonable nuclear energy scale?
 
-*Solution.* Δp c ≥ 197/(2 × 10⁻⁵) ≈ 10 MeV. KE ≈ (10)²/(2 × 938) ≈ 0.05 MeV. Using Δp ≈ ħ/Δx instead gives about 0.2 MeV. Either way it is in the 0.1–1 MeV range, consistent with nuclear energies of a few MeV.
+*Solution.* **Idea.** Same method, for a proton ($m_pc^2 = 938$ MeV) with $\Delta x = 10^{-14}$ m $= 10^{-5}$ nm.
+
+$$\Delta p\,c \ge \frac{197\ \text{eV nm}}{2\times10^{-5}\ \text{nm}} \approx 10\ \text{MeV}$$
+
+$$KE \approx \frac{(\Delta p\,c)^2}{2m_pc^2} = \frac{10^2}{2(938)} \approx \boxed{0.05\ \text{MeV}}$$
+
+Using $\Delta p \approx \hbar/\Delta x$ (a factor 2 larger) gives about $0.2$ MeV. Either way it is $\sim 0.1$ MeV, within an order of magnitude or two of nuclear binding energies per nucleon (MeV), so confinement alone gives the right nuclear scale. (An electron in the same space would need $\sim10$ MeV, far more than beta-decay energies, which rules out electrons living in the nucleus.)
 
 ### Problem 23 [QM 2 · Numerical]
 
 An excited atomic state lives 10⁻⁸ s. Find the minimum uncertainty in its energy, in eV.
 
-*Solution.* ΔE ≥ ħ/2Δt = 6.6 × 10⁻¹⁶ eV s / (2 × 10⁻⁸ s) ≈ 3 × 10⁻⁸ eV.
+*Solution.* **Idea.** Energy–time uncertainty: $\Delta E\,\Delta t \ge \hbar/2$.
+
+$$\Delta E \ge \frac{\hbar}{2\Delta t} = \frac{6.6\times10^{-16}\ \text{eV s}}{2(10^{-8}\ \text{s})} \approx \boxed{3\times10^{-8}\ \text{eV}}$$
+
+This is the natural line width of the spectral line.
 
 ### Problem 24 [QM 2 · Numerical]
 
 Find the de Broglie wavelength of a thermal neutron with KE = 0.025 eV. Why are such neutrons used to study crystals?
 
-*Solution.* pc = √(2 × 939 × 10⁶ × 0.025) eV ≈ 6.9 keV, so λ = 1240/6900 nm ≈ 0.18 nm. That matches atomic spacings, so the neutrons diffract from crystals. Being neutral, they also go deep into the material.
+*Solution.* **Idea.** Non-relativistic neutron: $p = \sqrt{2mK}$, so $pc = \sqrt{2(m_nc^2)K}$ and $\lambda = hc/pc$.
+
+$$pc = \sqrt{2(939\times10^6\ \text{eV})(0.025\ \text{eV})} \approx 6.9\ \text{keV}$$
+
+$$\lambda = \frac{1240\ \text{eV nm}}{6900\ \text{eV}} \approx \boxed{0.18\ \text{nm}}$$
+
+**Why used on crystals.** 0.18 nm is the size of atomic spacings, so the neutrons diffract strongly. Being neutral they also penetrate deep into the material.
 
 ## D. Estimate and discuss
 

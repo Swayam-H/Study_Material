@@ -355,55 +355,87 @@ Show that the stopping potential is a linear function of frequency. What are its
 
 Light of wavelength 310 nm falls on a metal with work function 2.0 eV. Find KE\_max of the photoelectrons and the stopping potential.
 
-*Solution.* E = 1240/310 = 4.0 eV. KE\_max = 4.0 − 2.0 = 2.0 eV. V₀ = 2.0 V.
+*Solution.* **Idea.** Photoelectric equation: $h\nu = KE_\text{max} + \phi$, and $eV_0 = KE_\text{max}$. Use $hc = 1240$ eV nm.
+
+$$E_\text{photon} = \frac{hc}{\lambda} = \frac{1240}{310} = 4.0\ \text{eV}$$
+
+$$KE_\text{max} = 4.0 - 2.0 = \boxed{2.0\ \text{eV}},\qquad V_0 = \frac{KE_\text{max}}{e} = \boxed{2.0\ \text{V}}$$
 
 ### Problem 20 [QM 1 · Numerical · 3 pts]
 
 The threshold wavelength for a metal is 620 nm. Find its work function in eV.
 
-*Solution.* φ = 1240/620 = 2.0 eV.
+*Solution.* **Idea.** At threshold the photon energy just equals the work function: $\phi = h\nu_0 = hc/\lambda_0$.
+
+$$\phi = \frac{1240\ \text{eV nm}}{620\ \text{nm}} = \boxed{2.0\ \text{eV}}$$
 
 ### Problem 21 [QM 1 · Numerical · 3 pts]
 
 An X-ray tube runs at 40 kV. Find the cutoff wavelength.
 
-*Solution.* λ\_min = 1240 eV nm / 40 000 eV = 0.031 nm = 31 pm.
+*Solution.* **Idea.** The most energetic photon carries all the electron's energy $eV$, so $\lambda_\text{min} = hc/eV$.
+
+$$\lambda_\text{min} = \frac{1240\ \text{eV nm}}{40\,000\ \text{eV}} = 0.031\ \text{nm} = \boxed{31\ \text{pm}}$$
 
 ### Problem 22 [QM 1 · Numerical · 3 pts]
 
 X-rays of wavelength 0.1 nm reflect from a crystal at a first-order Bragg angle of 30°. Find the plane spacing d.
 
-*Solution.* d = nλ/(2 sinθ) = 0.1/(2 × 0.5) = 0.1 nm.
+*Solution.* **Idea.** Bragg: $2d\sin\theta = n\lambda$ with $n = 1$.
+
+$$d = \frac{n\lambda}{2\sin\theta} = \frac{0.1\ \text{nm}}{2(0.5)} = \boxed{0.1\ \text{nm}}$$
 
 ### Problem 23 [QM 1 · Numerical · 4 pts]
 
 X-rays of wavelength 10.0 pm are Compton-scattered at 90°. Find the scattered wavelength and the kinetic energy given to the electron (in keV).
 
-*Solution.* Δλ = 2.43(1 − cos 90°) = 2.43 pm, so λ′ = 12.43 pm. E = 1240/0.0100 nm = 124 keV and E′ = 1240/0.01243 ≈ 100 keV. The electron gets about 24 keV.
+*Solution.* **Idea.** Compton shift $\Delta\lambda = \lambda_C(1 - \cos\phi)$ with $\lambda_C = 2.43$ pm. The electron's kinetic energy is the energy the photon loses.
+
+$$\Delta\lambda = 2.43(1 - \cos90^\circ) = 2.43\ \text{pm}\ \Rightarrow\ \lambda' = 10.0 + 2.43 = \boxed{12.43\ \text{pm}}$$
+
+$$E = \frac{1240}{0.0100} = 124\ \text{keV},\qquad E' = \frac{1240}{0.01243} \approx 100\ \text{keV}$$
+
+$$KE_e = E - E' \approx \boxed{24\ \text{keV}}$$
 
 ### Problem 24 [QM 1 · Numerical · 3 pts]
 
 What is the maximum Compton shift for scattering off an electron? Off a proton (m\_p ≈ 1836 mₑ)?
 
-*Solution.* Maximum at φ = 180°: 2λ\_C = 4.85 pm for an electron. For a proton λ\_C = 2.43 pm / 1836 ≈ 1.3 fm, so the maximum is about 2.6 fm, far too small to see.
+*Solution.* **Idea.** The maximum shift is at $\phi = 180^\circ$: $\Delta\lambda_\text{max} = 2\lambda_C = 2h/mc$, which is inversely proportional to the target mass.
+
+**Electron:** $2\lambda_C = \boxed{4.85\ \text{pm}}$.
+
+**Proton:** $\lambda_C = 2.43\ \text{pm}/1836 = 1.3\ \text{fm}$, so $\Delta\lambda_\text{max} \approx \boxed{2.6\ \text{fm}}$, far too small to measure. That is why Compton scattering is seen from electrons, not nuclei.
 
 ### Problem 25 [QM 1 · Numerical · 3 pts]
 
 The Sun's surface is at about 5800 K. Estimate the wavelength of peak emission. What colour is that?
 
-*Solution.* λ\_max = 2.9 × 10⁻³ / 5800 ≈ 5 × 10⁻⁷ m = 500 nm, blue-green. The Sun looks white because it emits strongly across the whole visible band.
+*Solution.* **Idea.** Wien's law: $\lambda_\text{max}T = 2.898\times10^{-3}$ m K.
+
+$$\lambda_\text{max} = \frac{2.9\times10^{-3}}{5800} \approx 5\times10^{-7}\ \text{m} = \boxed{500\ \text{nm}}$$
+
+That is blue-green (the peak of the visible band). The Sun looks white because it emits strongly across all visible wavelengths.
 
 ### Problem 26 [QM 1 · Numerical · 3 pts]
 
 A 1.5 MeV gamma ray makes an electron–positron pair. What is their total kinetic energy?
 
-*Solution.* KE = 1.5 − 1.02 = 0.48 MeV, shared between the two particles.
+*Solution.* **Idea.** Pair production needs the rest energy of two electron masses, $2m_ec^2 = 1.02$ MeV. The rest is kinetic energy.
+
+$$KE_\text{total} = 1.5 - 1.02 = \boxed{0.48\ \text{MeV}}$$
+
+shared between the electron and the positron.
 
 ### Problem 27 [QM 1 · Numerical · 3 pts]
 
 Estimate how many photons per second a 1 mW red laser pointer (650 nm) emits.
 
-*Solution.* E = 1240/650 ≈ 1.9 eV ≈ 3 × 10⁻¹⁹ J. N = 10⁻³ / 3 × 10⁻¹⁹ ≈ 3 × 10¹⁵ photons per second.
+*Solution.* **Idea.** Power = (energy per photon) × (photons per second).
+
+$$E_\gamma = \frac{1240}{650} = 1.9\ \text{eV} = 1.9 \times 1.6\times10^{-19} \approx 3\times10^{-19}\ \text{J}$$
+
+$$N = \frac{P}{E_\gamma} = \frac{10^{-3}}{3\times10^{-19}} \approx \boxed{3\times10^{15}\ \text{photons per second}}$$
 
 ## D. Estimate and discuss
 

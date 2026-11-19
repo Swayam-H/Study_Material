@@ -1789,73 +1789,135 @@ Using the phase rule, show that four phases of a pure substance cannot coexist.
 
 The molar heat capacity of a solid at 10 K is 0.43 J K⁻¹ mol⁻¹. Find its molar entropy at that temperature.
 
-*Solution.* S = C\_p/3 = 0.14 J K⁻¹ mol⁻¹.
+*Solution.* **Idea.** At very low temperature $C_p = aT^3$ (Debye), and the third law sets $S(0) = 0$.
+
+$$S(T) = \int_0^T\frac{C_p}{T'}\,dT' = \int_0^T aT'^2\,dT' = \frac{aT^3}{3} = \frac{C_p(T)}{3}$$
+
+$$S(10\ \text{K}) = \frac{0.43}{3} = \boxed{0.14\ \text{J K}^{-1}\text{mol}^{-1}}$$
 
 ### Problem 17 [Thermo 5 · Numerical · 2 pts]
 
 Calculate Δ\_rS° at 298 K for ½N₂(g) + 3/2 H₂(g) → NH₃(g). S°\_m: NH₃ 192.45, N₂ 191.61, H₂ 130.68 J K⁻¹ mol⁻¹. *(E3C.3(a))*
 
-*Solution.* 192.45 − ½(191.61) − 3/2(130.68) = 192.45 − 95.81 − 196.02 = −99.4 J K⁻¹ mol⁻¹. Negative, since 2 mol of gas become 1.
+*Solution.* **Idea.** $\Delta_rS^\circ = \sum\nu S^\circ_m(\text{products}) - \sum\nu S^\circ_m(\text{reactants})$, with $\nu$ the stoichiometric coefficients.
+
+$$\Delta_rS^\circ = 192.45 - \tfrac12(191.61) - \tfrac32(130.68) = 192.45 - 95.81 - 196.02 = \boxed{-99.4\ \text{J K}^{-1}\text{mol}^{-1}}$$
+
+**Check.** Negative, as expected: two moles of gas ($\tfrac12$ N$_2$ + $\tfrac32$ H$_2$) become one mole of gas, so the disorder falls.
 
 ### Problem 18 [Thermo 5 · Numerical · 2 pts]
 
 Find Δ\_rG° at 298 K for 4HI(g) + O₂(g) → 2I₂(s) + 2H₂O(l). Δ\_fG°: HI(g) +1.70, H₂O(l) −237.13 kJ mol⁻¹. *(E3D.2(a))*
 
-*Solution.* 2(−237.13) − 4(1.70) = −474.26 − 6.80 = −481.1 kJ mol⁻¹. Spontaneous.
+*Solution.* **Idea.** $\Delta_rG^\circ = \sum\nu\Delta_fG^\circ(\text{products}) - \sum\nu\Delta_fG^\circ(\text{reactants})$. Elements in their reference states (I$_2$(s), O$_2$(g)) have $\Delta_fG^\circ = 0$.
+
+$$\Delta_rG^\circ = 2(-237.13) - 4(+1.70) = -474.26 - 6.80 = \boxed{-481.1\ \text{kJ mol}^{-1}}$$
+
+**Check.** $\Delta_rG^\circ < 0$, so the reaction is spontaneous under standard conditions.
 
 ### Problem 19 [Thermo 5 · Numerical · 3 pts · like Ex 3D.2]
 
 For the combustion of glucose at 298 K, Δ\_cH° = −2808 kJ mol⁻¹ and Δ\_cS° = +182 J K⁻¹ mol⁻¹. How much non-expansion work can 1 mol supply at most? Why is it more than |ΔH|?
 
-*Solution.* ΔG = −2808 − 298 × 0.182 = −2808 − 54 = −2862 kJ, so up to 2862 kJ of non-expansion work. Since ΔS > 0, some heat can flow in from the surroundings and still keep the total entropy from falling, adding to the work available.
+*Solution.* **Idea.** The maximum non-expansion work is $|\Delta G|$, and $\Delta G = \Delta H - T\Delta S$.
+
+$$\Delta G = -2808\ \text{kJ} - (298\ \text{K})(0.182\ \text{kJ K}^{-1}) = -2808 - 54 = -2862\ \text{kJ}$$
+
+$$\boxed{w_\text{non-exp,max} = 2862\ \text{kJ per mole}}$$
+
+**Why more than $|\Delta H|$?** $\Delta S > 0$, so the system can absorb heat $T\Delta S$ from the surroundings without making the total entropy fall. That extra energy is available to be turned into work.
 
 ### Problem 20 [Thermo 5 · Numerical · 2 pts]
 
 CaCO₃ → CaO + CO₂ has ΔH° = +178 kJ mol⁻¹ and ΔS° = +161 J K⁻¹ mol⁻¹. Above what temperature is it spontaneous?
 
-*Solution.* T > 178000/161 ≈ 1100 K (about 830 °C).
+*Solution.* **Idea.** A reaction is spontaneous when $\Delta G = \Delta H - T\Delta S < 0$. Here $\Delta H > 0$ and $\Delta S > 0$, so entropy wins only at high $T$.
+
+$$\Delta G < 0 \iff T > \frac{\Delta H}{\Delta S} = \frac{178\,000\ \text{J mol}^{-1}}{161\ \text{J K}^{-1}\text{mol}^{-1}} = \boxed{1100\ \text{K}\ (\approx 830\ ^\circ\text{C})}$$
 
 ### Problem 21 [Thermo 5 · Numerical · 3 pts · like Ex 3E.3]
 
 Find the change in molar Gibbs energy at 298 K when (a) a perfect gas and (b) liquid water (V\_m = 18 cm³ mol⁻¹) are compressed isothermally from 1 bar to 2 bar. Comment.
 
-*Solution.* (a) RT ln 2 = 2.48 × 0.693 ≈ 1.72 kJ mol⁻¹. (b) V\_mΔp = 18 × 10⁻⁶ × 10⁵ = 1.8 J mol⁻¹. A gas's Gibbs energy is about a thousand times more sensitive to pressure, because its molar volume is so much larger.
+*Solution.* **Idea.** At constant $T$, $dG_m = V_m\,dp$.
+
+**(a) Perfect gas:** $V_m = RT/p$, so
+
+$$\Delta G_m = RT\ln\frac{p_2}{p_1} = (2.48\ \text{kJ mol}^{-1})\ln2 = \boxed{1.72\ \text{kJ mol}^{-1}}$$
+
+**(b) Liquid water:** $V_m$ is essentially constant, so
+
+$$\Delta G_m = V_m\Delta p = (18\times10^{-6}\ \text{m}^3)(10^5\ \text{Pa}) = \boxed{1.8\ \text{J mol}^{-1}}$$
+
+**Comment.** The gas is about 1000 times more sensitive to pressure, because its molar volume (about 25 L) is about 1000 times larger than that of the liquid (18 mL).
 
 ### Problem 22 [Thermo 5 · Numerical · 2 pts]
 
 The chemical potential of a substance differs by −8.3 kJ mol⁻¹ between two regions. By how much does G change when 0.15 mmol is transferred? *(E4A.2(b))*
 
-*Solution.* ΔG = nΔμ = 0.15 × 10⁻³ × (−8.3 × 10³) ≈ −1.2 J.
+*Solution.* **Idea.** $\mu = (\partial G/\partial n)_{T,p}$, so moving $n$ moles across a difference $\Delta\mu$ changes $G$ by $n\,\Delta\mu$.
+
+$$\Delta G = n\,\Delta\mu = (0.15\times10^{-3}\ \text{mol})(-8.3\times10^3\ \text{J mol}^{-1}) = \boxed{-1.2\ \text{J}}$$
 
 ### Problem 23 [Thermo 5 · Numerical · 2 pts]
 
 What is the maximum number of phases in equilibrium in a four-component system? In a one-component system, is P = 1 an area, a line or a point? *(E4A.3(b), E4A.4(a))*
 
-*Solution.* F = 0 gives P\_max = C + 2 = 6. For C = 1, P = 1 gives F = 2: an area, in which T and p can both be varied.
+*Solution.* **Idea.** The phase rule is $F = C - P + 2$.
+
+**Maximum phases:** the most phases coexist when $F = 0$, so $P_\text{max} = C + 2 = 4 + 2 = \boxed{6}$.
+
+**One component, $P = 1$:** $F = 1 - 1 + 2 = 2$. Both $T$ and $p$ can be varied independently, so one phase occupies an **area** of the phase diagram.
 
 ### Problem 24 [Thermo 5 · Numerical · 2 pts]
 
 The vapour pressure of a liquid fits ln(p/Torr) = 18.361 − (3036.8 K)/T. Find Δ\_vapH. *(E4B.7(b))*
 
-*Solution.* Slope of ln p vs 1/T is −Δ\_vapH/R, so Δ\_vapH = 3036.8 × 8.314 ≈ 25.2 kJ mol⁻¹.
+*Solution.* **Idea.** Integrating Clausius–Clapeyron gives $\ln p = \text{const} - \dfrac{\Delta_\text{vap}H}{R}\dfrac1T$, so the slope of $\ln p$ against $1/T$ is $-\Delta_\text{vap}H/R$.
+
+Here the slope is $-3036.8$ K, so
+
+$$\Delta_\text{vap}H = (3036.8\ \text{K})(8.314\ \text{J K}^{-1}\text{mol}^{-1}) = \boxed{25.2\ \text{kJ mol}^{-1}}$$
 
 ### Problem 25 [Thermo 5 · Numerical · 3 pts]
 
 The vapour pressure of a liquid fits log₁₀(p/Torr) = 8.750 − (1625 K)/T. Find Δ\_vapH and the normal boiling point (log₁₀ 760 = 2.881). *(E4B.8(b))*
 
-*Solution.* Δ\_vapH = 2.303 × 8.314 × 1625 ≈ 31.1 kJ mol⁻¹. At p = 760 Torr: 1625/T = 8.750 − 2.881 = 5.869, so T\_b ≈ 277 K.
+*Solution.* **Idea.** With $\log_{10}$ the slope is $-\Delta_\text{vap}H/(2.303R)$.
+
+$$\Delta_\text{vap}H = 2.303\,R\,(1625\ \text{K}) = 2.303 \times 8.314 \times 1625 = \boxed{31.1\ \text{kJ mol}^{-1}}$$
+
+**Normal boiling point** ($p = 760$ Torr, $\log_{10}760 = 2.881$):
+
+$$\frac{1625}{T_b} = 8.750 - 2.881 = 5.869\ \Rightarrow\ T_b = \boxed{277\ \text{K}}$$
 
 ### Problem 26 [Thermo 5 · Numerical · 3 pts · P4B.5]
 
 The entropies of fusion and vaporisation of water are 22.0 and 109.9 J K⁻¹ mol⁻¹. Find the difference in slope of μ against T on either side of (a) the freezing point and (b) the boiling point. (c) By how much does μ of water supercooled to −5 °C exceed that of ice?
 
-*Solution.* The slope is −S\_m, so the difference (liquid minus solid, or vapour minus liquid) is −Δ\_trsS. (a) −22.0 J K⁻¹ mol⁻¹. (b) −109.9 J K⁻¹ mol⁻¹. (c) Δμ ≈ Δ\_fusS × ΔT = 22.0 × 5 = 110 J mol⁻¹ above ice, so supercooled water tends to freeze.
+*Solution.* **Idea.** $(\partial\mu/\partial T)_p = -S_m$, so on crossing a transition the slope of $\mu$ against $T$ jumps by $-\Delta_\text{trs}S$.
+
+**(a)** At the freezing point (liquid minus solid): $-\Delta_\text{fus}S = \boxed{-22.0\ \text{J K}^{-1}\text{mol}^{-1}}$.
+
+**(b)** At the boiling point (vapour minus liquid): $-\Delta_\text{vap}S = \boxed{-109.9\ \text{J K}^{-1}\text{mol}^{-1}}$.
+
+**(c)** At the freezing point $\mu_\text{liq} = \mu_\text{ice}$. Cooling by $\Delta T = 5$ K, the liquid's $\mu$ rises relative to ice's by the slope difference times $\Delta T$:
+
+$$\mu_\text{liq} - \mu_\text{ice} \approx \Delta_\text{fus}S\,\Delta T = 22.0 \times 5 = \boxed{110\ \text{J mol}^{-1}}$$
+
+Supercooled water has the higher $\mu$, so it tends to freeze.
 
 ### Problem 27 [Thermo 5 · Numerical · 3 pts]
 
 Estimate the melting point of ice at 50 bar. Densities: ice 0.92, water 1.00 g cm⁻³; Δ\_fusH = 6.01 kJ mol⁻¹. *(E4B.14(a))*
 
-*Solution.* V\_m(ice) = 18.0/0.92 ≈ 19.6 cm³, V\_m(water) = 18.0 cm³, so Δ\_fusV ≈ −1.6 cm³ mol⁻¹. ΔT ≈ TΔVΔp/ΔH = 273 × (−1.6 × 10⁻⁶) × (49 × 10⁵)/6010 ≈ −0.35 K. It melts at about −0.35 °C.
+*Solution.* **Idea.** Clapeyron for melting: $\dfrac{dp}{dT} = \dfrac{\Delta_\text{fus}H}{T\Delta_\text{fus}V}$, so for a small pressure change $\Delta T \approx \dfrac{T\,\Delta_\text{fus}V\,\Delta p}{\Delta_\text{fus}H}$.
+
+**Volume change** (18.0 g mol$^{-1}$): $V_m(\text{ice}) = 18.0/0.92 = 19.6$ cm$^3$, $V_m(\text{water}) = 18.0$ cm$^3$, so $\Delta_\text{fus}V = -1.6\times10^{-6}$ m$^3$ mol$^{-1}$.
+
+$$\Delta T \approx \frac{(273)(-1.6\times10^{-6})(49\times10^5)}{6010} = -0.35\ \text{K}$$
+
+Ice melts at about $\boxed{-0.35\ ^\circ\text{C}}$. The melting point falls because water is denser than ice.
 
 ## D. Estimate
 
@@ -1863,11 +1925,21 @@ Estimate the melting point of ice at 50 bar. Densities: ice 0.92, water 1.00 g c
 
 Use Trouton's rule to estimate Δ\_vapH of benzene (T\_b = 353 K).
 
-*Solution.* Δ\_vapH ≈ 85 × 353 ≈ 30 kJ mol⁻¹ (measured: 30.8).
+*Solution.* **Idea.** Trouton's rule: $\Delta_\text{vap}S \approx 85\ \text{J K}^{-1}\text{mol}^{-1}$, and at the boiling point $\Delta_\text{vap}H = T_b\Delta_\text{vap}S$.
+
+$$\Delta_\text{vap}H \approx 85 \times 353 = 30\,000\ \text{J mol}^{-1} = \boxed{30\ \text{kJ mol}^{-1}}\quad(\text{measured: } 30.8)$$
 
 ### Problem 29 [Thermo 5 · Numerical · 3 pts]
 
 At the top of a high mountain the pressure is about 1/3 atm. Estimate the boiling point of water (Δ\_vapH = 40.7 kJ mol⁻¹, ln 3 ≈ 1.1).
 
-*Solution.* 1/T = 1/373 + (R/Δ\_vapH) ln 3 = 0.00268 + (8.314/40700)(1.1) ≈ 0.00268 + 0.000225 = 0.00291, so T ≈ 344 K, about 70 °C.
+*Solution.* **Idea.** Integrated Clausius–Clapeyron between the normal boiling point ($373$ K, $1$ atm) and the summit ($T$, $\tfrac13$ atm):
+
+$$\ln\frac{p_2}{p_1} = -\frac{\Delta_\text{vap}H}{R}\left(\frac1{T_2} - \frac1{T_1}\right)\ \Rightarrow\ \frac1{T_2} = \frac1{T_1} - \frac{R}{\Delta_\text{vap}H}\ln\frac{p_2}{p_1}$$
+
+With $\ln(p_2/p_1) = \ln\tfrac13 = -1.1$:
+
+$$\frac1{T_2} = \frac1{373} + \frac{8.314}{40\,700}(1.1) = 0.00268 + 0.000225 = 0.00291\ \text{K}^{-1}$$
+
+$$T_2 \approx \boxed{344\ \text{K} \approx 70\ ^\circ\text{C}}$$
 

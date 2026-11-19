@@ -368,37 +368,65 @@ Write the energy levels of a particle in a cubical 3-D box. Find the first three
 
 Find the ground-state energy of an electron in a box 1 nm wide.
 
-*Solution.* E₁ = (1240)²/(8 × 0.511 × 10⁶ × 1²) eV ≈ 1.54 × 10⁶/4.09 × 10⁶ ≈ 0.38 eV.
+*Solution.* **Idea.** $E_1 = h^2/8mL^2$. Write it as $(hc)^2/(8\,m_ec^2L^2)$ so everything is in eV and nm.
+
+$$E_1 = \frac{(1240\ \text{eV nm})^2}{8(0.511\times10^6\ \text{eV})(1\ \text{nm})^2} = \frac{1.54\times10^6}{4.09\times10^6} \approx \boxed{0.38\ \text{eV}}$$
 
 ### Problem 22 [QM 4 · Numerical]
 
 For a particle in a box, find the probability of finding it in the middle third of the box for n = 1 and n = 2. Compare with the classical answer.
 
-*Solution.* P = 1/3 − (1/2nπ)\[sin(4nπ/3) − sin(2nπ/3)\]. For n = 1: 1/3 + √3/2π ≈ 0.33 + 0.28 = 0.61. For n = 2: 1/3 − √3/4π ≈ 0.33 − 0.14 = 0.20. Classically it is 1/3 for every state, and the quantum answer tends to 1/3 at large n.
+*Solution.* **Idea.** With $\psi_n = \sqrt{2/L}\sin(n\pi x/L)$,
+
+$$P = \int_{L/3}^{2L/3}\frac2L\sin^2\frac{n\pi x}{L}\,dx = \frac13 - \frac{1}{2n\pi}\left[\sin\frac{4n\pi}{3} - \sin\frac{2n\pi}{3}\right]$$
+
+$$n = 1:\quad \frac13 + \frac{\sqrt3}{2\pi} \approx 0.33 + 0.28 = \boxed{0.61}$$
+
+$$n = 2:\quad \frac13 - \frac{\sqrt3}{4\pi} \approx 0.33 - 0.14 = \boxed{0.20}$$
+
+**Compare.** A classical particle is equally likely anywhere, so $P = 1/3$ for every state. The quantum answer oscillates about $1/3$ and approaches it as $n \to \infty$ (the correspondence principle).
 
 ### Problem 23 [QM 4 · Numerical]
 
 An electron with E = 1 eV meets a barrier 5 eV high and 0.5 nm wide. Estimate T. What happens to T if the width doubles?
 
-*Solution.* k₂ = √(2mₑc²(U − E))/ħc = √(2 × 0.511 × 10⁶ × 4)/197 ≈ 2020/197 ≈ 10 nm⁻¹. 2k₂L ≈ 10, so T ≈ e⁻¹⁰ ≈ 5 × 10⁻⁵. Doubling L doubles the exponent: T ≈ e⁻²⁰ ≈ 2 × 10⁻⁹. T is squared, not halved.
+*Solution.* **Idea.** $T \approx e^{-2k_2L}$ with $k_2 = \sqrt{2m(U - E)}/\hbar$.
+
+$$k_2 = \frac{\sqrt{2(m_ec^2)(U - E)}}{\hbar c} = \frac{\sqrt{2(0.511\times10^6)(4)}}{197\ \text{eV nm}} \approx \frac{2020}{197} \approx 10\ \text{nm}^{-1}$$
+
+$$2k_2L = 2(10)(0.5) \approx 10\ \Rightarrow\ T \approx e^{-10} \approx \boxed{5\times10^{-5}}$$
+
+**Doubling the width:** the exponent doubles, so $T \approx e^{-20} \approx 2\times10^{-9}$. $T$ is **squared**, not halved.
 
 ### Problem 24 [QM 4 · Numerical]
 
 Repeat question 23 for a proton. Comment.
 
-*Solution.* The proton is 1836 times heavier, so k₂ is √1836 ≈ 43 times larger and 2k₂L ≈ 430. T ≈ e⁻⁴³⁰, which is effectively zero. Tunnelling matters for light particles and thin barriers.
+*Solution.* **Idea.** $k_2 \propto \sqrt m$.
+
+The proton is 1836 times heavier, so $k_2$ is $\sqrt{1836} \approx 43$ times larger and
+
+$$2k_2L \approx 10\times43 \approx 430\ \Rightarrow\ T \approx e^{-430} \approx 0\ \text{(effectively zero)}$$
+
+**Comment.** Tunnelling matters for light particles and thin barriers. The mass dependence enters through the exponent, so the effect disappears very quickly as the mass grows.
 
 ### Problem 25 [QM 4 · Numerical]
 
 A molecule vibrates at 10¹⁴ Hz. Find its zero-point energy and the spacing between levels, in eV.
 
-*Solution.* hν = 4.14 × 10⁻¹⁵ × 10¹⁴ ≈ 0.41 eV, so the spacing is 0.41 eV and the zero-point energy is about 0.21 eV.
+*Solution.* **Idea.** Oscillator levels $E_n = (n + \tfrac12)h\nu$: spacing $h\nu$, zero-point energy $\tfrac12h\nu$.
+
+$$h\nu = (4.14\times10^{-15}\ \text{eV s})(10^{14}\ \text{s}^{-1}) \approx 0.41\ \text{eV}$$
+
+$$\text{spacing} = \boxed{0.41\ \text{eV}},\qquad E_0 = \tfrac12h\nu \approx \boxed{0.21\ \text{eV}}$$
 
 ### Problem 26 [QM 4 · Numerical]
 
 Find the wavelength of the photon emitted when an electron in a 1 nm box drops from n = 3 to n = 1.
 
-*Solution.* E₃ − E₁ = 8E₁ ≈ 8 × 0.38 ≈ 3.0 eV, so λ ≈ 1240/3.0 ≈ 410 nm (violet).
+*Solution.* **Idea.** $E_n = n^2E_1$, so $E_3 - E_1 = (9 - 1)E_1 = 8E_1$.
+
+$$\Delta E = 8(0.38\ \text{eV}) \approx 3.0\ \text{eV}\ \Rightarrow\ \lambda = \frac{1240}{3.0} \approx \boxed{410\ \text{nm}}\quad(\text{violet})$$
 
 ## D. Estimate and discuss
 

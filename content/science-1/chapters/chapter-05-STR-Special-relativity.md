@@ -312,37 +312,85 @@ A single-particle Lagrangian is L = −mc√(c² − u·u) − V(r). (a) Find th
 
 A rocket of proper length 300 m passes a station marker A at 0.8c. (a) Its length in the station frame? (b) How long, in the station frame, between the nose and the tail passing A? (c) That interval in the rocket frame? Which one is proper?
 
-*Solution.* γ = 5/3 and v = 240 m/μs. (a) L = 300/(5/3) = 180 m. (b) 180/240 = 0.75 μs; this is proper time, since both events happen at A. (c) In the rocket frame A moves the full 300 m: 300/240 = 1.25 μs = γ × 0.75 μs.
+*Solution.* **Setup.** $\beta = 0.8$, $\gamma = 5/3$, $v = 0.8c = 240$ m/$\mu$s.
+
+**(a)** The rocket's proper length is $L_0 = 300$ m, so in the station frame
+
+$$L = \frac{L_0}{\gamma} = \frac{300}{5/3} = \boxed{180\ \text{m}}$$
+
+**(b)** The nose and then the tail pass A, so the station-frame time is the length divided by the speed:
+
+$$\Delta t = \frac{180}{240} = \boxed{0.75\ \mu\text{s}}$$
+
+Both events happen at the same place (A), so this is the **proper time**.
+
+**(c)** In the rocket frame, A moves past the whole $300$ m:
+
+$$\Delta t' = \frac{300}{240} = \boxed{1.25\ \mu\text{s}} = \gamma\,(0.75\ \mu\text{s})$$
+
+The proper time (shorter) is the one measured in the station frame.
 
 ### Problem 20 [STR · Numerical · 3 pts]
 
 A muon (τ₀ = 2.2 μs) moves at 0.998c (γ ≈ 15.8). How far does it travel on average in the earth frame, and how thick is 10 km of atmosphere in the muon's frame?
 
-*Solution.* Distance = γvτ₀ ≈ 15.8 × 0.998 × 300 m/μs × 2.2 μs ≈ 10.4 km. In its frame the atmosphere is 10/15.8 ≈ 0.63 km, less than its 0.66 km range.
+*Solution.* **Idea.** The muon lives $\gamma\tau_0$ in the Earth frame. In its own frame the atmosphere is length-contracted.
+
+$$d = v\,\gamma\tau_0 = (0.998)(300\ \text{m}/\mu\text{s})(15.8)(2.2\ \mu\text{s}) \approx \boxed{10.4\ \text{km}}$$
+
+$$L = \frac{L_0}{\gamma} = \frac{10\ \text{km}}{15.8} \approx \boxed{0.63\ \text{km}}$$
+
+**Check.** In its own frame the muon would travel $v\tau_0 = 0.66$ km. The contracted atmosphere (0.63 km) is shorter than that, so it arrives. Both frames agree.
 
 ### Problem 21 [STR · Numerical · 3 pts]
 
 A twin travels at 0.6c to a star 6 ly away and returns. How much does each twin age?
 
-*Solution.* γ = 1.25. Home twin: 12 ly/0.6c = 20 y. Traveller: 20/1.25 = 16 y.
+*Solution.* **Setup.** $\beta = 0.6$, $\gamma = 1.25$. Round trip distance $= 12$ ly.
+
+**Home twin** (Earth frame):
+
+$$t_\text{home} = \frac{12\ \text{ly}}{0.6c} = \boxed{20\ \text{y}}$$
+
+**Travelling twin** (proper time along the path):
+
+$$t_\text{traveller} = \frac{t_\text{home}}{\gamma} = \frac{20}{1.25} = \boxed{16\ \text{y}}$$
+
+The traveller is 4 years younger. The situation is not symmetric: only the traveller changes inertial frame at the turnaround.
 
 ### Problem 22 [STR · Numerical · 2 pts]
 
 Two particles move towards each other, each at 0.5c in the lab. What is their relative speed?
 
-*Solution.* u = (0.5 + 0.5)c/(1 + 0.25) = 0.8c.
+*Solution.* **Idea.** Relative speed needs the relativistic addition rule, with $u' = 0.5c$ in the frame of one particle, which itself moves at $v = 0.5c$.
+
+$$u = \frac{u' + v}{1 + u'v/c^2} = \frac{0.5c + 0.5c}{1 + 0.25} = \boxed{0.8c}$$
+
+**Check.** Less than $c$ and less than the Galilean answer $c$.
 
 ### Problem 23 [STR · Numerical · 2 pts]
 
 A galaxy recedes at 0.6c. By what factor is the frequency of its light shifted?
 
-*Solution.* ν/ν₀ = √(0.4/1.6) = 0.5: the frequency is halved (wavelength doubled).
+*Solution.* **Idea.** Receding source: $\nu = \nu_0\sqrt{\dfrac{1 - \beta}{1 + \beta}}$.
+
+$$\frac{\nu}{\nu_0} = \sqrt{\frac{0.4}{1.6}} = \sqrt{0.25} = \boxed{0.5}$$
+
+The frequency is halved, so the wavelength is doubled (a red shift).
 
 ### Problem 24 [STR · Numerical · 3 pts]
 
 An electron has kinetic energy equal to its rest energy. Find γ, its speed and its momentum in units of mc.
 
-*Solution.* K = mc² gives γ = 2, β = √3/2 ≈ 0.87, p = γβmc = √3 mc ≈ 1.7mc.
+*Solution.* **Idea.** $K = (\gamma - 1)mc^2$. Setting $K = mc^2$:
+
+$$\gamma - 1 = 1 \Rightarrow \boxed{\gamma = 2}$$
+
+$$\beta = \sqrt{1 - \frac1{\gamma^2}} = \sqrt{1 - \frac14} = \frac{\sqrt3}{2} \approx \boxed{0.87}$$
+
+$$p = \gamma\beta\,mc = 2\cdot\frac{\sqrt3}{2}\,mc = \boxed{\sqrt3\,mc \approx 1.7\,mc}$$
+
+**Check.** $E^2 = (pc)^2 + (mc^2)^2$: $(2mc^2)^2 = 3(mc^2)^2 + (mc^2)^2$ ✓.
 
 ## D. Estimate
 
@@ -350,19 +398,39 @@ An electron has kinetic energy equal to its rest energy. Find γ, its speed and 
 
 What is the kinetic energy of a fast cricket ball? Compare it with its rest energy E = mc².
 
-*Solution.* m ≈ 0.16 kg, v ≈ 40 m/s (145 km/h). K ≈ ½ × 0.16 × 1600 ≈ 130 J. mc² ≈ 0.16 × 9 × 10¹⁶ ≈ 1.4 × 10¹⁶ J. The ratio K/mc² = β²/2 ≈ 10⁻¹⁴.
+*Solution.* **Idea.** At everyday speeds $K = \tfrac12mv^2$, while the rest energy is $mc^2$.
+
+For $m \approx 0.16$ kg and $v \approx 40$ m/s (145 km/h):
+
+$$K \approx \tfrac12(0.16)(40)^2 \approx \boxed{130\ \text{J}}$$
+
+$$mc^2 \approx (0.16)(9\times10^{16}) \approx \boxed{1.4\times10^{16}\ \text{J}}$$
+
+$$\frac{K}{mc^2} = \frac{\beta^2}{2} \approx 10^{-14}$$
+
+The kinetic energy is utterly negligible next to the rest energy, which is why $\tfrac12mv^2$ is perfectly good for everyday motion.
 
 ### Problem 26 [STR · Numerical · 2 pts]
 
 By how much does a clock on an aircraft (250 m/s) fall behind in a 10 h flight, ignoring gravity?
 
-*Solution.* Δt ≈ tβ²/2 = 3.6 × 10⁴ s × (250/3 × 10⁸)²/2 ≈ 3.6 × 10⁴ × 3.5 × 10⁻¹³ ≈ 1.3 × 10⁻⁸ s, about 13 ns.
+*Solution.* **Idea.** A moving clock runs slow by the factor $\gamma \approx 1 + \tfrac12\beta^2$, so over time $t$ it falls behind by about $t\beta^2/2$.
+
+$$\beta = \frac{250}{3\times10^8} = 8.3\times10^{-7},\qquad \frac{\beta^2}{2} \approx 3.5\times10^{-13}$$
+
+$$\Delta t \approx (3.6\times10^4\ \text{s})(3.5\times10^{-13}) \approx 1.3\times10^{-8}\ \text{s} = \boxed{\approx 13\ \text{ns}}$$
 
 ### Problem 27 [STR · Numerical · 5 pts · 2025 midsem Q11]
 
 A light source of rest frequency ν₀, a distance l from an observer, moves at v perpendicular to the observer's line of sight. Find the apparent frequency.
 
-*Solution.* At the moment the source crosses the line of sight there is no motion along it, so there is no classical Doppler shift. Only time dilation remains: in the observer's frame the source's period is γT₀, so ν = ν₀/γ = ν₀√(1 − v²/c²), a red shift. The distance l doesn't enter. This transverse Doppler effect has no classical counterpart.
+*Solution.* **Idea.** At the instant the source crosses the line of sight there is no velocity component along it, so there is **no classical Doppler shift**. Only time dilation remains.
+
+In the observer's frame the source's period is $T = \gamma T_0$, so
+
+$$\boxed{\nu = \frac{\nu_0}{\gamma} = \nu_0\sqrt{1 - \frac{v^2}{c^2}}}$$
+
+This is a **red shift**. The distance $l$ does not enter. The transverse Doppler effect has no classical counterpart.
 
 # Reference: Special relativity quick sheet (Beiser ch. 1)
 

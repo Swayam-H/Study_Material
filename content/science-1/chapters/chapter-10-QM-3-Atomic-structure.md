@@ -344,61 +344,99 @@ Explain the reduced-mass correction and estimate how much it changes hydrogen's 
 
 Find the wavelength of the Hα line (n = 3 → 2).
 
-*Solution.* ΔE = 13.6(1/4 − 1/9) = 13.6 × 5/36 ≈ 1.89 eV, so λ = 1240/1.89 ≈ 656 nm (red).
+*Solution.* **Idea.** A transition $n_i \to n_f$ emits $\Delta E = 13.6\left(\dfrac1{n_f^2} - \dfrac1{n_i^2}\right)$ eV, and $\lambda = 1240/\Delta E$ nm.
+
+$$\Delta E = 13.6\left(\frac14 - \frac19\right) = 13.6\cdot\frac5{36} = 1.89\ \text{eV}$$
+
+$$\lambda = \frac{1240}{1.89} \approx \boxed{656\ \text{nm}}\quad(\text{red})$$
 
 ### Problem 20 [QM 3 · Numerical]
 
 Find the wavelengths of the Lyman α line (2 → 1) and the Lyman series limit.
 
-*Solution.* Lyman α: ΔE = 13.6 × 3/4 = 10.2 eV, so λ = 1240/10.2 ≈ 122 nm. Limit: 13.6 eV, so λ = 91.2 nm.
+*Solution.* **Lyman $\alpha$** ($2 \to 1$):
+
+$$\Delta E = 13.6\left(1 - \frac14\right) = 10.2\ \text{eV},\qquad \lambda = \frac{1240}{10.2} \approx \boxed{122\ \text{nm}}$$
+
+**Series limit** ($\infty \to 1$): $\Delta E = 13.6$ eV, so $\lambda = 1240/13.6 = \boxed{91.2\ \text{nm}}$.
 
 ### Problem 21 [QM 3 · Numerical]
 
 Find the shortest wavelength in the Balmer series.
 
-*Solution.* The Balmer limit is ∞ → 2: ΔE = 13.6/4 = 3.4 eV, so λ = 1240/3.4 ≈ 365 nm.
+*Solution.* **Idea.** The shortest wavelength in a series is its limit, $n_i \to \infty$, which has the largest energy. For Balmer, $n_f = 2$:
+
+$$\Delta E = \frac{13.6}{2^2} = 3.4\ \text{eV},\qquad \lambda = \frac{1240}{3.4} \approx \boxed{365\ \text{nm}}$$
 
 ### Problem 22 [QM 3 · Numerical]
 
 Find the radius of the n = 3 orbit and the energy needed to ionise hydrogen from n = 3.
 
-*Solution.* r₃ = 9a₀ ≈ 0.48 nm. E₃ = −13.6/9 ≈ −1.51 eV, so 1.51 eV ionises it.
+*Solution.* **Radius:** $r_n = n^2a_0$, so
+
+$$r_3 = 9(0.0529\ \text{nm}) \approx \boxed{0.48\ \text{nm}}$$
+
+**Ionisation from $n = 3$:** $E_3 = -13.6/9 = -1.51$ eV, so $\boxed{1.51\ \text{eV}}$ lifts the electron to $E = 0$.
 
 ### Problem 23 [QM 3 · Numerical]
 
 Find the ground-state energies of He⁺ and Li²⁺.
 
-*Solution.* He⁺ (Z = 2): −54.4 eV. Li²⁺ (Z = 3): −122.4 eV.
+*Solution.* **Idea.** Hydrogen-like ion: $E_1 = -13.6\,Z^2$ eV.
+
+$$\text{He}^+\ (Z = 2):\quad -13.6\times4 = \boxed{-54.4\ \text{eV}}$$
+
+$$\text{Li}^{2+}\ (Z = 3):\quad -13.6\times9 = \boxed{-122.4\ \text{eV}}$$
 
 ### Problem 24 [QM 3 · Numerical]
 
 A ground-state hydrogen atom absorbs a 12.1 eV photon. To which level does it go? How many different lines can it emit on the way back down?
 
-*Solution.* Final energy = −13.6 + 12.1 = −1.5 eV = E₃, so it goes to n = 3. It can emit 3 → 1, or 3 → 2 then 2 → 1: three different lines.
+*Solution.* **Final energy:**
+
+$$E_f = -13.6 + 12.1 = -1.5\ \text{eV} \approx E_3 = -\frac{13.6}{9}\ \Rightarrow\ \boxed{n = 3}$$
+
+**Lines on the way down:** $3 \to 1$, or $3 \to 2$ followed by $2 \to 1$. That is $\boxed{3\ \text{different lines}}$.
 
 ### Problem 25 [QM 3 · Numerical]
 
 How many spectral lines can a gas of hydrogen atoms in the n = 4 state emit?
 
-*Solution.* From n = 4 you can have 4→3, 4→2, 4→1, 3→2, 3→1 and 2→1: six lines. In general n(n − 1)/2.
+*Solution.* **Idea.** Every pair of levels $(n_i > n_f)$ can give a line: choose 2 of the 4 levels.
+
+$$4\to3,\ 4\to2,\ 4\to1,\ 3\to2,\ 3\to1,\ 2\to1\ \Rightarrow\ \boxed{6\ \text{lines}}$$
+
+In general $\dfrac{n(n - 1)}{2}$ lines from level $n$.
 
 ### Problem 26 [QM 3 · Numerical]
 
 In the Franck–Hertz experiment with mercury, the dips are 4.9 V apart. What wavelength of light does the mercury vapour emit?
 
-*Solution.* λ = 1240/4.9 ≈ 253 nm, in the ultraviolet. The measured line is 253.6 nm.
+*Solution.* **Idea.** The dips are 4.9 V apart because 4.9 eV is the first excitation energy of mercury. The atom returns by emitting a photon of that energy.
+
+$$\lambda = \frac{1240}{4.9} \approx \boxed{253\ \text{nm}}\quad(\text{ultraviolet; measured } 253.6\ \text{nm})$$
+
+This shows directly that atomic energy levels are discrete.
 
 ### Problem 27 [QM 3 · Numerical]
 
 Find the ground-state energy of positronium.
 
-*Solution.* m′ = m/2, so E₁ = −13.6/2 = −6.8 eV.
+*Solution.* **Idea.** Replace the electron mass by the reduced mass. In positronium (e$^+$e$^-$), $m' = \dfrac{m\cdot m}{m + m} = \dfrac m2$, and all energies scale with $m'$.
+
+$$E_1 = \frac{-13.6}{2} = \boxed{-6.8\ \text{eV}}$$
 
 ### Problem 28 [QM 3 · Numerical]
 
 Estimate the separation of the Hα lines of hydrogen and deuterium.
 
-*Solution.* λ ∝ 1/m′ and m′ = m(1 − m/M) roughly. The fractional difference is about m/M\_p − m/(2M\_p) = 1/(2 × 1836) ≈ 2.7 × 10⁻⁴. Times 656 nm, that is about 0.18 nm, with deuterium's line at the shorter wavelength.
+*Solution.* **Idea.** $\lambda \propto 1/m'$ and $m' = \dfrac{m}{1 + m/M}$, so $\lambda \propto 1 + \dfrac mM$.
+
+$$\frac{\Delta\lambda}{\lambda} \approx \frac{m}{M_p} - \frac{m}{2M_p} = \frac{1}{2(1836)} \approx 2.7\times10^{-4}$$
+
+$$\Delta\lambda \approx (2.7\times10^{-4})(656\ \text{nm}) \approx \boxed{0.18\ \text{nm}}$$
+
+Deuterium (heavier nucleus, larger $m'$) has the **shorter** wavelength. This is how deuterium was discovered.
 
 ## D. Estimate and discuss
 
