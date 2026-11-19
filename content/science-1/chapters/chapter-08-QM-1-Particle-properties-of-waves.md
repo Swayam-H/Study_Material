@@ -12,9 +12,17 @@ By the end of the nineteenth century the nature of light seemed settled. Maxwell
 
 The first difficulty concerned blackbody radiation, the light given off by an ideal absorber held at a temperature T. Its spectrum depends only on T, rising to a peak whose wavelength falls as T increases (Wien's law) and carrying a total power proportional to T⁴ (the Stefan–Boltzmann law). Rayleigh and Jeans calculated the spectrum by treating the radiation inside a cavity as a set of standing waves, each with average energy kT. Since the number of possible standing waves grows without limit at short wavelengths, their result predicted infinite energy in the ultraviolet, which is plainly wrong. Planck removed the trouble by assuming that an oscillator of frequency ν can have only the energies 0, hν, 2hν, and so on. At high frequency hν is much larger than kT, such oscillators are seldom excited, and the spectrum falls back to zero as observed. The constant h was chosen to fit the data and turned out to be one of the fundamental constants of nature.
 
+![Blackbody spectra and the ultraviolet catastrophe](fig/blackbody.svg)
+
+*Figure. Left: hotter bodies emit more and peak at shorter wavelength (Wien). Right: classical Rayleigh–Jeans grows without limit; Planck turns over.*
+
 ## The photoelectric effect
 
 The photoelectric effect made the idea of quanta unavoidable. When light falls on a metal surface, electrons are emitted, and the experiments showed three things that the wave theory could not explain. The electrons come out at once, with no delay even in very weak light. Their maximum kinetic energy depends on the frequency of the light and not on its intensity. And below a certain threshold frequency no electrons are emitted however bright the light. Einstein explained all three by supposing that light itself consists of quanta, now called photons, each of energy hν. A single photon gives all its energy to a single electron, which uses part of it, the work function φ, to escape the surface. The rest appears as kinetic energy, so that hν = KE\_max + φ. Brighter light means more photons and therefore more electrons, but not faster ones.
+
+![Stopping potential against frequency](fig/photoelectric.svg)
+
+*Figure. Stopping potential against frequency: a straight line of slope $h/e$ with threshold $\nu_0=\phi/h$.*
 
 ## Wave–particle duality
 
@@ -27,6 +35,10 @@ X-rays provide the photoelectric effect in reverse. When fast electrons strike a
 ## The Compton effect
 
 The Compton effect shows that a photon carries momentum as well as energy. When X-rays are scattered by the loosely bound electrons in a target, the scattered rays have a longer wavelength than the incident ones, and the shift depends on the scattering angle. Treating the event as a collision between a photon of momentum p = h/λ and an electron at rest, and applying conservation of energy and of momentum, gives λ′ − λ = (h/mc)(1 − cosφ). The quantity h/mc = 2.43 pm is the Compton wavelength of the electron. The agreement of this formula with experiment is the most direct evidence that photons behave like particles in collisions.
+
+![Compton scattering and Bragg reflection geometry](fig/compton-bragg.svg)
+
+*Figure. Left: Compton scattering. Right: Bragg reflection, where the extra path of the lower ray is $2d\sin\theta$.*
 
 ## Pair production and photons in gravity
 

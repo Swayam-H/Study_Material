@@ -36,6 +36,10 @@ Mechanics must also be revised. If momentum is defined as mv, it is not conserve
 
 In every frame, observers disagree about the time Δt and the distance Δx between two events, but they agree on the combination (Δs)² = Δx² + Δy² + Δz² − c²Δt². This spacetime interval is invariant under the Lorentz transformation, just as the length of a vector is invariant under rotation. Its sign has a physical meaning. If it is negative (timelike, in the slides' convention), there is a frame in which the two events happen at the same place, and one can cause the other. If it is positive (spacelike), there is a frame in which they are simultaneous, and neither can influence the other.
 
+![Spacetime diagram with light cone](fig/spacetime.svg)
+
+*Figure. Spacetime diagram. Light travels at $45^\circ$. Events inside the cone are timelike-separated from the origin (past or future); events outside are spacelike. A boost tilts both axes toward the light line by the same angle.*
+
 ## Electricity, magnetism and gravity
 
 Relativity also unites electricity and magnetism. A line of charges at rest exerts a purely electric force on a nearby charge. In a frame where the line moves, length contraction increases the charge density and therefore the electric force, but the moving charges now form a current, and the magnetic force on the charge exactly cancels the excess. Electric and magnetic forces are the same interaction seen from different frames. Finally, the general theory extends these ideas to gravity. By the principle of equivalence, gravity is locally indistinguishable from acceleration, so light, which bends in an accelerating laboratory, must also bend in a gravitational field. The deflection of starlight passing the sun, observed in 1919, confirmed the prediction.

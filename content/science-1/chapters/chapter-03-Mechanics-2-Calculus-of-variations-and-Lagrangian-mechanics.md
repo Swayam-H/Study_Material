@@ -16,6 +16,10 @@ Such problems ask for the function y(x) that makes an integral J = ∫f(y, y′,
 
 Mechanics can be put in the same form. Hamilton's principle states that of all the paths a system could take between two configurations in a given time, the actual path is the one for which the action S = ∫L dt is stationary, where the Lagrangian L = T − U is the kinetic energy minus the potential energy. Applying the Euler equation with t in place of x gives the Euler–Lagrange equations, d/dt(∂L/∂q̇) = ∂L/∂q. For a single particle in Cartesian coordinates these are exactly Newton's equations mẍ = −∂U/∂x, so nothing new has been added to the physics. What has been gained is a far more convenient formulation.
 
+![Brachistochrone: cycloid, straight line and parabola](fig/brachistochrone.svg)
+
+*Figure. The fastest path from A to B is the cycloid, not the straight line: it dives steeply first to pick up speed.*
+
 ## Generalised coordinates and constraints
 
 The great advantage of the Lagrangian method is that the action is a scalar, and its stationary value does not depend on which coordinates are used to describe the path. Any set of independent quantities that fixes the configuration, called generalised coordinates, will do, and the Euler–Lagrange equations take the same form in all of them. The number of such coordinates is the number of degrees of freedom. A simple pendulum, for example, needs only the angle θ. Writing T = ½ml²θ̇² and U = −mgl cosθ gives the equation ml²θ̈ = −mgl sinθ at once, without ever mentioning the tension in the string. This is typical. Constraints that are built into the choice of coordinates never appear in the equations, and the forces that maintain them, which do no work, need not be found.

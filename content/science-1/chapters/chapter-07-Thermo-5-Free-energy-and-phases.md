@@ -504,6 +504,10 @@ The Otto cycle is worse because its heat does not all enter at the top temperatu
 
 The gap comes from friction, heat leaking through the cylinder walls, and combustion that is not instantaneous. This is the "30% of fuel energy" from the start of Lecture 3.
 
+![Isotherm and adiabat, the Carnot cycle and the Otto cycle on p–V diagrams](fig/pv-cycles.svg)
+
+*Figure. Left: an adiabat is steeper than an isotherm. Middle: the Carnot cycle (two isotherms, two adiabats). Right: the Otto cycle (two adiabats, two constant-volume steps).*
+
 ## 10. From Carnot to the Clausius inequality (3A.3(c), slides L4)
 
 For every reversible cycle ∮đq\_rev/T = 0, and for every real cycle ∮đq/T ≤ 0. The first result makes entropy a state function; the second makes it grow.
@@ -1551,6 +1555,10 @@ The equation dG = −SdT + Vdp shows how the Gibbs energy depends on temperature
 For a pure substance the molar Gibbs energy is called the chemical potential, μ. At given temperature and pressure the stable phase is the one with the lowest chemical potential, and two phases can coexist only where their chemical potentials are equal. A phase diagram maps out these regions in the p–T plane. Each area is a region where one phase is stable, the lines between areas are phase boundaries where two phases coexist, and three boundaries meet at the triple point, where solid, liquid and vapour coexist at a single temperature and pressure. The liquid–vapour line ends at the critical point, beyond which liquid and vapour can no longer be distinguished. Water is unusual in that its solid–liquid boundary slopes backwards, because ice is less dense than water, so increasing the pressure lowers the melting point. Carbon dioxide has its triple point above 1 atm, which is why dry ice sublimes instead of melting.
 
 Gibbs's phase rule counts how many intensive variables can be changed freely while keeping a given number of phases in equilibrium. For C components and P phases the number of degrees of freedom is F = C − P + 2. For a pure substance, C = 1, so a single phase has F = 2 and occupies an area; two phases have F = 1 and lie on a line; and three phases have F = 0, a single point. Four phases of one substance can never be in equilibrium.
+
+![Schematic phase diagram of water](fig/phase-diagram-water.svg)
+
+*Figure. Water. The boiling line ends at the critical point; the melting line slopes backwards because ice is less dense than liquid water. Not to scale.*
 
 ## The Clapeyron equations
 

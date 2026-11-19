@@ -20,6 +20,10 @@ The spectra of atoms gave a second clue. A heated gas does not emit a continuous
 
 Bohr's theory combined the nuclear atom with the wave nature of the electron. If the electron is a wave, an orbit can only be stable if the wave joins up smoothly with itself after one circuit, which means the circumference must contain a whole number of de Broglie wavelengths: 2πrₙ = nλ. Combined with the force balance, this gives orbit radii rₙ = n²a₀, where a₀ = 0.0529 nm is the Bohr radius, and energies Eₙ = −13.6 eV/n². The integer n is a quantum number, and the allowed orbits correspond to the allowed energy levels of the atom. An electron in one of these stationary states does not radiate. Light is emitted only when the electron drops from a higher level to a lower one, and the photon carries away the difference in energy, hν = Eᵢ − E\_f. Putting the formula for Eₙ into this condition reproduces the observed spectral series and gives the Rydberg constant in terms of e, m, h and ε₀, in excellent agreement with experiment.
 
+![Hydrogen energy levels and spectral series](fig/hydrogen-levels.svg)
+
+*Figure. Hydrogen energy levels $E_n=-13.6/n^2$ eV. Lyman lines end on $n=1$ (ultraviolet), Balmer on $n=2$ (visible), Paschen on $n=3$ (infrared).*
+
 ## Correspondence principle and nuclear motion
 
 Bohr was guided by the correspondence principle, which says that a quantum theory must agree with classical physics in the limit where classical physics is known to work. For very large n the energy levels are so close together that they are almost continuous, and the frequency of the photon emitted in a jump from n to n − 1 becomes equal to the frequency with which the electron goes round its orbit, which is just what classical theory predicts. The small difference between the observed and predicted spectra is removed by noting that the nucleus is not infinitely heavy. Electron and nucleus both move about their common centre of mass, and the electron mass in the formulas should be replaced by the reduced mass m′ = mM/(m + M). This correction explains, among other things, the slight difference between the spectra of hydrogen and deuterium.

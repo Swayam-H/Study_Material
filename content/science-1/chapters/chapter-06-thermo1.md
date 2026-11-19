@@ -73,6 +73,10 @@ Assumptions: point-like molecules, no forces except elastic collisions, random m
 - Same Q = 0 gives different outcomes: free expansion has ΔT = 0, while reversible adiabatic expansion cools.
 - Atkins writes the adiabat as V_i T_i^c = V_f T_f^c with c = C_V,m/R (2E.2b), and w_ad = C_V ΔT (2E.1).
 
+![Isotherm and adiabat, the Carnot cycle and the Otto cycle on p–V diagrams](fig/pv-cycles.svg)
+
+*Figure. Left panel: an adiabat is steeper than an isotherm through the same point. (The Carnot and Otto cycles are used in Chapter 7.)*
+
 ## 7. Differentials, Joule and Joule-Thomson (Atkins 2D, p.59-66)
 - dU = C_V dT + π_T dV, with **π_T = (∂U/∂V)_T = T(∂p/∂T)_V − p**. Perfect gas: π_T = 0. vdW: **π_T = a/V_m²** > 0 (attractions).
 - Joule's experiment saw no ΔT only because the water bath swamped it. Real gases cool slightly on free expansion (N₂ doubling: ΔT ≈ −0.13 K in the gas alone).

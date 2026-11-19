@@ -101,6 +101,12 @@ md.renderer.rules.link_open = (t, i, o, e, s) => {
 // ---------- helpers ----------
 const plain = s => s.replace(/\$([^$]+)\$/g, '$1').replace(/\\[a-zA-Z]+\s?/g, '').replace(/[*_`{}]/g, '').replace(/\s+/g, ' ').trim();
 const slugify = s => plain(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'section';
+md.renderer.rules.image = (t, i) => {
+  const src = t[i].attrGet('src') || '';
+  const alt = t[i].content || '';
+  if (/^fig\//.test(src)) return `<img class="fig" src="../../assets/${esc(src)}" alt="${esc(alt)}" loading="lazy">`;
+  return `<img src="${esc(src)}" alt="${esc(alt)}">`;
+};
 const inline = s => md.renderInline(s);
 function uniq(slug, seen) {
   let s = slug, n = 2;
@@ -498,6 +504,11 @@ fs.writeFileSync(path.join(OUT, 'assets', 'katex', 'katex.min.css'), kcss);
 for (const f of fs.readdirSync(path.join(kd, 'fonts')).filter(f => /\.woff2$/.test(f))) {
   fs.copyFileSync(path.join(kd, 'fonts', f), path.join(OUT, 'assets', 'katex', 'fonts', f));
   written.push(`assets/katex/fonts/${f}`);
+}
+const figDir = path.join(CONTENT, 'figures');
+if (fs.existsSync(figDir)) {
+  fs.mkdirSync(path.join(OUT, 'assets', 'fig'), { recursive: true });
+  for (const f of fs.readdirSync(figDir)) { fs.copyFileSync(path.join(figDir, f), path.join(OUT, 'assets', 'fig', f)); written.push(`assets/fig/${f}`); }
 }
 for (const f of fs.readdirSync(path.join(ROOT, 'src')).filter(f => f !== 'sw.js')) fs.copyFileSync(path.join(ROOT, 'src', f), path.join(OUT, 'assets', f));
 fs.writeFileSync(path.join(OUT, 'sw.js'), fs.readFileSync(path.join(ROOT, 'src', 'sw.js'), 'utf8').replace('__BUILD__', BUILD));

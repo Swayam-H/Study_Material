@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwny1tt3">
+<link rel="stylesheet" href="../../assets/style.css?v=mwnyy8u9">
 </head>
 <body data-root="../../" data-page="science-1/ch3-lagrange/learn" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -100,6 +100,8 @@
 <p>Such problems ask for the function y(x) that makes an integral J = ∫f(y, y′, x) dx stationary, with the end points held fixed. This is a different kind of optimisation from finding the minimum of a function, because the unknown is an entire curve. The method is to compare the true curve with nearby ones, y(x) + αη(x), where η is any smooth function that vanishes at the end points. For the true curve J must be stationary as α passes through zero. Differentiating under the integral and integrating the η′ term by parts, the boundary terms vanish and we are left with ∫[∂f/∂y − d/dx(∂f/∂y′)]η dx = 0. Since this must hold for every η, the bracket itself must vanish, giving the Euler equation ∂f/∂y − d/dx(∂f/∂y′) = 0. When f does not depend explicitly on x, a first integral follows at once: f − y′∂f/∂y′ is constant. This second form is often the quicker route, and it is the one used for the brachistochrone.</p>
 <h2 id="hamilton-s-principle">Hamilton's principle</h2>
 <p>Mechanics can be put in the same form. Hamilton's principle states that of all the paths a system could take between two configurations in a given time, the actual path is the one for which the action S = ∫L dt is stationary, where the Lagrangian L = T − U is the kinetic energy minus the potential energy. Applying the Euler equation with t in place of x gives the Euler–Lagrange equations, d/dt(∂L/∂q̇) = ∂L/∂q. For a single particle in Cartesian coordinates these are exactly Newton's equations mẍ = −∂U/∂x, so nothing new has been added to the physics. What has been gained is a far more convenient formulation.</p>
+<p><img class="fig" src="../../assets/fig/brachistochrone.svg" alt="Brachistochrone: cycloid, straight line and parabola" loading="lazy"></p>
+<p><em>Figure. The fastest path from A to B is the cycloid, not the straight line: it dives steeply first to pick up speed.</em></p>
 <h2 id="generalised-coordinates-and-constraints">Generalised coordinates and constraints</h2>
 <p>The great advantage of the Lagrangian method is that the action is a scalar, and its stationary value does not depend on which coordinates are used to describe the path. Any set of independent quantities that fixes the configuration, called generalised coordinates, will do, and the Euler–Lagrange equations take the same form in all of them. The number of such coordinates is the number of degrees of freedom. A simple pendulum, for example, needs only the angle θ. Writing T = ½ml²θ̇² and U = −mgl cosθ gives the equation ml²θ̈ = −mgl sinθ at once, without ever mentioning the tension in the string. This is typical. Constraints that are built into the choice of coordinates never appear in the equations, and the forces that maintain them, which do no work, need not be found.</p>
 <p>The same method handles more complicated systems with little extra effort. For a particle moving on the inside of a cone, the &quot;wall of death&quot;, two coordinates r and θ suffice, and since θ does not appear in the Lagrangian the angular momentum about the axis is conserved. For a block on an incline whose angle increases at a steady rate, the Lagrangian depends explicitly on time, and the energy is then not conserved. For a double pendulum, two angles describe the system, and the Lagrangian leads directly to two coupled equations of motion, which would be laborious to obtain from free-body diagrams.</p>
@@ -140,6 +142,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwny1tt3" defer></script>
+<script src="../../assets/app.js?v=mwnyy8u9" defer></script>
 </body>
 </html>

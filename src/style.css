@@ -2057,3 +2057,6 @@ details.sol > :last-child:not(summary) { margin-bottom: 8px; }
 .course-card.soon h2 { font-size: 19px; margin-bottom: 4px; }
 .course-card.soon p { font-size: 14.5px; }
 .course-card.soon .course-foot { margin-top: 12px; }
+
+/* figures */
+img.fig { display: block; max-width: 100%; height: auto; margin: 1.1rem auto 0.3rem; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px; }

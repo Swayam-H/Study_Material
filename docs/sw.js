@@ -1,5 +1,5 @@
 // Offline support: serve from cache first, refresh in the background.
-const CACHE = 'notes-mwny1tt3';
+const CACHE = 'notes-mwnyy8u9';
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('notes-') && k !== CACHE && k !== 'notes-offline').map(k => caches.delete(k)))).then(() => self.clients.claim()));

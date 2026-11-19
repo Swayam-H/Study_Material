@@ -18,17 +18,29 @@ Because Hamilton's equations are first order, the state of a system at any insta
 
 Suppose now that we do not know the initial state exactly, but only that it lies in some small region of phase space. Each point of the region moves according to Hamilton's equations, and the region is carried along and deformed. Liouville's theorem states that for Hamiltonian motion its volume never changes. The region may be stretched in one direction and squeezed in another, but its volume is conserved. The proof uses the fact that the flow velocity (q̇, ṗ) has zero divergence, since ∂q̇/∂q + ∂ṗ/∂p = ∂²H/∂q∂p − ∂²H/∂p∂q = 0, so phase-space points behave like an incompressible fluid. The theorem has two important consequences. A frictionless system cannot settle into a resting state, since that would shrink a region of phase space to a point, and it is only dissipation that does this. And uncertainty about the initial state is never removed by the motion itself, only reshaped. Liouville's theorem is also the starting point of statistical mechanics.
 
+![Phase-space trajectories of a harmonic oscillator](fig/phase-space.svg)
+
+*Figure. Phase space $(x,p)$. An undamped oscillator traces an ellipse of area $2\pi E/\omega$; with damping the trajectory spirals inward and the area shrinks, which a Hamiltonian system never does.*
+
 ## Reducing two bodies to one
 
 Two bodies interacting through a force that depends only on their separation, such as the sun and a planet, are described by six coordinates. A good choice of coordinates simplifies the problem greatly. Using the position of the centre of mass R and the relative position r = r₁ − r₂, the Lagrangian separates into L = ½MṘ² + ½μṙ² − U(r), where M is the total mass and μ = m₁m₂/(m₁ + m₂) is the reduced mass. R does not appear, so the centre of mass moves uniformly and we can work in the frame where it is at rest. What remains is the motion of a single particle of mass μ in the central potential U(r).
 
 For a central force the angular momentum is conserved, so the motion stays in the plane perpendicular to it, and plane polar coordinates (r, θ) suffice. The Lagrangian becomes L = ½μ(ṙ² + r²θ̇²) − U(r). Since θ is cyclic, its conjugate momentum ℓ = μr²θ̇ is constant. In a short time dt the line joining the bodies sweeps out an area dA = ½r²dθ, so the areal velocity dA/dt = ℓ/2μ is constant. This is Kepler's second law, and it holds for any central force, not only gravity.
 
+![Two bodies orbiting their centre of mass](fig/two-body.svg)
+
+*Figure. Both bodies orbit the centre of mass; the heavier one moves on the smaller circle.*
+
 ## The effective potential and the orbits
 
 The energy is E = ½μṙ² + ℓ²/(2μr²) + U(r). The middle term is the kinetic energy of the angular motion, but since ℓ is fixed it depends on r alone and acts like an extra repulsive potential, the centrifugal barrier. The radial motion is therefore that of a particle in one dimension moving in the effective potential U\_eff = ℓ²/(2μr²) − k/r for gravity, with k = Gm₁m₂. This function rises steeply at small r, falls to a minimum, and approaches zero from below at large r. If E equals the minimum, r cannot change and the orbit is a circle. If E lies between the minimum and zero, r oscillates between two turning points and the orbit is bound. If E is zero or positive, the body comes in from infinity, turns at a closest approach and escapes again.
 
 Solving the equations with the substitution u = 1/r gives the orbit explicitly: α/r = 1 + ε cosθ, with α = ℓ²/μk and eccentricity ε = √(1 + 2Eℓ²/μk²). This is a conic section with the centre of force at a focus. For E < 0, ε < 1 and the orbit is an ellipse, which is Kepler's first law; the special case ε = 0 is a circle. For E = 0 it is a parabola, and for E > 0 a hyperbola. For an ellipse the period satisfies T² ∝ a³, Kepler's third law. Bound orbits close on themselves only for two power laws, the inverse-square force and the linear force of the harmonic oscillator; for any other force law the orbit precesses.
+
+![Effective potential and the conic-section orbits](fig/effective-potential-orbits.svg)
+
+*Figure. Left: $U_\mathrm{eff}=\ell^2/2\mu r^2-k/r$ with the energy levels that give each orbit. Right: the orbits $r=p/(1+e\cos\theta)$ for eccentricity $e=0,\ 0.5,\ 1,\ 1.6$.*
 
 ## Beyond two bodies
 

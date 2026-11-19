@@ -22,6 +22,14 @@ The logistic map xₙ₊₁ = rxₙ(1 − xₙ), with 0 ≤ x ≤ 1 the populati
 
 Chaos here means deterministic chaos. The rule is completely determined, with no randomness, yet the sequence never repeats, and two starting values that differ by a tiny amount soon lead to completely different sequences. Long-term prediction is therefore impossible in practice, because the initial state can never be known exactly. Within the chaotic region there are still windows of order, notably a 3-cycle near r ≈ 3.83, and at r = 4 the map is fully chaotic, equivalent under x = sin²θ to doubling an angle at each step. The striking lesson is that a nonlinear term as simple as −rx² is enough to produce all this, whereas a linear map can only converge, diverge or oscillate.
 
+![Cobweb diagrams for r = 2.5, 3.3 and 3.9](fig/logistic-cobweb.svg)
+
+*Figure. Cobweb diagrams. Draw the map and the line $y=x$, then bounce between them. For $r=2.5$ the orbit spirals into the fixed point $x^*=0.6$; for $r=3.3$ it ends on a 2-cycle; for $r=3.9$ it never settles.*
+
+![Bifurcation diagram of the logistic map](fig/logistic-bifurcation.png)
+
+*Figure. Bifurcation diagram. For each $r$ the long-term values of $x$. The fixed point splits into a 2-cycle at $r=3$, then 4, 8, ... until chaos near $r\approx3.57$, with periodic windows inside.*
+
 ## The prey–predator model
 
 Continuous change is described by differential equations. Lotka and Volterra modelled a prey population X and a predator population Y by dX/dt = αX − βXY and dY/dt = γXY − δY. Prey grow at rate α when there are no predators; they are eaten at a rate proportional to encounters, βXY; predators grow in proportion to the food they catch, γXY; and predators die at rate δ when there is no food. Measuring the populations and time in natural units reduces the four parameters to a single ratio, a = δ/α.
@@ -29,6 +37,10 @@ Continuous change is described by differential equations. Lotka and Volterra mod
 The steady states are found by setting both rates to zero. One is (0, 0), the extinction of both. The other is the coexistence point (δ/γ, α/β). Their stability is decided by linearising the equations, that is, by the eigenvalues of the Jacobian matrix of partial derivatives at each point. If both eigenvalues are real and negative, nearby states approach the point; if one is positive, they move away; if the eigenvalues are complex, the motion spirals, inwards or outwards according to the sign of the real part; and if they are purely imaginary, the motion circles the point. At the origin the eigenvalues are α and −δ, a saddle: a few prey would multiply, so extinction is unstable. At the coexistence point they are ±i√(αδ), so populations near it oscillate with period 2π/√(αδ). The full nonlinear equations have a conserved quantity, and their orbits are closed loops: prey increase, predators follow, prey decline, predators decline, and the cycle repeats. Because the eigenvectors at the coexistence point are complex, the actual real populations are obtained by combining the complex solution with its conjugate, which produces sines and cosines.
 
 Small changes to the model can change its behaviour qualitatively. If prey are harvested at a constant rate, for example, the coexistence point keeps the same prey level but has fewer predators, and the closed cycles are replaced by oscillations that grow, so the system is no longer stable.
+
+![Lotka–Volterra phase portrait and time series](fig/lotka-volterra.svg)
+
+*Figure. Lotka–Volterra. The orbits are closed loops around the coexistence point, each a level curve of $V$; in time, predators peak a quarter cycle after prey.*
 
 # Reference: Scales, modelling and nonlinear dynamics
 

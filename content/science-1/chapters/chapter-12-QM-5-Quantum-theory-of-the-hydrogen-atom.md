@@ -30,6 +30,10 @@ The magnetic quantum number mₗ determines the component of the angular momentu
 
 The wave function does not describe a path. It gives the probability |ψ|² dV of finding the electron in a small volume, and the electron may be found at any distance from the nucleus. The probability of finding it between r and r + dr is P(r) dr = r²|R|² dr, the factor r² coming from the volume of a thin spherical shell. For the ground state this function has its maximum at r = a₀, the Bohr radius. The Bohr orbit therefore survives, but only as the most probable distance of the electron, not as a track it follows. The angular parts of ψ give the familiar shapes: s states are spherical, and p and d states have lobes in definite directions, which is why chemical bonds have definite directions.
 
+![Radial probability and the angular momentum vector model](fig/orbitals-angular-momentum.svg)
+
+*Figure. Left: radial probability densities of 1s, 2s and 2p. Right: for $l=2$, $\mathbf L$ has length $\sqrt6\hbar$ and $L_z=m_l\hbar$, so it can point only along five cones.*
+
 ## Radiative transitions
 
 Quantum mechanics also explains why atoms are stable and how they radiate. In a stationary state |Ψ|² does not change with time, so the electron's charge distribution is static and, unlike Bohr's orbiting electron, it does not radiate. During a transition the electron is in a mixture of the initial and final states, and |Ψ|² then oscillates at the frequency (Eᵢ − E\_f)/h. An oscillating charge distribution radiates at its oscillation frequency, so the emitted photon has exactly the energy Eᵢ − E\_f. What Bohr had to postulate now follows from the theory.
