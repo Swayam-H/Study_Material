@@ -301,18 +301,31 @@ A body falls from rest with linear drag −kv. Find v(t) and the terminal veloci
 
 A block slides down a 30° incline with μ = 0.2 (cos 30° ≈ 0.87). Find its acceleration (g = 10 m/s²).
 
-*Solution.* a = g(sin30° − 0.2cos30°) = 10(0.5 − 0.174) ≈ 3.3 m/s².
+*Solution.* **Idea.** Along the incline: gravity pulls down the slope with $mg\sin\theta$ and kinetic friction opposes with $\mu N = \mu mg\cos\theta$.
+
+$$a = g(\sin\theta - \mu\cos\theta) = 10(0.5 - 0.2\times0.87) = 10(0.5 - 0.174) \approx \boxed{3.3\ \text{m/s}^2}$$
 
 ### Problem 21 [Mechanics 1 · Numerical · 2 pts]
 
 A rocket in free space has u = 3 km/s. What mass ratio m₀/m gives 9 km/s? (e³ ≈ 20)
 
-*Solution.* ln(m₀/m) = 9/3 = 3, so m₀/m = e³ ≈ 20: 95% of the launch mass must be fuel, which is why rockets have stages.
+*Solution.* **Idea.** Free-space rocket: $v = v_0 + u\ln(m_0/m)$, starting from rest.
+
+$$\ln\frac{m_0}{m} = \frac{\Delta v}{u} = \frac{9}{3} = 3\ \Rightarrow\ \frac{m_0}{m} = e^3 \approx \boxed{20}$$
+
+So $1 - 1/20 = 95\%$ of the launch mass must be fuel. That is why rockets use stages.
 
 ### Problem 22 [Mechanics 1 · Numerical · 2 pts]
 
 Estimate the thrust needed to lift a 500 t rocket off the pad, and the burn rate if u = 3 km/s.
 
-*Solution.* Weight ≈ 5 × 10⁵ kg × 10 m/s² = 5 × 10⁶ N, so the thrust must exceed about 5 MN. Burn rate α > 5 × 10⁶/3000 ≈ 1.7 t/s.
+*Solution.* **Weight:**
 
+$$W = mg = (5\times10^5\ \text{kg})(10\ \text{m/s}^2) = 5\times10^6\ \text{N}$$
+
+Lift-off needs thrust $u\alpha > W$, so the thrust must exceed about $\boxed{5\ \text{MN}}$.
+
+**Burn rate** with $u = 3$ km/s:
+
+$$\alpha > \frac{W}{u} = \frac{5\times10^6}{3000} \approx 1.7\times10^3\ \text{kg/s} = \boxed{1.7\ \text{t/s}}$$
 

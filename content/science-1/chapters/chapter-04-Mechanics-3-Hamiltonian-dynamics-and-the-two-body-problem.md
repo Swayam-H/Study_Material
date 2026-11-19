@@ -280,25 +280,45 @@ Write the Hamiltonian and Hamilton's equations for a simple pendulum.
 
 The earth is 81 times as massive as the moon. Express the reduced mass of the earth–moon system in terms of the moon's mass.
 
-*Solution.* μ = (81m)(m)/(82m) = (81/82)m ≈ 0.988 m\_moon.
+*Solution.* **Idea.** Reduced mass $\mu = \dfrac{m_1m_2}{m_1 + m_2}$.
+
+$$\mu = \frac{(81m)(m)}{81m + m} = \frac{81}{82}\,m \approx \boxed{0.988\,m_\text{moon}}$$
+
+Because the earth is so much heavier, the moon behaves almost as if it orbits a fixed centre.
 
 ### Problem 19 [Mechanics 3 · Numerical · 2 pts]
 
 Mars orbits at 1.52 AU. Find its period (1.52^(3/2) ≈ 1.87).
 
-*Solution.* T ∝ a^(3/2): T = 1.52^(3/2) ≈ 1.87 yr.
+*Solution.* **Idea.** Kepler III: $T^2 \propto a^3$. In years and AU, Earth has $T = 1$ at $a = 1$, so $T = a^{3/2}$.
+
+$$T = (1.52)^{3/2} \approx \boxed{1.87\ \text{yr}}$$
 
 ### Problem 20 [Mechanics 3 · Numerical · 2 pts]
 
 Show that the escape speed from a planet's surface is √2 times the speed of a circular orbit skimming the surface.
 
-*Solution.* Escape: ½mv² − GMm/R = 0, so v\_esc = √(2GM/R). Circular: mv²/R = GMm/R², so v\_c = √(GM/R). Ratio √2.
+*Solution.* **Escape:** the total energy is zero at the escape speed:
+
+$$\tfrac12mv_\text{esc}^2 - \frac{GMm}{R} = 0\ \Rightarrow\ v_\text{esc} = \sqrt{\frac{2GM}{R}}$$
+
+**Circular orbit** at the surface: gravity supplies the centripetal force:
+
+$$\frac{mv_c^2}{R} = \frac{GMm}{R^2}\ \Rightarrow\ v_c = \sqrt{\frac{GM}{R}}$$
+
+$$\boxed{\frac{v_\text{esc}}{v_c} = \sqrt2}$$
 
 ### Problem 21 [Mechanics 3 · Numerical · 2 pts]
 
 Show that an orbit with E = −μk²/2ℓ² is a circle.
 
-*Solution.* ε = √(1 + 2Eℓ²/μk²) = √(1 − 1) = 0, a circle. (This E is the minimum of U\_eff.)
+*Solution.* **Idea.** The orbit's shape is set by $\varepsilon = \sqrt{1 + \dfrac{2E\ell^2}{\mu k^2}}$.
+
+With $E = -\dfrac{\mu k^2}{2\ell^2}$:
+
+$$\varepsilon = \sqrt{1 + \frac{2\ell^2}{\mu k^2}\left(-\frac{\mu k^2}{2\ell^2}\right)} = \sqrt{1 - 1} = 0\ \Rightarrow\ \text{a circle}$$
+
+**Check.** This value is exactly the minimum of $U_\text{eff}$ (at $r_0 = \ell^2/\mu k$), where $\dot r = 0$ for all time.
 
 ## D. Estimate
 
@@ -306,6 +326,9 @@ Show that an orbit with E = −μk²/2ℓ² is a circle.
 
 Estimate the earth's orbital speed (1 AU = 1.5 × 10¹¹ m, 1 yr ≈ 3.15 × 10⁷ s).
 
-*Solution.* v = 2π × 1.5 × 10¹¹/3.15 × 10⁷ ≈ 9.4 × 10¹¹/3.15 × 10⁷ ≈ 3 × 10⁴ m/s, about 30 km/s.
+*Solution.* **Idea.** Circular orbit: speed $=$ circumference $\div$ period.
 
+$$v = \frac{2\pi r}{T} = \frac{2\pi(1.5\times10^{11}\ \text{m})}{3.15\times10^7\ \text{s}} = \frac{9.4\times10^{11}}{3.15\times10^7} \approx \boxed{3\times10^4\ \text{m/s}}$$
+
+That is about $30$ km/s.
 

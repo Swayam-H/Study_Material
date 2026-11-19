@@ -307,12 +307,25 @@ A particle slides from rest at the top of a smooth sphere of radius R. Using a m
 
 Find the acceleration of a uniform hoop (I = MR²) and a uniform disk rolling down a 30° incline.
 
-*Solution.* a = g sinα/(1 + I/MR²), with sin 30° = ½. Hoop: g/4. Disk: g/3.
+*Solution.* **Idea.** For a body rolling without slipping, $a = \dfrac{g\sin\alpha}{1 + I/MR^2}$. With $\sin30^\circ = \tfrac12$:
+
+$$\text{Hoop } (I = MR^2):\quad a = \frac{g/2}{1 + 1} = \boxed{\frac g4}$$
+
+$$\text{Uniform disk } (I = \tfrac12MR^2):\quad a = \frac{g/2}{1 + \tfrac12} = \boxed{\frac g3}$$
+
+The disk, with less of its mass at the rim, accelerates faster.
 
 ### Problem 24 [Mechanics 2 · Numerical · 2 pts · practice P18a]
 
 Two blocks of mass M are joined by a light string; one is on a smooth table, the other hangs over a pulley. Find the acceleration.
 
-*Solution.* L = ½(2M)ẋ² + Mgx, so 2Mẍ = Mg and a = g/2.
+*Solution.* **Idea.** One coordinate $x$ (the string is inextensible): both blocks move with speed $\dot x$.
 
+$$T = \tfrac12M\dot x^2 + \tfrac12M\dot x^2 = \tfrac12(2M)\dot x^2,\qquad U = -Mgx\ \ (\text{only the hanging block})$$
+
+$$L = \tfrac12(2M)\dot x^2 + Mgx$$
+
+Lagrange's equation $\dfrac{d}{dt}\dfrac{\partial L}{\partial\dot x} = \dfrac{\partial L}{\partial x}$:
+
+$$2M\ddot x = Mg\ \Rightarrow\ \boxed{a = \frac g2}$$
 

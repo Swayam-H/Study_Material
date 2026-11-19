@@ -315,24 +315,53 @@ For the SHO, write the equation of motion and non-dimensionalise it.
 
 Estimate the number of cells in an adult human body.
 
-*Solution.* Body ≈ 70 kg; a typical cell is about 10 μm across, volume 10⁻¹⁵ m³, mass about 10⁻¹² kg (density of water). N ≈ 70/10⁻¹² ≈ 10¹³–10¹⁴ (accepted estimate about 3 × 10¹³).
+*Solution.* **Idea.** A Fermi estimate: (mass of a body) ÷ (mass of one cell), keeping to the right power of ten.
+
+$$m_\text{cell} \approx \rho\,V \approx (10^3\ \text{kg m}^{-3})(10\ \mu\text{m})^3 = (10^3)(10^{-15}) = 10^{-12}\ \text{kg}\quad(\text{cells are mostly water})$$
+
+$$N \approx \frac{70\ \text{kg}}{10^{-12}\ \text{kg}} = \boxed{\sim10^{13}\text{–}10^{14}}\quad(\text{accepted estimate about } 3\times10^{13})$$
+
+Cells vary a lot in size (red blood cells are far smaller), but the answer lands in the right range.
 
 ### Problem 19 [Intro · Numerical · 3 pts · HW 2b]
 
 Estimate the maximum kinetic energy of a bowled cricket ball, its rest energy mc², and the ratio.
 
-*Solution.* m = 0.16 kg, v ≈ 40 m/s: K ≈ 130 J. mc² ≈ 1.4 × 10¹⁶ J. Ratio ≈ 10⁻¹⁴.
+*Solution.* **Idea.** Compare $K = \tfrac12mv^2$ with the rest energy $mc^2$.
+
+$$K \approx \tfrac12(0.16)(40)^2 \approx \boxed{130\ \text{J}},\qquad mc^2 \approx (0.16)(9\times10^{16}) \approx \boxed{1.4\times10^{16}\ \text{J}}$$
+
+$$\frac{K}{mc^2} \approx \boxed{10^{-14}}$$
+
+Everyday motion uses a minuscule fraction of the energy locked in mass.
 
 ### Problem 20 [Intro · Numerical · 3 pts · HW 2c]
 
 How long would it take to walk from campus to the airport (about 30 km), and how much energy would you spend? Compare a 50-minute car journey.
 
-*Solution.* At 5 km/h, 30 km takes about 6 h. Walking costs about 250 W above rest, so roughly 250 × 2 × 10⁴ s ≈ 5 MJ (about 1200 kcal). A car at about 12 km/L uses 2.5 L of petrol, about 2.5 × 34 MJ ≈ 85 MJ, roughly 15–20 times more.
+*Solution.* **Time.** At walking speed $5$ km/h:
+
+$$t = \frac{30\ \text{km}}{5\ \text{km/h}} = \boxed{6\ \text{h}}\ (\approx 2\times10^4\ \text{s})$$
+
+**Energy.** Walking costs about $250$ W above resting:
+
+$$E \approx (250\ \text{W})(2\times10^4\ \text{s}) = 5\times10^6\ \text{J} = \boxed{5\ \text{MJ}}\ (\approx 1200\ \text{kcal})$$
+
+**Car** (50 minutes, about 12 km/L): fuel $= 30/12 = 2.5$ L of petrol at about $34$ MJ/L:
+
+$$E_\text{car} \approx 2.5 \times 34 \approx 85\ \text{MJ}$$
+
+The car is about $17$ times more energy-expensive, but about $7$ times faster.
 
 ### Problem 21 [Intro · Numerical · 2 pts · HW 2a]
 
 Estimate the power needed by a hovering mosquito.
 
-*Solution.* A mosquito of about 2 mg must push air down to support its weight, 2 × 10⁻⁵ N. Inducing an airflow of order 1 m/s, the power is about weight × speed ≈ 2 × 10⁻⁵ W, a few tens of microwatts (allowing for inefficiency, about 10⁻⁴ W).
+*Solution.* **Idea.** To hover, the mosquito must push air downward at a rate that supplies a force equal to its weight, and power $=$ force $\times$ speed of the air pushed.
 
+$$W = mg = (2\times10^{-6}\ \text{kg})(10) = 2\times10^{-5}\ \text{N}$$
+
+$$P \approx W\,v_\text{air} \approx (2\times10^{-5}\ \text{N})(1\ \text{m/s}) = 2\times10^{-5}\ \text{W}$$
+
+Allowing for inefficiency, $\boxed{P \sim 10^{-4}\ \text{W}}$, a few tens to a hundred microwatts.
 
