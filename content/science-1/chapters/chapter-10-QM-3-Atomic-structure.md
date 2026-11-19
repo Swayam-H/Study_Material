@@ -306,37 +306,109 @@ List two failures of the Bohr model.
 
 Using the de Broglie condition and the Coulomb force, derive the radii rₙ and energies Eₙ of the hydrogen atom.
 
-*Solution.* Force balance: mv²/r = e²/(4πε₀r²), so v² = e²/(4πε₀mr). De Broglie: 2πr = nh/mv, so v = nh/(2πmr). Equate the two expressions for v²: rₙ = n²h²ε₀/(πme²) = n²a₀ with a₀ = 0.053 nm. The energy is E = −e²/(8πε₀r), so Eₙ = −me⁴/(8ε₀²h²n²) = −13.6/n² eV.
+*Solution.* **Two conditions.**
+
+- **Force balance** (Coulomb provides the centripetal force):
+
+$$\frac{mv^2}r = \frac{e^2}{4\pi\varepsilon_0r^2}\ \Rightarrow\ v^2 = \frac{e^2}{4\pi\varepsilon_0mr}$$
+
+- **de Broglie** (a whole number of wavelengths fit around the orbit):
+
+$$2\pi r = n\lambda = \frac{nh}{mv}\ \Rightarrow\ v = \frac{nh}{2\pi mr}$$
+
+**Equate the two expressions for $v^2$:**
+
+$$\frac{n^2h^2}{4\pi^2m^2r^2} = \frac{e^2}{4\pi\varepsilon_0mr}\ \Rightarrow\ \boxed{r_n = n^2\frac{\varepsilon_0h^2}{\pi me^2} = n^2a_0},\qquad a_0 = 0.0529\ \text{nm}$$
+
+**Energy.** $E = \tfrac12mv^2 - \dfrac{e^2}{4\pi\varepsilon_0r}$, and $\tfrac12mv^2 = \dfrac{e^2}{8\pi\varepsilon_0r}$ from the force balance:
+
+$$E = -\frac{e^2}{8\pi\varepsilon_0r_n}\ \Rightarrow\ \boxed{E_n = -\frac{me^4}{8\varepsilon_0^2h^2n^2} = -\frac{13.6\ \text{eV}}{n^2}}$$
 
 ### Problem 14 [QM 3 · Derivation · 3 pts]
 
 From Eₙ, derive the Rydberg formula and an expression for R.
 
-*Solution.* hc/λ = Eᵢ − E\_f = −E₁(1/n\_f² − 1/nᵢ²). So 1/λ = R(1/n\_f² − 1/nᵢ²) with R = −E₁/hc = me⁴/(8ε₀²ch³) = 1.097 × 10⁷ m⁻¹.
+*Solution.* **Photon energy.** A transition $n_i \to n_f$ emits
+
+$$\frac{hc}\lambda = E_i - E_f = -E_1\left(\frac1{n_f^2} - \frac1{n_i^2}\right)$$
+
+with $E_n = E_1/n^2$ and $E_1 = -13.6$ eV.
+
+**Rydberg formula.**
+
+$$\boxed{\frac1\lambda = R\left(\frac1{n_f^2} - \frac1{n_i^2}\right)}$$
+
+**Rydberg constant.**
+
+$$R = \frac{-E_1}{hc} = \frac{me^4}{8\varepsilon_0^2ch^3} = \boxed{1.097\times10^7\ \text{m}^{-1}}$$
+
+**Series.** $n_f = 1$ Lyman (UV), $n_f = 2$ Balmer (visible), $n_f = 3$ Paschen (IR).
 
 ### Problem 15 [QM 3 · Derivation · 4 pts]
 
 Show that for large n the frequency of the photon emitted in n → n − 1 approaches the classical orbital frequency of the electron.
 
-*Solution.* ν = (−E₁/h)\[1/(n − 1)² − 1/n²\] = (−E₁/h)(2n − 1)/\[n²(n − 1)²\]. For large n this is about (−E₁/h)(2/n³). The classical orbital frequency is f = v/(2πr) = (−E₁/h)(2/n³) using vₙ and rₙ. They agree.
+*Solution.* **Quantum frequency** of the $n \to n-1$ photon (with $E_1 = -13.6$ eV):
+
+$$\nu = \frac{-E_1}h\left[\frac1{(n-1)^2} - \frac1{n^2}\right] = \frac{-E_1}h\,\frac{2n - 1}{n^2(n-1)^2}\ \xrightarrow{\ n\to\infty\ }\ \frac{-E_1}h\,\frac2{n^3}$$
+
+**Classical orbital frequency.** $f = \dfrac v{2\pi r}$ with $v_n = \dfrac{nh}{2\pi mr_n}$ and $r_n = n^2a_0$:
+
+$$f = \frac{v_n}{2\pi r_n} = \frac{nh}{4\pi^2mr_n^2} = \frac{h}{4\pi^2ma_0^2}\,\frac1{n^3}$$
+
+Using $-E_1 = \dfrac{\hbar^2}{2ma_0^2}$, i.e. $\dfrac{h}{4\pi^2ma_0^2} = \dfrac{2(-E_1)}h$:
+
+$$f = \frac{-E_1}h\,\frac2{n^3}$$
+
+The two agree: the **correspondence principle**.
 
 ### Problem 16 [QM 3 · Derivation · 3 pts]
 
 Show that the electron's speed in the n-th Bohr orbit is vₙ = αc/n. Comment on whether relativity is needed.
 
-*Solution.* From mvr = nħ and r = n²a₀: v = nħ/(m n² a₀) = ħ/(m a₀ n) = e²/(4πε₀ħn) = αc/n. For n = 1, v ≈ c/137 ≈ 2.2 × 10⁶ m/s, under 1% of c. Relativity matters only as a small correction (fine structure).
+*Solution.* **Angular momentum quantisation** $mv_nr_n = n\hbar$, with $r_n = n^2a_0$:
+
+$$v_n = \frac{n\hbar}{mr_n} = \frac{\hbar}{ma_0n}$$
+
+**Substitute** $a_0 = \dfrac{4\pi\varepsilon_0\hbar^2}{me^2}$:
+
+$$v_n = \frac{e^2}{4\pi\varepsilon_0\hbar}\,\frac1n = \boxed{\frac{\alpha c}n},\qquad \alpha = \frac{e^2}{4\pi\varepsilon_0\hbar c} \approx \frac1{137}$$
+
+**Relativity?** For $n = 1$, $v = c/137 \approx 2.2\times10^6$ m/s, less than $1\%$ of $c$ ($\gamma - 1 \sim 10^{-5}$). Non-relativistic mechanics is an excellent approximation; relativity enters only as a small correction (fine structure, of order $\alpha^2$).
 
 ### Problem 17 [QM 3 · Derivation · 3 pts]
 
 Show that for a hydrogen-like ion of nuclear charge Ze, Eₙ = −13.6 Z²/n² eV.
 
-*Solution.* Replace e² by Ze² in the force (one factor of e is the nucleus). Then rₙ = n²a₀/Z and Eₙ = −Z²(13.6 eV)/n².
+*Solution.* **Force.** With a nucleus of charge $Ze$ and an electron of charge $e$, the Coulomb force is $\dfrac{Ze^2}{4\pi\varepsilon_0r^2}$: replace $e^2 \to Ze^2$ in Problem 13.
+
+**Radii.** $r_n = \dfrac{n^2}Z\dfrac{\varepsilon_0h^2}{\pi me^2}$, that is
+
+$$r_n = \frac{n^2a_0}Z$$
+
+**Energies.** $E_n \propto (Ze^2)^2$, so
+
+$$\boxed{E_n = -\frac{13.6\ Z^2}{n^2}\ \text{eV}}$$
+
+**Example.** He$^+$ ($Z = 2$): $E_1 = -54.4$ eV.
 
 ### Problem 18 [QM 3 · Derivation · 3 pts]
 
 Explain the reduced-mass correction and estimate how much it changes hydrogen's energy levels.
 
-*Solution.* Both particles orbit the centre of mass. This is the same as an electron of mass m′ = mM/(m + M) around a fixed nucleus. Energies scale with mass, so Eₙ is multiplied by m′/m = 1/(1 + m/M) ≈ 1 − 1/1836, a change of about 0.05%.
+*Solution.* **Idea.** The electron does not orbit a fixed nucleus; both orbit their common centre of mass. The problem is equivalent to one body of the **reduced mass**
+
+$$m' = \frac{mM}{m + M} = \frac m{1 + m/M}$$
+
+orbiting a fixed centre.
+
+**Effect on energy.** In $E_n = -me^4/(8\varepsilon_0^2h^2n^2)$ replace $m \to m'$:
+
+$$E_n' = E_n\cdot\frac{m'}m = E_n\left(1 + \frac mM\right)^{-1} \approx E_n\left(1 - \frac1{1836}\right)$$
+
+for hydrogen ($M = m_p$). The change is about $0.05\%$.
+
+**Consequence.** Heavier isotopes (deuterium) have slightly larger $m'$, so their lines are shifted to shorter wavelengths: that is how deuterium was discovered.
 
 ## C. Numericals without a calculator
 

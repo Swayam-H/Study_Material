@@ -318,49 +318,137 @@ What is degeneracy? Give an example from the 3-D box.
 
 Starting from a free-particle wave Ψ = Ae^(−(i/ħ)(Et − px)) and E = p²/2m + U, obtain the time-dependent Schrödinger equation.
 
-*Solution.* ∂²Ψ/∂x² = −(p²/ħ²)Ψ, so p²Ψ = −ħ² ∂²Ψ/∂x². Also ∂Ψ/∂t = −(iE/ħ)Ψ, so EΨ = iħ ∂Ψ/∂t. Multiply E = p²/2m + U by Ψ and substitute: iħ ∂Ψ/∂t = −(ħ²/2m)∂²Ψ/∂x² + UΨ. Then assume it holds for any U.
+*Solution.* **Free-particle wave.** $\Psi = Ae^{-(i/\hbar)(Et - px)}$.
+
+**Differentiate.**
+
+$$\frac{\partial\Psi}{\partial t} = -\frac{iE}\hbar\Psi\ \Rightarrow\ E\Psi = i\hbar\frac{\partial\Psi}{\partial t}$$
+
+$$\frac{\partial^2\Psi}{\partial x^2} = -\frac{p^2}{\hbar^2}\Psi\ \Rightarrow\ p^2\Psi = -\hbar^2\frac{\partial^2\Psi}{\partial x^2}$$
+
+**Energy relation.** Multiply $E = \dfrac{p^2}{2m} + U$ by $\Psi$ and substitute:
+
+$$\boxed{i\hbar\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi}$$
+
+The equation is then **postulated** to hold for any $U(x,t)$. It is linear in $\Psi$, which allows superposition.
 
 ### Problem 14 [QM 4 · Derivation · 4 pts]
 
 Separate variables to obtain the steady-state Schrödinger equation from the time-dependent one when U = U(x).
 
-*Solution.* Try Ψ = ψ(x)f(t). Dividing the equation by ψf gives iħ(1/f)(df/dt) = (1/ψ)\[−(ħ²/2m)ψ″ + Uψ\]. The left side depends only on t and the right only on x, so both equal a constant E. Then f = e^(−iEt/ħ) and ψ″ + (2m/ħ²)(E − U)ψ = 0.
+*Solution.* **Separate variables** (valid when $U = U(x)$): $\Psi(x,t) = \psi(x)f(t)$.
+
+$$i\hbar\,\psi f' = -\frac{\hbar^2}{2m}\psi''f + U\psi f$$
+
+Divide by $\psi f$:
+
+$$i\hbar\frac{f'}f = \frac1\psi\left[-\frac{\hbar^2}{2m}\psi'' + U\psi\right]$$
+
+The left side depends only on $t$ and the right only on $x$, so both equal a constant $E$.
+
+**Time part:** $f = e^{-iEt/\hbar}$.
+
+**Space part:**
+
+$$-\frac{\hbar^2}{2m}\psi'' + U\psi = E\psi\quad\Longleftrightarrow\quad \boxed{\psi'' + \frac{2m}{\hbar^2}(E - U)\psi = 0}$$
 
 ### Problem 15 [QM 4 · Derivation · 6 pts] (hard)
 
 Solve the Schrödinger equation for a particle in an infinite box of width L: find Eₙ, the normalised ψₙ, and sketch |ψₙ|² for n = 1, 2, 3.
 
-*Solution.* Inside, ψ″ = −k²ψ with k = √(2mE)/ħ, so ψ = A sin kx + B cos kx. ψ(0) = 0 gives B = 0. ψ(L) = 0 gives kL = nπ. So Eₙ = n²π²ħ²/2mL² = n²h²/8mL². Normalising: A² L/2 = 1, so ψₙ = √(2/L) sin(nπx/L). Sketch: |ψ₁|² is one hump; |ψ₂|² two humps with a zero at L/2; |ψ₃|² three humps with zeros at L/3 and 2L/3.
+*Solution.* **Inside the box** ($U = 0$): $\psi'' = -k^2\psi$ with $k = \sqrt{2mE}/\hbar$, so
+
+$$\psi = A\sin kx + B\cos kx$$
+
+**Boundary conditions.** $\psi(0) = 0 \Rightarrow B = 0$. $\psi(L) = 0 \Rightarrow \sin kL = 0 \Rightarrow kL = n\pi$:
+
+$$\boxed{E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2}}$$
+
+**Normalise.**
+
+$$\int_0^LA^2\sin^2\frac{n\pi x}L\,dx = A^2\frac L2 = 1\ \Rightarrow\ \boxed{\psi_n = \sqrt{\frac2L}\sin\frac{n\pi x}L}$$
+
+**$|\psi_n|^2$:** $n = 1$ has one hump (maximum at $L/2$); $n = 2$ two humps with a zero at $L/2$; $n = 3$ three humps with zeros at $L/3$ and $2L/3$.
+
+**Common mistake.** $n = 0$ is not allowed ($\psi\equiv0$), so $E_1 > 0$ is the zero-point energy.
 
 ### Problem 16 [QM 4 · Derivation · 3 pts]
 
 Show that ⟨x⟩ = L/2 for every state of the infinite box.
 
-*Solution.* |ψₙ|² is symmetric about x = L/2 (replace x by L − x and sin² is unchanged). So x − L/2 averages to zero and ⟨x⟩ = L/2.
+*Solution.* **Symmetry.** $|\psi_n(x)|^2 = \dfrac2L\sin^2\dfrac{n\pi x}L$. Replace $x \to L - x$:
+
+$$\sin^2\frac{n\pi(L - x)}L = \sin^2\left(n\pi - \frac{n\pi x}L\right) = \sin^2\frac{n\pi x}L$$
+
+so $|\psi_n|^2$ is symmetric about $x = L/2$.
+
+**Mean.**
+
+$$\langle x - L/2\rangle = \int\left(x - \frac L2\right)|\psi_n|^2\,dx = 0$$
+
+(odd integrand about $L/2$), so $\boxed{\langle x\rangle = L/2}$ for every $n$.
 
 ### Problem 17 [QM 4 · Derivation · 3 pts]
 
 Show that e^(ikx) is an eigenfunction of the momentum operator, and that sin kx is not. What does this say about the momentum of a particle in a box?
 
-*Solution.* −iħ d/dx e^(ikx) = ħk e^(ikx), so it is an eigenfunction with p = ħk. −iħ d/dx sin kx = −iħk cos kx, which is not a multiple of sin kx. Since sin kx = (e^(ikx) − e^(−ikx))/2i, a particle in a box has p = +ħk or −ħk with equal probability, so ⟨p⟩ = 0.
+*Solution.* **Momentum operator** $\hat p = -i\hbar\,d/dx$.
+
+$$\hat pe^{ikx} = -i\hbar(ik)e^{ikx} = \hbar k\,e^{ikx}$$
+
+an **eigenfunction** with eigenvalue $p = \hbar k$.
+
+$$\hat p\sin kx = -i\hbar k\cos kx \ne (\text{number})\sin kx$$
+
+so $\sin kx$ is **not** an eigenfunction.
+
+**Meaning for the box.** $\sin kx = \dfrac{e^{ikx} - e^{-ikx}}{2i}$ is a superposition of $p = +\hbar k$ and $p = -\hbar k$, with equal weights. A measurement gives $\pm\hbar k$ with probability $\tfrac12$ each, so $\langle p\rangle = 0$ but $p$ is not definite. (This is the standing-wave picture: a particle bouncing back and forth.)
 
 ### Problem 18 [QM 4 · Derivation · 3 pts]
 
 Normalise ψ(x) = Ax(L − x) for 0 ≤ x ≤ L (zero outside).
 
-*Solution.* ∫₀ᴸ x²(L − x)² dx = L⁵/30, so A = √(30/L⁵).
+*Solution.* **Condition.** $\int_0^L|\psi|^2dx = 1$:
+
+$$A^2\int_0^Lx^2(L - x)^2\,dx = 1$$
+
+**Integral.** $\int_0^L(L^2x^2 - 2Lx^3 + x^4)dx = \dfrac{L^5}3 - \dfrac{L^5}2 + \dfrac{L^5}5 = \dfrac{L^5}{30}$.
+
+$$A^2\frac{L^5}{30} = 1\ \Rightarrow\ \boxed{A = \sqrt{\frac{30}{L^5}}}$$
 
 ### Problem 19 [QM 4 · Derivation · 4 pts]
 
 For the finite well, write the form of ψ inside and outside, and state the conditions used to join them.
 
-*Solution.* Inside: ψ = A sin kx + B cos kx with k = √(2mE)/ħ. Outside: ψ = Ce^(ax) on the left and De^(−ax) on the right, with a = √(2m(U − E))/ħ. The growing exponentials are dropped so ψ stays finite. At each wall, ψ and dψ/dx must be continuous.
+*Solution.* **Finite well** of depth $U$ and width $L$, with $E < U$.
+
+**Inside** ($U = 0$): $\psi'' = -k^2\psi$, $k = \sqrt{2mE}/\hbar$:
+
+$$\psi = A\sin kx + B\cos kx$$
+
+**Outside** ($U > E$): $\psi'' = a^2\psi$, $a = \sqrt{2m(U - E)}/\hbar$:
+
+$$\psi_\text{left} = Ce^{ax},\qquad \psi_\text{right} = De^{-ax}$$
+
+The growing exponentials are dropped so that $\psi$ stays finite as $|x|\to\infty$.
+
+**Matching conditions.** At each wall, $\psi$ **and** $d\psi/dx$ are continuous (the potential is finite, so $\psi''$ is finite). Together with normalisation these fix the allowed energies, which come out as a finite number of discrete levels. The wave function leaks into the walls over a distance $1/a$.
 
 ### Problem 20 [QM 4 · Derivation · 4 pts]
 
 Write the energy levels of a particle in a cubical 3-D box. Find the first three energy levels and their degeneracies.
 
-*Solution.* E = (π²ħ²/2mL²)(n₁² + n₂² + n₃²). The first three levels are 3 units (1,1,1), not degenerate; 6 units (1,1,2) and its permutations, 3-fold; and 9 units (1,2,2) and its permutations, 3-fold.
+*Solution.* **Separable problem.** $\psi = \psi_{n_1}(x)\psi_{n_2}(y)\psi_{n_3}(z)$ and the energies add:
+
+$$E = \frac{\pi^2\hbar^2}{2mL^2}\left(n_1^2 + n_2^2 + n_3^2\right) \equiv E_0\left(n_1^2 + n_2^2 + n_3^2\right)$$
+
+| level | $(n_1,n_2,n_3)$ | energy | degeneracy |
+|---|---|---|---|
+| 1st | $(1,1,1)$ | $3E_0$ | 1 |
+| 2nd | $(1,1,2)$ and permutations | $6E_0$ | 3 |
+| 3rd | $(1,2,2)$ and permutations | $9E_0$ | 3 |
+
+**Check.** $(2,2,2)$ gives $12E_0$ and $(1,1,3)$ gives $11E_0$, so nothing else fits below $9E_0$. The degeneracy arises from the cube's symmetry.
 
 ## C. Numericals without a calculator
 

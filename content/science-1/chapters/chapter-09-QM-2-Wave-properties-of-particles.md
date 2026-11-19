@@ -256,37 +256,99 @@ Why are spectral lines not perfectly sharp?
 
 Show that the phase velocity of a de Broglie wave is c²/v and that the group velocity equals v.
 
-*Solution.* With E = hν and p = h/λ: ω = 2πE/h and k = 2πp/h. Then v\_p = ω/k = E/p = γmc²/γmv = c²/v. For the group, v\_g = dω/dk = dE/dp. From E² = p²c² + m²c⁴, dE/dp = pc²/E = (γmv)c²/(γmc²) = v. As a check, v\_p v\_g = c².
+*Solution.* **de Broglie relations.** $E = h\nu$ and $p = h/\lambda$, so $\omega = 2\pi E/h$ and $k = 2\pi p/h$.
+
+**Phase velocity.**
+
+$$v_p = \frac\omega k = \frac Ep = \frac{\gamma mc^2}{\gamma mv} = \boxed{\frac{c^2}v}$$
+
+This exceeds $c$, but no energy or signal travels at $v_p$.
+
+**Group velocity.** $v_g = d\omega/dk = dE/dp$. From $E^2 = p^2c^2 + m^2c^4$:
+
+$$2E\,dE = 2pc^2\,dp\ \Rightarrow\ \frac{dE}{dp} = \frac{pc^2}E = \frac{\gamma mv\,c^2}{\gamma mc^2} = \boxed{v}$$
+
+The wave packet moves with the particle.
+
+**Check.** $v_pv_g = c^2$ ✓.
 
 ### Problem 12 [QM 2 · Derivation · 3 pts]
 
 Show that the de Broglie wavelength of an electron accelerated from rest through V volts is λ = h/√(2meV), assuming v ≪ c.
 
-*Solution.* Energy: eV = ½mv² = p²/2m, so p = √(2meV) and λ = h/p = h/√(2meV).
+*Solution.* **Energy.** With $v \ll c$, the work done by the field becomes kinetic energy:
+
+$$eV = \tfrac12mv^2 = \frac{p^2}{2m}\ \Rightarrow\ p = \sqrt{2meV}$$
+
+$$\boxed{\lambda = \frac hp = \frac h{\sqrt{2meV}}}$$
+
+**Numerically** $\lambda \approx \dfrac{1.226}{\sqrt V}$ nm, with $V$ in volts: for $V = 100$ V, $\lambda = 0.123$ nm, comparable to atomic spacings.
 
 ### Problem 13 [QM 2 · Derivation · 4 pts]
 
 Using the standing-wave condition, derive the energy levels of a particle in a 1-D box of width L. Sketch the first three wave functions.
 
-*Solution.* ψ = 0 at x = 0 and x = L, so L = nλ/2 and λₙ = 2L/n. Then pₙ = h/λₙ = nh/2L and Eₙ = pₙ²/2m = n²h²/8mL². Sketch: n = 1 is half a sine wave with no nodes inside, n = 2 a full wave with one node in the middle, n = 3 one and a half waves with two nodes.
+*Solution.* **Standing wave.** The wave function must vanish at the walls, $\psi(0) = \psi(L) = 0$, so a whole number of half-wavelengths fit in the box:
+
+$$L = n\frac{\lambda_n}2\ \Rightarrow\ \lambda_n = \frac{2L}n$$
+
+**Momentum and energy.**
+
+$$p_n = \frac h{\lambda_n} = \frac{nh}{2L},\qquad E_n = \frac{p_n^2}{2m} = \boxed{\frac{n^2h^2}{8mL^2}}$$
+
+**Wave functions** $\psi_n \propto \sin(n\pi x/L)$:
+
+| $n$ | shape | nodes inside |
+|---|---|---|
+| 1 | half a sine wave | 0 |
+| 2 | full sine wave | 1 (at $L/2$) |
+| 3 | one and a half waves | 2 |
+
+**Check.** $n = 0$ is not allowed ($\psi \equiv 0$), so the lowest energy is $E_1 > 0$: zero-point energy.
 
 ### Problem 14 [QM 2 · Derivation · 3 pts]
 
 Using ΔxΔp ≥ ħ/2, show that an electron can't exist inside a nucleus of size 10⁻¹⁴ m.
 
-*Solution.* Δp ≥ ħ/2Δx, so Δp c ≥ 197 eV nm / (2 × 10⁻⁵ nm) ≈ 10 MeV. This is far above mₑc² = 0.5 MeV, so KE ≈ pc ≈ 10 MeV. Electrons from beta decay carry only a few MeV, and nothing in the nucleus can bind an electron that strongly. So electrons aren't nuclear constituents.
+*Solution.* **Uncertainty principle.** Confined to $\Delta x \approx 10^{-14}$ m $= 10^{-5}$ nm:
+
+$$\Delta p \ge \frac\hbar{2\Delta x}\ \Rightarrow\ \Delta p\,c \ge \frac{197\ \text{eV nm}}{2(10^{-5}\ \text{nm})} \approx 10\ \text{MeV}$$
+
+**Relativistic regime.** $\Delta pc \approx 10\ \text{MeV} \gg m_ec^2 = 0.51$ MeV, so $K \approx pc \approx 10$ MeV.
+
+**Conclusion.** An electron confined to the nucleus would carry about $10$ MeV of kinetic energy, but nuclear beta-decay electrons have only a few MeV, and no nuclear potential could bind it that strongly. So electrons cannot be nuclear constituents. (A proton, being much heavier, gets only about $0.1$ MeV from confinement, consistent with nuclear binding.)
 
 ### Problem 15 [QM 2 · Derivation · 4 pts]
 
 Using the uncertainty principle, estimate the minimum energy of a particle of mass m in a box of width L. Compare with the exact E₁ = h²/8mL².
 
-*Solution.* Take Δx ≈ L, so p ≈ Δp ≈ ħ/2L and E ≈ p²/2m = ħ²/8mL². The exact value h²/8mL² is 4π² (about 40) times larger. The estimate gets the scaling right (∝ 1/mL²), which is what it is for.
+*Solution.* **Estimate.** Confining the particle to the box gives $\Delta x \approx L$, so
+
+$$p \approx \Delta p \approx \frac\hbar{2L}\ \Rightarrow\ E \approx \frac{p^2}{2m} = \frac{\hbar^2}{8mL^2}$$
+
+**Compare with the exact** $E_1 = \dfrac{h^2}{8mL^2} = \dfrac{4\pi^2\hbar^2}{8mL^2}$:
+
+$$\frac{E_1}{E_\text{est}} = 4\pi^2 \approx 40$$
+
+The estimate is off by a numerical factor (the uncertainty relation only gives a lower bound on $\Delta p$, and the true ground state has more momentum spread than the minimum), but it gets the **scaling** $E \propto 1/mL^2$ right, which is its purpose.
 
 ### Problem 16 [QM 2 · Derivation · 3 pts]
 
 Using the relativistic relations E = γmc² and p = γmv, write the de Broglie wavelength of an electron with kinetic energy K, valid at all speeds.
 
-*Solution.* E = K + mc² and E² = p²c² + m²c⁴, so pc = √(K² + 2Kmc²) and λ = hc/√(K² + 2Kmc²). For K ≪ mc² this becomes h/√(2mK).
+*Solution.* **Relativistic relations.** Total energy $E = K + mc^2$ and $E^2 = p^2c^2 + m^2c^4$:
+
+$$p^2c^2 = (K + mc^2)^2 - m^2c^4 = K^2 + 2Kmc^2$$
+
+$$\boxed{\lambda = \frac hp = \frac{hc}{\sqrt{K^2 + 2Kmc^2}}}$$
+
+**Non-relativistic limit** $K \ll mc^2$: drop $K^2$, giving
+
+$$\lambda \approx \frac{hc}{\sqrt{2Kmc^2}} = \frac h{\sqrt{2mK}}$$
+
+✓ (agrees with Problem 12).
+
+**Check.** For a 1 MeV electron, $pc = \sqrt{1 + 1.02} = 1.42$ MeV, $\lambda = 1240/1.42\times10^6$ nm $= 8.7\times10^{-4}$ nm; the non-relativistic formula would give $1.2\times10^{-3}$ nm (about 40% too long).
 
 ## C. Numericals without a calculator
 

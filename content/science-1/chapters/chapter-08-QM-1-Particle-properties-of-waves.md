@@ -310,44 +310,120 @@ Show that a photon of wavelength λ has momentum h/λ.
 
 Starting from u(ν) = (8πhν³/c³)/(e^(hν/kT) − 1), show that it reduces to the Rayleigh–Jeans law for hν ≪ kT. What happens for hν ≫ kT?
 
-*Solution.* For x = hν/kT ≪ 1, eˣ − 1 ≈ x, so u(ν) ≈ (8πhν³/c³)(kT/hν) = 8πν²kT/c³, the Rayleigh–Jeans law. For x ≫ 1, u ≈ (8πhν³/c³)e^(−hν/kT), Wien's form, which goes to zero at high ν.
+*Solution.* **Planck's law:**
+
+$$u(\nu) = \frac{8\pi h\nu^3}{c^3}\,\frac1{e^{h\nu/kT} - 1}$$
+
+**Low frequency** ($x = h\nu/kT \ll 1$). Expand $e^x - 1 \approx x$:
+
+$$u(\nu) \approx \frac{8\pi h\nu^3}{c^3}\cdot\frac{kT}{h\nu} = \boxed{\frac{8\pi\nu^2kT}{c^3}}$$
+
+the **Rayleigh–Jeans** law (classical equipartition).
+
+**High frequency** ($x \gg 1$). $e^x - 1 \approx e^x$:
+
+$$u(\nu) \approx \frac{8\pi h\nu^3}{c^3}\,e^{-h\nu/kT}$$
+
+**Wien's** form: the exponential kills the growth, so $u \to 0$ as $\nu \to \infty$. This avoids the "ultraviolet catastrophe" of Rayleigh–Jeans, which grows as $\nu^2$ without limit.
 
 ### Problem 14 [QM 1 · Derivation · 5 pts]
 
 Derive the Compton shift formula λ′ − λ = (h/mₑc)(1 − cosφ). State every conservation law you use.
 
-*Solution.* Let the photon (λ) hit an electron at rest. It scatters at angle φ with λ′, and the electron recoils at θ with momentum p.
+*Solution.* **Setup.** A photon (wavelength $\lambda$) hits an electron at rest. The photon scatters at angle $\varphi$ with $\lambda'$; the electron recoils with momentum $p$ and energy $E_e$.
 
-    - x-momentum: h/λ = (h/λ′)cosφ + p cosθ
-    - y-momentum: 0 = (h/λ′)sinφ − p sinθ
-    - Square and add to remove θ: p² = (h/λ)² + (h/λ′)² − 2(h/λ)(h/λ′)cosφ
-    - Energy: hc/λ + mc² = hc/λ′ + √(p²c² + m²c⁴)
-    - Move hc/λ′ across, square, and substitute p². The p² and m²c⁴ terms cancel and you get 2mc²(hc/λ − hc/λ′) = 2(hc)²(1 − cosφ)/(λλ′).
-    - Multiply by λλ′/(2mc²hc): λ′ − λ = (h/mc)(1 − cosφ).
+**Conservation laws used:** energy, and momentum (both components).
+
+**Energy:** $\dfrac{hc}\lambda + mc^2 = \dfrac{hc}{\lambda'} + E_e$
+
+**Momentum** (vector): $\mathbf p_\gamma = \mathbf p_\gamma' + \mathbf p_e$, so squaring,
+
+$$p_e^2c^2 = (h\nu)^2 + (h\nu')^2 - 2h^2\nu\nu'\cos\varphi$$
+
+**Eliminate the electron.** $E_e = h\nu - h\nu' + mc^2$, and $E_e^2 = p_e^2c^2 + m^2c^4$:
+
+$$(h\nu - h\nu')^2 + 2mc^2h(\nu - \nu') + m^2c^4 = (h\nu)^2 + (h\nu')^2 - 2h^2\nu\nu'\cos\varphi + m^2c^4$$
+
+The $\nu^2$ and $\nu'^2$ terms cancel:
+
+$$2mc^2h(\nu - \nu') = 2h^2\nu\nu'(1 - \cos\varphi)\ \Rightarrow\ \frac{\nu - \nu'}{\nu\nu'} = \frac h{mc^2}(1 - \cos\varphi)$$
+
+Multiply by $c$ and use $\lambda = c/\nu$:
+
+$$\boxed{\lambda' - \lambda = \frac h{mc}(1 - \cos\varphi)}$$
+
+**Check.** $\varphi = 0$ gives no shift; the maximum shift $2h/mc = 4.85$ pm is at $\varphi = 180^\circ$.
 
 ### Problem 15 [QM 1 · Derivation · 4 pts]
 
 Using conservation of energy and momentum, show that a free electron cannot absorb a photon completely.
 
-*Solution.* Take the electron at rest. Energy: hν + mc² = Eₑ. Momentum: pₑ = hν/c. Then Eₑ² = pₑ²c² + m²c⁴ gives (hν + mc²)² = (hν)² + m²c⁴, so 2hν mc² = 0 and ν = 0. So a free electron can only scatter a photon (Compton), never absorb it. In the photoelectric effect the lattice takes up the momentum.
+*Solution.* **Assume** a free electron at rest absorbs a photon completely, becoming a single electron of energy $E_e$ and momentum $p_e$.
+
+**Conservation.**
+
+- Energy: $h\nu + mc^2 = E_e$
+- Momentum: $p_e = h\nu/c$
+
+**Insert into** $E_e^2 = p_e^2c^2 + m^2c^4$:
+
+$$(h\nu + mc^2)^2 = (h\nu)^2 + m^2c^4\ \Rightarrow\ 2h\nu\,mc^2 = 0$$
+
+so $\nu = 0$: no photon. A free electron can only **scatter** a photon (Compton), never absorb it.
+
+**Photoelectric effect.** The electron is bound: the lattice (a heavy partner) absorbs the extra momentum, so both conservation laws can be met.
 
 ### Problem 16 [QM 1 · Derivation · 4 pts]
 
 Show that the minimum photon energy for pair production is 2mₑc² when a heavy nucleus is present, and explain why the nucleus takes almost no energy.
 
-*Solution.* Energy: hν = 2mc² + KE₊ + KE₋ + KE\_nucleus. The nucleus takes momentum p ≤ hν/c, and its kinetic energy is p²/2M. For M ≫ m this is tiny, so the threshold is hν = 2mc² = 1.02 MeV.
+*Solution.* **Energy balance.**
+
+$$h\nu = 2mc^2 + K_{e^+} + K_{e^-} + K_\text{nucleus}$$
+
+**Momentum.** The nucleus (mass $M$) takes up the momentum $p \le h\nu/c$, with kinetic energy
+
+$$K_\text{nucleus} = \frac{p^2}{2M} \le \frac{(h\nu)^2}{2Mc^2}$$
+
+For $h\nu \approx 1$ MeV and a nucleus with $Mc^2 \sim 10^5$ MeV this is about $5$ eV, utterly negligible. Hence the threshold is
+
+$$\boxed{h\nu_\text{min} = 2m_ec^2 = 1.02\ \text{MeV}}$$
+
+**Why a nucleus is needed.** In free space the photon has $E = pc$, but a pair at rest has $E = 2mc^2$ and $p = 0$; no pair state has $E = pc$, so momentum and energy cannot both be conserved. The nucleus provides the missing momentum.
 
 ### Problem 17 [QM 1 · Derivation · 4 pts]
 
 Derive Bragg's condition 2d sinθ = nλ from the path difference between rays reflected from two adjacent planes.
 
-*Solution.* Two rays reflect from adjacent planes at glancing angle θ. The lower ray travels an extra d sinθ going in and d sinθ coming out, 2d sinθ in all. Constructive interference needs this to equal nλ.
+*Solution.* **Setup.** Two adjacent planes are a distance $d$ apart. A ray strikes at glancing angle $\theta$ (to the plane).
+
+**Path difference.** The lower ray travels extra distance $d\sin\theta$ on the way in and $d\sin\theta$ on the way out:
+
+$$\Delta = 2d\sin\theta$$
+
+**Constructive interference** needs $\Delta$ to be a whole number of wavelengths:
+
+$$\boxed{2d\sin\theta = n\lambda,\quad n = 1, 2, 3, \dots}$$
+
+**Common mistake.** $\theta$ is measured from the **plane**, not from the normal.
 
 ### Problem 18 [QM 1 · Derivation · 3 pts]
 
 Show that the stopping potential is a linear function of frequency. What are its slope and intercept?
 
-*Solution.* eV₀ = hν − φ, so V₀ = (h/e)ν − φ/e. The slope is h/e, the same for every metal. The ν-intercept is the threshold ν₀ = φ/h, and the V-intercept is −φ/e.
+*Solution.* **Einstein's photoelectric equation:**
+
+$$h\nu = \phi + K_\text{max},\qquad K_\text{max} = eV_0$$
+
+$$V_0 = \frac he\,\nu - \frac\phi e$$
+
+A straight line in $V_0$ against $\nu$:
+
+- **Slope** $= h/e$: the same for every metal (that is how Millikan measured $h$).
+- **$\nu$-intercept** $= \nu_0 = \phi/h$ (threshold frequency).
+- **$V$-intercept** $= -\phi/e$.
+
+**Common mistake.** The slope does not depend on the metal; only the intercepts do.
 
 ## C. Numericals without a calculator
 

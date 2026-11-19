@@ -275,43 +275,109 @@ Why is the 2s state of hydrogen long-lived?
 
 Show that there are n² states with principal quantum number n.
 
-*Solution.* For each l there are 2l + 1 values of mₗ. Summing over l = 0 to n − 1: Σ(2l + 1) = 2 × n(n − 1)/2 + n = n².
+*Solution.* **Count.** For each $l = 0, 1, \dots, n-1$ there are $2l + 1$ values of $m_l$:
+
+$$\sum_{l=0}^{n-1}(2l + 1) = 2\cdot\frac{n(n-1)}2 + n = \boxed{n^2}$$
+
+(Including spin doubles this to $2n^2$, the capacity of each shell.)
 
 ### Problem 12 [QM 5 · Derivation · 3 pts]
 
 List all (n, l, mₗ) states for n = 3 and write their spectroscopic names.
 
-*Solution.* 3s: (3,0,0). 3p: (3,1,−1), (3,1,0), (3,1,1). 3d: (3,2,−2) to (3,2,2), five states. Total 9.
+*Solution.* **For $n = 3$:** $l = 0, 1, 2$.
+
+| $l$ | name | $m_l$ values | states |
+|---|---|---|---|
+| 0 | $3s$ | $0$ | 1 |
+| 1 | $3p$ | $-1, 0, 1$ | 3 |
+| 2 | $3d$ | $-2, -1, 0, 1, 2$ | 5 |
+
+Total $= 9 = n^2$ ✓. In hydrogen they all have the same energy, $-1.51$ eV.
 
 ### Problem 13 [QM 5 · Derivation · 4 pts]
 
 For l = 2, find L and the possible angles between L and the z-axis.
 
-*Solution.* L = √6 ħ ≈ 2.45ħ. cosθ = mₗ/√6 for mₗ = 2, 1, 0, −1, −2, giving θ ≈ 35°, 66°, 90°, 114°, 145°.
+*Solution.* **Magnitude.** $L = \sqrt{l(l+1)}\,\hbar$:
+
+$$L = \sqrt{6}\,\hbar \approx 2.45\hbar$$
+
+**Z-component.** $L_z = m_l\hbar$ with $m_l = 0, \pm1, \pm2$. The angle satisfies
+
+$$\cos\theta = \frac{m_l}{\sqrt6}$$
+
+$$\theta \approx 35^\circ,\ 66^\circ,\ 90^\circ,\ 114^\circ,\ 145^\circ$$
+
+**Check.** $L_z$ can never equal $L$: $L_z^\text{max} = 2\hbar < 2.45\hbar$, so $\mathbf L$ is never aligned with the $z$-axis.
 
 ### Problem 14 [QM 5 · Derivation · 4 pts]
 
 For the 1s state, P(r) ∝ r²e^(−2r/a₀). Show that the most probable radius is a₀.
 
-*Solution.* dP/dr ∝ (2r − 2r²/a₀)e^(−2r/a₀) = 0, so r = a₀ (r = 0 is a minimum).
+*Solution.* **Radial probability density** for 1s:
+
+$$P(r) \propto r^2e^{-2r/a_0}$$
+
+**Maximise.**
+
+$$\frac{dP}{dr} \propto \left(2r - \frac{2r^2}{a_0}\right)e^{-2r/a_0} = 2r\left(1 - \frac r{a_0}\right)e^{-2r/a_0} = 0$$
+
+$r = 0$ is a minimum ($P = 0$), so the maximum is at
+
+$$\boxed{r = a_0}$$
+
+**Note.** This is the most probable radius, **not** the average radius: $\langle r\rangle = \tfrac32a_0$, because of the long tail.
 
 ### Problem 15 [QM 5 · Derivation · 3 pts]
 
 Which of these transitions are allowed: 3p → 1s, 3d → 2s, 4f → 3d, 2s → 1s, 3s → 2p?
 
-*Solution.* 3p → 1s allowed (Δl = −1). 3d → 2s forbidden (Δl = −2). 4f → 3d allowed. 2s → 1s forbidden. 3s → 2p allowed (Δl = +1).
+*Solution.* **Selection rule.** $\Delta l = \pm1$ (and $\Delta m_l = 0, \pm1$): a photon carries one unit of angular momentum.
+
+| transition | $\Delta l$ | allowed? |
+|---|---|---|
+| $3p \to 1s$ | $1 \to 0 = -1$ | yes |
+| $3d \to 2s$ | $2 \to 0 = -2$ | **no** |
+| $4f \to 3d$ | $3 \to 2 = -1$ | yes |
+| $2s \to 1s$ | $0 \to 0 = 0$ | **no** |
+| $3s \to 2p$ | $0 \to 1 = +1$ | yes |
+
+**Note.** $2s \to 1s$ is single-photon forbidden, which is why the $2s$ state is metastable.
 
 ### Problem 16 [QM 5 · Derivation · 3 pts]
 
 Explain, using a superposition Ψ = aΨᵢ + bΨ\_f, why the emitted frequency is (Eᵢ − E\_f)/h.
 
-*Solution.* |Ψ|² contains a cross term ∝ ψᵢ\*ψ\_f e^(i(Eᵢ − E\_f)t/ħ) + complex conjugate, which oscillates at angular frequency (Eᵢ − E\_f)/ħ. The charge density, and so the dipole, oscillates at ν = (Eᵢ − E\_f)/h, and radiates at that frequency.
+*Solution.* **Superposition.** $\Psi = a\Psi_i + b\Psi_f$ with $\Psi_k = \psi_ke^{-iE_kt/\hbar}$.
+
+**Probability density.**
+
+$$|\Psi|^2 = |a|^2|\psi_i|^2 + |b|^2|\psi_f|^2 + ab^*\psi_i\psi_f^*\,e^{-i(E_i - E_f)t/\hbar} + \text{c.c.}$$
+
+The first two terms are constant in time. The **cross term** oscillates at angular frequency
+
+$$\omega = \frac{E_i - E_f}\hbar$$
+
+**Consequence.** The charge distribution (and so the electric dipole) oscillates at this frequency, and an oscillating dipole radiates at the same frequency:
+
+$$\boxed{\nu = \frac{E_i - E_f}h}$$
+
+A pure stationary state has a constant $|\Psi|^2$ and does not radiate.
 
 ### Problem 17 [QM 5 · Derivation · 3 pts]
 
 Sketch the radial probability densities of 1s, 2s and 2p and mark their nodes.
 
-*Solution.* 1s: one peak at a₀, no nodes. 2s: a small inner peak, a node, then a main peak near 5a₀ (n − l − 1 = 1 node). 2p: one peak at 4a₀, no radial nodes.
+*Solution.* **Radial density** $P(r) = r^2|R_{nl}(r)|^2$. The number of radial nodes is $n - l - 1$.
+
+| state | radial nodes | shape of $P(r)$ |
+|---|---|---|
+| $1s$ | 0 | a single peak at $a_0$ |
+| $2s$ | $2 - 0 - 1 = 1$ | small inner peak, a node at $2a_0$, then a larger outer peak near $5a_0$ |
+| $2p$ | $2 - 1 - 1 = 0$ | a single peak at $4a_0$ |
+
+**Observation.** $2s$ and $2p$ have the same energy, but $2s$ has some probability close to the nucleus (penetration), which is why in multi-electron atoms $2s$ is lower than $2p$.
 
 ## C. Short numericals
 
