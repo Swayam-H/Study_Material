@@ -244,73 +244,166 @@ Zero-point energy $\tfrac12h\nu$; level spacing $h\nu$. Near any minimum $x_0$: 
 
 What conditions must a wave function satisfy to be physically acceptable? Why?
 
-*Solution.* Ψ must be continuous and single-valued, so the probability is unambiguous. ∂Ψ/∂x must be continuous where U is finite, or the second derivative in the equation would be infinite. Ψ must be normalisable (∫|Ψ|² = 1), so it must go to zero at infinity and the particle is somewhere.
+*Solution.* **Conditions on $\Psi$.**
+
+1. **Continuous and single-valued**, so the probability density is unambiguous.
+2. **$\partial\Psi/\partial x$ continuous** wherever $U$ is finite. Otherwise $\partial^2\Psi/\partial x^2$ would be infinite and the equation could not hold.
+3. **Normalisable**: $\int|\Psi|^2dx = 1$, so $\Psi\to0$ at infinity and the particle is certainly somewhere.
+
+**Consequence.** These conditions are what restrict the solutions to a discrete set of energies for bound states.
 
 ### Problem 2 [QM 4 · Recall · 2 pts]
 
 Write the time-dependent Schrödinger equation in one dimension and name each term.
 
-*Solution.* iħ ∂Ψ/∂t = −(ħ²/2m) ∂²Ψ/∂x² + UΨ. The left side is the energy operator acting on Ψ. On the right, the first term is the kinetic energy and the second the potential energy.
+*Solution.* **Time-dependent Schrödinger equation (1-D).**
+
+$$i\hbar\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U(x)\Psi$$
+
+**Terms.**
+
+- $i\hbar\,\partial\Psi/\partial t$: the **energy** operator acting on $\Psi$.
+- $-\dfrac{\hbar^2}{2m}\dfrac{\partial^2\Psi}{\partial x^2}$: **kinetic energy**, since $\hat p^2/2m$ with $\hat p = -i\hbar\,\partial/\partial x$.
+- $U\Psi$: **potential energy**.
+
+So the equation says: total energy $=$ kinetic $+$ potential.
 
 ### Problem 3 [QM 4 · Recall · 2 pts]
 
 Why must the wave function be complex?
 
-*Solution.* The equation has i on one side and real terms on the other, so a real Ψ can't satisfy it for a moving particle. Only |Ψ|², which is real, is measurable.
+*Solution.* **Reason.** The Schrödinger equation has a factor $i$ on one side and real terms on the other:
+
+$$i\hbar\frac{\partial\Psi}{\partial t} = \hat H\Psi$$
+
+A real $\Psi$ cannot satisfy it for a travelling particle. A free-particle solution is $\Psi = Ae^{i(kx - \omega t)}$, which is complex.
+
+**What is measurable.** Only $|\Psi|^2 = \Psi^*\Psi$, which is real and non-negative. The phase of $\Psi$ itself is not observable, but **relative** phases matter for interference.
 
 ### Problem 4 [QM 4 · Recall · 2 pts]
 
 What does the linearity of the Schrödinger equation imply? Why does it lead to interference?
 
-*Solution.* Any sum of solutions is a solution. The probability of a sum is |Ψ₁ + Ψ₂|², which contains the cross term 2 Re(Ψ₁\*Ψ₂) that can add or cancel, giving interference.
+*Solution.* **Linearity.** If $\Psi_1$ and $\Psi_2$ are solutions, so is $a\Psi_1 + b\Psi_2$: the **superposition principle**.
+
+**Interference.** The probability density of a sum is
+
+$$|\Psi_1 + \Psi_2|^2 = |\Psi_1|^2 + |\Psi_2|^2 + 2\,\text{Re}(\Psi_1^*\Psi_2)$$
+
+The last term is the **cross term**. It can be positive or negative, so probabilities do not simply add: they can reinforce (constructive) or cancel (destructive). This is the origin of double-slit interference for electrons.
 
 ### Problem 5 [QM 4 · Recall · 2 pts]
 
 What is an expectation value? Write ⟨x⟩ and ⟨p⟩.
 
-*Solution.* The average result of measuring a quantity on many identical systems. ⟨x⟩ = ∫x|Ψ|² dx and ⟨p⟩ = ∫Ψ\*(−iħ ∂/∂x)Ψ dx.
+*Solution.* **Expectation value.** The average result of measuring a quantity on many identical systems prepared in the same state $\Psi$.
+
+$$\langle x\rangle = \int_{-\infty}^\infty x\,|\Psi|^2\,dx$$
+
+$$\langle p\rangle = \int_{-\infty}^\infty\Psi^*\left(-i\hbar\frac\partial{\partial x}\right)\Psi\,dx$$
+
+In general $\langle Q\rangle = \int\Psi^*\hat Q\Psi\,dx$ for any observable with operator $\hat Q$.
+
+**Note.** It is an average over many runs, not the result of one measurement.
 
 ### Problem 6 [QM 4 · Recall · 2 pts]
 
 What is a stationary state? Why is its probability density constant in time?
 
-*Solution.* A state Ψ = ψ(x)e^(−iEt/ħ) with a definite energy. |Ψ|² = |ψ|²|e^(−iEt/ħ)|² = |ψ|², since the time factor has modulus 1.
+*Solution.* **Stationary state.** A solution of the form
+
+$$\Psi(x,t) = \psi(x)\,e^{-iEt/\hbar}$$
+
+with a definite energy $E$.
+
+**Constant probability density.**
+
+$$|\Psi|^2 = |\psi|^2\left|e^{-iEt/\hbar}\right|^2 = |\psi(x)|^2$$
+
+because $|e^{i\theta}| = 1$. Nothing observable changes in time, so the state does not radiate, and all expectation values are constant.
 
 ### Problem 7 [QM 4 · Recall · 3 pts]
 
 Explain how energy quantisation follows from the steady-state Schrödinger equation without any extra postulate.
 
-*Solution.* The steady-state equation has well-behaved solutions (continuous, finite, normalisable, meeting the boundary conditions) only for certain values of E. Those values are the energy levels. In the box, ψ(L) = 0 forces kL = nπ.
+*Solution.* **How quantisation arises.** The steady-state equation
+
+$$\psi'' + \frac{2m}{\hbar^2}(E - U)\psi = 0$$
+
+has solutions for every $E$, but only certain values of $E$ give a $\psi$ that is **continuous, finite, normalisable and satisfies the boundary conditions**. Those special values are the allowed energies.
+
+**Example (box).** $\psi = A\sin kx$ with $\psi(L) = 0$ forces $kL = n\pi$, so
+
+$$E_n = \frac{\hbar^2k^2}{2m} = \frac{n^2\pi^2\hbar^2}{2mL^2}$$
+
+No separate quantum postulate is needed: it follows from the equation and the boundary conditions.
 
 ### Problem 8 [QM 4 · Recall · 2 pts]
 
 Why are the energy levels of a finite well lower than those of an infinite well of the same width?
 
-*Solution.* ψ leaks into the walls, so the wave is effectively spread over a wider region. A longer wavelength means smaller momentum and lower energy.
+*Solution.* **Reason.** In a finite well the wave function **leaks into the walls**, so the particle is effectively spread over a region wider than $L$.
+
+$$\text{wider region}\ \Rightarrow\ \text{longer }\lambda\ \Rightarrow\ \text{smaller }p = h/\lambda\ \Rightarrow\ \text{lower }E$$
+
+**Limits.**
+
+- Well depth $\to\infty$: the leakage vanishes and $E_n\to n^2h^2/8mL^2$.
+- A finite well has a **finite number** of bound states, and fewer when it is shallower or narrower.
 
 ### Problem 9 [QM 4 · Recall · 3 pts]
 
 What is quantum tunnelling? Give two real examples.
 
-*Solution.* A particle passes through a barrier higher than its energy because ψ decays inside the barrier but is not zero at the far side. Examples: alpha decay, tunnel diode, STM, fusion in the Sun.
+*Solution.* **Tunnelling.** A particle can pass through a potential barrier **higher than its energy**.
+
+**Mechanism.** Inside the barrier $\psi$ decays exponentially, $\psi\propto e^{-k_2x}$, but it is **not zero** at the far side, so there is a non-zero probability of finding the particle there:
+
+$$T \approx e^{-2k_2L},\qquad k_2 = \frac{\sqrt{2m(U - E)}}\hbar$$
+
+**Real examples.**
+
+- **Alpha decay**: $\alpha$ particles escape the Coulomb barrier of the nucleus.
+- **Scanning tunnelling microscope**: current tunnels between tip and surface.
+- **Tunnel diode** and flash memory.
+- **Fusion in the Sun**: protons tunnel through their mutual repulsion.
 
 ### Problem 10 [QM 4 · Recall · 2 pts]
 
 What is zero-point energy? Why is it required by the uncertainty principle?
 
-*Solution.* The lowest energy of a bound system is above the bottom of the potential (½hν for an oscillator). A particle at rest at the bottom would have Δx = 0 and Δp = 0, which the uncertainty principle forbids.
+*Solution.* **Zero-point energy.** The lowest energy of a bound system lies **above** the bottom of its potential well.
+
+- Box: $E_1 = h^2/8mL^2 > 0$.
+- Oscillator: $E_0 = \tfrac12h\nu$.
+
+**Why the uncertainty principle requires it.** A particle at rest at the bottom would have both $\Delta x = 0$ and $\Delta p = 0$, so $\Delta x\Delta p = 0 < \hbar/2$. Confining the particle to a region $\Delta x$ forces $\Delta p \gtrsim \hbar/2\Delta x$, and hence a kinetic energy of order $(\Delta p)^2/2m$.
+
+**Consequence.** Helium stays liquid at absolute zero at ordinary pressure.
 
 ### Problem 11 [QM 4 · Recall · 3 pts]
 
 Compare the probability distribution of a quantum harmonic oscillator in its ground state with that of a classical oscillator of the same energy.
 
-*Solution.* Quantum ground state: a Gaussian peaked at x = 0, with a small chance of being beyond the classical turning points. Classical: least likely at the centre (moving fastest) and most likely at the turning points, never beyond them. At large n the quantum distribution approaches the classical one.
+*Solution.* **Quantum ground state ($n = 0$).** $|\psi_0|^2\propto e^{-m\omega x^2/\hbar}$: a Gaussian **peaked at the centre**, with a small probability of being found **beyond** the classical turning points (tunnelling into the forbidden region).
+
+**Classical oscillator of the same energy.** It moves fastest at the centre, so it spends the least time there: the probability density is **smallest at the centre**, largest at the turning points $\pm A$, and **zero beyond them**.
+
+**Large $n$.** The quantum density oscillates rapidly, but its average follows the classical shape (peaks near the turning points). This is the **correspondence principle**.
 
 ### Problem 12 [QM 4 · Recall · 2 pts]
 
 What is degeneracy? Give an example from the 3-D box.
 
-*Solution.* Different states with the same energy. In a cubical box, (1,1,2), (1,2,1) and (2,1,1) all have n₁² + n₂² + n₃² = 6, so that level is 3-fold degenerate.
+*Solution.* **Degeneracy.** Different states with the **same energy**. The number of such states is the degree of degeneracy.
+
+**Cubical box.** $E\propto n_1^2 + n_2^2 + n_3^2$. The states
+
+$$(1,1,2),\ (1,2,1),\ (2,1,1)$$
+
+all have $n_1^2 + n_2^2 + n_3^2 = 6$, so the energy level $6E_0$ is **3-fold degenerate**.
+
+**Cause.** Degeneracy reflects symmetry (here, the cube's); changing one side length breaks the symmetry and splits the level.
 
 ## B. Derive or show
 
@@ -522,17 +615,37 @@ $$\Delta E = 8(0.38\ \text{eV}) \approx 3.0\ \text{eV}\ \Rightarrow\ \lambda = \
 
 Explain why a scanning tunnelling microscope can sense height changes of about 0.01 nm.
 
-*Solution.* Electrons tunnel across the vacuum gap between the tip and the surface, and T ≈ e^(−2k₂L) with k₂ ≈ 10 nm⁻¹ for a few eV. A change of 0.01 nm in L changes the exponent by 0.2, so the current changes by about 20%, which is easy to measure.
+*Solution.* **Tunnelling current.** Electrons tunnel across the vacuum gap $L$ between the tip and the surface, with
+
+$$T\approx e^{-2k_2L},\qquad k_2 = \frac{\sqrt{2m\phi}}\hbar\approx10\ \text{nm}^{-1}\ \ (\phi\sim\text{a few eV})$$
+
+**Sensitivity.** A change $\delta L = 0.01$ nm changes the exponent by
+
+$$2k_2\delta L = 2(10)(0.01) = 0.2\ \Rightarrow\ \frac{\delta I}I\approx e^{0.2} - 1\approx 20\%$$
+
+A $20\%$ current change is easy to measure, so heights of $0.01$ nm (a hundredth of an atom's size) are detected.
 
 ### Problem 28 [QM 4 · Discussion · 3 pts]
 
 Alpha particles of about 5 MeV escape from nuclei where the Coulomb barrier is about 30 MeV. Explain how, and why half-lives vary from microseconds to billions of years.
 
-*Solution.* The alpha particle tunnels through the Coulomb barrier. T depends exponentially on the barrier width and on √(U − E), and both change a lot with the alpha energy. So a small change in alpha energy (4 to 9 MeV) changes the decay rate by over 20 orders of magnitude (the Geiger–Nuttall law).
+*Solution.* **Mechanism.** An $\alpha$ particle with $E\approx5$ MeV sits inside a Coulomb barrier about $30$ MeV high. Classically it cannot escape; quantum mechanically it **tunnels** through.
+
+**Why half-lives vary so much.** The decay rate is proportional to the transmission probability $T\approx e^{-2k_2L}$, which depends **exponentially** on the barrier width and on $\sqrt{U - E}$. A small change in the $\alpha$ energy changes both strongly.
+
+An energy change from about $4$ MeV to $9$ MeV changes the half-life by more than $20$ orders of magnitude, from billions of years to microseconds. This is the **Geiger–Nuttall law**.
 
 ### Problem 29 [QM 4 · Discussion · 2 pts]
 
 Explain why the harmonic oscillator is useful for any system near a stable equilibrium.
 
-*Solution.* Expand any U(x) about a minimum x₀: U ≈ U(x₀) + ½U″(x₀)(x − x₀)². The linear term vanishes at a minimum. So small oscillations of any system look like a harmonic oscillator with k = U″(x₀), for example molecular vibrations and atoms in solids.
+*Solution.* **Taylor expansion about a stable minimum $x_0$.** Since $U'(x_0) = 0$:
+
+$$U(x) \approx U(x_0) + \tfrac12U''(x_0)(x - x_0)^2$$
+
+**This is a spring** with $k = U''(x_0) > 0$, so small oscillations have
+
+$$\omega = \sqrt{\frac{U''(x_0)}m},\qquad E_n = \left(n + \tfrac12\right)\hbar\omega$$
+
+**Examples.** Molecular vibrations (the $\sim10^{14}$ Hz absorption in infrared), atoms in crystals (specific heat of solids), and the electromagnetic field modes of a cavity.
 

@@ -183,19 +183,54 @@ $$\boxed{m\frac{dv}{dt} = -u\frac{dm}{dt} + F_\text{ext}}$$
 
 State Newton's three laws of mechanics.
 
-*Solution.* I: a body remains at rest or in uniform straight-line motion unless acted on by a net force (this defines inertial frames). II: the rate of change of momentum equals the net force, F = dp/dt. III: when two bodies interact they exert equal and opposite forces on each other (along the line joining them, for central forces).
+*Solution.* **Newton's laws.**
+
+- **I (inertia).** A body stays at rest or in uniform straight-line motion unless a net force acts on it. This defines **inertial frames**.
+- **II.** The net force equals the rate of change of momentum:
+
+$$\mathbf F = \frac{d\mathbf p}{dt}\qquad(= m\mathbf a\ \text{for constant mass})$$
+
+- **III.** Forces come in equal and opposite pairs: $\mathbf F_{12} = -\mathbf F_{21}$, acting on different bodies. For central forces they also lie along the line joining the bodies.
+
+**Common mistake.** The two forces of the third law act on **different** bodies, so they never cancel each other in a free-body diagram of one body.
 
 ### Problem 2 [Mechanics 1 · Recall · 3 pts · 2025 midsem Q5]
 
 Classical mechanical systems have several conservation laws. State them, and for projectile motion write the formula for each conserved quantity.
 
-*Solution.* Linear momentum (when F\_ext = 0, or its component along a force-free direction), angular momentum (when the torque, or its component, is zero), and energy (for conservative, time-independent forces). Projectile: pₓ = mvₓ = constant (no horizontal force); E = ½m(vₓ² + v\_y²) + mgy = constant. Angular momentum about the launch point is not conserved: the torque is −mgx ẑ.
+*Solution.* **The three conservation laws.**
+
+| quantity | conserved when | because |
+|---|---|---|
+| linear momentum $\mathbf p$ | net external force $= 0$ (or one component of it) | translation symmetry |
+| angular momentum $\mathbf L$ | net external torque $= 0$ (or one component) | rotation symmetry |
+| energy $E$ | forces are conservative and time-independent | time-translation symmetry |
+
+**Projectile motion** (gravity along $-y$):
+
+$$p_x = mv_x = \text{constant (no horizontal force)}$$
+
+$$E = \tfrac12m(v_x^2 + v_y^2) + mgy = \text{constant}$$
+
+**Angular momentum** about the launch point is **not** conserved: the torque of gravity is $\boldsymbol\tau = \mathbf r\times m\mathbf g = -mgx\,\hat{\mathbf z}\ne 0$. Conservation depends on the point you choose.
 
 ### Problem 3 [Mechanics 1 · Recall · 2 pts]
 
 What is a conservative force? Give two equivalent tests.
 
-*Solution.* A force whose work between two points is independent of the path. Tests: ∇ × F = 0 everywhere (in a simply connected region); ∮F·dr = 0 for every loop; equivalently F = −∇U.
+*Solution.* **Definition.** A force is conservative if the work it does between two points does **not depend on the path**.
+
+**Equivalent tests.**
+
+$$\oint\mathbf F\cdot d\mathbf r = 0\ \text{for every closed loop}$$
+
+$$\nabla\times\mathbf F = 0\ \text{everywhere (in a simply connected region)}$$
+
+$$\mathbf F = -\nabla U\ \text{for some potential } U(\mathbf r)$$
+
+In 2-D the curl test is $\partial F_y/\partial x - \partial F_x/\partial y = 0$.
+
+**Consequence.** For a conservative force, $K + U$ is constant. Gravity, springs and the Coulomb force are conservative; friction and drag are not.
 
 ### Problem 4 [Mechanics 1 · Recall · 2 pts]
 
@@ -221,19 +256,48 @@ So Newton's laws hold in the same form in every inertial frame: no experiment in
 
 Why is the total internal force on a system zero? When is the total internal torque zero?
 
-*Solution.* By the third law, internal forces come in equal and opposite pairs, so they sum to zero. Their torques also cancel in pairs when the forces are central (along the line joining the particles), since then rⱼ × F + rₖ × (−F) = (rⱼ − rₖ) × F = 0.
+*Solution.* **Total internal force.** Internal forces come in third-law pairs $\mathbf F_{jk} = -\mathbf F_{kj}$, so
+
+$$\sum_{j\ne k}\mathbf F_{jk} = 0$$
+
+**Total internal torque.** For one pair,
+
+$$\mathbf r_j\times\mathbf F_{jk} + \mathbf r_k\times\mathbf F_{kj} = (\mathbf r_j - \mathbf r_k)\times\mathbf F_{jk}$$
+
+This vanishes if $\mathbf F_{jk}$ is **central**, that is, along the line joining the particles (so it is parallel to $\mathbf r_j - \mathbf r_k$). Gravity and the Coulomb force are central; the strong form of the third law is then needed.
+
+**Result.** For a system with central internal forces, only external forces and torques change $\mathbf P$ and $\mathbf L$.
 
 ### Problem 6 [Mechanics 1 · Recall · 2 pts]
 
 What are the limitations of Newtonian mechanics?
 
-*Solution.* Constraints must be handled by finding constraint forces (awkward); it is not consistent with electromagnetism and fails near the speed of light (STR); it cannot explain the stability of atoms or atomic spectra (QM).
+*Solution.* **Limitations of Newtonian mechanics.**
+
+1. **Awkward with constraints.** You must find all the constraint forces (tensions, normal forces) before you can solve. Lagrangian mechanics avoids this.
+2. **Fails near the speed of light.** It disagrees with electromagnetism and experiment at high speed; special relativity replaces it.
+3. **Fails for atoms.** It cannot explain stable atoms, discrete spectra or the photoelectric effect; quantum mechanics is needed.
+4. **Needs inertial frames**, and says nothing about the origin of gravity (general relativity).
+
+**Still valid** for everyday speeds, sizes and energies, and recovered as the low-speed, large-size limit of both relativity and quantum mechanics.
 
 ### Problem 7 [Mechanics 1 · Recall · 2 pts]
 
 Why is the harmonic oscillator a good model for so many systems?
 
-*Solution.* Any smooth potential near a stable minimum is approximately quadratic, U ≈ U₀ + ½U″(x₀)(x − x₀)², so small oscillations about any equilibrium are harmonic.
+*Solution.* **Reason.** Any smooth potential near a stable minimum looks like a parabola.
+
+Taylor expand about the equilibrium $x_0$, where $U'(x_0) = 0$:
+
+$$U(x) \approx U(x_0) + \tfrac12U''(x_0)(x - x_0)^2$$
+
+This is a spring with $k = U''(x_0) > 0$, so small oscillations obey
+
+$$m\ddot\epsilon = -k\epsilon,\qquad \omega = \sqrt{\frac{U''(x_0)}m}$$
+
+**Hence** molecular vibrations, a pendulum at small angle, atoms in a crystal and a circuit's LC oscillations are all harmonic oscillators.
+
+**Limit.** The approximation fails for large amplitudes (anharmonic terms).
 
 ## B. Show or derive
 

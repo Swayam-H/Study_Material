@@ -204,61 +204,146 @@ Line charge $\lambda$ and test charge $q$ at distance $d$: in $K$, $F = \dfrac{q
 
 State the assumptions (postulates) of the special theory of relativity.
 
-*Solution.* (i) The laws of physics take the same form in all inertial frames; no experiment inside one frame can single it out as at rest. (ii) The speed of light in free space is c in every inertial frame, independent of the motion of source and observer.
+*Solution.* **The two postulates.**
+
+1. **Relativity.** The laws of physics take the same form in every inertial frame. No experiment inside a frame can tell you whether it is "at rest".
+2. **Light.** The speed of light in free space is $c$ in every inertial frame, independent of the motion of the source or the observer.
+
+**Consequences** follow from combining them: relative simultaneity, time dilation, length contraction, and $E = mc^2$.
+
+**Common mistake.** The second postulate does not say light is special in the ether; it says the speed is the **same for everyone**.
 
 ### Problem 2 [STR · Recall · 3 pts]
 
 What problems with electromagnetism and Galilean relativity led to these postulates?
 
-*Solution.* Maxwell's equations give one speed c, but the wave equation is not invariant under the Galilean transformation, so it would hold only in one special frame. The same induction experiment is explained by a magnetic force in one frame and an induced electric field in another. Michelson–Morley found no motion through an ether.
+*Solution.* **Three conflicts led to the postulates.**
+
+1. **Maxwell's equations** give a single speed $c = 1/\sqrt{\mu_0\varepsilon_0}$ for light. Under the Galilean transformation the wave equation is **not** invariant, so it would hold in only one special frame (the ether frame).
+2. **Induction.** A magnet and a coil in relative motion give the same current, but the Galilean account gives two different explanations (a magnetic force if the coil moves, an induced electric field if the magnet moves).
+3. **Experiment.** Michelson–Morley (1887) found no motion through the ether.
+
+**Resolution.** Keep Maxwell's equations and the relativity principle, and give up the Galilean transformation: replace it with the Lorentz transformation.
 
 ### Problem 3 [STR · Recall · 3 pts]
 
 Explain, using a train and two light flashes, why simultaneity is relative.
 
-*Solution.* Flashes from the two ends of a train reach a mid-train observer together, so in the train frame they were simultaneous. On the platform the train moves forward while the light travels, so the rear flash has further to go. With light at c in both frames, the rear flash must have been emitted first. Formally, Δt′ = −γvΔx/c² ≠ 0 when Δx ≠ 0.
+*Solution.* **The train thought experiment.** Two flashes go off at the front and the back of a moving train.
+
+- **Train frame.** The light from both flashes reaches the observer in the middle **at the same time**, so the flashes were **simultaneous**.
+- **Platform frame.** While the light travels, the train moves forward, so the observer in the middle moves toward the front flash and away from the back one. Since light still travels at $c$ in both directions, the front flash arrives first: it must have been emitted **later** than the back flash. They are **not simultaneous**.
+
+**Formally.** For two events with $\Delta t = 0$ in one frame,
+
+$$\Delta t' = -\frac{\gamma v\,\Delta x}{c^2} \ne 0\quad\text{whenever }\Delta x \ne 0$$
+
+**Takeaway.** Simultaneity depends on the frame; it is relative, not absolute.
 
 ### Problem 4 [STR · Recall · 2 pts]
 
 What is proper time? What is proper length?
 
-*Solution.* Proper time is the interval between two events that occur at the same place in some frame (the clock's rest frame). Proper length is the length of an object measured in its rest frame.
+*Solution.* **Proper time $\Delta\tau$.** The time between two events that happen at the **same place** in some frame, that is, measured on a single clock that is present at both events.
+
+$$\Delta t = \gamma\,\Delta\tau\quad(\text{any other frame measures a longer time})$$
+
+**Proper length $L_0$.** The length of an object measured in its **own rest frame**.
+
+$$L = \frac{L_0}\gamma\quad(\text{any other frame measures a shorter length})$$
+
+**Rule of thumb.** Proper time is the **shortest** time and proper length is the **longest** length.
 
 ### Problem 5 [STR · Recall · 2 pts]
 
 Each of two inertial observers says the other's clock runs slow. Why is this not a contradiction?
 
-*Solution.* Each observer measures the other's clock by comparing it with two of their own clocks at different places, and the two observers disagree about which events are simultaneous. Each conclusion is correct in its own frame.
+*Solution.* **Why it is not a contradiction.** Time dilation is a statement about comparing **one** moving clock with **two** synchronised clocks of the observer's own frame, placed at different positions.
+
+- Observer A compares B's one clock with two of A's clocks, and finds B's clock slow.
+- Observer B compares A's one clock with two of B's clocks, and finds A's clock slow.
+
+The two observers use **different pairs of events** and disagree about which events are simultaneous (Problem 3), so there is no single pair of readings to disagree about. Each statement is correct in its own frame.
+
+**Resolving it.** The symmetry breaks only if the clocks are brought back together, which requires one to accelerate (twin paradox).
 
 ### Problem 6 [STR · Recall · 3 pts]
 
 Explain the twin paradox and why the twins' situations are not symmetric.
 
-*Solution.* A twin who travels out and back ages less than the twin at home. Only the traveller changes inertial frame at the turnaround (feels an acceleration); the home twin stays in one inertial frame. So the situations are not symmetric, and the traveller's elapsed time is t\_home/γ.
+*Solution.* **Setup.** One twin travels out and back at high speed; the other stays home. When they meet again, the traveller is **younger**:
+
+$$t_\text{traveller} = \frac{t_\text{home}}{\gamma}$$
+
+**Why it is not symmetric.**
+
+- The home twin stays in **one inertial frame** the whole time.
+- The traveller changes frames at the turnaround (feels an acceleration), so their situation is **not** equivalent to the home twin's.
+
+**Why the "paradox" fails.** The naive argument says each twin sees the other's clock slow, so each should be younger. That uses time dilation in each of two **inertial** frames, but the traveller's path is not within one.
+
+**Check.** At $v = 0.6c$ ($\gamma = 1.25$), a $20$ year trip home takes only $16$ years for the traveller.
 
 ### Problem 7 [STR · Recall · 2 pts]
 
 Why is p = mv not a good definition of momentum in relativity?
 
-*Solution.* With p = mv and the relativistic velocity transformation, momentum conserved in one frame is not conserved in another (the slides' collision of A and B). Defining p = γmv restores conservation in all frames.
+*Solution.* **The problem.** Take $\mathbf p = m\mathbf v$ and use the relativistic velocity transformation. A collision in which total $\mathbf p = m\mathbf v$ is conserved in one frame **fails to conserve it in a frame moving with respect to the first**. That would make the laws depend on the frame, violating the first postulate.
+
+**The fix.** Define
+
+$$\mathbf p = \gamma m\mathbf v,\qquad \gamma = \frac1{\sqrt{1 - v^2/c^2}}$$
+
+With this, conservation holds in all inertial frames.
+
+**Limits.**
+
+- $v \ll c$: $\gamma\to 1$ and $\mathbf p \to m\mathbf v$.
+- $v\to c$: $p\to\infty$, so $c$ cannot be reached by a massive particle.
 
 ### Problem 8 [STR · Recall · 2 pts]
 
 What is the difference between timelike and spacelike intervals? Which can be causally connected?
 
-*Solution.* Timelike: |cΔt| > |Δx|; a frame exists where both events occur at the same place, so one can cause the other. Spacelike: |Δx| > |cΔt|; a frame exists where they are simultaneous, and no signal can connect them.
+*Solution.* **Interval.** $(\Delta s)^2 = (c\Delta t)^2 - \Delta x^2$ (or the opposite sign convention) is the same in all frames.
+
+| | condition | there is a frame in which | causally connected? |
+|---|---|---|---|
+| **Timelike** | $\lvert c\Delta t\rvert > \lvert\Delta x\rvert$ | the events happen at the **same place** | **yes**: a signal slower than $c$ can link them |
+| **Spacelike** | $\lvert\Delta x\rvert > \lvert c\Delta t\rvert$ | the events are **simultaneous** | **no**: it would need a speed $> c$ |
+| **Lightlike** | $\lvert\Delta x\rvert = \lvert c\Delta t\rvert$ | | only by light |
+
+**Consequence.** The time order of spacelike-separated events depends on the frame; for timelike separation it is the same for everyone, so cause always precedes effect.
 
 ### Problem 9 [STR · Recall · 3 pts]
 
 Explain how electric and magnetic forces are the same phenomenon seen from different frames.
 
-*Solution.* A line of charge at rest exerts only an electric force on a nearby charge q. In a frame where the charges move, length contraction increases the line density (λ′ > λ), so the electric repulsion is larger, but the moving charges form a current whose magnetic force attracts q and cancels exactly the excess. The net force is the same physics in both frames; electric and magnetic forces are one interaction seen differently.
+*Solution.* **Setup.** A neutral wire carries a current: positive ions at rest, electrons drifting at speed $v$. A test charge $q$ moves alongside the wire at the same velocity as the electrons.
+
+**Lab frame.** The wire is neutral, so the **electric** force on $q$ is zero. The current makes a magnetic field $B$, and a moving $q$ feels a **magnetic** force $q\mathbf v\times\mathbf B$ (toward or away from the wire).
+
+**Rest frame of $q$.** Now $q$ is at rest, so a magnetic force is impossible, yet the force on $q$ must still exist (the same physical outcome).
+
+- The electrons are now at rest: their spacing is the proper (larger) spacing, so their density is **lower**.
+- The ions now move: their spacing is length-contracted, so their density is **higher**.
+
+The wire is therefore **net charged**, and exerts an **electric** force on $q$.
+
+**Conclusion.** What one frame calls magnetic, another calls electric. $\mathbf E$ and $\mathbf B$ mix under a change of frame: they are two aspects of one electromagnetic field.
 
 ### Problem 10 [STR · Recall · 2 pts]
 
 State the principle of equivalence and one experimental confirmation of general relativity.
 
-*Solution.* Equivalence: the effects of a uniform gravitational field cannot be distinguished locally from those of an accelerated frame. Since light bends in an accelerating laboratory, it bends in gravity. Confirmed by the deflection of starlight past the sun (1919 eclipse); also gravitational lensing.
+*Solution.* **Principle of equivalence.** The effects of a uniform gravitational field cannot be distinguished, in a small enough region, from those of an accelerated frame. A person in a closed lift cannot tell the difference between standing on Earth and accelerating in empty space.
+
+**Consequence.** Light bends in an accelerating lift (its path curves relative to the floor), so it must also bend in a gravitational field.
+
+**Experimental confirmation.**
+
+- **1919 eclipse:** starlight passing close to the Sun was deflected by about $1.75''$, twice the Newtonian value, matching general relativity.
+- Also gravitational lensing, gravitational redshift (Pound–Rebka) and the precession of Mercury's orbit.
 
 ## B. Show or derive
 

@@ -236,73 +236,159 @@ Mercury: the first excitation energy is $4.9$ eV, and the emitted light has $\la
 
 What did Rutherford's alpha-scattering experiment show, and why did it rule out Thomson's model?
 
-*Solution.* Most alpha particles passed straight through gold foil, but about 1 in 8000 bounced back at large angles. Thomson's spread-out charge can only deflect alphas slightly. A large deflection needs a strong field from a tiny, heavy, positive nucleus about 10⁻¹⁴ m across, so the atom is mostly empty space.
+*Solution.* **Experiment.** Geiger and Marsden fired $\alpha$-particles at a thin gold foil.
+
+- Most passed almost undeflected.
+- About $1$ in $8000$ bounced back at large angles.
+
+**Why Thomson's model fails.** A positive charge smeared over the whole atom produces only a weak field, so it can deflect an $\alpha$-particle by a tiny angle at most. Large deflections need a **strong, concentrated** field.
+
+**Rutherford's conclusion.** The positive charge and nearly all the mass are in a tiny **nucleus** about $10^{-14}$ m across (the atom is about $10^{-10}$ m), so the atom is mostly empty space.
 
 ### Problem 2 [QM 3 · Recall · 2 pts]
 
 Why does classical physics predict that a planetary atom is unstable?
 
-*Solution.* An orbiting electron accelerates, and an accelerating charge radiates energy. It would lose energy continuously and spiral into the nucleus in about 10⁻⁸ s, giving a continuous spectrum. Real atoms are stable and have sharp lines.
+*Solution.* **Classical argument.** In the planetary model the electron orbits the nucleus, so it is **accelerating**. An accelerating charge radiates electromagnetic waves, so the electron continuously loses energy.
+
+**Consequences.**
+
+1. The orbit shrinks and the electron **spirals into the nucleus** in about $10^{-8}$ s.
+2. During the fall its orbital frequency changes continuously, so the emitted light would have a **continuous spectrum**.
+
+**Observation.** Atoms are stable for billions of years and emit **sharp lines**. Classical physics fails, which is why Bohr introduced stationary states.
 
 ### Problem 3 [QM 3 · Recall · 2 pts]
 
 State Bohr's postulates.
 
-*Solution.* (i) Electrons move in certain stationary orbits without radiating. (ii) These orbits have L = nħ. (iii) A photon hν = Eᵢ − E\_f is emitted or absorbed only when the electron jumps between orbits.
+*Solution.* **Bohr's postulates (1913).**
+
+1. An electron moves in certain **stationary orbits** without radiating, even though it accelerates.
+2. The allowed orbits have quantised angular momentum:
+
+$$L = mvr = n\hbar,\qquad n = 1, 2, 3,\dots$$
+
+3. A photon is emitted or absorbed only when the electron **jumps** between orbits:
+
+$$h\nu = E_i - E_f$$
+
+**Status.** Postulate 1 contradicts classical physics (that is the point). They give $E_n = -13.6/n^2$ eV for hydrogen.
 
 ### Problem 4 [QM 3 · Recall · 2 pts]
 
 How does the de Broglie hypothesis explain Bohr's quantisation of angular momentum?
 
-*Solution.* A stable orbit holds a whole number of wavelengths: 2πr = nλ = nh/mv. Rearranged, mvr = nh/2π = nħ.
+*Solution.* **de Broglie's idea.** An electron in a stable orbit is a standing wave: a whole number of wavelengths must fit around the circumference, otherwise the wave interferes destructively with itself.
+
+$$2\pi r = n\lambda = n\frac h{mv}\ \Rightarrow\ mvr = \frac{nh}{2\pi} = n\hbar$$
+
+This is exactly Bohr's second postulate, now **derived** rather than assumed.
+
+**Picture.** An orbit of circumference $n\lambda$ carries $n$ complete waves. Non-integer $n$ means the wave does not close on itself.
 
 ### Problem 5 [QM 3 · Recall · 2 pts]
 
 Name the hydrogen spectral series and the region of the spectrum each lies in.
 
-*Solution.* Lyman (to n = 1): ultraviolet. Balmer (to n = 2): visible. Paschen (to n = 3), Brackett (n = 4) and Pfund (n = 5): infrared.
+*Solution.* **Rydberg formula.**
+
+$$\frac1\lambda = R\left(\frac1{n_f^2} - \frac1{n_i^2}\right)$$
+
+| series | ends on $n_f$ | region |
+|---|---|---|
+| **Lyman** | 1 | ultraviolet |
+| **Balmer** | 2 | **visible** (and near UV) |
+| **Paschen** | 3 | infrared |
+| **Brackett** | 4 | infrared |
+| **Pfund** | 5 | infrared |
+
+**Rule.** The larger the energy drop, the shorter the wavelength: $n_f = 1$ gives the most energetic photons.
 
 ### Problem 6 [QM 3 · Recall · 2 pts]
 
 State the correspondence principle.
 
-*Solution.* Quantum physics must give the same results as classical physics in the limit of large quantum numbers.
+*Solution.* **Correspondence principle (Bohr).** Quantum physics must give the **same results as classical physics** in the limit of large quantum numbers (or $h\to0$).
+
+**Example.** For hydrogen the frequency of the photon emitted in $n\to n-1$ approaches the classical orbital frequency as $n\to\infty$ (Problem 15 in the derivations).
+
+**Use.** It is a consistency test for any quantum theory: a quantised energy spectrum looks continuous when the spacing is tiny compared with the energy.
 
 ### Problem 7 [QM 3 · Recall · 2 pts]
 
 Why do the spectral lines of deuterium differ slightly from those of hydrogen?
 
-*Solution.* The energy depends on the reduced mass mM/(m + M). Deuterium's nucleus is twice as heavy, so its reduced mass is slightly larger. Its levels are slightly deeper and its lines slightly shorter in wavelength.
+*Solution.* **Reason.** The nucleus is not fixed: both nucleus and electron orbit their common centre of mass. The energy levels depend on the **reduced mass**
+
+$$m' = \frac{mM}{m + M}$$
+
+**Isotope shift.** Deuterium's nucleus has twice the mass of hydrogen's, so its reduced mass is slightly larger. Its energy levels are slightly deeper and its lines slightly shifted to **shorter wavelength**.
+
+**Size.** The relative shift is about $\dfrac m{2M_p}\approx 3\times10^{-4}$; for $H_\alpha$ (656 nm) this is about $0.18$ nm.
+
+**History.** This is how Urey discovered deuterium in 1931.
 
 ### Problem 8 [QM 3 · Recall · 3 pts]
 
 Describe the Franck–Hertz experiment. What do the current dips at 4.9 V intervals show?
 
-*Solution.* Electrons accelerated through mercury vapour reach a collector past a small retarding voltage. The current drops each time the accelerating voltage passes a multiple of 4.9 V, because electrons with 4.9 eV can lose exactly that energy exciting a mercury atom and then can't reach the collector. So atoms absorb energy only in discrete amounts: they have discrete energy levels.
+*Solution.* **Setup.** Electrons from a hot cathode are accelerated through mercury vapour toward a grid, then must overcome a small retarding voltage to reach the collector.
+
+**Observation.** The collector current rises with accelerating voltage, then **drops sharply** every $4.9$ V.
+
+**Explanation.** An electron with $4.9$ eV can lose **exactly** that energy exciting a mercury atom (first excitation level), and then lacks the energy to reach the collector. At $9.8$ V it can do so twice, and so on.
+
+**Conclusion.** Atoms absorb energy only in **discrete amounts**: they have discrete energy levels. The atom then emits a $253$ nm photon ($1240/4.9$).
 
 ### Problem 9 [QM 3 · Recall · 2 pts]
 
 Distinguish spontaneous and stimulated emission.
 
-*Solution.* Spontaneous: an excited atom drops by itself, at a random time, emitting a photon in a random direction and phase. Stimulated: a passing photon of the right energy triggers the emission of a second photon identical to it in frequency, phase, direction and polarisation.
+*Solution.* | | **Spontaneous** | **Stimulated** |
+|---|---|---|
+| Trigger | none | a passing photon of energy $h\nu = E_2 - E_1$ |
+| Timing | random, within the lifetime | caused by the photon |
+| Photon produced | random direction, phase and polarisation | identical to the triggering photon in **frequency, phase, direction and polarisation** |
+| Light | incoherent (a bulb) | coherent (a laser) |
+
+**Result.** Stimulated emission **amplifies** light: one photon in, two identical photons out.
 
 ### Problem 10 [QM 3 · Recall · 3 pts]
 
 What is population inversion? Why is a metastable state needed to achieve it?
 
-*Solution.* Population inversion means more atoms in an upper state than a lower one, so stimulated emission beats absorption and light is amplified. A metastable state lives about 10⁻³ s, long enough for atoms to pile up in it; ordinary states empty in about 10⁻⁸ s.
+*Solution.* **Population inversion.** More atoms in an upper state than in a lower state, $N_2 > N_1$.
+
+- Normally $N_1 > N_2$, so a beam of light is **absorbed** more than it is amplified.
+- With inversion, stimulated emission wins and the beam is **amplified** (a laser).
+
+**Why a metastable state is needed.** An ordinary excited state empties by spontaneous emission in about $10^{-8}$ s, so atoms cannot accumulate. A **metastable** state lives about $10^{-3}$ s (the transition is forbidden by a selection rule), long enough for atoms to pile up there and form an inversion.
+
+**Pumping** (by light or collisions) supplies the energy to keep atoms in the upper state.
 
 ### Problem 11 [QM 3 · Recall · 2 pts]
 
 Why is a four-level laser easier to run continuously than a three-level laser?
 
-*Solution.* In a four-level laser the lower laser level is above the ground state and empties quickly, so it is almost always empty and inversion needs only a few atoms. A three-level laser must move more than half the atoms out of the ground state.
+*Solution.* **Three-level laser.** The lower laser level is the **ground state**. Since almost all atoms start there, more than **half** of them must be pumped out of it before $N_2 > N_1$: a lot of power, and usually only pulsed operation.
+
+**Four-level laser.** The lower laser level is a **higher** level, which empties rapidly to the ground state. It is therefore almost always empty, so even a small number of atoms in the upper level gives $N_2 > N_1$.
+
+**Result.** Four-level lasers need much less pumping power and can run continuously (He–Ne, Nd:YAG).
 
 ### Problem 12 [QM 3 · Recall · 2 pts]
 
 List two failures of the Bohr model.
 
-*Solution.* Any two: works only for one-electron atoms; can't predict line intensities; can't explain fine structure or the Zeeman effect; uses definite orbits, which the uncertainty principle forbids.
+*Solution.* **Two failures of the Bohr model** (any two):
+
+1. It works only for **one-electron** atoms (H, He$^+$, Li$^{2+}$); it fails for helium.
+2. It cannot predict **line intensities** or selection rules.
+3. It cannot explain **fine structure** or the **Zeeman effect**.
+4. It uses **definite orbits**, which the uncertainty principle forbids.
+
+**Replaced by** the Schrödinger equation (chapters 11 and 12), which gives the same energy levels for hydrogen but with correct probability distributions.
 
 ## B. Derive or show
 
@@ -520,17 +606,37 @@ Deuterium (heavier nucleus, larger $m'$) has the **shorter** wavelength. This is
 
 Estimate how long a classical electron in a Bohr orbit would take to spiral into the nucleus, and why that is a problem. (Order of magnitude only: Beiser quotes about 10⁻⁸ s.)
 
-*Solution.* The electron radiates its 13.6 eV (and more as it falls inward) within about 10⁻⁸ s. Atoms clearly last for billions of years, so classical physics can't describe them, and quantised stationary orbits are needed.
+*Solution.* **The problem.** The orbiting electron accelerates, so it radiates. Beiser's estimate is that it would lose its energy and spiral into the nucleus in
+
+$$t \sim 10^{-8}\ \text{s}$$
+
+**Why that matters.** Real atoms last for billions of years and emit **sharp lines**, not a continuous spectrum. So classical electromagnetism plus Rutherford's atom is inconsistent with observation.
+
+**Resolution.** Quantised **stationary states** (Bohr), and later a wave function with a lowest allowed energy (1s), below which the electron cannot fall.
 
 ### Problem 30 [QM 3 · Discussion · 3 pts]
 
 A He–Ne laser gives 1 mW at 632.8 nm. Estimate the number of photons per second and explain why laser light is coherent but a bulb's light isn't.
 
-*Solution.* E = 1240/632.8 ≈ 1.96 eV ≈ 3.1 × 10⁻¹⁹ J, so N ≈ 10⁻³/3.1 × 10⁻¹⁹ ≈ 3 × 10¹⁵ photons per second. Stimulated photons copy the phase of the photon that triggered them, so the beam is in step (coherent). A bulb's atoms emit spontaneously, each at a random time and phase.
+*Solution.* **Photons per second.**
+
+$$E_\gamma = \frac{1240}{632.8} = 1.96\ \text{eV} = 3.1\times10^{-19}\ \text{J}$$
+
+$$N = \frac P{E_\gamma} = \frac{10^{-3}}{3.1\times10^{-19}} \approx \boxed{3\times10^{15}\ \text{photons/s}}$$
+
+**Coherence.** In a laser, each stimulated photon copies the **phase** (and direction, polarisation) of the photon that triggered it, so the whole beam is in step: **coherent**. In a bulb every atom emits spontaneously at a random time with a random phase, so the light is a jumble of unrelated waves.
 
 ### Problem 31 [QM 3 · Discussion · 2 pts]
 
 The Sun's spectrum shows dark absorption lines. Explain how they tell us which elements are in the Sun's outer layers.
 
-*Solution.* Cooler gas in the Sun's outer layers absorbs the wavelengths that match its own energy-level differences. Each element has a unique set of levels, so the pattern of dark lines identifies the element. Helium was first found this way.
+*Solution.* **Idea.** The Sun's bright interior emits a continuous spectrum. The cooler gas in its outer layers **absorbs** photons whose energy equals an energy-level difference of its atoms.
+
+**Result.** Those wavelengths are missing, leaving **dark lines**:
+
+$$h\nu = E_f - E_i$$
+
+**Identification.** Every element has a unique set of energy levels, so its pattern of dark lines is a fingerprint. Matching the lines to laboratory spectra identifies the elements present.
+
+**History.** Helium (Greek *helios*, "sun") was found in the Sun's spectrum in 1868, before it was found on Earth.
 

@@ -186,25 +186,63 @@ Closed bound orbits for every initial condition occur only for $U\propto r^{-1}$
 
 Define the conjugate momentum and the Hamiltonian. When is H the total energy, and when is it conserved?
 
-*Solution.* pₖ = ∂L/∂q̇ₖ; H = Σpₖq̇ₖ − L written in q, p, t. H = T + U when the coordinate transformation has no explicit time and U depends only on q. H is conserved when it has no explicit t (dH/dt = ∂H/∂t).
+*Solution.* **Conjugate momentum and Hamiltonian.**
+
+$$p_k = \frac{\partial L}{\partial\dot q_k},\qquad H(q,p,t) = \sum_kp_k\dot q_k - L$$
+
+with $H$ written as a function of $q$ and $p$ (not $\dot q$).
+
+**$H$ is the total energy** $T + U$ when the relation between generalised and Cartesian coordinates does not depend explicitly on time (so $T$ is quadratic in $\dot q$) and $U$ depends only on $q$.
+
+**$H$ is conserved** when it has no explicit time dependence, because
+
+$$\frac{dH}{dt} = \frac{\partial H}{\partial t}$$
+
+**Common mistake.** $H$ can be conserved without being the energy (a bead on a rotating hoop), and can be the energy without being conserved (a driven system).
 
 ### Problem 2 [Mechanics 3 · Recall · 2 pts]
 
 Write Hamilton's equations. How do they compare in number and order with Lagrange's?
 
-*Solution.* q̇ₖ = ∂H/∂pₖ, ṗₖ = −∂H/∂qₖ: 2n first-order equations, against n second-order Lagrange equations. q and p are treated symmetrically.
+*Solution.* **Hamilton's equations.**
+
+$$\dot q_k = \frac{\partial H}{\partial p_k},\qquad \dot p_k = -\frac{\partial H}{\partial q_k}$$
+
+**Comparison with Lagrange.**
+
+| | Lagrange | Hamilton |
+|---|---|---|
+| number of equations | $n$ | $2n$ |
+| order | second | first |
+| variables | $q,\dot q$ | $q,p$ (treated symmetrically) |
+
+Hamilton's form is the natural starting point for phase space, Liouville's theorem and quantum mechanics.
 
 ### Problem 3 [Mechanics 3 · Recall · 2 pts]
 
 What is phase space? Sketch phase trajectories for a harmonic oscillator and for a damped one.
 
-*Solution.* The 2n-dimensional space of all (q, p); each state is a point and the motion a curve. SHO: closed ellipses about the origin (larger E, larger ellipse). Damped SHO: a spiral into the origin.
+*Solution.* **Phase space.** The $2n$-dimensional space of all $(q_1,\dots,q_n,p_1,\dots,p_n)$. Each state of the system is one **point**, and the motion is a **curve**.
+
+**Harmonic oscillator** ($H = p^2/2m + \tfrac12m\omega^2x^2$): the trajectories are closed **ellipses** about the origin, one for each energy. Larger $E$ gives a larger ellipse, with area $2\pi E/\omega$.
+
+**Damped oscillator.** Energy is lost, so the trajectory **spirals inward** to the origin and the enclosed area shrinks.
+
+**Key property.** Trajectories of an autonomous system never cross, because the state determines the future uniquely.
 
 ### Problem 4 [Mechanics 3 · Recall · 3 pts]
 
 State Liouville's theorem and give two consequences.
 
-*Solution.* Under Hamiltonian (frictionless) motion, the volume of any region of phase space stays constant. Consequences: a conservative system can't come to rest at an equilibrium point (that would shrink volume); uncertainty in the initial state is preserved, only reshaped; it underpins statistical mechanics.
+*Solution.* **Liouville's theorem.** For Hamiltonian (frictionless) motion, the **volume of any region of phase space is constant** as it flows. The flow is **incompressible**:
+
+$$\sum_k\left(\frac{\partial\dot q_k}{\partial q_k} + \frac{\partial\dot p_k}{\partial p_k}\right) = 0$$
+
+**Consequences.**
+
+1. A conservative system **cannot settle into an equilibrium point or attractor**, since that would shrink a region of phase space to a point. Only dissipation does that.
+2. **Uncertainty in the initial state** is never removed by the motion, only reshaped (stretched and folded).
+3. It is the starting point for **statistical mechanics**: a uniform distribution over an energy surface stays uniform.
 
 ### Problem 5 [Mechanics 3 · Recall · 3 pts · 2026 midsem Q3]
 

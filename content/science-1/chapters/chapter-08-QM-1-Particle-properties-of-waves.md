@@ -248,73 +248,173 @@ $$m_\text{grav} = \frac{h\nu}{c^2},\qquad \frac{\Delta\nu}{\nu} \approx \frac{GM
 
 State the Stefan–Boltzmann law and Wien's displacement law. What does each tell you about a hotter blackbody?
 
-*Solution.* Total power per area P/A = σT⁴, so doubling T gives 16× the power. λ\_max T = 2.898 × 10⁻³ m K, so a hotter body peaks at a shorter wavelength.
+*Solution.* **Stefan–Boltzmann law.** Total power radiated per unit area by a blackbody:
+
+$$\frac PA = \sigma T^4,\qquad \sigma = 5.67\times10^{-8}\ \text{W m}^{-2}\text{K}^{-4}$$
+
+Doubling $T$ gives $16$ times the power.
+
+**Wien's displacement law.** The wavelength of peak emission:
+
+$$\lambda_\text{max}T = 2.898\times10^{-3}\ \text{m K}$$
+
+**A hotter blackbody** radiates **much more** power (as $T^4$) and its spectrum peaks at a **shorter wavelength** (so it glows from red to white to blue).
 
 ### Problem 2 [QM 1 · Recall · 3 pts]
 
 What is the ultraviolet catastrophe? How did Planck's hypothesis remove it?
 
-*Solution.* Classically, every cavity mode gets kT, and the number of modes grows as ν², so the predicted energy density diverges at high ν (UV). Planck allowed only energies nhν. High-ν modes then need quanta much bigger than kT and are rarely excited, so u(ν) falls back to zero.
+*Solution.* **The catastrophe.** Classically every cavity mode gets energy $kT$ (equipartition), and the number of modes per unit frequency grows as $\nu^2$:
+
+$$u(\nu) = \frac{8\pi\nu^2}{c^3}kT\ \to\ \infty\quad\text{as }\nu\to\infty$$
+
+The predicted energy density (and total power) diverges in the ultraviolet, in contradiction with experiment.
+
+**Planck's fix.** Allow a mode of frequency $\nu$ to have only energies $E = nh\nu$.
+
+- At high $\nu$, one quantum $h\nu \gg kT$ is rarely supplied by thermal motion, so these modes are almost **never excited**.
+- $u(\nu)$ therefore turns over and falls to zero:
+
+$$u(\nu) = \frac{8\pi h\nu^3}{c^3}\frac1{e^{h\nu/kT} - 1}$$
 
 ### Problem 3 [QM 1 · Recall · 3 pts]
 
 List three observations of the photoelectric effect that the wave theory of light cannot explain.
 
-*Solution.* Any three of: no time delay; KE\_max does not depend on intensity; there is a threshold frequency; KE\_max rises linearly with ν.
+*Solution.* **Three observations wave theory cannot explain** (any three):
+
+1. **No time delay.** Electrons are emitted almost instantly (within $10^{-9}$ s), even for very dim light. A wave would need time to build up the energy.
+2. **$K_\text{max}$ is independent of intensity.** Brighter light gives more electrons, not faster ones. A wave's energy grows with intensity.
+3. **Threshold frequency.** Below $\nu_0$ there is no emission at any intensity.
+4. **$K_\text{max}$ rises linearly with $\nu$**, independent of intensity.
+
+**Explanation.** Light arrives in quanta of energy $h\nu$, and one photon ejects one electron.
 
 ### Problem 4 [QM 1 · Recall · 2 pts]
 
 State Einstein's photoelectric equation and define every symbol.
 
-*Solution.* hν = KE\_max + φ. Here hν is the photon energy, KE\_max the largest electron kinetic energy, and φ the work function, the minimum energy to free an electron from the surface.
+*Solution.* **Einstein's photoelectric equation.**
+
+$$h\nu = K_\text{max} + \phi$$
+
+- $h\nu$: energy of one photon (frequency $\nu$).
+- $K_\text{max}$: largest kinetic energy of an emitted electron ($= eV_0$, with $V_0$ the stopping potential).
+- $\phi$: **work function**, the minimum energy needed to free an electron from the surface.
+
+**Consequence.** Emission needs $h\nu \ge \phi$, so the threshold is $\nu_0 = \phi/h$.
 
 ### Problem 5 [QM 1 · Recall · 2 pts]
 
 Why does doubling the intensity of light double the photocurrent but leave the stopping potential unchanged?
 
-*Solution.* Intensity is the number of photons per second. More photons free more electrons, so the current rises. Each photon still carries hν, so KE\_max = eV₀ is unchanged.
+*Solution.* **Intensity** is the number of photons arriving per second (each of energy $h\nu$).
+
+- **Doubling the intensity** doubles the number of photons, so twice as many electrons are freed: the **photocurrent doubles**.
+- Each photon still carries the same $h\nu$, so each electron gets the same $K_\text{max} = h\nu - \phi$. The stopping potential $V_0 = K_\text{max}/e$ is **unchanged**.
+
+**To change $V_0$** you must change the frequency, not the brightness.
 
 ### Problem 6 [QM 1 · Recall · 2 pts]
 
 What is meant by wave–particle duality of light? Name one experiment for each side.
 
-*Solution.* Light shows wave behaviour in propagation (Young's double slit, X-ray diffraction) and particle behaviour in energy exchange (photoelectric effect, Compton effect). It never shows both in the same measurement.
+*Solution.* **Wave–particle duality.** Light shows **wave** behaviour when it propagates and **particle** behaviour when it exchanges energy with matter.
+
+| aspect | evidence | experiment |
+|---|---|---|
+| wave | interference, diffraction | Young's double slit; X-ray diffraction |
+| particle | quanta of energy $h\nu$ and momentum $h/\lambda$ | photoelectric effect; Compton scattering |
+
+**Complementarity.** An experiment shows one aspect or the other, **never both at once**. The wave describes where photons are likely to be; the particle describes how they are absorbed.
 
 ### Problem 7 [QM 1 · Recall · 2 pts]
 
 Why is X-ray production called the inverse photoelectric effect?
 
-*Solution.* In the photoelectric effect a photon's energy becomes electron KE. In an X-ray tube, electron KE (from eV) becomes photon energy.
+*Solution.* **Photoelectric effect.** A photon is absorbed and its energy becomes the kinetic energy of an electron:
+
+$$h\nu \to \phi + K$$
+
+**X-ray tube.** An electron accelerated through $V$ arrives with energy $eV$ and, on striking the target, produces a photon:
+
+$$eV \to h\nu_\text{max}$$
+
+So the process is the photoelectric effect **in reverse**: electron kinetic energy becomes photon energy.
+
+**Consequence.** The short-wavelength cutoff of the continuous spectrum is
+
+$$\lambda_\text{min} = \frac{hc}{eV}$$
+
+independent of the target material.
 
 ### Problem 8 [QM 1 · Recall · 2 pts]
 
 State Bragg's law. Why can a crystal diffract X-rays but not visible light?
 
-*Solution.* 2d sinθ = nλ. Diffraction needs λ comparable to the spacing d (about 0.1 nm). Visible light (400–700 nm) is thousands of times too long.
+*Solution.* **Bragg's law.**
+
+$$2d\sin\theta = n\lambda$$
+
+**Why a crystal diffracts X-rays but not visible light.** Diffraction by a lattice is strong only when $\lambda$ is comparable to or smaller than the plane spacing $d$ (about $0.1$ nm). Condition: $\sin\theta = n\lambda/2d \le 1$ requires $\lambda \le 2d$.
+
+- X-rays have $\lambda\approx0.1$ nm: **works**.
+- Visible light has $\lambda = 400$ to $700$ nm, thousands of times larger than $d$: $\sin\theta > 1$, so there is **no** Bragg reflection.
 
 ### Problem 9 [QM 1 · Recall · 3 pts]
 
 In Compton scattering, why does the scattered radiation have a longer wavelength? Why is the effect not seen with visible light?
 
-*Solution.* The photon gives part of its energy and momentum to the recoiling electron, so it leaves with less energy and a longer λ. The shift is at most 4.85 pm, which is negligible next to 500 nm but large next to a 10 pm X-ray.
+*Solution.* **Why the wavelength increases.** The photon gives part of its energy and momentum to the electron it hits, which recoils. The scattered photon has **less energy**, therefore a **longer wavelength**:
+
+$$\lambda' - \lambda = \frac h{m_ec}(1 - \cos\varphi) \ge 0$$
+
+**Why visible light shows nothing.** The shift is at most $2h/m_ec = 4.85$ pm.
+
+- For visible light ($\lambda\approx500$ nm) this is a fractional change of about $10^{-5}$: unmeasurable.
+- For X-rays ($\lambda\approx10$ pm) it is about $50\%$: obvious.
+
+**Also** the photon energy of visible light ($\sim2$ eV) is comparable to atomic binding energies, so the electrons are not free, unlike for X-rays.
 
 ### Problem 10 [QM 1 · Recall · 2 pts]
 
 Why can pair production not happen in empty space?
 
-*Solution.* A photon of energy E has momentum E/c. A pair with total energy E has momentum less than E/c, because the particles have rest mass. Energy and momentum can't both balance unless a third body (a nucleus) takes up momentum.
+*Solution.* **Why not in empty space.** A photon of energy $E$ has momentum $p = E/c$ (massless).
+
+Suppose it turned into an electron–positron pair with the same total energy $E$. The pair has rest mass, so its total momentum is **less than** $E/c$:
+
+$$p_\text{pair}c = \sqrt{E^2 - (2m_ec^2)^2} < E$$
+
+Energy and momentum cannot both be conserved.
+
+**With a nucleus.** A heavy nearby nucleus absorbs the extra momentum while taking almost no kinetic energy ($p^2/2M$ is tiny), so the process is allowed above the threshold $h\nu = 2m_ec^2 = 1.02$ MeV.
 
 ### Problem 11 [QM 1 · Recall · 2 pts]
 
 What is gravitational red shift? Why does it suggest a photon has gravitational mass?
 
-*Solution.* A photon climbing out of a gravitational field loses energy, so its frequency drops. Losing energy to gravity is what a mass does, so the photon acts as if it has mass hν/c².
+*Solution.* **Gravitational red shift.** Light climbing out of a gravitational field has its frequency **lowered** (it is shifted toward the red), even though its speed stays $c$.
+
+**Why this suggests the photon has gravitational mass.** To climb a height $H$, a mass $m$ loses energy $mgH$. If the photon behaves the same way, with an effective mass $m = h\nu/c^2$ (from $E = mc^2$):
+
+$$\Delta(h\nu) = -\frac{h\nu}{c^2}gH\ \Rightarrow\ \frac{\Delta\nu}\nu = -\frac{gH}{c^2}$$
+
+**Experiment.** Pound and Rebka (1960) measured this shift over a $22.5$ m tower, about $2.5\times10^{-15}$, in agreement.
 
 ### Problem 12 [QM 1 · Recall · 2 pts]
 
 Show that a photon of wavelength λ has momentum h/λ.
 
-*Solution.* For a massless particle E² = p²c² + m²c⁴ gives E = pc. With E = hν = hc/λ, p = h/λ.
+*Solution.* **Starting point.** For a massless particle the relativistic relation reduces to
+
+$$E^2 = p^2c^2 + m^2c^4\ \xrightarrow{\ m=0\ }\ E = pc$$
+
+**Photon.** $E = h\nu = hc/\lambda$. Then
+
+$$pc = \frac{hc}\lambda\ \Rightarrow\ \boxed{p = \frac h\lambda}$$
+
+**Check.** Same as de Broglie's $\lambda = h/p$, which therefore applies to both light and matter.
 
 ## B. Derive or show
 
@@ -531,23 +631,60 @@ $$N = \frac{P}{E_\gamma} = \frac{10^{-3}}{3\times10^{-19}} \approx \boxed{3\time
 
 Estimate the number of visible photons per second reaching your eye from a 100 W bulb 10 m away. State your assumptions.
 
-*Solution.* Assume about 5% of 100 W is visible light, or 5 W, with photons of about 2.5 eV (4 × 10⁻¹⁹ J). That is about 10¹⁹ photons/s. At 10 m they spread over 4πr² ≈ 1.3 × 10³ m². A pupil 4 mm across has area about 1.3 × 10⁻⁵ m², so it catches a fraction of about 10⁻⁸, or roughly 10¹¹ photons per second.
+*Solution.* **Assumptions.** $5\%$ of the $100$ W is emitted as visible light, so $P_\text{vis} = 5$ W; average photon energy about $2.5$ eV $= 4\times10^{-19}$ J; pupil diameter $4$ mm.
+
+**Photons emitted.**
+
+$$\dot N = \frac{5}{4\times10^{-19}} \approx 10^{19}\ \text{s}^{-1}$$
+
+**Fraction reaching the eye.** Spread over a sphere of radius $10$ m, area $4\pi r^2 = 1.3\times10^3$ m$^2$. The pupil area is $\pi(2\times10^{-3})^2 = 1.3\times10^{-5}$ m$^2$:
+
+$$\text{fraction} \approx \frac{1.3\times10^{-5}}{1.3\times10^{3}} = 10^{-8}$$
+
+$$\boxed{\dot N_\text{eye} \approx 10^{19}\times10^{-8} = 10^{11}\ \text{photons/s}}$$
+
+**Comment.** Light is "continuous" to the eye because so many photons arrive.
 
 ### Problem 29 [QM 1 · Discussion · 3 pts]
 
 A detector shows electrons leaving a metal within 10⁻⁹ s of the light being switched on. Estimate how long the wave theory says it would take at an intensity of 10⁻⁶ W/m², assuming an electron absorbs over an area of one atom (about 10⁻²⁰ m²) and needs 2 eV.
 
-*Solution.* Power on one atom = 10⁻⁶ × 10⁻²⁰ = 10⁻²⁶ W. 2 eV ≈ 3 × 10⁻¹⁹ J, so t ≈ 3 × 10⁷ s, about a year. Electrons actually come out in nanoseconds, so energy must arrive in lumps (photons).
+*Solution.* **Wave-theory estimate.** On a classical wave, the energy absorbed by one atom is the intensity times the area it presents:
+
+$$P = IA = (10^{-6}\ \text{W/m}^2)(10^{-20}\ \text{m}^2) = 10^{-26}\ \text{W}$$
+
+**Time to collect $2$ eV** $= 3.2\times10^{-19}$ J:
+
+$$t = \frac{3.2\times10^{-19}}{10^{-26}} \approx 3\times10^7\ \text{s} \approx 1\ \text{year}$$
+
+**Observation.** Electrons emerge within $10^{-9}$ s.
+
+**Conclusion.** Energy cannot arrive smoothly spread out; it must arrive in **lumps** (photons) that deliver $h\nu$ to a single electron at once.
 
 ### Problem 30 [QM 1 · Discussion · 4 pts]
 
 Rank the photoelectric effect, Compton scattering and pair production by the photon energy at which each dominates in lead. Explain the ranking in one line each.
 
-*Solution.* In lead, the photoelectric effect dominates below about 0.5 MeV, because the photon is absorbed whole by a bound electron. Compton scattering dominates from about 0.5 to 5 MeV, because the photon energy is far above the binding energy, so electrons act free. Pair production dominates above about 5 MeV; it is only possible above 1.02 MeV and grows with energy and with Z².
+*Solution.* **Ranking by photon energy in lead.**
+
+| process | dominates | reason |
+|---|---|---|
+| **Photoelectric** | below about $0.5$ MeV | the photon is absorbed whole by a bound electron; the cross-section falls steeply with energy |
+| **Compton** | about $0.5$ to $5$ MeV | $h\nu$ far exceeds binding energies, so electrons act as free, and the photon is scattered |
+| **Pair production** | above about $5$ MeV | needs $h\nu > 2m_ec^2 = 1.02$ MeV, and grows with energy and with $Z^2$ |
+
+**Order of increasing energy:** photoelectric $<$ Compton $<$ pair production.
 
 ### Problem 31 [QM 1 · Discussion · 3 pts]
 
 Explain, in your own words, why Planck himself thought quantisation was a mathematical trick, and what convinced physicists that it was real.
 
-*Solution.* Planck introduced E = nhν only to fit the data and hoped a better theory would remove it (his slide note says the same). Einstein's photoelectric explanation (1905) and Compton's experiment (1923) showed that light itself comes in quanta with energy hν and momentum h/λ. After that, quantisation was accepted as real.
+*Solution.* **Planck's view (1900).** He introduced $E = nh\nu$ only as a mathematical device to fit the blackbody curve, and hoped that a better classical theory would later remove it.
+
+**What made it real.**
+
+1. **Einstein (1905)** used light quanta of energy $h\nu$ to explain the photoelectric effect, including the threshold and the linear $K_\text{max}(\nu)$.
+2. **Compton (1923)** showed that X-rays scatter from electrons as particles with energy $h\nu$ **and momentum** $h/\lambda$, which no wave theory can reproduce.
+
+After that, quantisation was accepted as a real property of light, not a trick of the calculation.
 

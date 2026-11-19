@@ -221,25 +221,64 @@ To non-dimensionalise, scale each variable by a natural unit and count the param
 
 What is a scientific theory? How is it developed, and how does it differ from other knowledge?
 
-*Solution.* A scientific theory is a well-tested explanation of a broad class of phenomena that makes definite, falsifiable predictions (unlike the everyday sense of a guess). It is developed by the cycle of observation, hypothesis, prediction, test and revision, and it is accepted only provisionally, as long as it survives tests. It differs from other knowledge systems in being open to empirical refutation and in being revised when evidence demands it, rather than resting on authority or tradition.
+*Solution.* **In one line.** A scientific theory is a well-tested, broad explanation that makes definite predictions which could turn out false.
+
+**How it is built.** Science works in a cycle:
+
+$$\text{observation}\ \to\ \text{hypothesis}\ \to\ \text{prediction}\ \to\ \text{test}\ \to\ \text{revision}$$
+
+A hypothesis becomes a theory only after it survives many independent tests, and even then it is held provisionally.
+
+**How it differs from other knowledge.**
+
+- It is **falsifiable**: some observation could in principle refute it.
+- It is **revised** when evidence demands, rather than resting on authority or tradition.
+- It is **public**: anyone can repeat the tests.
+
+**Common mistake.** In everyday speech "theory" means a guess. In science it is the opposite: the strongest kind of explanation (the theory of relativity, the atomic theory).
 
 ### Problem 2 [Intro · Recall · 3 pts · HW 1c]
 
 Distinguish induction, deduction and abduction with an example of each.
 
-*Solution.* Induction: from many observed cases to a general rule (every swan seen is white, so all swans are white; can fail). Deduction: from a general law to a certain consequence (all metals conduct, copper is a metal, so copper conducts). Abduction: inferring the most plausible explanation (the lawn is wet, so it probably rained).
+*Solution.* **The three kinds of inference.**
+
+| type | direction | example | certain? |
+|---|---|---|---|
+| **Induction** | many cases $\to$ general rule | every swan I have seen is white, so all swans are white | no: one black swan breaks it |
+| **Deduction** | general law $\to$ a specific case | all metals conduct; copper is a metal; so copper conducts | yes, if the premises are true |
+| **Abduction** | observation $\to$ best explanation | the lawn is wet, so it probably rained | no: sprinklers also wet lawns |
+
+**In science.** Abduction proposes a hypothesis, deduction derives its predictions, and induction generalises from the tests.
 
 ### Problem 3 [Intro · Recall · 2 pts · HW 1d–e]
 
 What are reductionism and holism? Give an example of each.
 
-*Solution.* Reductionism explains a system by its parts: thermodynamics of a gas from molecular collisions. Holism says the whole has properties not found in the parts: consciousness, or the stability of an ecosystem.
+*Solution.* **Reductionism.** Explain a system by its parts and their interactions.
+
+- *Example:* the pressure of a gas follows from molecules colliding with the walls (kinetic theory).
+
+**Holism.** The whole can have properties that the parts do not have.
+
+- *Example:* consciousness, or the stability of an ecosystem. No single neuron or species shows it.
+
+**How they fit together.** Most of physics works by reduction, but behaviour such as phase transitions and chaos emerges only when many parts interact, so both views are needed.
 
 ### Problem 4 [Intro · Recall · 2 pts · HW 1f]
 
 Explain DNA computing in your own words.
 
-*Solution.* Information is encoded in DNA strands; mixing them lets billions of molecules react in parallel, each trying a candidate solution, and chemical selection picks out the strands that encode correct answers. Adleman (1994) solved a seven-vertex Hamiltonian path problem this way.
+*Solution.* **Idea.** Use DNA molecules as both memory and processor.
+
+1. **Encode.** Each possible answer (for example a path through a graph) is written as a strand of DNA.
+2. **Mix.** Billions of strands in a test tube react at once, so all candidates are tried **in parallel**.
+3. **Select.** Chemical steps (copying, cutting, filtering) keep only the strands that satisfy the conditions.
+4. **Read.** Whatever survives is the answer.
+
+**Example.** Adleman (1994) solved a seven-city Hamiltonian-path problem this way.
+
+**Limits.** It is massively parallel but slow to set up and read out, so it is a proof of principle rather than a competitor to silicon.
 
 ### Problem 5 [Intro · Recall · 2 pts · HW 3a–b]
 
@@ -275,7 +314,17 @@ $$f'(x^*) = r(1 - 2x^*) = r\left(1 - 2 + \frac2r\right) = 2 - r$$
 
 Explain "deterministic chaos" and how it is seen in the logistic map.
 
-*Solution.* A deterministic rule producing aperiodic, unpredictable behaviour, because tiny differences in initial conditions grow exponentially. In the logistic map for r > 3.57 (fully at r = 4), two starting values differing in the sixth decimal separate completely within a few dozen iterations.
+*Solution.* **Definition.** Deterministic chaos is **aperiodic, unpredictable behaviour from a deterministic rule**. Nothing is random; the unpredictability comes from extreme sensitivity to initial conditions.
+
+**In the logistic map.** For $r > 3.57$ (fully developed at $r = 4$) the orbit never repeats. Two starts that differ in the sixth decimal place
+
+$$x_0 = 0.200000\quad\text{and}\quad x_0' = 0.200001$$
+
+separate exponentially, $|\delta_n| \approx |\delta_0|e^{\lambda n}$ with Lyapunov exponent $\lambda > 0$, and are completely different within a few dozen iterations.
+
+**Consequence.** Long-term prediction fails, because any measurement error eventually grows to the size of the whole range.
+
+**Common mistake.** Chaos is not noise: the rule is simple, and short-term prediction still works.
 
 ## B. Show or derive
 

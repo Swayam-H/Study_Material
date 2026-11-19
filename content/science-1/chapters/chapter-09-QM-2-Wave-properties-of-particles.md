@@ -198,61 +198,138 @@ Estimates: $p \approx \Delta p \approx \hbar/2\Delta x$ and $E \approx p^2/2m$ g
 
 State de Broglie's hypothesis. Why don't we see wave effects for a cricket ball?
 
-*Solution.* A particle of momentum p has wavelength λ = h/p. A 0.1 kg ball at 10 m/s has λ ≈ 7 × 10⁻³⁴ m, far smaller than any slit or obstacle, so it can't show diffraction or interference.
+*Solution.* **De Broglie's hypothesis.** Every particle of momentum $p$ has a wavelength
+
+$$\lambda = \frac hp = \frac h{mv}$$
+
+**Cricket ball.** $m = 0.1$ kg, $v = 10$ m/s:
+
+$$\lambda = \frac{6.6\times10^{-34}}{(0.1)(10)} \approx 7\times10^{-34}\ \text{m}$$
+
+This is $10^{19}$ times smaller than a proton. Wave effects (diffraction, interference) appear only when the wavelength is comparable to the size of the obstacle or slit, and no such slit exists, so the ball never shows them.
 
 ### Problem 2 [QM 2 · Recall · 2 pts]
 
 What is the physical meaning of |Ψ|²? What does normalisation mean?
 
-*Solution.* |Ψ|² dx is the probability of finding the particle between x and x + dx. Normalisation, ∫|Ψ|² dx = 1, says the particle is certainly somewhere.
+*Solution.* **Meaning of $|\Psi|^2$.** It is the **probability density**: $|\Psi(x,t)|^2\,dx$ is the probability of finding the particle between $x$ and $x + dx$ at time $t$. ($\Psi$ itself is complex and not directly measurable.)
+
+**Normalisation.**
+
+$$\int_{-\infty}^{\infty}|\Psi|^2\,dx = 1$$
+
+The particle is certainly **somewhere**. A wave function that cannot be normalised (for example $e^{ikx}$ over all space) cannot describe a single localised particle.
 
 ### Problem 3 [QM 2 · Recall · 3 pts]
 
 Why can't a single sinusoidal wave represent a moving particle? What is used instead?
 
-*Solution.* A single wave has one exact λ and spreads over all space, so it doesn't locate the particle. Its phase velocity c²/v is also faster than light. A wave packet (a superposition of nearby wavelengths) is localised and moves at v.
+*Solution.* **Why one wave fails.** A single sinusoid $e^{i(kx - \omega t)}$ has:
+
+- one exact wavelength, so its amplitude is the same everywhere: it is spread over **all space** and cannot locate the particle;
+- a phase velocity $v_p = c^2/v > c$, which cannot be the speed of a particle.
+
+**What is used instead.** A **wave packet**: a superposition of waves with a range of wavelengths. Their interference makes the amplitude large only in a small region, and that region (the envelope) moves at the **group velocity**, which equals the particle's speed $v$.
+
+**Price.** Localising the packet needs a spread of wavelengths, which is the uncertainty principle.
 
 ### Problem 4 [QM 2 · Recall · 2 pts]
 
 Distinguish phase velocity and group velocity. Which one equals the particle's speed?
 
-*Solution.* v\_p = ω/k is the speed of the crests of one wave. v\_g = dω/dk is the speed of the envelope of the group. The group velocity equals the particle's speed.
+*Solution.* **Phase velocity** $v_p = \omega/k$: the speed of the crests of a single wave.
+
+**Group velocity** $v_g = d\omega/dk$: the speed of the envelope of a wave packet.
+
+For a de Broglie wave:
+
+$$v_p = \frac{c^2}v > c,\qquad v_g = v$$
+
+**The particle's speed is the group velocity.** The phase velocity can exceed $c$, but it carries no energy or information. They are related by $v_pv_g = c^2$.
 
 ### Problem 5 [QM 2 · Recall · 3 pts]
 
 Describe the Davisson–Germer experiment and explain how it confirmed matter waves.
 
-*Solution.* A 54 eV electron beam hit a nickel crystal and the scattered intensity showed a peak at 50°. Treating the surface atoms as a grating (d = 0.215 nm), d sinφ = λ gives 0.165 nm, matching h/p = 0.166 nm. Only interference of waves gives such a peak.
+*Solution.* **Experiment (1927).** A beam of $54$ eV electrons hit a nickel crystal. The scattered intensity at the detector showed a **sharp peak at $\varphi = 50^\circ$**.
+
+**Analysis.** Treat the surface atoms as a diffraction grating of spacing $d = 0.215$ nm:
+
+$$d\sin\varphi = n\lambda\ \Rightarrow\ \lambda = (0.215\ \text{nm})\sin50^\circ = 0.165\ \text{nm}$$
+
+**de Broglie prediction.** $\lambda = 1.226/\sqrt{54}\ \text{nm} = 0.167$ nm.
+
+The two agree to within $1\%$.
+
+**Why it confirms matter waves.** A peak at a definite angle that moves as the voltage changes is **interference**, which only waves produce. It was the first direct proof that electrons behave as waves.
 
 ### Problem 6 [QM 2 · Recall · 2 pts]
 
 Why must the lowest energy of a particle in a box be greater than zero?
 
-*Solution.* The wave must vanish at both walls, so at least half a wavelength must fit. That gives a non-zero momentum h/2L and energy h²/8mL². Also, E = 0 would mean exact zero momentum, which the uncertainty principle forbids in a finite box.
+*Solution.* **Wave argument.** The wave function must vanish at both walls, so at least half a wavelength fits in the box: $\lambda_\text{max} = 2L$. That means a non-zero momentum
+
+$$p = \frac h{2L}\ \Rightarrow\ E_1 = \frac{p^2}{2m} = \frac{h^2}{8mL^2} > 0$$
+
+**Uncertainty argument.** The particle is confined, so $\Delta x \le L$ and $\Delta p \ge \hbar/2L$; an exactly zero momentum would have $\Delta p = 0$, which is impossible.
+
+**Name.** This is the **zero-point energy**: a confined quantum particle can never be at rest.
 
 ### Problem 7 [QM 2 · Recall · 2 pts]
 
 State the Heisenberg uncertainty principle for position–momentum and for energy–time.
 
-*Solution.* ΔxΔp ≥ ħ/2 and ΔEΔt ≥ ħ/2.
+*Solution.* **Position–momentum.**
+
+$$\Delta x\,\Delta p \ge \frac\hbar2$$
+
+**Energy–time.**
+
+$$\Delta E\,\Delta t \ge \frac\hbar2$$
+
+where $\hbar = h/2\pi = 1.055\times10^{-34}$ J s ($\hbar c = 197$ eV nm).
+
+**Meaning.** $\Delta x$ and $\Delta p$ are the spreads (standard deviations) in a state. It is a property of the state, not of the measuring apparatus.
 
 ### Problem 8 [QM 2 · Recall · 3 pts]
 
 "The uncertainty principle is due to the clumsiness of our measuring instruments." Is this correct? Explain.
 
-*Solution.* No. It comes from the wave nature of matter: a localised wave packet must contain a spread of wavelengths, so a spread of momenta. A particle simply doesn't have exact x and p together. Better instruments can't beat it.
+*Solution.* **No.** The principle is not about clumsy instruments.
+
+**Reason.** A particle has wave properties. A localised wave packet is built from a **range of wavelengths**, and the narrower the packet (small $\Delta x$) the wider the range needed (large $\Delta p$). This is a property of waves, true even for perfect measurement.
+
+**Consequence.** A particle simply does not have exact $x$ and $p$ at the same time. Better instruments cannot beat $\Delta x\,\Delta p \ge \hbar/2$.
+
+**Common mistake.** Heisenberg's microscope is an illustration of the idea, not the cause.
 
 ### Problem 9 [QM 2 · Recall · 2 pts]
 
 Explain Heisenberg's microscope argument in three lines.
 
-*Solution.* To see an electron you must bounce at least one photon of wavelength λ off it. The position is fixed only to Δx ≈ λ, and the photon's momentum h/λ gives an unknown kick Δp ≈ h/λ. So ΔxΔp ≈ h, however you choose λ.
+*Solution.* **Heisenberg's microscope.**
+
+1. To "see" an electron you must scatter at least one photon of wavelength $\lambda$ off it. Resolution is limited to $\Delta x \approx \lambda$.
+2. The photon carries momentum $h/\lambda$, and gives the electron an unknown kick $\Delta p \approx h/\lambda$.
+3. Then
+
+$$\Delta x\,\Delta p \approx \lambda\cdot\frac h\lambda = h$$
+
+whatever wavelength you choose: a shorter $\lambda$ improves $\Delta x$ but worsens $\Delta p$.
 
 ### Problem 10 [QM 2 · Recall · 2 pts]
 
 Why are spectral lines not perfectly sharp?
 
-*Solution.* An excited state lives only a finite time Δt, so its energy is uncertain by ΔE ≥ ħ/2Δt. The emitted photons have a spread of energies, which is the natural line width.
+*Solution.* **Reason.** An excited state lives only a finite time $\Delta t$ (its lifetime) before decaying. By the energy–time uncertainty principle its energy is uncertain by
+
+$$\Delta E \ge \frac\hbar{2\Delta t}$$
+
+So the emitted photons have a spread of energies, giving the line a **natural width**.
+
+**Example.** For $\Delta t = 10^{-8}$ s, $\Delta E \approx 3\times10^{-8}$ eV, tiny but non-zero. (Doppler and collision broadening add to it in practice.)
+
+**Corollary.** The ground state has $\Delta t = \infty$, so it is perfectly sharp.
 
 ## B. Derive or show
 
@@ -448,17 +525,43 @@ $$\lambda = \frac{1240\ \text{eV nm}}{6900\ \text{eV}} \approx \boxed{0.18\ \tex
 
 Estimate the size of a hydrogen atom using the uncertainty principle: minimise E(r) = ħ²/(2mr²) − ke²/r.
 
-*Solution.* dE/dr = −ħ²/(mr³) + ke²/r² = 0 gives r = ħ²/(mke²) = a₀ ≈ 0.053 nm. Then E = −ke²/2a₀ ≈ −13.6 eV. The uncertainty principle alone gets the size and energy of hydrogen right.
+*Solution.* **Idea.** Confining the electron to a radius $r$ gives $\Delta p \approx \hbar/r$, so its kinetic energy is at least $\hbar^2/2mr^2$.
+
+$$E(r) = \frac{\hbar^2}{2mr^2} - \frac{ke^2}r$$
+
+**Minimise.**
+
+$$\frac{dE}{dr} = -\frac{\hbar^2}{mr^3} + \frac{ke^2}{r^2} = 0\ \Rightarrow\ \boxed{r = \frac{\hbar^2}{mke^2} = a_0 = 0.053\ \text{nm}}$$
+
+$$E_{\min} = -\frac{ke^2}{2a_0} = \boxed{-13.6\ \text{eV}}$$
+
+**Comment.** The uncertainty principle alone gives the right size and energy of hydrogen: kinetic energy ($\propto 1/r^2$) resists confinement while Coulomb attraction ($\propto -1/r$) pulls in, and the balance fixes the atom's size.
 
 ### Problem 26 [QM 2 · Discussion · 3 pts]
 
 Electron microscopes use electrons of about 100 keV. Estimate their wavelength and explain why they resolve much finer detail than light microscopes.
 
-*Solution.* At 100 keV, pc = √(0.1² + 2 × 0.1 × 0.511) MeV ≈ 0.335 MeV, so λ ≈ 1240/335 000 nm ≈ 3.7 pm. Visible light is about 500 nm, about 10⁵ times longer. Resolution is limited to about one wavelength, so electrons can see far finer detail (in practice lens defects limit it to about 0.1 nm).
+*Solution.* **Wavelength of a 100 keV electron.** Relativistic momentum:
+
+$$pc = \sqrt{K^2 + 2Kmc^2} = \sqrt{0.1^2 + 2(0.1)(0.511)}\ \text{MeV} = 0.335\ \text{MeV}$$
+
+$$\lambda = \frac{hc}{pc} = \frac{1240\ \text{eV nm}}{3.35\times10^5\ \text{eV}} = \boxed{3.7\ \text{pm}}$$
+
+**Comparison.** Visible light has $\lambda\approx500$ nm, about $10^5$ times longer.
+
+**Why finer detail.** A microscope cannot resolve features much smaller than the wavelength used, so electrons can in principle resolve about $10^5$ times finer detail. In practice lens defects limit electron microscopes to about $0.1$ nm.
 
 ### Problem 27 [QM 2 · Discussion · 2 pts]
 
 A dust grain of 1 μg sits in a 1 μm box. Using E₁ = h²/8mL², explain without exact arithmetic why we never notice its quantised energy.
 
-*Solution.* m = 10⁻⁹ kg and L = 10⁻⁶ m, so E₁ ≈ (7 × 10⁻³⁴)²/(8 × 10⁻⁹ × 10⁻¹²) ≈ 10⁻⁴⁶ J. Thermal energy kT at room temperature is about 4 × 10⁻²¹ J, about 10²⁵ times bigger. The levels are so close together that the energy looks continuous.
+*Solution.* **Numbers.** $m = 10^{-9}$ kg, $L = 10^{-6}$ m:
+
+$$E_1 = \frac{h^2}{8mL^2} = \frac{(6.6\times10^{-34})^2}{8(10^{-9})(10^{-12})} \approx 5\times10^{-47}\ \text{J}\ (\sim10^{-46}\ \text{J})$$
+
+**Compare** with thermal energy at room temperature, $k_BT \approx 4\times10^{-21}$ J:
+
+$$\frac{k_BT}{E_1} \sim 10^{25}$$
+
+**Why it is invisible.** The level spacing, $E_n - E_{n-1}\propto n$, is far smaller than anything measurable, and the grain has about $10^{25}$ quanta thermally. The energy looks continuous: this is the **correspondence principle** (large quantum numbers give classical behaviour).
 

@@ -217,61 +217,120 @@ A photon carries one unit of angular momentum. 2p $\to$ 1s and 3d $\to$ 2p are a
 
 Why are spherical polar coordinates used for the hydrogen atom?
 
-*Solution.* The Coulomb potential depends only on r, so the equation separates neatly in r, θ and φ, and the boundary conditions are simple in those coordinates.
+*Solution.* **Reason.** The Coulomb potential $U = -e^2/4\pi\varepsilon_0r$ depends **only on $r$**, so the system has spherical symmetry.
+
+In spherical polar coordinates $(r,\theta,\varphi)$ the Schrödinger equation **separates** into three ordinary differential equations, one for each variable:
+
+$$\psi(r,\theta,\varphi) = R(r)\,\Theta(\theta)\,\Phi(\varphi)$$
+
+The boundary conditions (periodicity in $\varphi$, regularity at the poles, decay as $r\to\infty$) are also simple in these coordinates.
 
 ### Problem 2 [QM 5 · Recall · 3 pts]
 
 Explain how the three quantum numbers arise from separating the Schrödinger equation. Which condition gives each one?
 
-*Solution.* Writing ψ = R(r)Θ(θ)Φ(φ) splits the equation into three. Φ must be single-valued around the z-axis, which gives integer mₗ. Θ must stay finite at the poles, which gives l ≥ |mₗ|. R must vanish at infinity for a bound state, which gives n > l and the energies.
+*Solution.* **Separation.** Writing $\psi = R(r)\Theta(\theta)\Phi(\varphi)$ splits the equation into three. Each boundary condition produces one quantum number.
+
+| equation | condition | quantum number |
+|---|---|---|
+| $\Phi(\varphi)$ | single-valued: $\Phi(\varphi + 2\pi) = \Phi(\varphi)$ | $m_l = 0,\pm1,\pm2,\dots$ |
+| $\Theta(\theta)$ | finite at the poles $\theta = 0,\pi$ | $l = 0,1,2,\dots$ with $l \ge \lvert m_l\rvert$ |
+| $R(r)$ | $R\to0$ as $r\to\infty$ (bound state) | $n = 1,2,\dots$ with $n > l$, and the energies $E_n$ |
 
 ### Problem 3 [QM 5 · Recall · 3 pts]
 
 Name the quantum numbers n, l and mₗ, give their allowed values, and say what physical quantity each fixes.
 
-*Solution.* n = 1, 2, … fixes the energy. l = 0, …, n − 1 fixes the magnitude L = √(l(l+1))ħ. mₗ = −l, …, +l fixes L\_z = mₗħ.
+*Solution.* | number | allowed values | fixes |
+|---|---|---|
+| **$n$** (principal) | $1, 2, 3, \dots$ | the **energy**, $E_n = -13.6/n^2$ eV |
+| **$l$** (orbital) | $0, 1, \dots, n-1$ | the **magnitude** of angular momentum, $L = \sqrt{l(l+1)}\,\hbar$ |
+| **$m_l$** (magnetic) | $-l, \dots, +l$ | the **$z$-component**, $L_z = m_l\hbar$ |
+
+For each $n$ there are $n^2$ states (without spin).
 
 ### Problem 4 [QM 5 · Recall · 2 pts]
 
 How does the quantum-mechanical energy of hydrogen compare with Bohr's? What is new?
 
-*Solution.* The same Eₙ = −13.6/n² eV. What is new is that it comes from the wave equation without assumed orbits, together with l and mₗ, the degeneracy, and the probability distributions.
+*Solution.* **Same energies.** The quantum-mechanical result is exactly Bohr's:
+
+$$E_n = -\frac{13.6\ \text{eV}}{n^2}$$
+
+**What is new.**
+
+- It comes from the **wave equation**, with no assumed orbits.
+- Two more quantum numbers, $l$ and $m_l$, with the **degeneracy** $n^2$.
+- **Probability distributions** instead of orbits.
+- A correct angular momentum, $\sqrt{l(l+1)}\hbar$, and selection rules for transitions.
 
 ### Problem 5 [QM 5 · Recall · 2 pts]
 
 Compare the angular momentum of hydrogen in Bohr's model and in quantum mechanics. What is surprising about s states?
 
-*Solution.* Bohr: L = nħ, never zero. Quantum: L = √(l(l+1))ħ, set by l, not n. For s states (l = 0), L = 0: the electron has no orbital angular momentum at all, impossible for a classical orbit.
+*Solution.* | | **Bohr** | **Quantum mechanics** |
+|---|---|---|
+| magnitude | $L = n\hbar$ | $L = \sqrt{l(l+1)}\,\hbar$ |
+| depends on | $n$ | $l$ (with $l\le n-1$) |
+| minimum | $\hbar$ (never zero) | $0$ |
+
+**Surprise.** For an **s state** ($l = 0$), $L = 0$: the electron has **no orbital angular momentum**, which is impossible for any classical orbit. The 1s state is a spherical cloud, not a circulating electron.
 
 ### Problem 6 [QM 5 · Recall · 3 pts]
 
 What is space quantisation? Why can L never point exactly along the z-axis?
 
-*Solution.* L can only take orientations with L\_z = mₗħ. Since |mₗ| ≤ l < √(l(l+1)), L\_z is always less than L, so L can't lie along z. If it did, L\_x and L\_y would both be exactly zero, giving all three components exactly, which the uncertainty principle forbids.
+*Solution.* **Space quantisation.** The angular momentum vector can take only orientations for which
+
+$$L_z = m_l\hbar,\qquad m_l = -l,\dots,+l$$
+
+**Why $\mathbf L$ can never point along $z$.** The largest $|L_z|$ is $l\hbar$, but $|\mathbf L| = \sqrt{l(l+1)}\hbar > l\hbar$. So $L_z < L$ always.
+
+**Uncertainty reason.** If $\mathbf L$ pointed along $z$, then $L_x = L_y = 0$ and $L_z = L$ would all be exactly known together, which the uncertainty principle forbids. Only $L_z$ and $|L|$ are definite; $L_x$ and $L_y$ are uncertain.
 
 ### Problem 7 [QM 5 · Recall · 2 pts]
 
 In what sense does the electron in hydrogen have no orbit? Where does Bohr's radius reappear?
 
-*Solution.* The electron has only a probability density |ψ|²; it can be found at any r. For 1s, the most probable distance is a₀, Bohr's radius.
+*Solution.* **No orbit.** The electron has no definite path. It has only a **probability density** $|\psi|^2$ and can be found at any $r$ (with different probabilities). The ground state is a spherical cloud.
+
+**Bohr's radius reappears.** For the 1s state the radial probability is $P(r)\propto r^2e^{-2r/a_0}$, which peaks at
+
+$$r = a_0 = 0.053\ \text{nm}$$
+
+so $a_0$ is the **most probable** distance (the average is $\tfrac32a_0$).
 
 ### Problem 8 [QM 5 · Recall · 3 pts]
 
 Why doesn't an atom in a stationary state radiate? Why does it radiate during a transition?
 
-*Solution.* In a stationary state |Ψ|² is constant in time, so the charge doesn't oscillate and doesn't radiate. In a transition Ψ is a mix of two states; |Ψ|² oscillates at (Eᵢ − E\_f)/h, and an oscillating dipole radiates at that frequency.
+*Solution.* **Stationary state.** $|\Psi|^2$ is constant in time (Chapter 11), so the charge distribution does not oscillate and **no radiation** is emitted.
+
+**During a transition.** The atom is in a superposition $\Psi = a\Psi_i + b\Psi_f$. The cross term makes $|\Psi|^2$ oscillate at
+
+$$\nu = \frac{E_i - E_f}h$$
+
+The oscillating charge distribution acts as an oscillating **electric dipole**, which radiates at that frequency. This explains both the frequency of the emitted light and the selection rules.
 
 ### Problem 9 [QM 5 · Recall · 2 pts]
 
 State the selection rules for allowed transitions. Why is Δl = ±1?
 
-*Solution.* Δl = ±1 and Δmₗ = 0, ±1. The photon carries one unit of angular momentum, so the atom's l must change by one.
+*Solution.* **Selection rules** (electric dipole transitions):
+
+$$\Delta l = \pm1,\qquad \Delta m_l = 0,\ \pm1$$
+
+**Why $\Delta l = \pm1$.** A photon carries one unit ($\hbar$) of angular momentum. Angular momentum is conserved, so the atom's $l$ must change by one unit to compensate.
+
+**Examples.** $2p\to1s$ is allowed; $2s\to1s$ and $3d\to2s$ are forbidden.
 
 ### Problem 10 [QM 5 · Recall · 2 pts]
 
 Why is the 2s state of hydrogen long-lived?
 
-*Solution.* The only lower state is 1s, and 2s → 1s has Δl = 0, which is forbidden. With no allowed way down, 2s lives about 0.1 s.
+*Solution.* **Reason.** The only lower state is $1s$, and the transition $2s\to1s$ has $\Delta l = 0$, which the selection rule $\Delta l = \pm1$ **forbids** (single-photon).
+
+With no allowed route down, the $2s$ state is **metastable**. It decays only through much slower processes (two-photon emission, collisions) and has a lifetime of about $0.1$ s, about $10^8$ times longer than a typical allowed transition ($\sim10^{-9}$ s).
 
 ## B. Show or work out
 
@@ -421,11 +480,24 @@ $$4f \to \boxed{3d}$$
 
 Explain why the shapes of p orbitals matter for chemistry.
 
-*Solution.* p densities are lobes along particular axes. Bonds form where lobes from neighbouring atoms overlap, so the lobes set the directions of bonds and the shapes of molecules.
+*Solution.* **Shape.** A $p$ orbital has two lobes along one axis ($p_x$, $p_y$, $p_z$) with a node at the nucleus: it is **directional**, unlike the spherical $s$ orbital.
+
+**Why it matters in chemistry.** Bonds form where orbital lobes on neighbouring atoms **overlap**. So the lobe directions set the **directions of bonds** and therefore the shapes of molecules: the roughly $90^\circ$ H–O–H and H–N–H angles come from $p$ orbitals, and hybrid orbitals ($sp^3$ tetrahedral for methane) are mixtures of $s$ and $p$ lobes.
 
 ### Problem 22 [QM 5 · Discussion · 3 pts]
 
 What does the hydrogen solution keep from the Bohr model and what does it discard?
 
-*Solution.* It keeps Eₙ = −13.6/n² eV and the radius a₀ (as the most probable 1s radius). It discards definite orbits, replaces L = nħ by √(l(l+1))ħ, and adds l, mₗ, degeneracy, space quantisation and selection rules.
+*Solution.* **Kept from Bohr.**
+
+- The energies $E_n = -13.6/n^2$ eV.
+- The radius $a_0$, now as the **most probable** 1s radius.
+- The idea of discrete states and transitions $h\nu = E_i - E_f$.
+
+**Discarded.**
+
+- **Definite orbits**, replaced by probability densities.
+- $L = n\hbar$, replaced by $L = \sqrt{l(l+1)}\hbar$ (and $L = 0$ is allowed).
+
+**Added.** The quantum numbers $l$ and $m_l$, degeneracy $n^2$, space quantisation, selection rules, and correct radial and angular shapes.
 

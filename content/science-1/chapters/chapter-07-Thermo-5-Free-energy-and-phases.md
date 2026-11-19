@@ -1703,49 +1703,131 @@ Trouton's rule: $\Delta_\text{vap}S \approx 85\ \text{J K}^{-1}\text{mol}^{-1}$.
 
 State the third law of thermodynamics and explain it in terms of S = k ln W.
 
-*Solution.* The entropy of every perfect crystalline substance is zero at T = 0. A perfect crystal at absolute zero has exactly one arrangement, W = 1, so S = k ln 1 = 0. Any disorder (defects, random orientations) leaves W > 1 and a residual entropy.
+*Solution.* **Third law.** The entropy of every **perfect crystalline** substance is zero at $T = 0$:
+
+$$S(0) = 0$$
+
+**Why, from $S = k\ln W$.** At absolute zero a perfect crystal is in its single lowest-energy arrangement, so the number of microstates is $W = 1$:
+
+$$S = k\ln 1 = 0$$
+
+**Residual entropy.** If there is any disorder frozen in (defects, random molecular orientations such as CO or ice), then $W > 1$ and $S(0) > 0$.
+
+**Use.** It sets the zero of the entropy scale, so absolute entropies $S_m^\circ$ can be tabulated.
 
 ### Problem 2 [Thermo 5 · Recall · 2 pts]
 
 Why are the Helmholtz and Gibbs energies more convenient than the total entropy for deciding spontaneity?
 
-*Solution.* Spontaneity requires ΔS\_total ≥ 0, which needs the entropy of the surroundings too. At constant T and p (or T and V) the surroundings' entropy change is −ΔH/T (or −ΔU/T), and it is built into G (or A), so the criterion uses only system properties.
+*Solution.* **Spontaneity criterion.** The second law says $\Delta S_\text{total} = \Delta S_\text{sys} + \Delta S_\text{surr} \ge 0$, which seems to need information about the surroundings.
+
+**How $A$ and $G$ help.** At constant $T$ and $p$ the surroundings receive $q_\text{surr} = -\Delta H$ reversibly, so
+
+$$\Delta S_\text{surr} = -\frac{\Delta H}T\quad\Rightarrow\quad \Delta S_\text{total} = -\frac{\Delta H - T\Delta S}T = -\frac{\Delta G}T$$
+
+The criterion $\Delta S_\text{total}\ge 0$ becomes
+
+$$\Delta G_{T,p} \le 0\qquad\text{(or } \Delta A_{T,V} \le 0\text{)}$$
+
+which uses **only system properties**.
 
 ### Problem 3 [Thermo 5 · Recall · 3 pts]
 
 What is the physical meaning of ΔA and ΔG in terms of work?
 
-*Solution.* −ΔA is the maximum work (of any kind) a process at constant T can do. −ΔG is the maximum non-expansion work at constant T and p, such as the electrical work of a cell.
+*Solution.* **Helmholtz energy $A = U - TS$.** At constant $T$,
+
+$$-\Delta A = w_\text{max}\ \ (\text{maximum work of any kind})$$
+
+**Gibbs energy $G = H - TS$.** At constant $T$ and $p$,
+
+$$-\Delta G = w_\text{non-exp,max}\ \ (\text{maximum non-expansion work})$$
+
+for example the electrical work of a fuel cell.
+
+**Why less than $\Delta U$ or $\Delta H$.** The $-T\Delta S$ term is the heat that must be exchanged with the surroundings for the process to be allowed. If $\Delta S > 0$, the system can **absorb** heat and turn it into extra work.
 
 ### Problem 4 [Thermo 5 · Recall · 2 pts]
 
 A reaction has ΔH > 0 and ΔS > 0. At what temperatures is it spontaneous? Give the general condition.
 
-*Solution.* ΔG = ΔH − TΔS < 0 when T > ΔH/ΔS. Entropy drives it at high temperature.
+*Solution.* **Condition.** A reaction is spontaneous at constant $T,p$ when
+
+$$\Delta G = \Delta H - T\Delta S < 0$$
+
+**Here** $\Delta H > 0$ (it costs energy) and $\Delta S > 0$ (it increases disorder):
+
+$$\Delta G < 0\iff T > \frac{\Delta H}{\Delta S}$$
+
+The reaction is **entropy-driven**: spontaneous only at **high** temperature.
+
+**The four cases.**
+
+| $\Delta H$ | $\Delta S$ | spontaneous? |
+|---|---|---|
+| $-$ | $+$ | always |
+| $+$ | $-$ | never |
+| $-$ | $-$ | low $T$ |
+| $+$ | $+$ | high $T$ |
 
 ### Problem 5 [Thermo 5 · Recall · 2 pts]
 
 What is the chemical potential of a pure substance, and how does it decide which phase is stable?
 
-*Solution.* μ = G\_m. At given T and p the phase with the lowest μ is stable; matter flows from high to low μ; phases coexist where their μ are equal.
+*Solution.* **Chemical potential.** For a pure substance,
+
+$$\mu = G_m = \left(\frac{\partial G}{\partial n}\right)_{T,p}$$
+
+**Stability rule.** At given $T$ and $p$:
+
+- The phase with the **lowest $\mu$** is the stable one.
+- Matter flows spontaneously from high $\mu$ to low $\mu$.
+- Two phases **coexist** where $\mu_\alpha = \mu_\beta$ (a phase boundary).
+
+**Slopes.** $(\partial\mu/\partial T)_p = -S_m$ and $(\partial\mu/\partial p)_T = V_m$. These explain which phase is stable where, and the shape of a phase diagram.
 
 ### Problem 6 [Thermo 5 · Recall · 3 pts]
 
 Sketch the phase diagram of water and label the areas, lines, triple point and critical point. Why does the solid–liquid line slope backwards?
 
-*Solution.* Areas solid, liquid, vapour; boundaries for melting, boiling and sublimation; triple point 273.16 K, 611 Pa; liquid–vapour line ends at the critical point (647 K, 218 atm). The solid–liquid line has negative slope because Δ\_fusV < 0 (ice is less dense), so in dp/dT = ΔH/(TΔV) the slope is negative: pressure lowers the melting point.
+*Solution.* **Phase diagram of water** (schematic; see the figure in the Learn page).
+
+- **Areas:** solid (low $T$, high $p$), liquid, vapour (low $p$, high $T$).
+- **Lines:** melting (solid–liquid), boiling (liquid–vapour), sublimation (solid–vapour).
+- **Triple point:** $273.16$ K and $611$ Pa, where all three phases coexist.
+- **Critical point:** $647$ K and $218$ atm, where the boiling line ends and liquid and vapour become indistinguishable.
+
+**Why the melting line slopes backwards.** From the Clapeyron equation
+
+$$\frac{dp}{dT} = \frac{\Delta_\text{fus}H}{T\,\Delta_\text{fus}V}$$
+
+$\Delta_\text{fus}H > 0$ always, but for water $\Delta_\text{fus}V < 0$ (ice is less dense than liquid water). So $dp/dT < 0$: raising the pressure **lowers** the melting point.
 
 ### Problem 7 [Thermo 5 · Recall · 2 pts]
 
 Why does solid CO₂ sublime at 1 atm rather than melt?
 
-*Solution.* Its triple point is at 5.11 atm. Below that pressure the liquid is never the stable phase, so at 1 atm the solid goes straight to vapour.
+*Solution.* **Reason.** The **triple point of CO$_2$ is at $5.11$ atm** (and $216.6$ K). The liquid is stable only above that pressure.
+
+At $1$ atm, which is below the triple-point pressure, the solid–vapour line is crossed on heating, so the solid goes **directly to vapour** (sublimes). That is why it is called dry ice.
+
+**To melt CO$_2$** you need a pressure above $5.11$ atm.
+
+**Contrast.** Water's triple point is at $0.006$ atm, well below $1$ atm, so ice melts at normal pressure.
 
 ### Problem 8 [Thermo 5 · Recall · 2 pts]
 
 Why does the chemical potential of a gas fall more steeply with temperature than that of the liquid?
 
-*Solution.* (∂μ/∂T)\_p = −S\_m, and S\_m(gas) > S\_m(liquid), so the gas's μ falls faster. That is why the gas becomes the stable phase at high temperature.
+*Solution.* **Slope of $\mu$ against $T$.** From $d\mu = -S_m\,dT + V_m\,dp$:
+
+$$\left(\frac{\partial\mu}{\partial T}\right)_p = -S_m$$
+
+**Entropies.** $S_m(\text{gas}) \gg S_m(\text{liquid}) > S_m(\text{solid})$, so the gas's $\mu(T)$ falls **most steeply**.
+
+**Consequence.** The curves cross: at low $T$ the liquid has the lowest $\mu$, but because the gas line falls faster, it crosses below the liquid line at the boiling point. Above it the **gas** is the stable phase.
+
+**Also** this explains why every transition goes in the direction of increasing entropy as $T$ rises: solid $\to$ liquid $\to$ gas.
 
 ## B. Show or derive
 

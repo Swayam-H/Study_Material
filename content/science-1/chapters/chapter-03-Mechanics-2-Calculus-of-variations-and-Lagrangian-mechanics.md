@@ -175,31 +175,77 @@ The term $\lambda_k\,\partial f_k/\partial q_j$ is the generalised constraint fo
 
 What is Hamilton's principle? Write the mathematical expression for it.
 
-*Solution.* Of all paths a system could follow between two configurations in a fixed time interval, the actual path makes the action stationary: δ∫\_{t₁}^{t₂} L(q, q̇, t) dt = 0, with L = T − U.
+*Solution.* **Hamilton's principle.** Of all the paths a system could take between two configurations in a fixed time interval, the actual one makes the **action** stationary:
+
+$$\delta S = \delta\int_{t_1}^{t_2}L(q,\dot q,t)\,dt = 0,\qquad L = T - U$$
+
+**Why it matters.** Setting $\delta S = 0$ gives the Euler–Lagrange equations
+
+$$\frac d{dt}\frac{\partial L}{\partial\dot q_i} - \frac{\partial L}{\partial q_i} = 0$$
+
+which are Newton's laws in any coordinates.
+
+**Common mistake.** The action is *stationary*, not always a minimum, and the end points (and the time interval) are held fixed.
 
 ### Problem 2 [Mechanics 2 · Recall · 3 pts · 2026 midsem Q2]
 
 What is the Lagrangian? For L({qᵢ}, {q̇ᵢ}, t), what happens when q₁ does not appear explicitly?
 
-*Solution.* L = T − U as a function of generalised coordinates, velocities and time. If q₁ is absent (cyclic), ∂L/∂q₁ = 0, so d/dt(∂L/∂q̇₁) = 0 and the conjugate momentum p₁ is conserved.
+*Solution.* **The Lagrangian** is the kinetic minus the potential energy, expressed in generalised coordinates and velocities:
+
+$$L(q_i,\dot q_i,t) = T - U$$
+
+**If $q_1$ does not appear** in $L$ (a **cyclic** or ignorable coordinate), then $\partial L/\partial q_1 = 0$ and Lagrange's equation reduces to
+
+$$\frac d{dt}\frac{\partial L}{\partial\dot q_1} = 0\ \Rightarrow\ p_1 = \frac{\partial L}{\partial\dot q_1} = \text{constant}$$
+
+The conjugate momentum is **conserved**. This is the link between symmetry and conservation laws (Noether): translation symmetry gives linear momentum, rotation symmetry gives angular momentum.
 
 ### Problem 3 [Mechanics 2 · Recall · 4 pts · 2025 Q6, 2026 Q5]
 
 State the differences between Newtonian and Lagrangian mechanics.
 
-*Solution.* Newton: vector forces, Cartesian coordinates, constraint forces must be found and balanced. Lagrange: scalar energies, any generalised coordinates, constraints built in or handled by multipliers; conservation laws appear through cyclic coordinates. Both give second-order equations and the same physics; Newton handles friction more naturally.
+*Solution.* | | **Newtonian** | **Lagrangian** |
+|---|---|---|
+| Basic quantities | vectors: force $\mathbf F$, acceleration | scalars: kinetic and potential energy |
+| Coordinates | Cartesian (or chosen by hand) | any generalised coordinates $q_i$ |
+| Constraints | find and balance every constraint force | built into the coordinates (or one multiplier) |
+| Conservation laws | proved case by case | read off from symmetries (cyclic coordinates) |
+| Starting principle | three laws | Hamilton's principle |
+| Friction | handled directly | needs extra generalised forces |
+
+**What they share.** Both give second-order equations of motion and the **same physics**. Lagrange is more powerful when there are constraints or non-Cartesian geometry; Newton is simpler for problems with non-conservative forces.
 
 ### Problem 4 [Mechanics 2 · Recall · 2 pts]
 
 What are generalised coordinates and degrees of freedom? Give the number for a double pendulum in a plane.
 
-*Solution.* Independent quantities that fix the configuration; their number is the number of degrees of freedom. Planar double pendulum: 2 (θ₁, θ₂), from 4 Cartesian coordinates minus 2 rod constraints.
+*Solution.* **Generalised coordinates** $q_1,\dots,q_n$ are independent quantities that completely fix the configuration of the system (lengths, angles, ...). The **number of degrees of freedom** is the number of independent coordinates needed.
+
+$$\text{DOF} = (\text{number of Cartesian coordinates}) - (\text{number of independent constraints})$$
+
+**Double pendulum in a plane.** Two particles, so $4$ Cartesian coordinates $(x_1,y_1,x_2,y_2)$, minus $2$ rod-length constraints:
+
+$$\boxed{2\ \text{degrees of freedom}}\quad(\theta_1,\theta_2)$$
+
+**Common mistake.** In 3-D the double pendulum has 4 degrees of freedom, not 2.
 
 ### Problem 5 [Mechanics 2 · Recall · 2 pts]
 
 Why do constraint forces not appear in Lagrange's equations? When would you use a Lagrange multiplier?
 
-*Solution.* Ideal constraint forces do no work in displacements allowed by the constraint, so they drop out of the variation. Use a multiplier when you want the constraint force, or when the constraint is awkward to build into the coordinates (e.g. rolling y = Rθ, or r = R on a sphere).
+*Solution.* **Why constraint forces drop out.** An ideal constraint force (normal force, tension in a rigid rod) is perpendicular to every displacement the constraint **allows**, so it does no work in such a displacement:
+
+$$\mathbf F_\text{constraint}\cdot\delta\mathbf r = 0$$
+
+Hamilton's principle varies the path only through allowed displacements, so these forces never appear.
+
+**When to use a Lagrange multiplier.**
+
+- You want the **constraint force** itself (the normal force on a sphere, friction in rolling).
+- The constraint is awkward to build into the coordinates, for example rolling $y - R\theta = 0$ or staying on a sphere $r - R = 0$.
+
+Then $L$ gets an extra term and the equations become $\dfrac d{dt}\dfrac{\partial L}{\partial\dot q} - \dfrac{\partial L}{\partial q} = \lambda\dfrac{\partial f}{\partial q}$, where $\lambda\,\partial f/\partial q$ is the generalised constraint force.
 
 ### Problem 6 [Mechanics 2 · Recall · 3 pts]
 
@@ -219,7 +265,17 @@ Explain how time, translation and rotation symmetry lead to conservation of ener
 
 How is calculus-of-variations optimisation different from ordinary function optimisation?
 
-*Solution.* The unknown is a whole function y(x), a point in an infinite-dimensional space, and J depends on all its values; the stationarity condition is a differential equation rather than an algebraic one.
+*Solution.* **Ordinary optimisation.** Find a number $x$ (or finitely many) that makes a function $f(x)$ stationary, by solving the algebraic equation $f'(x) = 0$.
+
+**Calculus of variations.** Find a whole **function** $y(x)$ that makes a functional
+
+$$J[y] = \int f(y,y';x)\,dx$$
+
+stationary. The unknown lives in an infinite-dimensional space, and the stationarity condition is a **differential equation** (the Euler equation), not an algebraic one:
+
+$$\frac{\partial f}{\partial y} - \frac d{dx}\frac{\partial f}{\partial y'} = 0$$
+
+**Examples.** Shortest path (straight line), fastest path (brachistochrone), Fermat's principle (Snell's law), and all of Lagrangian mechanics.
 
 ## B. Show or derive
 
