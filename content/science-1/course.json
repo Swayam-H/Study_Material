@@ -1,0 +1,87 @@
+{
+  "title": "Science-1",
+  "term": "Monsoon 2026",
+  "blurb": "Mechanics, special relativity, quantum and thermodynamics. Thermodynamics (Atkins 1A to 3B) and relativity notes so far.",
+  "docs": [
+    {
+      "slug": "thermo-notes",
+      "file": "10-thermo-quiz2-notes.md",
+      "title": "Thermodynamics study notes",
+      "about": "Sign convention, perfect gas, kinetic theory, first law, enthalpy, heat capacities, second law and entropy, in one pass (Atkins 1A to 3B)"
+    },
+    {
+      "slug": "gases",
+      "file": "11-gases-1A-1C-summary.md",
+      "title": "Gases (Atkins 1A to 1C)",
+      "about": "Perfect gas, kinetic model, Maxwell–Boltzmann, real gases and van der Waals",
+      "pdf": "1-gases-1A-1C-summary.pdf"
+    },
+    {
+      "slug": "first-law",
+      "file": "12-first-law-2A-2B-2E.md",
+      "title": "First law (Atkins 2A, 2B, 2E)",
+      "about": "Work, heat, internal energy, enthalpy, adiabatic changes, with solved homework",
+      "pdf": "2-first-law-2A-2B-2E.pdf"
+    },
+    {
+      "slug": "thermochem",
+      "file": "13-thermochem-state-functions-2C-2D.md",
+      "title": "Thermochemistry and state functions (Atkins 2C, 2D)",
+      "about": "Standard enthalpies, Hess and Kirchhoff, exact differentials, Joule–Thomson, with solved homework",
+      "pdf": "3-thermochem-state-functions-2C-2D.pdf"
+    },
+    {
+      "slug": "second-law",
+      "file": "14-second-law-entropy-3A-3B.md",
+      "title": "Second law and entropy (Atkins 3A, 3B)",
+      "about": "Cycles and engines, Kelvin–Planck and Clausius, Carnot, Clausius inequality, entropy changes, Boltzmann",
+      "pdf": "4-second-law-entropy-3A-3B.pdf"
+    },
+    {
+      "slug": "relativity",
+      "file": "17-str-sheet.md",
+      "title": "Special relativity sheet",
+      "about": "Postulates, Lorentz transform, time dilation, length contraction, Doppler, relativistic momentum and energy (Beiser ch. 1 and slides)",
+      "pdf": "7-str-sheet.pdf"
+    },
+    {
+      "slug": "cheatsheet",
+      "file": "15-quiz2-cheatsheet.md",
+      "title": "Thermodynamics cheat sheet",
+      "about": "Everything from Atkins 1A to 3B on a few pages, mapped to the slides",
+      "pdf": "5-quiz2-cheatsheet.pdf"
+    },
+    {
+      "slug": "formula-sheet",
+      "file": "16-quiz2-formula-sheet.md",
+      "title": "Thermodynamics formula sheet",
+      "about": "Constants and every formula from 1A to 3B",
+      "pdf": "6-quiz2-formula-sheet.pdf"
+    },
+    {
+      "slug": "definitions",
+      "file": "18-quiz2-definitions.md",
+      "title": "Thermodynamics definitions",
+      "about": "Every term to state precisely in an exam",
+      "pdf": "8-quiz2-definitions.pdf"
+    },
+    {
+      "slug": "practice",
+      "file": "quiz2-practice-questions.md",
+      "title": "Thermodynamics practice questions",
+      "about": "Recall, understanding and exam-style derivations; try these before opening the answer key"
+    },
+    {
+      "slug": "answer-key",
+      "file": "quiz2-answer-key.md",
+      "title": "Practice answer key",
+      "about": "Answers to the practice questions"
+    },
+    {
+      "slug": "flashcards",
+      "file": "quiz2-flashcards.md",
+      "title": "Thermodynamics flashcards",
+      "about": "69 cards with an Anki import block"
+    }
+  ]
+}
