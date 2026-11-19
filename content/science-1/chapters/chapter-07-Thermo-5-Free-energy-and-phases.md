@@ -1745,43 +1745,126 @@ Why does the chemical potential of a gas fall more steeply with temperature than
 
 Starting from the Clausius inequality, show that at constant temperature and pressure a spontaneous change has dG ≤ 0.
 
-*Solution.* Clausius: dS ≥ dq/T. At constant p with only expansion work, dq = dH, so dS ≥ dH/T, i.e. dH − TdS ≤ 0. At constant T, dG = dH − TdS − SdT = dH − TdS, so dG ≤ 0. Equality holds at equilibrium.
+*Solution.* **Clausius inequality.** For any process $dS \ge dq/T$.
+
+**Constant pressure, expansion work only:** $dq = dH$, so
+
+$$dS \ge \frac{dH}T\ \Rightarrow\ dH - T\,dS \le 0$$
+
+**Constant temperature:** $dG = dH - T\,dS - S\,dT = dH - T\,dS$, so
+
+$$\boxed{dG_{T,p} \le 0}$$
+
+Spontaneous processes lower $G$; $dG = 0$ at equilibrium.
+
+**Common mistake.** The condition needs constant $T$ **and** $p$; at constant $T,V$ the quantity to use is $A$.
 
 ### Problem 10 [Thermo 5 · Derivation · 3 pts]
 
 From dU = TdS − pdV and the definitions of H, A and G, write dH, dA and dG. Derive the Maxwell relation (∂S/∂V)\_T = (∂p/∂T)\_V.
 
-*Solution.* dH = dU + pdV + Vdp = TdS + Vdp. dA = dU − TdS − SdT = −SdT − pdV. dG = dH − TdS − SdT = −SdT + Vdp. From dA: (∂A/∂T)\_V = −S and (∂A/∂V)\_T = −p. Equal mixed derivatives give (∂S/∂V)\_T = (∂p/∂T)\_V.
+*Solution.* **Differentials.** Start from $dU = T\,dS - p\,dV$.
+
+$$H = U + pV:\quad dH = T\,dS + V\,dp$$
+
+$$A = U - TS:\quad dA = -S\,dT - p\,dV$$
+
+$$G = H - TS:\quad dG = -S\,dT + V\,dp$$
+
+**Maxwell relation.** From $dA$: $\left(\dfrac{\partial A}{\partial T}\right)_V = -S$ and $\left(\dfrac{\partial A}{\partial V}\right)_T = -p$. $A$ is a state function, so mixed second derivatives are equal:
+
+$$-\left(\frac{\partial S}{\partial V}\right)_T = -\left(\frac{\partial p}{\partial T}\right)_V\ \Rightarrow\ \boxed{\left(\frac{\partial S}{\partial V}\right)_T = \left(\frac{\partial p}{\partial T}\right)_V}$$
 
 ### Problem 11 [Thermo 5 · Derivation · 3 pts]
 
 Show that π\_T = T(∂p/∂T)\_V − p, and evaluate it for a perfect gas and for a van der Waals gas.
 
-*Solution.* Divide dU = TdS − pdV by dV at constant T: π\_T = T(∂S/∂V)\_T − p = T(∂p/∂T)\_V − p (Maxwell). Perfect gas: T(nR/V) − p = 0. Van der Waals: T·R/(V\_m − b) − p = a/V\_m².
+*Solution.* **Divide $dU = T\,dS - p\,dV$ by $dV$ at constant $T$:**
+
+$$\pi_T = \left(\frac{\partial U}{\partial V}\right)_T = T\left(\frac{\partial S}{\partial V}\right)_T - p$$
+
+**Maxwell relation** $(\partial S/\partial V)_T = (\partial p/\partial T)_V$:
+
+$$\boxed{\pi_T = T\left(\frac{\partial p}{\partial T}\right)_V - p}$$
+
+**Perfect gas:** $p = nRT/V$, so $T(nR/V) - p = 0$: the energy does not depend on volume.
+
+**van der Waals gas:** $p = \dfrac{RT}{V_m - b} - \dfrac a{V_m^2}$, so $(\partial p/\partial T)_V = R/(V_m - b)$:
+
+$$\pi_T = \frac{RT}{V_m - b} - p = \boxed{\frac a{V_m^2}}$$
+
+The attraction $a$ gives the internal energy a volume dependence.
 
 ### Problem 12 [Thermo 5 · Derivation · 4 pts · P3E.4]
 
 Use (∂S/∂V)\_T = (∂p/∂T)\_V to find (∂S/∂V)\_T for a perfect gas, a van der Waals gas p = RT/(V\_m − b) − a/V\_m², and a Dieterici gas p = RTe^(−a/RTV\_m)/(V\_m − b). For an isothermal expansion, compare ΔS for the perfect and van der Waals gases.
 
-*Solution.* Perfect: R/V\_m, so ΔS = R ln(V\_f/V\_i). Van der Waals: R/(V\_m − b), so ΔS = R ln((V\_f − b)/(V\_i − b)), larger than the perfect-gas value because the molecules have less free volume to start with. Dieterici: (∂p/∂T)\_V = \[R/(V\_m − b)\] e^(−a/RTV\_m)(1 + a/RTV\_m).
+*Solution.* **Strategy.** $(\partial S/\partial V)_T = (\partial p/\partial T)_V$; differentiate $p$ at fixed $V$.
+
+- **Perfect gas** $p = RT/V_m$: $(\partial p/\partial T)_V = R/V_m$.
+- **van der Waals** $p = \dfrac{RT}{V_m - b} - \dfrac a{V_m^2}$: $(\partial p/\partial T)_V = \dfrac R{V_m - b}$.
+- **Dieterici** $p = \dfrac{RT\,e^{-a/RTV_m}}{V_m - b}$:
+
+$$\left(\frac{\partial p}{\partial T}\right)_V = \frac R{V_m - b}e^{-a/RTV_m}\left(1 + \frac a{RTV_m}\right)$$
+
+**Isothermal expansion** $V_i \to V_f$ ($\Delta S = \int(\partial S/\partial V)_T\,dV$):
+
+$$\Delta S_\text{perfect} = R\ln\frac{V_f}{V_i},\qquad \Delta S_\text{vdW} = R\ln\frac{V_f - b}{V_i - b}$$
+
+Since $\dfrac{V_f - b}{V_i - b} > \dfrac{V_f}{V_i}$, the van der Waals gas gains **more** entropy: the molecules have less free volume at the start, so the same expansion releases more.
 
 ### Problem 13 [Thermo 5 · Derivation · 3 pts]
 
 Derive the Gibbs–Helmholtz equation (∂(G/T)/∂T)\_p = −H/T².
 
-*Solution.* (∂(G/T)/∂T)\_p = (1/T)(∂G/∂T)\_p − G/T² = −S/T − G/T² = −(TS + G)/T² = −H/T², using G = H − TS.
+*Solution.* **Differentiate the quotient:**
+
+$$\left(\frac{\partial(G/T)}{\partial T}\right)_p = \frac1T\left(\frac{\partial G}{\partial T}\right)_p - \frac G{T^2}$$
+
+**Use** $(\partial G/\partial T)_p = -S$ (from $dG = -S\,dT + V\,dp$):
+
+$$= -\frac ST - \frac G{T^2} = -\frac{TS + G}{T^2}$$
+
+**Use** $G = H - TS$, so $G + TS = H$:
+
+$$\boxed{\left(\frac{\partial(G/T)}{\partial T}\right)_p = -\frac H{T^2}}$$
+
+**Use.** Applied to $\Delta G$ it gives $\left(\partial(\Delta G/T)/\partial T\right)_p = -\Delta H/T^2$, which tells how an equilibrium constant changes with temperature.
 
 ### Problem 14 [Thermo 5 · Derivation · 4 pts]
 
 Derive the Clapeyron equation, and from it the Clausius–Clapeyron equation. State the approximations.
 
-*Solution.* Along the boundary μα = μβ, so dμα = dμβ: −SαdT + Vαdp = −SβdT + Vβdp. So dp/dT = Δ\_trsS/Δ\_trsV = Δ\_trsH/(TΔ\_trsV). For vaporisation, neglect V\_liquid and treat the vapour as perfect: ΔV ≈ RT/p. Then dp/dT = pΔ\_vapH/RT², i.e. d ln p/dT = Δ\_vapH/RT². Also assume Δ\_vapH is constant over the range when integrating.
+*Solution.* **Phase equilibrium.** Along the boundary between phases $\alpha$ and $\beta$, $\mu_\alpha = \mu_\beta$, and this holds as we move along the line, so $d\mu_\alpha = d\mu_\beta$. With $d\mu = -S_m\,dT + V_m\,dp$:
+
+$$-S_\alpha\,dT + V_\alpha\,dp = -S_\beta\,dT + V_\beta\,dp$$
+
+$$\boxed{\frac{dp}{dT} = \frac{\Delta_\text{trs}S}{\Delta_\text{trs}V} = \frac{\Delta_\text{trs}H}{T\,\Delta_\text{trs}V}}\quad(\text{Clapeyron})$$
+
+**Clausius–Clapeyron** (liquid to vapour). Approximations:
+
+1. $V_\text{liquid} \ll V_\text{vapour}$, so $\Delta V \approx V_\text{vapour}$.
+2. The vapour is a perfect gas: $V_m = RT/p$.
+
+$$\frac{dp}{dT} = \frac{\Delta_\text{vap}H\,p}{RT^2}\ \Rightarrow\ \boxed{\frac{d\ln p}{dT} = \frac{\Delta_\text{vap}H}{RT^2}}$$
+
+3. For integration, $\Delta_\text{vap}H$ is taken constant over the range:
+
+$$\ln\frac{p_2}{p_1} = -\frac{\Delta_\text{vap}H}R\left(\frac1{T_2} - \frac1{T_1}\right)$$
 
 ### Problem 15 [Thermo 5 · Derivation · 2 pts]
 
 Using the phase rule, show that four phases of a pure substance cannot coexist.
 
-*Solution.* F = C − P + 2 = 1 − 4 + 2 = −1 < 0, which is impossible, so four phases cannot coexist.
+*Solution.* **Phase rule.** $F = C - P + 2$.
+
+For a pure substance $C = 1$ and $P = 4$:
+
+$$F = 1 - 4 + 2 = -1 < 0$$
+
+A negative number of degrees of freedom is impossible: the system would be over-determined. Three phases ($F = 0$, the triple point) is the most that can coexist.
+
+**Check.** Three equal-$\mu$ conditions are enough to fix $T$ and $p$; a fourth would be an extra equation with nothing left to adjust.
 
 ## C. Numericals
 

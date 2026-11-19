@@ -262,49 +262,165 @@ State the principle of equivalence and one experimental confirmation of general 
 
 Outline the derivation of the Lorentz transformation from the two postulates.
 
-*Solution.* (1) The origin of K′ is at x = vt, so try a linear x′ = γ(x − vt). (2) The first postulate says K sees K′ move at −v by the same rule: x = γ(x′ + vt′), with the same γ. (3) Eliminate x′ to get t′ = γt + (1 − γ²)x/(γv). (4) A light flash from the common origin at t = 0 obeys x = ct and x′ = ct′ (second postulate). Substituting into (1) and (3) and dividing gives c = (c − v)γ²v/(γ²v − …), which reduces to γ = 1/√(1 − v²/c²). Then t′ = γ(t − vx/c²).
+*Solution.* **Setup.** $K'$ moves along $x$ at speed $v$ relative to $K$; the origins coincide at $t = t' = 0$. Space is homogeneous, so the transformation must be **linear**.
+
+**Step 1.** The origin of $K'$ ($x' = 0$) sits at $x = vt$, so $x' \propto (x - vt)$:
+
+$$x' = \gamma(x - vt)$$
+
+**Step 2 (first postulate).** $K$ sees $K'$ moving at $-v$ and the physics is the same, so with the same $\gamma$:
+
+$$x = \gamma(x' + vt')$$
+
+**Step 3 (second postulate).** A light flash from the origin at $t = 0$ has $x = ct$ in $K$ **and** $x' = ct'$ in $K'$. Multiply the two relations:
+
+$$xx' = \gamma^2(x - vt)(x' + vt')\ \Rightarrow\ c^2tt' = \gamma^2(ct - vt)(ct' + vt') = \gamma^2tt'(c - v)(c + v)$$
+
+$$\boxed{\gamma = \frac1{\sqrt{1 - v^2/c^2}}}$$
+
+**Step 4.** Eliminate $x'$ from the two relations to get the time:
+
+$$\boxed{t' = \gamma\left(t - \frac{vx}{c^2}\right)}$$
+
+**Check.** For $v \ll c$, $\gamma \to 1$ and $t' \to t$, $x' \to x - vt$: the Galilean transformation ✓.
 
 ### Problem 12 [STR · Derivation · 3 pts]
 
 Using the Lorentz transformation, show that a clock moving at v ticks at intervals γΔt₀.
 
-*Solution.* Ticks at the clock's position x = 0 in K: events (0, 0) and (0, Δt₀). In K′, Δt′ = γ(Δt − vΔx/c²) = γΔt₀ since Δx = 0.
+*Solution.* **Events.** The clock sits at $x = 0$ in $K$ and ticks at $t = 0$ and $t = \Delta t_0$ (its **proper time**): the two events have $\Delta x = 0$.
+
+**Lorentz transformation** into $K'$ (where the clock moves):
+
+$$\Delta t' = \gamma\left(\Delta t - \frac{v\Delta x}{c^2}\right) = \gamma\,\Delta t_0$$
+
+$$\boxed{\Delta t' = \gamma\,\Delta t_0 > \Delta t_0}$$
+
+The moving clock's ticks are stretched: it runs **slow** as seen from $K'$.
+
+**Common mistake.** The proper time is the interval between two events at the **same place** in the clock's own frame.
 
 ### Problem 13 [STR · Derivation · 3 pts]
 
 Using the Lorentz transformation, show that a moving rod has length L₀/γ. Why must you use the inverse transformation (or simultaneous measurements)?
 
-*Solution.* Rod at rest in K from 0 to L₀. In K′ the ends must be marked at the same t′, so Δt′ = 0. The forward transformation needs Δt, which we don't know, so use the inverse: Δx = γ(Δx′ + vΔt′) = γΔx′. So L₀ = γL′ and L′ = L₀/γ.
+*Solution.* **Setup.** The rod is at rest in $K$ with ends at $x = 0$ and $x = L_0$. In $K'$ it moves, and its length is the distance between the positions of its two ends measured **at the same time** $t'$, so $\Delta t' = 0$.
+
+**Why the inverse transformation.** The forward transformation $\Delta x' = \gamma(\Delta x - v\Delta t)$ needs $\Delta t$, which we don't know when $\Delta t' = 0$. The inverse needs only $\Delta t'$:
+
+$$\Delta x = \gamma(\Delta x' + v\Delta t') = \gamma\,\Delta x'$$
+
+With $\Delta x = L_0$ and $\Delta x' = L'$:
+
+$$\boxed{L' = \frac{L_0}\gamma}$$
+
+**Common mistake.** Measuring the ends at the same $t$ in the rod's own frame gives the wrong answer, because the events are not simultaneous in $K'$.
 
 ### Problem 14 [STR · Derivation · 4 pts]
 
 Derive the velocity transformation uₓ′ = (uₓ − v)/(1 − uₓv/c²) and u\_y′. Show that if uₓ = c then uₓ′ = c.
 
-*Solution.* dx′/dt = γ(uₓ − v) and dt′/dt = γ(1 − uₓv/c²). Dividing: uₓ′ = (uₓ − v)/(1 − uₓv/c²). Since dy′ = dy, u\_y′ = u\_y/\[γ(1 − uₓv/c²)\]. If uₓ = c: (c − v)/(1 − v/c) = c.
+*Solution.* **Differentials.** From the Lorentz transformation
+
+$$dx' = \gamma(dx - v\,dt),\qquad dt' = \gamma\left(dt - \frac{v\,dx}{c^2}\right),\qquad dy' = dy$$
+
+**Divide** $dx'$ by $dt'$ and substitute $u_x = dx/dt$:
+
+$$\boxed{u_x' = \frac{u_x - v}{1 - u_xv/c^2}}$$
+
+$$\boxed{u_y' = \frac{u_y}{\gamma(1 - u_xv/c^2)}}$$
+
+**Light.** If $u_x = c$:
+
+$$u_x' = \frac{c - v}{1 - v/c} = \frac{c - v}{(c - v)/c} = c$$
+
+The speed of light is the same in every frame, as the postulate demands.
 
 ### Problem 15 [STR · Derivation · 4 pts]
 
 Starting from W = ∫F·dr with p = γmu, show that K = (γ − 1)mc². Hence show E² = (pc)² + (mc²)².
 
-*Solution.* W = ∫(dp/dt)·u dt = ∫u d(γmu). Integrating by parts, ∫u d(γmu) = γmu² − ∫γmu du = γmu² + mc²√(1 − u²/c²) − mc² = γmc² − mc². So K = (γ − 1)mc², E = γmc², E₀ = mc². Then E² − p²c² = γ²m²c⁴(1 − u²/c²) = m²c⁴.
+*Solution.* **Work-energy.** With $\mathbf p = \gamma m\mathbf u$ and $\mathbf F = d\mathbf p/dt$, for motion along a line:
+
+$$K = \int F\,dx = \int u\,d(\gamma mu) = \gamma mu^2 - \int\gamma mu\,du$$
+
+**Evaluate the last integral** ($\gamma = (1 - u^2/c^2)^{-1/2}$):
+
+$$\int\gamma mu\,du = -mc^2\sqrt{1 - u^2/c^2} = -\frac{mc^2}\gamma\quad(+\text{const})$$
+
+so
+
+$$K = \gamma mu^2 + mc^2\sqrt{1 - u^2/c^2} - mc^2 = \gamma mc^2\left(\frac{u^2}{c^2} + 1 - \frac{u^2}{c^2}\right) - mc^2$$
+
+$$\boxed{K = (\gamma - 1)mc^2}$$
+
+Define $E = \gamma mc^2$ (so $E_0 = mc^2$). Then
+
+$$E^2 - (pc)^2 = \gamma^2m^2c^4\left(1 - \frac{u^2}{c^2}\right) = (mc^2)^2\ \Rightarrow\ \boxed{E^2 = (pc)^2 + (mc^2)^2}$$
 
 ### Problem 16 [STR · Derivation · 3 pts · 2025 midsem Q13]
 
 Show how the classical kinetic energy formula follows from the relativistic one. Find the range of speeds for which they differ by less than 1%.
 
-*Solution.* γ = (1 − β²)^(−½) ≈ 1 + ½β² + (3/8)β⁴, so K ≈ ½mu² + (3/8)mu⁴/c². The ratio K\_rel/K\_cl ≈ 1 + (3/4)β². For less than 1%: (3/4)β² < 0.01, β < 0.115, so u ≲ 3.5 × 10⁷ m/s.
+*Solution.* **Expand** for $\beta = u/c \ll 1$:
+
+$$\gamma = (1 - \beta^2)^{-1/2} \approx 1 + \tfrac12\beta^2 + \tfrac38\beta^4$$
+
+$$K = (\gamma - 1)mc^2 \approx \tfrac12mu^2 + \tfrac38\frac{mu^4}{c^2}$$
+
+The first term is the classical kinetic energy.
+
+**Ratio.**
+
+$$\frac{K_\text{rel}}{K_\text{cl}} \approx 1 + \tfrac34\beta^2$$
+
+**1% criterion:** $\tfrac34\beta^2 < 0.01 \Rightarrow \beta < 0.115$, so
+
+$$u \lesssim 0.115c \approx \boxed{3.5\times10^7\ \text{m/s}}$$
+
+**Check.** At $\beta = 0.115$ exactly, $\gamma - 1 = 0.00667$ versus $\tfrac12\beta^2 = 0.00661$: about $1\%$ difference ✓.
 
 ### Problem 17 [STR · Derivation · 3 pts]
 
 Show that (Δs)² = Δx² − c²Δt² is the same in K and K′.
 
-*Solution.* Δx′ = γ(Δx − βcΔt), cΔt′ = γ(cΔt − βΔx). Then Δx′² − c²Δt′² = γ²\[(Δx² − c²Δt²)(1 − β²)\] (the cross terms cancel) = Δx² − c²Δt².
+*Solution.* **Transform the differences.**
+
+$$\Delta x' = \gamma(\Delta x - \beta c\Delta t),\qquad c\Delta t' = \gamma(c\Delta t - \beta\Delta x)$$
+
+**Square and subtract.**
+
+$$\Delta x'^2 - c^2\Delta t'^2 = \gamma^2\left[(\Delta x - \beta c\Delta t)^2 - (c\Delta t - \beta\Delta x)^2\right]$$
+
+The cross terms $\mp2\beta c\Delta x\Delta t$ cancel, leaving
+
+$$= \gamma^2\left(\Delta x^2 - c^2\Delta t^2\right)(1 - \beta^2) = \Delta x^2 - c^2\Delta t^2$$
+
+since $\gamma^2(1 - \beta^2) = 1$. So $(\Delta s)^2$ is **invariant**.
 
 ### Problem 18 [STR · Derivation · 8 pts · 2026 midsem Q11] (hard)
 
 A single-particle Lagrangian is L = −mc√(c² − u·u) − V(r). (a) Find the conjugate momentum p and p·p in terms of u·u. (b) Find H(r, p). (c) Show that (H − V)² = (mc²)² + p²c².
 
-*Solution.* (a) p = ∂L/∂u = mcu/√(c² − u²) = γmu, so p·p = m²c²u²/(c² − u²). (b) H = p·u − L = mcu²/√(c² − u²) + mc√(c² − u²) + V = mc³/√(c² − u²) + V. From (a), c² − u² = m²c⁴/(p² + m²c²), so H = c√(p² + m²c²) + V. (c) (H − V)² = (mc²)² + p²c². H − V = γmc² is Einstein's energy; for small p it is mc² + p²/2m. The conjugate momentum is not mu but γmu.
+*Solution.* **(a) Conjugate momentum.**
+
+$$\mathbf p = \frac{\partial L}{\partial\mathbf u} = \frac{mc\,\mathbf u}{\sqrt{c^2 - u^2}} = \gamma m\mathbf u,\qquad \mathbf p\cdot\mathbf p = \frac{m^2c^2u^2}{c^2 - u^2}$$
+
+**(b) Hamiltonian.** $H = \mathbf p\cdot\mathbf u - L$:
+
+$$H = \frac{mcu^2}{\sqrt{c^2 - u^2}} + mc\sqrt{c^2 - u^2} + V = \frac{mc^3}{\sqrt{c^2 - u^2}} + V$$
+
+Express $u$ through $p$. From (a): $c^2 - u^2 = \dfrac{m^2c^4}{p^2 + m^2c^2}$. Then
+
+$$\boxed{H = c\sqrt{p^2 + m^2c^2} + V}$$
+
+**(c)** Rearranging,
+
+$$\boxed{(H - V)^2 = (mc^2)^2 + p^2c^2}$$
+
+$H - V = \gamma mc^2$ is Einstein's energy; for small $p$ it reduces to $mc^2 + p^2/2m$.
+
+**Common mistake.** The canonical momentum is $\gamma m\mathbf u$, not $m\mathbf u$.
 
 ## C. Numericals
 
