@@ -201,7 +201,21 @@ What is a conservative force? Give two equivalent tests.
 
 What is Galilean relativity? Show that F is the same in two inertial frames.
 
-*Solution.* The laws of mechanics have the same form in all inertial frames. With u′ = u − v and v constant, du′/dt = du/dt, so F′ = m du′/dt = F.
+*Solution.* **Galilean transformation.** Frame $S'$ moves at constant velocity $\mathbf V$ relative to $S$:
+
+$$\mathbf r' = \mathbf r - \mathbf Vt,\qquad t' = t$$
+
+**Differentiate twice.**
+
+$$\mathbf v' = \mathbf v - \mathbf V,\qquad \mathbf a' = \mathbf a \quad(\text{since } \dot{\mathbf V} = 0)$$
+
+**Force is unchanged.** With $m$ the same in both frames,
+
+$$\mathbf F' = m\mathbf a' = m\mathbf a = \mathbf F$$
+
+So Newton's laws hold in the same form in every inertial frame: no experiment in mechanics distinguishes rest from uniform motion.
+
+**Common mistake.** The velocity and the kinetic energy are **not** invariant, only the acceleration (and force) is.
 
 ### Problem 5 [Mechanics 1 · Recall · 2 pts]
 
@@ -227,73 +241,209 @@ Why is the harmonic oscillator a good model for so many systems?
 
 Which of these 2-D forces are conservative: F₁ = (−y, x), F₂ = (2xy, x² + 3y²), F₃ = (x², xy)? Why? Find the potential of any that are.
 
-*Solution.* Test ∂F\_y/∂x − ∂Fₓ/∂y. F₁: 1 − (−1) = 2 ≠ 0, not conservative (it circulates). F₂: 2x − 2x = 0, conservative, with U = −(x²y + y³) + constant. F₃: y − 0 = y ≠ 0, not conservative.
+*Solution.* **Test.** In 2-D, $\mathbf F = -\nabla U$ requires a zero curl:
+
+$$\frac{\partial F_y}{\partial x} - \frac{\partial F_x}{\partial y} = 0$$
+
+| force | $\partial_xF_y - \partial_yF_x$ | verdict |
+|---|---|---|
+| $\mathbf F_1 = (-y, x)$ | $1 - (-1) = 2$ | not conservative (it circulates) |
+| $\mathbf F_2 = (2xy,\ x^2 + 3y^2)$ | $2x - 2x = 0$ | **conservative** |
+| $\mathbf F_3 = (x^2, xy)$ | $y - 0 = y$ | not conservative |
+
+**Potential for $\mathbf F_2$.** $F_x = -\partial U/\partial x = 2xy \Rightarrow U = -x^2y + g(y)$. Then
+
+$$F_y = -\frac{\partial U}{\partial y} = x^2 - g'(y) = x^2 + 3y^2 \Rightarrow g' = -3y^2 \Rightarrow g = -y^3$$
+
+$$\boxed{U = -(x^2y + y^3) + \text{const}}$$
+
+**Check.** $-\partial_yU = x^2 + 3y^2$ ✓.
 
 ### Problem 9 [Mechanics 1 · Derivation · 3 pts]
 
 Show that W = K₂ − K₁, and that for a conservative force K + U is constant.
 
-*Solution.* W = ∫F·dr = ∫m(dv/dt)·v dt = ∫d(½mv²) = K₂ − K₁. If F = −∇U, W = −∫∇U·dr = U₁ − U₂. Equating: K₁ + U₁ = K₂ + U₂.
+*Solution.* **Work-energy.** Use $\mathbf F = m\,d\mathbf v/dt$ and $d\mathbf r = \mathbf v\,dt$:
+
+$$W = \int_1^2\mathbf F\cdot d\mathbf r = \int m\frac{d\mathbf v}{dt}\cdot\mathbf v\,dt = \int d\left(\tfrac12mv^2\right) = K_2 - K_1$$
+
+**Conservative case.** If $\mathbf F = -\nabla U$, then $\nabla U\cdot d\mathbf r = dU$, so
+
+$$W = -\int_1^2 dU = U_1 - U_2$$
+
+Equate the two expressions for $W$:
+
+$$K_2 - K_1 = U_1 - U_2 \Rightarrow \boxed{K_1 + U_1 = K_2 + U_2}$$
 
 ### Problem 10 [Mechanics 1 · Derivation · 2 pts]
 
 Show that dL/dt = r × F, and hence that L is conserved for a central force.
 
-*Solution.* dL/dt = ṙ × p + r × ṗ = v × mv + r × F = r × F. For a central force F ∥ r, so r × F = 0 and L is constant.
+*Solution.* **Differentiate $\mathbf L = \mathbf r\times\mathbf p$.**
+
+$$\frac{d\mathbf L}{dt} = \underbrace{\dot{\mathbf r}\times\mathbf p}_{\mathbf v\times m\mathbf v\,=\,0} + \mathbf r\times\dot{\mathbf p} = \boxed{\mathbf r\times\mathbf F}$$
+
+**Central force.** $\mathbf F\parallel\mathbf r$, so $\mathbf r\times\mathbf F = 0$ and $d\mathbf L/dt = 0$: $\mathbf L$ is **conserved**. The motion stays in the plane perpendicular to $\mathbf L$.
 
 ### Problem 11 [Mechanics 1 · Derivation · 3 pts]
 
 Show that dE/dt = ∂U/∂t for a particle in a conservative field.
 
-*Solution.* dT/dt = mv·a = v·F. dU/dt = v·∇U + ∂U/∂t. With F = −∇U: dE/dt = v·(F + ∇U) + ∂U/∂t = ∂U/∂t.
+*Solution.* **Kinetic energy.** $\dfrac{dT}{dt} = m\mathbf v\cdot\mathbf a = \mathbf v\cdot\mathbf F$.
+
+**Potential.** $U = U(\mathbf r, t)$, so by the chain rule
+
+$$\frac{dU}{dt} = \mathbf v\cdot\nabla U + \frac{\partial U}{\partial t}$$
+
+**Add** and use $\mathbf F = -\nabla U$:
+
+$$\frac{dE}{dt} = \mathbf v\cdot(\mathbf F + \nabla U) + \frac{\partial U}{\partial t} = \boxed{\frac{\partial U}{\partial t}}$$
+
+If $U$ has no explicit time dependence, $E$ is conserved.
 
 ### Problem 12 [Mechanics 1 · Derivation · 3 pts · Quiz-1 Q2]
 
 For the 1-D SHO, write the equation of motion and non-dimensionalise it. Comment on the parameters that are found.
 
-*Solution.* mẍ = −kx. Let ξ = x/x₀ and τ = t/t₀: (mx₀/t₀²)ξ″ = −kx₀ξ. Choosing t₀ = √(m/k) gives ξ″ + ξ = 0. The only parameter found is the time scale √(m/k) = 1/ω₀; the length scale x₀ is arbitrary (set by initial conditions, e.g. amplitude). So all SHOs behave identically once time is measured in units of 1/ω₀.
+*Solution.* **Equation of motion.** $m\ddot x = -kx$.
+
+**Scale.** Let $\xi = x/x_0$ and $\tau = t/t_0$:
+
+$$\frac{mx_0}{t_0^2}\,\xi'' = -kx_0\,\xi$$
+
+Choose $t_0 = \sqrt{m/k} = 1/\omega_0$:
+
+$$\boxed{\xi'' + \xi = 0}$$
+
+**Parameters found.** The only one is the time scale $1/\omega_0$. The length scale $x_0$ is arbitrary (fixed only by initial conditions), because the equation is linear. So all simple harmonic oscillators behave identically once time is measured in units of $1/\omega_0$.
 
 ### Problem 13 [Mechanics 1 · Derivation · 3 pts]
 
 A particle moves in U(x) = −a/x + b/x² (a, b > 0). Find the equilibrium and the frequency of small oscillations.
 
-*Solution.* U′ = a/x² − 2b/x³ = 0 gives x₀ = 2b/a. U″ = −2a/x³ + 6b/x⁴; at x₀, 6b/x₀ = 3a, so U″ = a/x₀³ > 0 (stable). ω = √(a/mx₀³) = √(a⁴/8mb³).
+*Solution.* **Equilibrium.** $U(x) = -a/x + b/x^2$:
+
+$$U'(x) = \frac a{x^2} - \frac{2b}{x^3} = 0 \Rightarrow \boxed{x_0 = \frac{2b}a}$$
+
+**Stability.**
+
+$$U''(x) = -\frac{2a}{x^3} + \frac{6b}{x^4} = \frac1{x^3}\left(-2a + \frac{6b}x\right)$$
+
+At $x_0$, $6b/x_0 = 3a$, so $U''(x_0) = \dfrac a{x_0^3} > 0$: a minimum, so **stable**.
+
+**Frequency.** Small oscillations obey $m\ddot\epsilon = -U''\epsilon$:
+
+$$\omega = \sqrt{\frac{U''(x_0)}m} = \sqrt{\frac a{mx_0^3}} = \boxed{\sqrt{\frac{a^4}{8mb^3}}}$$
 
 ### Problem 14 [Mechanics 1 · Derivation · 3 pts]
 
 Show that for a system of particles MŘ = F\_ext.
 
-*Solution.* MŘ = Σmₖr̈ₖ = ΣFₖ = ΣFₖ^ext + Σⱼ≠ₖFₖ←ⱼ. The double sum pairs Fₖ←ⱼ + Fⱼ←ₖ = 0, so MŘ = F\_ext.
+*Solution.* **Sum Newton's law over all particles.** For particle $k$: $m_k\ddot{\mathbf r}_k = \mathbf F_k^\text{ext} + \sum_{j\ne k}\mathbf F_{kj}$.
+
+$$M\ddot{\mathbf R} = \sum_km_k\ddot{\mathbf r}_k = \sum_k\mathbf F_k^\text{ext} + \sum_k\sum_{j\ne k}\mathbf F_{kj}$$
+
+The double sum pairs $\mathbf F_{kj} + \mathbf F_{jk} = 0$ (third law), so it vanishes:
+
+$$\boxed{M\ddot{\mathbf R} = \mathbf F^\text{ext}}$$
+
+The centre of mass moves as if all the mass sat there and only the external force acted.
 
 ### Problem 15 [Mechanics 1 · Derivation · 3 pts]
 
 Show that T = ½MV² + Σ½mₖv′ₖ², and the analogous split of L.
 
-*Solution.* Write vₖ = V + v′ₖ. T = Σ½mₖ(V² + 2V·v′ₖ + v′ₖ²) = ½MV² + V·Σmₖv′ₖ + Σ½mₖv′ₖ², and Σmₖv′ₖ = 0 (it is M times the centre-of-mass velocity in its own frame). Similarly L = R × MV + Σr′ₖ × mₖv′ₖ.
+*Solution.* **Split the velocity.** $\mathbf v_k = \mathbf V + \mathbf v_k'$, with $\mathbf v_k'$ measured relative to the centre of mass.
+
+**Kinetic energy.**
+
+$$T = \sum\tfrac12m_k(\mathbf V + \mathbf v_k')^2 = \tfrac12MV^2 + \mathbf V\cdot\sum m_k\mathbf v_k' + \sum\tfrac12m_kv_k'^2$$
+
+The middle term vanishes, because $\sum m_k\mathbf v_k' = M\dot{\mathbf R}'$ and the centre of mass is at rest in its own frame:
+
+$$\boxed{T = \tfrac12MV^2 + \sum\tfrac12m_kv_k'^2}$$
+
+**Angular momentum.** With $\mathbf r_k = \mathbf R + \mathbf r_k'$:
+
+$$\mathbf L = \sum m_k(\mathbf R + \mathbf r_k')\times(\mathbf V + \mathbf v_k') = \mathbf R\times M\mathbf V + \sum\mathbf r_k'\times m_k\mathbf v_k'$$
+
+(the cross terms vanish for the same reason): orbital part $+$ spin part.
 
 ### Problem 16 [Mechanics 1 · Derivation · 4 pts · 2025 midsem Q8]
 
 A rocket exhausts gas at constant speed u relative to itself. Assuming vertical motion, constant burn rate and constant gravity, find the equation of motion and v as a function of the current mass. When is lift-off achieved?
 
-*Solution.* In dt the rocket (mass m) ejects −dm at speed v − u. Momentum: (m + dm)(v + dv) + (−dm)(v − u) − mv = −mg dt, giving m dv/dt = −u dm/dt − mg. With −dm/dt = α: m dv/dt = uα − mg. Using dt = −dm/α: dv = −u dm/m + (g/α)dm, so v = u ln(m₀/m) − g(m₀ − m)/α. Lift-off requires the thrust to exceed the weight at the start: uα > m₀g; otherwise it waits on the pad until enough fuel has burned.
+*Solution.* **Momentum balance.** In time $dt$ the rocket (mass $m$, speed $v$) ejects gas of mass $|dm|$ at speed $v - u$ (upward is positive). Only gravity acts externally:
+
+$$(m + dm)(v + dv) + (-dm)(v - u) - mv = -mg\,dt$$
+
+Drop the second-order term $dm\,dv$:
+
+$$m\,dv + u\,dm = -mg\,dt\ \Rightarrow\ m\frac{dv}{dt} = -u\frac{dm}{dt} - mg$$
+
+**Constant burn rate** $\alpha = -dm/dt$:
+
+$$\boxed{m\frac{dv}{dt} = u\alpha - mg}$$
+
+**Speed versus mass.** Use $dt = -dm/\alpha$:
+
+$$dv = -u\frac{dm}m + \frac g\alpha\,dm\ \Rightarrow\ \boxed{v = u\ln\frac{m_0}m - \frac g\alpha(m_0 - m)}$$
+
+**Lift-off** needs $u\alpha > m_0g$ at the start. Otherwise the rocket stays on the pad until enough fuel has burned that $u\alpha > mg$.
 
 ### Problem 17 [Mechanics 1 · Derivation · 4 pts · 2025 midsem Q9]
 
 A rope of mass per unit length ρ and length a hangs just above a table and is released. Find the force on the table when a length x has fallen onto it.
 
-*Solution.* The falling part is in free fall, so when x has landed its speed is v = √(2gx). In dt a length v dt with momentum ρv²dt is stopped, a force ρv² = 2ρgx. Adding the weight of the pile, ρgx: total 3ρgx, three times the weight on the table.
+*Solution.* **Setup.** After a length $x$ has landed, the free part is still in free fall, so its speed is $v = \sqrt{2gx}$ (every point of the rope has fallen the same distance $x$).
+
+**Force from the arrival.** In $dt$ a length $v\,dt$ of rope, with mass $\rho v\,dt$ and speed $v$, is brought to rest:
+
+$$F_\text{stop} = \frac{dp}{dt} = \rho v^2 = 2\rho gx$$
+
+**Weight already on the table:** $\rho gx$.
+
+$$\boxed{F = 2\rho gx + \rho gx = 3\rho gx}$$
+
+**Check.** At the end ($x = a$) the table carries $3\rho ga$: three times the final weight of the rope.
+
+**Common mistake.** Using only the weight of the pile, or only the impact term.
 
 ### Problem 18 [Mechanics 1 · Derivation · 3 pts · 2025 midsem Q10]
 
 A rope hangs over a small smooth loop with equal lengths on each side. After a small tug it slides off. Find its speed when it leaves the loop.
 
-*Solution.* Let the total length be L and mass M = ρL. Initially each half has its centre L/4 below the loop: Uᵢ = −MgL/4. As it leaves, the whole rope hangs on one side with centre L/2 below: U\_f = −MgL/2. ½Mv² = MgL/4, so v = √(gL/2).
+*Solution.* **Energy conservation** (smooth loop, no losses).
+
+Let the total length be $L$ and mass $M = \rho L$.
+
+- **Initially:** two halves, each of mass $M/2$ with its centre $L/4$ below the loop:
+
+$$U_i = 2\cdot\frac M2g\left(-\frac L4\right) = -\frac{MgL}4$$
+
+- **Finally:** the whole rope hangs on one side, centre $L/2$ below:
+
+$$U_f = -\frac{MgL}2$$
+
+$$\tfrac12Mv^2 = U_i - U_f = \frac{MgL}4\ \Rightarrow\ \boxed{v = \sqrt{\frac{gL}2}}$$
 
 ### Problem 19 [Mechanics 1 · Derivation · 3 pts]
 
 A body falls from rest with linear drag −kv. Find v(t) and the terminal velocity.
 
-*Solution.* m dv/dt = mg − kv. Separating: v = (mg/k)(1 − e^(−kt/m)). Terminal velocity v\_t = mg/k, reached on a time scale m/k.
+*Solution.* **Equation of motion.** Taking down as positive:
+
+$$m\frac{dv}{dt} = mg - kv$$
+
+**Separate.**
+
+$$\int_0^v\frac{dv'}{g - kv'/m} = \int_0^tdt' \Rightarrow -\frac mk\ln\left(1 - \frac{kv}{mg}\right) = t$$
+
+$$\boxed{v(t) = \frac{mg}k\left(1 - e^{-kt/m}\right)}$$
+
+**Terminal velocity.** As $t\to\infty$, $v_t = \dfrac{mg}k$ (set $dv/dt = 0$), approached on a time scale $m/k$.
+
+**Check.** For $t \ll m/k$, $v \approx gt$: free fall, as expected.
 
 ## C. Short numericals and estimates
 

@@ -233,13 +233,31 @@ Explain DNA computing in your own words.
 
 Why are steady states important, and how do the eigenvalues of the Jacobian decide the behaviour near one?
 
-*Solution.* A system near a steady state either returns to it or leaves it, so steady states organise the long-term behaviour. Linearising, deviations evolve as e^(λt) along the eigenvectors of the Jacobian: Re λ < 0 decays (stable), Re λ > 0 grows (unstable), imaginary parts give rotation (spirals, or a centre when Re λ = 0).
+*Solution.* **Why they matter.** A steady state is where $\dot{\mathbf x} = 0$. Near one, the system either returns or leaves, so steady states organise the long-term behaviour.
+
+**Linearise.** Write $\mathbf x = \mathbf x^* + \boldsymbol\epsilon$, so $\dot{\boldsymbol\epsilon} = J\boldsymbol\epsilon$ with $J_{ij} = \partial f_i/\partial x_j\big|_{\mathbf x^*}$. Along each eigenvector
+
+$$\epsilon(t) \propto e^{\lambda t}$$
+
+- $\text{Re}\,\lambda < 0$ for all eigenvalues: **stable** (decay).
+- Any $\text{Re}\,\lambda > 0$: **unstable** (growth).
+- $\text{Im}\,\lambda \ne 0$: rotation (spiral); $\text{Re}\,\lambda = 0$ with $\text{Im}\,\lambda \ne 0$: a **centre**.
+
+**Common mistake.** At a centre the linearisation is not conclusive for the full nonlinear system. Say "neutral at linear order", not "stable".
 
 ### Problem 6 [Intro · Recall · 2 pts · HW 4c]
 
 Explain why the logistic map period-doubles at r = 3.
 
-*Solution.* At x\* = 1 − 1/r the slope is f′ = 2 − r, which reaches −1 at r = 3. Beyond that, deviations alternate in sign and grow, so the fixed point is unstable; meanwhile f(f(x)) develops two new stable fixed points, which are the 2-cycle the orbit settles onto.
+*Solution.* **Fixed point.** $x^* = 1 - 1/r$. The slope of the map $f(x) = rx(1-x)$ there is
+
+$$f'(x^*) = r(1 - 2x^*) = r\left(1 - 2 + \frac2r\right) = 2 - r$$
+
+**Stability.** $|f'| < 1$ means stable, so $1 < r < 3$. At $r = 3$, $f' = -1$: the deviation $e_{n+1} = f'e_n = -e_n$ flips sign each step without shrinking. Beyond $r = 3$ it flips sign and **grows**.
+
+**What happens next.** $f(f(x))$ acquires two new stable fixed points. The orbit alternates between them: a **2-cycle** (period doubling).
+
+**Common mistake.** The slope reaches $-1$, not $+1$. $f' = +1$ (at $r = 1$) gives a transcritical bifurcation instead.
 
 ### Problem 7 [Intro · Recall · 2 pts · HW 4d]
 
@@ -253,61 +271,184 @@ Explain "deterministic chaos" and how it is seen in the logistic map.
 
 For f(x) = mx + c, show that c is immaterial to the stability of the fixed point.
 
-*Solution.* x\* = mx\* + c gives x\* = c/(1 − m). With xₙ = x\* + eₙ: eₙ₊₁ = meₙ, independent of c. So stability is |m| < 1 for any c; c only shifts x\*.
+*Solution.* **Fixed point.** $x^* = mx^* + c \Rightarrow x^* = \dfrac{c}{1-m}$.
+
+**Perturb.** Let $x_n = x^* + e_n$:
+
+$$x^* + e_{n+1} = m(x^* + e_n) + c = \underbrace{mx^* + c}_{x^*} + me_n$$
+
+$$e_{n+1} = m\,e_n \quad\Rightarrow\quad e_n = m^n e_0$$
+
+The constant $c$ has cancelled. The fixed point is stable iff $|m| < 1$, for any $c$; $c$ only **shifts** $x^*$.
 
 ### Problem 9 [Intro · Derivation · 4 pts · practice P1]
 
 For the logistic map, find the fixed points and their stability ranges in r. Name the bifurcations at r = 1 and r = 3.
 
-*Solution.* x\* = 0 and x\* = 1 − 1/r (meaningful for r ≥ 1). f′(x) = r(1 − 2x). At 0: f′ = r, stable for r < 1. At 1 − 1/r: f′ = 2 − r, stable for 1 < r < 3. At r = 1 a transcritical bifurcation (the two points cross and exchange stability); at r = 3 a period-doubling bifurcation (2-cycle born).
+*Solution.* **Fixed points.** Solve $x = rx(1-x)$:
+
+$$x^* = 0 \qquad\text{or}\qquad 1 = r(1-x)\ \Rightarrow\ x^* = 1 - \frac1r\ \ (\text{physical for } r \ge 1)$$
+
+**Slope.** $f'(x) = r(1 - 2x)$.
+
+| fixed point | $f'$ | stable when |
+|---|---|---|
+| $0$ | $r$ | $r < 1$ |
+| $1 - 1/r$ | $2 - r$ | $1 < r < 3$ |
+
+**Bifurcations.**
+
+- $r = 1$: the two fixed points meet and exchange stability, a **transcritical** bifurcation.
+- $r = 3$: $f' = -1$, a **period-doubling** bifurcation (2-cycle born).
+
+**Common mistake.** At $r = 1$ no fixed point is created or destroyed; they merely swap stability.
 
 ### Problem 10 [Intro · Derivation · 2 pts · practice P3]
 
 Find the value of r for which the non-trivial fixed point is superstable (f′(x\*) = 0).
 
-*Solution.* f′(x\*) = r(1 − 2x\*) = 0 gives x\* = ½; then 1 − 1/r = ½, so r = 2.
+*Solution.* **Superstable** means $f'(x^*) = 0$, so errors shrink faster than geometrically.
+
+$$f'(x^*) = r(1 - 2x^*) = 0 \Rightarrow x^* = \tfrac12$$
+
+$$x^* = 1 - \frac1r = \frac12 \Rightarrow \frac1r = \frac12 \Rightarrow \boxed{r = 2}$$
+
+**Check.** $f'(x^*) = 2 - r = 0$ at $r = 2$ ✓ (using the other form of the slope).
 
 ### Problem 11 [Intro · Derivation · 4 pts · Quiz-1 Q1]
 
 f(x) = x² − 3x + 1 has roots c₁ = 2.63, c₂ = 0.38. For g₁(x) = (x² + 1)/3 and g₂(x) = 3 − 1/x, (a) show g(x) = x has c₁, c₂ as solutions; (b) find a∞ and b∞ for aₙ₊₁ = g₁(aₙ), bₙ₊₁ = g₂(bₙ). Why?
 
-*Solution.* (a) g₁(x) = x gives x² + 1 = 3x; g₂(x) = x gives 3x − 1 = x². Both are x² − 3x + 1 = 0. (b) g₁′ = 2x/3: 0.25 at c₂ (stable), 1.75 at c₁ (unstable), so a∞ = c₂ = 0.38 (for |a₀| < c₁). g₂′ = 1/x²: 0.14 at c₁ (stable), 6.9 at c₂ (unstable), so b∞ = c₁ = 2.63 (for most b₀ > 0).
+*Solution.* **(a)** $g_1(x) = x$:
+
+$$\frac{x^2+1}{3} = x \Rightarrow x^2 - 3x + 1 = 0$$
+
+$g_2(x) = x$:
+
+$$3 - \frac1x = x \Rightarrow 3x - 1 = x^2 \Rightarrow x^2 - 3x + 1 = 0$$
+
+Both give $f(x) = 0$, so $c_1 = 2.63$ and $c_2 = 0.38$ are fixed points of both maps.
+
+**(b)** A fixed point attracts only if $|g'| < 1$.
+
+$$g_1'(x) = \frac{2x}{3}:\quad g_1'(c_2) = 0.25\ \text{(stable)},\quad g_1'(c_1) = 1.75\ \text{(unstable)}$$
+
+$$g_2'(x) = \frac1{x^2}:\quad g_2'(c_1) = 0.14\ \text{(stable)},\quad g_2'(c_2) = 6.9\ \text{(unstable)}$$
+
+$$\boxed{a_\infty = c_2 = 0.38},\qquad \boxed{b_\infty = c_1 = 2.63}$$
+
+**Common mistake.** Same equation, different rearrangement, different answer. The rearrangement decides which root is stable.
 
 ### Problem 12 [Intro · Derivation · 8 pts · 2026 midsem Q8] (hard)
 
 Newton's iteration xₙ₊₁ = xₙ − f(xₙ)/f′(xₙ) for f(x) = 1/x − a computes 1/a. (a) Show it needs no division. (b) Show it is equivalent to a logistic map and find r; how does the map behave for this r? (c) For which x₀ does it converge to 1/a, and what happens otherwise?
 
-*Solution.* (a) f′ = −1/x², so xₙ₊₁ = xₙ + xₙ²(1/xₙ − a) = 2xₙ − axₙ²: only multiplication and subtraction. (b) Let z = ax/2: zₙ₊₁ = (a/2)(2xₙ − axₙ²) = 2zₙ − 2zₙ² = 2zₙ(1 − zₙ), a logistic map with r = 2. Its fixed point z\* = ½ (x = 1/a) is superstable, f′ = 0, so convergence is quadratic (the number of correct digits doubles each step). (c) It converges for 0 < z₀ < 1, i.e. 0 < x₀ < 2/a. Outside, z₁ ≤ 0, and from a negative value the map runs off to −∞, because the attraction is only to the basin (0, 1).
+*Solution.* **(a) No division.** With $f = 1/x - a$, $f' = -1/x^2$:
+
+$$x_{n+1} = x_n - \frac{1/x_n - a}{-1/x_n^2} = x_n + x_n^2\left(\frac1{x_n} - a\right) = 2x_n - a x_n^2$$
+
+Only multiplication and subtraction.
+
+**(b) Logistic map.** Let $z = ax/2$:
+
+$$z_{n+1} = \frac a2(2x_n - ax_n^2) = 2z_n - 2z_n^2 = 2z_n(1 - z_n)\ \Rightarrow\ \boxed{r = 2}$$
+
+The fixed point $z^* = \tfrac12$ (that is, $x = 1/a$) has $f' = 0$: it is **superstable**, so convergence is quadratic and the number of correct digits doubles each step.
+
+**(c) Basin.** Converges for $0 < z_0 < 1$, that is $0 < x_0 < 2/a$. Outside, $z_1 \le 0$, and from a negative value the iterates run off to $-\infty$.
+
+**Common mistake.** Starting at $x_0 > 2/a$: the first step overshoots to a negative value.
 
 ### Problem 13 [Intro · Derivation · 4 pts · HW 3c–d, practice P8–P9]
 
 Write the Lotka–Volterra equations and explain each term. Find the fixed points, the Jacobian and its eigenvalues at each, and describe the behaviour nearby.
 
-*Solution.* Terms as in the summary. Fixed points: (0, 0) and (δ/γ, α/β). J = \[\[α − βY, −βX\], \[γY, γX − δ\]\]. At (0, 0): diag(α, −δ), eigenvalues α, −δ: a saddle (prey grow along X, predators die along Y). At coexistence: \[\[0, −βδ/γ\], \[γα/β, 0\]\], λ² = −αδ, λ = ±i√(αδ): a centre, populations cycle with period 2π/√(αδ), predators lagging prey by a quarter cycle.
+*Solution.* **Model.** $\dot X = \alpha X - \beta XY$ (prey), $\dot Y = \gamma XY - \delta Y$ (predator): $\alpha$ prey birth, $\beta$ predation, $\gamma$ predator gain, $\delta$ predator death.
+
+**Fixed points.** $X(\alpha - \beta Y) = 0$ and $Y(\gamma X - \delta) = 0$:
+
+$$(0,0)\qquad\text{and}\qquad \left(\frac\delta\gamma,\ \frac\alpha\beta\right)$$
+
+**Jacobian.**
+
+$$J = \begin{pmatrix}\alpha - \beta Y & -\beta X\\ \gamma Y & \gamma X - \delta\end{pmatrix}$$
+
+**At $(0,0)$:** $J = \text{diag}(\alpha, -\delta)$, eigenvalues $\alpha > 0$ and $-\delta < 0$: a **saddle**.
+
+**At coexistence:**
+
+$$J = \begin{pmatrix}0 & -\beta\delta/\gamma\\ \gamma\alpha/\beta & 0\end{pmatrix}\ \Rightarrow\ \lambda^2 = -\alpha\delta\ \Rightarrow\ \lambda = \pm i\sqrt{\alpha\delta}$$
+
+A **centre**: populations cycle with period $2\pi/\sqrt{\alpha\delta}$, predators lagging prey by a quarter cycle.
+
+**Common mistake.** Pure imaginary eigenvalues alone don't prove closed orbits; the conserved quantity in Problem 16 does.
 
 ### Problem 14 [Intro · Derivation · 3 pts · HW 3e, practice P11]
 
 Non-dimensionalise the LV equations and identify the controlling parameter.
 
-*Solution.* x = γX/δ, y = βY/α, τ = αt give dx/dτ = x(1 − y), dy/dτ = ay(x − 1) with a = δ/α. One parameter remains: the ratio of predator death rate to prey birth rate. Fixed point (1, 1); small-oscillation period 2π/√a in τ.
+*Solution.* **Scale.** Let $x = \gamma X/\delta$, $y = \beta Y/\alpha$, $\tau = \alpha t$. Then
+
+$$\frac{dx}{d\tau} = \frac{\gamma}{\delta\alpha}\left(\alpha X - \beta XY\right) = x(1 - y)$$
+
+$$\frac{dy}{d\tau} = \frac{\beta}{\alpha^2}\left(\gamma XY - \delta Y\right) = \frac\delta\alpha\,y(x - 1)$$
+
+$$\boxed{\frac{dx}{d\tau} = x(1-y),\qquad \frac{dy}{d\tau} = a\,y(x-1),\qquad a = \frac\delta\alpha}$$
+
+Four parameters collapse to one: $a$, the ratio of predator death rate to prey birth rate. The fixed point is $(1,1)$ and the small-oscillation period is $2\pi/\sqrt a$ in $\tau$.
 
 ### Problem 15 [Intro · Derivation · 8 pts · 2026 midsem Q9] (hard)
 
 Modify the LV model so that prey are harvested at a constant rate h. Find the rate laws, the fixed points and the behaviour near them. Comment.
 
-*Solution.* dX/dt = αX − βXY − h, dY/dt = γXY − δY. From dY/dt = 0: Y = 0 or X = δ/γ. Y = 0 gives X = h/α (predators extinct). X = δ/γ gives Y\* = α/β − hγ/(βδ) (needs h < αδ/γ). At (δ/γ, Y\*): J = \[\[α − βY\*, −βδ/γ\], \[γY\*, 0\]\] = \[\[hγ/δ, −βδ/γ\], \[γY\*, 0\]\]: trace hγ/δ > 0, determinant βδY\* > 0, so an unstable spiral (growing oscillations). At (h/α, 0): eigenvalues α > 0 and γh/α − δ < 0, a saddle. Comment: harvesting prey leaves the prey equilibrium unchanged but lowers predators, and it destroys the neutral cycles, so the populations swing more and more widely.
+*Solution.* **Model.**
+
+$$\dot X = \alpha X - \beta XY - h,\qquad \dot Y = \gamma XY - \delta Y$$
+
+**Fixed points.** From $\dot Y = 0$: $Y = 0$ or $X = \delta/\gamma$.
+
+- $Y = 0$: $\alpha X = h \Rightarrow X = h/\alpha$ (predators extinct).
+- $X = \delta/\gamma$: $\alpha - \beta Y = h\gamma/\delta \Rightarrow Y^* = \dfrac\alpha\beta - \dfrac{h\gamma}{\beta\delta}$, which needs $h < \alpha\delta/\gamma$.
+
+**Stability at $(\delta/\gamma, Y^*)$.**
+
+$$J = \begin{pmatrix}h\gamma/\delta & -\beta\delta/\gamma\\ \gamma Y^* & 0\end{pmatrix},\qquad \text{tr} = \frac{h\gamma}\delta > 0,\quad \det = \beta\delta Y^* > 0$$
+
+Positive trace and determinant: an **unstable node or spiral** (a spiral when $\text{tr}^2 < 4\det$, which holds for small $h$).
+
+**At $(h/\alpha, 0)$:** eigenvalues $\alpha > 0$ and $\gamma h/\alpha - \delta$, a **saddle** when $h < \alpha\delta/\gamma$.
+
+**Comment.** The prey level stays $\delta/\gamma$, but predators are fewer, and the neutral cycles are destroyed, so swings grow.
 
 ### Problem 16 [Intro · Derivation · 3 pts · practice P12]
 
 Show that V = γX − δ ln X + βY − α ln Y is constant along LV trajectories.
 
-*Solution.* dV/dt = (γ − δ/X)Ẋ + (β − α/Y)Ẏ = (γX − δ)(α − βY) + (βY − α)(γX − δ) = 0.
+*Solution.* **Differentiate along a trajectory.**
+
+$$\frac{dV}{dt} = \left(\gamma - \frac\delta X\right)\dot X + \left(\beta - \frac\alpha Y\right)\dot Y$$
+
+Factor each bracket:
+
+$$\gamma - \frac\delta X = \frac{\gamma X - \delta}{X},\qquad \beta - \frac\alpha Y = \frac{\beta Y - \alpha}{Y}$$
+
+Substitute $\dot X/X = \alpha - \beta Y$ and $\dot Y/Y = \gamma X - \delta$:
+
+$$\frac{dV}{dt} = (\gamma X - \delta)(\alpha - \beta Y) + (\beta Y - \alpha)(\gamma X - \delta) = 0$$
+
+So $V$ is conserved and trajectories lie on level curves of $V$, which are closed loops around $(\delta/\gamma, \alpha/\beta)$.
 
 ### Problem 17 [Intro · Derivation · 3 pts · Quiz-1 Q2]
 
 For the SHO, write the equation of motion and non-dimensionalise it.
 
-*Solution.* mẍ = −kx; with τ = t√(k/m), ξ = x/x₀: ξ″ + ξ = 0. The only parameter is the time scale √(m/k); in these units every oscillator is identical.
+*Solution.* **Equation of motion.** $m\ddot x = -kx$.
+
+**Scale.** Let $\tau = t\sqrt{k/m}$ and $\xi = x/x_0$ with $x_0$ any length scale:
+
+$$\frac{d}{dt} = \sqrt{\frac km}\frac d{d\tau}\ \Rightarrow\ m\cdot\frac km\,x_0\,\xi'' = -kx_0\xi\ \Rightarrow\ \boxed{\xi'' + \xi = 0}$$
+
+No parameters are left: in these units **every** oscillator is identical. The only physical content is the time scale $\sqrt{m/k}$.
 
 ## C. Estimates
 
