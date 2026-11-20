@@ -97,6 +97,8 @@ Basic TRC has **no aggregates** (COUNT, SUM, AVG), **no grouping**, and no order
 
 # Practice: Tuple relational calculus
 
+Every solution below is written the way an answer should look on the exam script: **assumptions** first (each with its reason), then the **working** in full sentences, then a clearly marked **final answer**. The quoted *Examiner's notes* are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.
+
 Schemas: COMPANY as in the relational algebra chapter. AIRLINE: AIRPORT(**Airport_code**, Name, City, State), FLIGHT(**Flight_number**, Airline, Weekdays), FLIGHT_LEG(**Flight_number, Leg_number**, Departure_airport_code, Scheduled_departure_time, Arrival_airport_code, Scheduled_arrival_time), FARE(**Flight_number, Fare_code**, Amount, Restrictions). LIBRARY: BOOK(**Book_id**, Title, Publisher_name), BOOK_LOANS(**Book_id, Branch_id, Card_no**, Date_out, Due_date), LIBRARY_BRANCH(**Branch_id**, Branch_name, Address), BORROWER(**Card_no**, Name, Address, Phone).
 
 ## A. Textbook exercises set by Kamal
@@ -106,11 +108,19 @@ Schemas: COMPANY as in the relational algebra chapter. AIRLINE: AIRPORT(**Airpor
 In TRC: (a) names of employees in department 5 who work more than 10 hours per week on ProductX; (b) employees with a dependent of the same first name; (c) employees directly supervised by Franklin Wong.
 
 *Solution.*
-(a)
+
+**Assumption.** ProductX and Franklin Wong are identified by name, and the names are unique. *(Reason: the queries refer to them by name.)*
+
+**(a)** The free variable e ranges over EMPLOYEE; w and p are bound by ∃ and joined to e and to each other.
+
 $$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid\  \text{EMPLOYEE}(e) \wedge e.\text{Dno}=5 \\ &\qquad \wedge (\exists w)(\exists p)\big(\text{WORKS\_ON}(w) \wedge \text{PROJECT}(p) \\ &\qquad \wedge w.\text{Essn}=e.\text{Ssn} \wedge w.\text{Pno}=p.\text{Pnumber} \\ &\qquad \wedge p.\text{Pname}=\text{`ProductX'} \\ &\qquad \wedge w.\text{Hours}>10\big) \,\} \end{aligned} $$
-(b)
+
+**(b)** The dependent d must belong to e (join on Essn) and have e's first name.
+
 $$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid \text{EMPLOYEE}(e) \\ &\qquad \wedge (\exists d)(\text{DEPENDENT}(d) \\ &\qquad \wedge d.\text{Essn}=e.\text{Ssn} \wedge d.\text{Dependent\_name}=e.\text{Fname}) \,\} \end{aligned} $$
-(c)
+
+**(c)** The supervisor s is bound by ∃ and linked to e through Super_ssn.
+
 $$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid \text{EMPLOYEE}(e) \\ &\qquad \wedge (\exists s)(\text{EMPLOYEE}(s) \\ &\qquad \wedge s.\text{Fname}=\text{`Franklin'} \wedge s.\text{Lname}=\text{`Wong'} \\ &\qquad \wedge e.\text{Super\_ssn}=s.\text{Ssn}) \,\} \end{aligned} $$
 
 ### Problem 2 [TRC · Application · 8 pts · Elmasri 8.24 e, f, i, j]
@@ -118,17 +128,25 @@ $$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid \text{EMPLOYEE}(e) 
 (e) Employees who work on every project. (f) Employees who work on no project. (i) Names and addresses of employees who work on at least one project located in Houston but whose department has no location in Houston. (j) Last names of department managers with no dependents.
 
 *Solution.*
-(e)
-$$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid \text{EMPLOYEE}(e) \wedge (\forall p)\big(\neg\text{PROJECT}(p) \\ &\qquad \vee (\exists w)(\text{WORKS\_ON}(w) \wedge w.\text{Essn}=e.\text{Ssn} \\ &\qquad \wedge w.\text{Pno}=p.\text{Pnumber})\big) \,\} \end{aligned} $$
-Equivalently: no project p such that no WORKS_ON row links e and p.
 
-(f)
+**Assumption.** "Every project" means every tuple of PROJECT. *(Reason: no other set of projects is named.)*
+
+**(e)** For every tuple p, either p is not a project, or some WORKS_ON tuple links e to p.
+
+$$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid \text{EMPLOYEE}(e) \wedge (\forall p)\big(\neg\text{PROJECT}(p) \\ &\qquad \vee (\exists w)(\text{WORKS\_ON}(w) \wedge w.\text{Essn}=e.\text{Ssn} \\ &\qquad \wedge w.\text{Pno}=p.\text{Pnumber})\big) \,\} \end{aligned} $$
+
+Equivalently, using ∀x P ≡ ¬∃x ¬P: there is no project p such that no WORKS_ON tuple links e and p.
+
+**(f)** No WORKS_ON tuple belongs to e.
+
 $$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname} \mid \text{EMPLOYEE}(e) \\ &\qquad \wedge \neg(\exists w)(\text{WORKS\_ON}(w) \\ &\qquad \wedge w.\text{Essn}=e.\text{Ssn}) \,\} \end{aligned} $$
 
-(i)
+**(i)** Some Houston project is worked on by e, and no Houston location belongs to e's department.
+
 $$ \begin{aligned} &\{\, e.\text{Fname}, e.\text{Lname}, e.\text{Address} \mid\  \text{EMPLOYEE}(e) \\ &\qquad \wedge (\exists p)(\exists w)\big(\text{PROJECT}(p) \wedge \text{WORKS\_ON}(w) \\ &\qquad \wedge w.\text{Essn}=e.\text{Ssn} \\ &\qquad \wedge w.\text{Pno}=p.\text{Pnumber} \wedge p.\text{Plocation}=\text{`Houston'}\big) \\ &\qquad \wedge \neg(\exists l)\big(\text{DEPT\_LOCATIONS}(l) \wedge l.\text{Dnumber}=e.\text{Dno} \\ &\qquad \wedge l.\text{Dlocation}=\text{`Houston'}\big) \,\} \end{aligned} $$
 
-(j)
+**(j)** e manages some department and has no dependent.
+
 $$ \begin{aligned} &\{\, e.\text{Lname} \mid\  \text{EMPLOYEE}(e) \\ &\qquad \wedge (\exists d)(\text{DEPARTMENT}(d) \\ &\qquad \wedge d.\text{Mgr\_ssn}=e.\text{Ssn}) \\ &\qquad \wedge \neg(\exists x)(\text{DEPENDENT}(x) \wedge x.\text{Essn}=e.\text{Ssn}) \,\} \end{aligned} $$
 
 ### Problem 3 [TRC · Application · 8 pts · Elmasri 8.25]
@@ -136,51 +154,92 @@ $$ \begin{aligned} &\{\, e.\text{Lname} \mid\  \text{EMPLOYEE}(e) \\ &\qquad \we
 AIRLINE in TRC: (a) for each flight, flight number, departure airport of the first leg and arrival airport of the last leg; (b) flight numbers and weekdays of flights or legs departing 'iah' and arriving 'lax'; (c) flight number, departure code, scheduled departure time, arrival code, scheduled arrival time and weekdays of flights or legs that depart from some airport in Houston and arrive at some airport in Los Angeles; (d) all fare information for flight 'co197'.
 
 *Solution.*
-(a) No MIN or MAX in TRC, so "first leg" = a leg with no leg of the same flight numbered lower:
+
+**Assumptions.**
+1. The first leg of a flight is the one with the smallest Leg_number and the last leg the one with the largest. *(Reason: TRC has no MIN or MAX, so the order must be expressed by comparing leg numbers.)*
+2. Airports in Houston and Los Angeles are identified through AIRPORT.City. *(Reason: the question refers to cities, not airport codes.)*
+
+**(a)** Legs a and b belong to the same flight; no leg of that flight has a smaller number than a, and none has a larger number than b.
+
 $$ \begin{aligned} &\{\, a.\text{Flight\_number}, a.\text{Departure\_airport\_code}, \\ &\qquad b.\text{Arrival\_airport\_code} \mid\  \text{FLIGHT\_LEG}(a) \\ &\qquad \wedge \text{FLIGHT\_LEG}(b) \wedge a.\text{Flight\_number}=b.\text{Flight\_number} \\ &\qquad \wedge \neg(\exists x)(\text{FLIGHT\_LEG}(x) \\ &\qquad \wedge x.\text{Flight\_number}=a.\text{Flight\_number} \\ &\qquad \wedge x.\text{Leg\_number}<a.\text{Leg\_number}) \\ &\qquad \wedge \neg(\exists y)(\text{FLIGHT\_LEG}(y) \\ &\qquad \wedge y.\text{Flight\_number}=b.\text{Flight\_number} \\ &\qquad \wedge y.\text{Leg\_number}>b.\text{Leg\_number}) \,\} \end{aligned} $$
-(b)
+
+**(b)** Some leg l of flight f departs from 'iah' and arrives at 'lax'.
+
 $$ \begin{aligned} &\{\, f.\text{Flight\_number}, f.\text{Weekdays} \mid\  \text{FLIGHT}(f) \\ &\qquad \wedge (\exists l)(\text{FLIGHT\_LEG}(l) \\ &\qquad \wedge l.\text{Flight\_number}=f.\text{Flight\_number} \\ &\qquad \wedge l.\text{Departure\_airport\_code}=\text{`iah'} \\ &\qquad \wedge l.\text{Arrival\_airport\_code}=\text{`lax'}) \,\} \end{aligned} $$
-(c) Two answer variables (leg l and flight f) and two bound airports:
+
+**(c)** Both the leg l and the flight f are free (they supply output attributes); the two airports are bound.
+
 $$ \begin{aligned} &\{\, l.\text{Flight\_number}, l.\text{Departure\_airport\_code}, \\ &\qquad l.\text{Scheduled\_departure\_time}, \\ &\qquad l.\text{Arrival\_airport\_code}, \\ &\qquad l.\text{Scheduled\_arrival\_time}, f.\text{Weekdays} \mid \\ &\qquad \text{FLIGHT\_LEG}(l) \wedge \text{FLIGHT}(f) \\ &\qquad \wedge f.\text{Flight\_number}=l.\text{Flight\_number} \\ &\qquad \wedge (\exists a)(\exists b)\big(\text{AIRPORT}(a) \wedge \text{AIRPORT}(b) \\ &\qquad \wedge a.\text{City}=\text{`Houston'} \wedge b.\text{City}=\text{`Los Angeles'} \\ &\qquad \wedge l.\text{Departure\_airport\_code}=a.\text{Airport\_code} \\ &\qquad \wedge l.\text{Arrival\_airport\_code}=b.\text{Airport\_code}\big) \,\} \end{aligned} $$
-(d) $\{\, r \mid \text{FARE}(r) \wedge r.\text{Flight\_number}=\text{`co197'} \,\}$
+
+**(d)** $\{\, r \mid \text{FARE}(r) \wedge r.\text{Flight\_number}=\text{`co197'} \,\}$
 
 ### Problem 4 [TRC · Application · 6 pts · Elmasri 8.26]
 
 LIBRARY in TRC: (c) names of borrowers who have no books checked out; (d) for each book loaned out from Sharpstown whose Due_date is today, the title, borrower's name and address; (f) names, addresses and number of books checked out for borrowers with more than five books checked out.
 
 *Solution.*
-(c) $\{\, b.\text{Name} \mid \text{BORROWER}(b) \wedge \neg(\exists l)(\text{BOOK\_LOANS}(l) \wedge l.\text{Card\_no}=b.\text{Card\_no}) \,\}$
-(d)
+
+**Assumption.** "Today" is a constant date supplied with the query. *(Reason: TRC has no date functions.)*
+
+**(c)** No loan belongs to the borrower:
+
+$$ \begin{aligned} &\{\, b.\text{Name} \mid \text{BORROWER}(b) \wedge \neg(\exists l)(\text{BOOK\_LOANS}(l) \\ &\qquad \wedge l.\text{Card\_no}=b.\text{Card\_no}) \,\} \end{aligned} $$
+
+**(d)** The book k and the borrower b are free; the loan l and the branch r are bound and joined to them.
+
 $$ \begin{aligned} &\{\, k.\text{Title}, b.\text{Name}, b.\text{Address} \mid\  \text{BOOK}(k) \\ &\qquad \wedge \text{BORROWER}(b) \\ &\qquad \wedge (\exists l)(\exists r)\big(\text{BOOK\_LOANS}(l) \wedge \text{LIBRARY\_BRANCH}(r) \\ &\qquad \wedge r.\text{Branch\_name}=\text{`Sharpstown'} \\ &\qquad \wedge l.\text{Branch\_id}=r.\text{Branch\_id} \\ &\qquad \wedge l.\text{Book\_id}=k.\text{Book\_id} \\ &\qquad \wedge l.\text{Card\_no}=b.\text{Card\_no} \wedge l.\text{Due\_date}=\text{today}\big) \,\} \end{aligned} $$
-(f) **Not fully expressible**: basic TRC has no COUNT, so "number of books" cannot be returned. "More than five" alone can be written with six loan variables $l_1, \dots, l_6$ for the borrower that are pairwise different (each pair differs in Book_id or Branch_id); say so, and give that query for name and address only.
+
+**(f)** This query **cannot be expressed** in basic TRC, because TRC has no aggregate functions, so "the number of books checked out" cannot be returned. The condition "more than five books" alone can be written with six bound loan variables $l_1, \dots, l_6$ that all belong to the borrower and are pairwise different (each pair differs in Book_id or Branch_id); with it, the borrower's name and address can be returned, but not the count.
 
 ### Problem 5 [TRC · Concept · 3 pts · Elmasri 8.27]
 
 In a TRC query with n tuple variables, what is the typical minimum number of join conditions? Why? What happens with fewer?
 
-*Solution.* **n − 1**. The variables must be connected into one structure (like a spanning tree): each join condition links one more variable to the rest, so n variables need at least n − 1 links. With fewer, some variable is not linked to the others, so every combination of its tuples with the rest satisfies the formula: the result contains a **Cartesian product** of unrelated tuples, almost always wrong and very large.
+*Solution.*
+
+**Answer.** The typical minimum is **n − 1** join conditions.
+
+**Justification.**
+1. A join condition links two tuple variables. For the n variables to describe one combined fact, they must all be connected, like the edges of a spanning tree.
+2. A connected structure on n variables needs at least n − 1 links, since each link connects one more variable to the rest.
+3. With fewer than n − 1 join conditions, at least one variable is not linked to the others. Every tuple of its range then combines with every combination of the others, so the result contains a **Cartesian product** of unrelated tuples. Such a result is almost always wrong and very large.
 
 ### Problem 6 [TRC · Application · 4 pts · Elmasri 8.29]
 
 Retrieve the Ssns of employees who work on at least those projects on which the employee with Ssn = 123456789 works. Use (∀x)(IF P THEN Q) with x over PROJECT, P = "123456789 works on x", Q = "e works on x", and the rules ∀ = ¬∃¬ and IF P THEN Q = ¬P ∨ Q.
 
-*Solution.* Direct form:
+*Solution.*
+
+**Assumption.** x ranges over all tuples, so the implication "if x is a project on which 123456789 works, then e works on x" is written with ¬PROJECT(x) as one alternative. *(Reason: the universal quantifier is not restricted to one relation.)*
+
+**Direct form**, using (∀x)(IF P THEN Q) with IF P THEN Q ≡ ¬P ∨ Q:
+
 $$ \begin{aligned} &\{\, e.\text{Ssn} \mid \text{EMPLOYEE}(e) \wedge (\forall x)\Big(\neg\text{PROJECT}(x) \\ &\qquad \vee \neg(\exists w)(\text{WORKS\_ON}(w) \\ &\qquad \wedge w.\text{Essn}=\text{`123456789'} \wedge w.\text{Pno}=x.\text{Pnumber}) \\ &\qquad \vee (\exists v)(\text{WORKS\_ON}(v) \wedge v.\text{Essn}=e.\text{Ssn} \\ &\qquad \wedge v.\text{Pno}=x.\text{Pnumber})\Big) \,\} \end{aligned} $$
-Applying ∀ = ¬∃¬ and De Morgan:
+
+**Form with ∃ only**, using (∀x) P ≡ ¬(∃x)(¬P) and De Morgan's law ¬(¬A ∨ ¬B ∨ C) ≡ A ∧ B ∧ ¬C:
+
 $$ \begin{aligned} &\{\, e.\text{Ssn} \mid \text{EMPLOYEE}(e) \wedge \neg(\exists x)\Big(\text{PROJECT}(x) \\ &\qquad \wedge (\exists w)(\text{WORKS\_ON}(w) \\ &\qquad \wedge w.\text{Essn}=\text{`123456789'} \wedge w.\text{Pno}=x.\text{Pnumber}) \\ &\qquad \wedge \neg(\exists v)(\text{WORKS\_ON}(v) \wedge v.\text{Essn}=e.\text{Ssn} \\ &\qquad \wedge v.\text{Pno}=x.\text{Pnumber})\Big) \,\} \end{aligned} $$
-"There is no project that 123456789 works on and e does not." Employee 123456789 qualifies too (exclude with $e.\text{Ssn} \ne \text{`123456789'}$ if wanted).
+
+**Reading.** There is no project on which employee 123456789 works and employee e does not.
+
+**Final answer.** Either expression above. Employee 123456789 also satisfies the condition; add $e.\text{Ssn} \ne \text{`123456789'}$ to exclude them.
 
 ### Problem 7 [TRC · Application · 4 pts · Elmasri 8.30]
 
 Express in TRC: (a) $\sigma_{A=C}(R(A,B,C))$; (b) $\pi_{A,B}(R)$; (c) $R(A,B,C) * S(C,D,E)$; (d) R ∪ S; (e) R ∩ S; (f) R − S (R, S both (A, B, C)).
 
 *Solution.*
-(a) $\{\, t \mid R(t) \wedge t.A = t.C \,\}$
-(b) $\{\, t.A, t.B \mid R(t) \,\}$
-(c) $\{\, t.A, t.B, t.C, s.D, s.E \mid R(t) \wedge S(s) \wedge t.C = s.C \,\}$
-(d) $\{\, t \mid R(t) \vee S(t) \,\}$
-(e) $\{\, t \mid R(t) \wedge S(t) \,\}$
-(f) $\{\, t \mid R(t) \wedge \neg S(t) \,\}$
+
+**Answer.**
+
+| Operation | TRC expression | Explanation |
+| --- | --- | --- |
+| (a) $\sigma_{A=C}(R)$ | $\{\, t \mid R(t) \wedge t.A = t.C \,\}$ | selection becomes a condition on t |
+| (b) $\pi_{A,B}(R)$ | $\{\, t.A, t.B \mid R(t) \,\}$ | projection becomes the output list |
+| (c) $R * S$ | $\{\, t.A, t.B, t.C, s.D, s.E \mid R(t) \wedge S(s) \wedge t.C = s.C \,\}$ | natural join on C, with one copy of C |
+| (d) R ∪ S | $\{\, t \mid R(t) \vee S(t) \,\}$ | union becomes ∨ |
+| (e) R ∩ S | $\{\, t \mid R(t) \wedge S(t) \,\}$ | intersection becomes ∧ |
+| (f) R − S | $\{\, t \mid R(t) \wedge \neg S(t) \,\}$ | difference becomes ∧ ¬ |
 
 ## B. Assignment 5 queries in TRC (likely exam form)
 
@@ -190,15 +249,31 @@ Schema: BOOKS(**ISBN**, AuthorName, Title, Publisher, YearofBook), COAUTHORS(**I
 
 Complete rows of books whose senior author is younger than all the coauthors of the book.
 
-*Solution.* "No coauthor who is the same age or younger":
+*Solution.*
+
+**Assumptions.**
+1. AuthorName and JointAuthorName refer to PERSONS.Name. *(Reason: they name authors, who are persons.)*
+2. X is younger than Y if X.YearofBirth > Y.YearofBirth. *(Reason: only the year of birth is stored.)*
+3. Books with no coauthors are included. *(Reason: a universal condition over an empty set is true.)*
+
+**Answer.** The book b qualifies if there is no coauthor of b who is the same age as the senior author or younger:
+
 $$ \begin{aligned} &\{\, b \mid \text{BOOKS}(b) \wedge \neg(\exists c)(\exists p)(\exists q)\big( \text{COAUTHORS}(c) \\ &\qquad \wedge \text{PERSONS}(p) \\ &\qquad \wedge \text{PERSONS}(q) \wedge c.\text{ISBN}=b.\text{ISBN} \\ &\qquad \wedge p.\text{Name}=b.\text{AuthorName} \\ &\qquad \wedge q.\text{Name}=c.\text{JointAuthorName} \\ &\qquad \wedge p.\text{YearofBirth} \le q.\text{YearofBirth}\big) \,\} \end{aligned} $$
-Books with no coauthors are included (the ¬∃ is true). To exclude them, add $(\exists c')(\text{COAUTHORS}(c') \wedge c'.\text{ISBN}=b.\text{ISBN})$ and state the assumption.
+
+**Explanation.** The bound variables c, p and q are the coauthor tuple, the senior author's PERSONS tuple and the coauthor's PERSONS tuple. The condition p.YearofBirth ≤ q.YearofBirth says the senior author is not younger than this coauthor; ¬∃ excludes every book with such a coauthor.
+
+> **Examiner's note.** To exclude books without coauthors, add $(\exists c')(\text{COAUTHORS}(c') \wedge c'.\text{ISBN}=b.\text{ISBN})$ and state the assumption.
 
 ### Problem 9 [TRC · Application · 5 pts · A5 group Q2(a) in TRC]
 
 Complete rows of books whose senior author lives in the city of the publisher.
 
 *Solution.*
+
+**Assumption.** Residence and City are both city names and can be compared. *(Reason: the question says Residence is a city.)*
+
+**Answer.** The bound variables p and u are the senior author's PERSONS tuple and the book's PUBLISHERS tuple:
+
 $$ \begin{aligned} &\{\, b \mid \text{BOOKS}(b) \wedge (\exists p)(\exists u)\big(\text{PERSONS}(p) \\ &\qquad \wedge \text{PUBLISHERS}(u) \\ &\qquad \wedge p.\text{Name}=b.\text{AuthorName} \\ &\qquad \wedge u.\text{Publisher}=b.\text{Publisher} \\ &\qquad \wedge p.\text{Residence}=u.\text{City}\big) \,\} \end{aligned} $$
 
 ### Problem 10 [TRC · Application · 5 pts · A5 group Q2(c) in TRC]
@@ -206,19 +281,42 @@ $$ \begin{aligned} &\{\, b \mid \text{BOOKS}(b) \wedge (\exists p)(\exists u)\bi
 Complete rows of authors who published a book before a coauthor of a subsequent book of theirs was born.
 
 *Solution.*
+
+**Assumptions.**
+1. "Author" is the senior author of both books; the coauthor belongs to the later book. *(Reason: as in the A5 key.)*
+2. An earlier year means an earlier event. *(Reason: only years are stored.)*
+
+**Answer.**
+
 $$ \begin{aligned} &\{\, a \mid \text{PERSONS}(a) \wedge (\exists b_1)(\exists b_2)(\exists c)(\exists z)\big( \text{BOOKS}(b_1) \\ &\qquad \wedge \text{BOOKS}(b_2) \wedge \text{COAUTHORS}(c) \wedge \text{PERSONS}(z) \\ &\qquad \wedge b_1.\text{AuthorName}=a.\text{Name} \\ &\qquad \wedge b_2.\text{AuthorName}=a.\text{Name} \\ &\qquad \wedge b_2.\text{YearofBook} > b_1.\text{YearofBook} \\ &\qquad \wedge c.\text{ISBN}=b_2.\text{ISBN} \wedge z.\text{Name}=c.\text{JointAuthorName} \\ &\qquad \wedge z.\text{YearofBirth} > b_1.\text{YearofBook}\big) \,\} \end{aligned} $$
-Five variables, and the join conditions link all of them (a–b1, a–b2, b2–c, c–z): four links, as Problem 5 predicts.
+
+**Explanation.** b1 is the earlier book and b2 the later book, both with senior author a; c is a coauthor of b2 and z is that coauthor's PERSONS tuple. The five variables are linked by four join conditions (a–b1, a–b2, b2–c, c–z), as Problem 5 predicts.
 
 ### Problem 11 [TRC · Application · 4 pts]
 
 Publishers all of whose books were written (as senior author) by people living in the publisher's city.
 
 *Solution.*
+
+**Assumption.** A publisher with no books qualifies. *(Reason: "all of its books" is vacuously true over an empty set; add an ∃ book condition to exclude such publishers.)*
+
+**Answer.** There is no book of u whose senior author does not live in u's city:
+
 $$ \begin{aligned} &\{\, u.\text{Publisher} \mid \text{PUBLISHERS}(u) \\ &\qquad \wedge \neg(\exists b)\big( \text{BOOKS}(b) \\ &\qquad \wedge b.\text{Publisher}=u.\text{Publisher} \\ &\qquad \wedge \neg(\exists p)(\text{PERSONS}(p) \wedge p.\text{Name}=b.\text{AuthorName} \\ &\qquad \wedge p.\text{Residence}=u.\text{City})\big) \,\} \end{aligned} $$
-A publisher with no books qualifies vacuously; add an ∃ book condition if that is not wanted.
 
 ### Problem 12 [TRC · Concept · 3 pts]
 
 Which of these are safe? (a) $\{\, t \mid \neg\text{PERSONS}(t) \,\}$ (b) $\{\, t \mid \text{PERSONS}(t) \wedge \neg(\exists b)(\text{BOOKS}(b) \wedge b.\text{AuthorName}=t.\text{Name}) \,\}$ (c) $\{\, t \mid \text{PERSONS}(t) \vee \text{PUBLISHERS}(t) \,\}$
 
-*Solution.* (a) **Unsafe**: infinitely many tuples are not persons. (b) **Safe**: t is limited to PERSONS. (c) Safe in the sense that every value comes from the two relations, but **ill-formed** as a union: PERSONS and PUBLISHERS are not union-compatible (3 vs 2 attributes), so it has no meaningful result.
+*Solution.*
+
+**Definition.** A TRC expression is **safe** if every value in its result comes from the domain of the expression: the relations it mentions and the constants it uses.
+
+**(a)** $\{\, t \mid \neg\text{PERSONS}(t) \,\}$ is **unsafe**. Infinitely many tuples are not persons, and nothing restricts t to a finite relation.
+
+**(b)** $\{\, t \mid \text{PERSONS}(t) \wedge \neg(\exists b)(\ldots) \,\}$ is **safe**, because the atom PERSONS(t) restricts t to the tuples of PERSONS.
+
+**(c)** $\{\, t \mid \text{PERSONS}(t) \vee \text{PUBLISHERS}(t) \,\}$ takes all its values from the two relations, so it is safe in that sense, but it is **ill-formed**: PERSONS and PUBLISHERS are not union-compatible (three attributes against two), so the result has no well-defined schema.
+
+**Final answer.** (a) unsafe; (b) safe; (c) safe but not a valid query.
+

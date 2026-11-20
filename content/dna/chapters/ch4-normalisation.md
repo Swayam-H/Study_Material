@@ -166,53 +166,156 @@ A **multivalued dependency** X ↠ Y: the set of Y values for an X is independen
 
 # Practice: Functional dependencies and normalisation
 
+Every solution below is written the way an answer should look on the exam script: **assumptions** first (each with its reason), then the **working** in full sentences, then a clearly marked **final answer**. The quoted *Examiner's notes* are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.
+
 ## A. Assignment 4 (this year)
 
 ### Problem 1 [FD · Proof · 5 pts · Assignment 4 individual Q1]
 
 Let R(A, B, C, D, E, F, G, H) have FD set F, and suppose A belongs to no key of R. Specify one FD X → Y to add to F so that A becomes a key. Justify.
 
-*Solution.* Let K be any candidate key of R (one exists because R is a superkey of itself, and every superkey contains a candidate key). A ∉ K since A is in no key. Add **A → K**. Then $A^+$ ⊇ K by the new FD, and K → R holds since K is a key, so by transitivity A → R and $A^+$ = R. {A} is a single attribute, so it has no proper non-empty subset: A is a **candidate key**, not just a superkey. This works for any F, since it only uses that K is a key. (A → BCDEFGH also works but earned at most 4/5.)
+*Solution.*
+
+**Assumption.** F is an arbitrary set of FDs on R, and every attribute is single-valued. *(Reason: the question does not fix F, so the answer must work for every F.)*
+
+**Answer.** Add the FD **A → K**, where K is any candidate key of R.
+
+**Proof that A becomes a key.**
+1. R has at least one candidate key K, because the set of all attributes of R is a superkey and every superkey contains a candidate key. Since A belongs to no key, A ∉ K.
+2. After adding A → K, we have A → K. Since K is a key, K → R holds. By transitivity, A → R, that is, $A^+ = R$. So {A} is a superkey.
+3. {A} consists of a single attribute, so its only proper subset is the empty set, which is not a superkey. Hence {A} is minimal, and A is a **candidate key**, not merely a superkey.
+4. The argument used only the fact that K is a key, so it holds for every F.
+
+**Final answer.** Add **A → K** for a candidate key K of R; then $A^+ = R$ and A is a candidate key.
+
+> **Examiner's note.** A → R (or A → BCDEFGH) is also correct but was capped at 4 of 5, because it does not use the structure of R. A → B, or any FD with A on the right, earns nothing.
 
 ### Problem 2 [Normalisation · Application · 20 pts · Assignment 4 individual Q2]
 
 R(A, C, F, G, K, L), G = {L → K, K → GAL, C → FG, F → A}. (a) Highest normal form. (b) BCNF decomposition. (c) Minimal cover. (d) 3NF synthesis from the cover.
 
-*Solution.* Closures: $A^+$ = A, $G^+$ = G, $F^+$ = AF, $C^+$ = ACFG, $K^+ = L^+$ = AGKL, $(CK)^+ = (CL)^+$ = R.
+*Solution.*
 
-(a) C is on no right side → in every key. Keys **CK** and **CL**. Prime C, K, L; non-prime A, F, G. C → FG: C ⊂ CK, F and G non-prime → partial dependency → not 2NF. **Highest NF: 1NF.**
+**Assumption.** The given FDs are the complete specification, and all attributes are atomic. *(Reason: stated in the question; normal forms are judged with respect to $G^+$.)*
 
-(b) Violations: L → K…, K → AGL, C → FG, F → A (none of L, K, C, F is a superkey). Split on K → AGL: R1(K, L, A, G) (keys K, L; BCNF) and R2(C, F, K). In R2, C → F and C is not a key of R2 (CK is): split into (C, F) and (C, K). **{(K, L, A, G), (C, F), (C, K)}**, lossless because each split's common attribute (K, then C) is a key of one side. Also correct: {(K, L, A, G), (C, F), (C, L)}; {(F, A), (C, F, G), (K, L), (C, K)}.
+**Closures.** $A^+ = A$, $G^+ = G$, $F^+ = AF$, $C^+ = ACFG$, $K^+ = L^+ = AGKL$, $(CK)^+ = (CL)^+ = ACFGKL = R$.
 
-(c) Split: L → K, K → G, K → A, K → L, C → F, C → G, F → A. Left sides single. Redundancy test, computing the left side's closure without the FD under test: L → K gives L (keep); K → G gives AKL (keep); K → A gives GKL (keep); K → L gives AGK (keep); C → F gives CG (keep); C → G gives ACF (keep); F → A gives F (keep). Nothing is redundant. **{L → K, K → A, K → G, K → L, C → F, C → G, F → A}**.
+**(a) Highest normal form.**
+1. C appears on no right-hand side, so C is in every candidate key. $C^+ \ne R$, so C alone is not a key.
+2. $(CK)^+ = R$ and $(CL)^+ = R$, while adding A, F or G to C does not reach K or L. Hence the candidate keys are **CK** and **CL**.
+3. Prime attributes: C, K, L. Non-prime attributes: A, F, G.
+4. C → FG holds, C is a proper subset of the key CK, and F and G are non-prime. This is a partial dependency, so R is **not in 2NF**. R is in 1NF because all attributes are atomic.
 
-(d) Groups: (L, K), (K, A, G, L), (C, F, G), (F, A). No group contains CK or CL → add **(C, K)**. (L, K) ⊆ (K, A, G, L) → drop. **{(K, L, A, G), (C, F, G), (F, A), (C, K)}**, lossless and dependency-preserving.
+**(a) Answer.** The highest normal form is **1NF**.
+
+**(b) BCNF decomposition.**
+1. K → AGL violates BCNF ($K^+ = AGKL \ne R$). Decompose R into R1 = (K, L, A, G) and R2 = R − (AGL − K) = (C, F, K).
+2. In R1 the FDs K → AGL and L → K hold; K and L are keys of R1, so R1 is in BCNF.
+3. In R2 the FD C → F holds, but the key of R2 is CK, so C is not a superkey of R2. Decompose R2 into (C, F) and (C, K). Both are two-attribute relations, hence in BCNF.
+4. Each split is lossless, because the common attributes (K in step 1, C in step 3) form a key of one of the two parts.
+
+**(b) Answer.** **{(K, L, A, G), (C, F), (C, K)}**, a lossless BCNF decomposition.
+
+**(c) Minimal cover.**
+1. Splitting right-hand sides gives L → K, K → G, K → A, K → L, C → F, C → G, F → A.
+2. Every left-hand side is a single attribute, so no attribute is extraneous.
+3. For each FD X → B, compute $X^+$ using the other FDs: L → K gives $L^+ = L$; K → G gives AKL; K → A gives GKL; K → L gives AGK; C → F gives CG; C → G gives ACF; F → A gives F. In no case is B reached, so no FD is redundant.
+
+**(c) Answer.** **{L → K, K → A, K → G, K → L, C → F, C → G, F → A}**.
+
+**(d) 3NF synthesis.**
+1. One relation per left-hand side of the cover: (L, K), (K, A, G, L), (C, F, G), (F, A).
+2. No relation contains a candidate key (CK or CL), so add (C, K).
+3. (L, K) is contained in (K, A, G, L), so remove it.
+
+**(d) Answer.** **{(K, L, A, G), (C, F, G), (F, A), (C, K)}**, which is in 3NF, lossless (it contains the key CK) and dependency-preserving (every FD of the cover lies within one relation).
+
+> **Examiner's note.** Decompositions and covers are not unique; the grader checks yours against the definitions. Also correct for (b): {(K, L, A, G), (C, F), (C, L)} or {(F, A), (C, F, G), (K, L), (C, K)}. Wrong: citing K → L or L → K as a 2NF violation (K and L are prime).
 
 ### Problem 3 [FD · Proof · 10 pts · Assignment 4 group Q1]
 
 Prove or disprove: if attribute A appears on the right-hand side of no FD in F, then A belongs to every candidate key.
 
-*Solution.* **True.** Let K be any candidate key and suppose A ∉ K. K is a superkey, so A ∈ $K^+$. The closure algorithm starts from K (no A) and only ever adds attributes from right-hand sides of FDs in F; none contains A. So A ∉ $K^+$: contradiction. Hence A ∈ K, and in fact A is in every superkey. Assumption to state: "right-hand side" means the FDs as listed in F (in $F^+$, the trivial A → A always has A on the right). Proving it on examples is not a proof.
+*Solution.*
+
+**Assumption.** "Does not appear on the right-hand side of any FD in F" refers to the FDs as listed in F, not to $F^+$. *(Reason: $F^+$ always contains the trivial FD A → A, so under that reading the hypothesis could never hold.)*
+
+**Answer.** The statement is **true**.
+
+**Proof.**
+1. Let K be any candidate key of R, and suppose for contradiction that A ∉ K.
+2. Since K is a superkey, $K^+ = R$, so A ∈ $K^+$.
+3. The closure algorithm starts with the set K, which does not contain A, and each step adds only attributes that lie on the right-hand side of some FD in F.
+4. By hypothesis, A lies on no right-hand side, so no step can add A. Hence A ∉ $K^+$.
+5. Steps 2 and 4 contradict each other, so A ∈ K.
+6. K was an arbitrary candidate key, so A belongs to every candidate key.
+
+**Final answer.** True: an attribute that appears on no right-hand side cannot be derived from other attributes, so it belongs to every superkey and therefore to every candidate key.
+
+> **Examiner's note.** Checking the statement on one or two examples is not a proof; an example can only disprove a universal claim.
 
 ### Problem 4 [FD · Proof · 10 pts · Assignment 4 group Q2]
 
 For R(A1, …, An), find the minimum number of FDs that makes every non-empty subset of attributes a superkey; then give a 3NF decomposition.
 
-*Solution.* Every non-empty subset is a superkey iff every single attribute is (supersets of superkeys are superkeys). For each i, the closure of {Ai} must grow, so F needs an FD with left side exactly {Ai}: at least **n** FDs (n ≥ 2). The cycle A1 → A2, A2 → A3, …, An → A1 achieves it: following the cycle from any Ai reaches everything. Minimum **n** (0 if n = 1). Every left side is a single attribute, which is a key, so R is already in **BCNF**, hence 3NF: the decomposition is {R} itself. Wrong counts: n − 1 (open chain: $A_n^+$ = An), n(n − 1) (not minimal). Never split into single-attribute relations: their join is a Cartesian product (lossy).
+*Solution.*
+
+**Assumptions.**
+1. n ≥ 2 (for n = 1 the only non-empty subset is R itself and no FD is needed). *(Reason: the case n = 1 is trivial.)*
+2. Every FD has a non-empty left-hand side. *(Reason: ∅ → Y would force Y to be constant in every state.)*
+
+**Step 1: reduction to single attributes.** Every superset of a superkey is a superkey, and every non-empty subset contains a single attribute. So every non-empty subset is a superkey if and only if $\{A_i\}^+ = R$ for every i.
+
+**Step 2: at least n FDs are needed.** Fix i. The closure of {Ai} can grow only through an FD whose left-hand side is contained in {Ai}; since left-hand sides are non-empty, that left-hand side is exactly {Ai}. So for each i, F must contain an FD with left-hand side {Ai}. These n FDs are distinct, so |F| ≥ n.
+
+**Step 3: n FDs suffice.** Take F = {A1 → A2, A2 → A3, …, An−1 → An, An → A1}. Starting from any Ai and following the cycle reaches every attribute, so $\{A_i\}^+ = R$ for all i.
+
+**Step 4: 3NF decomposition.** Every FD in F has a single attribute on its left-hand side, and each single attribute is a key. More generally every non-trivial FD in $F^+$ has a non-empty left-hand side, which contains some Ai and is therefore a superkey. So R is already in **BCNF**, hence in 3NF, and no decomposition is needed.
+
+**Final answer.** The minimum is **n** FDs (for example the cycle A1 → A2 → … → An → A1), and the 3NF decomposition is **{R}** itself, which is trivially lossless and dependency-preserving.
+
+> **Examiner's note.** Common wrong counts: n − 1 (an open chain fails because $\{A_n\}^+ = \{A_n\}$) and n(n − 1) (sufficient but not minimal). Never decompose into single-attribute relations: their natural join is a Cartesian product, so the decomposition is lossy.
 
 ### Problem 5 [Normalisation · Application · 20 pts · Assignment 4 group Q3]
 
 R(A, C, F, G, K, L), Σ = {L → A, F → GKL, C → AFK, K → F}. Same four parts.
 
-*Solution.* $C^+$ = R; $F^+ = K^+$ = AFGKL; $L^+$ = AL. **Only key C**; prime C.
+*Solution.*
 
-(a) Single-attribute key → 2NF automatically. F → GKL: F not a superkey, right side non-prime → not 3NF. **Highest NF: 2NF.**
+**Assumption.** The FD set is written Σ to avoid confusion with the attribute G. *(Reason: the question names both the FD set and an attribute G.)*
 
-(b) Split on L → A: (L, A) and (C, F, G, K, L). In the second, F → GKL violates: split into (F, G, K, L) (keys F, K) and (C, F). **{(A, L), (F, G, K, L), (C, F)}**, lossless and here also dependency-preserving.
+**Closures.** $C^+ = R$; $F^+ = K^+ = AFGKL$; $L^+ = AL$; $A^+ = A$; $G^+ = G$.
 
-(c) **{L → A, F → G, F → K, F → L, K → F, C → K}** (C → A and C → F redundant, as shown in the Learn section). Alternative: keep C → F instead of C → K.
+**(a) Highest normal form.**
+1. C appears on no right-hand side, so it is in every key; $C^+ = R$, so **C is the only candidate key**. The only prime attribute is C.
+2. The key is a single attribute, so no partial dependency is possible: R is in **2NF**.
+3. F → GKL holds, F is not a superkey, and G, K, L are non-prime, so R is **not in 3NF**. (L → A and K → F violate 3NF in the same way.)
 
-(d) Groups (L, A), (F, G, K, L), (K, F), (C, K); C is in (C, K), no key relation needed; (K, F) ⊆ (F, G, K, L) → drop. **{(A, L), (F, G, K, L), (C, K)}**. Same as BCNF here.
+**(a) Answer.** The highest normal form is **2NF**.
+
+**(b) BCNF decomposition.**
+1. L → A violates BCNF. Decompose into R1 = (L, A), with key L, and R2 = (C, F, G, K, L).
+2. In R2 the FD F → GKL holds and F is not a key of R2. Decompose R2 into R3 = (F, G, K, L), with keys F and K, and R4 = (C, F), with key C.
+3. R1, R3 and R4 are in BCNF: in each, every non-trivial FD that holds has a key on its left-hand side.
+4. Both splits are lossless, because the common attribute (L, then F) is a key of one part.
+
+**(b) Answer.** **{(A, L), (F, G, K, L), (C, F)}**. It is also dependency-preserving here: C → AFK follows from C → F, F → KL and L → A.
+
+**(c) Minimal cover.**
+1. Split right-hand sides: L → A, F → G, F → K, F → L, C → A, C → F, C → K, K → F.
+2. All left-hand sides are single attributes, so nothing is extraneous.
+3. Test each FD against the current set. C → A is redundant (C → F → L → A); remove it. With the reduced set, C → F is redundant (C → K → F); remove it. C → K is now essential ($C^+ = C$ without it). Every other FD is essential.
+
+**(c) Answer.** **{L → A, F → G, F → K, F → L, K → F, C → K}**.
+
+**(d) 3NF synthesis.**
+1. Relations from the cover: (L, A), (F, G, K, L), (K, F), (C, K).
+2. (C, K) contains the key C, so no extra relation is needed.
+3. (K, F) is contained in (F, G, K, L), so remove it.
+
+**(d) Answer.** **{(A, L), (F, G, K, L), (C, K)}**, which is lossless and dependency-preserving; here it coincides with a BCNF decomposition.
+
+> **Examiner's note.** C → A, C → F and C → K are each redundant in the original set, but they cannot all be removed: redundancy must be tested against the current, already reduced set.
 
 ## B. Past papers (other years; style differs)
 
@@ -220,48 +323,157 @@ R(A, C, F, G, K, L), Σ = {L → A, F → GKL, C → AFK, K → F}. Same four pa
 
 R(A, B, C, D, E), FDs A → DE, B → A, D → C. (a) Primary key, with justification. (b) 2NF? (c) 3NF?
 
-*Solution.* (a) B is on no right side, so it is in every key. $B^+$: B → A → DE → C = ABCDE. **Key B** (only candidate key). (b) The key is a single attribute: no partial dependency possible, **2NF holds**. Saying "not 2NF" was marked wrong. (c) B → A → D → C: A and D are non-key, so A → DE and D → C are transitive: **not 3NF**. Decompose: **R1(B, A), R2(A, D, E), R3(D, C)**.
+*Solution.*
+
+**Assumption.** The three FDs are the complete specification. *(Reason: no other dependencies are given.)*
+
+**(a) Primary key.** B appears on no right-hand side, so it is in every key. Its closure is computed as follows: B → A adds A; A → DE adds D and E; D → C adds C. Hence $B^+ = ABCDE = R$. B is a single attribute, so it is minimal, and **B is the only candidate key**; it is the primary key.
+
+**(b) 2NF.** A relation is in 2NF if no non-prime attribute is partially dependent on a candidate key. The only key, B, is a single attribute, so it has no non-empty proper subset, and no partial dependency can exist. **R is in 2NF.**
+
+**(c) 3NF.** A relation is in 3NF if no non-prime attribute is transitively dependent on a key. Here B → A → DE and A → D → C, where A and D are not keys. So D, E and C are transitively dependent on B, and **R is not in 3NF**. Decomposing on the transitive dependencies gives R1(B, A), R2(A, D, E), R3(D, C).
+
+**Final answer.** (a) **B**. (b) **In 2NF.** (c) **Not in 3NF**; 3NF decomposition **{R1(B, A), R2(A, D, E), R3(D, C)}**, which is lossless and dependency-preserving.
+
+> **Examiner's note.** The 2023 key gave zero to "not in 2NF": with a single-attribute key, 2NF always holds.
 
 ### Problem 7 [Normalisation · Application · 5 pts · M23 endsem Q5]
 
 R(P, Q, R, S, T, U, V, W, X, Y), FDs PQ → R, PS → VW, QS → TU, P → X, W → Y; the key is PQS. In 2NF? If not, convert.
 
-*Solution.* PQ → R is a partial dependency (PQ ⊂ PQS, R non-prime): **not 2NF**. Remove partial dependencies: **R1(P, Q, R), R2(P, S, V, W, Y), R3(Q, S, T, U), R4(P, X), R5(P, Q, S)**. (W → Y is transitive, not partial; it may stay with PS → VW for 2NF, and moving it to (W, Y) gives 3NF. The official key listed it separately; either was accepted.)
+*Solution.*
+
+**Assumption.** PQS is the only candidate key, as stated. *(Reason: given in the question.)*
+
+**Working.**
+1. PQ → R holds, PQ is a proper subset of the key PQS, and R is non-prime. This is a partial dependency, so **R is not in 2NF**. (PS → VW, QS → TU and P → X are further partial dependencies.)
+2. To reach 2NF, move each partial dependency into its own relation together with its left-hand side, and keep a relation containing the key:
+   - PQ → R gives R1(P, Q, R);
+   - PS → VW, together with W → Y (Y depends on PS through W), gives R2(P, S, V, W, Y);
+   - QS → TU gives R3(Q, S, T, U);
+   - P → X gives R4(P, X);
+   - the key gives R5(P, Q, S).
+
+**Final answer.** **Not in 2NF.** 2NF decomposition: **R1(P, Q, R), R2(P, S, V, W, Y), R3(Q, S, T, U), R4(P, X), R5(P, Q, S)**.
+
+> **Examiner's note.** W → Y is a transitive dependency, not a partial one, so it may remain in R2 for 2NF; splitting R2 further into (P, S, V, W) and (W, Y) reaches 3NF and was also accepted.
 
 ### Problem 8 [Decomposition · Application · 4 pts · M23 endsem Q6]
 
 R(A, B, C, D), A → B, B → C, C → D. Is each decomposition dependency-preserving? (i) R1(A, B, D), R2(B, C). (ii) R1(A, B), R2(B, C), R3(C, D).
 
-*Solution.* (i) A → B in R1, B → C in R2. C → D: test Z = C; R1: (C ∩ ABD)⁺ adds nothing; R2: $C^+$ ∩ BC = C. Z stays C, D never reached. Also A → D holds in R1 (via $A^+$), but that does not help C → D. **Not preserving.** (ii) Each FD lies in one part: **preserving**.
+*Solution.*
 
-Advantages of decomposing: less redundancy, no update anomalies, fewer NULLs. Disadvantages: queries need joins (slower), risk of losing dependencies or creating spurious tuples if done wrong.
+**Method.** A decomposition preserves X → Y if Y is reached by: Z := X, then repeatedly Z := Z ∪ ((Z ∩ Ri)⁺ ∩ Ri) for each part Ri, until Z stops changing.
+
+**(i) R1(A, B, D), R2(B, C).**
+1. A → B lies within R1, and B → C lies within R2.
+2. For C → D: start with Z = C. In R1, C ∩ ABD is empty, so nothing is added. In R2, $C^+ ∩ BC = C$, so nothing is added. Z stays {C}, and D is never reached.
+3. So C → D is not preserved.
+
+**(ii) R1(A, B), R2(B, C), R3(C, D).** Each FD lies within one part (A → B in R1, B → C in R2, C → D in R3), so all are preserved.
+
+**Final answer.** (i) **Not dependency-preserving** (C → D is lost). (ii) **Dependency-preserving.**
+
+**Advantages and disadvantages of decomposition.** Advantages: less redundancy, and no insertion, deletion or update anomalies. Disadvantages: queries need joins, which are slower, and a careless decomposition may lose dependencies or produce spurious tuples.
 
 ### Problem 9 [Normalisation · Application · 6 pts · M25 endsem Q5]
 
 R(A, B, C, D), FDs A → B, BC → D, D → A. (a) All candidate keys. (b) 3NF? (c) BCNF?
 
-*Solution.* C is on no right side: in every key. $C^+$ = C. $(AC)^+$: A → B, BC → D → ACBD = R. $(BC)^+$ = BCDA = R. $(CD)^+$: D → A → B = R. So **keys AC, BC, CD**. Every attribute is prime. (b) **3NF holds**: every right side (B, D, A) is prime. (c) A → B: A is not a superkey → **not BCNF** (also D → A).
+*Solution.*
+
+**Assumption.** The three FDs are the complete specification. *(Reason: no others are given.)*
+
+**(a) Candidate keys.**
+1. C appears on no right-hand side, so C is in every key. $C^+ = C$, so C alone is not a key.
+2. $(AC)^+$: A → B gives B; BC → D gives D. So $(AC)^+ = ABCD = R$.
+3. $(BC)^+$: BC → D gives D; D → A gives A. So $(BC)^+ = R$.
+4. $(CD)^+$: D → A gives A; A → B gives B. So $(CD)^+ = R$.
+5. Each of these pairs is minimal, since C alone is not a key and A, B, D alone do not contain C.
+
+**(a) Answer.** The candidate keys are **AC, BC and CD**.
+
+**(b) 3NF.** Every attribute belongs to some key, so every attribute is prime. For each FD (A → B, BC → D, D → A) the right-hand side is prime, so the 3NF condition holds. **R is in 3NF.**
+
+**(c) BCNF.** A → B holds and $A^+ = AB \ne R$, so A is not a superkey. **R is not in BCNF** (D → A also violates it).
+
+**Final answer.** (a) AC, BC, CD. (b) **Yes**, in 3NF. (c) **No**, not in BCNF.
 
 ### Problem 10 [Normalisation · Application · 4 pts · M24 Quiz 4 Q3]
 
 R(A, B, C, D, E, F, G, H, I, J), FDs AB → C, AD → GH, BD → EF, A → I, H → J. In 3NF? If not, decompose.
 
-*Solution.* A, B, D are on no right side; $(ABD)^+$ = R, so **ABD** is the only key. AB → C: AB is not a superkey and C is non-prime → **not 3NF** (also partial, so not even 2NF). 3NF synthesis: **(A, B, C), (A, D, G, H), (B, D, E, F), (A, I), (H, J), (A, B, D)**; the last holds the key, so the decomposition is lossless.
+*Solution.*
+
+**Assumption.** R has the attributes A to J, with J added as stated during the quiz. *(Reason: H → J requires J to be an attribute of R.)*
+
+**Working.**
+1. A, B and D appear on no right-hand side, so they are in every key. $(ABD)^+$: AB → C, AD → GH, BD → EF, A → I, H → J; this gives all of R. So **ABD is the only candidate key**, and the prime attributes are A, B, D.
+2. AB → C holds, AB is not a superkey, and C is not prime, so **R is not in 3NF**. (It is not even in 2NF, because AB is a proper subset of the key.)
+3. The given FDs form a minimal cover (single-attribute right-hand sides after splitting, no extraneous attributes, no redundant FDs).
+4. 3NF synthesis creates one relation per left-hand side: (A, B, C), (A, D, G, H), (B, D, E, F), (A, I), (H, J). None contains the key ABD, so (A, B, D) is added.
+
+**Final answer.** **Not in 3NF.** 3NF decomposition: **{(A, B, C), (A, D, G, H), (B, D, E, F), (A, I), (H, J), (A, B, D)}**, which is lossless and dependency-preserving.
 
 ### Problem 11 [Normalisation · Application · 7 pts · M24 Quiz 4 Q4]
 
 For each, give candidate keys and decompose to BCNF through 1NF, 2NF, 3NF: (a) R1(A, B, C, D, E), A → B, C → D. (b) R2(A, B, F), AB → F, B → F.
 
-*Solution.* (a) Key **ACE** (E appears in no FD). 1NF yes (atomic). A → B and C → D are partial → not 2NF; decompose (A, B), (C, D), (A, C, E). These are in 3NF and BCNF. (b) Key **AB**. B → F is partial → not 2NF; decompose (B, F), (A, B). Both BCNF.
+*Solution.*
+
+**Assumption.** All attributes are atomic. *(Reason: no multivalued attributes are mentioned; this makes both relations 1NF.)*
+
+**(a) R1(A, B, C, D, E) with A → B, C → D.**
+1. A, C and E appear on no right-hand side, so they are in every key; $(ACE)^+ = ABCDE$. **The candidate key is ACE.**
+2. 1NF holds, because all attributes are atomic.
+3. A → B and C → D are partial dependencies (A and C are proper subsets of ACE, and B, D are non-prime), so **2NF fails**. Decompose into (A, B), (C, D) and (A, C, E).
+4. In each of these relations every FD has a key on its left-hand side, so each is in 3NF and BCNF.
+
+**(b) R2(A, B, F) with AB → F, B → F.**
+1. A and B appear on no right-hand side; $(AB)^+ = ABF$. **The candidate key is AB.**
+2. 1NF holds.
+3. B → F is a partial dependency, so **2NF fails**. Decompose into (B, F) and (A, B).
+4. Both relations are in 3NF and BCNF.
+
+**Final answer.** (a) Key ACE; BCNF decomposition **{(A, B), (C, D), (A, C, E)}**. (b) Key AB; BCNF decomposition **{(B, F), (A, B)}**.
 
 ### Problem 12 [1NF · Application · 5 pts · M24 Quiz 4 Q2]
 
 EMPLOYEE(Employee_ID, Phone_Number (multivalued), Dept, Manager_ID). Convert to 1NF and 2NF and say what problems each avoids.
 
-*Solution.* Best 1NF: EMP(**Employee_ID**, Dept, Manager_ID), EMP_PHONE(**Employee_ID, Phone**): already 2NF (EMP has a single-attribute key; EMP_PHONE is all key). Alternative 1NF: one row per phone with key (Employee_ID, Phone); then Dept and Manager_ID depend on Employee_ID alone (partial), so 2NF splits them out. 1NF avoids non-atomic values (cannot query or index one phone number). 2NF avoids repeating Dept and Manager_ID for each phone (update anomalies). Note also Dept → Manager_ID is transitive: 3NF would move it to DEPT(Dept, Manager_ID).
+*Solution.*
+
+**Assumptions.**
+1. Each employee belongs to one department, and each department has one manager. *(Reason: the table shows one Dept and one Manager ID per employee, and Sales has the same manager E13 for E01 and E04.)*
+2. Phone numbers are not shared between employees. *(Reason: no phone number appears twice.)*
+
+**1NF.** The Phone Number attribute is multivalued, which violates 1NF. Moving it into its own relation gives
+- EMP(**Employee_ID**, Dept, Manager_ID)
+- EMP_PHONE(**Employee_ID, Phone**), Employee_ID → EMP.
+
+**2NF.** EMP has a single-attribute key, so it has no partial dependency. EMP_PHONE consists only of key attributes. Both relations are therefore already in **2NF**; no further change is needed.
+
+**Problems avoided.**
+- 1NF avoids non-atomic values: with a list of phones in one cell, one phone number cannot be queried, indexed or updated on its own.
+- 2NF avoids repeating Dept and Manager_ID once per phone number (which happens if 1NF is reached by one row per phone with key (Employee_ID, Phone)); that repetition causes update anomalies.
+
+**Final answer.** 1NF and 2NF: **EMP(Employee_ID, Dept, Manager_ID)** and **EMP_PHONE(Employee_ID, Phone)**.
+
+> **Examiner's note.** The 2024 rubric also accepted the "one row per phone" 1NF followed by a 2NF split. Note that Dept → Manager_ID is a transitive dependency; 3NF would move it to DEPT(Dept, Manager_ID).
 
 ### Problem 13 [Normalisation · Concept · 3 pts · M22 endsem Q6]
 
 Should every database be normalised to 3NF? Give an example where it causes issues.
 
-*Solution.* Not always. Normalisation trades redundancy for joins. Read-heavy reporting tables (data warehouses) are often **denormalised** so that common queries avoid many joins. Example: an order-history report joining ORDER, CUSTOMER, PRODUCT and ADDRESS for every row; storing CustomerName in ORDER duplicates data but makes the report fast, and historical orders should keep the address at time of order anyway. Also, BCNF can lose dependencies (AB → C, C → B), so 3NF is often the practical stopping point.
+*Solution.*
+
+**Answer.** No, not every database should be normalised to 3NF.
+1. Normalisation removes redundancy, but each decomposition adds joins to the queries that need the data back together.
+2. In read-heavy reporting systems (data warehouses, dashboards), the same joins run constantly, so designers deliberately **denormalise** to make those queries fast.
+3. BCNF may also lose functional dependencies (for example AB → C with C → B), so 3NF is often the practical stopping point rather than BCNF.
+
+**Example.** An order-history report reads ORDER, CUSTOMER, PRODUCT and ADDRESS for every row. Storing CustomerName and the shipping address inside ORDER duplicates data, but it makes the report a single-table scan. It also keeps the address *as it was at the time of the order*, which a normalised design would overwrite when the customer moves.
+
+**Final answer.** Normalise to 3NF by default, but denormalise where join cost dominates and the redundancy is controlled, as in reporting tables.
+

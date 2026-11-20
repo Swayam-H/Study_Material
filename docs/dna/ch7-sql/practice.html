@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwoml3jv">
+<link rel="stylesheet" href="../../assets/style.css?v=mwon7yor">
 </head>
 <body data-root="../../" data-page="dna/ch7-sql/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,31 +87,54 @@
       <header class="note-head">
         <p class="eyebrow">Practice</p>
         <h1>SQL</h1>
-        <p class="note-meta">23 min read · 20 practice problems</p>
+        <p class="note-meta">34 min read · 20 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
           <span class="hint">Solutions stay collapsed until you click them.</span>
         </div>
       </header>
-      <div class="prose"><h2 id="a-assignment-6-this-year">A. Assignment 6 (this year)</h2>
+      <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
+<h2 id="a-assignment-6-this-year">A. Assignment 6 (this year)</h2>
 <p>Schema: BOOKS(<strong>ISBN</strong>, AuthorName, Title, Publisher, YearofBook), COAUTHORS(<strong>ISBN, JointAuthorName</strong>), PERSONS(<strong>Name</strong>, YearofBirth, Residence), PUBLISHERS(<strong>Publisher</strong>, City). The senior author is not repeated in COAUTHORS; author columns are never NULL.</p>
 <h3 id="problem-1-sql-application-5-pts-assignment-6-individual-a">Problem 1 [SQL · Application · 5 pts · Assignment 6 individual (a)]</h3>
 <p>For each publisher, list its authors ranked in descending order of the number of books they have published with that publisher as senior author. Output Publisher and AuthorName, grouped by publisher.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>ISBN is the key of BOOKS, so each row of BOOKS is one book. <em>(Reason: an ISBN identifies one book.)</em></li>
+<li>Only senior authorship counts. <em>(Reason: the question says &quot;as senior author&quot;, so COAUTHORS is not needed.)</em></li>
+<li>Ties within a publisher may appear in any order. <em>(Reason: no tie-breaking rule is given.)</em></li>
+</ol>
+<p><strong>Query.</strong></p>
 <pre><code class="language-sql">-- Assumption: ISBN is the key of BOOKS, so COUNT(*) per group = number of books
 SELECT   Publisher, AuthorName
 FROM     BOOKS
 GROUP BY Publisher, AuthorName
 ORDER BY Publisher, COUNT(*) DESC;
 </code></pre>
-<p>Group on <strong>both</strong> columns (one group per publisher–author pair); sort by publisher first so its rows are together, then by count descending. Common mistakes: GROUP BY Publisher only; ORDER BY COUNT(*) DESC alone (rows of one publisher scattered); no DESC; counting coauthors. A window function <code>RANK() OVER (PARTITION BY Publisher ORDER BY COUNT(*) DESC)</code> is also correct.</p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>GROUP BY Publisher, AuthorName forms one group per (publisher, author) pair; each row of a group is one book by that author with that publisher.</li>
+<li>COUNT(*) is therefore the number of such books.</li>
+<li>ORDER BY Publisher keeps each publisher's rows together, as &quot;grouped by publisher&quot; requires; COUNT(*) DESC then ranks the authors within each publisher.</li>
+<li>The count is used only for sorting; SQL allows ORDER BY on an aggregate that is not in the SELECT list.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> Common mistakes: GROUP BY Publisher only; ORDER BY COUNT(*) DESC without Publisher first; a missing DESC. A RANK() OVER (PARTITION BY Publisher …) window function is also accepted.</p>
+</blockquote>
 </details>
 <h3 id="problem-2-sql-application-5-pts-assignment-6-individual-b">Problem 2 [SQL · Application · 5 pts · Assignment 6 individual (b)]</h3>
 <p>List the book or books with the highest total number of authors (senior author plus coauthors). List all ties. Output ISBN and Title.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>The senior author is not repeated as a coauthor of the same book. <em>(Reason: COAUTHORS stores &quot;any other authors&quot;.)</em></li>
+<li>(ISBN, JointAuthorName) is the key of COAUTHORS. <em>(Reason: a person is not listed twice for one book.)</em></li>
+</ol>
+<p><strong>Query.</strong></p>
 <pre><code class="language-sql">WITH AuthorCount AS (
     SELECT   B.ISBN, B.Title, 1 + COUNT(C.JointAuthorName) AS NumAuthors
     FROM     BOOKS B LEFT JOIN COAUTHORS C ON B.ISBN = C.ISBN
@@ -121,24 +144,53 @@ SELECT ISBN, Title
 FROM   AuthorCount
 WHERE  NumAuthors = (SELECT MAX(NumAuthors) FROM AuthorCount);
 </code></pre>
-<p>LEFT JOIN keeps books with no coauthors; COUNT(C.JointAuthorName) gives 0 for them (COUNT(<em>) would give 1); comparing with MAX keeps ties (LIMIT 1 would not). Alternatives: HAVING … &gt;= ALL (…), RANK() = 1, or a UNION of both author roles then COUNT(</em>).</p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>BOOKS LEFT JOIN COAUTHORS keeps every book; a book with no coauthors gets one row with NULL coauthor columns.</li>
+<li>COUNT(C.JointAuthorName) ignores NULLs, so it is 0 for such a book; adding 1 counts the senior author. (1 + COUNT(*) would wrongly give 2.)</li>
+<li>GROUP BY B.ISBN gives one count per book; B.Title is also listed because it is in the SELECT list, which does not change the groups since ISBN is the key.</li>
+<li>Comparing with the maximum count returns every book that attains it, so ties are kept.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> ORDER BY … DESC LIMIT 1 loses ties and was marked down. HAVING … &gt;= ALL (…), RANK() = 1 and a UNION of both author roles were accepted.</p>
+</blockquote>
 </details>
 <h3 id="problem-3-sql-application-5-pts-assignment-6-individual-c">Problem 3 [SQL · Application · 5 pts · Assignment 6 individual (c)]</h3>
 <p>List the Name of every person who is neither a senior author nor a coauthor of any book.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> AuthorName and JointAuthorName are never NULL and refer to PERSONS.Name. <em>(Reason: they are key or foreign-key attributes.)</em></p>
+<p><strong>Query.</strong></p>
 <pre><code class="language-sql">SELECT P.Name
 FROM   PERSONS P
 WHERE  NOT EXISTS (SELECT * FROM BOOKS B     WHERE B.AuthorName      = P.Name)
   AND  NOT EXISTS (SELECT * FROM COAUTHORS C WHERE C.JointAuthorName = P.Name);
 </code></pre>
-<p>&quot;Neither … nor&quot; = NOT … AND NOT …; using OR returns almost everyone. Also correct: NOT IN twice (safe here because the columns are never NULL), <code>SELECT Name FROM PERSONS EXCEPT SELECT AuthorName FROM BOOKS EXCEPT SELECT JointAuthorName FROM COAUTHORS</code>, or two LEFT JOINs with both keys IS NULL.</p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>The first NOT EXISTS removes every person who is the senior author of some book.</li>
+<li>The second NOT EXISTS removes every person who is a coauthor of some book.</li>
+<li>&quot;Neither A nor B&quot; means &quot;not A and not B&quot;, so the two conditions are joined with AND.</li>
+<li>Name is the key of PERSONS, so each person appears once.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> NOT IN twice is also correct here, but only because of the assumption: a NULL in either subquery would make NOT IN return no rows. EXCEPT and two LEFT JOINs with IS NULL checks are also correct. Joining the conditions with OR is wrong.</p>
+</blockquote>
 </details>
 <h3 id="problem-4-sql-application-10-pts-assignment-6-group">Problem 4 [SQL · Application · 10 pts · Assignment 6 group]</h3>
 <p>Kahn's algorithm (L ← empty; S ← nodes with no incoming edge; while S not empty: remove n from S, append n to L, for each edge n → m remove it and if m has no other incoming edges insert m into S; if edges remain return error else return L). (a) What is the output? (b) With the graph stored as G(FromNode, ToNode), give SQL for each step. (c) Run it on a four-node graph.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) A <strong>topological order</strong> of the nodes (every edge u → v has u before v) if the graph is a DAG; an <strong>error</strong> if it has a cycle (cycle nodes never lose all incoming edges). Not unique: depends on which node is taken from S.</p>
-<p>(b) Work on a copy so G is not destroyed; store list positions because tables have no order; node set in V(Node).</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>The edges form a relation, so there are no duplicate edges and (FromNode, ToNode) is the key of G. <em>(Reason: a relation is a set.)</em></li>
+<li>The node set is stored in V(Node), so isolated nodes are included. <em>(Reason: G stores only edges.)</em></li>
+<li>The algorithm works on a copy E of G. <em>(Reason: step (G) removes edges, and the input must not be destroyed.)</em></li>
+<li>In step (D) the smallest node of S is taken. <em>(Reason: any node may be taken; choosing MIN makes the run reproducible.)</em></li>
+<li>Loops and conditions are written in a stored procedure with variables n and m. <em>(Reason: SQL has no while or if outside procedures.)</em></li>
+</ol>
+<p><strong>(a) Output.</strong> The algorithm is Kahn's algorithm. If G is a directed acyclic graph, L is a <strong>topological order</strong> of its nodes: every node appears once, and for every edge u → v, u appears before v. If G has a cycle, the nodes on the cycle never lose all their incoming edges, edges remain at step (J), and the algorithm returns an <strong>error</strong>. The order is not unique; it depends on the choice made in step (D).</p>
+<p><strong>(b) SQL for each step.</strong></p>
 <pre><code class="language-sql">CREATE TABLE E AS SELECT FromNode, ToNode FROM G;                 -- working copy
 CREATE TABLE L (Pos INT PRIMARY KEY, Node INT);                   -- (A)
 CREATE TABLE S AS SELECT Node FROM V
@@ -153,16 +205,81 @@ INSERT INTO S VALUES (m);                                         -- (I)
 SELECT COUNT(*) FROM E;                                           -- (J) &gt; 0 → error
 SELECT Node FROM L ORDER BY Pos;                                  -- (K)
 </code></pre>
-<p>The loops go in a stored procedure (WHILE … DO … END WHILE; IF … THEN … END IF; SIGNAL for the error) or a host program.</p>
-<p>(c) Edges 1→2, 1→3, 2→4, 3→4. S = {1}. Round 1: n = 1, L = [1]; delete 1→2 (2 has no other incoming → S = {2}), delete 1→3 (S = {2, 3}). Round 2: n = 2, L = [1, 2]; delete 2→4, but 3→4 remains, so 4 not added. Round 3: n = 3, L = [1, 2, 3]; delete 3→4, S = {4}. Round 4: n = 4, L = [1, 2, 3, 4]. E is empty → return [1, 2, 3, 4]. With a cycle (add the edge 4→1): every node now has an incoming edge, so S starts empty, the loop never runs, and (J) finds edges left → error.</p>
-<p>Common mistakes: (B) using FromNode (no <em>outgoing</em> edge); (D) not deleting n from S (infinite loop); (G) deleting with ToNode = m only; (H)/(J) checking G instead of E; (K) no ORDER BY.</p>
+<p>The list L stores an explicit position Pos because a table has no inherent row order. Steps (H) and (J) must examine the working copy E, not G, because G never changes.</p>
+<p><strong>(c) Run on the graph with edges 1→2, 1→3, 2→4, 3→4.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Round</th>
+<th>n</th>
+<th>Edges removed</th>
+<th>Nodes added to S</th>
+<th>L after the round</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start</td>
+<td>—</td>
+<td>—</td>
+<td>1 (only node with no incoming edge)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1→2, 1→3</td>
+<td>2, 3</td>
+<td>[1]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>2→4</td>
+<td>none (3→4 remains)</td>
+<td>[1, 2]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>3→4</td>
+<td>4</td>
+<td>[1, 2, 3]</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>none</td>
+<td>none</td>
+<td>[1, 2, 3, 4]</td>
+</tr>
+</tbody>
+</table></div>
+<p>After round 4, S is empty and E has no edges, so the algorithm returns <strong>[1, 2, 3, 4]</strong>. If the edge 4→1 is added, every node has an incoming edge, S starts empty, the loop never runs, edges remain, and step (J) returns an error.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Common mistakes: (B) using FromNode (no outgoing edge) instead of ToNode; (D) not deleting n from S, which loops forever; (G) deleting with ToNode = m only; (H) or (J) checking G instead of E; (K) no ORDER BY.</p>
+</blockquote>
 </details>
 <h2 id="b-textbook-exercises-set-by-kamal">B. Textbook exercises set by Kamal</h2>
 <p>UNIVERSITY (Elmasri Fig 1.2): STUDENT(Name, <strong>Student_number</strong>, Class, Major), COURSE(Course_name, <strong>Course_number</strong>, Credit_hours, Department), SECTION(<strong>Section_identifier</strong>, Course_number, Semester, Year, Instructor), GRADE_REPORT(<strong>Student_number, Section_identifier</strong>, Grade), PREREQUISITE(<strong>Course_number, Prerequisite_number</strong>).</p>
 <h3 id="problem-5-sql-application-6-pts-elmasri-6-5">Problem 5 [SQL · Application · 6 pts · Elmasri 6.5]</h3>
 <p>What referential integrity constraints should hold on UNIVERSITY? Write the DDL.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> SECTION.Course_number → COURSE; GRADE_REPORT.Student_number → STUDENT; GRADE_REPORT.Section_identifier → SECTION; PREREQUISITE.Course_number → COURSE; PREREQUISITE.Prerequisite_number → COURSE.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Deleting a student, section or course deletes the dependent grade and prerequisite rows. <em>(Reason: those rows have no meaning without their parents; RESTRICT is equally defensible if records must be kept.)</em></li>
+<li>Class takes the values 1 to 5. <em>(Reason: Elmasri's state uses classes 1 to 5.)</em></li>
+</ol>
+<p><strong>Referential integrity constraints.</strong></p>
+<ol>
+<li>SECTION.Course_number → COURSE.Course_number</li>
+<li>GRADE_REPORT.Student_number → STUDENT.Student_number</li>
+<li>GRADE_REPORT.Section_identifier → SECTION.Section_identifier</li>
+<li>PREREQUISITE.Course_number → COURSE.Course_number</li>
+<li>PREREQUISITE.Prerequisite_number → COURSE.Course_number</li>
+</ol>
+<p><strong>DDL.</strong></p>
 <pre><code class="language-sql">CREATE TABLE STUDENT (
   Name VARCHAR(30) NOT NULL, Student_number INT PRIMARY KEY,
   Class INT CHECK (Class BETWEEN 1 AND 5), Major CHAR(4));
@@ -184,12 +301,18 @@ CREATE TABLE PREREQUISITE (
   Prerequisite_number CHAR(8) REFERENCES COURSE(Course_number) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (Course_number, Prerequisite_number));
 </code></pre>
-<p>CASCADE on GRADE_REPORT is a choice (deleting a student deletes their grades); RESTRICT is also defensible if records must be kept. Say which and why.</p>
 </details>
 <h3 id="problem-6-sql-application-6-pts-elmasri-6-8">Problem 6 [SQL · Application · 6 pts · Elmasri 6.8]</h3>
 <p>Write DDL for the LIBRARY schema with keys and referential triggered actions: BOOK(Book_id, Title, Publisher_name), BOOK_AUTHORS(Book_id, Author_name), PUBLISHER(Name, Address, Phone), BOOK_COPIES(Book_id, Branch_id, No_of_copies), BOOK_LOANS(Book_id, Branch_id, Card_no, Date_out, Due_date), LIBRARY_BRANCH(Branch_id, Branch_name, Address), BORROWER(Card_no, Name, Address, Phone).</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Authors and copies have no meaning without their book, so they are deleted with it. <em>(Reason: existence dependency.)</em></li>
+<li>A borrower with books on loan must not be deleted. <em>(Reason: the loan record must be kept until the book is returned.)</em></li>
+<li>Deleting a publisher keeps its books with an unknown publisher. <em>(Reason: the books still exist in the library.)</em></li>
+</ol>
+<p><strong>DDL.</strong></p>
 <pre><code class="language-sql">CREATE TABLE PUBLISHER (Name VARCHAR(40) PRIMARY KEY, Address VARCHAR(80), Phone VARCHAR(15));
 CREATE TABLE BOOK (
   Book_id INT PRIMARY KEY, Title VARCHAR(80) NOT NULL,
@@ -214,12 +337,18 @@ CREATE TABLE BOOK_LOANS (
     ON DELETE RESTRICT ON UPDATE CASCADE,
   CHECK (Due_date &gt;= Date_out));
 </code></pre>
-<p>Reasons: authors and copies are meaningless without the book (CASCADE); a borrower with books out should not vanish (RESTRICT); a deleted publisher leaves its books (SET NULL).</p>
+<p><strong>Justification of the triggered actions.</strong> CASCADE is used where the referencing rows are existence-dependent (BOOK_AUTHORS, BOOK_COPIES); RESTRICT where deletion would lose an open loan (BOOK_LOANS); SET NULL where the referencing row should survive (BOOK.Publisher_name). ON UPDATE CASCADE propagates key changes everywhere.</p>
 </details>
 <h3 id="problem-7-sql-application-10-pts-elmasri-6-10-all-of-8-16-in">Problem 7 [SQL · Application · 10 pts · Elmasri 6.10 (all of 8.16 in SQL)]</h3>
 <p>COMPANY: (a) department 5 employees working more than 10 hours on ProductX; (b) employees with a dependent of the same first name; (c) employees supervised by Franklin Wong; (d) each project's name and total hours; (e) employees on every project; (f) employees on no project; (g) each department's name and average salary; (h) average salary of female employees; (i) employees on a Houston project whose department has no Houston location; (j) last names of managers with no dependents.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Names are output as (Fname, Lname). <em>(Reason: &quot;names&quot; in the COMPANY schema.)</em></li>
+<li>&quot;Every project&quot; means every row of PROJECT. <em>(Reason: no other set is named.)</em></li>
+</ol>
+<p><strong>Queries.</strong></p>
 <pre><code class="language-sql">-- (a)
 SELECT E.Fname, E.Lname
 FROM   EMPLOYEE E JOIN WORKS_ON W ON E.Ssn = W.Essn JOIN PROJECT P ON W.Pno = P.Pnumber
@@ -257,28 +386,46 @@ WHERE  P.Plocation = 'Houston'
 SELECT E.Lname FROM EMPLOYEE E JOIN DEPARTMENT D ON D.Mgr_ssn = E.Ssn
 WHERE  NOT EXISTS (SELECT * FROM DEPENDENT X WHERE X.Essn = E.Ssn);
 </code></pre>
-<p>On Elmasri's Figure 5.6 state: (a) John Smith, Joyce English; (b) none; (c) John Smith, Ramesh Narayan, Joyce English; (e) none; (f) none; (h) 31000; (i) Jennifer Wallace (she works on Reorganization in Houston, and department 4 is only in Stafford); (j) Borg.</p>
+<p><strong>Explanation of the non-trivial parts.</strong></p>
+<ul>
+<li>(d) The LEFT JOIN keeps projects with no workers (their total is NULL).</li>
+<li>(e) Double NOT EXISTS expresses division: there is no project on which the employee does not work.</li>
+<li>(f), (i), (j) use NOT EXISTS for &quot;no&quot; and &quot;has no&quot;.</li>
+<li>(i) DISTINCT removes duplicates when an employee works on several Houston projects.</li>
+</ul>
+<p><strong>Results on Elmasri's Figure 5.6 state.</strong> (a) John Smith, Joyce English. (b) None. (c) John Smith, Ramesh Narayan, Joyce English. (e) None. (f) None. (h) 31000. (i) Jennifer Wallace (she works on Reorganization in Houston, and department 4 is located only in Stafford). (j) Borg.</p>
 </details>
 <h3 id="problem-8-sql-application-4-pts-elmasri-6-13">Problem 8 [SQL · Application · 4 pts · Elmasri 6.13]</h3>
 <p>On UNIVERSITY: (a) insert student ⟨'Johnson', 25, 1, 'Math'⟩; (b) change Smith's class to 2; (c) insert course ⟨'Knowledge Engineering', 'cs4390', 3, 'cs'⟩; (d) delete the student named Smith with number 17.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> The column order of STUDENT is (Name, Student_number, Class, Major) and of COURSE (Course_name, Course_number, Credit_hours, Department). <em>(Reason: as in Elmasri Figure 1.2.)</em></p>
+<p><strong>Statements.</strong></p>
 <pre><code class="language-sql">INSERT INTO STUDENT VALUES ('Johnson', 25, 1, 'Math');
 UPDATE STUDENT SET Class = 2 WHERE Name = 'Smith';
 INSERT INTO COURSE VALUES ('Knowledge Engineering', 'cs4390', 3, 'cs');
 DELETE FROM STUDENT WHERE Name = 'Smith' AND Student_number = 17;
 </code></pre>
-<p>(b) updates every Smith; if names are not unique, use the Student_number. (d) succeeds only if GRADE_REPORT rows for 17 are cascaded or none exist; otherwise it is rejected (referential integrity).</p>
+<p><strong>Notes on each statement.</strong></p>
+<ul>
+<li>(b) changes every student named Smith; if names are not unique, the condition should use Student_number.</li>
+<li>(d) succeeds only if student 17 has no GRADE_REPORT rows, or the foreign key cascades; otherwise it is rejected by referential integrity.</li>
+</ul>
 </details>
 <h3 id="problem-9-sql-concept-4-pts-elmasri-6-15">Problem 9 [SQL · Concept · 4 pts · Elmasri 6.15]</h3>
 <p>EMPSUPERFK is changed to FOREIGN KEY (Super_ssn) REFERENCES EMPLOYEE(Ssn) ON DELETE CASCADE ON UPDATE CASCADE. (a) What happens on DELETE FROM EMPLOYEE WHERE Lname = 'Borg'? (b) CASCADE or SET NULL here?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) Borg (888665555) is the root of the supervision tree. Deleting him cascades to everyone he supervises (Wong, Wallace), then to everyone <em>they</em> supervise (Smith, Narayan, English, Zelaya, Jabbar): <strong>all eight employees are deleted</strong> (and, through other cascades, possibly their WORKS_ON and DEPENDENT rows; DEPARTMENT.Mgr_ssn references would block it if RESTRICT). (b) <strong>SET NULL</strong> is better: losing a supervisor should not delete the people they supervised.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> The database is in the state of Elmasri Figure 5.6, where Borg (888665555) supervises Wong and Wallace. <em>(Reason: given.)</em></p>
+<p><strong>(a)</strong> Borg is deleted. Because the foreign key cascades, every employee whose Super_ssn is Borg's (Wong, Wallace) is deleted too; this in turn deletes everyone they supervise (Smith, Narayan, English from Wong; Zelaya, Jabbar from Wallace). <strong>All eight employees are deleted.</strong> Rows in other tables that reference them are then handled by those tables' own foreign-key actions; a RESTRICT on DEPARTMENT.Mgr_ssn, for example, would make the whole delete fail.</p>
+<p><strong>(b)</strong> <strong>SET NULL is better.</strong> Losing a supervisor should not delete the employees they supervised; with SET NULL those employees remain, with no supervisor until a new one is assigned.</p>
 </details>
 <h3 id="problem-10-sql-application-4-pts-elmasri-7-5">Problem 10 [SQL · Application · 4 pts · Elmasri 7.5]</h3>
 <p>(a) For each department whose average salary is more than 30000, the department name and number of employees. (b) The same but counting only male employees: can it be done?</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Every employee has a non-NULL Dno. <em>(Reason: as in the COMPANY schema.)</em></p>
+<p><strong>Queries.</strong></p>
 <pre><code class="language-sql">-- (a)
 SELECT D.Dname, COUNT(*) FROM DEPARTMENT D JOIN EMPLOYEE E ON E.Dno = D.Dnumber
 GROUP BY D.Dnumber, D.Dname
@@ -289,12 +436,20 @@ WHERE  E.Sex = 'M'
   AND  D.Dnumber IN (SELECT Dno FROM EMPLOYEE GROUP BY Dno HAVING AVG(Salary) &gt; 30000)
 GROUP BY D.Dnumber, D.Dname;
 </code></pre>
-<p>(b) Yes, but not by adding WHERE Sex = 'M' to (a): that would also restrict the average to men. The department condition goes into a nested query. On Figure 5.6: (a) Research 4, Administration 3, Headquarters 1; (b) Research 3, Administration 1, Headquarters 1.</p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>In (a), HAVING tests the average salary of each department's group of employees.</li>
+<li>In (b), the count must be over male employees only, but the average over <strong>all</strong> employees. Adding WHERE Sex = 'M' to (a) would restrict the average as well, so the department condition is moved into a nested query that groups all employees.</li>
+</ol>
+<p><strong>Results on Figure 5.6.</strong> (a) Research 4, Administration 3, Headquarters 1. (b) Research 3, Administration 1, Headquarters 1.</p>
+<p><strong>Final answer.</strong> Yes, (b) can be specified in SQL, but only with a nested query for the department condition.</p>
 </details>
 <h3 id="problem-11-sql-application-6-pts-elmasri-7-7">Problem 11 [SQL · Application · 6 pts · Elmasri 7.7]</h3>
 <p>Nested queries: (a) employees in the department of the highest-paid employee; (b) employees whose supervisor's supervisor has Ssn 888665555; (c) employees earning at least 10000 more than the lowest-paid employee.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Salaries are not NULL. <em>(Reason: MAX and MIN ignore NULLs, and comparisons with NULL fail.)</em></p>
+<p><strong>Queries.</strong></p>
 <pre><code class="language-sql">-- (a)
 SELECT Fname, Lname FROM EMPLOYEE
 WHERE Dno IN (SELECT Dno FROM EMPLOYEE WHERE Salary = (SELECT MAX(Salary) FROM EMPLOYEE));
@@ -305,11 +460,19 @@ WHERE Super_ssn IN (SELECT Ssn FROM EMPLOYEE WHERE Super_ssn = '888665555');
 SELECT Fname, Lname FROM EMPLOYEE
 WHERE Salary &gt;= 10000 + (SELECT MIN(Salary) FROM EMPLOYEE);
 </code></pre>
+<p><strong>Explanation.</strong></p>
+<ul>
+<li>(a) The innermost query finds the highest salary, the middle one the department(s) of the employee(s) earning it, and the outer query all employees of those departments. IN handles ties in different departments.</li>
+<li>(b) The inner query finds the employees supervised by 888665555; the outer query finds the employees whose supervisor is one of them.</li>
+<li>(c) The scalar subquery returns the lowest salary; 10000 is added to it.</li>
+</ul>
 </details>
 <h3 id="problem-12-sql-application-6-pts-elmasri-7-8">Problem 12 [SQL · Application · 6 pts · Elmasri 7.8]</h3>
 <p>Views: (a) department name, manager name, manager salary; (b) employee name, supervisor name, salary for employees in Research; (c) project name, controlling department name, number of employees, total hours; (d) as (c) for projects with more than one employee.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> An employee with no supervisor should still appear in view (b). <em>(Reason: losing rows silently is rarely intended.)</em></p>
+<p><strong>Views.</strong></p>
 <pre><code class="language-sql">CREATE VIEW DEPT_MGR AS
   SELECT D.Dname, E.Fname, E.Lname, E.Salary
   FROM DEPARTMENT D JOIN EMPLOYEE E ON D.Mgr_ssn = E.Ssn;
@@ -329,17 +492,35 @@ CREATE VIEW PROJ_SUMMARY_BIG AS
   GROUP BY P.Pnumber, P.Pname, D.Dname
   HAVING COUNT(*) &gt; 1;
 </code></pre>
-<p>LEFT JOIN to the supervisor keeps employees with none (Borg-style roots).</p>
+<p><strong>Explanation.</strong></p>
+<ul>
+<li>(b) uses a LEFT JOIN to the supervisor so that employees with no supervisor are kept.</li>
+<li>(c) uses a LEFT JOIN to WORKS_ON so that projects with no employees appear with count 0; COUNT(W.Essn) ignores the NULL row.</li>
+<li>(d) uses an inner join, since projects with more than one employee necessarily have WORKS_ON rows, and HAVING COUNT(*) &gt; 1.</li>
+</ul>
 </details>
 <h3 id="problem-13-sql-concept-5-pts-elmasri-7-9">Problem 13 [SQL · Concept · 5 pts · Elmasri 7.9]</h3>
 <p>DEPT_SUMMARY(D, C, Total_s, Average_s) AS SELECT Dno, COUNT(*), SUM(Salary), AVG(Salary) FROM EMPLOYEE GROUP BY Dno. Which are allowed? (a) SELECT * FROM DEPT_SUMMARY; (b) SELECT D, C … WHERE Total_s &gt; 100000; (c) SELECT D, Average_s … WHERE C &gt; (SELECT C … WHERE D = 4); (d) UPDATE DEPT_SUMMARY SET D = 3 WHERE D = 4; (e) DELETE FROM DEPT_SUMMARY WHERE C &gt; 4.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Queries (a)–(c) are allowed (query modification rewrites them on EMPLOYEE). (a) rows (5, 4, 133000, 33250), (4, 3, 93000, 31000), (1, 1, 55000, 55000). (b) becomes <code>SELECT Dno, COUNT(*) FROM EMPLOYEE GROUP BY Dno HAVING SUM(Salary) &gt; 100000</code> → (5, 4). (c) departments with more employees than department 4's 3 → (5, 33250). Updates (d) and (e) are <strong>not allowed</strong>: the view is defined with grouping and aggregates, so a view row does not correspond to one base row (changing D would mean moving all department-4 employees; deleting a summary row has no single meaning).</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Views are implemented by query modification. <em>(Reason: the question asks for the corresponding queries on the base relations.)</em></p>
+<p><strong>(a) Allowed.</strong> It is rewritten as SELECT Dno, COUNT(*), SUM(Salary), AVG(Salary) FROM EMPLOYEE GROUP BY Dno. Result: (5, 4, 133000, 33250), (4, 3, 93000, 31000), (1, 1, 55000, 55000).</p>
+<p><strong>(b) Allowed.</strong> It is rewritten as SELECT Dno, COUNT(*) FROM EMPLOYEE GROUP BY Dno HAVING SUM(Salary) &gt; 100000. Result: (5, 4).</p>
+<p><strong>(c) Allowed.</strong> It returns the departments with more employees than department 4 (which has 3): result (5, 33250).</p>
+<p><strong>(d) Not allowed.</strong> The view is defined with GROUP BY and aggregates, so a view row does not correspond to one base row. Changing D from 4 to 3 has no well-defined meaning on EMPLOYEE (it would require moving every employee of department 4).</p>
+<p><strong>(e) Not allowed</strong>, for the same reason: deleting a summary row has no single corresponding change to EMPLOYEE.</p>
 </details>
 <h3 id="problem-14-sql-application-5-pts-elmasri-10-7">Problem 14 [SQL · Application · 5 pts · Elmasri 10.7]</h3>
 <p>Embedded SQL in C: read a student's name and print their GPA (A = 4, B = 3, C = 2, D = 1).</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>GPA is weighted by credit hours. <em>(Reason: the usual definition; an unweighted average is acceptable if stated.)</em></li>
+<li>Grades other than A to D (for example F) count as 0 points. <em>(Reason: only A to D are given values.)</em></li>
+<li><code>prompt</code> is a helper that reads a string from the user. <em>(Reason: as in Elmasri's examples.)</em></li>
+</ol>
+<p><strong>Program segment.</strong></p>
 <pre><code class="language-c">EXEC SQL BEGIN DECLARE SECTION;
   varchar sname[31]; char grade[2]; int credits;
   int SQLCODE;
@@ -362,13 +543,25 @@ while (SQLCODE == 0) {
 EXEC SQL CLOSE G;
 if (hours &gt; 0) printf(&quot;GPA = %.2f\n&quot;, points / hours); else printf(&quot;No grades\n&quot;);
 </code></pre>
-<p>Key points: host variables declared in the DECLARE SECTION and prefixed with ':' in SQL; a cursor because the query returns many rows; the loop stops when SQLCODE becomes 100 (no more rows). Weighting by credit hours is the usual definition; an unweighted average is acceptable if stated.</p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>Host variables are declared in the DECLARE SECTION and written with a colon prefix inside SQL statements.</li>
+<li>A cursor is needed because the query returns many rows, one per course taken; FETCH reads them one at a time into host variables.</li>
+<li>The loop stops when SQLCODE is no longer 0 (100 means no more rows).</li>
+<li>Points are accumulated as grade value times credit hours, and the GPA is their total divided by the total hours.</li>
+</ol>
 </details>
 <h2 id="c-past-papers-other-years-style-differs">C. Past papers (other years; style differs)</h2>
 <h3 id="problem-15-sql-application-6-pts-m25-endsem-q1">Problem 15 [SQL · Application · 6 pts · M25 endsem Q1]</h3>
 <p>Hospital: Patients(PatientID, FirstName, LastName, DOB, BloodType), Doctors(DoctorID, FirstName, LastName, Specialty, HireDate), Admissions(AdmissionID, PatientID, DoctorID, AdmissionDate, Diagnosis). (a) Blood types shared by more than one patient, with PatientCount, descending. (b) Patients whose LastName is longer than five letters or whose BloodType is negative. (c) Set the diagnosis of Rebecca Adler's most recent admission to 'Cluster Headache' without using AdmissionID directly.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Rebecca Adler is identified by first and last name, and there is only one such patient. <em>(Reason: the question names her.)</em></li>
+<li>&quot;Negative&quot; blood types are those ending in '-'. <em>(Reason: the question gives 'O-' and 'AB-' as examples.)</em></li>
+</ol>
+<p><strong>Queries.</strong></p>
 <pre><code class="language-sql">-- (a)
 SELECT BloodType, COUNT(*) AS PatientCount FROM Patients
 GROUP BY BloodType HAVING COUNT(*) &gt; 1
@@ -384,27 +577,115 @@ WHERE PatientID = (SELECT PatientID FROM Patients WHERE FirstName = 'Rebecca' AN
                        WHERE A.PatientID = (SELECT PatientID FROM Patients
                                             WHERE FirstName = 'Rebecca' AND LastName = 'Adler'));
 </code></pre>
-<p>MySQL forbids a subquery on the table being updated; wrap it in a derived table (<code>SELECT MAX(...) FROM (SELECT ...) T</code>) or use <code>ORDER BY AdmissionDate DESC LIMIT 1</code> in the UPDATE.</p>
+<p><strong>Explanation.</strong></p>
+<ul>
+<li>(a) HAVING COUNT(*) &gt; 1 keeps the blood types with more than one patient; the result is sorted by the alias.</li>
+<li>(b) LENGTH counts characters; LIKE '%-' matches values ending in a minus sign; the two conditions are joined with OR, as the question says &quot;either&quot;.</li>
+<li>(c) The inner subquery finds the latest admission date for her; only that admission is updated, without using AdmissionID.</li>
+</ul>
+<blockquote>
+<p><strong>Examiner's note.</strong> MySQL does not allow a subquery on the table being updated; wrap it in a derived table, or use ORDER BY AdmissionDate DESC LIMIT 1 in the UPDATE, and say which DBMS you assume.</p>
+</blockquote>
 </details>
 <h3 id="problem-16-sql-application-4-pts-m25-endsem-q1-d-b">Problem 16 [SQL · Application · 4 pts · M25 endsem Q1(d)B]</h3>
 <p>List every doctor and the number of admissions they handled, including doctors with zero, highest first, using a JOIN.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> See the Learn section: Doctors LEFT JOIN Admissions, GROUP BY the doctor's key and names, COUNT(A.AdmissionID), ORDER BY count DESC. On the sample data: 701 has 2; 703, 704, 705, 706 have 1; 702 (Cuddy) has 0 and must appear.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> DoctorID is the key of Doctors. <em>(Reason: it identifies a doctor.)</em></p>
+<p><strong>Query.</strong></p>
+<pre><code class="language-sql">SELECT   D.DoctorID, D.FirstName, D.LastName, COUNT(A.AdmissionID) AS NumAdmissions
+FROM     Doctors D LEFT JOIN Admissions A ON D.DoctorID = A.DoctorID
+GROUP BY D.DoctorID, D.FirstName, D.LastName
+ORDER BY NumAdmissions DESC;
+</code></pre>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>The LEFT JOIN keeps every doctor, including those with no admissions; such a doctor gets one row with NULL admission columns.</li>
+<li>COUNT(A.AdmissionID) ignores NULLs, so it gives 0 for those doctors; COUNT(*) would wrongly give 1.</li>
+<li>The result is sorted from the highest count to the lowest.</li>
+</ol>
+<p><strong>Result on the sample data.</strong> 701 (House) 2; 703, 704, 705 and 706 have 1 each; 702 (Cuddy) 0.</p>
 </details>
 <h3 id="problem-17-sql-concept-3-pts-m25-endsem-q3">Problem 17 [SQL · Concept · 3 pts · M25 endsem Q3]</h3>
 <p>Query A: SELECT EmployeeID, SUM(SaleAmount) FROM Sales WHERE SaleAmount &gt; 100 GROUP BY EmployeeID. Query B: … GROUP BY EmployeeID HAVING SaleAmount &gt; 100. Which is correct?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>A</strong>. WHERE filters individual sales before grouping, so SUM adds only sales over 100. <strong>B fails</strong>: HAVING is evaluated per group, and SaleAmount is not a single value per group (not grouped, not aggregated); standard SQL rejects it. Even if a DBMS accepted it, it would test an arbitrary row of the group.</p>
+<p><em>Solution.</em></p>
+<p><strong>Answer.</strong> <strong>Query A</strong> is correct; <strong>Query B</strong> fails.</p>
+<p><strong>Justification.</strong></p>
+<ol>
+<li>In Query A, WHERE SaleAmount &gt; 100 is applied to individual rows <em>before</em> grouping, so SUM adds only the sales over 100 for each employee. This is exactly what was asked.</li>
+<li>In Query B, HAVING is evaluated once per group, after grouping. SaleAmount is neither a grouping attribute nor inside an aggregate, so it has no single value per group, and standard SQL rejects the query.</li>
+<li>Even a DBMS that accepted Query B would test an arbitrary row of each group, and SUM would still include sales of 100 or less.</li>
+</ol>
+<p><strong>Final answer.</strong> Use WHERE for conditions on individual rows and HAVING for conditions on groups (for example HAVING SUM(SaleAmount) &gt; 1000).</p>
 </details>
 <h3 id="problem-18-sql-numerical-5-pts-m23-endsem-q3">Problem 18 [SQL · Numerical · 5 pts · M23 endsem Q3]</h3>
 <p>Students(1 Alice CS 21, 2 Bob Physics 22, 3 Charlie Physics 20, 4 David Mathematics 23, 5 Emily CS 22); Courses(101 Database Design, 102 Physics I, 103 Calculus II, 104 Genetics, 105 Organic Chem); Registrations(1→101 A, 2→102 B, 3→103 C, 4→104 B, 5→105 A). Give the output of: (a) students JOIN registrations JOIN courses WHERE grade = 'A' AND major = 'Computer Science', showing student_id, student_name, course_name, grade; (b) SELECT students.major, AVG(students.age) AS average_age FROM students RIGHT OUTER JOIN registrations ON … GROUP BY students.major ORDER BY average_age.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) (1, Alice, Database Design, A), (5, Emily, Organic Chem, A). (b) Every registration matches a student, so the right join equals the inner join: Physics (22 + 20)/2 = <strong>21</strong>, Computer Science (21 + 22)/2 = <strong>21.5</strong>, Mathematics <strong>23</strong>. In ascending order: Physics 21, Computer Science 21.5, Mathematics 23. Row order counts because of ORDER BY.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Every registration refers to an existing student. <em>(Reason: registrations.student_id is a foreign key.)</em></p>
+<p><strong>(a)</strong> The joins attach each student's course and grade; the WHERE clause keeps grade A and major Computer Science.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>student_id</th>
+<th>student_name</th>
+<th>course_name</th>
+<th>grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>Database Design</td>
+<td>A</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Emily</td>
+<td>Organic Chem</td>
+<td>A</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>(b)</strong> Every registration matches a student, so the right outer join gives the same rows as an inner join. Grouping by major: Physics (22 + 20)/2 = 21; Computer Science (21 + 22)/2 = 21.5; Mathematics 23. ORDER BY average_age sorts them in ascending order.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>major</th>
+<th>average_age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Physics</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Computer Science</td>
+<td>21.5</td>
+</tr>
+<tr>
+<td>Mathematics</td>
+<td>23</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Examiner's note.</strong> The 2023 key gave no marks for a row in the wrong position, because ORDER BY makes the order part of the answer.</p>
+</blockquote>
 </details>
 <h3 id="problem-19-sql-application-6-pts-m23-endsem-q2">Problem 19 [SQL · Application · 6 pts · M23 endsem Q2]</h3>
 <p>Restaurants(r_id, restaurant_name, location, cuisine_type), Orders(order_id, customer_id, restaurant_id, order_date, amount), Customers(c_id, customer_name, …), Chefs(chef_id, chef_name, specialty, years_of_experience, restaurant_id). (a) Revenue per restaurant in October of this year, descending. (b) The customer who spent the most. (c) Restaurants whose average order exceeds the overall average order. (d) Restaurants whose chefs average more than 7 years' experience.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>&quot;October of the current year&quot; is October 2023, the year of the paper. <em>(Reason: the paper was set in 2023.)</em></li>
+<li>For (b), every customer who spent the maximum amount is listed. <em>(Reason: the question says &quot;the customer&quot;, but ties are possible.)</em></li>
+</ol>
+<p><strong>Queries.</strong></p>
 <pre><code class="language-sql">-- (a)
 SELECT R.restaurant_name, R.location, SUM(O.amount) AS Revenue
 FROM Restaurants R JOIN Orders O ON R.r_id = O.restaurant_id
@@ -424,12 +705,38 @@ WHERE r_id IN (SELECT restaurant_id FROM Orders GROUP BY restaurant_id
 SELECT R.restaurant_name FROM Restaurants R JOIN Chefs C ON R.r_id = C.restaurant_id
 GROUP BY R.r_id, R.restaurant_name HAVING AVG(C.years_of_experience) &gt; 7;
 </code></pre>
-<p>The 2023 key accepted LIMIT 1 for (b); this year's rubric style would ask you to handle ties or state the assumption that there is a unique maximum.</p>
+<p><strong>Explanation.</strong></p>
+<ul>
+<li>(a) The date range restricts to October; the result is grouped by restaurant and sorted by revenue, highest first.</li>
+<li>(b) HAVING … &gt;= ALL compares each customer's total with every customer's total, so all customers tied at the maximum are returned.</li>
+<li>(c) The innermost query computes the overall average order amount; the middle one finds restaurants whose own average exceeds it.</li>
+<li>(d) HAVING AVG(years_of_experience) &gt; 7 tests the average over each restaurant's chefs.</li>
+</ul>
+<blockquote>
+<p><strong>Examiner's note.</strong> The 2023 key accepted ORDER BY … LIMIT 1 for (b); in this year's style, either handle ties or state the assumption that the maximum is unique.</p>
+</blockquote>
 </details>
 <h3 id="problem-20-sql-application-3-pts-m25-endsem-q4">Problem 20 [SQL · Application · 3 pts · M25 endsem Q4]</h3>
 <p>The DBMS has no FULL OUTER JOIN. Compute the full outer join of A and B on attribute k with basic SQL.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <code>SELECT * FROM A LEFT JOIN B ON A.k = B.k UNION SELECT * FROM A RIGHT JOIN B ON A.k = B.k;</code> UNION removes the duplicated matched rows. If the tables may contain genuine duplicate rows, use <code>UNION ALL</code> with the second part restricted to <code>WHERE A.k IS NULL</code> (only B's unmatched rows), so nothing is lost or double-counted. Without RIGHT JOIN, swap the operands of a LEFT JOIN.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> The DBMS supports LEFT JOIN, RIGHT JOIN and UNION. <em>(Reason: only FULL OUTER JOIN is said to be missing.)</em></p>
+<p><strong>Query.</strong></p>
+<pre><code class="language-sql">SELECT * FROM A LEFT JOIN B  ON A.k = B.k
+UNION
+SELECT * FROM A RIGHT JOIN B ON A.k = B.k;
+</code></pre>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>The LEFT JOIN returns all matched pairs plus the rows of A with no partner in B (padded with NULLs).</li>
+<li>The RIGHT JOIN returns all matched pairs plus the rows of B with no partner in A.</li>
+<li>UNION combines them and removes the matched pairs that appear in both, giving exactly the full outer join.</li>
+</ol>
+<p><strong>Refinement.</strong> If A or B may contain genuinely duplicate rows, UNION would also merge those. In that case use UNION ALL and keep only B's unmatched rows from the second part:</p>
+<pre><code class="language-sql">SELECT * FROM A LEFT JOIN B  ON A.k = B.k
+UNION ALL
+SELECT * FROM A RIGHT JOIN B ON A.k = B.k WHERE A.k IS NULL;
+</code></pre>
 </details>
 </div>
       <div class="done-row">
@@ -463,6 +770,6 @@ GROUP BY R.r_id, R.restaurant_name HAVING AVG(C.years_of_experience) &gt; 7;
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwoml3jv" defer></script>
+<script src="../../assets/app.js?v=mwon7yor" defer></script>
 </body>
 </html>

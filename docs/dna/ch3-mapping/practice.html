@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwoml3jv">
+<link rel="stylesheet" href="../../assets/style.css?v=mwon7yor">
 </head>
 <body data-root="../../" data-page="dna/ch3-mapping/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,17 +87,25 @@
       <header class="note-head">
         <p class="eyebrow">Practice</p>
         <h1>Mapping EER to relations</h1>
-        <p class="note-meta">7 min read · 7 practice problems</p>
+        <p class="note-meta">12 min read · 7 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
           <span class="hint">Solutions stay collapsed until you click them.</span>
         </div>
       </header>
-      <div class="prose"><h3 id="problem-1-mapping-application-10-pts-assignment-3-individual">Problem 1 [Mapping · Application · 10 pts · Assignment 3 individual (EtoR-I)]</h3>
+      <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
+<h3 id="problem-1-mapping-application-10-pts-assignment-3-individual">Problem 1 [Mapping · Application · 10 pts · Assignment 3 individual (EtoR-I)]</h3>
 <p>Map the television-show EER model (chapter on ER/EER, Problem 1) to relations. Show primary keys, foreign-key arrows, explanation and assumptions.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (PK attributes listed first; † = part of PK.)</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Production companies are identified by Name, TV shows by (Title, Year) and persons by (Name, DOB). <em>(Reason: these are the identifiers given in the requirements.)</em></li>
+<li>Season_No is unique within a show and Episode_No is unique within a season. <em>(Reason: as in the EER model.)</em></li>
+<li>An actor plays one role per episode. <em>(Reason: the requirements record &quot;the role&quot;.)</em></li>
+</ol>
+<p><strong>Relational schema.</strong> Primary-key attributes are marked †.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -159,57 +167,140 @@
 </tr>
 </tbody>
 </table></div>
-<p>How each construct was mapped: strong entities → one relation each, composite Address split. Weak SEASON and EPISODE: owner key + partial key; EPISODE carries SEASON's full three-part key; identifying relationships need no relation. PRODUCES (1:N): FK on TV_SHOW, NOT NULL for total participation. DIRECTS and APPEARS_IN (M:N): own relations; Role in APPEARS_IN. Genre (multivalued): TV_SHOW_GENRE. PERSON specialization (overlapping, total): 8A. Derived counts: not stored.</p>
-<p>Also accepted with a stated assumption: surrogate keys; 8B or 8D; Role in the APPEARS_IN key (if an actor can play two roles in one episode). <strong>Not</strong> accepted: 8C (single Person_Type) — cannot represent someone who both acts and directs.</p>
+<p><strong>Explanation of the mapping.</strong></p>
+<ol>
+<li><strong>Strong entity types</strong> (PRODUCTION_COMPANY, TV_SHOW, PERSON) each become a relation. The composite attribute Address is replaced by its components Street, City and Country.</li>
+<li><strong>Weak entity types</strong> take the owner's primary key plus their partial key as their primary key. EPISODE's owner SEASON is itself weak, so EPISODE carries SEASON's full three-part key. The identifying relationships need no separate relation.</li>
+<li><strong>PRODUCES (1:N)</strong> is mapped by the foreign key Company_Name on the N side (TV_SHOW). It is NOT NULL because every show must have a producer (total participation).</li>
+<li><strong>DIRECTS and APPEARS_IN (M:N)</strong> each become a relation whose key is the combination of both participants' keys. Role is placed in APPEARS_IN because it describes an actor in an episode.</li>
+<li>The <strong>multivalued attribute</strong> Genre becomes the relation TV_SHOW_GENRE.</li>
+<li>The <strong>specialization</strong> of PERSON is overlapping and total, so option 8A is used: a PERSON relation plus ACTOR and DIRECTOR relations sharing its key. A person who both acts and directs appears in both.</li>
+<li><strong>Derived attributes</strong> are not stored; they are computed with COUNT queries.</li>
+</ol>
+<p><strong>Final answer.</strong> The ten relations in the table, with the foreign keys drawn as arrows from each foreign key to the primary key it references.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Also accepted with a stated assumption: surrogate keys, option 8B or 8D, Role inside the APPEARS_IN key. Not accepted: option 8C (a single Person_Type attribute), because it cannot represent a person who is both an actor and a director.</p>
+</blockquote>
 </details>
 <h3 id="problem-2-mapping-application-10-pts-assignment-3-group-etor">Problem 2 [Mapping · Application · 10 pts · Assignment 3 group (EtoR-G)]</h3>
 <p>Map the EER-of-EER model (chapter on ER/EER, Problem 2) to relations. Focus on: the strong/weak specialization of ENTITY_TYPE, the attribute specializations, the weak entity's key, 1:1 relationships, and the ternary relationships.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Outline of the key (23 relations):</p>
-<ul>
-<li>ENTITY_TYPE(<strong>Name</strong>); STRONG_ENTITY_TYPE(<strong>Name</strong>, Key_Attr_Name) with Name → ENTITY_TYPE and Key_Attr_Name → KEY_ATTRIBUTE, <strong>NOT NULL, UNIQUE</strong> (1:1, total); WEAK_ENTITY_TYPE(<strong>Owner_Name, Name</strong>, Partial_Key_Attr_Name) — PK = owner's key + own name (weak-entity rule), Owner_Name → STRONG_ENTITY_TYPE.</li>
-<li>ENTITY(<strong>Entity_Id</strong>, Type_Name) — &quot;has instances&quot; is 1:N, folded as FK Type_Name NOT NULL.</li>
-<li>ATTRIBUTE(<strong>Attr_Name</strong>, Accepts_Null) and one relation per subclass (SIMPLE, SINGLE_VALUED, STORED, DERIVED, COMPOSITE, MULTIVALUED, KEY, PARTIAL_KEY, PARTICIPATION_CONSTRAINT(Attr_Name, Min, Max), CARDINALITY_CONSTRAINT(…)) each with PK Attr_Name → ATTRIBUTE (option 8A, chosen because specializations are partial and some subclasses have their own relationships). The composite (min, max) becomes columns Min, Max.</li>
-<li>VALUE_SET(<strong>Attr_Name, Value</strong>) for the multivalued Value_set.</li>
-<li>M:N relations: CONSISTS_OF(<strong>Composite_Name, Component_Name</strong>), HAS_ATTRIBUTES(<strong>Entity_Type_Name, Attr_Name</strong>), DESCRIBED_BY(<strong>Entity_Id, Attr_Name</strong>).</li>
-<li>Ternary relations: REL_TYPE(<strong>Entity_Type1, Entity_Type2, Attr_Name</strong>); HAS_SUBCLASS(<strong>Superclass_Name, Attr_Name</strong>, Subclass_Name) and GENERALIZATION(<strong>Subclass_Name, Attr_Name</strong>, Superclass_Name): where one participant has max 1 it is determined by the other two, so it is a non-key FK.</li>
-<li>BINARY_REL_TYPE(<strong>Entity_Type1</strong>, Entity_Type2 UNIQUE NOT NULL): 1:1 both ways.</li>
-</ul>
-<p>The key also had a diamond-by-diamond traceability table showing each of the 11 relationships mapped. That is a good habit: it proves rule M9 (no unmapped diamond).</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Entity types are identified by Name, entities by Entity_Id and attributes by Attr_Name. <em>(Reason: these are the identifiers in the EER model.)</em></li>
+<li>For a ternary relationship in which one participant has maximum 1, that participant is determined by the other two. <em>(Reason: the maximum 1 means at most one such entity per combination of the others.)</em></li>
+</ol>
+<p><strong>Relational schema</strong> (primary keys in bold).</p>
+<ol>
+<li>ENTITY_TYPE(<strong>Name</strong>).</li>
+<li>STRONG_ENTITY_TYPE(<strong>Name</strong>, Key_Attr_Name); Name → ENTITY_TYPE; Key_Attr_Name → KEY_ATTRIBUTE, NOT NULL, UNIQUE.</li>
+<li>WEAK_ENTITY_TYPE(<strong>Owner_Name, Name</strong>, Partial_Key_Attr_Name); Owner_Name → STRONG_ENTITY_TYPE; Name → ENTITY_TYPE; Partial_Key_Attr_Name → PARTIAL_KEY_ATTRIBUTE, NOT NULL, UNIQUE.</li>
+<li>ENTITY(<strong>Entity_Id</strong>, Type_Name); Type_Name → ENTITY_TYPE, NOT NULL.</li>
+<li>ATTRIBUTE(<strong>Attr_Name</strong>, Accepts_Null), and one relation per subclass: SIMPLE_ATTRIBUTE, SINGLE_VALUED_ATTRIBUTE, STORED_ATTRIBUTE, DERIVED_ATTRIBUTE, COMPOSITE_ATTRIBUTE, MULTIVALUED_ATTRIBUTE, KEY_ATTRIBUTE, PARTIAL_KEY_ATTRIBUTE, PARTICIPATION_CONSTRAINT(<strong>Attr_Name</strong>, Min, Max), CARDINALITY_CONSTRAINT(<strong>Attr_Name</strong>, Min, Max); each with Attr_Name → ATTRIBUTE.</li>
+<li>VALUE_SET(<strong>Attr_Name, Value</strong>); Attr_Name → MULTIVALUED_ATTRIBUTE.</li>
+<li>CONSISTS_OF(<strong>Composite_Name, Component_Name</strong>); HAS_ATTRIBUTES(<strong>Entity_Type_Name, Attr_Name</strong>); DESCRIBED_BY(<strong>Entity_Id, Attr_Name</strong>).</li>
+<li>REL_TYPE(<strong>Entity_Type1, Entity_Type2, Attr_Name</strong>); BINARY_REL_TYPE(<strong>Entity_Type1</strong>, Entity_Type2 NOT NULL UNIQUE).</li>
+<li>HAS_SUBCLASS(<strong>Superclass_Name, Attr_Name</strong>, Subclass_Name); GENERALIZATION(<strong>Subclass_Name, Attr_Name</strong>, Superclass_Name).</li>
+</ol>
+<p><strong>Explanation of the mapping.</strong></p>
+<ol>
+<li>Regular entity types become relations keyed by their identifiers.</li>
+<li>Every specialization uses option 8A (superclass relation plus one relation per subclass, sharing the key), because the specializations are partial and several subclasses have their own relationships.</li>
+<li>The weak entity type's key is the owner's key plus its own name, following the weak-entity rule.</li>
+<li>1:1 and 1:N relationships are folded into foreign keys: NOT NULL where participation is total, UNIQUE where the relationship is 1:1.</li>
+<li>M:N and ternary relationships become separate relations holding the participants' keys. In HAS_SUBCLASS and GENERALIZATION the participant with maximum 1 is a non-key foreign key, by Assumption 2.</li>
+<li>The composite attribute (min, max) is flattened into the columns Min and Max; the multivalued Value_set becomes VALUE_SET; the derived Component_count is not stored.</li>
+</ol>
+<p><strong>Final answer.</strong> The 23 relations above, with foreign-key arrows, together with a table showing how each of the 11 relationships in the EER diagram was mapped.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> The diamond-by-diamond table is what proves that no relationship was left unmapped (major mistake M9). Write it.</p>
+</blockquote>
 </details>
 <h3 id="problem-3-mapping-application-8-pts-elmasri-fig-9-1-9-2">Problem 3 [Mapping · Application · 8 pts · Elmasri Fig 9.1 / 9.2]</h3>
 <p>Map the COMPANY ER schema: EMPLOYEE (Ssn; Name composite; Address; Salary; Sex; Bdate), DEPARTMENT (Number, Name; multivalued Locations), PROJECT (Number, Name; Location), DEPENDENT (weak, partial key Name, owner EMPLOYEE; Sex, Bdate, Relationship); WORKS_FOR (1:N, total on both), MANAGES (1:1, Start_date, total on DEPARTMENT), CONTROLS (1:N, total on PROJECT), SUPERVISION (1:N recursive), WORKS_ON (M:N, Hours).</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
-<ul>
-<li>EMPLOYEE(<strong>Ssn</strong>, Fname, Minit, Lname, Bdate, Address, Sex, Salary, Super_ssn, Dno) — Super_ssn → EMPLOYEE.Ssn (recursive 1:N on the N side, NULL allowed); Dno → DEPARTMENT, NOT NULL.</li>
-<li>DEPARTMENT(<strong>Dnumber</strong>, Dname UNIQUE, Mgr_ssn, Mgr_start_date) — Mgr_ssn → EMPLOYEE, NOT NULL UNIQUE (1:1, total on department side); the relationship attribute goes with the FK.</li>
-<li>DEPT_LOCATIONS(<strong>Dnumber, Dlocation</strong>) — multivalued.</li>
-<li>PROJECT(<strong>Pnumber</strong>, Pname UNIQUE, Plocation, Dnum) — Dnum → DEPARTMENT NOT NULL.</li>
-<li>WORKS_ON(<strong>Essn, Pno</strong>, Hours) — M:N.</li>
-<li>DEPENDENT(<strong>Essn, Dependent_name</strong>, Sex, Bdate, Relationship) — weak; Essn → EMPLOYEE ON DELETE CASCADE.</li>
-</ul>
-<p>Note the circularity: EMPLOYEE.Dno → DEPARTMENT and DEPARTMENT.Mgr_ssn → EMPLOYEE. Insertion needs one FK to be added after the fact (ALTER TABLE) or deferred constraints.</p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Name is composite (Fname, Minit, Lname). <em>(Reason: as in Elmasri Figure 9.1.)</em></li>
+<li>A department that loses its manager keeps its employees. <em>(Reason: only DEPENDENT is existence-dependent.)</em></li>
+</ol>
+<p><strong>Relational schema</strong> (primary keys in bold).</p>
+<ol>
+<li>EMPLOYEE(<strong>Ssn</strong>, Fname, Minit, Lname, Bdate, Address, Sex, Salary, Super_ssn, Dno); Super_ssn → EMPLOYEE.Ssn (NULL allowed); Dno → DEPARTMENT.Dnumber, NOT NULL.</li>
+<li>DEPARTMENT(<strong>Dnumber</strong>, Dname UNIQUE, Mgr_ssn, Mgr_start_date); Mgr_ssn → EMPLOYEE.Ssn, NOT NULL, UNIQUE.</li>
+<li>DEPT_LOCATIONS(<strong>Dnumber, Dlocation</strong>); Dnumber → DEPARTMENT.</li>
+<li>PROJECT(<strong>Pnumber</strong>, Pname UNIQUE, Plocation, Dnum); Dnum → DEPARTMENT, NOT NULL.</li>
+<li>WORKS_ON(<strong>Essn, Pno</strong>, Hours); Essn → EMPLOYEE; Pno → PROJECT.</li>
+<li>DEPENDENT(<strong>Essn, Dependent_name</strong>, Sex, Bdate, Relationship); Essn → EMPLOYEE, ON DELETE CASCADE.</li>
+</ol>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>WORKS_FOR (1:N, total on EMPLOYEE) gives the NOT NULL foreign key Dno in EMPLOYEE.</li>
+<li>SUPERVISION (recursive 1:N) gives Super_ssn in EMPLOYEE; it may be NULL because the top employee has no supervisor.</li>
+<li>MANAGES (1:1, total on DEPARTMENT) gives Mgr_ssn in DEPARTMENT, NOT NULL and UNIQUE; its attribute Start_date goes with the foreign key.</li>
+<li>CONTROLS (1:N, total on PROJECT) gives Dnum in PROJECT.</li>
+<li>WORKS_ON (M:N) becomes its own relation with Hours.</li>
+<li>Locations (multivalued) becomes DEPT_LOCATIONS; DEPENDENT (weak) takes the owner key.</li>
+</ol>
+<p><strong>Final answer.</strong> The six relations above. Because EMPLOYEE.Dno and DEPARTMENT.Mgr_ssn reference each other, one of the two foreign keys must be added after both tables exist (ALTER TABLE) or checked at commit time.</p>
 </details>
 <h3 id="problem-4-mapping-concept-4-pts">Problem 4 [Mapping · Concept · 4 pts]</h3>
 <p>PERSON(Ssn, Name) specializes into STUDENT(Major) and EMPLOYEE(Salary), overlapping and partial. Which mapping options are valid? Give the schema for the best one.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Partial rules out <strong>8B</strong> (a person who is neither would be lost). Overlapping rules out <strong>8C</strong> (one type value). Valid: <strong>8A</strong> and <strong>8D</strong>. 8A: PERSON(<strong>Ssn</strong>, Name), STUDENT(<strong>Ssn</strong>, Major) with Ssn → PERSON, EMPLOYEE(<strong>Ssn</strong>, Salary) with Ssn → PERSON. 8D: PERSON(<strong>Ssn</strong>, Name, Major, Salary, Is_student, Is_employee); NULLs where a flag is false. Prefer 8A if subclasses have many attributes or their own relationships; 8D avoids joins when they have few.</p>
+<p><em>Solution.</em></p>
+<p><strong>Working.</strong></p>
+<ol>
+<li>The specialization is <strong>partial</strong>, so option 8B (subclass relations only) is invalid: a person who is neither a student nor an employee would not be stored anywhere.</li>
+<li>The specialization is <strong>overlapping</strong>, so option 8C (a single type attribute) is invalid: one type value cannot record a person who is both.</li>
+<li>Options <strong>8A</strong> and <strong>8D</strong> satisfy both constraints.</li>
+</ol>
+<p><strong>Schemas.</strong></p>
+<ul>
+<li>8A: PERSON(<strong>Ssn</strong>, Name); STUDENT(<strong>Ssn</strong>, Major), Ssn → PERSON; EMPLOYEE(<strong>Ssn</strong>, Salary), Ssn → PERSON.</li>
+<li>8D: PERSON(<strong>Ssn</strong>, Name, Major, Salary, Is_student, Is_employee), where Major and Salary are NULL when the corresponding flag is false.</li>
+</ul>
+<p><strong>Final answer.</strong> Valid options: <strong>8A and 8D</strong>. I choose <strong>8A</strong>, because it avoids NULL columns and lets each subclass take part in its own relationships; 8D is preferable only when subclasses have very few attributes.</p>
 </details>
 <h3 id="problem-5-mapping-application-4-pts">Problem 5 [Mapping · Application · 4 pts]</h3>
 <p>Map the ternary SUPPLY(SUPPLIER(Sname), PART(Part_no), PROJECT(Proj_name)) with attribute Quantity. What changes if each (project, part) pair has at most one supplier?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> SUPPLY(<strong>Sname, Part_no, Proj_name</strong>, Quantity), three FKs. If (Proj_name, Part_no) determines the supplier — SUPPLIER has max 1 in each (project, part) pair — the key shrinks to (<strong>Part_no, Proj_name</strong>) and Sname becomes a non-key FK. That is the same reasoning the GA3 key used for HAS_SUBCLASS.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> SUPPLIER, PART and PROJECT are identified by Sname, Part_no and Proj_name. <em>(Reason: given.)</em></p>
+<p><strong>Working.</strong></p>
+<ol>
+<li>An n-ary relationship becomes a new relation that holds the primary keys of all participants as foreign keys, plus its own attributes.</li>
+<li>In general no participant is determined by the others, so the primary key is the combination of all three foreign keys.</li>
+<li>If each (project, part) pair has at most one supplier, then (Part_no, Proj_name) → Sname. The key shrinks to (Part_no, Proj_name), and Sname becomes a non-key foreign key.</li>
+</ol>
+<p><strong>Final answer.</strong> SUPPLY(<strong>Sname, Part_no, Proj_name</strong>, Quantity), with three foreign keys. Under the extra constraint: SUPPLY(Sname, <strong>Part_no, Proj_name</strong>, Quantity).</p>
 </details>
 <h3 id="problem-6-mapping-concept-3-pts">Problem 6 [Mapping · Concept · 3 pts]</h3>
 <p>Map the category OWNER = PERSON ∪ BANK ∪ COMPANY, where PERSON has key Ssn, BANK has key Bname, COMPANY has key Cname, and OWNER owns REGISTERED_VEHICLE (1:N).</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> The superclass keys differ, so add a <strong>surrogate key</strong>: OWNER(<strong>Owner_id</strong>). Add Owner_id as an FK (UNIQUE) column to PERSON, BANK and COMPANY. The ownership relationship uses Owner_id: OWNS(<strong>Owner_id, Vehicle_id</strong>, Purchase_date, Lien_or_regular) if M:N, or an FK in the vehicle relation if 1:N.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> An owner may own several vehicles and a vehicle has one owner. <em>(Reason: OWNS is given as 1:N.)</em></p>
+<p><strong>Working.</strong></p>
+<ol>
+<li>The superclasses PERSON, BANK and COMPANY have <strong>different keys</strong> (Ssn, Bname, Cname), so no existing key can identify an owner.</li>
+<li>Therefore a <strong>surrogate key</strong> Owner_id is introduced in the category relation OWNER.</li>
+<li>Owner_id is added as a foreign key (UNIQUE, NULL allowed) to each superclass relation, linking each person, bank or company that is an owner to its OWNER tuple.</li>
+<li>The 1:N ownership relationship is mapped by placing Owner_id as a foreign key in the vehicle relation.</li>
+</ol>
+<p><strong>Final answer.</strong> OWNER(<strong>Owner_id</strong>); PERSON(<strong>Ssn</strong>, …, Owner_id), BANK(<strong>Bname</strong>, …, Owner_id), COMPANY(<strong>Cname</strong>, …, Owner_id), each Owner_id → OWNER; REGISTERED_VEHICLE(<strong>Vehicle_id</strong>, …, Owner_id → OWNER).</p>
 </details>
 <h3 id="problem-7-mapping-concept-3-pts-past-paper-style">Problem 7 [Mapping · Concept · 3 pts · past-paper style]</h3>
 <p>Why can a 1:N relationship's foreign key not go on the 1 side? Why must an M:N relationship get its own relation?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A relation's column holds one atomic value per row (1NF). On the 1 side, one department row would need all its employees' Ssns in one column: a multivalued column. On the N side, each employee row needs only its single department number. For M:N, both sides have many partners, so neither side can hold the FK; a separate relation with one row per pair is the only atomic representation, and its key must be the pair because neither key alone is unique there.</p>
+<p><em>Solution.</em></p>
+<p><strong>Answer.</strong></p>
+<ol>
+<li>Every attribute value in a relation must be atomic (first normal form), so a column can hold only one value per row.</li>
+<li>In a 1:N relationship such as WORKS_FOR, each employee is related to exactly one department. A foreign key Dno in EMPLOYEE therefore holds one value per row, as required. On the 1 side, a department row would need to hold <em>all</em> its employees' Ssns in one column, which is a multivalued attribute and is not allowed.</li>
+<li>In an M:N relationship both sides have many partners, so neither relation can hold the foreign key. A separate relation with one row per related pair is the only atomic representation, and its primary key must be the pair, because neither participant's key is unique in it.</li>
+</ol>
+<p><strong>Final answer.</strong> The foreign key goes on the N side because only there it is single-valued; an M:N relationship needs its own relation because neither side can hold a single-valued foreign key.</p>
 </details>
 </div>
       <div class="done-row">
@@ -243,6 +334,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwoml3jv" defer></script>
+<script src="../../assets/app.js?v=mwon7yor" defer></script>
 </body>
 </html>

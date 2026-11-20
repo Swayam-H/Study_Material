@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwoml3jv">
+<link rel="stylesheet" href="../../assets/style.css?v=mwon7yor">
 </head>
 <body data-root="../../" data-page="dna/ch1-relational-model/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,33 +87,77 @@
       <header class="note-head">
         <p class="eyebrow">Practice</p>
         <h1>The relational model, keys and constraints</h1>
-        <p class="note-meta">6 min read · 8 practice problems</p>
+        <p class="note-meta">11 min read · 8 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
           <span class="hint">Solutions stay collapsed until you click them.</span>
         </div>
       </header>
-      <div class="prose"><h2 id="a-keys">A. Keys</h2>
+      <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
+<h2 id="a-keys">A. Keys</h2>
 <h3 id="problem-1-keys-concept-3-pts-m24-quiz-2-q1c">Problem 1 [Keys · Concept · 3 pts · M24 Quiz 2 Q1c]</h3>
 <p>Differentiate between superkey, candidate key and primary key.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>Superkey:</strong> any set of attributes whose values are unique across all tuples in every legal state; adding attributes to a superkey keeps it a superkey. <strong>Candidate key:</strong> a <em>minimal</em> superkey, so no proper subset is a superkey. <strong>Primary key:</strong> one candidate key chosen by the designer to identify tuples; it is underlined, and by entity integrity it may not be NULL. Every primary key is a candidate key, and every candidate key is a superkey, but not conversely. Example: in STUDENT(Roll, Email, Name), {Roll, Name} is a superkey but not a candidate key; Roll and Email are both candidate keys; Roll is chosen as the primary key.</p>
+<p><em>Solution.</em></p>
+<p><strong>Definitions.</strong></p>
+<ol>
+<li>A <strong>superkey</strong> of R is a set of attributes SK such that no two distinct tuples in <em>any</em> legal state of R have the same values on SK. Every superset of a superkey is again a superkey.</li>
+<li>A <strong>candidate key</strong> is a <em>minimal</em> superkey: removing any attribute from it gives a set that is no longer a superkey.</li>
+<li>The <strong>primary key</strong> is one candidate key chosen by the designer to identify tuples. It is underlined in the schema, and by the entity integrity constraint it can never be NULL.</li>
+</ol>
+<p><strong>Relationship between them.</strong> Every primary key is a candidate key, and every candidate key is a superkey. The converses do not hold.</p>
+<p><strong>Example.</strong> In STUDENT(Roll, Email, Name), where Roll and Email are each unique:</p>
+<ul>
+<li>{Roll, Name} is a superkey but not a candidate key, because its subset {Roll} is already a superkey.</li>
+<li>{Roll} and {Email} are candidate keys.</li>
+<li>{Roll} is chosen as the primary key; {Email} remains an alternate (unique) key.</li>
+</ul>
 </details>
 <h3 id="problem-2-keys-numerical-3-pts-m25-quiz-2-q1b">Problem 2 [Keys · Numerical · 3 pts · M25 Quiz 2 Q1b]</h3>
 <p>A relation has 5 attributes, and exactly 3 of them are each unique on their own (each is a candidate key by itself), and there are no other candidate keys. How many superkeys are there?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A set is a superkey iff it contains at least one of the 3 key attributes. All subsets: 2⁵ = 32. Subsets avoiding all 3 key attributes: subsets of the remaining 2 attributes, 2² = 4 (including the empty set). So #superkeys = 32 − 4 = <strong>28</strong>. In general 2ⁿ − 2ⁿ⁻ᵏ.</p>
+<p><em>Solution.</em></p>
+<p><strong>Working.</strong></p>
+<ol>
+<li>Every superkey contains a candidate key. The candidate keys here are three single attributes, so a set of attributes is a superkey exactly when it contains at least one of these three attributes.</li>
+<li>The number of subsets of the 5 attributes is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">32</span></span></span></span>.</li>
+<li>A subset fails to be a superkey exactly when it avoids all three key attributes, i.e. when it is a subset of the remaining 2 attributes. There are <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span> such subsets (including the empty set).</li>
+<li>Hence the number of superkeys is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">32</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">28</span></span></span></span>.</li>
+</ol>
+<p><strong>Final answer.</strong> <strong>28 superkeys.</strong> In general, with n attributes and k single-attribute candidate keys, the count is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7477em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8491em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span></span></span></span></span></span></span></span>.</p>
 </details>
 <h3 id="problem-3-keys-numerical-3-pts-m24-quiz-2-q1b">Problem 3 [Keys · Numerical · 3 pts · M24 Quiz 2 Q1b]</h3>
 <p>VEHICLE(Vehicle_ID, Registration, Model, Company, Year, Colour), where Vehicle_ID and Registration are each underlined separately (each is a key on its own). How many superkeys does VEHICLE have? Which of {Year, Colour}, {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company}, {Registration, Year, Colour, Company} are superkeys?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> n = 6, k = 2: 2⁶ − 2⁴ = 64 − 16 = <strong>48</strong> superkeys. {Year, Colour} is <strong>not</strong> a superkey (contains neither key). The other three each contain Vehicle_ID or Registration, so they <strong>are</strong> superkeys (none of them is a candidate key except the single attributes themselves).</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Vehicle_ID and Registration are the only candidate keys. <em>(Reason: they are the only attributes marked as keys.)</em></p>
+<p><strong>Working.</strong></p>
+<ol>
+<li>A set is a superkey exactly when it contains Vehicle_ID or Registration.</li>
+<li>There are <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">64</span></span></span></span> subsets of the six attributes, and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">16</span></span></span></span> of them contain neither key attribute.</li>
+<li>So the number of superkeys is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">64</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">16</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">48</span></span></span></span>.</li>
+<li>{Year, Colour} contains neither key attribute, so it is <strong>not</strong> a superkey.</li>
+<li>{Vehicle_ID, Registration}, {Vehicle_ID, Model, Company} and {Registration, Year, Colour, Company} each contain a key attribute, so each <strong>is</strong> a superkey. None of them is a candidate key, because each has a proper subset ({Vehicle_ID} or {Registration}) that is already a superkey.</li>
+</ol>
+<p><strong>Final answer.</strong> <strong>48 superkeys.</strong> Superkeys: {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company}, {Registration, Year, Colour, Company}. Not a superkey: {Year, Colour}.</p>
 </details>
 <h3 id="problem-4-keys-concept-4-pts-m25-quiz-2-q1a">Problem 4 [Keys · Concept · 4 pts · M25 Quiz 2 Q1a]</h3>
 <p>You are shown a library issue table with 10 rows: StudentID, BookID, BookTitle, IssueDate, ReturnDate. In the sample, BookTitle happens to be different in every row. Is BookTitle a candidate key?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>Not justified.</strong> A key is a constraint on all legal states, and a sample can only <em>rule out</em> keys. The data shows StudentID repeats (S04 twice) and BookID repeats (B03 twice), so neither is a key; BookTitle is unique <em>in this sample</em> only. Semantically, a student can borrow the same book twice on different days, so a sensible key is <strong>(StudentID, BookID, IssueDate)</strong>. If the question insists &quot;this is the complete table and no new data will be added&quot;, then BookTitle is the smallest candidate key <strong>for this state</strong> — state that assumption explicitly, as the rubric requires.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> The table records book issues over time, so new rows will be added. <em>(Reason: an issue table grows with every loan; the question does not say the state is fixed.)</em></p>
+<p><strong>Answer.</strong></p>
+<ol>
+<li>A key is a constraint that must hold in <strong>every</strong> legal state of the relation, not only in the rows shown. A sample of data can show that a set is <em>not</em> a key (by exhibiting two rows that agree on it), but it can never prove that a set <em>is</em> a key.</li>
+<li>In the sample, StudentID repeats (S04 appears twice) and BookID repeats (B03 appears twice), so neither is a key on its own.</li>
+<li>BookTitle is unique only in this sample. Two copies of the same title, or the same book issued again later, would give two rows with equal BookTitle. So BookTitle is not a key of the schema.</li>
+<li>From the meaning of the data, a student can borrow the same book on different days, so a suitable key is (StudentID, BookID, IssueDate).</li>
+</ol>
+<p><strong>Final answer.</strong> <strong>No.</strong> BookTitle is not a candidate key; a suitable candidate key is <strong>(StudentID, BookID, IssueDate)</strong>.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> If you assume &quot;this is the complete table and no rows will ever be added&quot;, then BookTitle is a minimal unique attribute <em>for this state</em>, and that answer is acceptable <strong>only</strong> with the assumption written down.</p>
+</blockquote>
 </details>
 <h2 id="b-constraint-violations">B. Constraint violations</h2>
 <h3 id="problem-5-constraints-application-6-pts-m23-endsem-q1">Problem 5 [Constraints · Application · 6 pts · M23 endsem Q1]</h3>
@@ -122,32 +166,105 @@
 (b) UPDATE Student SET Major = 'History' WHERE ID = 103;
 (c) DELETE FROM Major WHERE Name = 'Physics';</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>(a)</strong> Two violations. ID 104 already exists: <strong>key constraint</strong> (not entity integrity — the key is not NULL). GPA 4.1 is outside 0–4: <strong>domain constraint</strong> (a CHECK). 'Chemistry' exists in MAJOR, so referential integrity holds.</p>
-<p><strong>(b)</strong> 'History' is not a Name in MAJOR: <strong>referential integrity</strong>.</p>
-<p><strong>(c)</strong> Student 103 references 'Physics': deleting it would leave a dangling reference, so <strong>referential integrity</strong>; with the default RESTRICT the delete is rejected. (With ON DELETE CASCADE, student 103 would be deleted; with SET NULL, 103's Major would become NULL.)</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Each statement is applied to the original state, independently of the others. <em>(Reason: the question says so.)</em></li>
+<li>The foreign key uses the default action, ON DELETE RESTRICT. <em>(Reason: no referential action is specified.)</em></li>
+</ol>
+<p><strong>(a)</strong> The statement violates two constraints.</p>
+<ul>
+<li>A student with ID 104 already exists, so the new tuple duplicates the primary key: a <strong>key constraint</strong> violation. (It is not an entity integrity violation, because the key value is not NULL.)</li>
+<li>GPA = 4.1 lies outside the permitted range 0 to 4: a <strong>domain constraint</strong> (CHECK) violation.</li>
+<li>'Chemistry' exists in MAJOR, so referential integrity is satisfied.</li>
+</ul>
+<p><strong>(b)</strong> No tuple of MAJOR has Name = 'History', so student 103 would reference a non-existent major: a <strong>referential integrity</strong> violation.</p>
+<p><strong>(c)</strong> Student 103 references 'Physics'. Deleting that tuple would leave a dangling reference: a <strong>referential integrity</strong> violation. Under RESTRICT the delete is rejected.</p>
+<p><strong>Final answer.</strong> (a) key constraint and domain constraint; (b) referential integrity; (c) referential integrity (delete rejected).</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Mention what other actions would do in (c): ON DELETE CASCADE deletes student 103 as well; SET NULL sets 103's Major to NULL. Writing &quot;entity integrity&quot; for (a) lost a mark in the 2023 key.</p>
+</blockquote>
 </details>
 <h3 id="problem-6-constraints-application-3-pts-m24-quiz-2-q4">Problem 6 [Constraints · Application · 3 pts · M24 Quiz 2 Q4]</h3>
 <p>For a USERS(<strong>uid</strong>, name, age CHECK age &gt; 0) and ORDERS(<strong>oid</strong>, uid → USERS, amount) database, give one example each of: an INSERT violating the key constraint; an INSERT violating entity integrity; a DELETE on ORDERS that violates referential integrity; an acceptable DELETE on ORDERS; an acceptable UPDATE on USERS; an UPDATE on USERS violating a domain constraint.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
-<ul>
-<li>Key: USERS has uid 1; <code>INSERT INTO USERS VALUES (1, 'Ravi', 20)</code>.</li>
-<li>Entity integrity: <code>INSERT INTO USERS VALUES (NULL, 'Ravi', 20)</code>.</li>
-<li>DELETE on ORDERS violating RI: <strong>impossible</strong> in this schema, since nothing references ORDERS. Deleting from the <em>referencing</em> relation never breaks RI. Say so (that was the point of the question).</li>
-<li>Acceptable DELETE: <code>DELETE FROM ORDERS WHERE oid = 7</code>.</li>
-<li>Acceptable UPDATE: <code>UPDATE USERS SET name = 'Ravi K' WHERE uid = 1</code>.</li>
-<li>Domain: <code>UPDATE USERS SET age = -5 WHERE uid = 1</code>.</li>
-</ul>
+<p><strong>Assumption.</strong> USERS contains a tuple with uid = 1, and ORDERS contains a tuple with oid = 7. <em>(Reason: the examples need existing tuples.)</em></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Required example</th>
+<th>Statement</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INSERT violating the key constraint</td>
+<td><code>INSERT INTO USERS VALUES (1, 'Ravi', 20);</code></td>
+<td>uid 1 already exists</td>
+</tr>
+<tr>
+<td>INSERT violating entity integrity</td>
+<td><code>INSERT INTO USERS VALUES (NULL, 'Ravi', 20);</code></td>
+<td>primary key is NULL</td>
+</tr>
+<tr>
+<td>DELETE on ORDERS violating RI</td>
+<td><strong>Not possible</strong></td>
+<td>no relation references ORDERS</td>
+</tr>
+<tr>
+<td>Acceptable DELETE on ORDERS</td>
+<td><code>DELETE FROM ORDERS WHERE oid = 7;</code></td>
+<td>deleting a referencing tuple never breaks RI</td>
+</tr>
+<tr>
+<td>Acceptable UPDATE on USERS</td>
+<td><code>UPDATE USERS SET name = 'Ravi K' WHERE uid = 1;</code></td>
+<td>non-key, valid value</td>
+</tr>
+<tr>
+<td>UPDATE violating a domain constraint</td>
+<td><code>UPDATE USERS SET age = -5 WHERE uid = 1;</code></td>
+<td>violates CHECK (age &gt; 0)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Justification of the third row.</strong> Referential integrity can be violated by a delete only in the <em>referenced</em> relation. ORDERS is the referencing relation and nothing references it, so no delete on ORDERS can violate referential integrity.</p>
 </details>
 <h3 id="problem-7-constraints-concept-2-pts">Problem 7 [Constraints · Concept · 2 pts]</h3>
 <p>Which update operations can violate referential integrity, and what are the options when a DELETE would?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> INSERT into the referencing relation (FK value not present), UPDATE of an FK (new value not present), DELETE from the referenced relation (and UPDATE of a referenced PK). Options for the DELETE: RESTRICT (reject), CASCADE (also delete referencing tuples), SET NULL, SET DEFAULT.</p>
+<p><em>Solution.</em></p>
+<p><strong>Operations that can violate referential integrity.</strong></p>
+<ol>
+<li>INSERT into the referencing relation, when the new foreign-key value does not exist in the referenced relation.</li>
+<li>UPDATE of a foreign-key attribute to a value that does not exist in the referenced relation.</li>
+<li>DELETE of a referenced tuple (and UPDATE of a referenced primary key), when some tuple still refers to it.</li>
+</ol>
+<p><strong>Options when a DELETE would violate it.</strong></p>
+<ul>
+<li><strong>RESTRICT / NO ACTION</strong>: reject the delete (the default).</li>
+<li><strong>CASCADE</strong>: also delete the referencing tuples.</li>
+<li><strong>SET NULL</strong>: set the referencing foreign keys to NULL (only if they are not part of a primary key).</li>
+<li><strong>SET DEFAULT</strong>: set them to the declared default value.</li>
+</ul>
 </details>
 <h3 id="problem-8-foreign-keys-application-3-pts-m24-quiz-2-q2-elmas">Problem 8 [Foreign keys · Application · 3 pts · M24 Quiz 2 Q2, Elmasri 5.15]</h3>
 <p>ORDER-PROCESSING: CUSTOMER(<strong>Cust#</strong>, Cname, City); ORDER(<strong>Order#</strong>, Odate, Cust#, Ord_amt); ORDER_ITEM(<strong>Order#, Item#</strong>, Qty); ITEM(<strong>Item#</strong>, Unit_price); SHIPMENT(<strong>Order#, Warehouse#</strong>, Ship_date); WAREHOUSE(<strong>Warehouse#</strong>, City). Specify the foreign keys.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> ORDER.Cust# → CUSTOMER; ORDER_ITEM.Order# → ORDER; ORDER_ITEM.Item# → ITEM; SHIPMENT.Order# → ORDER; SHIPMENT.Warehouse# → WAREHOUSE. Assumption: an order can be shipped from several warehouses (given), so (Order#, Warehouse#) is SHIPMENT's key and both parts are FKs. Ship_date is per (order, warehouse).</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> An order may be shipped from several warehouses, and each (order, warehouse) pair has its own ship date. <em>(Reason: (Order#, Warehouse#) is given as the key of SHIPMENT.)</em></p>
+<p><strong>Foreign keys.</strong></p>
+<ol>
+<li>ORDER.Cust# → CUSTOMER.Cust#</li>
+<li>ORDER_ITEM.Order# → ORDER.Order#</li>
+<li>ORDER_ITEM.Item# → ITEM.Item#</li>
+<li>SHIPMENT.Order# → ORDER.Order#</li>
+<li>SHIPMENT.Warehouse# → WAREHOUSE.Warehouse#</li>
+</ol>
+<p><strong>Justification.</strong> Each foreign key is an attribute whose values identify a tuple of another relation, and it references that relation's primary key. In ORDER_ITEM and SHIPMENT both parts of the composite key are foreign keys, because these relations record M:N associations.</p>
 </details>
 </div>
       <div class="done-row">
@@ -181,6 +298,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwoml3jv" defer></script>
+<script src="../../assets/app.js?v=mwon7yor" defer></script>
 </body>
 </html>

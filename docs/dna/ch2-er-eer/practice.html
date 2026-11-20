@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwoml3jv">
+<link rel="stylesheet" href="../../assets/style.css?v=mwon7yor">
 </head>
 <body data-root="../../" data-page="dna/ch2-er-eer/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,33 +87,43 @@
       <header class="note-head">
         <p class="eyebrow">Practice</p>
         <h1>ER and EER modelling</h1>
-        <p class="note-meta">9 min read · 8 practice problems</p>
+        <p class="note-meta">16 min read · 8 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
           <span class="hint">Solutions stay collapsed until you click them.</span>
         </div>
       </header>
-      <div class="prose"><h2 id="a-assignment-2-this-year">A. Assignment 2 (this year)</h2>
+      <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
+<h2 id="a-assignment-2-this-year">A. Assignment 2 (this year)</h2>
 <h3 id="problem-1-eer-application-10-pts-assignment-2-individual-ia2">Problem 1 [EER · Application · 10 pts · Assignment 2 individual (IA2)]</h3>
 <p>Television show database. (a) A show is identified by title and year of release, has one or more seasons, each with episodes of a given duration in minutes. Each show is associated with a production company and classified under one or more genres. Each episode is directed by one or more directors and features one or more actors; a plot outline is recorded for every episode. (b) Each actor is identified by name and date of birth and appears in one or more shows; for every episode in which an actor appears, the role is recorded. (c) Each director is identified by name and date of birth and directs one or more episodes; a director may also act, even in an episode they direct. (d) Each production company is identified by name, has an address, and produces one or more shows. Draw the EER model with (min, max) everywhere.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>Entity types.</strong></p>
-<ul>
-<li>PRODUCTION_COMPANY: key Name; composite Address (Street, City, Country).</li>
-<li>TV_SHOW: key (Title, Year); multivalued Genre; derived No_of_Seasons.</li>
-<li>SEASON (weak, owner TV_SHOW): partial key Season_No; derived No_of_Episodes.</li>
-<li>EPISODE (weak, owner SEASON): partial key Episode_No; Duration_Min; Plot_Outline.</li>
-<li>PERSON: key (Name, DOB). Subclasses ACTOR (derived No_of_Shows) and DIRECTOR (derived No_Episodes_Directed).</li>
-</ul>
-<p><strong>Relationships with (min, max)</strong> (pair written beside the entity it describes):</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Season_No is unique within a show and Episode_No is unique within a season. <em>(Reason: seasons and episodes are numbered per show and per season, so they cannot be identified on their own.)</em></li>
+<li>An actor plays one role in a given episode. <em>(Reason: the requirements record &quot;the role&quot;, singular.)</em></li>
+<li>Every person stored is an actor or a director. <em>(Reason: persons enter the database only through these two roles.)</em></li>
+<li>Genre values are plain names. <em>(Reason: no other genre information is required.)</em></li>
+</ol>
+<p><strong>Entity types and attributes.</strong></p>
+<ol>
+<li>PRODUCTION_COMPANY: key Name; composite attribute Address(Street, City, Country).</li>
+<li>TV_SHOW: composite key (Title, Year); multivalued attribute Genre; derived attribute No_of_Seasons.</li>
+<li>SEASON: <strong>weak</strong> entity type, owner TV_SHOW, partial key Season_No; derived No_of_Episodes.</li>
+<li>EPISODE: <strong>weak</strong> entity type, owner SEASON, partial key Episode_No; attributes Duration_Min and Plot_Outline.</li>
+<li>PERSON: composite key (Name, DOB), with subclasses ACTOR (derived No_of_Shows) and DIRECTOR (derived No_Episodes_Directed).</li>
+</ol>
+<p><strong>Relationship types with (min, max).</strong> Each pair is written beside the entity type it constrains.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
 <th>Relationship</th>
-<th>Side 1</th>
-<th>Side 2</th>
+<th>Participant 1</th>
+<th>Participant 2</th>
 <th>Attribute</th>
+<th>Justification</th>
 </tr>
 </thead>
 <tbody>
@@ -122,94 +132,292 @@
 <td>PRODUCTION_COMPANY (1,N)</td>
 <td>TV_SHOW (1,1)</td>
 <td>—</td>
+<td>Requirement (a) and (d)</td>
 </tr>
 <tr>
 <td>HAS_SEASON (identifying)</td>
 <td>TV_SHOW (1,N)</td>
 <td>SEASON (1,1)</td>
 <td>—</td>
+<td>A show has one or more seasons</td>
 </tr>
 <tr>
 <td>HAS_EPISODE (identifying)</td>
 <td>SEASON (1,N)</td>
 <td>EPISODE (1,1)</td>
 <td>—</td>
+<td>A season has episodes</td>
 </tr>
 <tr>
 <td>DIRECTS</td>
 <td>DIRECTOR (1,N)</td>
 <td>EPISODE (1,N)</td>
 <td>—</td>
+<td>Requirement (a) and (c)</td>
 </tr>
 <tr>
 <td>APPEARS_IN</td>
 <td>ACTOR (1,N)</td>
 <td>EPISODE (1,N)</td>
 <td>Role</td>
+<td>Requirement (a) and (b)</td>
 </tr>
 </tbody>
 </table></div>
-<p><strong>Specialization.</strong> PERSON → {ACTOR, DIRECTOR}, <strong>overlapping (o)</strong>, because requirement (c) says a director may also act. Total or partial: total if every person in the database is an actor or a director (they only enter the database in one of those roles) — state it.</p>
-<p><strong>Why each choice.</strong> Role is on APPEARS_IN because it describes an actor <em>in an episode</em>, not the actor or the episode alone. Actors &quot;appear in one or more shows&quot;, but roles are per episode, so the relationship is to EPISODE; &quot;appears in one or more shows&quot; then follows from (1,N) on episodes. SEASON and EPISODE are weak: Season 2 or Episode 5 has no meaning without its show or season.</p>
-<p><strong>Assumptions to write.</strong> Season_No unique within a show, Episode_No unique within a season; one role per actor per episode; Genre values are names.</p>
+<p><strong>Specialization.</strong> PERSON → {ACTOR, DIRECTOR} is <strong>overlapping (o)</strong>, because requirement (c) states that a director may also act. It is <strong>total</strong> by Assumption 3.</p>
+<p><strong>Justification of the main design choices.</strong></p>
+<ul>
+<li>SEASON and EPISODE are weak because &quot;Season 2&quot; or &quot;Episode 5&quot; has no meaning without its show or season, and they should be deleted with their owner.</li>
+<li>Role is an attribute of APPEARS_IN, because it describes an actor <em>in a particular episode</em>, not the actor alone or the episode alone.</li>
+<li>Actors are related to episodes rather than shows, because roles are recorded per episode; &quot;appears in one or more shows&quot; then follows from (1,N) on episodes.</li>
+</ul>
+<p><strong>Final answer.</strong> The EER diagram contains the five entity types above (two of them weak, with double rectangles, double diamonds and dashed partial keys), the five relationship types with the (min, max) pairs in the table, and an overlapping, total specialization of PERSON.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Grade A needed: every line carrying a (min, max) pair, both weak entities correctly drawn with partial keys, a sensible d/o choice with a reason, and at least one multivalued and one composite attribute. Major mistakes: a strong entity with no key, a weak entity with no partial key, (1:N) written instead of (min, max), min greater than max.</p>
+</blockquote>
 </details>
 <h3 id="problem-2-eer-application-10-pts-assignment-2-group-ga2">Problem 2 [EER · Application · 10 pts · Assignment 2 group (GA2)]</h3>
 <p>Draw an EER model of the EER model itself: entities have attributes (simple or composite, single- or multivalued, stored or derived, may accept NULL); entity types are strong (with a key attribute) or weak (with a partial key, depending on a strong type through an identifying relationship type); relationship types associate entity types and may have attributes; participation and cardinality constraints in (min, max); entity types may have subclasses (specialization), and strong types may be generalized into a superclass.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Outline of the key's model (any equivalent model with stated assumptions earned an A):</p>
-<ul>
-<li>ENTITY (key Entity_id) —(1,N) DESCRIBED_BY (1,N)— ATTRIBUTE (key Attribute_name; attribute Accepts_NULL).</li>
-<li>ATTRIBUTE specialized three times, each <strong>d</strong> and total: {SIMPLE, COMPOSITE}, {SINGLE_VALUED, MULTIVALUED}, {STORED, DERIVED}. COMPOSITE —(2,N) CONSISTS_OF (0,N)— ATTRIBUTE (recursive); derived Component_count. MULTIVALUED has multivalued attribute Value_set.</li>
-<li>ENTITY_TYPE (key Name) —(0,N) HAS_INSTANCES (1,1)— ENTITY; ENTITY_TYPE —(1,N) HAS_ATTRIBUTES (0,N)— ATTRIBUTE.</li>
-<li>ENTITY_TYPE specialized (d, total) into STRONG_ENTITY_TYPE and WEAK_ENTITY_TYPE. STRONG —(1,1) HAS_KEY (0,1)— KEY_ATTRIBUTE; WEAK —(1,1) HAS_PARTIAL_KEY (1,1)— PARTIAL_KEY_ATTRIBUTE; WEAK —(1,1) IDENTIFYING_RELATIONSHIP (0,N)— STRONG.</li>
-<li>RELATIONSHIP_TYPE ternary among ENTITY_TYPE (two roles) and ATTRIBUTE; BINARY_RELATIONSHIP_TYPE; PARTICIPATION_CONSTRAINT and CARDINALITY_CONSTRAINT as attributes with composite (min, max).</li>
-<li>HAS_SUBCLASS (recursive on ENTITY_TYPE: superclass (0,N), subclass (0,1)); GENERALIZATION from (2,N) strong types to one superclass.</li>
-</ul>
-<p>The point of the exercise: every concept in Chapter 3–4 shows up as an entity, attribute or relationship, so you must know each definition precisely.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Each entity type has a unique name and each attribute has a unique name. <em>(Reason: names are how the EER model refers to its constructs.)</em></li>
+<li>A strong entity type has exactly one key attribute and a weak entity type exactly one partial key. <em>(Reason: the requirements speak of &quot;a key attribute&quot; and &quot;a partial key&quot;.)</em></li>
+<li>The three attribute classifications are independent of each other. <em>(Reason: an attribute is simple or composite, and separately single- or multivalued, and separately stored or derived.)</em></li>
+</ol>
+<p><strong>Entity types and attributes.</strong></p>
+<ol>
+<li>ENTITY (key Entity_id) and ENTITY_TYPE (key Name), related by HAS_INSTANCES: ENTITY_TYPE (0,N), ENTITY (1,1).</li>
+<li>ATTRIBUTE (key Attribute_name; attribute Accepts_NULL), with three <strong>disjoint, total</strong> specializations: {SIMPLE, COMPOSITE}, {SINGLE_VALUED, MULTIVALUED}, {STORED, DERIVED}. MULTIVALUED has the multivalued attribute Value_set; COMPOSITE has the derived attribute Component_count.</li>
+<li>ENTITY_TYPE is specialized (<strong>disjoint, total</strong>) into STRONG_ENTITY_TYPE and WEAK_ENTITY_TYPE.</li>
+<li>KEY_ATTRIBUTE and PARTIAL_KEY_ATTRIBUTE are subclasses of ATTRIBUTE.</li>
+<li>RELATIONSHIP_TYPE, with BINARY_RELATIONSHIP_TYPE as a subclass; participation and cardinality constraints are modelled with the composite attribute (Min, Max).</li>
+</ol>
+<p><strong>Relationship types with (min, max).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DESCRIBED_BY</td>
+<td>ENTITY (1,N), ATTRIBUTE (1,N)</td>
+</tr>
+<tr>
+<td>HAS_ATTRIBUTES</td>
+<td>ENTITY_TYPE (1,N), ATTRIBUTE (0,N)</td>
+</tr>
+<tr>
+<td>CONSISTS_OF (recursive)</td>
+<td>COMPOSITE (2,N) as whole, ATTRIBUTE (0,N) as component</td>
+</tr>
+<tr>
+<td>HAS_KEY</td>
+<td>STRONG_ENTITY_TYPE (1,1), KEY_ATTRIBUTE (0,1)</td>
+</tr>
+<tr>
+<td>HAS_PARTIAL_KEY</td>
+<td>WEAK_ENTITY_TYPE (1,1), PARTIAL_KEY_ATTRIBUTE (1,1)</td>
+</tr>
+<tr>
+<td>IDENTIFYING_RELATIONSHIP</td>
+<td>WEAK_ENTITY_TYPE (1,1), STRONG_ENTITY_TYPE (0,N)</td>
+</tr>
+<tr>
+<td>RELATIONSHIP_TYPE (ternary)</td>
+<td>ENTITY_TYPE in two roles (1,N), ATTRIBUTE (0,N)</td>
+</tr>
+<tr>
+<td>HAS_SUBCLASS (recursive)</td>
+<td>ENTITY_TYPE as superclass (0,N), as subclass (0,1)</td>
+</tr>
+<tr>
+<td>GENERALIZATION</td>
+<td>STRONG_ENTITY_TYPE (2,N), ENTITY_TYPE as superclass (0,1)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Justification.</strong> A composite attribute has at least two components, hence (2,N). A weak entity type depends on exactly one owner, hence (1,1) on its side of the identifying relationship. Generalization combines at least two strong entity types, hence (2,N).</p>
+<p><strong>Final answer.</strong> The EER diagram consists of the entity types, specializations and relationship types listed above.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> The key accepted any equivalent model with stated assumptions. What is being tested is that you know every definition of chapters 3 and 4 precisely enough to model it.</p>
+</blockquote>
 </details>
 <h2 id="b-past-papers-other-years-style-differs">B. Past papers (other years; style differs)</h2>
 <h3 id="problem-3-eer-application-5-pts-m23-endsem-q7">Problem 3 [EER · Application · 5 pts · M23 endsem Q7]</h3>
 <p>TEACHES is a ternary relationship among PROFESSOR, COURSE and STUDENT (which professor teaches which course to which student). A course is taught by at least 1 and at most 2 professors and attended by at least 1 and at most 100 students; a professor teaches no course or at most 3 courses; a student attends no course or at most 6 courses. Give (min, max) for each participant.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Count <strong>triples</strong> each entity can appear in.</p>
-<ul>
-<li><strong>COURSE (1, 200):</strong> at least one professor and one student → ≥ 1 triple; at most 2 professors × 100 students = 200 triples.</li>
-<li><strong>PROFESSOR (0, 300):</strong> may teach nothing → 0; at most 3 courses × 100 students each = 300.</li>
-<li><strong>STUDENT (0, 12):</strong> may attend nothing → 0; at most 6 courses × 2 professors each = 12.</li>
-</ul>
-<p>State the assumption that every professor of a course teaches it to every student of that course; then the maxima are reached. The ternary cannot express &quot;each course has ≤ 2 professors&quot; directly; that per-pair limit needs an extra constraint or binaries.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Every professor of a course teaches it to every student of that course. <em>(Reason: TEACHES records triples; without this assumption the maxima below are upper bounds that may not be reached.)</em></p>
+<p><strong>Working.</strong> For a ternary relationship, the (min, max) pair beside an entity type counts the <strong>triples</strong> (professor, course, student) in which one entity of that type appears.</p>
+<ol>
+<li><strong>COURSE.</strong> A course has at least one professor and at least one student, so it is in at least <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> triple. It has at most 2 professors and at most 100 students, so it is in at most <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">200</span></span></span></span> triples.</li>
+<li><strong>PROFESSOR.</strong> A professor may teach no course, so the minimum is 0. A professor teaches at most 3 courses, each with at most 100 students, so the maximum is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">300</span></span></span></span>.</li>
+<li><strong>STUDENT.</strong> A student may attend no course, so the minimum is 0. A student attends at most 6 courses, each with at most 2 professors, so the maximum is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">12</span></span></span></span>.</li>
+</ol>
+<p><strong>Final answer.</strong> COURSE <strong>(1, 200)</strong>, PROFESSOR <strong>(0, 300)</strong>, STUDENT <strong>(0, 12)</strong>.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Writing (1, 2) for COURSE confuses the per-pair limit with the triple count. Add that the per-pair limits (&quot;at most 2 professors per course&quot;) cannot be expressed by (min, max) on the ternary alone.</p>
+</blockquote>
 </details>
 <h3 id="problem-4-eer-concept-4-pts">Problem 4 [EER · Concept · 4 pts]</h3>
 <p>Explain, with an example, why a ternary relationship is not equivalent to three binary relationships.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> SUPPLY(SUPPLIER, PART, PROJECT): &quot;s supplies p to j&quot;. Replace it with CAN_SUPPLY(s, p), USES(j, p), SUPPLIES(s, j). With s1 supplying p1 to j2 and s2 supplying p2 to j1, and s1 also supplying p2 to j1… the binaries record (s1, p1), (s1, p2), (j1, p2), (j2, p1), (s1, j1), (s1, j2), from which we cannot tell whether s1 supplies p1 to j1. The ternary keeps exactly which triples happened. Binaries can be added <em>alongside</em> a ternary for extra constraints (a supplier may only supply parts it can supply).</p>
+<p><em>Solution.</em></p>
+<p><strong>Answer.</strong> A ternary relationship records which combinations of <em>three</em> entities occur together. Three binary relationships record only which <em>pairs</em> occur, and the triples cannot in general be recovered from the pairs.</p>
+<p><strong>Example.</strong> Let SUPPLY(SUPPLIER, PART, PROJECT) mean &quot;supplier s supplies part p to project j&quot;, with the instance {(s1, p1, j2), (s1, p2, j1), (s2, p1, j1)}. Replace it by three binary relationships:</p>
+<ul>
+<li>CAN_SUPPLY(s, p) = {(s1, p1), (s1, p2), (s2, p1)}</li>
+<li>USES(j, p) = {(j2, p1), (j1, p2), (j1, p1)}</li>
+<li>SUPPLIES(s, j) = {(s1, j2), (s1, j1), (s2, j1)}</li>
+</ul>
+<p>From these pairs, (s1, p1, j1) looks possible: s1 can supply p1, j1 uses p1, and s1 supplies j1. Yet s1 never supplied p1 to j1. The binaries therefore lose information.</p>
+<p><strong>Final answer.</strong> They are not equivalent: the ternary stores exactly which triples occurred, which the binaries cannot reproduce. Binaries may be kept <em>in addition</em> to a ternary to express extra constraints, such as &quot;a supplier may supply only parts it can supply&quot;.</p>
 </details>
 <h3 id="problem-5-eer-concept-3-pts">Problem 5 [EER · Concept · 3 pts]</h3>
 <p>Distinguish total from partial and disjoint from overlapping specialization, with one example of each combination.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
-<ul>
-<li>Disjoint, total: EMPLOYEE → {HOURLY, SALARIED} (every employee is exactly one).</li>
-<li>Disjoint, partial: EMPLOYEE → {SECRETARY, ENGINEER, TECHNICIAN} (some employees are none).</li>
-<li>Overlapping, total: PART → {MANUFACTURED, PURCHASED} (a part can be both, and is at least one).</li>
-<li>Overlapping, partial: PERSON → {ACTOR, DIRECTOR} if the database also holds people who are neither.
-Total: double line from the superclass to the circle. Disjoint: <strong>d</strong>; overlapping: <strong>o</strong>.</li>
-</ul>
+<p><strong>Definitions.</strong></p>
+<ol>
+<li><strong>Disjoint (d)</strong>: an entity of the superclass belongs to at most one subclass. <strong>Overlapping (o)</strong>: it may belong to several.</li>
+<li><strong>Total</strong>: every entity of the superclass belongs to at least one subclass (double line from the superclass to the circle). <strong>Partial</strong>: some entities belong to none (single line).</li>
+</ol>
+<p><strong>Examples of the four combinations.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Combination</th>
+<th>Example</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Disjoint, total</td>
+<td>EMPLOYEE → {HOURLY, SALARIED}</td>
+<td>every employee is paid in exactly one way</td>
+</tr>
+<tr>
+<td>Disjoint, partial</td>
+<td>EMPLOYEE → {SECRETARY, ENGINEER, TECHNICIAN}</td>
+<td>some employees have none of these jobs</td>
+</tr>
+<tr>
+<td>Overlapping, total</td>
+<td>PART → {MANUFACTURED, PURCHASED}</td>
+<td>a part can be both, and is at least one</td>
+</tr>
+<tr>
+<td>Overlapping, partial</td>
+<td>PERSON → {ACTOR, DIRECTOR}</td>
+<td>a person may be both, and the database also holds people who are neither</td>
+</tr>
+</tbody>
+</table></div>
 </details>
 <h3 id="problem-6-eer-concept-3-pts">Problem 6 [EER · Concept · 3 pts]</h3>
 <p>What is the difference between a shared subclass and a category?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A <strong>shared subclass</strong> (in a lattice) has several superclasses and each member belongs to <strong>all</strong> of them (ENGINEERING_MANAGER is an ENGINEER and a MANAGER); it inherits from all. A <strong>category</strong> (union type) is a subclass of the <strong>union</strong> of several superclasses, and each member belongs to <strong>one</strong> of them (OWNER is a PERSON or a BANK or a COMPANY); it inherits only from the one it belongs to. A category is drawn with ∪ in the circle.</p>
+<p><em>Solution.</em></p>
+<p><strong>Answer.</strong></p>
+<ol>
+<li>A <strong>shared subclass</strong> has several superclasses and appears in a specialization lattice. Each of its entities belongs to <strong>all</strong> of its superclasses and inherits from all of them. Example: ENGINEERING_MANAGER is a subclass of both ENGINEER and MANAGER.</li>
+<li>A <strong>category</strong> (union type) is a subclass of the <strong>union</strong> of several superclasses, which usually have different keys. Each of its entities belongs to <strong>exactly one</strong> of the superclasses and inherits only from that one. Example: OWNER = PERSON ∪ BANK ∪ COMPANY. It is drawn with ∪ in the circle.</li>
+</ol>
+<p><strong>Final answer.</strong> A shared subclass is an intersection (member of all superclasses); a category is a union (member of one superclass).</p>
 </details>
 <h3 id="problem-7-eer-application-6-pts-m24-quiz-2-q3">Problem 7 [EER · Application · 6 pts · M24 Quiz 2 Q3]</h3>
 <p>Reverse-engineer an ER diagram from: EMPLOYEE(<strong>Ssn</strong>, Name, Dno), DEPARTMENT(<strong>Dnumber</strong>, Dname, Mgr_ssn), PROJECT(<strong>Pnumber</strong>, Pname, Dnum), WORKS_ON(<strong>Essn, Pno</strong>, Hours), DEPENDENT(<strong>Essn, Dependent_name</strong>, Relationship).</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Strong entities EMPLOYEE, DEPARTMENT, PROJECT (each has its own single-attribute key). DEPENDENT is <strong>weak</strong> (its key contains an FK to EMPLOYEE plus a partial key Dependent_name) with identifying relationship DEPENDENTS_OF: EMPLOYEE (0,N), DEPENDENT (1,1). WORKS_ON is an <strong>M:N relationship</strong> (its key is two FKs) with attribute Hours: EMPLOYEE (1,N), PROJECT (1,N) or (0,N) by assumption. EMPLOYEE.Dno → WORKS_FOR, 1:N: EMPLOYEE (1,1), DEPARTMENT (1,N). DEPARTMENT.Mgr_ssn → MANAGES, 1:1: DEPARTMENT (1,1), EMPLOYEE (0,1). PROJECT.Dnum → CONTROLS: PROJECT (1,1), DEPARTMENT (0,N). Rule of thumb: a relation whose key is made of FKs is a relationship; an FK plus a partial key is a weak entity; a lone FK is a 1:N or 1:1 relationship.</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Every project has at least one employee working on it. <em>(Reason: not stated; (0,N) would also be acceptable with the opposite assumption.)</em></li>
+<li>Mgr_ssn is never NULL, so every department has a manager. <em>(Reason: a department is managed by an employee.)</em></li>
+</ol>
+<p><strong>Working.</strong> Each relation is classified by the structure of its key.</p>
+<ol>
+<li>EMPLOYEE, DEPARTMENT and PROJECT each have a single-attribute key of their own, so they are <strong>strong entity types</strong>.</li>
+<li>DEPENDENT's key is (Essn, Dependent_name): a foreign key to EMPLOYEE plus a name that is unique only per employee. So DEPENDENT is a <strong>weak entity type</strong> with owner EMPLOYEE, partial key Dependent_name and identifying relationship DEPENDENTS_OF: EMPLOYEE (0,N), DEPENDENT (1,1).</li>
+<li>WORKS_ON's key consists of two foreign keys, so it is an <strong>M:N relationship</strong> between EMPLOYEE and PROJECT with attribute Hours: EMPLOYEE (1,N), PROJECT (1,N).</li>
+<li>EMPLOYEE.Dno is a single foreign key, so it is a <strong>1:N relationship</strong> WORKS_FOR: EMPLOYEE (1,1), DEPARTMENT (1,N).</li>
+<li>DEPARTMENT.Mgr_ssn is a single foreign key, and an employee manages at most one department, so it is a <strong>1:1 relationship</strong> MANAGES: DEPARTMENT (1,1), EMPLOYEE (0,1).</li>
+<li>PROJECT.Dnum is a single foreign key, giving the <strong>1:N relationship</strong> CONTROLS: PROJECT (1,1), DEPARTMENT (0,N).</li>
+</ol>
+<p><strong>Final answer.</strong> Strong entities EMPLOYEE, DEPARTMENT, PROJECT; weak entity DEPENDENT; relationships DEPENDENTS_OF (identifying), WORKS_ON (M:N, Hours), WORKS_FOR (1:N), MANAGES (1:1), CONTROLS (1:N), with the (min, max) pairs above.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> The rule of thumb: a key made only of foreign keys means a relationship; a foreign key plus a partial key means a weak entity; a lone foreign key means a 1:N or 1:1 relationship.</p>
+</blockquote>
 </details>
 <h3 id="problem-8-eer-application-6-pts-elmasri-3-16-style">Problem 8 [EER · Application · 6 pts · Elmasri 3.16 style]</h3>
 <p>A UNIVERSITY database: colleges have departments; departments offer courses with sections; instructors belong to departments, one of whom chairs it; students major in a department and register for sections with a grade. Name the entity types, keys, relationships and (min, max) you would use.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> COLLEGE(CName key) —(1,N) HAS (1,1)— DEPT(DCode key); DEPT —(0,N) OFFERS (1,1)— COURSE(CoCode key); COURSE —(0,N) SECS (1,1)— SECTION (weak? only if section numbers repeat per course: then partial key SecNo, owner COURSE); INSTRUCTOR(Id key) —(1,1) EMPLOYS (1,N)— DEPT; INSTRUCTOR —(0,1) CHAIRS (1,1)— DEPT; INSTRUCTOR —(0,N) TEACHES (1,1)— SECTION; STUDENT(Sid key) —(1,1) MAJORS (0,N)— DEPT; STUDENT —(0,N) TAKES (0,N)— SECTION with attribute Grade. Write assumptions for every min you chose (for example, a new department may have no courses yet → (0,N)).</p>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Section numbers repeat across courses, so SECTION is weak with owner COURSE. <em>(Reason: universities number sections 1, 2, … per course.)</em></li>
+<li>A newly created department may have no courses yet. <em>(Reason: departments are created before their courses.)</em></li>
+<li>Every instructor belongs to exactly one department. <em>(Reason: given.)</em></li>
+</ol>
+<p><strong>Entity types.</strong> COLLEGE (key CName), DEPT (key DCode), COURSE (key CoCode), SECTION (weak, partial key SecNo, owner COURSE), INSTRUCTOR (key Id), STUDENT (key Sid).</p>
+<p><strong>Relationship types with (min, max).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+<th>Attribute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HAS</td>
+<td>COLLEGE (1,N), DEPT (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OFFERS</td>
+<td>DEPT (0,N), COURSE (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SECS (identifying)</td>
+<td>COURSE (0,N), SECTION (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>EMPLOYS</td>
+<td>DEPT (1,N), INSTRUCTOR (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CHAIRS</td>
+<td>DEPT (1,1), INSTRUCTOR (0,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TEACHES</td>
+<td>INSTRUCTOR (0,N), SECTION (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>MAJORS</td>
+<td>STUDENT (1,1), DEPT (0,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TAKES</td>
+<td>STUDENT (0,N), SECTION (0,N)</td>
+<td>Grade</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Final answer.</strong> The schema has the six entity types and eight relationship types above. Grade is an attribute of TAKES, because it describes a student in a particular section.</p>
 </details>
 </div>
       <div class="done-row">
@@ -243,6 +451,6 @@ Total: double line from the superclass to the circle. Disjoint: <strong>d</stron
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwoml3jv" defer></script>
+<script src="../../assets/app.js?v=mwon7yor" defer></script>
 </body>
 </html>

@@ -119,31 +119,76 @@ Learn this schema well: Ch 8 and Ch 6–7 examples, and many textbook exercises 
 
 # Practice: The relational model, keys and constraints
 
+Every solution below is written the way an answer should look on the exam script: **assumptions** first (each with its reason), then the **working** in full sentences, then a clearly marked **final answer**. The quoted *Examiner's notes* are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.
+
 ## A. Keys
 
 ### Problem 1 [Keys · Concept · 3 pts · M24 Quiz 2 Q1c]
 
 Differentiate between superkey, candidate key and primary key.
 
-*Solution.* **Superkey:** any set of attributes whose values are unique across all tuples in every legal state; adding attributes to a superkey keeps it a superkey. **Candidate key:** a *minimal* superkey, so no proper subset is a superkey. **Primary key:** one candidate key chosen by the designer to identify tuples; it is underlined, and by entity integrity it may not be NULL. Every primary key is a candidate key, and every candidate key is a superkey, but not conversely. Example: in STUDENT(Roll, Email, Name), {Roll, Name} is a superkey but not a candidate key; Roll and Email are both candidate keys; Roll is chosen as the primary key.
+*Solution.*
+
+**Definitions.**
+1. A **superkey** of R is a set of attributes SK such that no two distinct tuples in *any* legal state of R have the same values on SK. Every superset of a superkey is again a superkey.
+2. A **candidate key** is a *minimal* superkey: removing any attribute from it gives a set that is no longer a superkey.
+3. The **primary key** is one candidate key chosen by the designer to identify tuples. It is underlined in the schema, and by the entity integrity constraint it can never be NULL.
+
+**Relationship between them.** Every primary key is a candidate key, and every candidate key is a superkey. The converses do not hold.
+
+**Example.** In STUDENT(Roll, Email, Name), where Roll and Email are each unique:
+- {Roll, Name} is a superkey but not a candidate key, because its subset {Roll} is already a superkey.
+- {Roll} and {Email} are candidate keys.
+- {Roll} is chosen as the primary key; {Email} remains an alternate (unique) key.
 
 ### Problem 2 [Keys · Numerical · 3 pts · M25 Quiz 2 Q1b]
 
 A relation has 5 attributes, and exactly 3 of them are each unique on their own (each is a candidate key by itself), and there are no other candidate keys. How many superkeys are there?
 
-*Solution.* A set is a superkey iff it contains at least one of the 3 key attributes. All subsets: 2⁵ = 32. Subsets avoiding all 3 key attributes: subsets of the remaining 2 attributes, 2² = 4 (including the empty set). So #superkeys = 32 − 4 = **28**. In general 2ⁿ − 2ⁿ⁻ᵏ.
+*Solution.*
+
+**Working.**
+1. Every superkey contains a candidate key. The candidate keys here are three single attributes, so a set of attributes is a superkey exactly when it contains at least one of these three attributes.
+2. The number of subsets of the 5 attributes is $2^5 = 32$.
+3. A subset fails to be a superkey exactly when it avoids all three key attributes, i.e. when it is a subset of the remaining 2 attributes. There are $2^2 = 4$ such subsets (including the empty set).
+4. Hence the number of superkeys is $32 - 4 = 28$.
+
+**Final answer.** **28 superkeys.** In general, with n attributes and k single-attribute candidate keys, the count is $2^n - 2^{n-k}$.
 
 ### Problem 3 [Keys · Numerical · 3 pts · M24 Quiz 2 Q1b]
 
 VEHICLE(Vehicle_ID, Registration, Model, Company, Year, Colour), where Vehicle_ID and Registration are each underlined separately (each is a key on its own). How many superkeys does VEHICLE have? Which of {Year, Colour}, {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company}, {Registration, Year, Colour, Company} are superkeys?
 
-*Solution.* n = 6, k = 2: 2⁶ − 2⁴ = 64 − 16 = **48** superkeys. {Year, Colour} is **not** a superkey (contains neither key). The other three each contain Vehicle_ID or Registration, so they **are** superkeys (none of them is a candidate key except the single attributes themselves).
+*Solution.*
+
+**Assumption.** Vehicle_ID and Registration are the only candidate keys. *(Reason: they are the only attributes marked as keys.)*
+
+**Working.**
+1. A set is a superkey exactly when it contains Vehicle_ID or Registration.
+2. There are $2^6 = 64$ subsets of the six attributes, and $2^4 = 16$ of them contain neither key attribute.
+3. So the number of superkeys is $64 - 16 = 48$.
+4. {Year, Colour} contains neither key attribute, so it is **not** a superkey.
+5. {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company} and {Registration, Year, Colour, Company} each contain a key attribute, so each **is** a superkey. None of them is a candidate key, because each has a proper subset ({Vehicle_ID} or {Registration}) that is already a superkey.
+
+**Final answer.** **48 superkeys.** Superkeys: {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company}, {Registration, Year, Colour, Company}. Not a superkey: {Year, Colour}.
 
 ### Problem 4 [Keys · Concept · 4 pts · M25 Quiz 2 Q1a]
 
 You are shown a library issue table with 10 rows: StudentID, BookID, BookTitle, IssueDate, ReturnDate. In the sample, BookTitle happens to be different in every row. Is BookTitle a candidate key?
 
-*Solution.* **Not justified.** A key is a constraint on all legal states, and a sample can only *rule out* keys. The data shows StudentID repeats (S04 twice) and BookID repeats (B03 twice), so neither is a key; BookTitle is unique *in this sample* only. Semantically, a student can borrow the same book twice on different days, so a sensible key is **(StudentID, BookID, IssueDate)**. If the question insists "this is the complete table and no new data will be added", then BookTitle is the smallest candidate key **for this state** — state that assumption explicitly, as the rubric requires.
+*Solution.*
+
+**Assumption.** The table records book issues over time, so new rows will be added. *(Reason: an issue table grows with every loan; the question does not say the state is fixed.)*
+
+**Answer.**
+1. A key is a constraint that must hold in **every** legal state of the relation, not only in the rows shown. A sample of data can show that a set is *not* a key (by exhibiting two rows that agree on it), but it can never prove that a set *is* a key.
+2. In the sample, StudentID repeats (S04 appears twice) and BookID repeats (B03 appears twice), so neither is a key on its own.
+3. BookTitle is unique only in this sample. Two copies of the same title, or the same book issued again later, would give two rows with equal BookTitle. So BookTitle is not a key of the schema.
+4. From the meaning of the data, a student can borrow the same book on different days, so a suitable key is (StudentID, BookID, IssueDate).
+
+**Final answer.** **No.** BookTitle is not a candidate key; a suitable candidate key is **(StudentID, BookID, IssueDate)**.
+
+> **Examiner's note.** If you assume "this is the complete table and no rows will ever be added", then BookTitle is a minimal unique attribute *for this state*, and that answer is acceptable **only** with the assumption written down.
 
 ## B. Constraint violations
 
@@ -154,32 +199,74 @@ MAJOR(**Name**, Department NOT NULL); STUDENT(**ID**, Name NOT NULL, Age > 0, GP
 (b) UPDATE Student SET Major = 'History' WHERE ID = 103;
 (c) DELETE FROM Major WHERE Name = 'Physics';
 
-*Solution.* **(a)** Two violations. ID 104 already exists: **key constraint** (not entity integrity — the key is not NULL). GPA 4.1 is outside 0–4: **domain constraint** (a CHECK). 'Chemistry' exists in MAJOR, so referential integrity holds.
+*Solution.*
 
-**(b)** 'History' is not a Name in MAJOR: **referential integrity**.
+**Assumptions.**
+1. Each statement is applied to the original state, independently of the others. *(Reason: the question says so.)*
+2. The foreign key uses the default action, ON DELETE RESTRICT. *(Reason: no referential action is specified.)*
 
-**(c)** Student 103 references 'Physics': deleting it would leave a dangling reference, so **referential integrity**; with the default RESTRICT the delete is rejected. (With ON DELETE CASCADE, student 103 would be deleted; with SET NULL, 103's Major would become NULL.)
+**(a)** The statement violates two constraints.
+- A student with ID 104 already exists, so the new tuple duplicates the primary key: a **key constraint** violation. (It is not an entity integrity violation, because the key value is not NULL.)
+- GPA = 4.1 lies outside the permitted range 0 to 4: a **domain constraint** (CHECK) violation.
+- 'Chemistry' exists in MAJOR, so referential integrity is satisfied.
+
+**(b)** No tuple of MAJOR has Name = 'History', so student 103 would reference a non-existent major: a **referential integrity** violation.
+
+**(c)** Student 103 references 'Physics'. Deleting that tuple would leave a dangling reference: a **referential integrity** violation. Under RESTRICT the delete is rejected.
+
+**Final answer.** (a) key constraint and domain constraint; (b) referential integrity; (c) referential integrity (delete rejected).
+
+> **Examiner's note.** Mention what other actions would do in (c): ON DELETE CASCADE deletes student 103 as well; SET NULL sets 103's Major to NULL. Writing "entity integrity" for (a) lost a mark in the 2023 key.
 
 ### Problem 6 [Constraints · Application · 3 pts · M24 Quiz 2 Q4]
 
 For a USERS(**uid**, name, age CHECK age > 0) and ORDERS(**oid**, uid → USERS, amount) database, give one example each of: an INSERT violating the key constraint; an INSERT violating entity integrity; a DELETE on ORDERS that violates referential integrity; an acceptable DELETE on ORDERS; an acceptable UPDATE on USERS; an UPDATE on USERS violating a domain constraint.
 
 *Solution.*
-- Key: USERS has uid 1; `INSERT INTO USERS VALUES (1, 'Ravi', 20)`.
-- Entity integrity: `INSERT INTO USERS VALUES (NULL, 'Ravi', 20)`.
-- DELETE on ORDERS violating RI: **impossible** in this schema, since nothing references ORDERS. Deleting from the *referencing* relation never breaks RI. Say so (that was the point of the question).
-- Acceptable DELETE: `DELETE FROM ORDERS WHERE oid = 7`.
-- Acceptable UPDATE: `UPDATE USERS SET name = 'Ravi K' WHERE uid = 1`.
-- Domain: `UPDATE USERS SET age = -5 WHERE uid = 1`.
+
+**Assumption.** USERS contains a tuple with uid = 1, and ORDERS contains a tuple with oid = 7. *(Reason: the examples need existing tuples.)*
+
+| Required example | Statement | Why |
+| --- | --- | --- |
+| INSERT violating the key constraint | `INSERT INTO USERS VALUES (1, 'Ravi', 20);` | uid 1 already exists |
+| INSERT violating entity integrity | `INSERT INTO USERS VALUES (NULL, 'Ravi', 20);` | primary key is NULL |
+| DELETE on ORDERS violating RI | **Not possible** | no relation references ORDERS |
+| Acceptable DELETE on ORDERS | `DELETE FROM ORDERS WHERE oid = 7;` | deleting a referencing tuple never breaks RI |
+| Acceptable UPDATE on USERS | `UPDATE USERS SET name = 'Ravi K' WHERE uid = 1;` | non-key, valid value |
+| UPDATE violating a domain constraint | `UPDATE USERS SET age = -5 WHERE uid = 1;` | violates CHECK (age > 0) |
+
+**Justification of the third row.** Referential integrity can be violated by a delete only in the *referenced* relation. ORDERS is the referencing relation and nothing references it, so no delete on ORDERS can violate referential integrity.
 
 ### Problem 7 [Constraints · Concept · 2 pts]
 
 Which update operations can violate referential integrity, and what are the options when a DELETE would?
 
-*Solution.* INSERT into the referencing relation (FK value not present), UPDATE of an FK (new value not present), DELETE from the referenced relation (and UPDATE of a referenced PK). Options for the DELETE: RESTRICT (reject), CASCADE (also delete referencing tuples), SET NULL, SET DEFAULT.
+*Solution.*
+
+**Operations that can violate referential integrity.**
+1. INSERT into the referencing relation, when the new foreign-key value does not exist in the referenced relation.
+2. UPDATE of a foreign-key attribute to a value that does not exist in the referenced relation.
+3. DELETE of a referenced tuple (and UPDATE of a referenced primary key), when some tuple still refers to it.
+
+**Options when a DELETE would violate it.**
+- **RESTRICT / NO ACTION**: reject the delete (the default).
+- **CASCADE**: also delete the referencing tuples.
+- **SET NULL**: set the referencing foreign keys to NULL (only if they are not part of a primary key).
+- **SET DEFAULT**: set them to the declared default value.
 
 ### Problem 8 [Foreign keys · Application · 3 pts · M24 Quiz 2 Q2, Elmasri 5.15]
 
 ORDER-PROCESSING: CUSTOMER(**Cust#**, Cname, City); ORDER(**Order#**, Odate, Cust#, Ord_amt); ORDER_ITEM(**Order#, Item#**, Qty); ITEM(**Item#**, Unit_price); SHIPMENT(**Order#, Warehouse#**, Ship_date); WAREHOUSE(**Warehouse#**, City). Specify the foreign keys.
 
-*Solution.* ORDER.Cust# → CUSTOMER; ORDER_ITEM.Order# → ORDER; ORDER_ITEM.Item# → ITEM; SHIPMENT.Order# → ORDER; SHIPMENT.Warehouse# → WAREHOUSE. Assumption: an order can be shipped from several warehouses (given), so (Order#, Warehouse#) is SHIPMENT's key and both parts are FKs. Ship_date is per (order, warehouse).
+*Solution.*
+
+**Assumption.** An order may be shipped from several warehouses, and each (order, warehouse) pair has its own ship date. *(Reason: (Order#, Warehouse#) is given as the key of SHIPMENT.)*
+
+**Foreign keys.**
+1. ORDER.Cust# → CUSTOMER.Cust#
+2. ORDER_ITEM.Order# → ORDER.Order#
+3. ORDER_ITEM.Item# → ITEM.Item#
+4. SHIPMENT.Order# → ORDER.Order#
+5. SHIPMENT.Warehouse# → WAREHOUSE.Warehouse#
+
+**Justification.** Each foreign key is an attribute whose values identify a tuple of another relation, and it references that relation's primary key. In ORDER_ITEM and SHIPMENT both parts of the composite key are foreign keys, because these relations record M:N associations.
