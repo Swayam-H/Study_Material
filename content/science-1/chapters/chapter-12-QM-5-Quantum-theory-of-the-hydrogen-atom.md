@@ -209,7 +209,7 @@ A photon carries one unit of angular momentum. 2p $\to$ 1s and 3d $\to$ 2p are a
 
 # Practice: Quantum theory of the hydrogen atom
 
-22 questions with worked answers (tap a solution to open it). These are mostly "explain" questions, since the professor wants understanding rather than derivations. Points are in brackets.
+28 questions with worked answers (tap a solution to open it). These are mostly "explain" questions, since the professor wants understanding rather than derivations. Points are in brackets.
 
 ## A. State and explain
 
@@ -501,3 +501,93 @@ What does the hydrogen solution keep from the Bohr model and what does it discar
 
 **Added.** The quantum numbers $l$ and $m_l$, degeneracy $n^2$, space quantisation, selection rules, and correct radial and angular shapes.
 
+
+## D. More practice: counting states and transitions
+
+### Problem 23 [QM 5 · Numerical · 3 pts]
+
+List the orbital states of hydrogen with $n = 3$ and give the degeneracy, with and without spin.
+
+*Solution.* For $n = 3$, $l = 0, 1, 2$ and $m_l = -l,\dots,+l$:
+
+| $l$ | subshell | number of $m_l$ values |
+|---|---|---|
+| $0$ | $3s$ | $1$ |
+| $1$ | $3p$ | $3$ |
+| $2$ | $3d$ | $5$ |
+
+$$\text{total} = 1 + 3 + 5 = n^2 = \boxed{9}\ \text{(orbital)},\qquad 2n^2 = \boxed{18}\ \text{(with spin)}$$
+
+All $9$ share the energy $E_3 = -13.6/9 = -1.51$ eV, which is a special feature of the Coulomb potential (in most other potentials the energy also depends on $l$).
+
+### Problem 24 [QM 5 · Numerical · 3 pts]
+
+Find the wavelength of the photon emitted in the transition $n = 3\to n = 2$ in hydrogen. Which spectral series is it?
+
+*Solution.* **Idea.** $\Delta E = 13.6\ \text{eV}\left(\dfrac1{n_f^2} - \dfrac1{n_i^2}\right)$ and $\lambda = hc/\Delta E$ with $hc = 1240$ eV nm.
+
+$$\Delta E = 13.6\left(\frac14 - \frac19\right) = 13.6\times\frac5{36} = 1.89\ \text{eV}$$
+
+$$\lambda = \frac{1240}{1.89} = \boxed{656\ \text{nm}}$$
+
+**Series.** Final level $n = 2$ is the **Balmer** series, and this is its first line (H$_\alpha$), a red line in the visible.
+
+### Problem 25 [QM 5 · Numerical · 3 pts]
+
+An electron is in a state with $l = 2$. Find $|\vec L|$, the possible values of $L_z$, and the smallest angle between $\vec L$ and the $z$-axis.
+
+*Solution.* $|\vec L| = \sqrt{l(l+1)}\,\hbar = \boxed{\sqrt6\,\hbar = 2.45\hbar}$
+
+$$L_z = m_l\hbar,\quad m_l\in\{-2,-1,0,1,2\}\ \Rightarrow\ \boxed{L_z = 0,\ \pm\hbar,\ \pm2\hbar}$$
+
+**Smallest angle** ($m_l = 2$):
+
+$$\cos\theta = \frac{L_z}{|\vec L|} = \frac2{\sqrt6} = 0.816\ \Rightarrow\ \theta = \boxed{35.3^\circ}$$
+
+**Meaning.** $\vec L$ can never point exactly along $z$, because $|L_z| < |\vec L|$ always; this is the uncertainty principle at work (knowing $L_z$ exactly means $L_x$ and $L_y$ are undefined).
+
+### Problem 26 [QM 5 · Concept · 3 pts]
+
+How many radial nodes and angular nodes do the $3s$, $3p$, $3d$ and $4f$ orbitals have?
+
+*Solution.* **Rules.** Radial nodes $= n - l - 1$, angular nodes $= l$, total nodes $= n - 1$.
+
+| orbital | $n$ | $l$ | radial nodes | angular nodes | total |
+|---|---|---|---|---|---|
+| $3s$ | $3$ | $0$ | $2$ | $0$ | $2$ |
+| $3p$ | $3$ | $1$ | $1$ | $1$ | $2$ |
+| $3d$ | $3$ | $2$ | $0$ | $2$ | $2$ |
+| $4f$ | $4$ | $3$ | $0$ | $3$ | $3$ |
+
+**Pattern.** For fixed $n$ the total number of nodes is the same; the orbital with the biggest $l$ has the fewest radial nodes.
+
+### Problem 27 [QM 5 · Derivation · 4 pts]
+
+For the hydrogen ground state $|\psi_{100}|^2\propto e^{-2r/a_0}$, show that the most probable distance of the electron from the nucleus is $a_0$.
+
+*Solution.* **Radial probability density.** Include the spherical shell volume $4\pi r^2\,dr$:
+
+$$P(r) = 4\pi r^2|\psi|^2 = \frac4{a_0^3}r^2e^{-2r/a_0}$$
+
+**Maximise:**
+
+$$\frac{dP}{dr}\propto\left(2r - \frac{2r^2}{a_0}\right)e^{-2r/a_0} = 0\ \Rightarrow\ \boxed{r = a_0}$$
+
+**Common mistake.** The wavefunction itself is largest at $r = 0$, but the **radial probability** peaks at $a_0$, because the volume of the shell goes to zero as $r\to0$. The average is larger still: $\langle r\rangle = \tfrac32a_0$.
+
+### Problem 28 [QM 5 · Concept · 3 pts]
+
+The electric-dipole selection rule for hydrogen is $\Delta l = \pm1$ (and $\Delta m_l = 0, \pm1$). Which of these transitions are allowed: $3p\to1s$, $3d\to2s$, $2s\to1s$, $3d\to2p$?
+
+*Solution.* Check $\Delta l$ for each:
+
+| transition | $\Delta l$ | allowed? |
+|---|---|---|
+| $3p\to1s$ | $1\to0$: $-1$ | ✓ allowed |
+| $3d\to2s$ | $2\to0$: $-2$ | ✗ forbidden |
+| $2s\to1s$ | $0\to0$: $0$ | ✗ forbidden |
+| $3d\to2p$ | $2\to1$: $-1$ | ✓ allowed |
+
+**Why $\Delta l = \pm1$.** A photon carries one unit of angular momentum, so the atom's $l$ must change by one.
+
+**Consequence.** The $2s$ state cannot decay to $1s$ by emitting a single photon, so it is long-lived (metastable, about $0.12$ s) compared with $2p$ (about $1.6$ ns).

@@ -178,7 +178,7 @@ $$\frac{d^2u}{d\theta^2} + u = -\frac{\mu}{\ell^2u^2}F\!\left(\frac1u\right)$$
 Closed bound orbits for every initial condition occur only for $U\propto r^{-1}$ and $U\propto r^2$ (Bertrand).
 # Practice: Hamiltonian dynamics and the two-body problem
 
-22 questions with worked answers (tap a solution to open it). Points in brackets, midsem style.
+28 questions with worked answers (tap a solution to open it). Points in brackets, midsem style.
 
 ## A. State and explain
 
@@ -545,3 +545,77 @@ $$v = \frac{2\pi r}{T} = \frac{2\pi(1.5\times10^{11}\ \text{m})}{3.15\times10^7\
 
 That is about $30$ km/s.
 
+
+## D. More practice: orbits and Hamilton's equations
+
+### Problem 23 [Mechanics 3 · Numerical · 3 pts]
+
+Find the speed and period of a satellite in a circular orbit at altitude $400$ km. ($GM_E = 3.986\times10^{14}$ m$^3$/s$^2$, $R_E = 6.371\times10^6$ m.)
+
+*Solution.* **Idea.** Gravity provides the centripetal force: $\dfrac{mv^2}r = \dfrac{GMm}{r^2}$.
+
+$$r = 6.371\times10^6 + 0.4\times10^6 = 6.77\times10^6\ \text{m}$$
+
+$$v = \sqrt{\frac{GM}{r}} = \sqrt{\frac{3.986\times10^{14}}{6.77\times10^6}} = \boxed{7.67\ \text{km/s}}$$
+
+$$T = \frac{2\pi r}{v} = \frac{2\pi(6.77\times10^6)}{7.67\times10^3} = 5.55\times10^3\ \text{s} \approx \boxed{92.5\ \text{min}}$$
+
+**Check.** About $16$ orbits per day, which matches the International Space Station.
+
+### Problem 24 [Mechanics 3 · Numerical · 2 pts]
+
+Mars orbits at a mean distance of $1.524$ AU. Use Kepler's third law to find its year in Earth years.
+
+*Solution.* **Idea.** $T^2\propto a^3$, and for the Earth $T = 1$ yr at $a = 1$ AU, so $T^2 = a^3$ in these units.
+
+$$T = a^{3/2} = (1.524)^{1.5} = 1.524\times1.2345 = \boxed{1.88\ \text{yr}}$$
+
+**Check.** That is about $687$ days, the known length of a Martian year.
+
+### Problem 25 [Mechanics 3 · Numerical · 2 pts]
+
+Find the escape speed from the surface of the Earth, and explain why it is $\sqrt2$ times the circular-orbit speed at the surface.
+
+*Solution.* **Idea.** Escape means total energy $\ge 0$: $\tfrac12mv^2 - \dfrac{GMm}R = 0$.
+
+$$v_\text{esc} = \sqrt{\frac{2GM}R} = \sqrt{\frac{2(3.986\times10^{14})}{6.371\times10^6}} = \boxed{11.2\ \text{km/s}}$$
+
+**The factor $\sqrt2$.** At the surface the circular-orbit speed is $v_c = \sqrt{GM/R} = 7.9$ km/s, and $v_\text{esc} = \sqrt2\,v_c$ since a circular orbit has $E = -\tfrac12|U|$ while escape needs $E = 0$, which means twice the kinetic energy.
+
+### Problem 26 [Mechanics 3 · Numerical · 3 pts]
+
+A $1000$ kg satellite is in a circular orbit of radius $7.0\times10^6$ m. Find its kinetic energy, potential energy and total energy.
+
+*Solution.* **Idea.** For a circular orbit $K = \dfrac{GMm}{2r}$, $U = -\dfrac{GMm}r$ and $E = -\dfrac{GMm}{2r}$.
+
+$$\frac{GMm}{r} = \frac{(3.986\times10^{14})(1000)}{7.0\times10^6} = 5.69\times10^{10}\ \text{J}$$
+
+$$K = \boxed{+2.85\times10^{10}\ \text{J}},\qquad U = \boxed{-5.69\times10^{10}\ \text{J}},\qquad E = \boxed{-2.85\times10^{10}\ \text{J}}$$
+
+**Check.** $E = K = -\tfrac12U$ (the virial theorem for a $1/r$ potential). Losing energy through drag lowers $r$ and **raises** the speed: the satellite speeds up as it spirals in.
+
+### Problem 27 [Mechanics 3 · Derivation · 3 pts]
+
+For the harmonic oscillator $H = \dfrac{p^2}{2m} + \dfrac12kx^2$, write Hamilton's equations and show that they reproduce Newton's second law.
+
+*Solution.* **Hamilton's equations:**
+
+$$\dot x = \frac{\partial H}{\partial p} = \frac pm,\qquad \dot p = -\frac{\partial H}{\partial x} = -kx$$
+
+**Eliminate $p$.** Differentiate the first: $\ddot x = \dot p/m = -kx/m$, so
+
+$$\boxed{m\ddot x = -kx}$$
+
+which is Newton's law with the spring force $-kx$.
+
+**Bonus.** $H$ does not depend on time explicitly, so $H = E$ is conserved, and the phase-space trajectories are the ellipses $\dfrac{p^2}{2mE} + \dfrac{x^2}{2E/k} = 1$.
+
+### Problem 28 [Mechanics 3 · Numerical · 3 pts]
+
+Halley's comet has perihelion $0.586$ AU, aphelion $35.1$ AU and a perihelion speed of $54.5$ km/s. Find its speed at aphelion.
+
+*Solution.* **Idea.** The gravitational force is central, so angular momentum $L = mvr$ is conserved; at perihelion and aphelion the velocity is perpendicular to the radius.
+
+$$v_ar_a = v_pr_p\ \Rightarrow\ v_a = v_p\frac{r_p}{r_a} = 54.5\times\frac{0.586}{35.1} = \boxed{0.91\ \text{km/s}}$$
+
+**Check.** The comet is slowest where it is farthest from the Sun, as it must be; the speed ratio equals the inverse distance ratio, about $60$.
