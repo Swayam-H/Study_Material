@@ -2,7 +2,7 @@
   "title": "Operating Systems and Networks",
   "code": "CS3.301",
   "term": "Monsoon 2026",
-  "blurb": "CPU and memory virtualization, networking and the transport layer, concurrency, locks and semaphores.",
+  "blurb": "CPU and memory virtualization, networking and the transport layer, concurrency, locks and semaphores, files and file systems.",
   "docs": [
     {
       "slug": "cpu",
@@ -29,6 +29,12 @@
       "about": "Threads, races, locks, condition variables, semaphores, deadlock"
     },
     {
+      "slug": "filesystems",
+      "file": "filesystems.md",
+      "title": "Lectures 18 and 19: file systems",
+      "about": "Files, directories, fds and offsets, links, fsync and rename, vsfs layout, inodes and the multi-level index, access-path I/O counts, caching, the xv6 file system (Tutorial 7)"
+    },
+    {
       "slug": "formula-sheet",
       "file": "formula-sheet.md",
       "title": "Formula sheet",
@@ -43,7 +49,7 @@
     {
       "slug": "topics",
       "file": "topics.md",
-      "title": "Topic map, Lectures 1 to 17",
+      "title": "Topic map, Lectures 1 to 19",
       "about": "Every topic with its lecture slides and book chapters"
     }
   ]

@@ -1,6 +1,6 @@
 # CS3.301 OSN: topics and subtopics
 
-Built from the 17 lecture decks in `lectures/` (main source), the tutorial slides in `tutorials/`, and the four books in `textbooks/`. Project code is left out.
+Built from the 19 lecture decks in `lectures/` (main source), the tutorial slides in `tutorials/`, and the four books in `textbooks/`. Project code is left out.
 
 **How to read this:** `L05 s8-10` means lecture 05, slides 8 to 10 (PDF page numbers). Book references are chapters or sections:
 - **OSTEP**: Arpaci-Dusseau, *Three Easy Pieces*
@@ -341,9 +341,50 @@ Built from the 17 lecture decks in `lectures/` (main source), the tutorial slide
 
 ---
 
+## Unit 5: Persistence (file systems)
+
+### 5.1 Files and directories
+*Lecture 18*
+
+- Persistence as the third piece; files and directories as the abstractions (s2-4)
+- `open()` flags and file descriptors; fds 0/1/2 (s5-6)
+- `read()`/`write()`: tracing `cat` with `strace` (s7-8)
+- Open file table, offsets, `lseek()` (s9-12)
+- Shared table entries across `fork()` (s13)
+- `fsync()` and atomic `rename()` (s14-15)
+- `stat()` and metadata (s16)
+- `mkdir`, `readdir`, `rmdir` (s17-18)
+- Hard links, `unlink()` and link counts (s19-20)
+- Symbolic links; hard vs. soft (s21-22)
+- Permission bits, ACLs, superuser (s23-24)
+- `mkfs` and `mount` (s25)
+
+📖 OSTEP ch 39 · Silb ch 13 · 🛠 Tutorial 7 s25-31 (links)
+
+### 5.2 File system implementation
+*Lecture 19*
+
+- Data structures vs. access methods (s2)
+- vsfs layout: superblock, inode and data bitmaps, inode table, data region (s3-5)
+- Locating an inode from its i-number (s6-7)
+- Inode contents (s8)
+- Direct pointers, multi-level index, file-size limits (s9-11)
+- Why an imbalanced tree: file-size studies (s12)
+- Extents; linked allocation and FAT (s13-14)
+- Directory entries on disk (s15)
+- Free-space policy, pre-allocation (s16)
+- Access paths: `open()` path walk, read timeline, allocating writes, create timeline (s17-22)
+- `vsfs.py` simulations (s23-24)
+- Page cache, write buffering, durability vs. performance (s25-28)
+- Linux tools: `stat`, `df -i`, `dumpe2fs`, `filefrag`, `debugfs` (s29)
+
+📖 OSTEP ch 40 · Silb ch 14 · 🛠 Tutorial 7 s6-24 (vsfs from scratch), s32-37 (xv6 FS: `fs.h`, `readi`/`writei`, inode API) · Mini Project 3
+
+---
+
 ## Not in the lectures yet
 
-The site's calendar lists lectures 25-27 and Tutorial 7 (Filesystems) without slides. When they appear, expect **Persistence**: OSTEP ch 36-42 (I/O devices, disks, files and directories, FS implementation, FFS, journaling), Silb ch 11-15.
+Expected next: crash consistency and journaling (OSTEP ch 42), FFS (ch 41), I/O devices and disks (ch 36-37), Silb ch 11-15.
 
 ## Quick map: lecture → books
 
@@ -366,3 +407,5 @@ The site's calendar lists lectures 25-27 and Tutorial 7 (Filesystems) without sl
 | 15 | Locks | 28, 29 | 6.3-6.5 | Tut 6 |
 | 16 | Condition variables | 30 | 6.7, 7.3 | LBoS 4.1-4.2, Tut 6 |
 | 17 | Semaphores | 31, 32 | 6.6, 7.1, 8 | LBoS 2-4, HW 04 |
+| 18 | Files and directories | 39 | 13 | Tut 7 |
+| 19 | File system implementation | 40 | 14 | Tut 7, MP3 |

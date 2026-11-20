@@ -1,4 +1,4 @@
-# Formula sheet, Lectures 01 to 17
+# Formula sheet, Lectures 01 to 19
 
 Every number-crunching rule from the course on one page, in the same notation as the notes.
 
@@ -102,3 +102,30 @@ A semaphore's value, when negative, is minus the number of waiting threads. Init
 | Throttle to at most k threads | k |
 
 Deadlock needs all four: mutual exclusion, hold and wait, no preemption, circular wait. Breaking any one prevents it, and a global lock order breaks circular wait.
+
+## File systems (L18 and L19)
+
+Locating inode $i$ (integer division; disks address 512-byte sectors):
+
+$$
+\boxed{\text{blk} = \frac{i \times \text{sizeof(inode)}}{\text{blockSize}} \qquad \text{sector} = \frac{\text{blk} \times \text{blockSize} + \text{inodeStartAddr}}{\text{sectorSize}}}
+$$
+
+Maximum file size with block size $B$, pointer size $p$, $n = B/p$ pointers per indirect block, 12 direct pointers:
+
+$$
+\boxed{\text{max size} = (12 + n + n^2 + n^3) \times B}
+$$
+
+With 4 KB blocks: 48 KB direct, about 4 MB with single, 4 GB with double, 4 TB with triple indirect. xv6: $(12 + 256) \times 1\text{ KB} = 268$ KB.
+
+To find a byte offset's pointer: block $= \lfloor \text{offset} / B \rfloor$; subtract 12, then $n$, then $n^2$ until it fits; in the double-indirect tree, outer slot $= \lfloor r / n \rfloor$, inner slot $= r \bmod n$.
+
+I/O counts in vsfs with a cold cache:
+
+$$
+\boxed{\texttt{open()} \approx 2 \times \text{depth} + 1 \qquad \text{create} + N \text{ allocating writes} = 10 + 5N}
+$$
+
+Each `read()` of a block costs 3 I/Os (inode, data, inode write for atime); a bitmap of a disk with $K$ blocks takes $K/8$ bytes.
+

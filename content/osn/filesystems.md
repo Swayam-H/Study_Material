@@ -1,0 +1,640 @@
+# Lecture 18: Files and directories
+
+*Slides: L18. Read: OSTEP ch 39, Silb ch 13. Tutorial 7 (Filesystems) s2-5, s25-31.*
+
+Units 1 to 4 virtualized the CPU (processes) and memory (address spaces). This unit is the third pillar, **persistence**. Memory is volatile; a disk or SSD keeps data across power loss, and it holds the data people care most about, so the OS must be extra careful with it.
+
+| Physical resource | OS abstraction |
+| --- | --- |
+| CPU | Process |
+| Memory | Address space |
+| Disk / SSD | **Files and directories** |
+
+**The crux (L18 s2).** How should the OS manage a persistent device, and what API should it offer? This lecture is the API (what a program sees). Lecture 19 is the implementation (what is on the disk).
+
+**Why disks need care (Tut 7 s2-3).** Disk I/O is roughly a million times slower than RAM. The disk is not byte-addressable: it is a linear array of **blocks** (typically 512 B sectors or 4 KB blocks), and you read or write a whole block by giving its block number. The file system is the kernel software that turns a name like `/home/me/a.txt` into block numbers.
+
+## Two abstractions: files and directories
+
+*L18 s3-4.*
+
+**File.** A linear array of bytes you can read or write. Each file has a low-level name, its **inode number** (i-number). The OS does not interpret the bytes: it returns exactly what was written.
+
+**Directory.** Also has an inode number. Its contents are a list of **(user-readable name, inode number)** pairs. An entry can point to a file or to another directory, so directories form a **directory tree**.
+
+| Name | Inode number | Refers to |
+| --- | --- | --- |
+| `foo` | 10 | file |
+| `notes.txt` | 14 | file |
+| `docs` | 22 | directory |
+
+**Pathnames.** The tree starts at the root `/`, and `/` also separates components: `/foo/bar.txt` is an **absolute pathname**. Names only need to be unique within one directory, so `/foo/bar.txt` and `/bar/foo/bar.txt` can both exist. Extensions like `.c` are only a convention. UNIX names almost everything in this one tree: devices, pipes, even processes (`/proc`).
+
+## Creating, reading and writing files
+
+*L18 s5-8. OSTEP 39.3-39.4.*
+
+```c
+int fd = open("foo", O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
+```
+
+| Flag | Meaning |
+| --- | --- |
+| `O_CREAT` | create the file if it does not exist |
+| `O_WRONLY` | open for writing only (`O_RDONLY`, `O_RDWR` are the others) |
+| `O_TRUNC` | if it exists, truncate it to 0 bytes |
+| `S_IRUSR \| S_IWUSR` | permissions of a new file: owner can read and write |
+
+`open()` returns a **file descriptor** or **-1 on error**. Always check it.
+
+**File descriptors (L18 s6).** A small integer, **private to each process**. It is a *capability*: an opaque handle that lets you call `read()`, `write()` and `close()` on the file. Think of it as a pointer to a file object whose methods are system calls. In xv6 it is an index into the per-process array `struct file *ofile[NOFILE]` in `struct proc`.
+
+Every process starts with **0 = stdin, 1 = stdout, 2 = stderr** already open, so the first file you open usually gets **fd 3** (the lowest free number).
+
+**What `cat` does (L18 s7).** `strace` prints every system call a program makes (`-f` follows children, `-t` adds timestamps, `-e trace=open,read,write` filters):
+
+```
+prompt> strace cat foo
+open("foo", O_RDONLY|O_LARGEFILE) = 3
+read(3, "hello\n", 4096)          = 6
+write(1, "hello\n", 6)            = 6
+hello
+read(3, "", 4096)                 = 0
+close(3)                          = 0
+```
+
+1. `open` returns fd 3.
+2. `read(fd, buf, count)` says which file, where to put the bytes, and the buffer size. It returns the number of bytes actually read: 6 = five letters plus the newline.
+3. `write(1, ...)` sends them to stdout.
+4. The next `read` returns **0, which means end of file**, so `cat` knows it is done.
+5. `close(3)`.
+
+Writing a file is the same pattern: `open` for writing, `write()` repeatedly, `close()`.
+
+## The open file table and offsets
+
+*L18 s9-13. OSTEP 39.5-39.6.*
+
+A file descriptor does not hold the position in the file. It points to an entry in the **system-wide open file table**, and that entry holds it:
+
+```c
+struct file {          // xv6, simplified
+  int ref;             // how many fds point here
+  char readable;
+  char writable;
+  struct inode *ip;    // the underlying file
+  uint off;            // current offset
+};
+
+struct {
+  struct spinlock lock;
+  struct file file[NFILE];
+} ftable;              // the whole table: one array, one lock
+```
+
+So **the offset, the access mode and the reference count live in the table entry, not in the fd**.
+
+**`lseek()` (L18 s10).** `off_t lseek(int fd, off_t offset, int whence);`
+
+| `whence` | New offset |
+| --- | --- |
+| `SEEK_SET` | `offset` |
+| `SEEK_CUR` | current offset + `offset` |
+| `SEEK_END` | file size + `offset` |
+
+`lseek()` **does not perform a disk seek**. It only changes a number in kernel memory; no I/O happens. The offset also advances implicitly: a read or write of N bytes adds N.
+
+**Tracing the offset (L18 s11).** A 300-byte file:
+
+| Call | Returns | Offset after |
+| --- | --- | --- |
+| `fd = open("file", O_RDONLY)` | 3 | 0 |
+| `read(fd, buf, 100)` | 100 | 100 |
+| `read(fd, buf, 100)` | 100 | 200 |
+| `read(fd, buf, 100)` | 100 | 300 |
+| `read(fd, buf, 100)` | **0** (EOF) | 300 |
+| `close(fd)` | 0 | – |
+
+With `lseek(fd, 200, SEEK_SET)` then `read(fd, buf, 50)`, the read returns 50 and leaves the offset at 250.
+
+**Opening the same file twice (L18 s12).** Two `open()` calls create **two table entries with two independent offsets**, both pointing at the one inode. Reading 100 bytes through fd 3 does not move fd 4's offset.
+
+**Sharing an entry across `fork()` (L18 s13).** The child's fds point to the **same** table entry as the parent's, so the reference count becomes 2.
+
+```c
+int fd = open("file.txt", O_RDONLY);
+int rc = fork();
+if (rc == 0) {                       // child
+    rc = lseek(fd, 10, SEEK_SET);
+    printf("child: offset %d\n", rc);
+} else if (rc > 0) {                 // parent
+    (void) wait(NULL);
+    printf("parent: offset %d\n", (int) lseek(fd, 0, SEEK_CUR));
+}
+```
+
+Both print **10**: the child's `lseek` is visible to the parent. The entry is freed only after both close it. This is how cooperating processes (for example a shell's `cmd > out` with several children) write one output file without overwriting each other. `dup()` and `dup2()` also make a second fd that shares the entry, which is how the shell does redirection.
+
+## Durability: `fsync()` and atomic `rename()`
+
+*L18 s14-15. OSTEP 39.7-39.8.*
+
+**`fsync()`.** A `write()` usually returns as soon as the data is in a memory buffer; the file system writes it to disk **5 to 30 seconds later**. A crash in that window loses the data. `fsync(fd)` forces all dirty data of that file to disk and returns only when it is there. Databases and anything with a recovery protocol need it.
+
+A newly created file also needs **`fsync()` on the directory that contains it**, or its directory entry may not be on disk.
+
+**`rename(old, new)`.** This is what `mv` uses, and it is **atomic with respect to crashes**: afterwards the file has the old name or the new name, never something in between. That makes it the building block for updating a file safely:
+
+```c
+int fd = open("foo.txt.tmp", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+write(fd, buffer, size);   // 1. write the new version to a temp file
+fsync(fd);                 // 2. make sure it is on disk
+close(fd);                 // 3. close it
+rename("foo.txt.tmp", "foo.txt");   // 4. atomically swap it in
+```
+
+A crash at any point leaves either the **complete old file or the complete new file**. Editors save files this way.
+
+## Metadata with `stat()`
+
+*L18 s16. OSTEP 39.9.*
+
+**Metadata** is data about a file. `stat(path)` or `fstat(fd)` fills a `struct stat`:
+
+```c
+struct stat {
+  dev_t     st_dev;     // device of file
+  ino_t     st_ino;     // inode number
+  mode_t    st_mode;    // type + protection
+  nlink_t   st_nlink;   // number of hard links
+  uid_t     st_uid;     // owner user ID
+  gid_t     st_gid;     // owner group ID
+  off_t     st_size;    // size in bytes
+  blksize_t st_blksize; // FS I/O block size
+  blkcnt_t  st_blocks;  // blocks allocated
+  time_t    st_atime;   // last access
+  time_t    st_mtime;   // last modification (of the data)
+  time_t    st_ctime;   // last status change (of the inode)
+};
+```
+
+All of this is stored in the file's **inode** on disk; active inodes are cached in memory. `echo hello > file; stat file` shows Size: 6, Links: 1, Access: (0640/-rw-r-----).
+
+## Directories
+
+*L18 s17-18. OSTEP 39.11-39.14.*
+
+**You can never write a directory directly.** It is file-system metadata, so you change it only indirectly: by creating, removing or renaming things inside it. `mkdir("foo", 0777)` creates one.
+
+An "empty" directory has **two entries**: `.` (itself) and `..` (its parent). `cd ..` is just a lookup of the name `..`.
+
+| Contents of `foo` (inode 31, inside inode 2) | Inode | Meaning |
+| --- | --- | --- |
+| `.` | 31 | this directory |
+| `..` | 2 | parent directory |
+
+**Reading a directory.** A tiny `ls`:
+
+```c
+DIR *dp = opendir(".");
+struct dirent *d;
+while ((d = readdir(dp)) != NULL)
+    printf("%lu %s\n", (unsigned long) d->d_ino, d->d_name);
+closedir(dp);
+```
+
+Each `struct dirent` holds little: the name, the inode number, and bookkeeping (`d_off`, `d_reclen`, `d_type`). That is why `ls -l` has to call `stat()` on every entry to print sizes and permissions.
+
+**Deleting a directory.** `rmdir()` only works on an **empty** directory (only `.` and `..`). The slides' warning: `rm -rf *` run from `/` deletes the whole file system.
+
+## Hard links: why removing a file is `unlink()`
+
+*L18 s19-22. OSTEP 39.15-39.16. Tut 7 s26-31.*
+
+`strace rm foo` shows `unlink("foo")`, not "delete". Here is why.
+
+**`link(old, new)`** (the `ln` command) adds a **new name for the same inode** in a directory. Nothing is copied.
+
+```
+$ ln file file2
+$ ls -i file file2
+67158084 file
+67158084 file2
+$ rm file
+$ cat file2
+hello
+```
+
+So **creating a file is really two steps**: make an inode, then link a name to it in a directory. **`unlink()` removes one name and decrements the inode's link count** (`st_nlink`). The inode and its data blocks are freed only when **the link count reaches 0** (and no process still has the file open).
+
+| Command | Link count of inode 67158084 |
+| --- | --- |
+| `echo hello > file` | 1 |
+| `ln file file2` | 2 |
+| `ln file2 file3` | 3 |
+| `rm file` | 2 |
+| `rm file2` | 1 |
+| `rm file3` | **0: inode and data freed** |
+
+> **Deleting a file = performing the last `unlink()` of it from the directory tree.**
+
+**Symbolic (soft) links.** `ln -s file file2` makes a **separate file of a third type** (`l` in `ls -l`). Its data is the target's **pathname**, so `file2` is 4 bytes, the length of `"file"`. It has **its own inode**.
+
+If the target is removed, the link **dangles**: `cat file2` prints "No such file or directory".
+
+| Property | Hard link (`ln`) | Symbolic link (`ln -s`) |
+| --- | --- | --- |
+| What it is | another directory entry for the same inode | a separate file whose data is a path |
+| Own inode? | no, shares the target's | yes, type "symlink" |
+| Link to a directory? | **not allowed** (could create cycles) | allowed |
+| Across file systems? | **no**, inode numbers are per file system | yes, it only stores a path |
+| Original name removed | data still reachable, count drops | link dangles |
+| In `ls -l` | looks like a normal file | starts with `l`, shows `name -> target` |
+
+## Permissions, ACLs and mounting
+
+*L18 s23-25. OSTEP 39.17-39.18.*
+
+**Permission bits.** `-rw-r--r--` is the file type (`-` file, `d` directory, `l` symlink), then three groups of `rwx` for **owner, group and other**. In octal **r = 4, w = 2, x = 1**, added within each group: `chmod 600 foo.txt` gives `rw-------`.
+
+- `x` on a **file**: may it be run? A script with mode 600 gives "Permission denied" when executed.
+- `x` on a **directory**: may you `cd` into it (and look names up in it); with `w` as well, you may create and delete files in it.
+
+**Access control lists.** An ACL is an explicit list of who may do what, more precise than owner/group/other. AFS keeps one per directory, with rights `r l i d w k a` (read, lookup, insert, delete, write, lock, administer): `fs setacl private/ andrea rl`. The **superuser** (root) can access every file, which is an inherent risk if someone impersonates them.
+
+**Making and mounting.** `mkfs` writes an empty file system (with a root directory) onto a partition. `mount` pastes it onto the existing tree at a **mount point**: after `mount -t ext3 /dev/sda1 /home/users`, the new FS's root is reachable as `/home/users`. So many file systems (ext3, `proc`, `sysfs`, `tmpfs`, AFS) appear as one uniform tree.
+
+# Lecture 19: File system implementation
+
+*Slides: L19. Read: OSTEP ch 40, Silb ch 14. Tutorial 7 s6-24 (vsfs from scratch), s32-37 (xv6).*
+
+**The crux (L19 s2).** How do we build a simple file system? There is no special hardware: a file system is pure software. Think about it in two parts:
+
+1. **Data structures:** what is on the disk (blocks, superblock, bitmaps, inodes, directories)?
+2. **Access methods:** which of those structures does each call (`open`, `read`, `write`, create) read and write?
+
+We learn this through **vsfs** (the Very Simple File System from OSTEP), then see how xv6 does it.
+
+## The on-disk layout of vsfs
+
+*L19 s3-5. OSTEP 40.2.*
+
+The example disk has **64 blocks of 4 KB**. Built up in steps:
+
+1. Most of the disk is the **data region** (D): user data. 56 blocks.
+2. Reserve an **inode table** (I) for the per-file metadata: 5 blocks. With 256-byte inodes, 16 fit in a 4 KB block, so **5 × 16 = 80 inodes**, which is the most files this FS can ever hold.
+3. Add two **bitmaps** to track what is free: an **inode bitmap** (i) and a **data bitmap** (d), one block each.
+4. Block 0 is the **superblock** (S).
+
+```
+block:  0  1  2  3  4  5  6  7  8 ........ 63
+        S  i  d  I  I  I  I  I  D ........ D
+```
+
+**The superblock** describes the whole FS: its type (a **magic number**), the block size, how many inodes and data blocks there are, and where the inode table starts (block 3 here). On **mount**, the OS reads the superblock first, sets up its parameters, and attaches the volume to the tree. After that it knows where every other structure lives. **Lose the superblock and nothing else can be found**, which is why real file systems keep copies.
+
+**Bitmaps.** One bit per object, **0 = free, 1 = in use**. To allocate, find a 0 bit, set it to 1, and write the bitmap block back. That write-back is an **extra I/O on every allocation**. A bitmap costs 1 bit per block: a 1 TB disk with 4 KB blocks has $2^{40} / 2^{12} = 2^{28}$ blocks, so a **32 MB** data bitmap. Alternatives are free lists (what xv6 uses for *RAM* pages, `struct run`) and B-trees (XFS). On a disk a bitmap is better: it is compact and makes it easy to find *contiguous* free blocks.
+
+## Inodes
+
+*L19 s6-8. OSTEP 40.3. Tut 7 s7-19.*
+
+The **inode** (index node) holds all of a file's metadata. The **i-number** is just its index in the on-disk inode array, so **its location is computed, not searched**:
+
+$$
+\boxed{\text{blk} = \frac{\text{inumber} \times \text{sizeof(inode)}}{\text{blockSize}} \qquad \text{sector} = \frac{\text{blk} \times \text{blockSize} + \text{inodeStartAddr}}{\text{sectorSize}}}
+$$
+
+(Integer division. Disks address **512-byte sectors**, not bytes.)
+
+**Where is inode 32?** The inode table starts at 12 KB:
+
+| Step | Inode 32 | Inode 70 |
+| --- | --- | --- |
+| Offset in table = i × 256 | 8192 B | 17920 B |
+| Inode block = offset ÷ 4096 | iblock 2 | iblock 4 |
+| Disk address = 12 KB + blk × 4 KB | 20 KB | 28 KB |
+| Sector = address ÷ 512 | 40 | 56 |
+| Offset inside the block = (i mod 16) × 256 | 0 B | 1536 B |
+
+**What is inside an inode (ext2, L19 s8).** Mode (permissions and type), uid, gid, size in bytes, four times (access, change, modify, delete), the **links count**, blocks allocated, flags, and **15 block pointers** (60 bytes). Everything that is not user data is metadata, and `stat()` reads it from here.
+
+**Notice what is missing: the file's name.** Names live in directories, not in inodes (Tut 7 s17). That is exactly what makes hard links possible.
+
+## Finding a file's data: the multi-level index
+
+*L19 s9-12. OSTEP 40.3. Tut 7 s9-16.*
+
+Tutorial 7 builds this up the same way paging was built up for memory:
+
+1. **Start and end block in the inode.** Requires the file to be contiguous. After deletions, free space is scattered, so you could have 7 free blocks but no 6 in a row. That is **external fragmentation**, the problem with segmentation.
+2. **An array of block numbers in the inode** (like a page table): blocks can be anywhere. But the array has a fixed size N, so the max file is N × block size. ext2 has **12 direct pointers: 12 × 4 KB = 48 KB**. Making the array big enough for 1 GB files would make every inode huge. (A bigger block size is not the answer either: a 2 MB file in a 1 GB block wastes 998 MB.)
+3. **Indirect pointers** (like multi-level page tables): one inode slot points to a block that holds **more pointers**. With 4 KB blocks and 4-byte pointers, one block holds **1024**. The key point from the tutorial: **the indirect block is allocated only on demand**, so small files never pay for it.
+
+ext2 has **12 direct + 1 single indirect + 1 double indirect + 1 triple indirect = 15 pointers**.
+
+$$
+\boxed{\text{max blocks} = 12 + 1024 + 1024^2 + 1024^3 \quad (\text{4 KB blocks, 4 B pointers})}
+$$
+
+| Pointers used | Adds | Max file size |
+| --- | --- | --- |
+| 12 direct | 12 blocks | 48 KB |
+| + single indirect | 1024 blocks | ≈ 4 MB |
+| + double indirect | $1024^2$ blocks | ≈ 4 GB |
+| + triple indirect | $1024^3$ blocks | ≈ 4 TB |
+
+Each extra level multiplies capacity by 1024. In general, with block size $B$ and pointer size $p$, one indirect block holds $B/p$ pointers.
+
+**Which pointer serves byte 5,000,000?**
+
+1. Block index = 5,000,000 ÷ 4096 = **1220**.
+2. 1220 ≥ 12, so not direct. 1220 − 12 = 1208.
+3. 1208 ≥ 1024, so not single indirect. 1208 − 1024 = **184**.
+4. Double indirect: outer slot 184 ÷ 1024 = **0**, inner slot 184 mod 1024 = **184**.
+5. Disk reads: inode → double-indirect block → indirect block → data block.
+
+**Why such a lopsided tree? Most files are small (L19 s12).** From Agrawal et al. (FAST '07): the most common file size is about **2 KB**, the average is about 200 KB, a few big files hold most of the bytes, a FS holds about 100K files and is about half full, and most directories have 20 or fewer entries. The 12 direct pointers (48 KB) cover the common small file with **no extra reads**, and indirection keeps huge files possible. *Optimize the common case; keep the rare case possible.*
+
+**Extents (L19 s13).** Instead of one pointer per block, store **(start block, length)** for each contiguous run. A 1.2 MB file in blocks 1000-1299 needs one extent (start 1000, length 300) instead of 300 pointers. Used by ext4 and XFS. Less metadata, but it needs contiguous free space. Pointers are to extents what **paging** is to **segmentation**.
+
+**Linked allocation and FAT (L19 s14).** The inode (or directory entry) points to the first block, and each block points to the next. Random access, or finding the last block, means walking the chain. **FAT** moves all the next-pointers into one **File Allocation Table** kept in memory: for `a.txt` starting at block 4, the table says 4 → 7 → 2 → 10 → EOF. FAT has **no inodes**; metadata lives in the directory entry, so **hard links are impossible in FAT**.
+
+## Directories on disk
+
+*L19 s15. OSTEP 40.4. Tut 7 s18-19.*
+
+A directory is **a file of type "directory"**: an inode plus data blocks. Its data blocks hold the entries:
+
+| inum | reclen | strlen | name |
+| --- | --- | --- | --- |
+| 5 | 12 | 2 | `.` |
+| 2 | 12 | 3 | `..` |
+| 12 | 12 | 4 | `foo` |
+| 13 | 12 | 4 | `bar` |
+| 24 | 36 | 28 | `foobar_is_a_pretty_longname` |
+
+- `strlen` is the name's real length (including the terminator); **`reclen`** is the space the record takes.
+- `unlink()` leaves a **hole**: the entry's inum is set to 0. `reclen` lets a later entry reuse that space.
+- The inode's **type field** (directory or regular file) tells the kernel how to interpret the data blocks.
+- A linear list is simple. XFS uses B-trees so lookups in huge directories are fast.
+
+## Free-space policy
+
+*L19 s16. OSTEP 40.5.*
+
+Creating a file means finding a free inode in the **inode bitmap** and free blocks in the **data bitmap**. The policy matters: first-fit may scatter a new 8-block file across the disk (many seeks). ext2/ext3 **pre-allocate**: look for a run of about 8 free blocks so at least part of the file is contiguous and can be read sequentially.
+
+## Access paths: what each call costs
+
+*L19 s17-22. OSTEP 40.6.*
+
+Assume the FS is mounted (superblock in memory) and nothing else is cached.
+
+**`open("/foo/bar")` walks the path (L19 s17).**
+
+1. Read the **root inode**. Its i-number is well known (**2** in most UNIX file systems, **1** in xv6), because the root has no parent to look it up in.
+2. Read root's **data**, find `"foo" → 44`.
+3. Read **foo's inode** (44).
+4. Read foo's **data**, find `"bar" → 50`.
+5. Read **bar's inode** (50).
+
+Then check permissions, allocate an fd and an open-file-table entry, and return. **Each level costs at least 2 reads** (its inode and its data):
+
+$$
+\boxed{\text{uncached reads for } \texttt{open()} \approx 2 \times \text{depth} + 1}
+$$
+
+So `/a` costs 3, `/a/b/c` costs 7, and a path 100 levels deep costs hundreds of reads (more if directories span several blocks). This is the motivation for caching.
+
+**Reading a 3-block file (Figure 40.3, L19 s18).**
+
+| Call | I/Os |
+| --- | --- |
+| `open(bar)` | 5 reads (the walk above) |
+| each `read()` | read inode, read data block, **write inode** (access time) = 3 |
+| `close()` | **none** |
+
+Total = 5 + 3 × 3 = **14 I/Os**. **Reads never touch the bitmaps.**
+
+**An allocating write costs 5 I/Os (L19 s20).** To append one 4 KB block:
+
+1. Read the inode (where do blocks go?).
+2. Read the data bitmap (find a free block, say 23).
+3. Write the data bitmap (mark 23 used).
+4. Write data block 23 (the user's data).
+5. Write the inode (`ptr[0] = 23`, new size).
+
+**Only 1 of the 5 is user data; the other 4 are metadata.** Overwriting an existing block needs no allocation, so no bitmap I/O.
+
+**Creating `/foo/bar` costs 10 I/Os (Figure 40.4, L19 s21).** Walk the path (read root inode, root data, foo inode, foo data), read and write the **inode bitmap** to allocate an inode, read and write **foo's data** to add the entry, read and write **bar's inode** to initialize it, and write **foo's inode** (size and mtime). Why *read* a brand-new inode? It shares a 4 KB block with 15 others, so it is a read-modify-write.
+
+$$
+\boxed{\text{create} + N \text{ allocating writes} = 10 + 5N \text{ I/Os}}
+$$
+
+Creating a 12 KB (3-block) file: 10 + 3 × 5 = **25 I/Os**.
+
+## Simulating vsfs: predict each change
+
+*L19 s23-24. OSTEP ch 40 homework (`vsfs.py`).*
+
+Notation: `[type a:data-block r:link-count]`, `d` = directory, `f` = file. The allocator takes the **lowest free number**.
+
+| Operation | What changes |
+| --- | --- |
+| `mkdir("/g")` | new inode (bitmap bit), new data block holding `(.,1) (..,0)`, entry `(g,1)` in root, **root's link count +1** (because of g's `..`) |
+| `creat("/g/q")` | new inode `[f a:-1 r:1]` only, **no data block** until the first write, entry `(q,2)` in g |
+| first write to `/g/q` | data bitmap bit, the inode's `a:` field, and the block's contents |
+| `link /g/q /w` | entry `(w,2)` in root, inode's link count 1 → 2; **no new inode** |
+| `unlink /g/q` | entry removed, link count 2 → 1; inode and block **stay** until the count reaches 0 |
+
+## Caching and buffering
+
+*L19 s25-28. OSTEP 40.7.*
+
+**Caching reads.** Keep popular blocks in DRAM with LRU-like replacement. The first `open` of a path costs many I/Os; later ones are cache hits.
+
+- **Static partitioning:** a fixed file cache of about 10% of RAM. Predictable, but idle cache memory is wasted and the cache cannot grow when needed.
+- **Dynamic partitioning, the unified page cache:** file pages and process (virtual memory) pages share one pool, and the boundary moves with demand. Better utilization.
+
+Inside `read()`: on a miss, disk → page cache → copy into your `buf`; on a hit, page cache → copy, no disk. Cached pages are shared by all processes.
+
+**Buffering writes.** Caching absorbs reads, but writes must reach the disk eventually. File systems hold dirty data **5 to 30 seconds**, which wins three ways:
+
+| Benefit | Example | Without buffering | With buffering |
+| --- | --- | --- | --- |
+| **Batching** | create `a.txt` then `b.txt` (same inode-bitmap block) | 2 bitmap writes | 1 |
+| **Scheduling** | 100 dirty blocks scattered over the disk | 100 writes in arrival order | 100 writes sorted by location |
+| **Avoidance** | create a temp file, write it, delete it | 10+ I/Os | **0** |
+
+The risk: a crash before write-back loses those updates.
+
+**The durability / performance trade-off (L19 s28).** From fastest to safest: buffered writes (default, may lose up to ~30 s) → `fsync()` at key points (durable when it returns) → `O_DIRECT` (bypass the page cache) → raw disk (no FS at all). A browser cache can use buffered writes; a bank transaction needs `fsync()` or `O_DIRECT`.
+
+**Try it on Linux (L19 s29).**
+
+| Command | Shows |
+| --- | --- |
+| `ls -i file`, `stat file` | inode number, links, size, blocks |
+| `ls -id /` | root inode = 2 |
+| `df -i` | inodes used and free (the table is fixed-size) |
+| `sudo dumpe2fs -h /dev/sda1` | superblock fields, magic `0xEF53` |
+| `filefrag -v file` | the file's extents |
+| `sudo debugfs -R 'stat <12>' /dev/sda1` | raw inode fields |
+
+# The xv6 file system (Tutorial 7)
+
+*Tut 7 s32-37. Code: `kernel/fs.h`, `kernel/fs.c`, `kernel/file.c`, `kernel/sysfile.c`, `kernel/bio.c`, `kernel/log.c`. xv6 book ch 8. This is the base for Mini Project 3.*
+
+xv6 is the same design as vsfs with small differences.
+
+**Layers.** From top to bottom: file descriptors → pathnames → directories → **inodes** → **logging** → **buffer cache** → disk. The tutorial focuses on the inode layer and only touches the log and buffer cache where MP3 needs them.
+
+**Disk layout** (`kernel/fs.h`):
+
+```
+[ boot block | superblock | log | inode blocks | free bitmap | data blocks ]
+```
+
+- **BSIZE = 1024** bytes (not 4 KB), FSSIZE = 2000 blocks.
+- There is **one bitmap, for data blocks only**. Free inodes are found by scanning the inode blocks for `type == 0` (`ialloc`). The tutorial notes that OSTEP's split into two bitmaps is not necessary.
+- The **log** region is for crash consistency: every FS write happens inside a transaction (`begin_op` … `end_op`) and is first written to the log, so a crash leaves either all of an operation's writes or none.
+- `ROOTINO = 1`.
+
+**On-disk structures:**
+
+```c
+struct superblock {
+  uint magic;       // FSMAGIC
+  uint size;        // size of FS image in blocks
+  uint nblocks;     // number of data blocks
+  uint ninodes;
+  uint nlog;
+  uint logstart, inodestart, bmapstart;
+};
+
+#define NDIRECT   12
+#define NINDIRECT (BSIZE / sizeof(uint))      // 256
+#define MAXFILE   (NDIRECT + NINDIRECT)       // 268 blocks
+
+struct dinode {
+  short type;               // T_DIR, T_FILE, T_DEVICE; 0 = free
+  short major, minor;       // T_DEVICE only
+  short nlink;              // number of hard links
+  uint  size;               // bytes
+  uint  addrs[NDIRECT + 1]; // 12 direct + 1 single indirect
+};
+
+#define DIRSIZ 14
+struct dirent {             // a directory's data is an array of these
+  ushort inum;              // 0 = free slot
+  char name[DIRSIZ];
+};
+```
+
+So the largest xv6 file is **268 × 1 KB = 268 KB**. A `dinode` is 64 bytes, so `IPB` (inodes per block) = 1024 / 64 = 16, and inode *i* is in block `i / IPB + sb.inodestart` (the `IBLOCK` macro: the vsfs formula again). The in-memory `struct inode` adds a reference count and a **sleep-lock**.
+
+**`read()` (Tut 7 s35).** `fileread` locks the inode, calls `readi(ip, 1, addr, f->off, n)`, and advances `f->off` by what was read. `readi` loops block by block:
+
+```c
+for (tot = 0; tot < n; tot += m, off += m, dst += m) {
+    uint addr = bmap(ip, off / BSIZE);   // file block index -> disk block number
+    bp = bread(ip->dev, addr);           // through the buffer cache
+    m = min(n - tot, BSIZE - off % BSIZE);
+    either_copyout(user_dst, dst, bp->data + (off % BSIZE), m);
+    brelse(bp);
+}
+```
+
+`bmap` is the multi-level index: below `NDIRECT` it uses `addrs[]` directly; otherwise it reads the indirect block `addrs[NDIRECT]`. When writing, it **allocates blocks on demand** with `balloc`, including the indirect block itself.
+
+**`write()` (Tut 7 s36).** `filewrite` splits a big write into chunks of at most `((MAXOPBLOCKS - 1 - 1 - 2) / 2) * BSIZE` = 3 blocks, and wraps **each chunk in its own transaction**, because one transaction may only touch `MAXOPBLOCKS` (10) blocks: the inode, an indirect block, bitmap blocks, slop for unaligned writes, and the data. `writei` uses `log_write(bp)` instead of writing the block directly, and ends with `iupdate(ip)`, since `bmap` may have added a block to `addrs[]`.
+
+**The inode API (Tut 7 s37).**
+
+| Function | Does |
+| --- | --- |
+| `readi`, `writei` | read or write an inode's data |
+| `itrunc` | free all of an inode's data blocks (empty file) |
+| `namei(path)` | path → inode (unlocked); `nameiparent` returns the parent and the last name |
+| `dirlookup(dp, name)` | look a name up in a directory inode |
+| `ilock`, `iunlock` | lock / unlock an inode (reads it from disk on first lock) |
+| `iput` | drop a reference; free the inode if it has no references **and** `nlink == 0` |
+| `iunlockput` | `iunlock` **then** `iput` (iput may need to take the lock itself to truncate) |
+| `iupdate` | copy an in-memory inode to disk |
+| `begin_op`, `end_op` | start and end a transaction; every FS write must be inside one |
+
+**Going further (Tut 7 s38).** RAID, disk partitioning (MBR, GPT), SATA and NVMe, journaling / write-ahead logging, network file systems, FUSE, character and block devices, initramfs, and other file systems (ext4, btrfs, NTFS).
+
+# Practice problems, Lectures 18 and 19
+
+Try each one before you open its solution. Problems marked **(slides)** come from the lecture's own simulations.
+
+**F1.** A process runs the code below on a 300-byte file. What does each call return, and what is the offset after each?
+
+```c
+int fd = open("file", O_RDONLY);
+read(fd, buf, 120);
+lseek(fd, -50, SEEK_END);
+read(fd, buf, 100);
+read(fd, buf, 100);
+```
+
+*Solution.* `open` returns 3 (0-2 are taken), offset 0. `read` returns 120, offset 120. `lseek` sets the offset to 300 − 50 = **250** and returns 250. The next `read` asks for 100 but only 50 remain: returns **50**, offset 300. The last `read` returns **0** (end of file), offset stays 300.
+
+**F2.** A parent opens a file, then forks. The child reads 100 bytes, then exits. The parent then reads 100 bytes. Which bytes does the parent get? What changes if the child instead opens the file itself after the fork?
+
+*Solution.* After `fork()` both fds point to the **same open-file-table entry**, which holds one offset. The child's read moves it to 100, so the parent reads **bytes 100-199**. If the child calls `open()` itself, it gets a **new table entry** with its own offset, and the parent reads **bytes 0-99**.
+
+**F3.** You run `echo hi > a; ln a b; ln -s a c; rm a`. What do `cat b` and `cat c` print, and what are the link counts?
+
+*Solution.* `ln a b` makes `b` a second name for a's inode (link count 2). `ln -s a c` makes a new inode whose data is the path `"a"`; it does not change a's count. `rm a` unlinks the name `a`: count drops to **1**. `cat b` prints **hi** (the inode is still reachable). `cat c` follows the path `a`, which no longer exists: **"No such file or directory"** (a dangling link).
+
+**F4.** Why are hard links to directories not allowed, and why can't a hard link cross file systems?
+
+*Solution.* A hard link to a directory could create a **cycle** in the tree (a directory containing a link to its own ancestor), which breaks tools that walk the tree and makes `..` ambiguous. Inode numbers are only unique **within one file system**, so a directory entry on one FS cannot name an inode on another. Symbolic links store a path, so they have neither problem.
+
+**F5.** An editor wants a crash during save never to leave a half-written file. Give the sequence of calls and say why each is needed.
+
+*Solution.* Write the new contents to `foo.txt.tmp`, **`fsync()`** it so the data really is on disk, `close()` it, then **`rename("foo.txt.tmp", "foo.txt")`**. `rename` is atomic, so a crash leaves either the full old file or the full new one. Without the `fsync`, the rename could reach the disk before the data, and a crash would leave `foo.txt` pointing to empty or garbage blocks. For full safety, also `fsync` the directory after the rename.
+
+**F6. (slides)** vsfs: 4 KB blocks, 256-byte inodes, inode table starting at 12 KB, 512-byte sectors. Find the inode block, the sector and the offset inside the block for inode 70. Then do inode 45.
+
+*Solution.* Inode 70: 70 × 256 = 17920 B; 17920 ÷ 4096 = iblock **4**; address 12 + 4 × 4 = **28 KB**; sector 28672 ÷ 512 = **56**; offset (70 mod 16) × 256 = **1536 B**. Inode 45: 45 × 256 = 11520 B; iblock **2**; address 12 + 8 = **20 KB**; sector **40**; offset (45 mod 16) × 256 = 13 × 256 = **3328 B**.
+
+**F7.** A file system has 4 KB blocks, 4-byte block pointers, 12 direct pointers, and one single, one double and one triple indirect pointer. (a) What is the maximum file size? (b) Which pointer holds byte offset 100,000? (c) Byte offset 10,000,000?
+
+*Solution.* (a) $(12 + 1024 + 1024^2 + 1024^3) \times 4\text{ KB} \approx$ **4 TB** (just over $2^{42}$ bytes). (b) 100,000 ÷ 4096 = block **24**. 24 ≥ 12, so it is in the **single indirect** block at slot 24 − 12 = **12**. (c) 10,000,000 ÷ 4096 = block 2441. 2441 − 12 = 2429 ≥ 1024, so subtract again: 2429 − 1024 = 1405. That is in the **double indirect** tree: outer slot 1405 ÷ 1024 = **1**, inner slot 1405 mod 1024 = **381**.
+
+**F8.** Redo F7(a) for 1 KB blocks with the same pointers. Then compute xv6's maximum file size.
+
+*Solution.* A 1 KB block holds 1024 / 4 = 256 pointers: $(12 + 256 + 256^2 + 256^3)$ blocks × 1 KB ≈ **16 GB** (16,843,020 KB). xv6 has only 12 direct pointers and one single indirect: (12 + 256) × 1 KB = **268 KB**.
+
+**F9.** How many disk reads does `open("/usr/lib/libc.so")` need with a cold cache, assuming each directory fits in one block?
+
+*Solution.* Depth 3: root inode, root data, `usr` inode, `usr` data, `lib` inode, `lib` data, `libc.so` inode = **7 reads** = 2 × 3 + 1. The superblock is already in memory after mount.
+
+**F10. (slides)** How many I/Os does it take to create `/foo/bar` and write 12 KB to it in vsfs (4 KB blocks, cold cache)? Which are user data?
+
+*Solution.* Create = **10**: read root inode, read root data, read foo inode, read foo data, read + write the inode bitmap, write foo's data (new entry), read + write bar's inode, write foo's inode. Each of the 3 allocating writes = **5**: read bar's inode, read + write the data bitmap, write the data block, write bar's inode. Total = 10 + 15 = **25**, and **only 3** of them are user data.
+
+**F11.** Why does `read()` write the inode, and why does it never touch a bitmap? How could you avoid that write?
+
+*Solution.* It updates the inode's **access time** (`atime`). It touches no bitmap because reading never allocates or frees anything. Mount options like `noatime` or `relatime` skip or reduce the atime write.
+
+**F12. (slides)** In `vsfs.py` the state is `inodes [d a:0 r:2] [] [] []`, `data [(.,0) (..,0)] [] [] []`. Show the state after `mkdir("/g")`, then `creat("/g/q")`, then `link("/g/q", "/w")`.
+
+*Solution.* `mkdir("/g")`: inodes `[d a:0 r:3] [d a:1 r:2] [] []` (root's count +1 for g's `..`), data `[(.,0) (..,0) (g,1)] [(.,1) (..,0)] [] []`. `creat("/g/q")`: inode 2 = `[f a:-1 r:1]` (no data block yet), g's block gets `(q,2)`. `link`: root's block gets `(w,2)` and inode 2 becomes `[f a:-1 r:2]`. No new inode or data block.
+
+**F13.** Compare pointer-based allocation, extents and FAT on (a) metadata for a 1 GB contiguous file, (b) random access, (c) hard links.
+
+*Solution.* (a) Pointers need one entry per block: 262,144 pointers plus indirect blocks. **Extents need one** (start, length). FAT needs one table entry per block. (b) Pointers: at most a few indirect reads. Extents: a short search over the extent list. FAT: **walk the chain** (fast only because the table is in memory). (c) Pointers and extents keep metadata in an inode, so hard links work. **FAT has no inodes**, so hard links are impossible.
+
+**F14.** Give one example each of batching, scheduling and avoidance by write buffering, and say what an application that cannot lose data should do.
+
+*Solution.* Batching: two files created in the same inode-bitmap block → one bitmap write instead of two. Scheduling: 100 scattered dirty blocks written in disk order instead of arrival order. Avoidance: a temp file created and deleted within 30 s → no I/O at all. An application that cannot lose data calls **`fsync()`** at commit points (or uses `O_DIRECT`).
+
+**F15.** In xv6, why does `filewrite` split a large write into several `begin_op`/`end_op` transactions? Why does `writei` call `iupdate` even when the size did not change?
+
+*Solution.* A transaction must fit in the log: it may write at most `MAXOPBLOCKS` (10) blocks. Each written data block can also dirty a bitmap block, plus the inode, the indirect block and slop for unaligned ends, so `filewrite` limits each chunk to 3 data blocks. `writei` calls `iupdate` because `bmap` may have **allocated a new block** and stored it in `ip->addrs[]`, and that change must reach the on-disk inode.
