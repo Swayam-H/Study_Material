@@ -175,7 +175,7 @@ $$\boxed{m\frac{dv}{dt} = -u\frac{dm}{dt} + F_\text{ext}}$$
 | Rope falling onto a table | force on the table $= 3\rho g x$ once length $x$ has landed |
 # Practice: Newtonian mechanics of one particle and many
 
-22 questions with worked answers (tap a solution to open it). Points in brackets, midsem style.
+28 questions with worked answers (tap a solution to open it). Points in brackets, midsem style.
 
 ## A. State and explain
 
@@ -543,3 +543,90 @@ Lift-off needs thrust $u\alpha > W$, so the thrust must exceed about $\boxed{5\ 
 
 $$\alpha > \frac{W}{u} = \frac{5\times10^6}{3000} \approx 1.7\times10^3\ \text{kg/s} = \boxed{1.7\ \text{t/s}}$$
 
+
+## D. More practice: collisions, centre of mass and rockets
+
+### Problem 23 [Mechanics 1 · Numerical · 3 pts]
+
+A $2$ kg mass moving at $6$ m/s hits a stationary $1$ kg mass in a head-on elastic collision on a frictionless line. Find both final velocities and verify that kinetic energy is conserved.
+
+*Solution.* **Idea.** Elastic: conserve momentum and kinetic energy. For a target at rest the standard results are
+
+$$v_1' = \frac{m_1 - m_2}{m_1 + m_2}v,\qquad v_2' = \frac{2m_1}{m_1 + m_2}v$$
+
+$$v_1' = \frac{2 - 1}{3}(6) = \boxed{2\ \text{m/s}},\qquad v_2' = \frac{2(2)}{3}(6) = \boxed{8\ \text{m/s}}$$
+
+**Check.**
+
+- Momentum: before $2(6) = 12$; after $2(2) + 1(8) = 12$ ✓
+- Energy: before $\tfrac12(2)(36) = 36$ J; after $\tfrac12(2)(4) + \tfrac12(1)(64) = 4 + 32 = 36$ J ✓
+
+**Common mistake.** The light target flies off faster than the incoming speed ($8 > 6$), which is allowed; the heavy projectile keeps going forward.
+
+### Problem 24 [Mechanics 1 · Numerical · 3 pts]
+
+A $10$ g bullet moving at $400$ m/s embeds itself in a free $2.0$ kg block at rest. Find the common velocity and the fraction of kinetic energy lost.
+
+*Solution.* **Idea.** Perfectly inelastic: momentum is conserved and kinetic energy is not.
+
+$$v = \frac{mv_0}{m + M} = \frac{(0.010)(400)}{2.010} = \boxed{1.99\ \text{m/s}}$$
+
+**Energy.**
+
+$$K_i = \tfrac12(0.010)(400)^2 = 800\ \text{J},\qquad K_f = \tfrac12(2.010)(1.99)^2 = 3.98\ \text{J}$$
+
+$$\frac{K_i - K_f}{K_i} = 1 - \frac{m}{m + M} = \boxed{99.5\%}$$
+
+**Why.** The lost fraction is $M/(m + M)$, so a heavy target absorbs almost no kinetic energy but almost all of the bullet's energy goes into heat, sound and deformation.
+
+### Problem 25 [Mechanics 1 · Numerical · 3 pts]
+
+Find the centre of mass of the Earth–Moon system and say whether it lies inside the Earth. ($M_E = 5.97\times10^{24}$ kg, $M_M = 7.35\times10^{22}$ kg, separation $3.84\times10^8$ m, $R_E = 6.37\times10^6$ m.)
+
+*Solution.* **Idea.** Measure from the Earth's centre: $x_\text{cm} = \dfrac{M_Md}{M_E + M_M}$.
+
+$$x_\text{cm} = \frac{(7.35\times10^{22})(3.84\times10^8)}{6.04\times10^{24}} = \boxed{4.67\times10^6\ \text{m}}$$
+
+**Answer.** $4.67\times10^6 < 6.37\times10^6$ m, so the centre of mass lies about $4700$ km from the Earth's centre, **inside** the Earth, at roughly $0.73R_E$.
+
+**Meaning.** Both bodies orbit this point, so the Earth "wobbles" with a radius of about $4700$ km once a month.
+
+### Problem 26 [Mechanics 1 · Numerical · 2 pts]
+
+A rocket with exhaust speed $u = 3$ km/s starts from rest in free space and burns until its mass has fallen to $1/10$ of its initial mass. Find its final speed.
+
+*Solution.* **Idea.** The rocket equation (no gravity, no drag):
+
+$$\Delta v = u\ln\frac{m_0}{m_1}$$
+
+$$\Delta v = (3\ \text{km/s})\ln10 = (3)(2.303) = \boxed{6.9\ \text{km/s}}$$
+
+**Check.** This is below the $7.8$ km/s needed for low Earth orbit, which is why real launchers use several stages: the logarithm punishes a single big tank.
+
+### Problem 27 [Mechanics 1 · Numerical · 2 pts]
+
+A $2$ kg block slides at $10$ m/s onto a rough horizontal floor with $\mu_k = 0.25$. How far does it travel before stopping, and how much heat is generated?
+
+*Solution.* **Idea.** Work–energy: friction removes all the kinetic energy.
+
+$$\mu mg\,d = \tfrac12mv^2\ \Rightarrow\ d = \frac{v^2}{2\mu g} = \frac{100}{2(0.25)(9.8)} = \boxed{20.4\ \text{m}}$$
+
+**Heat.** All of the initial kinetic energy ends up as heat:
+
+$$Q = \tfrac12(2)(10)^2 = \boxed{100\ \text{J}}$$
+
+**Note.** The mass cancels in $d$: a heavier block stops in the same distance.
+
+### Problem 28 [Mechanics 1 · Numerical · 3 pts]
+
+A $0.50$ kg ball on a frictionless table moves in a circle of radius $2.0$ m at $3.0$ m/s, attached to a string that passes through a hole. The string is pulled slowly until the radius is $1.0$ m. Find the new speed and the work done by the pull.
+
+*Solution.* **Idea.** The string force is central, so angular momentum $L = mvr$ is conserved.
+
+$$v_2 = v_1\frac{r_1}{r_2} = 3.0\times\frac{2.0}{1.0} = \boxed{6.0\ \text{m/s}}$$
+
+**Work.** By the work–energy theorem the work done equals the change in kinetic energy:
+
+$$W = \tfrac12(0.50)(6.0^2 - 3.0^2) = \tfrac12(0.50)(27) = \boxed{6.75\ \text{J}}$$
+
+**Check.** Kinetic energy rises from $2.25$ J to $9.0$ J, a gain of $6.75$ J, which the person pulling the string supplies. Angular momentum is conserved, but energy is not.
