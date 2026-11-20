@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Practice: SQL · Data and Applications</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwoml3jv">
+</head>
+<body data-root="../../" data-page="dna/ch7-sql/practice" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS4.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../dna/index.html">Data and Applications</a>
+      </div><div class="nav-tools"><a class="" href="../../dna/practice.html">Practice <b>89</b></a><a class="" href="../../dna/formulas.html">Formulas <b>5</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="dna/start-here/start-here" href="../../dna/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Chapter 1: The relational model, keys and constraints</span><i data-count-for="dna/ch1-relational-model/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch1-relational-model/learn" href="../../dna/ch1-relational-model/learn.html"><small>Learn</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/reference" href="../../dna/ch1-relational-model/reference.html"><small>Reference</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/practice" href="../../dna/ch1-relational-model/practice.html"><small>Practice</small><span>The relational model, keys and constraints</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: ER and EER modelling</span><i data-count-for="dna/ch2-er-eer/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch2-er-eer/learn" href="../../dna/ch2-er-eer/learn.html"><small>Learn</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/reference" href="../../dna/ch2-er-eer/reference.html"><small>Reference</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/practice" href="../../dna/ch2-er-eer/practice.html"><small>Practice</small><span>ER and EER modelling</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Mapping EER to relations</span><i data-count-for="dna/ch3-mapping/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch3-mapping/learn" href="../../dna/ch3-mapping/learn.html"><small>Learn</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/reference" href="../../dna/ch3-mapping/reference.html"><small>Reference</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/practice" href="../../dna/ch3-mapping/practice.html"><small>Practice</small><span>Mapping EER to relations</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Functional dependencies and normalisation</span><i data-count-for="dna/ch4-normalisation/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch4-normalisation/learn" href="../../dna/ch4-normalisation/learn.html"><small>Learn</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/reference" href="../../dna/ch4-normalisation/reference.html"><small>Reference</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/practice" href="../../dna/ch4-normalisation/practice.html"><small>Practice</small><span>Functional dependencies and normalisation</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Relational algebra</span><i data-count-for="dna/ch5-relational-algebra/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch5-relational-algebra/learn" href="../../dna/ch5-relational-algebra/learn.html"><small>Learn</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/reference" href="../../dna/ch5-relational-algebra/reference.html"><small>Reference</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/practice" href="../../dna/ch5-relational-algebra/practice.html"><small>Practice</small><span>Relational algebra</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Tuple relational calculus</span><i data-count-for="dna/ch6-trc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch6-trc/learn" href="../../dna/ch6-trc/learn.html"><small>Learn</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/reference" href="../../dna/ch6-trc/reference.html"><small>Reference</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/practice" href="../../dna/ch6-trc/practice.html"><small>Practice</small><span>Tuple relational calculus</span></a></div></details><details class="nav-doc" open><summary><span>Chapter 7: SQL</span><i data-count-for="dna/ch7-sql/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch7-sql/learn" href="../../dna/ch7-sql/learn.html"><small>Learn</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/reference" href="../../dna/ch7-sql/reference.html"><small>Reference</small><span>SQL</span></a><a class="nav-link current" data-id="dna/ch7-sql/practice" href="../../dna/ch7-sql/practice.html"><small>Practice</small><span>SQL</span></a></div></details><a class="nav-link nav-single" data-id="dna/mock-endsem/mock-endsem" href="../../dna/mock-endsem/mock-endsem.html"><span>Mock endsem with solutions</span></a><a class="nav-link nav-single" data-id="dna/cheat-sheet/cheat-sheet" href="../../dna/cheat-sheet/cheat-sheet.html"><span>Two-page cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>68</b></a><a class="" href="../../osn/formulas.html">Formulas <b>23</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><details class="nav-doc"><summary><span>Lectures 18 and 19: file systems</span><i data-count-for="osn/filesystems/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/filesystems/lecture-18" href="../../osn/filesystems/lecture-18.html"><small>Lecture 18</small><span>Files and directories</span></a><a class="nav-link" data-id="osn/filesystems/lecture-19" href="../../osn/filesystems/lecture-19.html"><small>Lecture 19</small><span>File system implementation</span></a><a class="nav-link" data-id="osn/filesystems/the-xv6-file-system-tutorial-7" href="../../osn/filesystems/the-xv6-file-system-tutorial-7.html"><span>The xv6 file system (Tutorial 7)</span></a><a class="nav-link" data-id="osn/filesystems/practice-problems-lectures-18-and-19" href="../../osn/filesystems/practice-problems-lectures-18-and-19.html"><span>Practice problems, Lectures 18 and 19</span></a></div></details><a class="nav-link nav-single" data-id="osn/formula-sheet/formula-sheet-lectures-01-to-19" href="../../osn/formula-sheet/formula-sheet-lectures-01-to-19.html"><span>Formula sheet</span></a><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 19</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>252</b></a><a class="" href="../../pns/formulas.html">Formulas <b>127</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-skim" href="../../pns/l21-onward/part-6-linear-regression-skim.html"><span>Part 6 — Linear regression (skim)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>371</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>61</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/start-here/start-here" href="../../science-1/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Chapter 1: Scales, modelling and nonlinear dynamics</span><i data-count-for="science-1/ch1-intro/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch1-intro/learn" href="../../science-1/ch1-intro/learn.html"><small>Learn</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/reference" href="../../science-1/ch1-intro/reference.html"><small>Reference</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/formulas" href="../../science-1/ch1-intro/formulas.html"><small>Formulas</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/practice" href="../../science-1/ch1-intro/practice.html"><small>Practice</small><span>Scales, modelling and nonlinear dynamics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: Newtonian mechanics of one particle and many</span><i data-count-for="science-1/ch2-newton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch2-newton/learn" href="../../science-1/ch2-newton/learn.html"><small>Learn</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/reference" href="../../science-1/ch2-newton/reference.html"><small>Reference</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/formulas" href="../../science-1/ch2-newton/formulas.html"><small>Formulas</small><span>Newtonian mechanics</span></a><a class="nav-link" data-id="science-1/ch2-newton/practice" href="../../science-1/ch2-newton/practice.html"><small>Practice</small><span>Newtonian mechanics of one particle and many</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Calculus of variations and Lagrangian mechanics</span><i data-count-for="science-1/ch3-lagrange/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch3-lagrange/learn" href="../../science-1/ch3-lagrange/learn.html"><small>Learn</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/reference" href="../../science-1/ch3-lagrange/reference.html"><small>Reference</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/formulas" href="../../science-1/ch3-lagrange/formulas.html"><small>Formulas</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/practice" href="../../science-1/ch3-lagrange/practice.html"><small>Practice</small><span>Calculus of variations and Lagrangian mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Hamiltonian dynamics and the two-body problem</span><i data-count-for="science-1/ch4-hamilton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch4-hamilton/learn" href="../../science-1/ch4-hamilton/learn.html"><small>Learn</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/reference" href="../../science-1/ch4-hamilton/reference.html"><small>Reference</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/formulas" href="../../science-1/ch4-hamilton/formulas.html"><small>Formulas</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/practice" href="../../science-1/ch4-hamilton/practice.html"><small>Practice</small><span>Hamiltonian dynamics and the two-body problem</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Special relativity</span><i data-count-for="science-1/ch5-relativity/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch5-relativity/learn" href="../../science-1/ch5-relativity/learn.html"><small>Learn</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference" href="../../science-1/ch5-relativity/reference.html"><small>Reference</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/formulas" href="../../science-1/ch5-relativity/formulas.html"><small>Formulas</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/practice" href="../../science-1/ch5-relativity/practice.html"><small>Practice</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference-2" href="../../science-1/ch5-relativity/reference-2.html"><small>Reference</small><span>Special relativity quick sheet (Beiser ch. 1)</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Thermodynamics I: gases and the first law</span><i data-count-for="science-1/ch6-thermo1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch6-thermo1/learn" href="../../science-1/ch6-thermo1/learn.html"><small>Learn</small><span>Thermodynamics in one pass (Atkins 1A to 3B)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-2" href="../../science-1/ch6-thermo1/learn-2.html"><small>Learn</small><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-3" href="../../science-1/ch6-thermo1/learn-3.html"><small>Learn</small><span>The first law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-4" href="../../science-1/ch6-thermo1/learn-4.html"><small>Learn</small><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/practice" href="../../science-1/ch6-thermo1/practice.html"><small>Practice</small><span>Thermodynamics I: gases and the first law</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: Thermodynamics II: second law, entropy and free energy</span><i data-count-for="science-1/ch7-thermo2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch7-thermo2/learn" href="../../science-1/ch7-thermo2/learn.html"><small>Learn</small><span>The second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/learn-2" href="../../science-1/ch7-thermo2/learn-2.html"><small>Learn</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/reference" href="../../science-1/ch7-thermo2/reference.html"><small>Reference</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/formulas" href="../../science-1/ch7-thermo2/formulas.html"><small>Formulas</small><span>Second law, entropy and free energy</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/practice" href="../../science-1/ch7-thermo2/practice.html"><small>Practice</small><span>Free energy and phases</span></a></div></details><details class="nav-doc"><summary><span>Chapter 8: Particle properties of waves</span><i data-count-for="science-1/ch8-qm1/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch8-qm1/learn" href="../../science-1/ch8-qm1/learn.html"><small>Learn</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/reference" href="../../science-1/ch8-qm1/reference.html"><small>Reference</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/formulas" href="../../science-1/ch8-qm1/formulas.html"><small>Formulas</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/practice" href="../../science-1/ch8-qm1/practice.html"><small>Practice</small><span>Particle properties of waves</span></a></div></details><details class="nav-doc"><summary><span>Chapter 9: Wave properties of particles</span><i data-count-for="science-1/ch9-qm2/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch9-qm2/learn" href="../../science-1/ch9-qm2/learn.html"><small>Learn</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/reference" href="../../science-1/ch9-qm2/reference.html"><small>Reference</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/formulas" href="../../science-1/ch9-qm2/formulas.html"><small>Formulas</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/practice" href="../../science-1/ch9-qm2/practice.html"><small>Practice</small><span>Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>Chapter 10: Atomic structure</span><i data-count-for="science-1/ch10-qm3/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch10-qm3/learn" href="../../science-1/ch10-qm3/learn.html"><small>Learn</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/reference" href="../../science-1/ch10-qm3/reference.html"><small>Reference</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/formulas" href="../../science-1/ch10-qm3/formulas.html"><small>Formulas</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/practice" href="../../science-1/ch10-qm3/practice.html"><small>Practice</small><span>Atomic structure</span></a></div></details><details class="nav-doc"><summary><span>Chapter 11: Quantum mechanics</span><i data-count-for="science-1/ch11-qm4/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch11-qm4/learn" href="../../science-1/ch11-qm4/learn.html"><small>Learn</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/reference" href="../../science-1/ch11-qm4/reference.html"><small>Reference</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/formulas" href="../../science-1/ch11-qm4/formulas.html"><small>Formulas</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/practice" href="../../science-1/ch11-qm4/practice.html"><small>Practice</small><span>Quantum mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 12: Quantum theory of the hydrogen atom</span><i data-count-for="science-1/ch12-qm5/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch12-qm5/learn" href="../../science-1/ch12-qm5/learn.html"><small>Learn</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/reference" href="../../science-1/ch12-qm5/reference.html"><small>Reference</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/formulas" href="../../science-1/ch12-qm5/formulas.html"><small>Formulas</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/practice" href="../../science-1/ch12-qm5/practice.html"><small>Practice</small><span>Quantum theory of the hydrogen atom</span></a></div></details><details class="nav-doc"><summary><span>Practice: Mock endsem</span><i data-count-for="science-1/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/mock-endsem/practice" href="../../science-1/mock-endsem/practice.html"><small>Practice</small><span>Mock endsem</span></a><a class="nav-link" data-id="science-1/mock-endsem/practice-2" href="../../science-1/mock-endsem/practice-2.html"><small>Practice</small><span>Mock endsem, marking scheme and solutions</span></a></div></details><a class="nav-link nav-single" data-id="science-1/toolkit-practice/practice" href="../../science-1/toolkit-practice/practice.html"><span>Practice set: thermodynamics</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cheatsheet/sheet" href="../../science-1/toolkit-cheatsheet/sheet.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-formulas/sheet" href="../../science-1/toolkit-formulas/sheet.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-definitions/sheet" href="../../science-1/toolkit-definitions/sheet.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cards/cards" href="../../science-1/toolkit-cards/cards.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../dna/index.html">Data and Applications</a><span>›</span><span>Chapter 7: SQL</span></nav>
+      <header class="note-head">
+        <p class="eyebrow">Practice</p>
+        <h1>SQL</h1>
+        <p class="note-meta">23 min read · 20 practice problems</p>
+        <div class="note-tools">
+          <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          <span class="hint">Solutions stay collapsed until you click them.</span>
+        </div>
+      </header>
+      <div class="prose"><h2 id="a-assignment-6-this-year">A. Assignment 6 (this year)</h2>
+<p>Schema: BOOKS(<strong>ISBN</strong>, AuthorName, Title, Publisher, YearofBook), COAUTHORS(<strong>ISBN, JointAuthorName</strong>), PERSONS(<strong>Name</strong>, YearofBirth, Residence), PUBLISHERS(<strong>Publisher</strong>, City). The senior author is not repeated in COAUTHORS; author columns are never NULL.</p>
+<h3 id="problem-1-sql-application-5-pts-assignment-6-individual-a">Problem 1 [SQL · Application · 5 pts · Assignment 6 individual (a)]</h3>
+<p>For each publisher, list its authors ranked in descending order of the number of books they have published with that publisher as senior author. Output Publisher and AuthorName, grouped by publisher.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">-- Assumption: ISBN is the key of BOOKS, so COUNT(*) per group = number of books
+SELECT   Publisher, AuthorName
+FROM     BOOKS
+GROUP BY Publisher, AuthorName
+ORDER BY Publisher, COUNT(*) DESC;
+</code></pre>
+<p>Group on <strong>both</strong> columns (one group per publisher–author pair); sort by publisher first so its rows are together, then by count descending. Common mistakes: GROUP BY Publisher only; ORDER BY COUNT(*) DESC alone (rows of one publisher scattered); no DESC; counting coauthors. A window function <code>RANK() OVER (PARTITION BY Publisher ORDER BY COUNT(*) DESC)</code> is also correct.</p>
+</details>
+<h3 id="problem-2-sql-application-5-pts-assignment-6-individual-b">Problem 2 [SQL · Application · 5 pts · Assignment 6 individual (b)]</h3>
+<p>List the book or books with the highest total number of authors (senior author plus coauthors). List all ties. Output ISBN and Title.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">WITH AuthorCount AS (
+    SELECT   B.ISBN, B.Title, 1 + COUNT(C.JointAuthorName) AS NumAuthors
+    FROM     BOOKS B LEFT JOIN COAUTHORS C ON B.ISBN = C.ISBN
+    GROUP BY B.ISBN, B.Title
+)
+SELECT ISBN, Title
+FROM   AuthorCount
+WHERE  NumAuthors = (SELECT MAX(NumAuthors) FROM AuthorCount);
+</code></pre>
+<p>LEFT JOIN keeps books with no coauthors; COUNT(C.JointAuthorName) gives 0 for them (COUNT(<em>) would give 1); comparing with MAX keeps ties (LIMIT 1 would not). Alternatives: HAVING … &gt;= ALL (…), RANK() = 1, or a UNION of both author roles then COUNT(</em>).</p>
+</details>
+<h3 id="problem-3-sql-application-5-pts-assignment-6-individual-c">Problem 3 [SQL · Application · 5 pts · Assignment 6 individual (c)]</h3>
+<p>List the Name of every person who is neither a senior author nor a coauthor of any book.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">SELECT P.Name
+FROM   PERSONS P
+WHERE  NOT EXISTS (SELECT * FROM BOOKS B     WHERE B.AuthorName      = P.Name)
+  AND  NOT EXISTS (SELECT * FROM COAUTHORS C WHERE C.JointAuthorName = P.Name);
+</code></pre>
+<p>&quot;Neither … nor&quot; = NOT … AND NOT …; using OR returns almost everyone. Also correct: NOT IN twice (safe here because the columns are never NULL), <code>SELECT Name FROM PERSONS EXCEPT SELECT AuthorName FROM BOOKS EXCEPT SELECT JointAuthorName FROM COAUTHORS</code>, or two LEFT JOINs with both keys IS NULL.</p>
+</details>
+<h3 id="problem-4-sql-application-10-pts-assignment-6-group">Problem 4 [SQL · Application · 10 pts · Assignment 6 group]</h3>
+<p>Kahn's algorithm (L ← empty; S ← nodes with no incoming edge; while S not empty: remove n from S, append n to L, for each edge n → m remove it and if m has no other incoming edges insert m into S; if edges remain return error else return L). (a) What is the output? (b) With the graph stored as G(FromNode, ToNode), give SQL for each step. (c) Run it on a four-node graph.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a) A <strong>topological order</strong> of the nodes (every edge u → v has u before v) if the graph is a DAG; an <strong>error</strong> if it has a cycle (cycle nodes never lose all incoming edges). Not unique: depends on which node is taken from S.</p>
+<p>(b) Work on a copy so G is not destroyed; store list positions because tables have no order; node set in V(Node).</p>
+<pre><code class="language-sql">CREATE TABLE E AS SELECT FromNode, ToNode FROM G;                 -- working copy
+CREATE TABLE L (Pos INT PRIMARY KEY, Node INT);                   -- (A)
+CREATE TABLE S AS SELECT Node FROM V
+                  WHERE Node NOT IN (SELECT ToNode FROM E);       -- (B)
+SELECT COUNT(*) FROM S;                                           -- (C) loop while &gt; 0
+SELECT MIN(Node) INTO n FROM S;  DELETE FROM S WHERE Node = n;    -- (D)
+INSERT INTO L (Pos, Node) SELECT COALESCE(MAX(Pos), 0) + 1, n FROM L;   -- (E)
+CREATE TEMPORARY TABLE M AS SELECT ToNode AS Target FROM E WHERE FromNode = n;  -- (F)
+DELETE FROM E WHERE FromNode = n AND ToNode = m;                  -- (G)
+SELECT COUNT(*) FROM E WHERE ToNode = m;                          -- (H) = 0 ?
+INSERT INTO S VALUES (m);                                         -- (I)
+SELECT COUNT(*) FROM E;                                           -- (J) &gt; 0 → error
+SELECT Node FROM L ORDER BY Pos;                                  -- (K)
+</code></pre>
+<p>The loops go in a stored procedure (WHILE … DO … END WHILE; IF … THEN … END IF; SIGNAL for the error) or a host program.</p>
+<p>(c) Edges 1→2, 1→3, 2→4, 3→4. S = {1}. Round 1: n = 1, L = [1]; delete 1→2 (2 has no other incoming → S = {2}), delete 1→3 (S = {2, 3}). Round 2: n = 2, L = [1, 2]; delete 2→4, but 3→4 remains, so 4 not added. Round 3: n = 3, L = [1, 2, 3]; delete 3→4, S = {4}. Round 4: n = 4, L = [1, 2, 3, 4]. E is empty → return [1, 2, 3, 4]. With a cycle (add the edge 4→1): every node now has an incoming edge, so S starts empty, the loop never runs, and (J) finds edges left → error.</p>
+<p>Common mistakes: (B) using FromNode (no <em>outgoing</em> edge); (D) not deleting n from S (infinite loop); (G) deleting with ToNode = m only; (H)/(J) checking G instead of E; (K) no ORDER BY.</p>
+</details>
+<h2 id="b-textbook-exercises-set-by-kamal">B. Textbook exercises set by Kamal</h2>
+<p>UNIVERSITY (Elmasri Fig 1.2): STUDENT(Name, <strong>Student_number</strong>, Class, Major), COURSE(Course_name, <strong>Course_number</strong>, Credit_hours, Department), SECTION(<strong>Section_identifier</strong>, Course_number, Semester, Year, Instructor), GRADE_REPORT(<strong>Student_number, Section_identifier</strong>, Grade), PREREQUISITE(<strong>Course_number, Prerequisite_number</strong>).</p>
+<h3 id="problem-5-sql-application-6-pts-elmasri-6-5">Problem 5 [SQL · Application · 6 pts · Elmasri 6.5]</h3>
+<p>What referential integrity constraints should hold on UNIVERSITY? Write the DDL.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> SECTION.Course_number → COURSE; GRADE_REPORT.Student_number → STUDENT; GRADE_REPORT.Section_identifier → SECTION; PREREQUISITE.Course_number → COURSE; PREREQUISITE.Prerequisite_number → COURSE.</p>
+<pre><code class="language-sql">CREATE TABLE STUDENT (
+  Name VARCHAR(30) NOT NULL, Student_number INT PRIMARY KEY,
+  Class INT CHECK (Class BETWEEN 1 AND 5), Major CHAR(4));
+CREATE TABLE COURSE (
+  Course_name VARCHAR(40) NOT NULL, Course_number CHAR(8) PRIMARY KEY,
+  Credit_hours INT, Department CHAR(4));
+CREATE TABLE SECTION (
+  Section_identifier INT PRIMARY KEY,
+  Course_number CHAR(8) NOT NULL REFERENCES COURSE(Course_number)
+                ON DELETE CASCADE ON UPDATE CASCADE,
+  Semester VARCHAR(6), Year CHAR(4), Instructor VARCHAR(30));
+CREATE TABLE GRADE_REPORT (
+  Student_number INT REFERENCES STUDENT(Student_number) ON DELETE CASCADE ON UPDATE CASCADE,
+  Section_identifier INT REFERENCES SECTION(Section_identifier) ON DELETE CASCADE ON UPDATE CASCADE,
+  Grade CHAR(1),
+  PRIMARY KEY (Student_number, Section_identifier));
+CREATE TABLE PREREQUISITE (
+  Course_number CHAR(8) REFERENCES COURSE(Course_number) ON DELETE CASCADE ON UPDATE CASCADE,
+  Prerequisite_number CHAR(8) REFERENCES COURSE(Course_number) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (Course_number, Prerequisite_number));
+</code></pre>
+<p>CASCADE on GRADE_REPORT is a choice (deleting a student deletes their grades); RESTRICT is also defensible if records must be kept. Say which and why.</p>
+</details>
+<h3 id="problem-6-sql-application-6-pts-elmasri-6-8">Problem 6 [SQL · Application · 6 pts · Elmasri 6.8]</h3>
+<p>Write DDL for the LIBRARY schema with keys and referential triggered actions: BOOK(Book_id, Title, Publisher_name), BOOK_AUTHORS(Book_id, Author_name), PUBLISHER(Name, Address, Phone), BOOK_COPIES(Book_id, Branch_id, No_of_copies), BOOK_LOANS(Book_id, Branch_id, Card_no, Date_out, Due_date), LIBRARY_BRANCH(Branch_id, Branch_name, Address), BORROWER(Card_no, Name, Address, Phone).</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">CREATE TABLE PUBLISHER (Name VARCHAR(40) PRIMARY KEY, Address VARCHAR(80), Phone VARCHAR(15));
+CREATE TABLE BOOK (
+  Book_id INT PRIMARY KEY, Title VARCHAR(80) NOT NULL,
+  Publisher_name VARCHAR(40) REFERENCES PUBLISHER(Name) ON DELETE SET NULL ON UPDATE CASCADE);
+CREATE TABLE BOOK_AUTHORS (
+  Book_id INT REFERENCES BOOK(Book_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  Author_name VARCHAR(40),
+  PRIMARY KEY (Book_id, Author_name));
+CREATE TABLE LIBRARY_BRANCH (Branch_id INT PRIMARY KEY, Branch_name VARCHAR(40) NOT NULL, Address VARCHAR(80));
+CREATE TABLE BORROWER (Card_no INT PRIMARY KEY, Name VARCHAR(40) NOT NULL, Address VARCHAR(80), Phone VARCHAR(15));
+CREATE TABLE BOOK_COPIES (
+  Book_id INT REFERENCES BOOK(Book_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  Branch_id INT REFERENCES LIBRARY_BRANCH(Branch_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  No_of_copies INT CHECK (No_of_copies &gt;= 0),
+  PRIMARY KEY (Book_id, Branch_id));
+CREATE TABLE BOOK_LOANS (
+  Book_id INT, Branch_id INT,
+  Card_no INT REFERENCES BORROWER(Card_no) ON DELETE RESTRICT ON UPDATE CASCADE,
+  Date_out DATE NOT NULL, Due_date DATE NOT NULL,
+  PRIMARY KEY (Book_id, Branch_id, Card_no),
+  FOREIGN KEY (Book_id, Branch_id) REFERENCES BOOK_COPIES(Book_id, Branch_id)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  CHECK (Due_date &gt;= Date_out));
+</code></pre>
+<p>Reasons: authors and copies are meaningless without the book (CASCADE); a borrower with books out should not vanish (RESTRICT); a deleted publisher leaves its books (SET NULL).</p>
+</details>
+<h3 id="problem-7-sql-application-10-pts-elmasri-6-10-all-of-8-16-in">Problem 7 [SQL · Application · 10 pts · Elmasri 6.10 (all of 8.16 in SQL)]</h3>
+<p>COMPANY: (a) department 5 employees working more than 10 hours on ProductX; (b) employees with a dependent of the same first name; (c) employees supervised by Franklin Wong; (d) each project's name and total hours; (e) employees on every project; (f) employees on no project; (g) each department's name and average salary; (h) average salary of female employees; (i) employees on a Houston project whose department has no Houston location; (j) last names of managers with no dependents.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">-- (a)
+SELECT E.Fname, E.Lname
+FROM   EMPLOYEE E JOIN WORKS_ON W ON E.Ssn = W.Essn JOIN PROJECT P ON W.Pno = P.Pnumber
+WHERE  E.Dno = 5 AND P.Pname = 'ProductX' AND W.Hours &gt; 10;
+-- (b)
+SELECT E.Fname, E.Lname FROM EMPLOYEE E JOIN DEPENDENT D
+  ON D.Essn = E.Ssn AND D.Dependent_name = E.Fname;
+-- (c)
+SELECT E.Fname, E.Lname FROM EMPLOYEE E JOIN EMPLOYEE S ON E.Super_ssn = S.Ssn
+WHERE  S.Fname = 'Franklin' AND S.Lname = 'Wong';
+-- (d)
+SELECT P.Pname, SUM(W.Hours) AS TotalHours
+FROM   PROJECT P LEFT JOIN WORKS_ON W ON P.Pnumber = W.Pno
+GROUP BY P.Pnumber, P.Pname;
+-- (e)
+SELECT E.Fname, E.Lname FROM EMPLOYEE E
+WHERE NOT EXISTS (SELECT * FROM PROJECT P
+                  WHERE NOT EXISTS (SELECT * FROM WORKS_ON W
+                                    WHERE W.Essn = E.Ssn AND W.Pno = P.Pnumber));
+-- (f)
+SELECT Fname, Lname FROM EMPLOYEE E
+WHERE NOT EXISTS (SELECT * FROM WORKS_ON W WHERE W.Essn = E.Ssn);
+-- (g)
+SELECT D.Dname, AVG(E.Salary) FROM DEPARTMENT D JOIN EMPLOYEE E ON E.Dno = D.Dnumber
+GROUP BY D.Dnumber, D.Dname;
+-- (h)
+SELECT AVG(Salary) FROM EMPLOYEE WHERE Sex = 'F';
+-- (i)
+SELECT DISTINCT E.Fname, E.Lname, E.Address
+FROM   EMPLOYEE E JOIN WORKS_ON W ON E.Ssn = W.Essn JOIN PROJECT P ON W.Pno = P.Pnumber
+WHERE  P.Plocation = 'Houston'
+  AND  NOT EXISTS (SELECT * FROM DEPT_LOCATIONS L
+                   WHERE L.Dnumber = E.Dno AND L.Dlocation = 'Houston');
+-- (j)
+SELECT E.Lname FROM EMPLOYEE E JOIN DEPARTMENT D ON D.Mgr_ssn = E.Ssn
+WHERE  NOT EXISTS (SELECT * FROM DEPENDENT X WHERE X.Essn = E.Ssn);
+</code></pre>
+<p>On Elmasri's Figure 5.6 state: (a) John Smith, Joyce English; (b) none; (c) John Smith, Ramesh Narayan, Joyce English; (e) none; (f) none; (h) 31000; (i) Jennifer Wallace (she works on Reorganization in Houston, and department 4 is only in Stafford); (j) Borg.</p>
+</details>
+<h3 id="problem-8-sql-application-4-pts-elmasri-6-13">Problem 8 [SQL · Application · 4 pts · Elmasri 6.13]</h3>
+<p>On UNIVERSITY: (a) insert student ⟨'Johnson', 25, 1, 'Math'⟩; (b) change Smith's class to 2; (c) insert course ⟨'Knowledge Engineering', 'cs4390', 3, 'cs'⟩; (d) delete the student named Smith with number 17.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">INSERT INTO STUDENT VALUES ('Johnson', 25, 1, 'Math');
+UPDATE STUDENT SET Class = 2 WHERE Name = 'Smith';
+INSERT INTO COURSE VALUES ('Knowledge Engineering', 'cs4390', 3, 'cs');
+DELETE FROM STUDENT WHERE Name = 'Smith' AND Student_number = 17;
+</code></pre>
+<p>(b) updates every Smith; if names are not unique, use the Student_number. (d) succeeds only if GRADE_REPORT rows for 17 are cascaded or none exist; otherwise it is rejected (referential integrity).</p>
+</details>
+<h3 id="problem-9-sql-concept-4-pts-elmasri-6-15">Problem 9 [SQL · Concept · 4 pts · Elmasri 6.15]</h3>
+<p>EMPSUPERFK is changed to FOREIGN KEY (Super_ssn) REFERENCES EMPLOYEE(Ssn) ON DELETE CASCADE ON UPDATE CASCADE. (a) What happens on DELETE FROM EMPLOYEE WHERE Lname = 'Borg'? (b) CASCADE or SET NULL here?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a) Borg (888665555) is the root of the supervision tree. Deleting him cascades to everyone he supervises (Wong, Wallace), then to everyone <em>they</em> supervise (Smith, Narayan, English, Zelaya, Jabbar): <strong>all eight employees are deleted</strong> (and, through other cascades, possibly their WORKS_ON and DEPENDENT rows; DEPARTMENT.Mgr_ssn references would block it if RESTRICT). (b) <strong>SET NULL</strong> is better: losing a supervisor should not delete the people they supervised.</p>
+</details>
+<h3 id="problem-10-sql-application-4-pts-elmasri-7-5">Problem 10 [SQL · Application · 4 pts · Elmasri 7.5]</h3>
+<p>(a) For each department whose average salary is more than 30000, the department name and number of employees. (b) The same but counting only male employees: can it be done?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">-- (a)
+SELECT D.Dname, COUNT(*) FROM DEPARTMENT D JOIN EMPLOYEE E ON E.Dno = D.Dnumber
+GROUP BY D.Dnumber, D.Dname
+HAVING AVG(E.Salary) &gt; 30000;
+-- (b) the average must be over ALL employees, the count over men only
+SELECT D.Dname, COUNT(*) FROM DEPARTMENT D JOIN EMPLOYEE E ON E.Dno = D.Dnumber
+WHERE  E.Sex = 'M'
+  AND  D.Dnumber IN (SELECT Dno FROM EMPLOYEE GROUP BY Dno HAVING AVG(Salary) &gt; 30000)
+GROUP BY D.Dnumber, D.Dname;
+</code></pre>
+<p>(b) Yes, but not by adding WHERE Sex = 'M' to (a): that would also restrict the average to men. The department condition goes into a nested query. On Figure 5.6: (a) Research 4, Administration 3, Headquarters 1; (b) Research 3, Administration 1, Headquarters 1.</p>
+</details>
+<h3 id="problem-11-sql-application-6-pts-elmasri-7-7">Problem 11 [SQL · Application · 6 pts · Elmasri 7.7]</h3>
+<p>Nested queries: (a) employees in the department of the highest-paid employee; (b) employees whose supervisor's supervisor has Ssn 888665555; (c) employees earning at least 10000 more than the lowest-paid employee.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">-- (a)
+SELECT Fname, Lname FROM EMPLOYEE
+WHERE Dno IN (SELECT Dno FROM EMPLOYEE WHERE Salary = (SELECT MAX(Salary) FROM EMPLOYEE));
+-- (b)
+SELECT Fname, Lname FROM EMPLOYEE
+WHERE Super_ssn IN (SELECT Ssn FROM EMPLOYEE WHERE Super_ssn = '888665555');
+-- (c)
+SELECT Fname, Lname FROM EMPLOYEE
+WHERE Salary &gt;= 10000 + (SELECT MIN(Salary) FROM EMPLOYEE);
+</code></pre>
+</details>
+<h3 id="problem-12-sql-application-6-pts-elmasri-7-8">Problem 12 [SQL · Application · 6 pts · Elmasri 7.8]</h3>
+<p>Views: (a) department name, manager name, manager salary; (b) employee name, supervisor name, salary for employees in Research; (c) project name, controlling department name, number of employees, total hours; (d) as (c) for projects with more than one employee.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">CREATE VIEW DEPT_MGR AS
+  SELECT D.Dname, E.Fname, E.Lname, E.Salary
+  FROM DEPARTMENT D JOIN EMPLOYEE E ON D.Mgr_ssn = E.Ssn;
+CREATE VIEW RESEARCH_EMP AS
+  SELECT E.Fname, E.Lname, S.Fname AS Sup_fname, S.Lname AS Sup_lname, E.Salary
+  FROM EMPLOYEE E JOIN DEPARTMENT D ON E.Dno = D.Dnumber
+                  LEFT JOIN EMPLOYEE S ON E.Super_ssn = S.Ssn
+  WHERE D.Dname = 'Research';
+CREATE VIEW PROJ_SUMMARY AS
+  SELECT P.Pname, D.Dname, COUNT(W.Essn) AS Num_emps, SUM(W.Hours) AS Total_hours
+  FROM PROJECT P JOIN DEPARTMENT D ON P.Dnum = D.Dnumber
+                 LEFT JOIN WORKS_ON W ON W.Pno = P.Pnumber
+  GROUP BY P.Pnumber, P.Pname, D.Dname;
+CREATE VIEW PROJ_SUMMARY_BIG AS
+  SELECT P.Pname, D.Dname, COUNT(*) AS Num_emps, SUM(W.Hours) AS Total_hours
+  FROM PROJECT P JOIN DEPARTMENT D ON P.Dnum = D.Dnumber JOIN WORKS_ON W ON W.Pno = P.Pnumber
+  GROUP BY P.Pnumber, P.Pname, D.Dname
+  HAVING COUNT(*) &gt; 1;
+</code></pre>
+<p>LEFT JOIN to the supervisor keeps employees with none (Borg-style roots).</p>
+</details>
+<h3 id="problem-13-sql-concept-5-pts-elmasri-7-9">Problem 13 [SQL · Concept · 5 pts · Elmasri 7.9]</h3>
+<p>DEPT_SUMMARY(D, C, Total_s, Average_s) AS SELECT Dno, COUNT(*), SUM(Salary), AVG(Salary) FROM EMPLOYEE GROUP BY Dno. Which are allowed? (a) SELECT * FROM DEPT_SUMMARY; (b) SELECT D, C … WHERE Total_s &gt; 100000; (c) SELECT D, Average_s … WHERE C &gt; (SELECT C … WHERE D = 4); (d) UPDATE DEPT_SUMMARY SET D = 3 WHERE D = 4; (e) DELETE FROM DEPT_SUMMARY WHERE C &gt; 4.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> Queries (a)–(c) are allowed (query modification rewrites them on EMPLOYEE). (a) rows (5, 4, 133000, 33250), (4, 3, 93000, 31000), (1, 1, 55000, 55000). (b) becomes <code>SELECT Dno, COUNT(*) FROM EMPLOYEE GROUP BY Dno HAVING SUM(Salary) &gt; 100000</code> → (5, 4). (c) departments with more employees than department 4's 3 → (5, 33250). Updates (d) and (e) are <strong>not allowed</strong>: the view is defined with grouping and aggregates, so a view row does not correspond to one base row (changing D would mean moving all department-4 employees; deleting a summary row has no single meaning).</p>
+</details>
+<h3 id="problem-14-sql-application-5-pts-elmasri-10-7">Problem 14 [SQL · Application · 5 pts · Elmasri 10.7]</h3>
+<p>Embedded SQL in C: read a student's name and print their GPA (A = 4, B = 3, C = 2, D = 1).</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-c">EXEC SQL BEGIN DECLARE SECTION;
+  varchar sname[31]; char grade[2]; int credits;
+  int SQLCODE;
+EXEC SQL END DECLARE SECTION;
+
+prompt(&quot;Student name: &quot;, sname);
+EXEC SQL DECLARE G CURSOR FOR
+  SELECT R.Grade, C.Credit_hours
+  FROM   STUDENT S, GRADE_REPORT R, SECTION X, COURSE C
+  WHERE  S.Name = :sname AND S.Student_number = R.Student_number
+    AND  R.Section_identifier = X.Section_identifier AND X.Course_number = C.Course_number;
+EXEC SQL OPEN G;
+float points = 0; int hours = 0;
+EXEC SQL FETCH FROM G INTO :grade, :credits;
+while (SQLCODE == 0) {
+    int p = grade[0]=='A' ? 4 : grade[0]=='B' ? 3 : grade[0]=='C' ? 2 : grade[0]=='D' ? 1 : 0;
+    points += p * credits; hours += credits;
+    EXEC SQL FETCH FROM G INTO :grade, :credits;
+}
+EXEC SQL CLOSE G;
+if (hours &gt; 0) printf(&quot;GPA = %.2f\n&quot;, points / hours); else printf(&quot;No grades\n&quot;);
+</code></pre>
+<p>Key points: host variables declared in the DECLARE SECTION and prefixed with ':' in SQL; a cursor because the query returns many rows; the loop stops when SQLCODE becomes 100 (no more rows). Weighting by credit hours is the usual definition; an unweighted average is acceptable if stated.</p>
+</details>
+<h2 id="c-past-papers-other-years-style-differs">C. Past papers (other years; style differs)</h2>
+<h3 id="problem-15-sql-application-6-pts-m25-endsem-q1">Problem 15 [SQL · Application · 6 pts · M25 endsem Q1]</h3>
+<p>Hospital: Patients(PatientID, FirstName, LastName, DOB, BloodType), Doctors(DoctorID, FirstName, LastName, Specialty, HireDate), Admissions(AdmissionID, PatientID, DoctorID, AdmissionDate, Diagnosis). (a) Blood types shared by more than one patient, with PatientCount, descending. (b) Patients whose LastName is longer than five letters or whose BloodType is negative. (c) Set the diagnosis of Rebecca Adler's most recent admission to 'Cluster Headache' without using AdmissionID directly.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">-- (a)
+SELECT BloodType, COUNT(*) AS PatientCount FROM Patients
+GROUP BY BloodType HAVING COUNT(*) &gt; 1
+ORDER BY PatientCount DESC;
+-- (b)
+SELECT * FROM Patients
+WHERE LENGTH(LastName) &gt; 5 OR BloodType LIKE '%-';      -- or LastName LIKE '______%'
+-- (c)
+UPDATE Admissions
+SET Diagnosis = 'Cluster Headache'
+WHERE PatientID = (SELECT PatientID FROM Patients WHERE FirstName = 'Rebecca' AND LastName = 'Adler')
+  AND AdmissionDate = (SELECT MAX(A.AdmissionDate) FROM Admissions A
+                       WHERE A.PatientID = (SELECT PatientID FROM Patients
+                                            WHERE FirstName = 'Rebecca' AND LastName = 'Adler'));
+</code></pre>
+<p>MySQL forbids a subquery on the table being updated; wrap it in a derived table (<code>SELECT MAX(...) FROM (SELECT ...) T</code>) or use <code>ORDER BY AdmissionDate DESC LIMIT 1</code> in the UPDATE.</p>
+</details>
+<h3 id="problem-16-sql-application-4-pts-m25-endsem-q1-d-b">Problem 16 [SQL · Application · 4 pts · M25 endsem Q1(d)B]</h3>
+<p>List every doctor and the number of admissions they handled, including doctors with zero, highest first, using a JOIN.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> See the Learn section: Doctors LEFT JOIN Admissions, GROUP BY the doctor's key and names, COUNT(A.AdmissionID), ORDER BY count DESC. On the sample data: 701 has 2; 703, 704, 705, 706 have 1; 702 (Cuddy) has 0 and must appear.</p>
+</details>
+<h3 id="problem-17-sql-concept-3-pts-m25-endsem-q3">Problem 17 [SQL · Concept · 3 pts · M25 endsem Q3]</h3>
+<p>Query A: SELECT EmployeeID, SUM(SaleAmount) FROM Sales WHERE SaleAmount &gt; 100 GROUP BY EmployeeID. Query B: … GROUP BY EmployeeID HAVING SaleAmount &gt; 100. Which is correct?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> <strong>A</strong>. WHERE filters individual sales before grouping, so SUM adds only sales over 100. <strong>B fails</strong>: HAVING is evaluated per group, and SaleAmount is not a single value per group (not grouped, not aggregated); standard SQL rejects it. Even if a DBMS accepted it, it would test an arbitrary row of the group.</p>
+</details>
+<h3 id="problem-18-sql-numerical-5-pts-m23-endsem-q3">Problem 18 [SQL · Numerical · 5 pts · M23 endsem Q3]</h3>
+<p>Students(1 Alice CS 21, 2 Bob Physics 22, 3 Charlie Physics 20, 4 David Mathematics 23, 5 Emily CS 22); Courses(101 Database Design, 102 Physics I, 103 Calculus II, 104 Genetics, 105 Organic Chem); Registrations(1→101 A, 2→102 B, 3→103 C, 4→104 B, 5→105 A). Give the output of: (a) students JOIN registrations JOIN courses WHERE grade = 'A' AND major = 'Computer Science', showing student_id, student_name, course_name, grade; (b) SELECT students.major, AVG(students.age) AS average_age FROM students RIGHT OUTER JOIN registrations ON … GROUP BY students.major ORDER BY average_age.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a) (1, Alice, Database Design, A), (5, Emily, Organic Chem, A). (b) Every registration matches a student, so the right join equals the inner join: Physics (22 + 20)/2 = <strong>21</strong>, Computer Science (21 + 22)/2 = <strong>21.5</strong>, Mathematics <strong>23</strong>. In ascending order: Physics 21, Computer Science 21.5, Mathematics 23. Row order counts because of ORDER BY.</p>
+</details>
+<h3 id="problem-19-sql-application-6-pts-m23-endsem-q2">Problem 19 [SQL · Application · 6 pts · M23 endsem Q2]</h3>
+<p>Restaurants(r_id, restaurant_name, location, cuisine_type), Orders(order_id, customer_id, restaurant_id, order_date, amount), Customers(c_id, customer_name, …), Chefs(chef_id, chef_name, specialty, years_of_experience, restaurant_id). (a) Revenue per restaurant in October of this year, descending. (b) The customer who spent the most. (c) Restaurants whose average order exceeds the overall average order. (d) Restaurants whose chefs average more than 7 years' experience.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<pre><code class="language-sql">-- (a)
+SELECT R.restaurant_name, R.location, SUM(O.amount) AS Revenue
+FROM Restaurants R JOIN Orders O ON R.r_id = O.restaurant_id
+WHERE O.order_date BETWEEN '2023-10-01' AND '2023-10-31'
+GROUP BY R.r_id, R.restaurant_name, R.location
+ORDER BY Revenue DESC;
+-- (b) ties kept
+SELECT C.customer_name, SUM(O.amount) AS Total
+FROM Customers C JOIN Orders O ON C.c_id = O.customer_id
+GROUP BY C.c_id, C.customer_name
+HAVING SUM(O.amount) &gt;= ALL (SELECT SUM(amount) FROM Orders GROUP BY customer_id);
+-- (c)
+SELECT restaurant_name FROM Restaurants
+WHERE r_id IN (SELECT restaurant_id FROM Orders GROUP BY restaurant_id
+               HAVING AVG(amount) &gt; (SELECT AVG(amount) FROM Orders));
+-- (d)
+SELECT R.restaurant_name FROM Restaurants R JOIN Chefs C ON R.r_id = C.restaurant_id
+GROUP BY R.r_id, R.restaurant_name HAVING AVG(C.years_of_experience) &gt; 7;
+</code></pre>
+<p>The 2023 key accepted LIMIT 1 for (b); this year's rubric style would ask you to handle ties or state the assumption that there is a unique maximum.</p>
+</details>
+<h3 id="problem-20-sql-application-3-pts-m25-endsem-q4">Problem 20 [SQL · Application · 3 pts · M25 endsem Q4]</h3>
+<p>The DBMS has no FULL OUTER JOIN. Compute the full outer join of A and B on attribute k with basic SQL.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> <code>SELECT * FROM A LEFT JOIN B ON A.k = B.k UNION SELECT * FROM A RIGHT JOIN B ON A.k = B.k;</code> UNION removes the duplicated matched rows. If the tables may contain genuine duplicate rows, use <code>UNION ALL</code> with the second part restricted to <code>WHERE A.k IS NULL</code> (only B's unmatched rows), so nothing is lost or double-counted. Without RIGHT JOIN, swap the operands of a LEFT JOIN.</p>
+</details>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Practice</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../dna/ch7-sql/reference.html"><small>← Previous</small><span>Reference: SQL</span></a><a class="pn pn-next" id="next-link" href="../../dna/mock-endsem/mock-endsem.html"><small>Next →</small><span>Mock endsem</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#a-assignment-6-this-year">A. Assignment 6 (this year)</a><a class="l3" href="#problem-1-sql-application-5-pts-assignment-6-individual-a">Problem 1 [SQL · Application · 5 pts · Assignment 6 individual (a)]</a><a class="l3" href="#problem-2-sql-application-5-pts-assignment-6-individual-b">Problem 2 [SQL · Application · 5 pts · Assignment 6 individual (b)]</a><a class="l3" href="#problem-3-sql-application-5-pts-assignment-6-individual-c">Problem 3 [SQL · Application · 5 pts · Assignment 6 individual (c)]</a><a class="l3" href="#problem-4-sql-application-10-pts-assignment-6-group">Problem 4 [SQL · Application · 10 pts · Assignment 6 group]</a><a class="l2" href="#b-textbook-exercises-set-by-kamal">B. Textbook exercises set by Kamal</a><a class="l3" href="#problem-5-sql-application-6-pts-elmasri-6-5">Problem 5 [SQL · Application · 6 pts · Elmasri 6.5]</a><a class="l3" href="#problem-6-sql-application-6-pts-elmasri-6-8">Problem 6 [SQL · Application · 6 pts · Elmasri 6.8]</a><a class="l3" href="#problem-7-sql-application-10-pts-elmasri-6-10-all-of-8-16-in">Problem 7 [SQL · Application · 10 pts · Elmasri 6.10 (all of 8.16 in SQL)]</a><a class="l3" href="#problem-8-sql-application-4-pts-elmasri-6-13">Problem 8 [SQL · Application · 4 pts · Elmasri 6.13]</a><a class="l3" href="#problem-9-sql-concept-4-pts-elmasri-6-15">Problem 9 [SQL · Concept · 4 pts · Elmasri 6.15]</a><a class="l3" href="#problem-10-sql-application-4-pts-elmasri-7-5">Problem 10 [SQL · Application · 4 pts · Elmasri 7.5]</a><a class="l3" href="#problem-11-sql-application-6-pts-elmasri-7-7">Problem 11 [SQL · Application · 6 pts · Elmasri 7.7]</a><a class="l3" href="#problem-12-sql-application-6-pts-elmasri-7-8">Problem 12 [SQL · Application · 6 pts · Elmasri 7.8]</a><a class="l3" href="#problem-13-sql-concept-5-pts-elmasri-7-9">Problem 13 [SQL · Concept · 5 pts · Elmasri 7.9]</a><a class="l3" href="#problem-14-sql-application-5-pts-elmasri-10-7">Problem 14 [SQL · Application · 5 pts · Elmasri 10.7]</a><a class="l2" href="#c-past-papers-other-years-style-differs">C. Past papers (other years; style differs)</a><a class="l3" href="#problem-15-sql-application-6-pts-m25-endsem-q1">Problem 15 [SQL · Application · 6 pts · M25 endsem Q1]</a><a class="l3" href="#problem-16-sql-application-4-pts-m25-endsem-q1-d-b">Problem 16 [SQL · Application · 4 pts · M25 endsem Q1(d)B]</a><a class="l3" href="#problem-17-sql-concept-3-pts-m25-endsem-q3">Problem 17 [SQL · Concept · 3 pts · M25 endsem Q3]</a><a class="l3" href="#problem-18-sql-numerical-5-pts-m23-endsem-q3">Problem 18 [SQL · Numerical · 5 pts · M23 endsem Q3]</a><a class="l3" href="#problem-19-sql-application-6-pts-m23-endsem-q2">Problem 19 [SQL · Application · 6 pts · M23 endsem Q2]</a><a class="l3" href="#problem-20-sql-application-3-pts-m25-endsem-q4">Problem 20 [SQL · Application · 3 pts · M25 endsem Q4]</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwoml3jv" defer></script>
+</body>
+</html>

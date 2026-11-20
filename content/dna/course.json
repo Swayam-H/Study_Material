@@ -1,0 +1,18 @@
+{
+  "title": "Data and Applications",
+  "code": "CS4.301",
+  "term": "Monsoon 2026",
+  "blurb": "Databases from the ground up for the endsem on 23 Nov: the relational model, ER/EER design and mapping, normalisation, relational algebra, tuple relational calculus and SQL. Built from Elmasri and Navathe 7e, this year's six assignments with Kamal's keys and rubrics, and last year's papers.",
+  "docs": [
+    { "slug": "start-here", "file": "chapters/start-here.md", "title": "Start here: the endsem map", "about": "Exam rules, syllabus to textbook sections to assignments, how this year differs from last year's papers, and a three-day plan" },
+    { "slug": "ch1-relational-model", "file": "chapters/ch1-relational-model.md", "title": "Chapter 1: The relational model, keys and constraints", "about": "Relations, superkeys and candidate keys, counting superkeys, integrity constraints, update operations and violations" },
+    { "slug": "ch2-er-eer", "file": "chapters/ch2-er-eer.md", "title": "Chapter 2: ER and EER modelling", "about": "Entities, attributes, relationships, (min, max), weak entities, ternary relationships, specialization and categories; Assignment 2" },
+    { "slug": "ch3-mapping", "file": "chapters/ch3-mapping.md", "title": "Chapter 3: Mapping EER to relations", "about": "The seven mapping steps, specialization options 8A to 8D, categories, and the Assignment 3 rubric" },
+    { "slug": "ch4-normalisation", "file": "chapters/ch4-normalisation.md", "title": "Chapter 4: Functional dependencies and normalisation", "about": "Closure, keys, 1NF to BCNF, minimal cover, BCNF decomposition, 3NF synthesis, lossless join and dependency preservation; Assignment 4" },
+    { "slug": "ch5-relational-algebra", "file": "chapters/ch5-relational-algebra.md", "title": "Chapter 5: Relational algebra", "about": "Selection, projection, joins, set operations, division, aggregates and outer joins; Assignment 5 and Elmasri 8.15 to 8.22" },
+    { "slug": "ch6-trc", "file": "chapters/ch6-trc.md", "title": "Chapter 6: Tuple relational calculus", "about": "Tuple variables, free and bound variables, quantifiers, universal queries via NOT EXISTS, safety; Elmasri 8.24 to 8.29" },
+    { "slug": "ch7-sql", "file": "chapters/ch7-sql.md", "title": "Chapter 7: SQL", "about": "DDL and constraints, SELECT, NULLs, nested and correlated queries, EXISTS, joins, GROUP BY and HAVING, views, stored procedures; Assignment 6 and past papers" },
+    { "slug": "mock-endsem", "file": "chapters/mock-endsem.md", "title": "Mock endsem with solutions", "about": "A full paper in this year's style, with worked answers and what an A needs" },
+    { "slug": "cheat-sheet", "file": "chapters/cheat-sheet.md", "title": "Two-page cheat sheet", "about": "What to copy onto your two handwritten A4 sheets" }
+  ]
+}
