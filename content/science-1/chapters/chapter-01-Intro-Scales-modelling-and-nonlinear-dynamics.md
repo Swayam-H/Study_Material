@@ -213,7 +213,7 @@ $$\text{answer} \approx \prod_i (\text{guessable factor})_i$$
 To non-dimensionalise, scale each variable by a natural unit and count the parameters left over.
 # Practice: Scales, modelling and nonlinear dynamics
 
-21 questions with worked answers (tap a solution to open it). Points in brackets, Quiz-1 and midsem style.
+27 questions with worked answers (tap a solution to open it). Points in brackets, Quiz-1 and midsem style.
 
 ## A. State and explain
 
@@ -567,3 +567,106 @@ $$P \approx W\,v_\text{air} \approx (2\times10^{-5}\ \text{N})(1\ \text{m/s}) = 
 
 Allowing for inefficiency, $\boxed{P \sim 10^{-4}\ \text{W}}$, a few tens to a hundred microwatts.
 
+
+## D. More practice: maps, models and estimates
+
+### Problem 22 [Intro · Numerical · 2 pts]
+
+The logistic map is $x_{n+1} = rx_n(1 - x_n)$ with $r = 2.5$. Find the non-zero fixed point, decide whether it is stable, and iterate twice from $x_0 = 0.2$.
+
+*Solution.* **Idea.** A fixed point satisfies $x^* = f(x^*)$ and is stable when $|f'(x^*)| < 1$.
+
+**Fixed point.** $x^* = rx^*(1 - x^*)\Rightarrow x^* = 1 - \dfrac1r = 1 - 0.4 = \boxed{0.6}$
+
+**Stability.** $f'(x) = r(1 - 2x)$, so
+
+$$f'(0.6) = 2.5(1 - 1.2) = -0.5,\qquad |f'| = 0.5 < 1\ \Rightarrow\ \text{stable}$$
+
+**Iterates.**
+
+$$x_1 = 2.5(0.2)(0.8) = 0.4,\qquad x_2 = 2.5(0.4)(0.6) = 0.6 = x^*$$
+
+**Check.** In general $f'(x^*) = 2 - r$, so the fixed point is stable for $1 < r < 3$. The negative slope means the iterates alternate on the two sides of $x^*$ as they converge.
+
+### Problem 23 [Intro · Numerical · 3 pts]
+
+For the logistic map with $r = 3.2$, find the two points of the period-2 cycle.
+
+*Solution.* **Idea.** A period-2 point satisfies $x = f(f(x))$ but $x \ne f(x)$.
+
+$f(f(x)) = x$ is a quartic. Two roots are the fixed points $0$ and $1 - 1/r$; dividing them out leaves the quadratic
+
+$$r^2x^2 - r(r+1)x + (r+1) = 0$$
+
+$$x_\pm = \frac{(r+1) \pm \sqrt{(r+1)(r-3)}}{2r}$$
+
+**Substitute $r = 3.2$:**
+
+$$x_\pm = \frac{4.2 \pm\sqrt{(4.2)(0.2)}}{6.4} = \frac{4.2 \pm 0.917}{6.4} = \boxed{0.799\ \text{and}\ 0.513}$$
+
+**Check.** $f(0.513) = 3.2(0.513)(0.487) = 0.799$ and $f(0.799) = 3.2(0.799)(0.201) = 0.514$ ✓. The cycle only exists for $r > 3$, since the square root needs $(r+1)(r-3) \ge 0$: this is where the fixed point loses stability.
+
+### Problem 24 [Intro · Derivation · 2 pts]
+
+Show that the logistic-map fixed point $x = 0$ is stable for $r < 1$ and unstable for $r > 1$, and explain in terms of a population what this means.
+
+*Solution.* $f'(x) = r(1 - 2x)$, so $f'(0) = r$.
+
+- $r < 1$: $|f'(0)| < 1$, so small populations shrink each generation by the factor $r$ and the population dies out.
+- $r > 1$: $|f'(0)| > 1$, so small populations grow geometrically, and extinction is unstable.
+
+**Why.** For small $x$ the map is $x_{n+1}\approx rx_n$, the pure growth law with no crowding. Crowding (the $-rx^2$ term) matters only once the population is no longer small.
+
+**Common mistake.** $r < 1$ means each generation has less than one surviving offspring per individual, not that the species is rare.
+
+### Problem 25 [Intro · Numerical · 3 pts]
+
+Predator–prey model: $\dot x = ax - bxy$, $\dot y = -cy + dxy$ with $a = 1$, $b = 0.1$, $c = 1.5$, $d = 0.075$. Find the coexistence fixed point and the period of small oscillations around it.
+
+*Solution.* **Fixed point.** Set both rates to zero with $x, y \ne 0$: $a = by$ and $c = dx$, so
+
+$$x^* = \frac cd = \frac{1.5}{0.075} = \boxed{20},\qquad y^* = \frac ab = \frac1{0.1} = \boxed{10}$$
+
+**Linearise.** The Jacobian at $(x^*, y^*)$ is
+
+$$J = \begin{pmatrix}0 & -bx^*\\ dy^* & 0\end{pmatrix} = \begin{pmatrix}0 & -2\\ 0.75 & 0\end{pmatrix},\qquad \lambda^2 = -(2)(0.75) = -1.5$$
+
+so $\lambda = \pm i\omega$ with $\omega = \sqrt{ac} = \sqrt{1.5} = 1.225$.
+
+$$T = \frac{2\pi}{\omega} = \frac{6.283}{1.225} = \boxed{5.13}\ \text{time units}$$
+
+**Check.** The eigenvalues are purely imaginary: a centre, so the populations cycle forever around the fixed point at small amplitude instead of settling. The prey peaks first and the predator peak lags a quarter period behind.
+
+### Problem 26 [Intro · Numerical · 2 pts]
+
+Use dimensional analysis to find how the period $T$ of a simple pendulum depends on its length $l$, mass $m$ and $g$. Estimate $T$ for $l = 1$ m. What does the exact answer add?
+
+*Solution.* **Idea.** Look for $T = Cm^\alpha l^\beta g^\gamma$ with the dimensions matching.
+
+$$[\text{s}] = [\text{kg}]^\alpha[\text{m}]^\beta[\text{m s}^{-2}]^\gamma$$
+
+- kg: $\alpha = 0$ (the period does not depend on the mass)
+- s: $1 = -2\gamma\Rightarrow\gamma = -\tfrac12$
+- m: $0 = \beta + \gamma\Rightarrow\beta = \tfrac12$
+
+$$T = C\sqrt{l/g}$$
+
+**Estimate.** $\sqrt{1/9.8} = 0.32$ s. The exact small-angle result is $C = 2\pi$, so
+
+$$T = 2\pi\sqrt{l/g} \approx \boxed{2.0\ \text{s}}$$
+
+**Lesson.** Dimensional analysis fixes the scaling exactly but cannot give the dimensionless constant $C$ (here $2\pi$). It also cannot tell you about a dimensionless variable such as the amplitude angle $\theta_0$, which the large-angle period depends on.
+
+### Problem 27 [Intro · Numerical · 2 pts]
+
+Estimate the number of breaths you take in a lifetime.
+
+*Solution.* **Idea.** Rate $\times$ time, rounding generously.
+
+- Rate: about $15$ breaths per minute at rest.
+- Minutes per year: $60\times24\times365\approx5\times10^5$.
+- Lifetime: about $80$ years.
+
+$$N\approx15\times(5\times10^5)\times80\approx\boxed{6\times10^8}$$
+
+**Check.** The answer is of order $10^9$, between half a billion and a billion. Rounding $525{,}600\to5\times10^5$ is the only approximation; it lowers the answer by about $5\%$.
