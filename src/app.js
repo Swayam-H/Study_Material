@@ -665,6 +665,29 @@
     });
   }
 
+  // ---------- Mastery bars and weak-spots box (course pages) ----------
+  (function () {
+    var ms = $$('[data-mastery]'); if (!ms.length) return;
+    var weak = [];
+    ms.forEach(function (el) {
+      var pre = el.dataset.mastery, n = +el.dataset.n || 1, s = 0, r = 0;
+      for (var k in probs) if (k.indexOf(pre) === 0) { if (probs[k] === 'done') s++; else if (probs[k] === 'review') r++; }
+      el.querySelector('.m-solved').style.width = (100 * s / n) + '%';
+      el.querySelector('.m-review').style.width = (100 * r / n) + '%';
+      el.querySelector('.m-label').textContent = s + ' / ' + n + ' problems solved' + (r ? ' · ' + r + ' to review' : '');
+      var lk = el.querySelector('.m-link');
+      if (r) { lk.hidden = false; lk.textContent = 'Review ' + r + ' →'; weak.push({ r: r, s: s, n: n, doc: el.dataset.doc, title: (el.closest('.doc-block').querySelector('h2') || {}).textContent || '' }); }
+    });
+    var box = $('weak-box'); if (!box) return;
+    if (!weak.length) { box.hidden = true; return; }
+    weak.sort(function (x, y) { return y.r - x.r; });
+    var tot = weak.reduce(function (t, w) { return t + w.r; }, 0);
+    box.innerHTML = '<h2>Weak spots</h2><p>' + tot + ' problems marked “Review later”. Most in:</p><ul>' + weak.slice(0, 5).map(function (w) {
+      return '<li><a href="practice.html#review&doc=' + esc(w.doc) + '"><b>' + esc(w.title) + '</b><span>' + w.r + ' to review · ' + w.s + ' / ' + w.n + ' solved</span></a></li>';
+    }).join('') + '</ul><a class="btn small" href="practice.html#review">Redo all ' + tot + ' →</a>';
+    box.hidden = false;
+  })();
+
   // ---------- Home Dashboard & Interactive Normal Tail Calculator ----------
   if (document.body.classList.contains('is-home')) {
     loadScript('meta.js').then(function () {
@@ -882,7 +905,16 @@
       }
     });
 
-    var start = function () { if (location.hash === '#random') random(); else render(); };
+    var applyHash = function () {
+      var h = location.hash.slice(1).split('&'), got = false;
+      h.forEach(function (x) {
+        if (x === 'review') { state.status = 'review'; if ($('f-status')) $('f-status').value = 'review'; got = true; }
+        else if (x.indexOf('doc=') === 0) { state.doc = x.slice(4); if ($('f-doc')) $('f-doc').value = state.doc; got = true; }
+      });
+      if (got) { state.shown = 15; state.only = null; state.deckIdx = 0; }
+      return got;
+    };
+    var start = function () { if (location.hash === '#random') random(); else { applyHash(); render(); } };
     if (window.NOTES_PROBLEMS) start(); else addEventListener('load', start);
     addEventListener('hashchange', function () { if (location.hash === '#random' && window.NOTES_PROBLEMS) random(); });
   }

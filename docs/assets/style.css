@@ -2060,3 +2060,15 @@ details.sol > :last-child:not(summary) { margin-bottom: 8px; }
 
 /* figures */
 img.fig { display: block; max-width: 100%; height: auto; margin: 1.1rem auto 0.3rem; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
+
+.mastery{display:flex;align-items:center;gap:10px;margin:.2rem 0 .6rem;font:600 11.5px var(--font-mono);color:var(--muted,#667)}
+.mastery .m-bar{flex:1;display:flex;height:6px;overflow:hidden}
+.mastery .m-bar i{display:block;height:100%}
+.mastery .m-solved{background:var(--good,#2a8a5a)}
+.mastery .m-review{background:#d9902f}
+.mastery .m-link{color:#b36b00;text-decoration:none;white-space:nowrap}
+.weak-box{border:1px solid var(--line);border-left:4px solid #d9902f;border-radius:8px;padding:.8rem 1rem;margin:1rem 0}
+.weak-box h2{margin:0 0 .2rem;font-size:1.05rem}
+.weak-box ul{list-style:none;margin:.4rem 0 .7rem;padding:0}
+.weak-box li a{display:flex;justify-content:space-between;gap:1rem;padding:.25rem 0;text-decoration:none;color:inherit}
+.weak-box li span{color:var(--muted,#667);font-size:.85em}
