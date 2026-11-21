@@ -88,6 +88,30 @@
       "about": "A 50-point, 120-minute paper across all 12 chapters, then the marking scheme, worked solutions and a score sheet by chapter"
     },
     {
+      "slug": "hw-mechanics",
+      "file": "chapters/hw-practice-mechanics.md",
+      "title": "HW practice: Mechanics (lectures 1-8, Marion & Thornton)",
+      "about": "Worked solutions to the homework items that had none: phase plots and the tent map, MT chapter 2 examples and problems, calculus of variations and Lagrangian examples, multiparticle systems"
+    },
+    {
+      "slug": "hw-thermo",
+      "file": "chapters/hw-practice-thermo.md",
+      "title": "HW practice: Thermodynamics (Atkins 11e)",
+      "about": "Worked solutions for the Atkins gas-law, kinetic-theory, third-law, Gibbs-energy and phase-transformation homework items not solved elsewhere"
+    },
+    {
+      "slug": "hw-qm",
+      "file": "chapters/hw-practice-qm-a.md",
+      "title": "HW practice: Quantum mechanics, Beiser chapters 2 and 3",
+      "about": "Every in-chapter example and the assigned end-of-chapter problems for particle properties of waves and wave properties of particles"
+    },
+    {
+      "slug": "hw-qm-b",
+      "file": "chapters/hw-practice-qm-b.md",
+      "title": "HW practice: Quantum mechanics, Beiser chapters 4 to 6",
+      "about": "Atomic structure, the Schrödinger equation and the hydrogen atom: all in-chapter examples and the assigned end-of-chapter problems"
+    },
+    {
       "slug": "toolkit-practice",
       "file": "chapters/toolkit-thermo-practice.md",
       "title": "Practice set: thermodynamics",
