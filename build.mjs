@@ -128,7 +128,7 @@ function splitTitle(raw) {
   if (m) { meta = (m[1] + m[2]).trim(); title = title.slice(0, m.index).trim(); }
   let kicker = '';
   const c = title.indexOf(': ');
-  if (c > 0 && c < 40 && /^(Lectures?|Part|Midsem|Learn|Reference|Formulas|Practice|Sheet|Cards|Start here)\b/.test(title)) { kicker = title.slice(0, c); title = title.slice(c + 2); }
+  if (c > 0 && c < 40 && /^(Lectures?|Part|Midsem|Learn|Reference|Formulas|Coverage|Practice|Sheet|Cards|Start here)\b/.test(title)) { kicker = title.slice(0, c); title = title.slice(c + 2); }
   title = title.charAt(0).toUpperCase() + title.slice(1);
   return { kicker, title, meta };
 }

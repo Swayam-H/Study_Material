@@ -38,137 +38,770 @@ The last important system is the harmonic oscillator, in which the potential is 
 
 # Reference: Quantum mechanics
 
-The course material section by section, in the order of the textbook, with the key formulas.
+Beiser ch 5 (with its tunnel-effect appendix) section by section, with each derivation written out, and the slides' own derivations (`QM.tex:258` to `:443`: the momentum operator, the 3-D box, the oscillator series solution, the barrier boundary conditions) in full. Beiser's in-chapter examples are summarised with their answers; full worked versions are in *HW practice: Beiser chapters 4 to 6*.
 
 ## 5.1 Quantum mechanics
 
-- Classical mechanics is the limit of quantum mechanics for large masses and energies, where λ = h/p is tiny.
-- The **wave function Ψ(x, t)** contains everything that can be known. |Ψ|² is the probability density (Born).
-- **Normalisation:** ∫|Ψ|² dV = 1 over all space.
-- **A well-behaved Ψ must:** (1) be continuous and single-valued; (2) have continuous derivative ∂Ψ/∂x wherever the potential is finite; (3) be normalisable, so Ψ → 0 as x → ±∞.
-- Probability of finding the particle between x₁ and x₂ is ∫|Ψ|² dx from x₁ to x₂.
+**Classical against quantum.** In classical mechanics a particle's future is fixed by its initial position and momentum and the forces on it. In quantum mechanics the uncertainty principle forbids knowing the initial state exactly, so the theory predicts **probabilities**. Example: Bohr says the hydrogen electron is always 5.3 × 10⁻¹¹ m from the nucleus; quantum mechanics says that is the *most probable* distance, and most measurements give something else. Classical mechanics is not a separate theory but an approximation: everyday objects contain so many atoms that departures from average behaviour are unnoticeable.
+
+**The wave function.** Ψ itself has no physical interpretation, but |Ψ|² at a place and time is proportional to the probability of finding the body there then. Momentum, angular momentum and energy can also be extracted from Ψ. The problem of quantum mechanics is to find Ψ when forces restrict the motion.
+
+**Complex Ψ.** Wave functions are usually complex. Write Ψ = A + iB with A, B real; the complex conjugate (replace i by −i) is Ψ* = A − iB, and
+
+$$
+|\Psi|^2 = \Psi^*\Psi = A^2 - i^2B^2 = A^2 + B^2 \ge 0
+$$
+
+always a positive real number, as a probability density must be.
+
+**Normalisation.** The particle exists somewhere, so ∫|Ψ|² dV must be finite: if it were 0 there would be no particle, and ∞ means nothing. Choosing the constant in Ψ so that |Ψ|² *equals* the probability density P:
+
+$$
+\int_{-\infty}^{\infty}|\Psi|^2\,dV = 1 \tag{5.1}
+$$
+
+Every acceptable Ψ can be normalised by multiplying by a constant.
+
+**Well-behaved wave functions.** Only these give physically meaningful results:
+
+1. Ψ must be continuous and single-valued everywhere (P has one value at each place and time).
+2. ∂Ψ/∂x, ∂Ψ/∂y, ∂Ψ/∂z must be continuous and single-valued everywhere (needed for momentum, 5.6).
+3. Ψ must be normalisable, so Ψ → 0 as x, y, z → ±∞.
+
+Model problems can break rule 2: a box with *infinitely* hard walls has a kink in ψ at the walls. Real walls are never infinitely hard, and there the derivative is continuous (compare the finite well, 5.9).
+
+**Probability in a region.** For motion along x:
+
+$$
+P_{x_1x_2} = \int_{x_1}^{x_2}|\Psi|^2\,dx \tag{5.2}
+$$
+
+**The slides' postulates (`QM.tex:258`).** (1) The state of a system is a wave function Ψ(x, t), possibly complex. (2) It evolves by Schrödinger's equation $i\hbar\,\partial\Psi/\partial t = \hat H\Psi$. (3) Born: |Ψ(x, t)|² dx is the probability of finding the system at x at time t. (4) Every observable has an operator, and its expectation value is $\langle A\rangle = \int\Psi^*\hat A\Psi\,dx$. (5) A measurement gives one result and "collapses" the wave function onto the state with that result.
 
 ## 5.2 The wave equation
 
-The classical wave equation is ∂²y/∂x² = (1/v²)∂²y/∂t². Its free-wave solutions can be written in complex form y = A e^(−iω(t − x/v)). For a physical wave only the real part matters, but for Ψ the complex form is essential.
+Schrödinger's equation plays the role in quantum mechanics that F = ma plays in Newtonian mechanics, and it is a wave equation in Ψ. First recall the classical wave equation for a quantity y moving in x at speed v:
+
+$$
+\frac{\partial^2 y}{\partial x^2} = \frac{1}{v^2}\frac{\partial^2 y}{\partial t^2} \tag{5.3}
+$$
+
+It follows from Newton's second law for mechanical waves and from Maxwell's equations for em waves.
+
+**Partial derivatives (box).** ∂f/∂x means differentiate with respect to x holding every other variable fixed. For f = yx²: ∂f/∂x = 2yx, ∂f/∂y = x², ∂²f/∂x² = 2y, ∂²f/∂y² = 0.
+
+**Solutions.** Every solution has the form $F(t \pm x/v)$ for any differentiable F: $t - x/v$ moves in +x, $t + x/v$ in −x. Pulses, wave trains, superpositions and standing waves are all special cases. For a free, undamped (constant A), monochromatic (constant ω) wave in +x:
+
+$$
+y = Ae^{-i\omega(t - x/v)} = A\cos\omega\left(t - \frac xv\right) - iA\sin\omega\left(t - \frac xv\right) \tag{5.5, 5.6}
+$$
+
+using $e^{-i\theta} = \cos\theta - i\sin\theta$. For a string only the real part, the familiar cosine, means anything.
+
+**Example 5.1 (Beiser): check that (5.5) solves (5.3).** $\partial y/\partial x = (i\omega/v)y$, so $\partial^2y/\partial x^2 = (i\omega/v)^2y = -(\omega^2/v^2)y$. $\partial y/\partial t = -i\omega y$, so $\partial^2y/\partial t^2 = -\omega^2y$. Then $\partial^2y/\partial x^2 = (1/v^2)\,\partial^2y/\partial t^2$. ✓
 
 ## 5.3 Schrödinger's equation: time-dependent form
 
-**Motivation** (not a derivation; it is a postulate checked by experiment). Write a free-particle wave with E = ħω and p = ħk:
+**The free-particle wave.** Ψ is not measurable, so it may be complex. Take the free wave (5.5), and use ω = 2πν and v = νλ:
 
 $$
-\Psi = A\,e^{-(i/\hbar)(Et - px)} \;\Rightarrow\; \frac{\partial^2\Psi}{\partial x^2} = -\frac{p^2}{\hbar^2}\Psi, \qquad \frac{\partial\Psi}{\partial t} = -\frac{iE}{\hbar}\Psi
+\Psi = Ae^{-i\omega(t - x/v)} = Ae^{-2\pi i(\nu t - x/\lambda)}
 $$
 
-Insert these into E = p²/2m + U and assume the result holds for any U:
+With $E = h\nu = 2\pi\hbar\nu$ and $\lambda = h/p = 2\pi\hbar/p$, $2\pi\nu = E/\hbar$ and $2\pi/\lambda = p/\hbar$:
 
 $$
-i\hbar\,\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi
+\Psi = Ae^{-(i/\hbar)(Et - px)} \tag{5.9}
 $$
 
-- It is first order in time, so Ψ at one time fixes Ψ at all later times.
-- It is **linear**: if Ψ₁ and Ψ₂ are solutions, so is a₁Ψ₁ + a₂Ψ₂.
-- Ψ is necessarily complex (the i on the left).
-- The slides give a second motivating route (`QM.tex:283`) and list these features at `:297`.
+the wave of a free particle with energy E and momentum p moving in +x.
+
+**Differentiate.** Twice in x, once in t:
+
+$$
+\frac{\partial^2\Psi}{\partial x^2} = -\frac{p^2}{\hbar^2}\Psi \;\Rightarrow\; p^2\Psi = -\hbar^2\frac{\partial^2\Psi}{\partial x^2} \tag{5.10}
+$$
+
+$$
+\frac{\partial\Psi}{\partial t} = -\frac{iE}{\hbar}\Psi \;\Rightarrow\; E\Psi = -\frac{\hbar}{i}\frac{\partial\Psi}{\partial t} = i\hbar\frac{\partial\Psi}{\partial t} \tag{5.11}
+$$
+
+**Use the energy.** At speeds well below c, the total energy is kinetic plus potential, with U(x, t) standing for the influence of the rest of the universe:
+
+$$
+E = \frac{p^2}{2m} + U(x,t) \quad\Rightarrow\quad E\Psi = \frac{p^2\Psi}{2m} + U\Psi \tag{5.12, 5.13}
+$$
+
+Substitute (5.10) and (5.11):
+
+$$
+i\hbar\,\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi \tag{5.14}
+$$
+
+and in three dimensions
+
+$$
+i\hbar\,\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\left(\frac{\partial^2\Psi}{\partial x^2} + \frac{\partial^2\Psi}{\partial y^2} + \frac{\partial^2\Psi}{\partial z^2}\right) + U\Psi \tag{5.15}
+$$
+
+**Is it valid?** The route used a free particle (constant U) and then assumed the result for any U(x, y, z, t). That leap has no formal justification, nor does any other route, including Schrödinger's own. So:
+
+> Schrödinger's equation cannot be derived from other basic principles of physics; it is a basic principle in itself.
+
+It is postulated, solved, and checked against experiment, and it agrees remarkably well (for non-relativistic problems; near c a more elaborate theory is needed). It does not add a principle: F = ma follows from it if the quantities are read as averages. Newton's laws weren't derived from anything either.
+
+**The slides' first motivating route (`QM.tex:269`): straight to the steady-state equation.**
+
+1. A wave of wave number k obeys $\nabla^2\psi + k^2\psi = 0$ (the spatial part of the wave equation).
+2. De Broglie: $k = 2\pi/\lambda = p/\hbar$, so $\nabla^2\psi + (p/\hbar)^2\psi = 0$, solved by $\psi = e^{ipx/\hbar}$.
+3. Free particle: $E = p^2/2m$, and from step 2, $p^2\psi = -\hbar^2\nabla^2\psi$, so $-\dfrac{\hbar^2}{2m}\nabla^2\psi = E\psi$.
+4. In a potential, $E = p^2/2m + V(x)$, giving the **time-independent Schrödinger equation**
+
+$$
+\left(-\frac{\hbar^2}{2m}\nabla^2 + V(x)\right)\psi(x) = E\psi(x)
+$$
+
+**The slides' second route (`QM.tex:283`)** is the one above: $\Psi = e^{i(kx - \omega t)}$ with $k = p/\hbar$ and $\omega = E/\hbar$ (the slide's "ω = ν/2π" should read ω = 2πν), so $\Psi = e^{(i/\hbar)(px - Et)}$; then $\partial_t\Psi = -(i/\hbar)E\Psi$ and $\partial_x^2\Psi = -(p^2/\hbar^2)\Psi$; with $E = p^2/2m + V$ this gives (5.14).
+
+**Features.** First order in time, so Ψ at one instant fixes Ψ at all later times. Linear in Ψ (5.4). The i on the left forces Ψ to be complex.
 
 ## 5.4 Linearity and superposition
 
-If Ψ = Ψ₁ + Ψ₂, then |Ψ|² = |Ψ₁|² + |Ψ₂|² + 2 Re(Ψ₁\*Ψ₂). The last term is the **interference term**, and it is what produces the double-slit fringes for electrons. **Amplitudes add, not probabilities.**
+**Linear** means every term contains Ψ or a derivative of Ψ to the first power, with no term free of Ψ and no Ψ², (∂Ψ/∂x)², and so on. So if Ψ₁ and Ψ₂ are solutions, so is
+
+$$
+\Psi = a_1\Psi_1 + a_2\Psi_2
+$$
+
+(apply the equation term by term). Wave functions obey the superposition principle like other waves, so they interfere. Sections 3.4 and 3.7 already assumed this.
+
+**Electrons through two slits (Fig. 5.2).** Slit 1 alone gives $P_1 = |\Psi_1|^2$; slit 2 alone gives $P_2 = |\Psi_2|^2$. With both open you might expect $P_1 + P_2$, but **wave functions add, not probabilities**:
+
+$$
+P = |\Psi_1 + \Psi_2|^2 = (\Psi_1^* + \Psi_2^*)(\Psi_1 + \Psi_2) = P_1 + P_2 + \Psi_1^*\Psi_2 + \Psi_2^*\Psi_1
+$$
+
+The last two terms, together $2\,\mathrm{Re}(\Psi_1^*\Psi_2)$, are the interference terms; they make the alternating bright and dark bands, as for light through a double slit. The same algebra explains radiation from atoms (6.8).
+
+**Normalising a superposition (slides `QM.tex:297`).** If Ψ₁ and Ψ₂ are normalised and orthogonal (∫Ψ₁*Ψ₂ dx = 0, true for eigenstates of different energy), then a₁Ψ₁ + a₂Ψ₂ is normalised when $|a_1|^2 + |a_2|^2 = 1$. The cross terms integrate to zero.
 
 ## 5.5 Expectation values
 
-The expectation value is the average of many measurements on identically prepared systems:
+**Definition.** ⟨x⟩ is the average position you would get by measuring x on a great many particles with the same Ψ at the same instant.
+
+**Derivation.** For N₁ particles at x₁, N₂ at x₂, and so on, the average position is the centre of mass:
 
 $$
-\langle x\rangle = \int_{-\infty}^{\infty} x\,|\Psi|^2\,dx, \qquad \langle G(x)\rangle = \int_{-\infty}^{\infty} \Psi^*\,G(x)\,\Psi\,dx
+\bar x = \frac{N_1x_1 + N_2x_2 + \cdots}{N_1 + N_2 + \cdots} = \frac{\sum N_ix_i}{\sum N_i} \tag{5.16}
 $$
+
+For one particle replace N\_i by the probability of finding it in dx at x\_i, $P_i = |\Psi_i|^2dx$ (5.17), and turn sums into integrals:
+
+$$
+\langle x\rangle = \frac{\int_{-\infty}^{\infty}x|\Psi|^2dx}{\int_{-\infty}^{\infty}|\Psi|^2dx} \;\xrightarrow{\text{normalised}}\; \langle x\rangle = \int_{-\infty}^{\infty}x|\Psi|^2\,dx \tag{5.18, 5.19}
+$$
+
+Any function of position, such as the potential energy U(x), works the same way:
+
+$$
+\langle G(x)\rangle = \int_{-\infty}^{\infty}G(x)|\Psi|^2\,dx \tag{5.20}
+$$
+
+**Example 5.2 (Beiser).** ψ = ax for 0 ≤ x ≤ 1, zero elsewhere. (a) $P(0.45 \le x \le 0.55) = a^2\int_{0.45}^{0.55}x^2dx = a^2[x^3/3]_{0.45}^{0.55} = 0.0251a^2$. (b) $\langle x\rangle = a^2\int_0^1x^3dx = a^2/4$. (Normalising, $a^2\int_0^1x^2dx = a^2/3 = 1$, so a² = 3, giving P = 0.0753 and ⟨x⟩ = 3/4.)
+
+**Why momentum and energy need something else.** ⟨p⟩ can't be ∫p(x)|Ψ|²dx, because no function p(x) can exist: if x is specified exactly (Δx = 0), Δp ≥ ħ/2Δx forbids a definite p. Likewise ΔEΔt ≥ ħ/2 forbids E(t). Classically, solving the equations gives x(t), p(x, t) and E(x, t), the whole future; in quantum mechanics you get only Ψ, and the future is probabilities. Operators (5.6) give ⟨p⟩ and ⟨E⟩.
 
 ## 5.6 Operators
 
-Quantities like momentum and energy become operators that act on Ψ:
+**The hint.** Differentiate the free-particle wave (5.9):
 
 $$
-\hat p = -i\hbar\,\frac{\partial}{\partial x}, \qquad \hat E = i\hbar\,\frac{\partial}{\partial t}, \qquad \hat H = -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + U
+\frac{\partial\Psi}{\partial x} = \frac{i}{\hbar}p\Psi, \qquad \frac{\partial\Psi}{\partial t} = -\frac{i}{\hbar}E\Psi \quad\Rightarrow\quad p\Psi = \frac{\hbar}{i}\frac{\partial\Psi}{\partial x}, \qquad E\Psi = i\hbar\frac{\partial\Psi}{\partial t} \tag{5.21, 5.22}
 $$
 
-- ⟨p⟩ = ∫Ψ\* (−iħ ∂/∂x) Ψ dx. Always put the operator between Ψ\* and Ψ, in that order.
-- The Schrödinger equation is just ÊΨ = ĤΨ: the energy operator equals the Hamiltonian.
+So momentum corresponds to the operator (ħ/i)∂/∂x and energy to iħ∂/∂t. An **operator** tells you what to do to whatever follows it.
+
+$$
+\hat p = \frac{\hbar}{i}\frac{\partial}{\partial x} = -i\hbar\frac{\partial}{\partial x}, \qquad \hat E = i\hbar\frac{\partial}{\partial t} \tag{5.23, 5.24}
+$$
+
+(Eq. 5.22 was on the postmark of the Austrian stamp for Schrödinger's 100th birthday.)
+
+**They are general, not just for free particles.** Write E = KE + U as an operator equation, $\hat E = \widehat{KE} + \hat U$, with $\hat U = U$. Since KE = p²/2m,
+
+$$
+\widehat{KE} = \frac{\hat p^2}{2m} = \frac{1}{2m}\left(\frac{\hbar}{i}\frac{\partial}{\partial x}\right)^2 = -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} \tag{5.26}
+$$
+
+so $\hat E = \widehat{KE} + \hat U$ reads $i\hbar\,\partial/\partial t = -(\hbar^2/2m)\,\partial^2/\partial x^2 + U$. Acting on Ψ gives Schrödinger's equation (5.14). **Postulating the operators is equivalent to postulating Schrödinger's equation.** In 3-D (slides) $\widehat{KE} = -\frac{\hbar^2}{2m}\left(\partial_x^2 + \partial_y^2 + \partial_z^2\right)$.
+
+**Expectation values with operators.**
+
+$$
+\langle p\rangle = \int_{-\infty}^{\infty}\Psi^*\hat p\Psi\,dx = \frac{\hbar}{i}\int_{-\infty}^{\infty}\Psi^*\frac{\partial\Psi}{\partial x}\,dx, \qquad \langle E\rangle = \int_{-\infty}^{\infty}\Psi^*\hat E\Psi\,dx = i\hbar\int_{-\infty}^{\infty}\Psi^*\frac{\partial\Psi}{\partial t}\,dx \tag{5.28, 5.29}
+$$
+
+**Why the order Ψ* (operator) Ψ.** The alternatives fail. $\int\hat p(\Psi^*\Psi)\,dx = (\hbar/i)[\Psi^*\Psi]_{-\infty}^{\infty} = 0$ always, since Ψ → 0 at ±∞. And $\int\Psi^*\Psi\,\hat p\,dx$ leaves the operator with nothing to act on. For x or U(x) the order doesn't matter; for differential operators it does.
+
+**General rule.** Express the observable G in terms of x and p, replace p by (ħ/i)∂/∂x, and
+
+$$
+\langle G(x,p)\rangle = \int_{-\infty}^{\infty}\Psi^*\hat G\Psi\,dx \tag{5.30}
+$$
+
+All the information the uncertainty principle permits is in Ψ. Slides: all operators can be built from position and momentum operators, $\hat K(\hat r, \hat p)$.
+
+### The slides' derivation of the momentum operator (`QM.tex:309`)
+
+Classically p = m dx/dt. Ask what ⟨p⟩ = m d⟨x⟩/dt is in terms of Ψ. Write C = ħ²/2m and subscripts for partial derivatives.
+
+**Step 1. Schrödinger's equation and its conjugate.**
+
+$$
+i\hbar\Psi_t = -C\Psi_{xx} + V\Psi, \qquad -i\hbar\Psi^*_t = -C\Psi^*_{xx} + V\Psi^*
+$$
+
+**Step 2. Differentiate ⟨x⟩.** x is just an integration variable, so
+
+$$
+\frac{d\langle x\rangle}{dt} = \int x\left(\Psi^*\Psi_t + \Psi^*_t\Psi\right)dx
+$$
+
+From step 1, $\Psi_t = (1/i\hbar)(-C\Psi_{xx} + V\Psi)$ and $\Psi^*_t = -(1/i\hbar)(-C\Psi^*_{xx} + V\Psi^*)$. The V terms cancel:
+
+$$
+\Psi^*\Psi_t + \Psi^*_t\Psi = -\frac{C}{i\hbar}\left(\Psi^*\Psi_{xx} - \Psi\Psi^*_{xx}\right) = -\frac{C}{i\hbar}\,\frac{\partial}{\partial x}\left(\Psi^*\Psi_x - \Psi\Psi^*_x\right)
+$$
+
+(check: the derivative of the bracket is $\Psi^*_x\Psi_x + \Psi^*\Psi_{xx} - \Psi_x\Psi^*_x - \Psi\Psi^*_{xx}$).
+
+**Step 3. Integrate by parts** ("uv rule"), with the boundary term zero because Ψ → 0 at ±∞:
+
+$$
+\frac{d\langle x\rangle}{dt} = -\frac{C}{i\hbar}\int x\,\partial_x(\Psi^*\Psi_x - \Psi\Psi^*_x)\,dx = +\frac{C}{i\hbar}\int(\Psi^*\Psi_x - \Psi\Psi^*_x)\,dx
+$$
+
+**Step 4. One more integration by parts** gives $\int\Psi\Psi^*_x\,dx = -\int\Psi^*\Psi_x\,dx$, so the two terms are equal:
+
+$$
+\frac{d\langle x\rangle}{dt} = \frac{2C}{i\hbar}\int\Psi^*\frac{\partial\Psi}{\partial x}\,dx = \frac{\hbar}{im}\int\Psi^*\frac{\partial\Psi}{\partial x}\,dx
+$$
+
+**Step 5.** Multiply by m:
+
+$$
+\langle p\rangle = m\frac{d\langle x\rangle}{dt} = \int\Psi^*\left(\frac{\hbar}{i}\frac{\partial}{\partial x}\right)\Psi\,dx \quad\Rightarrow\quad \hat p = \frac{\hbar}{i}\frac{\partial}{\partial x}
+$$
+
+(The slide's last line prints h/i; it should be ħ/i.) This also shows the classical relation p = m dx/dt holds for averages, the start of the "F = ma for averages" statement in 5.3.
 
 ## 5.7 Schrödinger's equation: steady-state form
 
-If U doesn't depend on time, separate Ψ(x, t) = ψ(x) e^(−iEt/ħ). Then |Ψ|² = |ψ|² doesn't change in time (a **stationary state**), and ψ obeys
+**Separating out time.** When U depends only on position, the free-particle wave function already shows the pattern:
 
 $$
-\frac{d^2\psi}{dx^2} + \frac{2m}{\hbar^2}\,(E - U)\,\psi = 0
+\Psi = Ae^{-(i/\hbar)(Et - px)} = Ae^{-(iE/\hbar)t}e^{(ip/\hbar)x} = \psi\,e^{-(iE/\hbar)t} \tag{5.31}
 $$
 
-- This is an **eigenvalue equation**, Ĥψ = Eψ. Acceptable (well-behaved) solutions exist only for certain energies Eₙ, the **eigenvalues**. The matching ψₙ are the **eigenfunctions**.
-- Energy quantisation comes from requiring ψ to be well behaved, not from an extra postulate.
+The time dependence of every wave function with a time-independent U has this same form. **Why** (slides `QM.tex:297`): try $\Psi(x,t) = \psi(x)\chi(t)$ in (5.14) and divide by ψχ:
+
+$$
+i\hbar\frac{1}{\chi}\frac{d\chi}{dt} = \frac{1}{\psi}\left(-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + U\psi\right)
+$$
+
+The left side depends only on t, the right only on x, so both equal a constant, which is the energy E. Then $\chi(t) = \chi(0)e^{-iEt/\hbar}$, and
+
+$$
+-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + U\psi = E\psi \quad\Longleftrightarrow\quad \frac{d^2\psi}{dx^2} + \frac{2m}{\hbar^2}(E - U)\psi = 0 \tag{5.32}
+$$
+
+In 3-D:
+
+$$
+\frac{\partial^2\psi}{\partial x^2} + \frac{\partial^2\psi}{\partial y^2} + \frac{\partial^2\psi}{\partial z^2} + \frac{2m}{\hbar^2}(E - U)\psi = 0 \tag{5.33}
+$$
+
+**Stationary states.** $|\Psi|^2 = \psi^*e^{+iEt/\hbar}\psi e^{-iEt/\hbar} = |\psi|^2$: the probability density does not change in time.
+
+**Quantisation appears naturally.** If the steady-state equation has well-behaved solutions, each belongs to a specific E. Energy quantisation is part of the theory and characteristic of all stable systems. Analogy: a string of length L fixed at both ends must have y = 0 at the ends (a **boundary condition**), and only wavelengths $\lambda_n = 2L/(n+1)$, n = 0, 1, 2, … survive (Fig. 5.3).
+
+**Eigenvalues and eigenfunctions.** The energies E\_n for which the steady-state equation can be solved are the **eigenvalues**; the matching ψ\_n are the **eigenfunctions** (German *Eigenwert*, "proper value"). Hydrogen's $E_n = -me^4/(32\pi^2\varepsilon_0^2\hbar^2n^2)$ are eigenvalues (ch 6). Angular momentum is also quantised in stable systems, with eigenvalues $L = \sqrt{l(l+1)}\,\hbar$, l = 0, 1, …, n − 1.
+
+**A variable that is not quantised** (for example the electron's position in hydrogen) gives a spread of results whose average is ⟨G⟩ = ∫G|ψ|²dx. The probability of finding the electron is smeared out; the electron is not. Every measurement finds a whole electron.
+
+**Operators and eigenvalues.** G is quantised to the values G\_n when the wave functions satisfy
+
+$$
+\hat G\psi_n = G_n\psi_n \qquad (G_n \text{ real}) \tag{5.34}
+$$
+
+It is a postulate that a measurement of G can then yield only one of the G\_n, and if every system is in the state ψ\_k, every measurement gives G\_k.
+
+**Example 5.3 (Beiser).** ψ = e^(2x) is an eigenfunction of d²/dx²: $\frac{d^2}{dx^2}e^{2x} = \frac{d}{dx}2e^{2x} = 4e^{2x} = 4\psi$, eigenvalue 4.
+
+**The Hamiltonian.** From (5.25) and (5.26),
+
+$$
+\hat H = -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + U, \qquad \hat H\psi_n = E_n\psi_n \tag{5.35, 5.36}
+$$
+
+named after the classical Hamiltonian (total energy in terms of coordinates and momenta; chapter 4, Hamiltonian dynamics). The energy levels are the eigenvalues of Ĥ.
+
+**Table 5.1: operators.**
+
+| Quantity | Operator |
+| --- | --- |
+| Position x | x |
+| Momentum p | $(\hbar/i)\,\partial/\partial x$ |
+| Potential energy U(x) | U(x) |
+| Kinetic energy p²/2m | $-(\hbar^2/2m)\,\partial^2/\partial x^2$ |
+| Total energy E | $i\hbar\,\partial/\partial t$ |
+| Total energy (Hamiltonian) | $-(\hbar^2/2m)\,\partial^2/\partial x^2 + U(x)$ |
 
 ## 5.8 Particle in a box
 
-U = 0 for 0 < x < L, U = ∞ outside. ψ must be 0 at the walls.
+**Setup.** A particle moves along x between infinitely hard walls at x = 0 and x = L. It loses no energy at the walls. Formally U = ∞ outside and U = 0 inside (Fig. 5.4). It can't have infinite energy, so **ψ = 0 outside**. (Slides `QM.tex:323`: in regions $x < 0$ and $x > L$ the term Vψ is infinite while Eψ is finite, so the only solution is ψ = 0.)
 
-- Inside, d²ψ/dx² = −k²ψ with k = √(2mE)/ħ, so ψ = A sin kx + B cos kx.
-- ψ(0) = 0 gives B = 0. ψ(L) = 0 gives kL = nπ.
+**Inside.** With U = 0, (5.32) becomes
 
 $$
-E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2}, \qquad \psi_n(x) = \sqrt{\frac{2}{L}}\,\sin\frac{n\pi x}{L}, \qquad n = 1, 2, 3, \dots
+\frac{d^2\psi}{dx^2} + \frac{2mE}{\hbar^2}\psi = 0 \quad\text{i.e.}\quad \frac{d^2\psi}{dx^2} = -k^2\psi, \quad k = \frac{\sqrt{2mE}}{\hbar} \tag{5.37}
 $$
 
-- A = √(2/L) comes from normalisation, ∫₀ᴸ A² sin²(nπx/L) dx = A²L/2 = 1.
-- **Probability density** |ψₙ|²: for n = 1 the particle is most likely in the middle. For n = 2 it is never found at the middle (a node). Classically every position is equally likely; at large n the quantum density averages to that (correspondence).
-- ⟨x⟩ = L/2 for every n, by symmetry.
-- ψₙ is not a momentum eigenfunction: sin kx is a mix of e^(ikx) and e^(−ikx), so p = ±ħk with equal chances and ⟨p⟩ = 0, while p² has the definite value 2mEₙ.
-- **3-D box** (`QM.tex:346`): E = (π²ħ²/2mL²)(n₁² + n₂² + n₃²) for a cube. Different (n₁, n₂, n₃) with the same sum have the same energy: **degeneracy**, e.g. (1,1,2), (1,2,1) and (2,1,1).
+whose solution is
+
+$$
+\psi = A\sin kx + B\cos kx \tag{5.38}
+$$
+
+**Boundary conditions.** ψ(0) = 0: sin 0 = 0, cos 0 = 1, so B = 0. ψ(L) = 0: A sin kL = 0 with A ≠ 0, so kL = nπ:
+
+$$
+\frac{\sqrt{2mE_n}}{\hbar}L = n\pi, \qquad n = 1, 2, 3, \dots \tag{5.39}
+$$
+
+(n = 0 gives ψ = 0 everywhere, no particle; negative n gives the same states as positive.)
+
+**Energies.** Solve (5.39):
+
+$$
+E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2}, \qquad n = 1, 2, 3, \dots \tag{5.40}
+$$
+
+the same as the standing-wave result (3.18), with the same meaning: quantised, no zero energy, noticeable only for small m and L.
+
+**Wave functions and normalisation.** $\psi_n = A\sin(n\pi x/L)$. These are finite, single-valued and continuous, with continuous derivatives except at the walls. Normalise using $\sin^2\theta = \tfrac12(1 - \cos 2\theta)$:
+
+$$
+\int_0^L A^2\sin^2\frac{n\pi x}{L}\,dx = \frac{A^2}{2}\left[\int_0^Ldx - \int_0^L\cos\frac{2n\pi x}{L}\,dx\right] = \frac{A^2}{2}\left[x - \frac{L}{2n\pi}\sin\frac{2n\pi x}{L}\right]_0^L = \frac{A^2L}{2} \tag{5.43}
+$$
+
+Setting this equal to 1:
+
+$$
+A = \sqrt{\frac2L}, \qquad \psi_n = \sqrt{\frac2L}\,\sin\frac{n\pi x}{L} \tag{5.46}
+$$
+
+(Slides `QM.tex:336`: B = √(2/L) in their labelling, and E\_n = n²E₁ with E₁ = h²/8mL².)
+
+**Probability densities (Fig. 5.5).**
+
+- |ψ\_n|² = 0 at both walls in every state.
+- |ψ₁|² is largest, 2/L, at the centre: the ground-state particle is most likely in the middle.
+- |ψ₂|² = 0 at the centre: in the n = 2 state the particle is *never* there.
+- ψ\_n has n − 1 nodes inside the box (slides: "notice the number of nodes").
+- Classically every position is equally likely. At large n the rapid wiggles of |ψ\_n|² average to the uniform 1/L (correspondence principle).
+- ψ\_n looks like the vibrations of a string fixed at both ends because the two obey equations of the same form with the same restrictions.
+
+**Example 5.4 (Beiser).** Probability between 0.45L and 0.55L:
+
+$$
+P = \frac2L\int_{x_1}^{x_2}\sin^2\frac{n\pi x}{L}\,dx = \left[\frac xL - \frac{1}{2n\pi}\sin\frac{2n\pi x}{L}\right]_{x_1}^{x_2}
+$$
+
+n = 1: P = 0.198 (19.8%), twice the classical 10%. n = 2: P = 0.0065 (0.65%), consistent with the node at the centre.
+
+**Example 5.5 (Beiser): ⟨x⟩.** Using $\int x\sin^2ax\,dx = \frac{x^2}{4} - \frac{x\sin 2ax}{4a} - \frac{\cos 2ax}{8a^2}$ with a = nπ/L:
+
+$$
+\langle x\rangle = \frac2L\int_0^Lx\sin^2\frac{n\pi x}{L}\,dx = \frac2L\left[\frac{x^2}{4} - \frac{x\sin(2n\pi x/L)}{4n\pi/L} - \frac{\cos(2n\pi x/L)}{8(n\pi/L)^2}\right]_0^L = \frac2L\cdot\frac{L^2}{4} = \frac L2
+$$
+
+(sin 2nπ = 0, and cos 2nπ = cos 0 = 1, so the cosine terms cancel.) The average position is the middle in every state, even when |ψ|² = 0 there: ⟨x⟩ is an average, set by the symmetry of |ψ|².
+
+**Momentum.** With $d\psi_n/dx = \sqrt{2/L}\,(n\pi/L)\cos(n\pi x/L)$ and $\int\sin ax\cos ax\,dx = \sin^2ax/2a$:
+
+$$
+\langle p\rangle = \int_0^L\psi_n\frac{\hbar}{i}\frac{d\psi_n}{dx}\,dx = \frac{2n\pi\hbar}{iL^2}\int_0^L\sin\frac{n\pi x}{L}\cos\frac{n\pi x}{L}\,dx = \frac{\hbar}{iL}\left[\sin^2\frac{n\pi x}{L}\right]_0^L = 0
+$$
+
+But $E_n = p^2/2m$ suggests
+
+$$
+p_n = \pm\sqrt{2mE_n} = \pm\frac{n\pi\hbar}{L} \tag{5.47}
+$$
+
+The ± is the answer: the particle moves back and forth, so the average is $\tfrac12(n\pi\hbar/L) + \tfrac12(-n\pi\hbar/L) = 0$.
+
+**Momentum eigenfunctions.** ψ\_n is not one: $\hat p\psi_n = \sqrt{2/L}\,(\hbar/i)(n\pi/L)\cos(n\pi x/L)$, which is not a number times ψ\_n. Use $\sin\theta = (e^{i\theta} - e^{-i\theta})/2i$ to split ψ\_n into
+
+$$
+\psi_n^{+} = \frac{1}{2i}\sqrt{\frac2L}\,e^{in\pi x/L}, \qquad \psi_n^{-} = -\frac{1}{2i}\sqrt{\frac2L}\,e^{-in\pi x/L} \tag{5.49, 5.50}
+$$
+
+Then $\hat p\psi_n^{+} = \frac{\hbar}{i}\cdot\frac{in\pi}{L}\psi_n^{+} = +\frac{n\pi\hbar}{L}\psi_n^{+}$ and likewise $\hat p\psi_n^{-} = -\frac{n\pi\hbar}{L}\psi_n^{-}$. Two momentum eigenfunctions per energy level, one for each direction, with eigenvalues ±nπħ/L, as (5.47) said.
+
+### The 3-D box (slides `QM.tex:346`)
+
+**Setup.** $0 \le x \le L_x$, $0 \le y \le L_y$, $0 \le z \le L_z$, with V = 0 inside and ∞ outside, so ψ = 0 outside. With C = ħ²/2m, inside:
+
+$$
+-C\left(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}\right)\psi = E\psi
+$$
+
+**Separate.** Try $\psi = \psi_1(x)\psi_2(y)\psi_3(z)$ and divide by ψ:
+
+$$
+\frac{\psi_1''}{\psi_1} + \frac{\psi_2''}{\psi_2} + \frac{\psi_3''}{\psi_3} = -\frac{E}{C}
+$$
+
+Each term depends on a different variable, so each is a constant: $\psi_1'' = -k_x^2\psi_1$, and so on, with $C(k_x^2 + k_y^2 + k_z^2) = E$. Each is a 1-D box problem, so $k_x = n_1\pi/L_x$, $k_y = n_2\pi/L_y$, $k_z = n_3\pi/L_z$:
+
+$$
+\psi = \sqrt{\frac{8}{L_xL_yL_z}}\,\sin\frac{n_1\pi x}{L_x}\,\sin\frac{n_2\pi y}{L_y}\,\sin\frac{n_3\pi z}{L_z}, \qquad E = \frac{h^2}{8m}\left(\frac{n_1^2}{L_x^2} + \frac{n_2^2}{L_y^2} + \frac{n_3^2}{L_z^2}\right)
+$$
+
+with each n = 1, 2, 3, …. (The slide writes $L_y$ in the last sine; it should be $L_z$.) A 3-D problem needs **three quantum numbers**, one per boundary condition, which is why hydrogen has three (6.1).
+
+**Degeneracy in a cube** (L\_x = L\_y = L\_z = L). In units of h²/8mL², E = n₁² + n₂² + n₃²:
+
+| E | (n₁, n₂, n₃) | Degeneracy |
+| --- | --- | --- |
+| 3 | (1,1,1) | 1 |
+| 6 | (2,1,1), (1,2,1), (1,1,2) | 3 |
+| 9 | (2,2,1) and permutations | 3 |
+| 11 | (3,1,1) and permutations | 3 |
+| 12 | (2,2,2) | 1 |
+| 14 | (3,2,1) and permutations | 6 |
+
+Different states with the same energy are **degenerate**; the symmetry of the cube causes it, and stretching one side lifts it.
 
 ## 5.9 Finite potential well
 
-Walls of finite height U. For E < U, outside the well (E − U) < 0, so the solutions are exponentials:
+**Setup (Fig. 5.7).** A well of width L (0 < x < L) with walls of height U, and a particle with E < U. Classically it bounces between the walls and never enters regions I (x < 0) or III (x > L). Quantum mechanically it can.
+
+**Outside the well.** In I and III, (5.32) with E − U < 0:
 
 $$
-\psi = C e^{-ax}\ (x > L), \qquad a = \frac{\sqrt{2m(U-E)}}{\hbar}
+\frac{d^2\psi}{dx^2} - a^2\psi = 0, \qquad a = \frac{\sqrt{2m(U-E)}}{\hbar} \tag{5.53, 5.54}
 $$
 
-- ψ and dψ/dx must match at the walls. The wave function **penetrates the walls**, decaying over a distance about 1/a.
-- The wave is effectively a bit longer than in the infinite box, so **each energy level is lower**.
-- There are only a finite number of bound states. Classically the particle could never be in the walls.
+Solutions are real exponentials, $\psi_I = Ce^{ax} + De^{-ax}$ and $\psi_{III} = Fe^{ax} + Ge^{-ax}$. Ψ must stay finite: $e^{-ax} \to \infty$ as $x \to -\infty$ (so D = 0) and $e^{ax} \to \infty$ as $x \to +\infty$ (so F = 0):
+
+$$
+\psi_I = Ce^{ax}, \qquad \psi_{III} = Ge^{-ax} \tag{5.57, 5.58}
+$$
+
+The wave function **decays exponentially** into the walls, with penetration depth about 1/a.
+
+**Inside.** As in the box, $\psi_{II} = A\sin(\sqrt{2mE}\,x/\hbar) + B\cos(\sqrt{2mE}\,x/\hbar)$. Now ψ is not zero at the walls (it equals C at x = 0 and Ge^(−aL) at x = L), so **both** sine and cosine are allowed.
+
+**Matching.** ψ and dψ/dx must be continuous at x = 0 and x = L: the inside and outside pieces must meet with the same value and the same slope. Only certain energies E\_n allow a smooth fit, so the energy is still quantised (Fig. 5.8).
+
+**Why the levels are lower.** The wave spills into the walls, so it is effectively longer than in an infinite well of the same width. Longer λ means smaller p = h/λ and so a **lower energy** for each n.
+
+**More (beyond Beiser's text).** Taking the well centred on the origin, the even states satisfy $k\tan(kL/2) = a$ and the odd ones $-k\cot(kL/2) = a$, with $k = \sqrt{2mE}/\hbar$; these are solved graphically. There is always at least one bound state, and only a finite number; a deeper or wider well holds more. The particle has a real chance of being found inside the walls, where classically KE < 0.
 
 ## 5.10 Tunnel effect
 
-A particle with E < U meets a barrier of height U and width L. Classically it always bounces back. Quantum mechanically ψ decays inside but is not zero at the far side, so there is a chance of getting through.
+**Idea.** A barrier of height U and *finite* width L (Fig. 5.9). A particle with E < U would always bounce back classically. Quantum mechanically ψ decays inside the barrier but is not zero at the far side, so some of the wave gets through: the particle **tunnels**. The higher and wider the barrier, the smaller the chance.
+
+**Slides (`QM.tex:390`).** The oscillator already showed probability beyond the classical turning points, where KE < 0. At each edge of the barrier, ψ and dψ/dx must be continuous.
+
+**Approximate transmission probability** (derived in the appendix below):
 
 $$
-T \approx e^{-2k_2L}, \qquad k_2 = \frac{\sqrt{2m(U-E)}}{\hbar}
+T \approx e^{-2k_2L}, \qquad k_2 = \frac{\sqrt{2m(U-E)}}{\hbar} \tag{5.60, 5.61}
 $$
 
-- T falls **exponentially** with barrier width and with √(mass × energy deficit). A small change in L or U changes T by a large factor.
-- Reflection probability R = 1 − T. Even for E > U there is some reflection, unlike classical physics.
-- **Examples:** alpha decay (alphas tunnel out of the nucleus; Gamow, 1928), the tunnel diode, the scanning tunnelling microscope, fusion in the Sun, and ammonia inversion.
-- **The appendix** solves it exactly: write ψ in the three regions (incoming plus reflected wave, decaying plus growing exponential, transmitted wave), match ψ and dψ/dx at both edges, and get T = \[1 + U² sinh²(k₂L)/(4E(U − E))\]⁻¹. For a wide barrier (k₂L ≫ 1) this reduces to T ≈ e^(−2k₂L) up to a prefactor.
+T falls exponentially with the width L and with √(m(U − E)), so a small change in either changes T by a large factor. Reflection R = 1 − T.
+
+**Where it matters.**
+
+- **Alpha decay**: an alpha particle with a few MeV escapes a nucleus whose wall is perhaps 25 MeV high. It might hit the wall 10³⁸ times before getting out, but it does (Gamow, 1928).
+- **Tunnel diode**: electrons cross barriers higher than their kinetic energy.
+- **Scanning tunnelling microscope (box)**: Binnig and Rohrer (1981; Nobel 1986, shared with Ruska, inventor of the electron microscope). A probe whose tip is a single atom is brought within a nanometre or two of a conducting surface with about 10 mV across the gap. Electrons tunnel even though they need several eV (the work function) to escape. Since $T \propto e^{-2k_2L}$, a gap change of 0.01 nm changes the current measurably. Scanning with a piezoelectric drive while holding the current constant maps the surface; the map is really one of constant electron density, so different elements look different. The atomic force microscope (AFM) feels repulsive forces instead and works on any surface, including biological ones. (The slides' "Scanning Electron Microscope (SEM)" on `QM.tex:433` should read scanning *tunnelling* microscope.)
+
+**Example 5.6 (Beiser).** Electrons of 1.0 eV and 2.0 eV hit a barrier 10.0 eV high and 0.50 nm wide. For 1.0 eV, $k_2 = \sqrt{2(9.1\times10^{-31})(9.0)(1.6\times10^{-19})}/1.054\times10^{-34} = 1.6\times10^{10}$ m⁻¹, so 2k₂L = 16 and T₁ = e⁻¹⁶ = 1.1 × 10⁻⁷ (one in 8.9 million). For 2.0 eV, T₂ = 2.4 × 10⁻⁷. Doubling the width to 1.0 nm: T₁ = 1.3 × 10⁻¹⁴ and T₂ = 5.1 × 10⁻¹⁴. T is more sensitive to width than to energy here.
+
+### Appendix: the tunnel effect worked out
+
+**Outside the barrier** (regions I and III, U = 0):
+
+$$
+\frac{d^2\psi}{dx^2} + \frac{2mE}{\hbar^2}\psi = 0, \qquad k_1 = \frac{\sqrt{2mE}}{\hbar} = \frac p\hbar = \frac{2\pi}{\lambda} \tag{5.73 to 5.77}
+$$
+
+$$
+\psi_I = Ae^{ik_1x} + Be^{-ik_1x}, \qquad \psi_{III} = Fe^{ik_1x} + Ge^{-ik_1x}
+$$
+
+These are the same as A sin + B cos, rewritten with $e^{\pm i\theta} = \cos\theta \pm i\sin\theta$ to describe moving particles.
+
+**What each term means.**
+
+- $Ae^{ik_1x}$: the **incoming** wave (from the left). With $v_I$ its group velocity (the particles' speed), $S = |\psi_{I+}|^2v_I$ is the flux of particles arriving per second.
+- $Be^{-ik_1x}$: the **reflected** wave.
+- $Fe^{ik_1x}$: the **transmitted** wave. Nothing in region III can send a wave back, so **G = 0** (slides: "only the +ve direction wave").
+
+**Transmission probability** is the ratio of fluxes out and in:
+
+$$
+T = \frac{|\psi_{III+}|^2v_{III}}{|\psi_{I+}|^2v_I} = \frac{FF^*v_{III}}{AA^*v_I} = \frac{FF^*}{AA^*} \quad (v_{III} = v_I) \tag{5.83}
+$$
+
+Classically T = 0.
+
+**Inside the barrier** (region II, U > E):
+
+$$
+\frac{d^2\psi_{II}}{dx^2} - \frac{2m(U-E)}{\hbar^2}\psi_{II} = 0, \qquad \psi_{II} = Ce^{k_2x} + De^{-k_2x}, \qquad k_2 = \frac{\sqrt{2m(U-E)}}{\hbar} \tag{5.84 to 5.86}
+$$
+
+The exponents are real, so ψ\_II doesn't oscillate and doesn't describe motion, but |ψ\_II|² ≠ 0: a particle can be found inside and may go on to III or return to I.
+
+**Boundary conditions** (ψ and dψ/dx continuous at x = 0 and x = L; slides `QM.tex:408` list exactly these four):
+
+$$
+A + B = C + D \tag{5.91}
+$$
+$$
+ik_1A - ik_1B = k_2C - k_2D \tag{5.92}
+$$
+$$
+Ce^{k_2L} + De^{-k_2L} = Fe^{ik_1L} \tag{5.93}
+$$
+$$
+k_2Ce^{k_2L} - k_2De^{-k_2L} = ik_1Fe^{ik_1L} \tag{5.94}
+$$
+
+**Solving for A/F.** From (5.93) and (5.94), adding and subtracting (5.94)/k₂:
+
+$$
+C = \frac F2\left(1 + \frac{ik_1}{k_2}\right)e^{(ik_1 - k_2)L}, \qquad D = \frac F2\left(1 - \frac{ik_1}{k_2}\right)e^{(ik_1 + k_2)L}
+$$
+
+From (5.91) and (5.92), adding (5.91) and (5.92)/ik₁: $A = \tfrac12\left[C\left(1 - \tfrac{ik_2}{k_1}\right) + D\left(1 + \tfrac{ik_2}{k_1}\right)\right]$. Substitute, using $\left(1 - \tfrac{ik_1}{k_2}\right)\left(1 + \tfrac{ik_2}{k_1}\right) = 2 + i\left(\tfrac{k_2}{k_1} - \tfrac{k_1}{k_2}\right)$:
+
+$$
+\frac AF = \left[\frac12 + \frac i4\left(\frac{k_2}{k_1} - \frac{k_1}{k_2}\right)\right]e^{(ik_1 + k_2)L} + \left[\frac12 - \frac i4\left(\frac{k_2}{k_1} - \frac{k_1}{k_2}\right)\right]e^{(ik_1 - k_2)L} \tag{5.95}
+$$
+
+**Two approximations.** (1) A high barrier (U ≫ E) makes k₂ ≫ k₁, so $k_2/k_1 - k_1/k_2 \approx k_2/k_1$. (2) A wide barrier ($k_2L \gg 1$) makes $e^{k_2L} \gg e^{-k_2L}$, so drop the second term:
+
+$$
+\frac AF \approx \left(\frac12 + \frac{ik_2}{4k_1}\right)e^{(ik_1 + k_2)L}, \qquad \left(\frac AF\right)^* \approx \left(\frac12 - \frac{ik_2}{4k_1}\right)e^{(-ik_1 + k_2)L} \tag{5.97, 5.98}
+$$
+
+Multiply:
+
+$$
+\frac{AA^*}{FF^*} = \left(\frac14 + \frac{k_2^2}{16k_1^2}\right)e^{2k_2L} \quad\Rightarrow\quad T = \frac{FF^*}{AA^*} = \left[\frac{16}{4 + (k_2/k_1)^2}\right]e^{-2k_2L} \tag{5.99}
+$$
+
+From the definitions, $(k_2/k_1)^2 = (U - E)/E = U/E - 1$ (5.100). The bracket varies far more slowly with E and U than the exponential and is of order 1 (for Example 5.6 it is 16/13 ≈ 1.2), so
+
+$$
+T \approx e^{-2k_2L} \tag{5.101}
+$$
+
+**Exact result** (beyond Beiser, useful as a check): $T = \left[1 + \dfrac{U^2\sinh^2(k_2L)}{4E(U - E)}\right]^{-1}$, which reduces to the above for $k_2L \gg 1$.
+
+**The slides' picture (`QM.tex:433`).** Oscillating ψ in I (incident plus reflected), decaying exponential in II, smaller oscillating ψ in III with the same wavelength as in I: the particle that gets through has the same energy, only its amplitude is reduced.
 
 ## 5.11 Harmonic oscillator
 
-U = ½kx², so classically the frequency is ν = (1/2π)√(k/m). The Schrödinger equation has well-behaved solutions only for
+**Classical oscillator.** Simple harmonic motion comes from a linear restoring force, Hooke's law F = −kx. With F = ma:
 
 $$
-E_n = \left(n + \tfrac12\right)h\nu, \qquad n = 0, 1, 2, \dots
+\frac{d^2x}{dt^2} + \frac km x = 0, \qquad x = A\cos(2\pi\nu t + \phi), \qquad \nu = \frac{1}{2\pi}\sqrt{\frac km} \tag{5.62 to 5.64}
 $$
 
-- The levels are **evenly spaced** by hν (Planck's assumption in 2.2 came close, but missed the ½).
-- **Zero-point energy** E₀ = ½hν. The oscillator is never at rest, which matches the uncertainty principle. It is why helium stays liquid at 0 K at normal pressure.
-- ψₙ = (Hermite polynomial) × e^(−y²/2) with y a scaled x. ψ₀ is a Gaussian, most likely at x = 0.
-- **Classical comparison:** a classical oscillator spends most time at its turning points. The quantum ground state peaks at the centre and leaks past the turning points, but for large n |ψ|² approaches the classical distribution.
-- **Use:** molecular vibrations, atoms in solids. Any potential near a minimum looks like ½kx² (as in chunk 2).
+φ is fixed by x and the direction of motion at t = 0.
+
+**Why it matters everywhere.** Expand any restoring force about the equilibrium x = 0 in a Maclaurin series:
+
+$$
+F(x) = F_{x=0} + \left(\frac{dF}{dx}\right)_0x + \frac12\left(\frac{d^2F}{dx^2}\right)_0x^2 + \cdots
+$$
+
+F = 0 at equilibrium, and for small x the x², x³ terms are negligible, so $F \approx (dF/dx)_0\,x$, Hooke's law with $k = -(dF/dx)_0 > 0$. **All oscillations are simple harmonic when small enough**: molecules, atoms in crystals, objects on springs.
+
+**Potential energy.** The work to move from 0 to x against F:
+
+$$
+U(x) = -\int_0^xF\,dx = k\int_0^xx\,dx = \tfrac12kx^2, \qquad E = \tfrac12kA^2 \tag{5.65}
+$$
+
+a parabola (Fig. 5.10). Classically E can be anything and the particle swings between −A and +A.
+
+**What to expect quantum mechanically.** (1) Discrete energies, not a continuum. (2) The lowest energy is not 0 but some E₀. (3) Some probability of being found beyond ±A.
+
+### Energy levels
+
+With U = ½kx²:
+
+$$
+\frac{d^2\psi}{dx^2} + \frac{2m}{\hbar^2}\left(E - \tfrac12kx^2\right)\psi = 0 \tag{5.66}
+$$
+
+Change to dimensionless position and energy:
+
+$$
+y = \left(\frac1\hbar\sqrt{km}\right)^{1/2}x = \sqrt{\frac{2\pi m\nu}{\hbar}}\,x, \qquad \alpha = \frac{2E}{\hbar}\sqrt{\frac mk} = \frac{2E}{h\nu} \tag{5.67, 5.68}
+$$
+
+so that
+
+$$
+\frac{d^2\psi}{dy^2} + (\alpha - y^2)\psi = 0 \tag{5.69}
+$$
+
+ψ must → 0 as y → ±∞ to be normalisable, and the equation allows that **only when α = 2n + 1**, n = 0, 1, 2, …. With α = 2E/hν:
+
+$$
+E_n = \left(n + \tfrac12\right)h\nu, \qquad n = 0, 1, 2, \dots \tag{5.70}
+$$
+
+$$
+E_0 = \tfrac12 h\nu \quad\text{(zero-point energy)} \tag{5.71}
+$$
+
+- Quantised in steps of hν, **evenly spaced** (Planck's assumption in 2.2, but shifted by ½hν).
+- The zero-point energy is the lowest possible; an oscillator in equilibrium with its surroundings approaches E₀, not 0, as T → 0 K. It is what the uncertainty principle demands: at rest at the bottom, x and p would both be exactly 0.
+- **Level patterns compared (Fig. 5.11).** Hydrogen: E\_n ∝ −1/n², crowding together. Box: E\_n ∝ n², spreading apart. Oscillator: E\_n ∝ n + ½, the only evenly spaced one.
+
+### The slides' series solution (`QM.tex:353` to `:378`)
+
+This is how α = 2n + 1 comes out. Write C = ħ²/2m.
+
+**Step 1. Rescale.** Put x = by in $-C\psi_{xx} + \tfrac12kx^2\psi = E\psi$:
+
+$$
+-\frac{C}{b^2}\psi_{yy} + \tfrac12kb^2y^2\psi = E\psi \quad\Rightarrow\quad \psi_{yy} - \frac{kb^4}{2C}y^2\psi + \frac{Eb^2}{C}\psi = 0
+$$
+
+Choose b so that $kb^4/2C = 1$, i.e. $b^4 = \hbar^2/mk$ (Beiser's y), and call $\alpha = Eb^2/C$, which works out to 2E/hν. (The slide drops the factor ½ in the middle term; with it the scaling agrees with Beiser.) Result: $\psi_{yy} + (\alpha - y^2)\psi = 0$.
+
+**Step 2. Large-y behaviour.** For y → ±∞, α is negligible: $\psi_{yy} \approx y^2\psi$. Try $\psi = e^{\beta y^2}$: $\psi_{yy} = (4\beta^2y^2 + 2\beta)\psi \approx 4\beta^2y^2\psi$, so $4\beta^2 = 1$ and β = ±½. Only β = −½ is normalisable: $\psi \sim e^{-y^2/2}$.
+
+**Step 3. Factor it out.** Try $\psi = f(y)e^{-y^2/2}$:
+
+$$
+\psi_y = e^{-y^2/2}(f' - yf), \qquad \psi_{yy} = e^{-y^2/2}\left(f'' - 2yf' - f + y^2f\right)
+$$
+
+Then $\psi_{yy} + (\alpha - y^2)\psi = e^{-y^2/2}\left[f'' - 2yf' + (\alpha - 1)f\right] = 0$, so
+
+$$
+f'' - 2yf' + (\alpha - 1)f = 0 \qquad \text{(Hermite's equation)}
+$$
+
+**Step 4. Power series.** Put $f = \sum_n a_ny^n$. Then $f'' = \sum n(n-1)a_ny^{n-2}$ and $2yf' = \sum 2na_ny^n$. Shift the index in f'' (n → n + 2) and collect powers of yⁿ:
+
+$$
+(n+2)(n+1)a_{n+2} - 2na_n + (\alpha - 1)a_n = 0 \quad\Rightarrow\quad a_{n+2} = \frac{2n + 1 - \alpha}{(n+1)(n+2)}\,a_n
+$$
+
+**Step 5. The series must stop.** If it doesn't, for large n $a_{n+2}/a_n \to 2/n$, the same as the series of $e^{y^2}$, so $f \sim e^{y^2}$ and $\psi \sim e^{+y^2/2}$ blows up. The only way out is for the series to terminate: $2n + 1 - \alpha = 0$ for some whole number n (with the other-parity series set to zero). So **α = 2n + 1**, which is $E_n = (n + \tfrac12)h\nu$, and $f_n$ is a polynomial of degree n.
+
+**Step 6. The first few.**
+
+- n = 0, α = 1: a₂ = 0, so f₀ = 1 and ψ₀ ∝ e^(−y²/2), a Gaussian.
+- n = 1, α = 3: odd series stops at a₁y, so f₁ ∝ y, conventionally H₁ = 2y.
+- n = 2, α = 5: $a_2 = \frac{1 - 5}{2}a_0 = -2a_0$, so f₂ ∝ 1 − 2y², conventionally H₂ = 4y² − 2. (The slide writes α = 4 for n = 2; it should be 5.)
+
+### Wave functions
+
+$$
+\psi_n = \left(\frac{2m\nu}{\hbar}\right)^{1/4}\left(2^nn!\right)^{-1/2}H_n(y)\,e^{-y^2/2} \tag{5.72}
+$$
+
+| n | H\_n(y) | E\_n |
+| --- | --- | --- |
+| 0 | 1 | ½hν |
+| 1 | 2y | 3/2 hν |
+| 2 | 4y² − 2 | 5/2 hν |
+| 3 | 8y³ − 12y | 7/2 hν |
+| 4 | 16y⁴ − 48y² + 12 | 9/2 hν |
+| 5 | 32y⁵ − 160y³ + 120y | 11/2 hν |
+
+- H\_n has only even or only odd powers, so ψ\_n is even or odd; it has n nodes.
+- **Beyond the classical limits (Fig. 5.12).** Each ψ\_n leaks past ±A with exponentially falling probability, as in the finite well. For n = 0 the classical limit is y = ±1 (α = 1 = y²), and the probability outside is erfc(1) ≈ 16% (the slides, `QM.tex:379`, quote about 10%). It shrinks as n grows.
+- **Classical against quantum density (Fig. 5.13).** A classical oscillator moves slowest at the ends, so it is most likely found near ±A and least likely at 0. The quantum ground state is the opposite: most likely at x = 0. By n = 10, |ψ₁₀|² averaged over its wiggles follows the classical curve, and its tails beyond ±A are small: the correspondence principle. The wiggles get finer as n grows, and soon can't be detected. In ψ₁₀ the wavelength is shortest at x = 0 (fastest motion) and longest near ±A.
+- Slides (`QM.tex:379`): spacing ΔE = hν, zero-point energy ½hν, correspondence as n → ∞.
+
+**Example 5.7 (Beiser): ⟨x⟩ = 0.** For n = 0 the integrand is $y\,e^{-y^2}$ and for n = 1 it is $y^3e^{-y^2}$, both odd, so both integrals over (−∞, ∞) vanish. In fact ⟨x⟩ = 0 in every state, as expected: x = 0 is the equilibrium point where U is smallest, and |ψ\_n|² is symmetric about it.
 
 ## What to be able to do without notes
 
-- List the conditions for a well-behaved ψ.
-- Write the time-dependent and steady-state Schrödinger equations, and motivate the first from a free-particle wave.
-- Define and calculate expectation values; write the momentum and energy operators.
-- Solve the infinite box completely: Eₙ, normalised ψₙ, sketch |ψₙ|², ⟨x⟩.
-- Explain qualitatively the finite well, tunnelling (T ≈ e^(−2k₂L)) and why it matters.
-- State the oscillator levels and zero-point energy and compare with the classical oscillator.
+- Explain why quantum mechanics predicts probabilities, list the three conditions on a well-behaved ψ, and normalise a wave function.
+- Motivate the time-dependent Schrödinger equation from $\Psi = Ae^{-(i/\hbar)(Et - px)}$ (Beiser and slide 2) and the steady-state equation from $\nabla^2\psi + k^2\psi = 0$ (slide 1); say why it is a postulate.
+- Show amplitudes add (the interference term) and when a superposition is normalised.
+- Derive ⟨x⟩ from the centre-of-mass idea; write p̂, Ê, Ĥ; explain the Ψ*ÂΨ order; derive p̂ from m d⟨x⟩/dt.
+- Separate Ψ = ψ(x)e^(−iEt/ħ) and explain stationary states, eigenvalues and eigenfunctions.
+- Solve the infinite box completely (E\_n, normalised ψ\_n, |ψ\_n|², ⟨x⟩, ⟨p⟩ = 0, momentum eigenfunctions) and the 3-D box with its degeneracies.
+- Explain the finite well (decaying tails, lower levels) and tunnelling (T ≈ e^(−2k₂L), its sensitivity, alpha decay and the STM); write the four boundary conditions and outline the appendix.
+- Rescale the oscillator equation, find the e^(−y²/2) tail, derive the recursion and show it must terminate, giving E\_n = (n + ½)hν; compare with the classical oscillator.
+
+# Coverage: Quantum mechanics
+
+Every section and example of Beiser ch 5 and its appendix, and every slide frame from the mathematical formulation to tunnelling (`QM.tex:258` to `:443`). "HW practice" means *HW practice: Beiser chapters 4 to 6*.
+
+## Beiser ch 5
+
+| Beiser | Topic | Where on the site |
+| --- | --- | --- |
+| 5.1 | Wave function, normalisation, well-behaved conditions | Reference 5.1 |
+| 5.2 | The wave equation | Reference 5.2 |
+| Ex 5.1 | Check y = Ae^(−iω(t − x/v)) solves it | Reference 5.2; HW practice |
+| 5.3 | Time-dependent Schrödinger equation | Reference 5.3 (derivation, plus both slide routes) |
+| 5.4 | Linearity and superposition | Reference 5.4 (interference term written out) |
+| 5.5 | Expectation values | Reference 5.5 (from the centre-of-mass sum) |
+| Ex 5.2 | Probability and ⟨x⟩ for ψ = ax | Reference 5.5; HW practice |
+| 5.6 | Operators, Table 5.1 | Reference 5.6 and 5.7 |
+| 5.7 | Steady-state equation, eigenvalues, Hamiltonian | Reference 5.7 (separation of variables shown) |
+| Ex 5.3 | e^(2x) as an eigenfunction | Reference 5.7; HW practice |
+| 5.8 | Particle in a box | Reference 5.8 (normalisation, ⟨x⟩, ⟨p⟩, momentum eigenfunctions) |
+| Ex 5.4, 5.5 | Probability in the middle tenth; ⟨x⟩ | Reference 5.8; HW practice |
+| 5.9 | Finite potential well | Reference 5.9 |
+| 5.10 | Tunnel effect, STM | Reference 5.10 |
+| Ex 5.6 | Electrons through a 10 eV barrier | Reference 5.10; HW practice |
+| Appendix to ch 5 | The tunnel effect worked out, eqs 5.73 to 5.101 | Reference 5.10 appendix (all steps) |
+| 5.11 | Harmonic oscillator | Reference 5.11 |
+| Ex 5.7 | ⟨x⟩ = 0 for the oscillator | Reference 5.11; HW practice |
+
+## Slides
+
+| Frame (`QM.tex`) | Where on the site |
+| --- | --- |
+| `:258` Mathematical formulation (postulates) | Reference 5.1 |
+| `:269` Motivating the equation, `:283` another derivation | Reference 5.3 |
+| `:297` Features of the equation | Reference 5.3, 5.4, 5.7 |
+| `:309` Momentum operator derivation | Reference 5.6 (all steps) |
+| `:323`, `:336` Particle in a 1-D box | Reference 5.8 |
+| `:346` 3-D box | Reference 5.8 (with degeneracies of a cube) |
+| `:353`, `:363`, `:379` Harmonic oscillator | Reference 5.11 (series solution in full) |
+| `:390`, `:408`, `:433` Tunnelling | Reference 5.10 and appendix |
+
+## Slide typos corrected on the site
+
+- `:283`: ω = ν/2π should be ω = 2πν.
+- `:309`: the final p̂ = (h/i)∂/∂x should be (ħ/i)∂/∂x.
+- `:346`: the last sine should have L\_z, not L\_y.
+- `:363`: the middle term should be kb⁴/2C, and n = 2 has α = 5, not 4.
+- `:379`: the ground-state probability beyond the turning points is about 16%, not 10%.
+- `:433`: "Scanning Electron Microscope (SEM)" should be scanning tunnelling microscope (STM).
 
 # Formulas: Quantum mechanics
 

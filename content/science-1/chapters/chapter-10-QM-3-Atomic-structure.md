@@ -10,7 +10,7 @@ An atom is electrically neutral, yet it contains negatively charged electrons, s
 
 ## Why the planetary model fails
 
-This nuclear atom raises an immediate question: what keeps the electrons from falling into the nucleus? A stationary electron would be pulled in, so it seems natural to imagine it circling the nucleus as a planet circles the sun, with the electric attraction supplying the centripetal force. For hydrogen this gives a total energy E = −e²/(8πε₀r), negative because the electron is bound. The planetary model, however, fails at once. An electron moving in a circle is accelerating, and classical electromagnetism says an accelerated charge radiates. The electron should lose energy continuously and spiral into the nucleus in about 10⁻⁸ s. Atoms would not exist.
+This nuclear atom raises an immediate question: what keeps the electrons from falling into the nucleus? A stationary electron would be pulled in, so it seems natural to imagine it circling the nucleus as a planet circles the sun, with the electric attraction supplying the centripetal force. For hydrogen this gives a total energy E = −e²/(8πε₀r), negative because the electron is bound. The planetary model, however, fails at once. An electron moving in a circle is accelerating, and classical electromagnetism says an accelerated charge radiates. The electron should lose energy continuously and spiral into the nucleus in a tiny fraction of a second (about 10⁻¹¹ s by the classical radiation formula). Atoms would not exist.
 
 ## Atomic spectra
 
@@ -38,136 +38,304 @@ The laser is a practical application of these ideas. An atom in an excited state
 
 # Reference: Atomic structure
 
-The course material section by section, in the order of the textbook, with the key formulas.
+Beiser ch 4 section by section, with each derivation written out, the numbers worth knowing, and what the slides (`QM.tex:224` to `:257`) add. Rutherford scattering (the formula and the appendix) and the laser (4.9) are not in the course; they are marked below and kept short. Beiser's in-chapter examples are summarised with their answers; full worked versions are in *HW practice: Beiser chapters 4 to 6*.
 
 ## 4.1 The nuclear atom
 
-- **Thomson's "plum pudding" model:** positive charge spread through the atom with electrons embedded in it. It predicts only small deflections of alpha particles.
-- **Geiger–Marsden experiment:** alpha particles fired at thin gold foil. Most went straight through, but a few bounced back at large angles.
-- **Rutherford (1911):** large-angle scattering needs a concentrated charge. Nearly all the mass and all the positive charge sit in a nucleus of radius about 10⁻¹⁴ m, while the atom is about 10⁻¹⁰ m. **An atom is largely empty space.**
-- You need only the conclusions. The scattering formula derivation (the appendix) is not in your syllabus.
+**The question.** All atoms contain electrons, and atoms are neutral, so they must also contain positive matter. What kind, arranged how?
+
+- **Thomson's model (1898).** A lump of positive charge with electrons embedded in it, like raisins in a fruitcake ("plum pudding"). With the charge spread over the whole atom, the electric forces on a passing alpha particle are weak, so alphas should be deflected by 1° or less.
+- **Geiger and Marsden (1911),** at Rutherford's suggestion, fired alpha particles (helium nuclei, charge +2e, about 8000 electron masses, typically 2 × 10⁷ m/s) from a radioactive source through a lead collimator at a thin gold foil, and counted flashes on a zinc sulfide screen through a microscope (Fig. 4.2).
+- **Result.** Most alphas went nearly straight through, but a few were scattered through large angles, some even backward. Rutherford: "as incredible as if you fired a 15-inch shell at a piece of tissue paper and it came back and hit you."
+- **Conclusion (Rutherford).** Only a very strong force at close range can turn back such heavy, fast particles. All the positive charge and nearly all the mass are concentrated in a tiny **nucleus**, with the electrons far away. Most alphas miss every nucleus and pass through; the light electrons barely affect them.
+- **Atomic number.** How strongly a foil scatters depends on its nuclear charge. Every atom of an element turned out to have the same nuclear charge Ze, a whole multiple of e that rises step by step through the periodic table. Z is the atomic number, the number of protons.
+- **Sizes.** Nucleus about 10⁻¹⁴ m or less, atom about 10⁻¹⁰ m. **An atom is largely empty space**; packed solid, our bodies would shrink to specks just visible under a microscope.
+
+**Not in the course: Rutherford scattering.** The scattering formula $N(\theta) \propto 1/\sin^4(\theta/2)$ (Eq. 4.1), its derivation (the chapter appendix), and the closest-approach estimate $R = 2Ze^2/4\pi\varepsilon_0 KE$ (Eq. 4.2, which gives R ≈ 3.0 × 10⁻¹⁴ m for 7.7 MeV alphas on gold) are excluded. You need only the experiment and its conclusion above. (The slides' frame `QM.tex:224` likewise gives only the models.)
 
 ## 4.2 Electron orbits
 
-**Planetary model.** For a circular orbit, the Coulomb force provides the centripetal force:
+**The planetary model.** Electrons can't sit still in Rutherford's atom: nothing would hold them against the pull of the nucleus. So imagine them orbiting, like planets. Take hydrogen (one electron) and a circular orbit of radius r.
+
+**Force balance.** The Coulomb attraction supplies the centripetal force:
 
 $$
-\frac{mv^2}{r} = \frac{e^2}{4\pi\varepsilon_0 r^2} \;\Rightarrow\; v = \frac{e}{\sqrt{4\pi\varepsilon_0 m r}}, \qquad E = KE + PE = -\frac{e^2}{8\pi\varepsilon_0 r}
+\frac{mv^2}{r} = \frac{1}{4\pi\varepsilon_0}\frac{e^2}{r^2} \quad\Rightarrow\quad v = \frac{e}{\sqrt{4\pi\varepsilon_0\,m\,r}} \tag{4.4}
 $$
 
-- E is negative because the electron is bound. The ionisation energy of hydrogen is 13.6 eV, which gives r = 5.3 × 10⁻¹¹ m.
-- **Why it fails:** an accelerating charge radiates (classical electromagnetism). The electron should spiral into the nucleus in about 10⁻⁸ s, giving off a continuous spectrum. Real atoms are stable and give sharp lines.
+**Energy.** Kinetic and potential energies (PE = 0 at infinite separation, hence the minus sign):
+
+$$
+KE = \tfrac12 mv^2, \qquad PE = -\frac{e^2}{4\pi\varepsilon_0 r}
+$$
+
+From the force balance $mv^2 = e^2/4\pi\varepsilon_0 r$, so $KE = e^2/8\pi\varepsilon_0 r$, and
+
+$$
+E = KE + PE = \frac{e^2}{8\pi\varepsilon_0 r} - \frac{e^2}{4\pi\varepsilon_0 r} = -\frac{e^2}{8\pi\varepsilon_0 r} \tag{4.5}
+$$
+
+- **E is negative because the electron is bound.** E > 0 would mean it is not on a closed orbit.
+- Note KE = −E and PE = 2E (the virial theorem for 1/r forces): for the ground state, KE = 13.6 eV and PE = −27.2 eV.
+- E belongs to the electron–nucleus system, not to the electron alone (4.7).
+
+**Example 4.1 (Beiser).** 13.6 eV separates hydrogen into a proton and an electron, so E = −13.6 eV = −2.2 × 10⁻¹⁸ J. From (4.5), $r = -e^2/8\pi\varepsilon_0E = 5.3\times10^{-11}$ m; from (4.4), v = 2.2 × 10⁶ m/s. Since v ≪ c, special relativity can be ignored.
+
+**Why it fails.** Newton and Coulomb say the orbit is stable. Electromagnetism, the third pillar, says an accelerated charge radiates. The orbiting electron accelerates, so it should lose energy continuously and spiral into the nucleus in a tiny fraction of a second (about 10⁻¹¹ s by the classical radiation formula), giving a continuous spectrum on the way. Atoms are stable and give sharp lines. The laws of the macroworld don't all hold inside the atom.
+
+**Why classical physics fails here (Beiser's summary).** It treats nature as pure particles or pure waves. Particles and waves share properties; the smallness of h hides this in everyday life but not inside atoms. The Bohr model mixes classical and quantum ideas and gets part of the way (4.4); quantum mechanics finishes the job (ch 5, 6).
 
 ## 4.3 Atomic spectra
 
-- A hot gas emits light only at certain wavelengths (an **emission** line spectrum). Cool gas in front of white light absorbs the same wavelengths (an **absorption** spectrum). Each element has its own pattern.
-- **Hydrogen series:** all fit one formula, with R = 1.097 × 10⁷ m⁻¹:
+**Continuous against line spectra.** Hot solids and liquids emit all wavelengths (Planck, 2.2): the collective behaviour of many interacting atoms, independent of the material. In a rarefied gas the atoms are far apart and interact only in occasional collisions, so the light is characteristic of the atoms themselves.
+
+- **Emission spectrum.** A gas or vapour at less than atmospheric pressure, excited by an electric discharge, emits only certain wavelengths: bright lines on a dark background. Every element has its own pattern (hydrogen, helium, mercury in Fig. 4.8), so spectra identify substances.
+- **Absorption spectrum.** White light passed through a gas loses some of the same wavelengths: dark lines on a bright background. Sunlight has dark lines because the hot surface (radiating nearly like a 5800 K blackbody) is surrounded by cooler gas.
+- The number, intensity and exact wavelengths of the lines depend on temperature, pressure, electric and magnetic fields, and motion of the source. From a star's spectrum astronomers read its elements, their ionisation, and whether it is approaching or receding.
+
+**Spectral series of hydrogen.** Balmer (1885) found the visible lines fit one formula. Hα = 656.3 nm (red), Hβ = 486.3 nm (blue), Hγ and Hδ violet; the lines crowd together and weaken toward the **series limit** at 364.6 nm. All series fit
 
 $$
-\frac{1}{\lambda} = R\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right)
+\frac{1}{\lambda} = R\left(\frac{1}{n_f^2} - \frac{1}{n^2}\right), \qquad R = 1.097\times10^7\ \text{m}^{-1} = 0.01097\ \text{nm}^{-1}
 $$
 
-| Series | n\_f | Region |
-| --- | --- | --- |
-| Lyman | 1 | Ultraviolet |
-| Balmer | 2 | Visible (Hα 656 nm, Hβ 486 nm, …) |
-| Paschen | 3 | Infrared |
-| Brackett, Pfund | 4, 5 | Infrared |
+| Series | n\_f | n | Region | Series limit (n → ∞) |
+| --- | --- | --- | --- | --- |
+| Lyman | 1 | 2, 3, 4, … | Ultraviolet | 1/R = 91.2 nm |
+| Balmer | 2 | 3, 4, 5, … | Visible and near UV | 4/R = 364.6 nm |
+| Paschen | 3 | 4, 5, 6, … | Infrared | 9/R = 820 nm |
+| Brackett | 4 | 5, 6, 7, … | Infrared | 16/R = 1.46 μm |
+| Pfund | 5 | 6, 7, 8, … | Infrared | 25/R = 2.28 μm |
 
-- The **series limit** (n\_i → ∞) is the shortest wavelength in each series: 91.2 nm for Lyman, 365 nm for Balmer.
+The same R appears in every series; the Brackett series overlaps Paschen and Pfund. Any theory of the atom must explain this formula and the value of R.
 
 ## 4.4 The Bohr atom
 
-**Key idea.** An electron orbit is stable only if its circumference holds a whole number of de Broglie wavelengths. The electron wave then reinforces itself instead of cancelling.
+**Old quantum theory (slides `QM.tex:224`).** Planck (1900) quantised oscillator energy, E = nhν. Bohr (1913) quantised the electron's angular momentum in hydrogen, mvr = nh/2π. Sommerfeld and others added more quantisation conditions to handle other atoms. The conditions were pulled out of a hat and unsatisfying; de Broglie's waves (1924) and then Schrödinger's equation (1926) explained them.
+
+**The orbiting electron's wavelength.** With v from (4.4) and γ ≈ 1:
 
 $$
-2\pi r_n = n\lambda = \frac{nh}{mv} \;\Leftrightarrow\; L = mvr_n = n\hbar
+\lambda = \frac{h}{mv} = \frac{h}{e}\sqrt{\frac{4\pi\varepsilon_0 r}{m}} \tag{4.11}
 $$
 
-- So **angular momentum is quantised** in units of ħ. That was Bohr's original postulate; the de Broglie picture explains it.
-- Combine with the force balance from 4.2:
+At r = 5.3 × 10⁻¹¹ m this gives λ = 33 × 10⁻¹¹ m, **exactly the circumference** 2πr = 33 × 10⁻¹¹ m. The ground-state orbit is one electron wave joined smoothly on itself.
+
+**The stability condition.** A wire loop vibrates freely only if a whole number of wavelengths fits around it; a fractional number interferes destructively and dies out. By analogy:
+
+> An electron can circle a nucleus only if its orbit contains a whole number of de Broglie wavelengths.
 
 $$
-r_n = n^2 a_0, \qquad a_0 = \frac{4\pi\varepsilon_0\hbar^2}{me^2} = 0.0529\ \text{nm}
+n\lambda = 2\pi r_n, \qquad n = 1, 2, 3, \dots \tag{4.12}
 $$
 
-- The orbital speed is vₙ = αc/n, with α ≈ 1/137, so v₁ ≈ 2.2 × 10⁶ m/s (non-relativistic, so Bohr's treatment is consistent).
+n is the **quantum number** of the orbit.
+
+**Orbit radii.** Substitute (4.11):
+
+$$
+\frac{nh}{e}\sqrt{\frac{4\pi\varepsilon_0 r_n}{m}} = 2\pi r_n
+$$
+
+Square both sides: $n^2h^2\cdot 4\pi\varepsilon_0 r_n/(e^2m) = 4\pi^2r_n^2$. Divide by $4\pi^2 r_n$:
+
+$$
+r_n = \frac{n^2h^2\varepsilon_0}{\pi me^2}, \qquad a_0 = r_1 = \frac{h^2\varepsilon_0}{\pi me^2} = \frac{4\pi\varepsilon_0\hbar^2}{me^2} = 5.292\times10^{-11}\ \text{m}, \qquad r_n = n^2a_0 \tag{4.13, 4.14}
+$$
+
+a₀ is the **Bohr radius**.
+
+**Same thing as Bohr's postulate.** $n\lambda = 2\pi r$ with λ = h/mv is $mvr = nh/2\pi = n\hbar$: angular momentum comes in units of ħ.
+
+**The slides' route (`QM.tex:234`), with K = 1/4πε₀.** Start from the two conditions
+
+$$
+mvr = n\hbar, \qquad mv^2 = \frac{Ke^2}{r}
+$$
+
+Divide the second by the first: $v = Ke^2/n\hbar$. Then $r = n\hbar/mv = (n\hbar)^2/mKe^2$. The energy is $E = \tfrac12 mv^2 - Ke^2/r = -\tfrac12 Ke^2/r$, so
+
+$$
+E_n = -\frac12\,Ke^2\cdot\frac{mKe^2}{n^2\hbar^2} = -\frac{mK^2e^4}{2\hbar^2}\,\frac{1}{n^2}
+$$
+
+The slide calls the constant $R = K^2me^4/2\hbar^2$; it equals 13.6 eV (an energy, the Rydberg energy, not the R in m⁻¹ above).
+
+**Orbital speed.** $v_n = Ke^2/n\hbar = \alpha c/n$, where $\alpha = Ke^2/\hbar c \approx 1/137$ is the fine-structure constant. v₁ = 2.19 × 10⁶ m/s ≈ c/137, so the non-relativistic treatment is consistent.
 
 ## 4.5 Energy levels and spectra
 
-$$
-E_n = -\frac{me^4}{8\varepsilon_0^2 h^2}\,\frac{1}{n^2} = \frac{E_1}{n^2}, \qquad E_1 = -13.6\ \text{eV}
-$$
-
-- **Ground state** n = 1. **Excited states** n = 2, 3, … Ionisation means taking the electron to n = ∞ (E = 0), which needs 13.6 eV from the ground state.
-- **Photon emitted** when the electron drops from n\_i to n\_f:
+**Energy levels.** Put $r_n$ into $E = -e^2/8\pi\varepsilon_0 r$:
 
 $$
-h\nu = E_i - E_f = -E_1\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right) \quad\Rightarrow\quad R = \frac{-E_1}{hc} = \frac{me^4}{8\varepsilon_0^2 ch^3}
+E_n = -\frac{me^4}{8\varepsilon_0^2h^2}\,\frac{1}{n^2} = \frac{E_1}{n^2}, \qquad E_1 = -2.18\times10^{-18}\ \text{J} = -13.6\ \text{eV} \tag{4.15}
 $$
 
-- This derives the Rydberg constant from h, m, e and ε₀, Bohr's great success.
-- **Hydrogen-like ions** (He⁺, Li²⁺) with nuclear charge Ze: Eₙ = −13.6 Z²/n² eV and rₙ = n²a₀/Z.
-- **Limits:** it works only for one-electron atoms. It can't give line intensities or fine structure, and it treats the electron as a particle on a definite orbit, which ch 6 replaces.
+| n | 1 | 2 | 3 | 4 | 5 | ∞ |
+| --- | --- | --- | --- | --- | --- | --- |
+| E\_n (eV) | −13.6 | −3.40 | −1.51 | −0.85 | −0.54 | 0 |
+
+- All levels are negative: the electron can't escape. It can have only these energies, like a person who can stand only on the rungs of a ladder.
+- n = 1 is the **ground state**; n = 2, 3, … are **excited states**. As n → ∞, E → 0 and the electron is free. E > 0 means a free electron with no quantum condition, not an atom.
+- **Ionisation energy** is the work to remove the electron from the ground state, −E₁ = 13.6 eV for hydrogen.
+
+**Example 4.2 (Beiser).** A collision raises hydrogen from n = 1 to n = 3: $\Delta E = E_1(1/3^2 - 1/1^2) = -13.6(1/9 - 1) = 12.1$ eV.
+
+**Example 4.3 (Beiser): Rydberg atoms.** An orbit of radius 0.0100 mm: $n = \sqrt{r_n/a_0} = \sqrt{1.00\times10^{-5}/5.29\times10^{-11}} = 435$, and $E = -13.6/435^2 = -7.19\times10^{-5}$ eV. So fragile that they exist naturally only in the near-vacuum of space; their spectra reach radio frequencies.
+
+**Origin of line spectra.** When the electron drops from a higher level n\_i to a lower level n\_f, the energy difference leaves as one photon:
+
+$$
+E_i - E_f = h\nu \tag{4.16}
+$$
+
+$$
+E_i - E_f = E_1\left(\frac{1}{n_i^2} - \frac{1}{n_f^2}\right) = -E_1\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right)
+$$
+
+Since E₁ < 0, −E₁ > 0 and
+
+$$
+\nu = -\frac{E_1}{h}\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right), \qquad \frac1\lambda = \frac{\nu}{c} = -\frac{E_1}{ch}\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right) \tag{4.17, 4.18}
+$$
+
+n\_f = 1, 2, 3, 4, 5 give the Lyman, Balmer, Paschen, Brackett and Pfund series, with n\_i > n\_f. The constant is
+
+$$
+-\frac{E_1}{ch} = \frac{me^4}{8\varepsilon_0^2ch^3} = \frac{(9.109\times10^{-31})(1.602\times10^{-19})^4}{8(8.854\times10^{-12})^2(2.998\times10^8)(6.626\times10^{-34})^3} = 1.097\times10^7\ \text{m}^{-1}
+$$
+
+which is **exactly the Rydberg constant**. Bohr derived R from m, e, h and ε₀, his great success. The slides (`QM.tex:234`): the model fits the Lyman, Balmer, Paschen and Pfund series.
+
+**Example 4.4 (Beiser).** The longest Balmer wavelength (Hα) is the smallest jump onto n = 2, from n = 3: $1/\lambda = R(1/4 - 1/9) = 0.139R$, so λ = 656 nm, near the red end.
+
+**Quantisation in the atomic world (box).** Energy levels are characteristic of all atoms, not just hydrogen: confinement restricts the wave function, which restricts the energy, as in the box (3.6). Matter, charge, light energy and the energies of bound systems all come in discrete amounts at the atomic scale.
+
+**Hydrogen-like ions** (one electron, nuclear charge Ze: He⁺, Li²⁺; replace e² by Ze² in the force): $r_n = n^2a_0/Z$ and $E_n = -13.6Z^2/n^2$ eV.
+
+**Limits of the Bohr model.** It works only for one-electron atoms; it can't give line intensities or fine structure; it puts the electron on a definite orbit, which ch 6 replaces with a probability cloud.
 
 ## 4.6 Correspondence principle
 
-At large n the levels get close together. The frequency of a photon from n → n − 1 approaches the classical orbital frequency f = v/2πr of the electron, which is the frequency classical radiation theory predicts. **Quantum physics must give classical results in the limit of large quantum numbers.** Bohr used this as a check on the model.
+**The principle.** Quantum physics must give the same results as classical physics where classical physics is known to work, that is, for large quantum numbers.
+
+**Classical prediction.** An electron on a circular orbit radiates at its frequency of revolution and at its harmonics (whole multiples). With v from (4.4):
+
+$$
+f = \frac{v}{2\pi r} = \frac{e}{2\pi r\sqrt{4\pi\varepsilon_0 m r}} = \frac{e}{2\pi\sqrt{4\pi\varepsilon_0 m r^3}}
+$$
+
+Put in $r_n = n^2h^2\varepsilon_0/\pi me^2$:
+
+$$
+f_n = \frac{me^4}{8\varepsilon_0^2h^3}\,\frac{2}{n^3} = -\frac{E_1}{h}\,\frac{2}{n^3} \tag{4.19}
+$$
+
+**Example 4.5 (Beiser).** f₁ = (2.18 × 10⁻¹⁸/6.63 × 10⁻³⁴)(2) = 6.58 × 10¹⁵ rev/s and f₂ = f₁/8 = 0.823 × 10¹⁵ rev/s. The 2 → 1 photon has $\nu = (-E_1/h)(1 - 1/4) = 2.47\times10^{15}$ Hz, between f₁ and f₂ but equal to neither. In 1.00 × 10⁻⁸ s (a typical excited-state lifetime) an n = 2 electron makes 8.23 × 10⁶ revolutions; the Earth takes 8.23 million years to orbit the Sun that many times.
+
+**Quantum prediction at large n.** Let the jump be from n to n − p (p = 1, 2, 3, …):
+
+$$
+\nu = -\frac{E_1}{h}\left[\frac{1}{(n-p)^2} - \frac{1}{n^2}\right] = -\frac{E_1}{h}\,\frac{2np - p^2}{n^2(n-p)^2}
+$$
+
+When n ≫ p, $2np - p^2 \approx 2np$ and $(n-p)^2 \approx n^2$:
+
+$$
+\nu \approx -\frac{E_1}{h}\,\frac{2p}{n^3} \tag{4.20}
+$$
+
+For p = 1 this is exactly the orbital frequency (4.19); p = 2, 3, … give the harmonics. Quantum and classical agree at large n. The discrepancy is almost 300% at n = 2 and only about 0.01% at n = 10,000. For an orbit 0.01 mm across (n = 435, Example 4.3) the atom should already behave classically.
+
+**Bohr used it in reverse.** Starting from (4.19) and demanding agreement at large n, he showed that stable orbits must have $mvr = nh/2\pi$ (4.21), which is the same as $n\lambda = 2\pi r$.
 
 ## 4.7 Nuclear motion
 
-The nucleus is not infinitely heavy. Electron and nucleus both orbit their centre of mass, which you handle (as in the two-body problem in chunk 4) by replacing m with the reduced mass:
+**Idea.** The nucleus is not fixed. Electron and nucleus both circle their common centre of mass, which is very close to the nucleus. The system is equivalent to a single particle of **reduced mass** m′ circling a fixed centre (the two-body reduction of chapter 4, Hamiltonian dynamics):
 
 $$
-m' = \frac{mM}{m+M}
+m' = \frac{mM}{m + M} \tag{4.22}
 $$
 
-- For hydrogen m′ = 0.99946 m, so energies change by about 0.05%. This shifts spectral lines slightly.
-- That small shift led to the discovery of **deuterium** (Urey, 1932): its lines sit slightly apart from hydrogen's because its nucleus is twice as heavy.
-- In **positronium** (e⁺ e⁻) m′ = m/2, so all energies are halved.
+**Corrected levels.** Replace m by m′ everywhere:
+
+$$
+E_n' = -\frac{m'e^4}{8\varepsilon_0^2h^2}\,\frac{1}{n^2} = \frac{m'}{m}\,\frac{E_1}{n^2}, \qquad \frac{m'}{m} = \frac{M}{M + m} = 0.99945 \text{ for hydrogen} \tag{4.23}
+$$
+
+- Every level is raised by 0.055% (less negative). This removes a small, definite discrepancy with measured wavelengths.
+- The Rydberg constant for an infinitely heavy nucleus is R∞ = 1.0973731 × 10⁷ m⁻¹; for hydrogen the correction lowers it to R\_H = 1.0967758 × 10⁷ m⁻¹.
+- **Deuterium.** Its nucleus (a proton and a neutron) is about twice as heavy, so m′ is slightly larger and all its lines are shifted to slightly *shorter* wavelengths. Deuterium Hα is at 656.1 nm against hydrogen's 656.3 nm. About one hydrogen atom in 6000 is deuterium; Urey identified it in 1932 from this shift.
+
+**Example 4.6 (Beiser): positronium.** An electron and a positron orbiting each other: m′ = m·m/2m = m/2. Energies are halved, the Rydberg constant is halved, and every wavelength is **twice** the corresponding hydrogen one.
+
+**Example 4.7 (Beiser): muonic hydrogen.** A negative muon (207 m\_e) captured by a proton (1836 m\_e): m′ = (207)(1836)/(2043) m\_e = 186 m\_e. Radius r₁ = a₀(m\_e/m′) = a₀/186 = 2.85 × 10⁻¹³ m, 186 times closer than an electron. Ionisation energy 186 × 13.6 eV = 2.53 keV.
 
 ## 4.8 Atomic excitation
 
-An atom can be raised to an excited state in two ways:
+**Two ways to excite an atom.**
 
-1. **Collisions** with electrons or other atoms (as in a gas discharge or a flame).
-2. **Absorbing a photon** of exactly the right energy, which is why absorption lines match emission lines.
+1. **Collision** with another particle, which gives up part of the pair's kinetic energy (Fig. 4.18). In a gas discharge an electric field accelerates electrons and ions until they excite the atoms they hit. Energy transfer is greatest between equal masses, so the light electrons are more effective than ions at transferring energy to atomic electrons. Neon signs glow red, mercury lamps blue; auroras are atoms excited by fast particles from the Sun (oxygen green, oxygen and nitrogen red).
+2. **Absorbing a photon** of exactly the right energy. Hydrogen dropping from n = 2 to n = 1 emits 121.7 nm (10.2 eV), so a ground-state atom absorbing 121.7 nm rises to n = 2 (Fig. 4.19). This is the origin of absorption spectra.
 
-The excited atom returns to lower levels in about 10⁻⁸ s, emitting photons.
+An excited atom returns to the ground state in about 10⁻⁸ s on average, emitting one or more photons.
 
-**Franck–Hertz experiment (1914).** Electrons are accelerated through mercury vapour toward a grid, with a small retarding voltage before the collector.
+**Why absorption lines aren't totally black (Fig. 4.20).** The excited atoms re-radiate almost at once, but in random directions, so few of those photons continue along the beam. The lines look dark only against the bright background. Absorption lines should match the emission lines of transitions that end on the ground state, and they do.
 
-- As the voltage rises, the current rises, then drops sharply at 4.9 V, then rises again and drops again at 9.8 V, 14.7 V, and so on.
-- **Reason:** an electron with 4.9 eV can give exactly that energy to a mercury atom (exciting its first level), and then lacks the energy to pass the retarding voltage. Below 4.9 eV the collisions are elastic.
-- The mercury glows with ultraviolet light at 253.6 nm, and hc/4.9 eV = 253 nm. **This shows directly that atoms have discrete energy levels**, independent of spectra.
+**Franck–Hertz experiment (1914; the slides `QM.tex:246` say 1913).** A second, independent way to see energy levels, by collisions.
 
-## 4.9 The laser
+- **Apparatus (Fig. 4.21).** Electrons from a hot filament are accelerated by a voltage V toward a grid through mercury vapour. A small retarding voltage V₀ between the grid and the collecting plate stops electrons with too little energy from reaching it.
+- **Elastic collisions.** If kinetic energy is conserved, the electron just bounces off. The atom is far heavier, so the electron loses almost nothing. As V rises, more electrons reach the plate and the current rises.
+- **Critical potential.** At 4.9 V the current drops sharply (Fig. 4.22). An electron with 4.9 eV can now give up its energy in an **inelastic** collision, raising a mercury atom to its first excited state, and then can't pass the retarding voltage.
+- **More dips.** Raising V further, the current rises again (electrons have energy to spare after one inelastic collision), then drops again near 9.8 V, 14.7 V, …, multiples of 4.9 V, from two, three, … inelastic collisions.
+- **Check with light.** The bombarded vapour emits the 253.6 nm mercury line, and hc/253.6 nm = 4.9 eV. Collision energies and spectral lines give the same levels.
+- **Meaning.** Atomic energy levels really exist and are discrete, independent of spectra. Done right after Bohr's theory, it confirmed his basic ideas.
 
-**LASER** = Light Amplification by Stimulated Emission of Radiation.
+## 4.9 The laser (not in the course)
 
-| Process | What happens |
-| --- | --- |
-| Induced absorption | A photon hν raises an atom from E₁ to E₂ |
-| Spontaneous emission | An excited atom drops by itself at a random time and in a random direction |
-| Stimulated emission | A passing photon hν makes an excited atom emit a second photon with the same frequency, phase, direction and polarisation |
-
-- Einstein (1917) showed the stimulated emission rate equals the absorption rate per atom. Normally most atoms are in lower states, so absorption wins.
-- **Population inversion:** more atoms in the upper state than the lower. Then stimulated emission wins and light is amplified.
-- **Metastable state:** a level that lives much longer than usual (about 10⁻³ s instead of 10⁻⁸ s), so atoms can pile up in it.
-- **Three-level laser** (e.g. ruby): pump atoms to a high level, they drop quickly to a metastable level, and the laser transition is from there to the ground state. More than half the atoms must leave the ground state, which is hard.
-- **Four-level laser** (e.g. helium–neon): the laser transition ends on a level above the ground state that empties quickly, so inversion is easy and the laser can run continuously.
-- **The cavity:** mirrors at both ends bounce photons back and forth so stimulated emission builds up. One mirror lets a little light out as the beam.
-- **Properties:** monochromatic, coherent, highly directional, intense.
+The course drops lasers, so this is a reminder only, not exam material. **LASER** = light amplification by stimulated emission of radiation. Three processes: induced absorption, spontaneous emission (random time and direction), and stimulated emission (a passing photon of energy hν makes an excited atom emit an identical photon: same frequency, phase, direction, polarisation). Amplification needs a **population inversion** (more atoms in the upper level than the lower), made possible by a **metastable** level that lives about 10⁻³ s instead of 10⁻⁸ s. Three-level lasers (ruby) must empty more than half the ground state; four-level lasers (helium–neon) end on a quickly emptied level, so inversion is easy. Mirrors at the ends make a resonant cavity; the beam is monochromatic, coherent, directional and intense.
 
 ## What to be able to do without notes
 
-- Explain why the planetary atom fails and how the de Broglie condition fixes it.
-- Derive rₙ = n²a₀ and Eₙ = −13.6/n² eV, and the Rydberg formula from Eₙ.
-- Name the series and their regions; compute a transition wavelength.
-- State the correspondence principle with an example.
-- Explain the reduced-mass correction and how it found deuterium.
-- Describe Franck–Hertz and what the 4.9 V dips mean.
-- Explain stimulated emission, population inversion, metastable states, and 3- vs 4-level lasers.
+- Describe Thomson's model, the Geiger–Marsden experiment and Rutherford's conclusion (no scattering formula).
+- Derive v(r) and E = −e²/8πε₀r for a classical orbit, and explain why the planetary model fails.
+- Name the hydrogen series, their n\_f and regions, and compute a line or a series limit.
+- Show the ground-state orbit is one de Broglie wavelength, derive $r_n = n^2a_0$ by both routes (standing waves, or mvr = nħ), and derive $E_n = -13.6/n^2$ eV.
+- Derive the Rydberg formula and show the constant equals R.
+- Derive the orbital frequency $f_n$ and show $\nu \to f_n$ for n → n − 1 at large n (correspondence principle).
+- Use the reduced mass for hydrogen, deuterium, positronium and muonic atoms.
+- Explain the two ways to excite an atom and describe Franck–Hertz and what the 4.9 V dips and the 253.6 nm line mean.
+
+# Coverage: Atomic structure
+
+Every section and example of Beiser ch 4 and the slide frames on the old quantum theory (`QM.tex:224` to `:257`). "HW practice" means *HW practice: Beiser chapters 4 to 6*.
+
+## Beiser ch 4
+
+| Beiser | Topic | Where on the site |
+| --- | --- | --- |
+| 4.1 | The nuclear atom, Geiger–Marsden | Reference 4.1 |
+| Appendix to ch 4 | Rutherford scattering formula | Not in the course (named only, in Reference 4.1) |
+| 4.2 | Electron orbits, r and E of a classical orbit, why it fails | Reference 4.2 (collapse time about 10⁻¹¹ s) |
+| Ex 4.1 | Orbital radius and speed from E = −13.6 eV | Reference 4.2; HW practice |
+| 4.3 | Atomic spectra, the series | Reference 4.3 (series table with limits) |
+| 4.4 | The Bohr atom, nλ = 2πr, r\_n, a₀ | Reference 4.4 (both Beiser's and the slides' derivations) |
+| 4.5 | Energy levels and spectra, Rydberg constant | Reference 4.5 |
+| Ex 4.2, 4.3, 4.4 | Collision exciting to n = 3; orbit of radius 0.0100 mm; Hα wavelength | Reference 4.5; HW practice |
+| 4.6 | Correspondence principle | Reference 4.6 (derivation of f\_n) |
+| Ex 4.5 | Orbital frequency against photon frequency | Reference 4.6; HW practice |
+| 4.7 | Nuclear motion, reduced mass | Reference 4.7 |
+| Ex 4.6, 4.7 | Positronium; muonic atom | Reference 4.7; HW practice |
+| 4.8 | Atomic excitation, Franck–Hertz | Reference 4.8 |
+| 4.9 | The laser | Not in the course (short reminder only) |
+
+## Slides
+
+| Frame (`QM.tex`) | Where on the site |
+| --- | --- |
+| `:224` Old quantum theory | Reference 4.3, 4.4 |
+| `:234` Bohr | Reference 4.4, 4.5 (the slides' kinetic-energy route is written out) |
+| `:246` Franck–Hertz | Reference 4.8 (slides date it 1913, Beiser 1914) |
 
 # Formulas: Atomic structure
 
@@ -604,11 +772,13 @@ Deuterium (heavier nucleus, larger $m'$) has the **shorter** wavelength. This is
 
 ### Problem 29 [QM 3 · Discussion · 3 pts]
 
-Estimate how long a classical electron in a Bohr orbit would take to spiral into the nucleus, and why that is a problem. (Order of magnitude only: Beiser quotes about 10⁻⁸ s.)
+Estimate how long a classical electron in a Bohr orbit would take to spiral into the nucleus, and why that is a problem. (Order of magnitude only: Beiser just says "a fraction of a second"; the classical radiation formula gives about 10⁻¹¹ s.)
 
-*Solution.* **The problem.** The orbiting electron accelerates, so it radiates. Beiser's estimate is that it would lose its energy and spiral into the nucleus in
+*Solution.* **The problem.** The orbiting electron accelerates, so it radiates. The classical radiation (Larmor) formula says it would lose its energy and spiral into the nucleus in
 
-$$t \sim 10^{-8}\ \text{s}$$
+$$t \sim 10^{-11}\ \text{s}$$
+
+(Beiser only says "a fraction of a second"; don't confuse this with the 10⁻⁸ s lifetime of an excited state.)
 
 **Why that matters.** Real atoms last for billions of years and emit **sharp lines**, not a continuous spectrum. So classical electromagnetism plus Rutherford's atom is inconsistent with observation.
 
