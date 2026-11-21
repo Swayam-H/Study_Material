@@ -44,118 +44,376 @@ Not every pair of levels is connected by such a transition. The rate depends on 
 
 # Reference: Quantum theory of the hydrogen atom
 
-The course material section by section, in the order of the textbook, with the key formulas.
+Beiser 6.1 to 6.9 section by section, with the slides (`QM.tex:444` to `:533`) mapped in, then short notes on the slides that go beyond hydrogen (`QM.tex:534` to `:579`). Your professor wants understanding rather than derivations for this chapter: the steps are written out so each result makes sense, not because you must reproduce them. Beiser's in-chapter examples are summarised with their answers; full worked versions are in *HW practice: Beiser chapters 4 to 6*.
 
 ## 6.1 Schrödinger's equation for the hydrogen atom
 
-- The potential is U(r) = −e²/(4πε₀r). It depends only on r, the distance from the nucleus: it is **spherically symmetric**.
-- So use spherical polar coordinates (r, θ, φ), with x = r sinθ cosφ, y = r sinθ sinφ, z = r cosθ.
-- The time-independent 3-D equation is −(ħ²/2m)∇²ψ + U(r)ψ = Eψ, with the Laplacian written in spherical coordinates. You don't need to write it out.
-- Use the reduced mass m′ if you want the 0.05% correction (chunk 10, 4.7).
+**Why a full treatment.** Bohr's model got hydrogen's energy levels right by postulating circular orbits and L = nħ. It could not explain multi-electron atoms, line intensities, or why the postulates hold. Schrödinger's equation gives all of it with no extra assumptions, and its results differ from Bohr's in important ways (angular momentum, no orbits).
+
+**Setup.** A proton of charge +e and an electron of charge −e. The proton is 1836 times heavier, so take it as fixed and let the electron move; the small correction is made by using the reduced mass m′ in place of m (4.7). The 3-D steady-state equation (5.33) is
+
+$$
+\frac{\partial^2\psi}{\partial x^2} + \frac{\partial^2\psi}{\partial y^2} + \frac{\partial^2\psi}{\partial z^2} + \frac{2m}{\hbar^2}(E - U)\psi = 0 \tag{6.1}
+$$
+
+with the Coulomb potential energy
+
+$$
+U = -\frac{e^2}{4\pi\varepsilon_0 r} \tag{6.2}
+$$
+
+**Why spherical coordinates.** U depends on r alone, not on x, y, z separately. Writing $r = \sqrt{x^2 + y^2 + z^2}$ into (6.1) gives a mess; instead rewrite the equation in spherical polar coordinates (Fig. 6.1):
+
+$$
+x = r\sin\theta\cos\phi, \qquad y = r\sin\theta\sin\phi, \qquad z = r\cos\theta
+$$
+
+- r: length of the radius vector from the nucleus to the electron.
+- θ (zenith or polar angle): angle between the radius vector and the +z axis, 0 to π.
+- φ (azimuth): angle between the projection of the radius vector on the xy plane and the +x axis, 0 to 2π.
+
+In these coordinates (Beiser 6.3, 6.4; slides `QM.tex:444`):
+
+$$
+\frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2\frac{\partial\psi}{\partial r}\right) + \frac{1}{r^2\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta\frac{\partial\psi}{\partial\theta}\right) + \frac{1}{r^2\sin^2\theta}\frac{\partial^2\psi}{\partial\phi^2} + \frac{2m}{\hbar^2}\left(E + \frac{e^2}{4\pi\varepsilon_0r}\right)\psi = 0
+$$
+
+Multiplying by r² sin²θ gives Beiser's form (6.4), ready for separation. You don't need to derive the spherical Laplacian.
+
+**Why three quantum numbers.** As in the 3-D box (5.8), a problem in three dimensions has three boundary conditions, one per coordinate, and each one produces a quantum number. In hydrogen they are n, l and mₗ.
 
 ## 6.2 Separation of variables
 
-**Idea.** Look for solutions that are a product of three one-variable functions:
+**The idea (slides `QM.tex:461`).** Look for a solution that is a product of three one-variable functions:
 
 $$
-\psi(r,\theta,\phi) = R(r)\,\Theta(\theta)\,\Phi(\phi)
+\psi(r, \theta, \phi) = R(r)\,\Theta(\theta)\,\Phi(\phi) \tag{6.5}
 $$
 
-Substituting splits the equation into three ordinary equations, one per variable, linked by separation constants. Those constants become the quantum numbers:
+R says how ψ changes along a radius at fixed θ, φ; Θ how it changes with zenith angle along a meridian; Φ how it changes with azimuth along a parallel of latitude.
 
-| Equation | Its condition | Quantum number |
-| --- | --- | --- |
-| Φ(φ) | Φ must be single-valued: Φ(φ + 2π) = Φ(φ), so Φ = e^(imₗφ) | mₗ (an integer) |
-| Θ(θ) | Θ must be finite at θ = 0 and π | l, with |
-| R(r) | R must go to 0 as r → ∞ (bound state) | n, with l < n |
+**The steps.**
 
-**The point:** quantum numbers arise from the requirement that ψ be well behaved in each direction, exactly as n did in the 1-D box. Three dimensions give three quantum numbers.
+1. Since $\partial\psi/\partial r = \Theta\Phi\,dR/dr$, $\partial\psi/\partial\theta = R\Phi\,d\Theta/d\theta$ and $\partial^2\psi/\partial\phi^2 = R\Theta\,d^2\Phi/d\phi^2$, the partial derivatives become ordinary ones. Substitute into (6.4) and divide by RΘΦ (6.6).
+2. The φ term, $(1/\Phi)\,d^2\Phi/d\phi^2$, is a function of φ only, while everything else depends only on r and θ. Move it to one side (6.7). A function of φ can equal a function of r and θ for all values only if both are the same constant. Call it $-m_l^2$ (6.8).
+3. Substitute $m_l^2$, divide by sin²θ and regroup: now one side depends only on r, the other only on θ (6.9). Again both must equal a constant. Call it $l(l+1)$ (6.10, 6.11).
+
+**The three equations** (Beiser 6.12 to 6.14):
+
+$$
+\frac{d^2\Phi}{d\phi^2} + m_l^2\Phi = 0 \qquad \text{(equation for Φ)}
+$$
+
+$$
+\frac{1}{\sin\theta}\frac{d}{d\theta}\left(\sin\theta\frac{d\Theta}{d\theta}\right) + \left[l(l+1) - \frac{m_l^2}{\sin^2\theta}\right]\Theta = 0 \qquad \text{(equation for Θ)}
+$$
+
+$$
+\frac{1}{r^2}\frac{d}{dr}\left(r^2\frac{dR}{dr}\right) + \left[\frac{2m}{\hbar^2}\left(E + \frac{e^2}{4\pi\varepsilon_0r}\right) - \frac{l(l+1)}{r^2}\right]R = 0 \qquad \text{(equation for R)}
+$$
+
+Each is an ordinary differential equation in one variable. The fact that the split works at all shows the product assumption (6.5) is valid.
 
 ## 6.3 Quantum numbers
 
-| Name | Symbol | Allowed values | Fixes |
-| --- | --- | --- | --- |
-| Principal | n | 1, 2, 3, … | Energy |
-| Orbital | l | 0, 1, …, n − 1 | Size of angular momentum L |
-| Magnetic | mₗ | −l, …, 0, …, +l | z-component of L |
-
-- For each l there are 2l + 1 values of mₗ. For each n there are Σ(2l + 1) = **n² states** with the same energy (2n² counting spin, which comes in ch 7).
-- Example: n = 2 has l = 0 (mₗ = 0) and l = 1 (mₗ = −1, 0, +1), so 4 states.
-
-## 6.4 Principal quantum number: quantisation of energy
+**Φ: the magnetic quantum number.** The Φ equation is solved by
 
 $$
-E_n = -\frac{m e^4}{32\pi^2\varepsilon_0^2\hbar^2}\,\frac{1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}
+\Phi(\phi) = Ae^{im_l\phi} \tag{6.15}
 $$
 
-- Exactly Bohr's result, but now it comes from the wave equation without ad hoc orbits.
-- Energy depends **only on n**, not on l or mₗ. States with the same n and different l or mₗ are **degenerate**. This is special to the 1/r potential (in other atoms the l-degeneracy is lifted).
-- Only E < 0 gives quantised bound states. For E > 0 the electron is free and any energy is allowed.
+φ and φ + 2π are the same meridian, so ψ must be single-valued: $\Phi(\phi) = \Phi(\phi + 2\pi)$, that is $e^{im_l\phi} = e^{im_l(\phi + 2\pi)}$, so $e^{2\pi im_l} = 1$. Since $e^{2\pi im_l} = \cos 2\pi m_l + i\sin 2\pi m_l$, this holds only when mₗ = 0 or a positive or negative whole number. mₗ is the **magnetic quantum number**.
 
-## 6.5 Orbital quantum number: quantisation of angular momentum magnitude
+**Θ: the orbital quantum number.** The Θ equation has finite solutions at θ = 0 and π only when l is a whole number with $l \ge \lvert m_l\rvert$. Equivalently, mₗ can only be 0, ±1, …, ±l. l is the **orbital quantum number**.
 
-$$
-L = \sqrt{l(l+1)}\;\hbar
-$$
-
-- Note it is √(l(l+1))ħ, not lħ as in Bohr's model. For l = 0 (s states), **L = 0**: the electron has no orbital angular momentum, which no classical orbit can do.
-- The kinetic energy splits into a radial part and an orbital part L²/(2mr²). Because L is fixed, the orbital part enters the radial equation like a centrifugal barrier (compare the effective potential in chunk 4).
-- **Letter notation:** l = 0, 1, 2, 3, 4 → s, p, d, f, g. A state is written n then letter: 1s, 2s, 2p, 3d.
-
-## 6.6 Magnetic quantum number: quantisation of angular momentum direction
+**R: the principal quantum number.** The R equation has solutions that vanish as r → ∞ (needed for normalisation, so a bound electron) only for
 
 $$
-L_z = m_l\,\hbar
+E_n = -\frac{me^4}{32\pi^2\varepsilon_0^2\hbar^2}\left(\frac{1}{n^2}\right) = \frac{E_1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}, \qquad n = 1, 2, 3, \dots \tag{6.16}
 $$
 
-- The z-axis is any direction you choose, typically along an applied magnetic field (hence "magnetic").
-- **Space quantisation:** the vector L can only point at angles where cosθ = mₗ/√(l(l+1)). For l = 2, L = √6 ħ and L\_z = −2ħ … +2ħ, giving 5 allowed orientations.
-- L can never point exactly along z, because |mₗ| ≤ l < √(l(l+1)). If it did, L\_x and L\_y would both be exactly zero, and the uncertainty principle forbids knowing all three components. Only L and L\_z are definite; L\_x and L\_y are not.
-- The magnetic moment of the orbit is proportional to L, so its energy in a field B depends on mₗ. That is the Zeeman effect (6.10, not in your syllabus).
+exactly Bohr's levels (4.15). The equation also requires $n \ge l + 1$. n is the **principal quantum number**. (Positive energies, unbound electrons, are not quantised, as in Bohr's theory.)
+
+**Summary of the three** (slides `QM.tex:468`):
+
+$$
+n = 1, 2, 3, \dots; \qquad l = 0, 1, 2, \dots, (n - 1); \qquad m_l = 0, \pm1, \pm2, \dots, \pm l \tag{6.17}
+$$
+
+**Counting states.** For each l there are 2l + 1 values of mₗ, so for each n there are $\sum_{l=0}^{n-1}(2l + 1) = n^2$ states, all with the same energy (degenerate). n = 1: 1 state; n = 2: 4; n = 3: 9 (doubled when spin is counted, ch 7).
+
+**The wave function.** With the three quantum numbers,
+
+$$
+\psi = R_{nl}\,\Theta_{lm_l}\,\Phi_{m_l} \tag{6.18}
+$$
+
+R depends on n and l, Θ on l and mₗ, Φ on mₗ.
+
+**Table 6.1 (part): normalised hydrogen wave functions** (a₀ = 4πε₀ħ²/me² = 5.29 × 10⁻¹¹ m)
+
+| n | l | mₗ | Φ(φ) | Θ(θ) | R(r) |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 0 | 0 | $1/\sqrt{2\pi}$ | $1/\sqrt2$ | $\dfrac{2}{a_0^{3/2}}e^{-r/a_0}$ |
+| 2 | 0 | 0 | $1/\sqrt{2\pi}$ | $1/\sqrt2$ | $\dfrac{1}{2\sqrt2\,a_0^{3/2}}\left(2 - \dfrac r{a_0}\right)e^{-r/2a_0}$ |
+| 2 | 1 | 0 | $1/\sqrt{2\pi}$ | $\dfrac{\sqrt6}{2}\cos\theta$ | $\dfrac{1}{2\sqrt6\,a_0^{3/2}}\dfrac r{a_0}e^{-r/2a_0}$ |
+| 2 | 1 | ±1 | $\dfrac{1}{\sqrt{2\pi}}e^{\pm i\phi}$ | $\dfrac{\sqrt3}{2}\sin\theta$ | $\dfrac{1}{2\sqrt6\,a_0^{3/2}}\dfrac r{a_0}e^{-r/2a_0}$ |
+
+(Beiser's table continues to n = 3. R has n − l − 1 radial nodes: 2s has one, at r = 2a₀.)
+
+**Example 6.1 (Beiser): check R₁₀ against the R equation.** With $R = (2/a_0^{3/2})e^{-r/a_0}$, $dR/dr = -(2/a_0^{5/2})e^{-r/a_0}$ and $\frac{1}{r^2}\frac{d}{dr}\left(r^2\frac{dR}{dr}\right) = \frac{2}{a_0^{5/2}}\left(\frac{1}{a_0} - \frac2r\right)e^{-r/a_0}$. Substitute with l = 0 and E = E₁: the equation splits into a constant part and a 1/r part, each of which must vanish separately. The 1/r part gives $a_0 = 4\pi\varepsilon_0\hbar^2/me^2$ (Bohr's radius) and the constant part gives $E_1 = -\hbar^2/2ma_0^2 = -me^4/32\pi^2\varepsilon_0^2\hbar^2$, agreeing with (6.16).
+
+## 6.4 Principal quantum number
+
+**Where it comes from.** Quantisation of energy comes from the R equation, and so from the boundary condition on the electron's radial motion: a bound electron's R must vanish far away. The same thing happens to a particle trapped in a box.
+
+**Meaning.** The negative energy shows the electron is bound: it needs at least |Eₙ| to be freed. E depends on n alone (the degeneracy above is special to the 1/r potential). Planetary motion is also quantised, but n is so large (about 10⁷⁴ for the Earth) that the levels form a continuum.
+
+## 6.5 Orbital quantum number
+
+**The puzzle.** The R equation is about radial motion (toward or away from the nucleus), yet it contains the total energy E, which includes the kinetic energy of motion *around* the nucleus.
+
+**The resolution.** Split the kinetic energy: $E = KE_\text{radial} + KE_\text{orbital} - e^2/4\pi\varepsilon_0r$. Put this into the R equation:
+
+$$
+\frac{1}{r^2}\frac{d}{dr}\left(r^2\frac{dR}{dr}\right) + \frac{2m}{\hbar^2}\left[KE_\text{radial} + KE_\text{orbital} - \frac{\hbar^2l(l+1)}{2mr^2}\right]R = 0 \tag{6.19}
+$$
+
+For this to be an equation in the radial motion alone, the last two terms in the bracket must cancel:
+
+$$
+KE_\text{orbital} = \frac{\hbar^2l(l+1)}{2mr^2} \tag{6.20}
+$$
+
+Classically $KE_\text{orbital} = \tfrac12mv_\text{orbital}^2$ and $L = mv_\text{orbital}r$, so $KE_\text{orbital} = L^2/2mr^2$. Comparing,
+
+$$
+L = \sqrt{l(l+1)}\,\hbar, \qquad l = 0, 1, 2, \dots, (n - 1) \tag{6.21}
+$$
+
+Angular momentum, like energy, is conserved and quantised, with natural unit ħ = h/2π = 1.054 × 10⁻³⁴ J·s. (Slides `QM.tex:499`: $\hat L^2Y = \hbar^2l(l+1)Y$, the eigenvalue form.)
+
+**Not Bohr's L = nħ.** The lowest state has l = 0, so L = 0, which no circular orbit allows. For any n, L is less than nħ.
+
+**Too small to notice for big objects.** For l = 2, $L = \sqrt6\,\hbar = 2.6 \times 10^{-34}$ J·s; the Earth's orbital angular momentum is 2.7 × 10⁴⁰ J·s.
+
+**Letters for l.** From the old names of spectral series (sharp, principal, diffuse, fundamental), then alphabetical:
+
+| l | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Letter | s | p | d | f | g | h | i |
+
+A state is named by n then the letter: n = 2, l = 0 is 2s; n = 4, l = 2 is 4d.
+
+**Table 6.2: atomic electron states**
+
+| | l = 0 | l = 1 | l = 2 | l = 3 | l = 4 | l = 5 |
+| --- | --- | --- | --- | --- | --- | --- |
+| n = 1 | 1s | | | | | |
+| n = 2 | 2s | 2p | | | | |
+| n = 3 | 3s | 3p | 3d | | | |
+| n = 4 | 4s | 4p | 4d | 4f | | |
+| n = 5 | 5s | 5p | 5d | 5f | 5g | |
+| n = 6 | 6s | 6p | 6d | 6f | 6g | 6h |
+
+## 6.6 Magnetic quantum number
+
+**Direction is quantised too.** l fixes the magnitude of **L**; mₗ fixes its direction. An orbiting electron is a current loop with a magnetic moment, so its energy in a magnetic field **B** depends on the angle between **L** and **B**, which is where the name comes from. Take B along z. Then
+
+$$
+L_z = m_l\hbar, \qquad m_l = 0, \pm1, \pm2, \dots, \pm l \tag{6.22}
+$$
+
+so **L** can have only 2l + 1 orientations: **space quantisation** (Fig. 6.4). For l = 2, $L = \sqrt6\,\hbar$ and $L_z$ = 2ħ, ħ, 0, −ħ, −2ħ, five orientations at angles given by $\cos\theta = m_l/\sqrt{l(l+1)}$.
+
+- **L** can never point exactly along B, because the largest Lz, lħ, is less than $\sqrt{l(l+1)}\,\hbar$.
+- With no field the z axis is arbitrary: the component of **L** along *any* chosen direction is mₗħ. A field (or something like the axis of an H₂ molecule) just makes one direction experimentally meaningful.
+
+**Why only one component (uncertainty).** If **L** had a fixed direction, all of Lx, Ly, Lz would be definite and the electron would stay in one plane. For example, **L** along z means the electron is always in the xy plane, so its z coordinate is exactly known (Δz = 0), and then Δpz would have to be infinite, impossible for a bound electron. In reality only L and Lz are definite and L > |Lz|, so the electron is not confined to a plane (Fig. 6.5).
+
+**Precession.** **L** lies somewhere on a cone about the z axis with fixed projection mₗħ; you can picture it as precessing (Fig. 6.6). So ⟨Lx⟩ = ⟨Ly⟩ = 0 while Lz = mₗħ exactly.
+
+**Slides (`QM.tex:499`).** $\hat L_zY = m\hbar Y$, with L² and Lz simultaneously definite; the vector-model figure shows the cones.
 
 ## 6.7 Electron probability density
 
-- **No definite orbit.** The electron is found at a given place with probability |ψ|² dV = |R|²|Θ|²|Φ|² dV. It can be found anywhere, but some regions are much more likely.
-- |Φ|² = constant: the density is always **symmetric about the z-axis**.
-- **Radial probability:** the chance of finding the electron between r and r + dr, in a thin spherical shell of volume 4πr² dr:
+**Two changes to Bohr's picture.** Bohr has the electron always at r = n²a₀ in the equatorial plane (θ = 90°), going round in φ. Quantum mechanics says: (1) no definite r, θ or φ can be given, only probabilities, a consequence of the electron's wave nature; (2) the electron does not move around the nucleus in any conventional sense, since |ψ|² is independent of time.
+
+**The density.**
 
 $$
-P(r)\,dr = r^2\,|R(r)|^2\,dr
+|\psi|^2 = |R|^2|\Theta|^2|\Phi|^2 \tag{6.23}
 $$
 
-- For the 1s state, R ∝ e^(−r/a₀), so P(r) ∝ r²e^(−2r/a₀). Setting dP/dr = 0 gives the **most probable radius r = a₀**, Bohr's radius. Bohr's orbit survives as the most likely distance, not as a path.
-- ⟨r⟩ for 1s is 1.5a₀, a bit larger than the most probable r because the tail is long.
-- For other states, the most probable radius for the largest-l state (l = n − 1) is n²a₀, again matching Bohr's rₙ.
-- **Shapes:** s states (l = 0) are spherically symmetric. p states have two lobes (dumbbell) along an axis. d states have more lobes. The number of radial nodes is n − l − 1.
-- Chemistry follows from these shapes (bond directions, covalent bonding, the slides' last frames).
+- **Φ part.** $|\Phi|^2 = \Phi^*\Phi = A^2e^{-im_l\phi}e^{im_l\phi} = A^2$, a constant. The density is the same at every azimuth: **symmetric about the z axis** in every state.
+- **R part (Fig. 6.10).** R is largest at r = 0 for s states, and zero at the nucleus for l > 0.
+- **Θ part.** For s states (l = mₗ = 0), |Θ|² = ½, a constant, so with |Φ|² constant the density is **spherically symmetric**. Other states have angular lobes (Fig. 6.12), which matter in chemistry because they decide how neighbouring atoms bond. Since |ψ|² doesn't depend on φ, rotating a 2-D section about the z axis gives the 3-D picture.
+
+**Probability at a distance r.** The volume element in spherical coordinates (Fig. 6.9) is
+
+$$
+dV = r^2\sin\theta\,dr\,d\theta\,d\phi \tag{6.24}
+$$
+
+Θ and Φ are normalised, so integrating over all angles leaves the probability of finding the electron between r and r + dr:
+
+$$
+P(r)\,dr = r^2|R|^2\,dr \tag{6.25}
+$$
+
+The r² is the area factor of a thin spherical shell (4πr² dr, with the 4π absorbed by the normalised angular parts). P(r) is plotted in Fig. 6.11; slides `QM.tex:480`.
+
+- **1s.** $P(r) \propto r^2e^{-2r/a_0}$. Setting dP/dr = 0: $2r - 2r^2/a_0 = 0$, so the **most probable r is a₀**, the Bohr radius. But the electron can be found anywhere from 0 to ∞, and **⟨r⟩ = 1.5a₀**.
+- **Why the energy still matches Bohr.** The energy depends on ⟨1/r⟩, not ⟨r⟩, and ⟨1/r⟩ = 1/a₀ exactly.
+- **Each level's most probable r grows with n**, in line with Bohr's r = n²a₀ for the states of largest l.
+- Radial nodes: n − l − 1 of them (2s has one; 2p none).
+
+**Example 6.2 (Beiser): ⟨1/r⟩ for 1s.** With $\psi = e^{-r/a_0}/\sqrt{\pi a_0^3}$ and dV from (6.24),
+
+$$
+\left\langle\frac1r\right\rangle = \frac{1}{\pi a_0^3}\int_0^\infty re^{-2r/a_0}dr\int_0^\pi\sin\theta\,d\theta\int_0^{2\pi}d\phi = \frac{1}{\pi a_0^3}\cdot\frac{a_0^2}{4}\cdot2\cdot2\pi = \frac1{a_0}
+$$
+
+**Example 6.3 (Beiser): a₀ against a₀/2.** $\dfrac{P_1}{P_2} = \dfrac{r_1^2e^{-2r_1/a_0}}{r_2^2e^{-2r_2/a_0}} = \dfrac{a_0^2e^{-2}}{(a_0/2)^2e^{-1}} = 4e^{-1} = 1.47$. The 1s electron is 47% more likely at a₀ than at a₀/2.
+
+**Where Bohr survives (slides `QM.tex:491`).** The 2p state with mₗ = ±1 looks like a doughnut in the equatorial plane, with its most probable distance **4a₀**, exactly Bohr's n = 2 radius. Likewise 3d with mₗ = ±2, 4f with mₗ = ±3, and so on: the states with the largest l for their n and **L** as close to the z axis as possible, so the density hugs the equatorial plane. Bohr's model gives the most probable location in one of the several states of each level.
 
 ## 6.8 Radiative transitions
 
-- In a stationary state, |Ψ|² doesn't change in time, so the charge distribution is static and **does not radiate**. That explains the stability Bohr had to assume.
-- During a transition the electron is in a **superposition** of the initial and final states: Ψ = aΨᵢ + bΨ\_f. The cross term makes |Ψ|² oscillate at frequency ν = (Eᵢ − E\_f)/h.
-- An oscillating charge distribution is an oscillating electric dipole, and it radiates at exactly that frequency. So the emitted photon has hν = Eᵢ − E\_f, now explained rather than postulated.
+**What Bohr had to postulate.** A drop from Em to En gives a photon of frequency $\nu = (E_m - E_n)/h$. Quantum mechanics produces this. For simplicity take motion in x only.
+
+**One stationary state doesn't radiate.** From 5.7, $\Psi_n = \psi_ne^{-(iE_n/\hbar)t}$ and $\Psi_n^* = \psi_n^*e^{+(iE_n/\hbar)t}$ (6.26). The expectation value of position is
+
+$$
+\langle x\rangle = \int_{-\infty}^{\infty}x\Psi_n^*\Psi_n\,dx = \int_{-\infty}^{\infty}x\psi_n^*\psi_n\,dx \tag{6.27}
+$$
+
+independent of time: the charge distribution stays still, so it does not radiate. (Bohr's orbiting electron should have radiated; this is the real explanation of why it doesn't.)
+
+**A mixture does.** During a transition the electron is in a superposition (slides `QM.tex:523`):
+
+$$
+\Psi = a\Psi_n + b\Psi_m \tag{6.28}
+$$
+
+where a*a is the probability of state n and b*b of state m, with a*a + b*b = 1. Initially a = 0, b = 1; finally a = 1, b = 0. In between,
+
+$$
+\langle x\rangle = \int x(a^*\Psi_n^* + b^*\Psi_m^*)(a\Psi_n + b\Psi_m)\,dx = a^2\int x\psi_n^*\psi_n\,dx + b^2\int x\psi_m^*\psi_m\,dx + (\text{cross terms}) \tag{6.29, 6.30}
+$$
+
+The first and last terms are constant. The cross terms carry the time dependence:
+
+$$
+b^*a\int x\psi_m^*\psi_n\,e^{(i/\hbar)(E_m - E_n)t}dx + a^*b\int x\psi_n^*\psi_m\,e^{-(i/\hbar)(E_m - E_n)t}dx
+$$
+
+Using $e^{\pm i\theta} = \cos\theta \pm i\sin\theta$ with $\theta = (E_m - E_n)t/\hbar$, these become a real combination of $\cos\left(\frac{E_m - E_n}{\hbar}t\right)$ and $\sin\left(\frac{E_m - E_n}{\hbar}t\right)$ (6.31). Since $\cos\left(\frac{E_m - E_n}{\hbar}t\right) = \cos 2\pi\nu t$ (6.32),
+
+$$
+\nu = \frac{E_m - E_n}{h} \tag{6.33}
+$$
+
+The electron's position oscillates at exactly this frequency, and an oscillating charge radiates at its own frequency: the result Bohr had to assume, with no special assumption. It is the interference term of 5.4 again.
+
+**Quantum electrodynamics (box).** The argument above mixes classical and quantum ideas. QED shows the radiation is a single photon, and explains *why* an excited atom decays "spontaneously": electric and magnetic fields fluctuate constantly even in empty space (vacuum fluctuations, analogous to an oscillator's zero-point motion), and these trigger emission. The fluctuations can be pictured as short-lived virtual photons allowed by ΔEΔt ≥ ħ/2. They cause the **Casimir effect** (1948): two parallel metal plates in vacuum are pushed together, because only certain wavelengths fit between them while all fit outside. The energy available is tiny, about 0.5 nJ per square metre of plate.
 
 ## 6.9 Selection rules
 
-- Not every pair of levels gives a line. The transition probability depends on the **dipole moment integral** ∫ψ\_f\* r ψᵢ dV between the two states. If it is zero, the transition is **forbidden** (very unlikely).
-- Evaluating the integrals gives the selection rules for allowed (electric dipole) transitions:
+**When is a transition allowed?** It needs ⟨x⟩ (in 3-D, ⟨u⟩ with u = x, y, z) to oscillate, which needs the cross integral to be nonzero:
 
 $$
-\Delta l = \pm 1, \qquad \Delta m_l = 0, \pm 1, \qquad \Delta n \text{ any}
+\int_{-\infty}^{\infty}x\psi_n^*\psi_m\,dx \ne 0 \tag{6.34}
 $$
 
-- **Physical reason for Δl = ±1:** a photon carries one unit (ħ) of angular momentum. Taking it away or adding it must change the atom's angular momentum by one unit.
-- Examples: 2p → 1s is allowed. 2s → 1s is forbidden (Δl = 0), so the 2s state is metastable and lives about 0.1 s instead of 10⁻⁸ s. 3d → 2p is allowed; 3d → 1s is not (Δl = 2).
-- In hydrogen, every line in the Lyman, Balmer and other series still appears, because states with the right l exist for each n (energy depends only on n). Selection rules matter more for which sublevels connect and for lifetimes.
+$$
+\text{Allowed transitions:}\quad \int u\,\psi_{n,l,m_l}^*\psi_{n',l',m_l'}\,dV \ne 0 \tag{6.35}
+$$
+
+If the integral is 0 for every u, the transition is **forbidden** (really just very unlikely). Working the integrals out for hydrogen's wave functions gives
+
+$$
+\Delta l = \pm1 \tag{6.36}
+$$
+
+$$
+\Delta m_l = 0, \pm1 \tag{6.37}
+$$
+
+and **no restriction on Δn** (slides `QM.tex:523`: the dipole integral ⟨Ψn|x|Ψm⟩ decides).
+
+- **Fig. 6.13**: the allowed transitions only join neighbouring columns (s ↔ p, p ↔ d, d ↔ f).
+- **Meaning of Δl = ±1.** The photon carries away angular momentum ħ, the difference between the atom's initial and final angular momenta. Classically, a circularly polarised em wave carries angular momentum too, so this isn't purely a quantum idea.
+- **2s is metastable.** 2s → 1s would need Δl = 0, so it is forbidden. A 2s atom in isolation lives a long time (it decays by a much slower two-photon process, or loses its energy in a collision).
+- **Line intensities.** How likely each allowed transition is (the size of the integral) sets how bright its spectral line is, which Bohr's theory couldn't predict.
+
+## 6.10 Zeeman effect (excluded by your professor, on the slides)
+
+Your professor's list stops at 6.9, but the slides have a frame on it (`QM.tex:511`), so here is the short version.
+
+- A circulating electron with angular momentum **L** has magnetic moment $\boldsymbol\mu = -(e/2m)\mathbf L$. In a field B along z, its energy is $U_m = -\mu_zB = m_l\left(\dfrac{e\hbar}{2m}\right)B = m_l\mu_BB$.
+- **Bohr magneton:** $\mu_B = e\hbar/2m = 9.274 \times 10^{-24}$ J/T $= 5.788 \times 10^{-5}$ eV/T.
+- So a field splits each level of given l into 2l + 1 sublevels spaced μ\_B B apart. With Δmₗ = 0, ±1, each line splits into three (the **normal Zeeman effect**), separated in frequency by $\Delta\nu = \pm eB/4\pi m$.
+- Most lines actually show the more complicated *anomalous* Zeeman effect, which needs electron spin (Beiser ch 7).
+
+## Beyond hydrogen: the slides' last frames
+
+These frames (`QM.tex:534` to `:579`) go past Beiser ch 6 into ch 7 and 8 material. They aren't on your professor's chapter list, so know the ideas, not details.
+
+- **Multi-electron atoms (`QM.tex:534`).** The Schrödinger equation can no longer be solved exactly because of electron–electron repulsion; it is solved numerically or approximately, each electron moving in the average field of the others.
+- **Exchange symmetry.** Identical particles can't be told apart, so |ψ|² must be unchanged when two are swapped. The wave function itself is either symmetric (+) or antisymmetric (−) under the swap. Electrons are antisymmetric (fermions).
+- **Spin.** The electron has an intrinsic angular momentum with quantum number s = ½ and $m_s = \pm\tfrac12$, so each state is fixed by four quantum numbers n, l, mₗ, mₛ.
+- **Pauli exclusion principle.** No two electrons in an atom can have the same set of four quantum numbers (it follows from antisymmetry: swapping two identical states would give ψ = −ψ = 0).
+- **Periodic table (`QM.tex:552`).** Fill states in order of energy, two electrons (mₛ = ±½) per orbital: shells (n) hold 2n² electrons and subshells (l) hold 2(2l + 1). Elements with the same outer configuration behave alike chemically.
+- **Spin–orbit coupling (`QM.tex:561`).** The electron's spin magnetic moment interacts with the magnetic field it sees from its orbital motion, splitting levels of l > 0 into two (fine structure; for example the sodium D lines).
+- **Energy ordering (`QM.tex:571`).** In many-electron atoms, inner electrons screen the nucleus, and the screening is weaker for low-l electrons that penetrate close to the nucleus. So states of the same n split by l, and the filling order is 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, … (4s before 3d).
+- **Covalent bond (`QM.tex:579`).** In H₂ the electrons' wave functions from the two atoms overlap. The symmetric spatial combination (spins opposite) piles up charge between the nuclei, attracting both and lowering the energy: a bound molecule. The antisymmetric one doesn't bond.
 
 ## What to be able to do without notes
 
-- Explain why spherical coordinates and separation of variables are used, and how each quantum number arises from a condition on ψ.
-- List n, l, mₗ with their ranges and meanings; count the states for a given n.
-- State Eₙ, L = √(l(l+1))ħ and L\_z = mₗħ, and explain space quantisation and why L can't lie along z.
-- Explain what P(r) is and show the 1s most probable radius is a₀.
-- Explain why stationary states don't radiate and transitions do.
-- State the selection rules and decide whether a given transition is allowed.
+- Explain why spherical coordinates are used and why three quantum numbers appear.
+- Describe the separation ψ = RΘΦ in words: which constant appears where (mₗ², l(l + 1), E).
+- Derive "mₗ is an integer" from single-valuedness of Φ, and state the ranges of n, l, mₗ; count n² states per level.
+- Explain L = √(l(l + 1))ħ from splitting the kinetic energy, and contrast with Bohr's L = nħ; name states (3d, 4f).
+- Explain space quantisation, Lz = mₗħ, why **L** can't lie along z (uncertainty), and the cone/precession picture.
+- Use P(r) = r²|R|² to find the most probable radius for 1s (a₀), compare probabilities at two radii, and say why 2p (mₗ = ±1) peaks at 4a₀.
+- Show why a stationary state doesn't radiate and a superposition radiates at (Em − En)/h.
+- State the selection rules Δl = ±1, Δmₗ = 0, ±1, explain them via the photon's angular momentum, and say why 2s is metastable.
+
+# Coverage: Quantum theory of the hydrogen atom
+
+Every section and example of Beiser 6.1 to 6.9, and every slide frame from the hydrogen atom to the end of the deck (`QM.tex:444` to `:579`). "HW practice" means *HW practice: Beiser chapters 4 to 6*.
+
+## Beiser ch 6
+
+| Beiser | Topic | Where on the site |
+| --- | --- | --- |
+| 6.1 | Schrödinger's equation in spherical coordinates | Reference 6.1 |
+| 6.2 | Separation of variables | Reference 6.2 (the three equations) |
+| 6.3 | Quantum numbers, Table 6.1 | Reference 6.3 |
+| Ex 6.1 | Check R₁₀ against the radial equation | Reference 6.3; HW practice |
+| 6.4 | Principal quantum number | Reference 6.4 |
+| 6.5 | Orbital quantum number, L = √(l(l + 1))ħ, Table 6.2 | Reference 6.5 |
+| 6.6 | Magnetic quantum number, space quantisation | Reference 6.6 |
+| 6.7 | Electron probability density | Reference 6.7 |
+| Ex 6.2, 6.3 | ⟨1/r⟩ for 1s; P(a₀)/P(a₀/2) | Reference 6.7; HW practice |
+| 6.8 | Radiative transitions, QED box | Reference 6.8 |
+| 6.9 | Selection rules | Reference 6.9 |
+| 6.10 | Zeeman effect | Excluded by your professor; short version in Reference 6.10 because the slides have it |
+| Ex 6.4 | Zeeman components of a 450 nm line in 0.300 T | HW practice (excluded topic) |
+
+## Slides
+
+| Frame (`QM.tex`) | Where on the site |
+| --- | --- |
+| `:444` H atom equation, `:461` separation | Reference 6.1, 6.2 |
+| `:468` quantum numbers | Reference 6.3 |
+| `:480`, `:491` radial and orbital figures | Reference 6.7; Learn "Probability density" figure |
+| `:499` orbital quantum numbers, L² and Lz | Reference 6.5, 6.6 |
+| `:511` Zeeman | Reference 6.10 |
+| `:523` transitions | Reference 6.8, 6.9 |
+| `:534` multi-electron atoms, spin, exclusion | Reference "Beyond hydrogen" |
+| `:552` periodic table, `:561` spin–orbit, `:571` level ordering, `:579` covalent bond | Reference "Beyond hydrogen" (ideas only; Beiser ch 7 and 8) |
 
 # Formulas: Quantum theory of the hydrogen atom
 

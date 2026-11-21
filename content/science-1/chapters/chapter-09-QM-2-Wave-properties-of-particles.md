@@ -38,106 +38,335 @@ A similar relation connects energy and time. To measure an energy to within ΔE 
 
 # Reference: Wave properties of particles
 
-The course material section by section, in the order of the textbook, with the key formulas.
+Beiser ch 3 section by section, with each derivation written out, the numbers worth knowing, and what the slides (`QM.tex:137` to `:223`) add. Beiser's in-chapter examples are summarised with their answers; full worked versions are in *HW practice: Beiser chapters 2 and 3*.
 
 ## 3.1 De Broglie waves
 
-**Idea.** If light (a wave) has momentum p = h/λ, de Broglie (1924) proposed the reverse: a particle with momentum p has a wavelength
+**Idea.** A photon of momentum p has wavelength λ = h/p (2.4). De Broglie (1924) proposed that the same relation holds for every moving body:
 
 $$
-\lambda = \frac{h}{p} = \frac{h}{\gamma m v} \;\approx\; \frac{h}{mv} \quad (v \ll c)
+\lambda = \frac{h}{p} = \frac{h}{\gamma m v}, \qquad \gamma = \frac{1}{\sqrt{1 - v^2/c^2}} \qquad (\gamma \approx 1 \text{ for } v \ll c)
 $$
 
-- **Electron accelerated through V volts** (non-relativistic): p = √(2meV), so λ = h/√(2meV) ≈ 1.226/√V nm. At 100 V, λ ≈ 0.12 nm, the size of atomic spacings.
-- **Everyday objects:** a 0.1 kg ball at 10 m/s has λ ≈ 7 × 10⁻³⁴ m. That is far smaller than anything it could diffract from, so no wave effects show.
-- Wave nature shows only when λ is comparable to the size of the obstacle or region.
+- The greater the momentum, the shorter the wavelength.
+- As with light, the wave and particle aspects are never seen at the same time. Which one shows depends on how λ compares with the size of the body and of whatever it meets.
+- De Broglie had no direct evidence, but he showed his waves explain Bohr's quantisation of hydrogen orbits (4.4). Electron diffraction confirmed the idea in 1927 (3.5).
+- **Slides (`QM.tex:137`).** Inspired by light's duality; Einstein strongly supported it; electrons diffract from crystals like x-rays and show double-slit fringes; Schrödinger then found the wave equation for these waves (1926), the quantum counterpart of F = ma.
+
+**Electron accelerated through V volts** (non-relativistic, KE = eV ≪ mc²):
+
+$$
+p = \sqrt{2m\,KE} = \sqrt{2meV}, \qquad \lambda = \frac{h}{\sqrt{2meV}} = \frac{6.626\times10^{-34}}{\sqrt{2(9.109\times10^{-31})(1.602\times10^{-19})}}\frac{1}{\sqrt V} \approx \frac{1.226}{\sqrt V}\ \text{nm}
+$$
+
+At 100 V, λ ≈ 0.12 nm, the size of atomic spacings. When KE is not small compared with mc², use $pc = \sqrt{KE^2 + 2KE\,mc^2}$ and λ = hc/pc.
+
+**Example 3.1 (Beiser).** A 46 g golf ball at 30 m/s: λ = 4.8 × 10⁻³⁴ m, far too small for any wave effect. An electron at 10⁷ m/s: λ = 7.3 × 10⁻¹¹ m, comparable to the hydrogen atom's radius of 5.3 × 10⁻¹¹ m. That is why the electron's wave nature is the key to atomic structure.
+
+**Example 3.2 (Beiser).** A proton with λ = 1.000 fm (about its own diameter). pc = hc/λ = 1.240 GeV, larger than its rest energy 0.938 GeV, so the calculation must be relativistic: $E = \sqrt{0.938^2 + 1.240^2}$ GeV = 1.555 GeV and KE = E − E₀ = 617 MeV.
+
+**Matter waves on the slides (`QM.tex:163`).** A 1 μg mass at 1 μm/s has p = 10⁻¹⁵ kg m/s and λ = 6.6 × 10⁻³⁴/10⁻¹⁵ ≈ 7 × 10⁻¹⁹ m (the slide rounds h to 10⁻³⁴ and prints 10⁻²⁰ m; either way it is absurdly small). Wave effects belong to the regime of small mass and momentum, though the slide notes that some macroscopic systems show them too.
 
 ## 3.2 Waves of what?
 
-- The wave function Ψ(x, t) is not a physical displacement. It is a probability amplitude and can be complex.
-- **Born interpretation:** |Ψ|² dx is the probability of finding the particle between x and x + dx. Large |Ψ|² means the particle is likely there; Ψ = 0 means it is never found there.
-- Because the particle must be somewhere, ∫|Ψ|² dx = 1 (normalisation).
+- In water waves the height varies, in sound the pressure, in light the fields. In matter waves the quantity that varies is the **wave function Ψ**. Its value at x, y, z, t is related to the likelihood of finding the body there then.
+- **Ψ itself has no direct physical meaning.** A probability must lie between 0 and 1, but a wave amplitude can be negative (or complex), and a negative probability means nothing.
+- **Born (1926):** the probability of finding the body at x, y, z at time t is proportional to |Ψ|² there. |Ψ|² is the **probability density**. For complex Ψ, $|\Psi|^2 = \Psi^*\Psi$.
+- Large |Ψ|² means the body is likely to be found; small means unlikely; as long as |Ψ|² is not exactly 0 somewhere, there is some chance of finding it there.
+- **The probability is spread out, the particle is not.** A detector finds a whole electron or none; there is no "20 percent of an electron", only a 20 percent chance.
+- For a large number of identical bodies with the same Ψ, the actual number per unit volume is proportional to |Ψ|², just as photon density is proportional to $\overline{E^2}$ for light (2.4).
+- W. L. Bragg's picture: "Everything in the future is a wave, everything in the past is a particle", with "now" being the moment of measurement.
+- How to calculate Ψ is the subject of ch 5.
 
 ## 3.3 Describing a wave
 
-A wave moving in +x with speed v\_p:
+**De Broglie phase velocity.** Use $v_p = \nu\lambda$. The wavelength is $\lambda = h/\gamma mv$. For the frequency, set the quantum energy equal to the relativistic total energy, $h\nu = \gamma mc^2$, so $\nu = \gamma mc^2/h$. Then
 
 $$
-y = A\cos(\omega t - kx), \qquad \omega = 2\pi\nu, \quad k = \frac{2\pi}{\lambda}, \quad v_p = \nu\lambda = \frac{\omega}{k}
+v_p = \nu\lambda = \frac{\gamma mc^2}{h}\cdot\frac{h}{\gamma mv} = \frac{c^2}{v}
 $$
 
-k is the wave number (radians per metre) and ω the angular frequency (radians per second).
+Since v < c, **de Broglie waves always travel faster than light**. Section 3.4 resolves this.
+
+**Building the wave formula.** Take a string along x, vibrating in y with simple harmonic motion. Choose t = 0 when the point x = 0 is at maximum displacement:
+
+$$
+y = A\cos 2\pi\nu t \qquad (x = 0)
+$$
+
+A wave moving in +x at speed v\_p reaches x after a delay x/v\_p, so y at (x, t) equals y at x = 0 at the earlier time t − x/v\_p:
+
+$$
+y = A\cos 2\pi\nu\left(t - \frac{x}{v_p}\right) = A\cos 2\pi\left(\nu t - \frac{x}{\lambda}\right) \qquad (v_p = \nu\lambda)
+$$
+
+**Angular frequency and wave number.**
+
+$$
+\omega = 2\pi\nu \ \text{(rad/s)}, \qquad k = \frac{2\pi}{\lambda} = \frac{\omega}{v_p} \ \text{(rad/m)}, \qquad y = A\cos(\omega t - kx)
+$$
+
+- k is the number of radians in a wave train 1 m long.
+- In 3-D, k becomes a vector normal to the wave fronts and kx becomes **k**·**r**.
+- A wave moving in −x is $A\cos(\omega t + kx)$. The slides write $A\cos(kx + \omega t)$, which is this −x wave; for +x use kx − ωt.
+- For a de Broglie wave, $k = 2\pi/\lambda = 2\pi p/h = p/\hbar$ and $\omega = 2\pi E/h = E/\hbar$.
 
 ## 3.4 Phase and group velocities
 
-**Problem.** A single de Broglie wave has phase velocity v\_p = νλ = (E/h)(h/p) = E/p = γmc²/γmv = c²/v. That is *faster than light* for v < c, so a single wave can't be the particle.
+**Idea.** A single wave $A\cos(\omega t - kx)$ has the same amplitude everywhere, so it can't describe a particle that is more likely in one place than another. A particle is a **wave group** (wave packet): many waves of slightly different wavelength that reinforce in one region and cancel elsewhere.
 
-**Fix.** A particle is a **wave group** (wave packet): a superposition of waves with slightly different k. They add up in one region and cancel elsewhere, like beats.
+**Beats.** Two sound waves of 440 Hz and 442 Hz together sound like 441 Hz whose loudness rises and falls twice a second. That is a series of wave groups.
+
+**Dispersion.** If all component waves travel at the same phase velocity, the group moves with them. If the phase velocity depends on wavelength (**dispersion**), the group moves at a different speed. De Broglie waves are dispersive.
+
+### Group velocity of two waves
+
+Take two waves of equal amplitude A whose angular frequencies differ by Δω and wave numbers by Δk:
 
 $$
-v_g = \frac{d\omega}{dk}, \qquad v_p\, v_g = c^2 \;\text{(de Broglie waves)}, \qquad v_g = v
+y_1 = A\cos(\omega t - kx), \qquad y_2 = A\cos[(\omega + \Delta\omega)t - (k + \Delta k)x]
 $$
 
-- Using ω = 2πγmc²/h and k = 2πγmv/h, the derivatives give dω/dk = v. The **group velocity equals the particle's velocity**, as it must.
-- The group carries the energy and information, so nothing travels faster than c.
-- **Dispersion:** when v\_p depends on k (as here), the group velocity differs from the phase velocity. With no dispersion (light in vacuum), v\_p = v\_g.
+Use $\cos\alpha + \cos\beta = 2\cos\tfrac12(\alpha+\beta)\cos\tfrac12(\alpha-\beta)$ and $\cos(-\theta) = \cos\theta$:
+
+$$
+y = y_1 + y_2 = 2A\cos\tfrac12[(2\omega + \Delta\omega)t - (2k + \Delta k)x]\,\cos\tfrac12(\Delta\omega\,t - \Delta k\,x)
+$$
+
+Since Δω ≪ ω and Δk ≪ k, replace 2ω + Δω by 2ω and 2k + Δk by 2k:
+
+$$
+y = 2A\cos(\omega t - kx)\,\cos\left(\frac{\Delta\omega}{2}t - \frac{\Delta k}{2}x\right) \tag{3.10}
+$$
+
+A fast wave of angular frequency ω and wave number k, modulated by a slow envelope of angular frequency Δω/2 and wave number Δk/2 (the slides' frame `QM.tex:177` shows this). The crests move at the phase velocity, the envelope at the group velocity:
+
+$$
+v_p = \frac{\omega}{k}, \qquad v_g = \frac{\Delta\omega}{\Delta k} \;\to\; v_g = \frac{d\omega}{dk} \ \text{(continuous spread of } \omega, k\text{)}
+$$
+
+v\_g can be larger or smaller than v\_p depending on how v\_p varies with k. With no dispersion (light in vacuum) v\_g = v\_p.
+
+**A quick uncertainty preview.** The envelope in (3.10) goes from one zero to the next over $\Delta x = 2\pi/\Delta k$, so $\Delta x\,\Delta k \approx 2\pi$. A narrower group needs a wider spread of k. This is the seed of 3.7.
+
+### Group velocity of de Broglie waves
+
+For a body of mass m and speed v (slides `QM.tex:193`):
+
+$$
+\omega = 2\pi\nu = \frac{2\pi\gamma mc^2}{h} = \frac{2\pi mc^2}{h\sqrt{1 - v^2/c^2}}, \qquad k = \frac{2\pi}{\lambda} = \frac{2\pi\gamma mv}{h} = \frac{2\pi mv}{h\sqrt{1 - v^2/c^2}}
+$$
+
+Both depend on v, so $v_g = \dfrac{d\omega}{dk} = \dfrac{d\omega/dv}{dk/dv}$. Using $\dfrac{d}{dv}(1 - v^2/c^2)^{-1/2} = \dfrac{v}{c^2}(1 - v^2/c^2)^{-3/2}$:
+
+$$
+\frac{d\omega}{dv} = \frac{2\pi mv}{h(1 - v^2/c^2)^{3/2}}
+$$
+
+and, by the product rule,
+
+$$
+\frac{d}{dv}\left[\frac{v}{(1 - v^2/c^2)^{1/2}}\right] = \frac{1}{(1 - v^2/c^2)^{1/2}} + \frac{v^2/c^2}{(1 - v^2/c^2)^{3/2}} = \frac{1}{(1 - v^2/c^2)^{3/2}} \quad\Rightarrow\quad \frac{dk}{dv} = \frac{2\pi m}{h(1 - v^2/c^2)^{3/2}}
+$$
+
+Divide:
+
+$$
+v_g = v, \qquad v_p = \frac{\omega}{k} = \frac{c^2}{v}, \qquad v_pv_g = c^2
+$$
+
+- **The group moves with the body.** The group, not the individual crests, corresponds to the particle, and v\_g < c. v\_p > c has no physical meaning (no energy or information travels with a crest), so relativity is not violated.
+- A check without relativity (beyond Beiser): with $E = p^2/2m$, $\omega = \hbar k^2/2m$, so $v_g = d\omega/dk = \hbar k/m = v$ again, while $v_p = v/2$. The phase velocity changes with what you count as the energy (with or without rest energy); the group velocity does not. That is another sign v\_p is not physical.
+
+**Example 3.3 (Beiser).** An electron with λ = 2.00 pm. pc = hc/λ = 620 keV; $E = \sqrt{511^2 + 620^2}$ keV = 803 keV, so KE = 292 keV. From $E = E_0/\sqrt{1 - v^2/c^2}$, $v = c\sqrt{1 - (511/803)^2} = 0.771c$. Then v\_p = c²/v = 1.30c and v\_g = 0.771c.
+
+**Electron microscope (box).** Diffraction limits any microscope to detail about the size of the wavelength used. Visible light gives a useful magnification of about 500 and a resolution of about 200 nm. Fast electrons have much shorter wavelengths and are focused by magnetic "lenses" (current-carrying coils) in an evacuated column, with a thin specimen. 100 keV electrons have λ = 0.0037 nm; lens imperfections limit the real resolution to about 0.1 nm, still allowing magnifications above 1,000,000.
 
 ## 3.5 Particle diffraction
 
-**Davisson–Germer (1927):** 54 eV electrons hit a nickel crystal. The scattered intensity showed a sharp peak at 50°, which only wave interference explains.
+**Who.** Davisson and Germer (US) and G. P. Thomson (England), independently in 1927. (J. J. Thomson, G. P.'s father, had won a Nobel Prize for showing the electron is a particle.)
 
-- Treat the surface atoms as a grating (spacing d = 0.215 nm). The peak satisfies d sinφ = nλ, giving λ = 0.165 nm.
-- De Broglie predicts λ = h/√(2meV) = 0.166 nm at 54 V. The match confirms matter waves.
-- G.P. Thomson's transmission rings through thin foils (1927) and later neutron diffraction confirm it too.
+**The experiment (Fig. 3.6, slides `QM.tex:147`).** An electron gun sends a beam of known energy onto a nickel target; a movable detector measures the scattered intensity against angle. Classically the intensity should vary only gently with angle and hardly at all with energy, and at first that is what they found.
 
-## 3.6 Particle in a box (wave picture)
+**The accident.** Air leaked in and oxidised the nickel. To remove the oxide they baked the target in a hot oven. Afterward the scattered intensity showed sharp maxima and minima whose positions depended on the electron energy (polar plots at 40 to 68 V, Fig. 3.7). Heating had fused the many small crystals of the block into one large crystal, a regular lattice that diffracts the electron waves like x-rays.
 
-**Idea.** A particle trapped between rigid walls a distance L apart. Its wave must vanish at the walls, so only standing waves fit: a whole number of half-wavelengths.
+**The numbers.** 54 eV electrons at normal incidence gave a sharp peak at 50° from the incoming beam. The Bragg planes responsible are tilted to the surface, so relative to them the angles of incidence and scattering are both 65° (and 180° − 2 × 65° = 50°). Their spacing, measured by x-ray diffraction, is d = 0.091 nm. Bragg's law with n = 1:
 
 $$
-\lambda_n = \frac{2L}{n}, \quad p_n = \frac{h}{\lambda_n} = \frac{nh}{2L}, \quad E_n = \frac{p_n^2}{2m} = \frac{n^2 h^2}{8 m L^2}, \quad n = 1, 2, 3, \dots
+\lambda = 2d\sin\theta = 2(0.091\ \text{nm})\sin 65^\circ = 0.165\ \text{nm}
 $$
 
-- **Energy is quantised** purely because the wave must fit. This is the key idea behind every bound-state result.
-- **No zero energy:** n = 0 would mean no wave at all, so the lowest energy is E₁ = h²/8mL². A confined particle is never at rest.
-- Levels spread out as 1, 4, 9, … × E₁, and E₁ grows as L shrinks and as m shrinks. That is why quantisation matters for electrons in atoms and not for marbles in boxes.
-- Ch 5.8 gets the same answer from the Schrödinger equation.
+De Broglie's prediction (KE = 54 eV ≪ mc², so γ ≈ 1):
+
+$$
+p = \sqrt{2m\,KE} = \sqrt{2(9.1\times10^{-31})(54)(1.6\times10^{-19})} = 4.0\times10^{-24}\ \text{kg m/s}, \qquad \lambda = \frac{h}{p} = 0.166\ \text{nm}
+$$
+
+Agreement to better than 1%: direct proof of de Broglie waves.
+
+- **Equivalent surface-grating view.** The surface rows of atoms are D = 0.215 nm apart and act as a reflection grating: $D\sin 50^\circ = 0.215 \times 0.766 = 0.165$ nm. Same answer, since d = D sin 25°.
+- **Complications.** Electrons gain energy equal to the work function on entering the crystal, so the wavelength inside is a little shorter; and diffraction from different families of planes interferes, so maxima appear only for certain combinations of energy and angle.
+- Neutrons and whole atoms have since been diffracted too; neutron diffraction, like x-ray and electron diffraction, is used to study crystal structures.
+
+## 3.6 Particle in a box
+
+**Model.** A particle moves back and forth along a line between two infinitely hard walls a distance L apart. It loses no energy at the walls, and its speed is non-relativistic. Ch 5 solves this properly; the wave picture already gives the energies.
+
+**Standing waves.** Like a string tied at both ends, the wave function must be zero at each wall. Only a whole number of half-wavelengths fit:
+
+$$
+\lambda_n = \frac{2L}{n}, \qquad n = 1, 2, 3, \dots \qquad (\lambda = 2L,\ L,\ 2L/3, \dots)
+$$
+
+**Energies.** The particle has no potential energy inside, so its energy is kinetic:
+
+$$
+KE = \tfrac12 mv^2 = \frac{(mv)^2}{2m} = \frac{h^2}{2m\lambda^2} \quad\Rightarrow\quad E_n = \frac{h^2}{2m}\cdot\frac{n^2}{4L^2} = \frac{n^2h^2}{8mL^2}, \qquad n = 1, 2, 3, \dots
+$$
+
+Each allowed energy is an **energy level**, and n is its **quantum number**.
+
+**Three conclusions** (true for any confined particle, such as an electron held by a nucleus):
+
+1. **A trapped particle can't have any energy it likes.** Confinement restricts the wave function, which restricts the energy to certain values that depend on the mass and on how it is trapped.
+2. **A trapped particle can't have zero energy.** v = 0 would mean infinite λ, which can't fit in the box. Zero is excluded; the lowest energy is $E_1 = h^2/8mL^2$. No classical counterpart.
+3. **Quantisation is noticeable only when m and L are small**, because h is so small.
+
+**Example 3.4 (Beiser).** An electron in a box 0.10 nm wide: $E_n = 6.0\times10^{-18}n^2$ J = 38n² eV. So E₁ = 38 eV, E₂ = 152 eV, E₃ = 342 eV, E₄ = 608 eV. Quantisation is prominent.
+
+**Example 3.5 (Beiser).** A 10 g marble in a box 10 cm wide: $E_n = 5.5\times10^{-64}n^2$ J. At n = 1 the speed is 3.3 × 10⁻³¹ m/s, indistinguishable from rest. A realistic 1/3 m/s needs n ≈ 10³⁰, and the levels are far too close to tell apart. Newtonian mechanics works in everyday life.
 
 ## 3.7 Uncertainty principle I (wave view)
 
-**Idea.** A narrow wave group (small Δx) needs many wavelengths (a wide spread Δk). A single exact wavelength (Δk = 0) extends forever (Δx = ∞). This is a property of all waves (Fourier analysis); with p = ħk it becomes a limit on knowledge of x and p.
+**Idea.** A narrow wave group (Fig. 3.12a) fixes the position well, but has too few waves to define λ, so the momentum h/λ is spread over a wide range. A wide group (Fig. 3.12b) has a well-defined λ and momentum, but the position is spread out.
+
+> It is impossible to know both the exact position and exact momentum of an object at the same time. (Heisenberg, 1927)
+
+**Fourier picture.** A single isolated group of any shape is a superposition of infinitely many harmonic waves with different k and amplitudes:
 
 $$
-\Delta x\,\Delta p \;\ge\; \frac{\hbar}{2}, \qquad \hbar = \frac{h}{2\pi} = 1.055\times10^{-34}\ \text{J s}
+\psi(x) = \int_0^\infty g(k)\cos kx\,dk
 $$
 
-- Δx and Δp are standard deviations. A Gaussian wave packet gives exactly ħ/2, the minimum.
-- It is not a flaw in instruments. The particle doesn't *have* an exact x and p at the same time.
+g(k) is the **Fourier transform** of ψ(x); it describes the group just as completely. A short pulse needs a broad g(k); a long wave train a narrow one; an infinite train a single k (Fig. 3.14). For a group of finite length Δx, the appreciable amplitudes lie within a finite spread Δk, and the narrower the group the wider Δk.
+
+**The bound.** The product ΔxΔk depends on the shape of the group. It is smallest for a **Gaussian** envelope, whose Fourier transform is also Gaussian; with Δx and Δk as standard deviations, the minimum is ½. In general
+
+$$
+\Delta x\,\Delta k \ge \tfrac12
+$$
+
+(The slides, `QM.tex:206`, state this as the "fundamental property" of waves.)
+
+**From waves to momentum.** $k = 2\pi/\lambda = 2\pi p/h$, so $p = hk/2\pi$ and $\Delta p = h\,\Delta k/2\pi$. With $\Delta k \ge 1/2\Delta x$:
+
+$$
+\Delta x\,\Delta p \ge \frac{h}{4\pi} = \frac{\hbar}{2}, \qquad \hbar = \frac{h}{2\pi} = 1.054\times10^{-34}\ \text{J s}
+$$
+
+- Δx and Δp refer to the same instant, with Δp the uncertainty in the x-component of momentum.
+- **It is not a limit of instruments.** The quantities themselves are imprecise in nature; instrumental errors only make the product larger. Since we can't know exactly where a particle is and how it moves now, we can't predict its future exactly, only probabilities.
+- ħ is the natural unit of angular momentum (4.4, 6.5).
+- **Gaussian facts (box).** Standard deviation σ; full width at half maximum 2.35σ; 68.3% of values lie within ±σ, 95.4% within ±2σ; $f(x) = e^{-(x-x_0)^2/2\sigma^2}/(\sigma\sqrt{2\pi})$.
+
+**Example 3.6 (Beiser): the packet spreads.** A proton's position is measured to $\Delta x_0 = 1.00\times10^{-11}$ m. Then $\Delta p \ge \hbar/2\Delta x_0$ and $\Delta v = \Delta p/m \ge \hbar/2m\Delta x_0$. After a time t its position is uncertain by
+
+$$
+\Delta x \ge \Delta v\,t = \frac{\hbar t}{2m\,\Delta x_0} = \frac{(1.054\times10^{-34})(1.00)}{2(1.672\times10^{-27})(1.00\times10^{-11})} = 3.15\times10^3\ \text{m}
+$$
+
+after 1.00 s: 3.15 km. The narrow group needed many wave numbers, their phase velocities differ, and the group spreads (Fig. 3.16). The better we know the position now, the worse later.
+
+**The slides' example: particle in a box** (beyond Beiser's text). Confinement gives Δx of order L. In state n the momentum is ±nh/2L with equal chances, so Δp = nh/2L = nπħ/L. With ch 5's wave functions, Δx = L√(1/12 − 1/2n²π²); for n = 1 this is 0.18L, and ΔxΔp = 0.57ħ, comfortably above ħ/2. The zero-point energy of the box is the uncertainty principle at work.
 
 ## 3.8 Uncertainty principle II (particle view)
 
-**Heisenberg's microscope.** To see an electron you hit it with at least one photon of wavelength λ. The position is fuzzy by Δx ≈ λ, and the photon kicks the electron by up to Δp ≈ h/λ. So ΔxΔp ≈ h. A shorter λ gives a better position but a bigger kick. This rougher argument gives the same order of magnitude.
+**Heisenberg's microscope (Fig. 3.17).** To measure an electron's position we must hit it with something, say light of wavelength λ. At least one photon must bounce off it.
+
+- The photon has momentum h/λ, and it changes the electron's momentum by an unpredictable amount of about that size: $\Delta p \approx h/\lambda$.
+- Light is a wave, so the position can't be fixed better than about one wavelength: $\Delta x \approx \lambda$.
+- Short λ improves the position but kicks harder; long λ disturbs less but blurs the position. Multiplying:
+
+$$
+\Delta x\,\Delta p \approx h
+$$
+
+consistent with $\Delta x\,\Delta p \ge \hbar/2$.
+
+**Caution.** This argument suggests the electron *has* an exact position and momentum that the measurement disturbs. In fact the indeterminacy is built into a moving body. Such arguments are useful because they show there is no way to dodge the principle, and they make it feel familiar.
 
 ## 3.9 Applying the uncertainty principle
 
-**Energy–time form.** A wave group of duration Δt has a frequency spread Δν ≈ 1/Δt, so with E = hν:
+**A working tool.** Because h is so small, the limits matter only on the atomic scale. The bound ħ/2 is rarely reached; often ΔxΔp ≥ ħ, or even about h, is the realistic estimate. Shortcut: ħc = 197 eV nm.
+
+**Example 3.7 (Beiser): no electrons in nuclei.** A nucleus has radius about 5.0 × 10⁻¹⁵ m. Taking Δx equal to that, $\Delta p \ge \hbar/2\Delta x = 1.1\times10^{-20}$ kg m/s, and the momentum itself must be at least that big. This pc (about 20 MeV) is far above mc² = 0.511 MeV, so KE ≈ pc = 3.3 × 10⁻¹² J ≈ 20 MeV. Electrons emitted by unstable nuclei (beta decay) have only a small fraction of this, so nuclei can't contain electrons; the emitted electron is created when the nucleus decays.
+
+**Example 3.8 (Beiser): size and energy of hydrogen.** Radius 5.3 × 10⁻¹¹ m gives $\Delta p \ge \hbar/2\Delta x = 9.9\times10^{-25}$ kg m/s. Non-relativistic, KE = p²/2m = 5.4 × 10⁻¹⁹ J = 3.4 eV. The actual ground-state kinetic energy is 13.6 eV: the right order of magnitude from one line.
+
+**Minimum energy of a trapped particle.** Take p ≈ Δp ≈ ħ/2Δx and E ≈ p²/2m. This estimates zero-point energies (box, oscillator, atom) to the right order.
+
+### Energy and time
+
+Measure the energy E of an em wave group that lasts a time Δt by counting its waves. Assume the count is uncertain by one wave. The frequency is the count divided by the time, so
 
 $$
-\Delta E\,\Delta t \;\ge\; \frac{\hbar}{2}
+\Delta\nu \ge \frac{1}{\Delta t}, \qquad \Delta E = h\,\Delta\nu \ge \frac{h}{\Delta t} \quad\Rightarrow\quad \Delta E\,\Delta t \ge h
 $$
 
-- **Electron in the nucleus?** Confine it to Δx ≈ 10⁻¹⁴ m. Then Δp ≥ ħ/2Δx ≈ 5 × 10⁻²¹ kg m/s and the KE is about pc ≈ 10 MeV or more. Beta-decay electrons have only a few MeV, so electrons can't be held inside nuclei.
-- **Minimum energy of a trapped particle:** take p ≈ Δp ≈ ħ/2Δx and E ≈ p²/2m. This estimates zero-point energies (box, oscillator, hydrogen atom size) to the right order.
-- **Natural line width:** an excited state that lives Δt ≈ 10⁻⁸ s has an energy spread ΔE ≥ ħ/2Δt ≈ 3 × 10⁻⁸ eV, so spectral lines have a small natural width.
+A more careful treatment of wave groups sharpens this to
+
+$$
+\Delta E\,\Delta t \ge \frac{\hbar}{2}
+$$
+
+It holds generally, not just for em waves. (Slides: such an uncertainty exists for every pair of complementary variables, E and t being one.)
+
+**Example 3.9 (Beiser): natural line width.** An excited atom radiates after an average 1.0 × 10⁻⁸ s. Then $\Delta E \ge \hbar/2\Delta t = 5.3\times10^{-27}$ J (3.3 × 10⁻⁸ eV), and $\Delta\nu = \Delta E/h \ge 8\times10^6$ Hz. For a 5.0 × 10¹⁴ Hz line, Δν/ν = 1.6 × 10⁻⁸. This is the irreducible width of a spectral line; in practice Doppler broadening is larger.
 
 ## What to be able to do without notes
 
-- Write λ = h/p and the shortcut λ ≈ 1.226/√V nm for electrons.
-- Explain |Ψ|² as probability density and why normalisation is needed.
-- Show v\_p = c²/v and v\_g = v, and explain why a wave packet is needed.
-- Describe Davisson–Germer and the numbers that confirmed de Broglie.
-- Get E\_n = n²h²/8mL² from standing waves and explain why E = 0 is not allowed.
-- Use ΔxΔp ≥ ħ/2 and ΔEΔt ≥ ħ/2 for estimates.
+- Write λ = h/p, the shortcut λ ≈ 1.226/√V nm for electrons, and know when to switch to the relativistic pc.
+- Explain why Ψ is not observable but |Ψ|² is, and what "probability density" means for one particle and for many.
+- Build $y = A\cos(\omega t - kx)$ from a vibration at x = 0.
+- Derive the beat formula (3.10), define v\_p and v\_g, and show v\_p = c²/v and v\_g = v for de Broglie waves.
+- Describe Davisson–Germer and reproduce 0.165 nm (Bragg) against 0.166 nm (de Broglie).
+- Get E\_n = n²h²/8mL² from standing waves and state the three conclusions.
+- Derive ΔxΔp ≥ ħ/2 from ΔxΔk ≥ ½, give the microscope argument, and use ΔxΔp ≥ ħ/2 and ΔEΔt ≥ ħ/2 for estimates (electron in nucleus, hydrogen size, line width, spreading packet).
+
+# Coverage: Wave properties of particles
+
+Every section and example of Beiser ch 3 and every slide frame from de Broglie to the uncertainty principle (`QM.tex:137` to `:223`). "HW practice" means *HW practice: Beiser chapters 2 and 3*.
+
+## Beiser ch 3
+
+| Beiser | Topic | Where on the site |
+| --- | --- | --- |
+| 3.1 | De Broglie waves, λ = h/γmv, 1.226/√V nm | Reference 3.1 |
+| Ex 3.1, 3.2 | λ of a golf ball and an electron; KE of a proton with λ = 1 fm | Reference 3.1; HW practice |
+| 3.2 | Waves of what? Born interpretation | Reference 3.2; Learn "The wave function" |
+| 3.3 | Describing a wave, v\_p = c²/v | Reference 3.3 (derivation) |
+| 3.4 | Phase and group velocities, v\_g = v | Reference 3.4 (beats and full v\_g derivation) |
+| Ex 3.3 | KE, phase and group velocity of a 2.00 pm electron | Reference 3.4; HW practice |
+| 3.5 | Particle diffraction, Davisson–Germer | Reference 3.5 (Bragg and surface-grating routes) |
+| 3.6 | Particle in a box from standing waves | Reference 3.6 |
+| Ex 3.4, 3.5 | Electron in a 0.10 nm box; marble in a 10 cm box | Reference 3.6; HW practice |
+| 3.7 | Uncertainty principle from wave packets | Reference 3.7 (Gaussian packet, ΔxΔp ≥ ħ/2) |
+| Ex 3.6 | Proton position known to 10⁻¹¹ m | Reference 3.7; HW practice |
+| 3.8 | Uncertainty from the gamma-ray microscope | Reference 3.8 |
+| 3.9 | Applying the principle; energy and time | Reference 3.9 |
+| Ex 3.7, 3.8, 3.9 | Minimum proton energy in a nucleus; minimum electron energy in hydrogen; frequency spread of an excited atom | Reference 3.9; HW practice |
+
+## Slides
+
+| Frame (`QM.tex`) | Where on the site |
+| --- | --- |
+| `:137` de Broglie | Reference 3.1 |
+| `:147` Davisson–Germer (d = 0.091 nm, θ = 65°) | Reference 3.5 |
+| `:163` Matter waves | Reference 3.2, 3.3 (notes the slide's sign convention and its 1 μg example) |
+| `:177`, `:193` Group wave | Reference 3.4 |
+| `:206` Uncertainty | Reference 3.7 to 3.9 |
+
+Nothing in Beiser ch 3 is dropped by the course.
 
 # Formulas: Wave properties of particles
 
