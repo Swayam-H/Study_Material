@@ -10,6 +10,12 @@
       "about": "The 12 endsem topics, what each covers, slides, textbook sections and homework for every subtopic, and the video list"
     },
     {
+      "slug": "videos-ftlop",
+      "file": "chapters/videos-ftlop.md",
+      "title": "Reference: For the Love of Physics videos",
+      "about": "The channel's videos matched to the 12 endsem topics, with gaps marked. Strongest on quantum mechanics and relativity"
+    },
+    {
       "slug": "ch1-intro",
       "file": "chapters/chapter-01-Intro-Scales-modelling-and-nonlinear-dynamics.md",
       "title": "Chapter 1: Scales, modelling and nonlinear dynamics",
