@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Practice problems, Lectures 14 to 17 · Operating Systems and Networks</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwpvzw06">
+</head>
+<body data-root="../../" data-page="osn/concurrency/practice-problems-lectures-14-to-17" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS4.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../dna/index.html">Data and Applications</a>
+      </div><div class="nav-tools"><a class="" href="../../dna/practice.html">Practice <b>89</b></a><a class="" href="../../dna/formulas.html">Formulas <b>5</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="dna/start-here/start-here" href="../../dna/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Chapter 1: The relational model, keys and constraints</span><i data-count-for="dna/ch1-relational-model/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch1-relational-model/learn" href="../../dna/ch1-relational-model/learn.html"><small>Learn</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/reference" href="../../dna/ch1-relational-model/reference.html"><small>Reference</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/practice" href="../../dna/ch1-relational-model/practice.html"><small>Practice</small><span>The relational model, keys and constraints</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: ER and EER modelling</span><i data-count-for="dna/ch2-er-eer/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch2-er-eer/learn" href="../../dna/ch2-er-eer/learn.html"><small>Learn</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/reference" href="../../dna/ch2-er-eer/reference.html"><small>Reference</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/practice" href="../../dna/ch2-er-eer/practice.html"><small>Practice</small><span>ER and EER modelling</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Mapping EER to relations</span><i data-count-for="dna/ch3-mapping/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch3-mapping/learn" href="../../dna/ch3-mapping/learn.html"><small>Learn</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/reference" href="../../dna/ch3-mapping/reference.html"><small>Reference</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/practice" href="../../dna/ch3-mapping/practice.html"><small>Practice</small><span>Mapping EER to relations</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Functional dependencies and normalisation</span><i data-count-for="dna/ch4-normalisation/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch4-normalisation/learn" href="../../dna/ch4-normalisation/learn.html"><small>Learn</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/reference" href="../../dna/ch4-normalisation/reference.html"><small>Reference</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/practice" href="../../dna/ch4-normalisation/practice.html"><small>Practice</small><span>Functional dependencies and normalisation</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Relational algebra</span><i data-count-for="dna/ch5-relational-algebra/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch5-relational-algebra/learn" href="../../dna/ch5-relational-algebra/learn.html"><small>Learn</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/reference" href="../../dna/ch5-relational-algebra/reference.html"><small>Reference</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/practice" href="../../dna/ch5-relational-algebra/practice.html"><small>Practice</small><span>Relational algebra</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Tuple relational calculus</span><i data-count-for="dna/ch6-trc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch6-trc/learn" href="../../dna/ch6-trc/learn.html"><small>Learn</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/reference" href="../../dna/ch6-trc/reference.html"><small>Reference</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/practice" href="../../dna/ch6-trc/practice.html"><small>Practice</small><span>Tuple relational calculus</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: SQL</span><i data-count-for="dna/ch7-sql/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch7-sql/learn" href="../../dna/ch7-sql/learn.html"><small>Learn</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/reference" href="../../dna/ch7-sql/reference.html"><small>Reference</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/practice" href="../../dna/ch7-sql/practice.html"><small>Practice</small><span>SQL</span></a></div></details><a class="nav-link nav-single" data-id="dna/mock-endsem/mock-endsem" href="../../dna/mock-endsem/mock-endsem.html"><span>Mock endsem with solutions</span></a><a class="nav-link nav-single" data-id="dna/cheat-sheet/cheat-sheet" href="../../dna/cheat-sheet/cheat-sheet.html"><span>Two-page cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>68</b></a><a class="" href="../../osn/formulas.html">Formulas <b>23</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc" open><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link current" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><details class="nav-doc"><summary><span>Lectures 18 and 19: file systems</span><i data-count-for="osn/filesystems/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/filesystems/lecture-18" href="../../osn/filesystems/lecture-18.html"><small>Lecture 18</small><span>Files and directories</span></a><a class="nav-link" data-id="osn/filesystems/lecture-19" href="../../osn/filesystems/lecture-19.html"><small>Lecture 19</small><span>File system implementation</span></a><a class="nav-link" data-id="osn/filesystems/the-xv6-file-system-tutorial-7" href="../../osn/filesystems/the-xv6-file-system-tutorial-7.html"><span>The xv6 file system (Tutorial 7)</span></a><a class="nav-link" data-id="osn/filesystems/practice-problems-lectures-18-and-19" href="../../osn/filesystems/practice-problems-lectures-18-and-19.html"><span>Practice problems, Lectures 18 and 19</span></a></div></details><a class="nav-link nav-single" data-id="osn/formula-sheet/formula-sheet-lectures-01-to-19" href="../../osn/formula-sheet/formula-sheet-lectures-01-to-19.html"><span>Formula sheet</span></a><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 19</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>252</b></a><a class="" href="../../pns/formulas.html">Formulas <b>127</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-skim" href="../../pns/l21-onward/part-6-linear-regression-skim.html"><span>Part 6 — Linear regression (skim)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>490</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>61</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/start-here/start-here" href="../../science-1/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Chapter 1: Scales, modelling and nonlinear dynamics</span><i data-count-for="science-1/ch1-intro/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch1-intro/learn" href="../../science-1/ch1-intro/learn.html"><small>Learn</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/reference" href="../../science-1/ch1-intro/reference.html"><small>Reference</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/formulas" href="../../science-1/ch1-intro/formulas.html"><small>Formulas</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/practice" href="../../science-1/ch1-intro/practice.html"><small>Practice</small><span>Scales, modelling and nonlinear dynamics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: Newtonian mechanics of one particle and many</span><i data-count-for="science-1/ch2-newton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch2-newton/learn" href="../../science-1/ch2-newton/learn.html"><small>Learn</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/reference" href="../../science-1/ch2-newton/reference.html"><small>Reference</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/formulas" href="../../science-1/ch2-newton/formulas.html"><small>Formulas</small><span>Newtonian mechanics</span></a><a class="nav-link" data-id="science-1/ch2-newton/practice" href="../../science-1/ch2-newton/practice.html"><small>Practice</small><span>Newtonian mechanics of one particle and many</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Calculus of variations and Lagrangian mechanics</span><i data-count-for="science-1/ch3-lagrange/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch3-lagrange/learn" href="../../science-1/ch3-lagrange/learn.html"><small>Learn</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/reference" href="../../science-1/ch3-lagrange/reference.html"><small>Reference</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/formulas" href="../../science-1/ch3-lagrange/formulas.html"><small>Formulas</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/practice" href="../../science-1/ch3-lagrange/practice.html"><small>Practice</small><span>Calculus of variations and Lagrangian mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Hamiltonian dynamics and the two-body problem</span><i data-count-for="science-1/ch4-hamilton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch4-hamilton/learn" href="../../science-1/ch4-hamilton/learn.html"><small>Learn</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/reference" href="../../science-1/ch4-hamilton/reference.html"><small>Reference</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/formulas" href="../../science-1/ch4-hamilton/formulas.html"><small>Formulas</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/practice" href="../../science-1/ch4-hamilton/practice.html"><small>Practice</small><span>Hamiltonian dynamics and the two-body problem</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Special relativity</span><i data-count-for="science-1/ch5-relativity/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch5-relativity/learn" href="../../science-1/ch5-relativity/learn.html"><small>Learn</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference" href="../../science-1/ch5-relativity/reference.html"><small>Reference</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/formulas" href="../../science-1/ch5-relativity/formulas.html"><small>Formulas</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/practice" href="../../science-1/ch5-relativity/practice.html"><small>Practice</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference-2" href="../../science-1/ch5-relativity/reference-2.html"><small>Reference</small><span>Special relativity quick sheet (Beiser ch. 1)</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Thermodynamics I: gases and the first law</span><i data-count-for="science-1/ch6-thermo1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch6-thermo1/learn" href="../../science-1/ch6-thermo1/learn.html"><small>Learn</small><span>Thermodynamics in one pass (Atkins 1A to 3B)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-2" href="../../science-1/ch6-thermo1/learn-2.html"><small>Learn</small><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-3" href="../../science-1/ch6-thermo1/learn-3.html"><small>Learn</small><span>The first law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-4" href="../../science-1/ch6-thermo1/learn-4.html"><small>Learn</small><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/practice" href="../../science-1/ch6-thermo1/practice.html"><small>Practice</small><span>Thermodynamics I: gases and the first law</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: Thermodynamics II: second law, entropy and free energy</span><i data-count-for="science-1/ch7-thermo2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch7-thermo2/learn" href="../../science-1/ch7-thermo2/learn.html"><small>Learn</small><span>The second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/learn-2" href="../../science-1/ch7-thermo2/learn-2.html"><small>Learn</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/reference" href="../../science-1/ch7-thermo2/reference.html"><small>Reference</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/formulas" href="../../science-1/ch7-thermo2/formulas.html"><small>Formulas</small><span>Second law, entropy and free energy</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/practice" href="../../science-1/ch7-thermo2/practice.html"><small>Practice</small><span>Free energy and phases</span></a></div></details><details class="nav-doc"><summary><span>Chapter 8: Particle properties of waves</span><i data-count-for="science-1/ch8-qm1/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch8-qm1/learn" href="../../science-1/ch8-qm1/learn.html"><small>Learn</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/reference" href="../../science-1/ch8-qm1/reference.html"><small>Reference</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/formulas" href="../../science-1/ch8-qm1/formulas.html"><small>Formulas</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/practice" href="../../science-1/ch8-qm1/practice.html"><small>Practice</small><span>Particle properties of waves</span></a></div></details><details class="nav-doc"><summary><span>Chapter 9: Wave properties of particles</span><i data-count-for="science-1/ch9-qm2/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch9-qm2/learn" href="../../science-1/ch9-qm2/learn.html"><small>Learn</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/reference" href="../../science-1/ch9-qm2/reference.html"><small>Reference</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/formulas" href="../../science-1/ch9-qm2/formulas.html"><small>Formulas</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/practice" href="../../science-1/ch9-qm2/practice.html"><small>Practice</small><span>Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>Chapter 10: Atomic structure</span><i data-count-for="science-1/ch10-qm3/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch10-qm3/learn" href="../../science-1/ch10-qm3/learn.html"><small>Learn</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/reference" href="../../science-1/ch10-qm3/reference.html"><small>Reference</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/formulas" href="../../science-1/ch10-qm3/formulas.html"><small>Formulas</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/practice" href="../../science-1/ch10-qm3/practice.html"><small>Practice</small><span>Atomic structure</span></a></div></details><details class="nav-doc"><summary><span>Chapter 11: Quantum mechanics</span><i data-count-for="science-1/ch11-qm4/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch11-qm4/learn" href="../../science-1/ch11-qm4/learn.html"><small>Learn</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/reference" href="../../science-1/ch11-qm4/reference.html"><small>Reference</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/formulas" href="../../science-1/ch11-qm4/formulas.html"><small>Formulas</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/practice" href="../../science-1/ch11-qm4/practice.html"><small>Practice</small><span>Quantum mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 12: Quantum theory of the hydrogen atom</span><i data-count-for="science-1/ch12-qm5/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch12-qm5/learn" href="../../science-1/ch12-qm5/learn.html"><small>Learn</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/reference" href="../../science-1/ch12-qm5/reference.html"><small>Reference</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/formulas" href="../../science-1/ch12-qm5/formulas.html"><small>Formulas</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/practice" href="../../science-1/ch12-qm5/practice.html"><small>Practice</small><span>Quantum theory of the hydrogen atom</span></a></div></details><details class="nav-doc"><summary><span>Practice: Mock endsem</span><i data-count-for="science-1/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/mock-endsem/practice" href="../../science-1/mock-endsem/practice.html"><small>Practice</small><span>Mock endsem</span></a><a class="nav-link" data-id="science-1/mock-endsem/practice-2" href="../../science-1/mock-endsem/practice-2.html"><small>Practice</small><span>Mock endsem, marking scheme and solutions</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Mechanics (lectures 1-8, Marion &amp; Thornton)</span><i data-count-for="science-1/hw-mechanics/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics" href="../../science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics.html"><span>HW practice: Lectures 1 to 4, nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2" href="../../science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2.html"><span>HW practice: Lecture 5, Newton for one particle (MT Chapter 2)</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange" href="../../science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange.html"><span>HW practice: Lectures 6 and 7, calculus of variations, Lagrange and Hamilton</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc" href="../../science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc.html"><span>HW practice: Lecture 8, multiparticle systems and central forces</span></a></div></details><a class="nav-link nav-single" data-id="science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e" href="../../science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e.html"><span>HW practice: Thermodynamics (Atkins 11e)</span></a><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 2 and 3</span><i data-count-for="science-1/hw-qm/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves" href="../../science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves.html"><span>HW practice: Beiser Chapter 2, Particle properties of waves</span></a><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles" href="../../science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles.html"><span>HW practice: Beiser Chapter 3, Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 4 to 6</span><i data-count-for="science-1/hw-qm-b/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure.html"><span>HW practice: Beiser Chapter 4, Atomic structure</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics.html"><span>HW practice: Beiser Chapter 5, Quantum mechanics</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-.html"><span>HW practice: Beiser Chapter 6, Quantum theory of the hydrogen atom</span></a></div></details><a class="nav-link nav-single" data-id="science-1/toolkit-practice/practice" href="../../science-1/toolkit-practice/practice.html"><span>Practice set: thermodynamics</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cheatsheet/sheet" href="../../science-1/toolkit-cheatsheet/sheet.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-formulas/sheet" href="../../science-1/toolkit-formulas/sheet.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-definitions/sheet" href="../../science-1/toolkit-definitions/sheet.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cards/cards" href="../../science-1/toolkit-cards/cards.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../osn/index.html">Operating Systems and Networks</a><span>›</span><span>Lectures 14 to 17: concurrency</span></nav>
+      <header class="note-head">
+        
+        <h1>Practice problems, Lectures 14 to 17</h1>
+        <p class="note-meta">18 min read · 20 practice problems</p>
+        <div class="note-tools">
+          <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          <span class="hint">Solutions stay collapsed until you click them.</span>
+        </div>
+      </header>
+      <div class="prose"><p>Try each one before you open its solution. Problems marked <strong>(L08)</strong> are the lecture's own review questions, and <strong>(sheet)</strong> ones come from the &quot;Transport Layer - Practice Questions&quot; PDF.</p>
+<p id="p-s1"><strong>S1.</strong> Two threads each run <code>counter++</code> three times, with no lock. counter starts at 0. What are the largest and the smallest possible final values? Give the interleaving that produces the smallest one.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> The largest is <strong>6</strong>: every increment runs without interruption. The smallest is <strong>2</strong>. Here is how:</p>
+<ol>
+<li>T1 loads 0 into its register, then is interrupted.</li>
+<li>T2 runs two complete increments: counter = 2.</li>
+<li>T1 adds 1 to its stale 0 and stores 1. <strong>T2's two increments are wiped out.</strong></li>
+<li>T2 loads 1 for its third increment, then is interrupted.</li>
+<li>T1 runs its last two increments in full: counter = 3.</li>
+<li>T2 adds 1 to its stale 1 and stores <strong>2</strong>.</li>
+</ol>
+<p>The result cannot be 1. Every store writes (value loaded) + 1, so once any store has happened, memory holds at least 1. The final value comes from the last store, which is some thread's <em>last</em> increment. That increment loaded its value after the same thread's first increment had already stored, so it loaded at least 1 and stored at least 2.</p>
+</details>
+<hr>
+<p id="p-s2"><strong>S2.</strong> In the code below, which of <code>g</code>, <code>s</code>, <code>local</code>, <code>p</code> and <code>*p</code> are shared between two threads that both run <code>work()</code>?</p>
+<pre><code class="language-c">int g = 0;
+void *work(void *arg) {
+    static int s = 0;
+    int local = 0;
+    int *p = malloc(sizeof(int));
+    ...
+}
+</code></pre>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Shared?</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td><strong>Yes</strong></td>
+<td>Globals live in the data segment, and there is one copy</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td><strong>Yes</strong></td>
+<td>A <code>static</code> local also lives in the data segment, not on the stack</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td>No</td>
+<td>Each thread has it on its own stack</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>No</td>
+<td>The pointer variable itself is on each thread's stack</td>
+</tr>
+<tr>
+<td><code>*p</code></td>
+<td>Not in practice</td>
+<td>The heap is shared memory, but each thread mallocs its own block. It becomes shared only if one thread passes the pointer to another</td>
+</tr>
+</tbody>
+</table></div>
+</details>
+<hr>
+<p id="p-s3"><strong>S3.</strong> Show an interleaving in which the plain-flag lock from 4.2 (test with a load, then set with a store) lets two threads into the critical section. Then explain exactly why <code>TestAndSet</code> closes that gap.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> The bad interleaving, starting with flag = 0:</p>
+<ol>
+<li>T1 tests the flag and sees 0.</li>
+<li>An interrupt switches to T2. T2 tests, sees 0, and sets the flag to 1, entering the critical section.</li>
+<li>An interrupt switches back to T1, which sets the flag to 1 and also enters.</li>
+</ol>
+<p>The problem is the gap between the test and the set. <code>TestAndSet</code> does both in <strong>one atomic instruction</strong>, so there is no gap. Whichever thread executes it first gets back 0 and leaves 1 behind; every other thread gets back 1 and keeps spinning.</p>
+</details>
+<hr>
+<p id="p-s4"><strong>S4.</strong> Four threads share one CPU and a test-and-set spin lock. The holder is preempted just after taking the lock. Roughly how much CPU time is wasted before the holder runs again, and why? How do <code>yield</code> and the queue lock each improve this?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> On one CPU, each of the other three threads gets scheduled in turn and spins for its <strong>whole time slice</strong>, because the lock cannot be released while its holder is not running. That is roughly <strong>3 time slices wasted</strong> for each time the holder is preempted (more if the scheduler is unlucky).</p>
+<ul>
+<li>With <strong>yield</strong>, each waiter gives up the CPU as soon as it finds the lock held. That costs 3 context switches instead of 3 slices, but it still has overhead and starvation is still possible.</li>
+<li>With the <strong>queue lock</strong>, waiters sleep and are not scheduled at all until the holder unparks them, so no time is wasted.</li>
+</ul>
+</details>
+<hr>
+<p id="p-s5"><strong>S5.</strong> A ticket lock starts with ticket = 0 and turn = 0. T1, T2 and T3 call <code>lock()</code> in that order, then T1 calls <code>unlock()</code>, then T4 calls <code>lock()</code>, then T2 calls <code>unlock()</code>. After each step, give ticket, turn, each thread's <code>myturn</code>, and who holds the lock.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>ticket</th>
+<th>turn</th>
+<th>myturn</th>
+<th>Holder</th>
+<th>Spinning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>none</td>
+<td></td>
+</tr>
+<tr>
+<td>T1 lock</td>
+<td>1</td>
+<td>0</td>
+<td>T1 = 0</td>
+<td>T1</td>
+<td></td>
+</tr>
+<tr>
+<td>T2 lock</td>
+<td>2</td>
+<td>0</td>
+<td>T2 = 1</td>
+<td>T1</td>
+<td>T2</td>
+</tr>
+<tr>
+<td>T3 lock</td>
+<td>3</td>
+<td>0</td>
+<td>T3 = 2</td>
+<td>T1</td>
+<td>T2, T3</td>
+</tr>
+<tr>
+<td>T1 unlock</td>
+<td>3</td>
+<td>1</td>
+<td></td>
+<td><strong>T2</strong></td>
+<td>T3</td>
+</tr>
+<tr>
+<td>T4 lock</td>
+<td>4</td>
+<td>1</td>
+<td>T4 = 3</td>
+<td>T2</td>
+<td>T3, T4</td>
+</tr>
+<tr>
+<td>T2 unlock</td>
+<td>4</td>
+<td>2</td>
+<td></td>
+<td><strong>T3</strong></td>
+<td>T4</td>
+</tr>
+</tbody>
+</table></div>
+<p>Threads are served strictly in ticket order. That is what makes the ticket lock fair.</p>
+</details>
+<hr>
+<p id="p-s6"><strong>S6.</strong> In the queue lock with <code>park</code>/<code>unpark</code>: (a) What would go wrong if a thread called <code>park()</code> <em>before</em> releasing the guard? (b) Describe the wakeup/waiting race that remains, and how <code>setpark()</code> fixes it.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p>(a) The thread would go to sleep <strong>holding the guard</strong>. When the lock holder calls <code>unlock()</code>, it spins forever trying to take the guard, so it can never unpark anyone. Everything stops.</p>
+<p>(b) The race:</p>
+<ol>
+<li>A thread adds itself to the queue and releases the guard.</li>
+<li>It is preempted just <em>before</em> calling <code>park()</code>.</li>
+<li>The lock holder runs <code>unlock()</code> and calls <code>unpark()</code> on it. This has no effect, because the thread is not asleep yet.</li>
+<li>The thread runs again, calls <code>park()</code>, and <strong>sleeps forever</strong>.</li>
+</ol>
+<p>With <strong><code>setpark()</code></strong>, the thread announces &quot;I am about to park&quot; <em>before</em> releasing the guard. If an <code>unpark()</code> arrives between that announcement and the <code>park()</code>, the <code>park()</code> returns immediately instead of sleeping.</p>
+</details>
+<hr>
+<p id="p-s7"><strong>S7.</strong> Low-priority thread L holds a spin lock. High-priority thread H wakes up and tries to take it. Explain what happens on one CPU, and how priority inheritance fixes it.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> H has the higher priority, so the scheduler always runs H, and H spins on the lock. L never gets the CPU, so it never finishes its critical section and never releases the lock. The system hangs, even though nothing is technically deadlocked. With <strong>priority inheritance</strong>, while H waits for a lock that L holds, L temporarily runs at H's priority. L gets the CPU, finishes, releases the lock, and drops back to its own priority, and then H proceeds.</p>
+</details>
+<hr>
+<p id="p-s8"><strong>S8.</strong> Is this code correct? If not, give the interleaving that breaks it and fix it.</p>
+<pre><code class="language-c">// waiting thread                      // signalling thread
+pthread_mutex_lock(&amp;m);                ready = 1;
+while (!ready)                         pthread_cond_signal(&amp;c);
+    pthread_cond_wait(&amp;c, &amp;m);
+pthread_mutex_unlock(&amp;m);
+</code></pre>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> <strong>Not correct: there is a lost wakeup</strong>, because the signaller does not take the lock.</p>
+<ol>
+<li>The waiter locks m and sees <code>ready == 0</code>. Just before it calls <code>wait</code>, it is interrupted.</li>
+<li>The signaller sets <code>ready = 1</code> and signals. Nobody is waiting yet, so the signal is lost.</li>
+<li>The waiter calls <code>wait</code> and <strong>sleeps forever</strong>.</li>
+</ol>
+<p><strong>Fix:</strong> the signaller must hold the same mutex:</p>
+<pre><code class="language-c">pthread_mutex_lock(&amp;m);
+ready = 1;
+pthread_cond_signal(&amp;c);
+pthread_mutex_unlock(&amp;m);
+</code></pre>
+<p>Now the signaller cannot change <code>ready</code> between the waiter's check and its sleep, because the waiter holds m until <code>wait</code> has put it to sleep.</p>
+</details>
+<hr>
+<p id="p-s9"><strong>S9.</strong> Producer/consumer already uses two CVs (<code>empty</code> and <code>fill</code>). Do the waits still need <code>while</code>, or would <code>if</code> now be safe? Give a scenario to justify your answer.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> <strong><code>while</code> is still needed.</strong> Two CVs make sure a signal wakes the right <em>kind</em> of thread, but not that the condition still holds when the woken thread runs. A scenario:</p>
+<ol>
+<li>The buffer is empty, and Tc1 is asleep on <code>fill</code>.</li>
+<li>The producer puts an item and signals <code>fill</code>, so Tc1 becomes ready.</li>
+<li>Before Tc1 runs, a newly arriving consumer Tc2 gets the mutex, sees count == 1, and takes the item.</li>
+<li>Tc1 finally returns from <code>wait</code>. With <code>if</code>, it calls <code>get()</code> on an empty buffer.</li>
+</ol>
+<p>Spurious wakeups are a second reason. Under Mesa semantics, always use <code>while</code>.</p>
+</details>
+<hr>
+<p id="p-s10"><strong>S10.</strong> For each, give the semaphore's initial value: (a) thread B's line <code>b1</code> must run after thread A's line <code>a1</code>; (b) at most 5 threads may hold a database connection at once; (c) a plain mutex; (d) the <code>full</code> semaphore of a bounded buffer with 8 slots; (e) its <code>empty</code> semaphore.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a) <strong>0</strong>. (b) <strong>5</strong>. (c) <strong>1</strong>. (d) <code>full</code> = <strong>0</strong>. (e) <code>empty</code> = <strong>8</strong>.</p>
+</details>
+<hr>
+<p id="p-s11"><strong>S11.</strong> A semaphore starts at 2. T1, T2, T3, T4 and T5 call <code>sem_wait</code> in that order, then T1 and T2 each call <code>sem_post</code>. After each call, give the value and the list of waiting threads.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Value</th>
+<th>Waiting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>T1 wait</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>T2 wait</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>T3 wait</td>
+<td>−1</td>
+<td>T3</td>
+</tr>
+<tr>
+<td>T4 wait</td>
+<td>−2</td>
+<td>T3, T4</td>
+</tr>
+<tr>
+<td>T5 wait</td>
+<td>−3</td>
+<td>T3, T4, T5</td>
+</tr>
+<tr>
+<td>T1 post</td>
+<td>−2</td>
+<td>T4, T5 (T3 woken)</td>
+</tr>
+<tr>
+<td>T2 post</td>
+<td>−1</td>
+<td>T5 (T4 woken)</td>
+</tr>
+</tbody>
+</table></div>
+<p>At every step, a negative value equals minus the number of waiting threads.</p>
+</details>
+<hr>
+<p id="p-s12"><strong>S12.</strong> In the bounded buffer with semaphores: (a) does the order of the two <code>sem_post</code> calls in the producer matter? (b) Does the order of the two <code>sem_wait</code> calls matter? Explain each.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p>(a) <strong>No.</strong> <code>sem_post</code> never blocks, so both posts always complete, in either order. Posting the mutex first just ends the critical section slightly sooner.</p>
+<p>(b) <strong>Yes.</strong> If a thread takes the mutex first and then waits on <code>full</code> or <code>empty</code>, it can go to sleep while holding the mutex. The thread that would wake it then blocks on the mutex, and both are stuck: the deadlock from 4.4. Always wait on <code>full</code>/<code>empty</code> first, then take the mutex.</p>
+</details>
+<hr>
+<p id="p-s13"><strong>S13.</strong> Using semaphores only, make three threads print A, B and C in exactly that order every time, whatever order they are scheduled in. Then make two threads print ABABAB... forever.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> For A, then B, then C: use two semaphores, <code>s1</code> and <code>s2</code>, both initialized to 0.</p>
+<pre><code class="language-c">// Thread A            // Thread B            // Thread C
+printf(&quot;A&quot;);           sem_wait(&amp;s1);         sem_wait(&amp;s2);
+sem_post(&amp;s1);         printf(&quot;B&quot;);           printf(&quot;C&quot;);
+                       sem_post(&amp;s2);
+</code></pre>
+<p>B cannot print until A has posted s1, and C cannot print until B has posted s2, whatever order the threads start in.</p>
+<p>For ABAB...: <code>sA</code> starts at 1 (A goes first) and <code>sB</code> starts at 0.</p>
+<pre><code class="language-c">// Thread A                       // Thread B
+while (1) {                       while (1) {
+    sem_wait(&amp;sA);                    sem_wait(&amp;sB);
+    printf(&quot;A&quot;);                      printf(&quot;B&quot;);
+    sem_post(&amp;sB);                    sem_post(&amp;sA);
+}                                 }
+</code></pre>
+<p>Each thread hands the turn to the other.</p>
+</details>
+<hr>
+<p id="p-s14"><strong>S14.</strong> For the semaphore reader-writer lock: R1 holds a read lock, W calls <code>acquire_writelock</code>, then R2 calls <code>acquire_readlock</code>. What happens to W and R2, and what are <code>readers</code> and the value of <code>writelock</code>? Why is this unfair, and what is the general idea of the fix?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> While R1 is reading, readers = 1 and writelock = 0, because R1, as the first reader, took it.</p>
+<ul>
+<li>W calls <code>sem_wait(&amp;writelock)</code>: the value goes to −1, and <strong>W sleeps</strong>.</li>
+<li>R2 takes <code>lock</code>, increments readers to 2, and, because it is not the first reader, does not touch writelock. <strong>R2 enters immediately.</strong></li>
+<li>Now readers = 2, writelock = −1, and W is still waiting.</li>
+</ul>
+<p>This is unfair: W arrived before R2, but R2 got in first. W must wait until readers drops all the way to 0, and if readers keep arriving, that may never happen. The fix is to make new readers queue behind a waiting writer, with a turnstile semaphore that the writer holds while it waits (LBoS 4.2.3).</p>
+</details>
+<hr>
+<p id="p-s15"><strong>S15.</strong> Dining philosophers: (a) Does it also prevent deadlock if every <em>even-numbered</em> philosopher picks up the right fork first? (b) A different fix lets at most four philosophers try to eat at once, using a semaphore initialized to 4. Why does that prevent deadlock?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p>(a) <strong>Yes.</strong> With even philosophers taking the right fork first, P0 and P1 both reach for f1 first, and P2 and P3 both reach for f3 first. In each pair, the one who loses holds <strong>nothing</strong>. So the five philosophers can never all be holding one fork each, and the circular wait cannot close. In general, any arrangement where not everyone reaches in the same direction breaks the cycle.</p>
+<p>(b) With at most 4 philosophers at the table and 5 forks, even if all 4 hold one fork, one fork is still free. One of the seated philosophers is next to it, so that philosopher can take it, eat, and release both forks. Someone can always make progress, so there is no deadlock. This is the multiplex pattern (LBoS 4.4 calls the semaphore the &quot;footman&quot;).</p>
+</details>
+<hr>
+<p id="p-s16"><strong>S16.</strong> For each technique, name the deadlock condition it removes: (a) always locking in address order; (b) taking a global lock around all lock acquisitions; (c) <code>trylock</code> that releases what it holds on failure; (d) a lock-free counter using compare-and-swap.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a) <strong>Circular wait</strong>. (b) <strong>Hold and wait</strong>. (c) <strong>No preemption</strong> (OSTEP's classification). Tutorial 6 files it under hold and wait, since after releasing, the thread never waits while holding a lock; both views are reasonable. (d) <strong>Mutual exclusion</strong>.</p>
+</details>
+<hr>
+<p id="p-s17"><strong>S17.</strong> T1 holds A and waits for B. T2 holds B and waits for C. T3 holds C and is running, and will not request anything else. Is the system deadlocked? What if T3 then requests A?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> <strong>Not deadlocked.</strong> T3 is not waiting for anything, so it will finish and release C. Then T2 gets C, finishes, and releases B, and then T1 gets B. There is a chain, but no cycle. If T3 then requests A, there is a cycle: T1 waits for T2 (B), T2 waits for T3 (C), and T3 waits for T1 (A). All four conditions now hold: <strong>deadlock</strong>.</p>
+</details>
+<hr>
+<p id="p-s18"><strong>S18.</strong> There are 12 units of a resource. T0 has maximum 10 and holds 5; T1 has maximum 4 and holds 2; T2 has maximum 9 and holds 3. Is this state safe under the Banker's algorithm? Explain.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> The free units are 12 − (5 + 2 + 3) = <strong>2</strong>. The remaining needs are T0: 5, T1: 2, T2: 6.</p>
+<ol>
+<li>T1 can finish (needs 2, has 2 free). It returns its 4, so 4 are free.</li>
+<li>Now T0 needs 5 and T2 needs 6, but only 4 are free. Neither can be guaranteed to finish.</li>
+</ol>
+<p>The state is <strong>unsafe</strong>. Unsafe does not mean deadlocked yet: it means a deadlock <em>can</em> happen if the threads ask for their maximums. This is exactly the state in 4.5's example after granting T2 one more unit, which is why the Banker's algorithm refuses that request.</p>
+</details>
+<hr>
+<p id="p-s19"><strong>S19.</strong> Classify each bug as an atomicity violation, an order violation or a deadlock, and give a fix: (a) Thread 1 checks <code>if (q-&gt;head != NULL)</code> and then reads <code>q-&gt;head-&gt;value</code>, while Thread 2 may remove the head. (b) The main thread creates a worker that immediately uses a global config pointer, and only afterwards does the main thread set that pointer. (c) Function <code>transfer(a, b)</code> locks account a, then account b; two threads call <code>transfer(x, y)</code> and <code>transfer(y, x)</code>.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p>(a) <strong>Atomicity violation.</strong> The check and the use are meant to be one atomic step, but nothing makes them one. <strong>Fix:</strong> hold the queue's lock across both the check and the read, and in the remover.</p>
+<p>(b) <strong>Order violation.</strong> The worker assumes the pointer was set before it runs. <strong>Fix:</strong> set the pointer <em>before</em> creating the thread, or make the worker wait (on a semaphore initialized to 0, or a flag plus a CV) until main has set it.</p>
+<p>(c) <strong>Deadlock</strong> (circular wait): one thread holds x and wants y; the other holds y and wants x. <strong>Fix:</strong> always lock the two accounts in a global order, for example by account number or by address, whatever the argument order.</p>
+</details>
+<hr>
+<p id="p-s20"><strong>S20.</strong> A program sometimes hangs. <code>top -H</code> shows its threads at 0% CPU. What is the likely bug class, and how would you find exactly where each thread is stuck? What if they showed 100% CPU instead?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> <strong>0% CPU</strong> means the threads are asleep, blocked. The likely cause is a <strong>deadlock</strong>, or a <strong>lost wakeup</strong> (a thread sleeping in <code>cond_wait</code> that nobody will ever signal, like Tutorial 6's &quot;forgot to signal&quot; variant). To find it:</p>
+<ol>
+<li>Attach with <code>gdb -p $(pgrep prog)</code>.</li>
+<li>Run <code>thread apply all bt</code>, which shows exactly which <code>pthread_mutex_lock</code> or <code>pthread_cond_wait</code> call, on which line, each thread is stuck in.</li>
+<li>Helgrind can also report lock-order inversions directly.</li>
+</ol>
+<p><strong>100% CPU with no progress</strong> suggests a <strong>livelock</strong>, or threads spinning on a lock or flag. Use <code>perf</code> or gdb backtraces to see where they are looping.</p>
+</details>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Practice problems, Lectures 14 to 17</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><small>← Previous</small><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="pn pn-next" id="next-link" href="../../osn/filesystems/lecture-18.html"><small>Next →</small><span>Lecture 18: Files and directories</span></a></nav>
+    </article></main>
+  
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwpvzw06" defer></script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Part 3 — xv6: Copy-on-write fork and alarms · Operating Systems and Networks</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwpvzw06">
+</head>
+<body data-root="../../" data-page="osn/mp2-theory/part-3-xv6" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS4.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../dna/index.html">Data and Applications</a>
+      </div><div class="nav-tools"><a class="" href="../../dna/practice.html">Practice <b>89</b></a><a class="" href="../../dna/formulas.html">Formulas <b>5</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="dna/start-here/start-here" href="../../dna/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Chapter 1: The relational model, keys and constraints</span><i data-count-for="dna/ch1-relational-model/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch1-relational-model/learn" href="../../dna/ch1-relational-model/learn.html"><small>Learn</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/reference" href="../../dna/ch1-relational-model/reference.html"><small>Reference</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/practice" href="../../dna/ch1-relational-model/practice.html"><small>Practice</small><span>The relational model, keys and constraints</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: ER and EER modelling</span><i data-count-for="dna/ch2-er-eer/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch2-er-eer/learn" href="../../dna/ch2-er-eer/learn.html"><small>Learn</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/reference" href="../../dna/ch2-er-eer/reference.html"><small>Reference</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/practice" href="../../dna/ch2-er-eer/practice.html"><small>Practice</small><span>ER and EER modelling</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Mapping EER to relations</span><i data-count-for="dna/ch3-mapping/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch3-mapping/learn" href="../../dna/ch3-mapping/learn.html"><small>Learn</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/reference" href="../../dna/ch3-mapping/reference.html"><small>Reference</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/practice" href="../../dna/ch3-mapping/practice.html"><small>Practice</small><span>Mapping EER to relations</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Functional dependencies and normalisation</span><i data-count-for="dna/ch4-normalisation/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch4-normalisation/learn" href="../../dna/ch4-normalisation/learn.html"><small>Learn</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/reference" href="../../dna/ch4-normalisation/reference.html"><small>Reference</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/practice" href="../../dna/ch4-normalisation/practice.html"><small>Practice</small><span>Functional dependencies and normalisation</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Relational algebra</span><i data-count-for="dna/ch5-relational-algebra/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch5-relational-algebra/learn" href="../../dna/ch5-relational-algebra/learn.html"><small>Learn</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/reference" href="../../dna/ch5-relational-algebra/reference.html"><small>Reference</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/practice" href="../../dna/ch5-relational-algebra/practice.html"><small>Practice</small><span>Relational algebra</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Tuple relational calculus</span><i data-count-for="dna/ch6-trc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch6-trc/learn" href="../../dna/ch6-trc/learn.html"><small>Learn</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/reference" href="../../dna/ch6-trc/reference.html"><small>Reference</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/practice" href="../../dna/ch6-trc/practice.html"><small>Practice</small><span>Tuple relational calculus</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: SQL</span><i data-count-for="dna/ch7-sql/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch7-sql/learn" href="../../dna/ch7-sql/learn.html"><small>Learn</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/reference" href="../../dna/ch7-sql/reference.html"><small>Reference</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/practice" href="../../dna/ch7-sql/practice.html"><small>Practice</small><span>SQL</span></a></div></details><a class="nav-link nav-single" data-id="dna/mock-endsem/mock-endsem" href="../../dna/mock-endsem/mock-endsem.html"><span>Mock endsem with solutions</span></a><a class="nav-link nav-single" data-id="dna/cheat-sheet/cheat-sheet" href="../../dna/cheat-sheet/cheat-sheet.html"><span>Two-page cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>68</b></a><a class="" href="../../osn/formulas.html">Formulas <b>23</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><details class="nav-doc"><summary><span>Lectures 18 and 19: file systems</span><i data-count-for="osn/filesystems/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/filesystems/lecture-18" href="../../osn/filesystems/lecture-18.html"><small>Lecture 18</small><span>Files and directories</span></a><a class="nav-link" data-id="osn/filesystems/lecture-19" href="../../osn/filesystems/lecture-19.html"><small>Lecture 19</small><span>File system implementation</span></a><a class="nav-link" data-id="osn/filesystems/the-xv6-file-system-tutorial-7" href="../../osn/filesystems/the-xv6-file-system-tutorial-7.html"><span>The xv6 file system (Tutorial 7)</span></a><a class="nav-link" data-id="osn/filesystems/practice-problems-lectures-18-and-19" href="../../osn/filesystems/practice-problems-lectures-18-and-19.html"><span>Practice problems, Lectures 18 and 19</span></a></div></details><a class="nav-link nav-single" data-id="osn/formula-sheet/formula-sheet-lectures-01-to-19" href="../../osn/formula-sheet/formula-sheet-lectures-01-to-19.html"><span>Formula sheet</span></a><details class="nav-doc" open><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link current" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 19</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>252</b></a><a class="" href="../../pns/formulas.html">Formulas <b>127</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-skim" href="../../pns/l21-onward/part-6-linear-regression-skim.html"><span>Part 6 — Linear regression (skim)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>490</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>61</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/start-here/start-here" href="../../science-1/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Chapter 1: Scales, modelling and nonlinear dynamics</span><i data-count-for="science-1/ch1-intro/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch1-intro/learn" href="../../science-1/ch1-intro/learn.html"><small>Learn</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/reference" href="../../science-1/ch1-intro/reference.html"><small>Reference</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/formulas" href="../../science-1/ch1-intro/formulas.html"><small>Formulas</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/practice" href="../../science-1/ch1-intro/practice.html"><small>Practice</small><span>Scales, modelling and nonlinear dynamics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: Newtonian mechanics of one particle and many</span><i data-count-for="science-1/ch2-newton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch2-newton/learn" href="../../science-1/ch2-newton/learn.html"><small>Learn</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/reference" href="../../science-1/ch2-newton/reference.html"><small>Reference</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/formulas" href="../../science-1/ch2-newton/formulas.html"><small>Formulas</small><span>Newtonian mechanics</span></a><a class="nav-link" data-id="science-1/ch2-newton/practice" href="../../science-1/ch2-newton/practice.html"><small>Practice</small><span>Newtonian mechanics of one particle and many</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Calculus of variations and Lagrangian mechanics</span><i data-count-for="science-1/ch3-lagrange/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch3-lagrange/learn" href="../../science-1/ch3-lagrange/learn.html"><small>Learn</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/reference" href="../../science-1/ch3-lagrange/reference.html"><small>Reference</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/formulas" href="../../science-1/ch3-lagrange/formulas.html"><small>Formulas</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/practice" href="../../science-1/ch3-lagrange/practice.html"><small>Practice</small><span>Calculus of variations and Lagrangian mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Hamiltonian dynamics and the two-body problem</span><i data-count-for="science-1/ch4-hamilton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch4-hamilton/learn" href="../../science-1/ch4-hamilton/learn.html"><small>Learn</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/reference" href="../../science-1/ch4-hamilton/reference.html"><small>Reference</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/formulas" href="../../science-1/ch4-hamilton/formulas.html"><small>Formulas</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/practice" href="../../science-1/ch4-hamilton/practice.html"><small>Practice</small><span>Hamiltonian dynamics and the two-body problem</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Special relativity</span><i data-count-for="science-1/ch5-relativity/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch5-relativity/learn" href="../../science-1/ch5-relativity/learn.html"><small>Learn</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference" href="../../science-1/ch5-relativity/reference.html"><small>Reference</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/formulas" href="../../science-1/ch5-relativity/formulas.html"><small>Formulas</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/practice" href="../../science-1/ch5-relativity/practice.html"><small>Practice</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference-2" href="../../science-1/ch5-relativity/reference-2.html"><small>Reference</small><span>Special relativity quick sheet (Beiser ch. 1)</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Thermodynamics I: gases and the first law</span><i data-count-for="science-1/ch6-thermo1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch6-thermo1/learn" href="../../science-1/ch6-thermo1/learn.html"><small>Learn</small><span>Thermodynamics in one pass (Atkins 1A to 3B)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-2" href="../../science-1/ch6-thermo1/learn-2.html"><small>Learn</small><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-3" href="../../science-1/ch6-thermo1/learn-3.html"><small>Learn</small><span>The first law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-4" href="../../science-1/ch6-thermo1/learn-4.html"><small>Learn</small><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/practice" href="../../science-1/ch6-thermo1/practice.html"><small>Practice</small><span>Thermodynamics I: gases and the first law</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: Thermodynamics II: second law, entropy and free energy</span><i data-count-for="science-1/ch7-thermo2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch7-thermo2/learn" href="../../science-1/ch7-thermo2/learn.html"><small>Learn</small><span>The second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/learn-2" href="../../science-1/ch7-thermo2/learn-2.html"><small>Learn</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/reference" href="../../science-1/ch7-thermo2/reference.html"><small>Reference</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/formulas" href="../../science-1/ch7-thermo2/formulas.html"><small>Formulas</small><span>Second law, entropy and free energy</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/practice" href="../../science-1/ch7-thermo2/practice.html"><small>Practice</small><span>Free energy and phases</span></a></div></details><details class="nav-doc"><summary><span>Chapter 8: Particle properties of waves</span><i data-count-for="science-1/ch8-qm1/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch8-qm1/learn" href="../../science-1/ch8-qm1/learn.html"><small>Learn</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/reference" href="../../science-1/ch8-qm1/reference.html"><small>Reference</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/formulas" href="../../science-1/ch8-qm1/formulas.html"><small>Formulas</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/practice" href="../../science-1/ch8-qm1/practice.html"><small>Practice</small><span>Particle properties of waves</span></a></div></details><details class="nav-doc"><summary><span>Chapter 9: Wave properties of particles</span><i data-count-for="science-1/ch9-qm2/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch9-qm2/learn" href="../../science-1/ch9-qm2/learn.html"><small>Learn</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/reference" href="../../science-1/ch9-qm2/reference.html"><small>Reference</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/formulas" href="../../science-1/ch9-qm2/formulas.html"><small>Formulas</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/practice" href="../../science-1/ch9-qm2/practice.html"><small>Practice</small><span>Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>Chapter 10: Atomic structure</span><i data-count-for="science-1/ch10-qm3/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch10-qm3/learn" href="../../science-1/ch10-qm3/learn.html"><small>Learn</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/reference" href="../../science-1/ch10-qm3/reference.html"><small>Reference</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/formulas" href="../../science-1/ch10-qm3/formulas.html"><small>Formulas</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/practice" href="../../science-1/ch10-qm3/practice.html"><small>Practice</small><span>Atomic structure</span></a></div></details><details class="nav-doc"><summary><span>Chapter 11: Quantum mechanics</span><i data-count-for="science-1/ch11-qm4/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch11-qm4/learn" href="../../science-1/ch11-qm4/learn.html"><small>Learn</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/reference" href="../../science-1/ch11-qm4/reference.html"><small>Reference</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/formulas" href="../../science-1/ch11-qm4/formulas.html"><small>Formulas</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/practice" href="../../science-1/ch11-qm4/practice.html"><small>Practice</small><span>Quantum mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 12: Quantum theory of the hydrogen atom</span><i data-count-for="science-1/ch12-qm5/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch12-qm5/learn" href="../../science-1/ch12-qm5/learn.html"><small>Learn</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/reference" href="../../science-1/ch12-qm5/reference.html"><small>Reference</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/formulas" href="../../science-1/ch12-qm5/formulas.html"><small>Formulas</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/practice" href="../../science-1/ch12-qm5/practice.html"><small>Practice</small><span>Quantum theory of the hydrogen atom</span></a></div></details><details class="nav-doc"><summary><span>Practice: Mock endsem</span><i data-count-for="science-1/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/mock-endsem/practice" href="../../science-1/mock-endsem/practice.html"><small>Practice</small><span>Mock endsem</span></a><a class="nav-link" data-id="science-1/mock-endsem/practice-2" href="../../science-1/mock-endsem/practice-2.html"><small>Practice</small><span>Mock endsem, marking scheme and solutions</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Mechanics (lectures 1-8, Marion &amp; Thornton)</span><i data-count-for="science-1/hw-mechanics/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics" href="../../science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics.html"><span>HW practice: Lectures 1 to 4, nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2" href="../../science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2.html"><span>HW practice: Lecture 5, Newton for one particle (MT Chapter 2)</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange" href="../../science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange.html"><span>HW practice: Lectures 6 and 7, calculus of variations, Lagrange and Hamilton</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc" href="../../science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc.html"><span>HW practice: Lecture 8, multiparticle systems and central forces</span></a></div></details><a class="nav-link nav-single" data-id="science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e" href="../../science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e.html"><span>HW practice: Thermodynamics (Atkins 11e)</span></a><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 2 and 3</span><i data-count-for="science-1/hw-qm/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves" href="../../science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves.html"><span>HW practice: Beiser Chapter 2, Particle properties of waves</span></a><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles" href="../../science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles.html"><span>HW practice: Beiser Chapter 3, Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 4 to 6</span><i data-count-for="science-1/hw-qm-b/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure.html"><span>HW practice: Beiser Chapter 4, Atomic structure</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics.html"><span>HW practice: Beiser Chapter 5, Quantum mechanics</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-.html"><span>HW practice: Beiser Chapter 6, Quantum theory of the hydrogen atom</span></a></div></details><a class="nav-link nav-single" data-id="science-1/toolkit-practice/practice" href="../../science-1/toolkit-practice/practice.html"><span>Practice set: thermodynamics</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cheatsheet/sheet" href="../../science-1/toolkit-cheatsheet/sheet.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-formulas/sheet" href="../../science-1/toolkit-formulas/sheet.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-definitions/sheet" href="../../science-1/toolkit-definitions/sheet.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cards/cards" href="../../science-1/toolkit-cards/cards.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../osn/index.html">Operating Systems and Networks</a><span>›</span><span>Mini Project 2 theory</span></nav>
+      <header class="note-head">
+        <p class="eyebrow">Part 3 — xv6</p>
+        <h1>Copy-on-write fork and alarms</h1>
+        <p class="note-meta">23 min read</p>
+        <div class="note-tools">
+          
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          
+        </div>
+      </header>
+      <div class="prose"><p>xv6 is a small teaching operating system modelled on Unix V6, running on the RISC-V architecture (in QEMU). The two xv6 tasks change the kernel itself. Copy-on-write fork is about <strong>memory</strong>: page tables, physical page allocation and page faults. Alarms are about <strong>control flow</strong>: timer interrupts, traps, and how the kernel can make a user program run a function and later return to exactly where it was. Both depend on the same machinery, so this part starts with virtual memory and traps.</p>
+<h2 id="3-1-virtual-memory-and-page-tables">3.1 Virtual memory and page tables</h2>
+<h3 id="why-virtual-memory">Why virtual memory</h3>
+<p>Every process believes it has its own private memory starting at address 0. In reality all processes share one physical RAM. <strong>Virtual memory</strong> is the hardware and kernel mechanism that maps each process's virtual addresses onto physical memory. It gives three things:</p>
+<ul>
+<li><strong>Isolation.</strong> A process can only reach the physical pages its page table maps, so it cannot read or damage another process or the kernel.</li>
+<li><strong>A simple address space.</strong> Every program can be linked to run at the same addresses, regardless of where its pages actually sit in RAM.</li>
+<li><strong>Flexibility for the kernel.</strong> The kernel can change mappings at any time: share a page between processes, map a page read-only, or leave it unmapped and fill it in on demand. Copy-on-write is built entirely on this flexibility.</li>
+</ul>
+<h3 id="pages">Pages</h3>
+<p>Memory is managed in fixed-size blocks called <strong>pages</strong>: 4096 bytes (4 KB) on RISC-V. A virtual address is split into a <strong>virtual page number</strong> (which page) and an <strong>offset</strong> (which byte inside the page, the low 12 bits, since 2¹² = 4096). Translation replaces the virtual page number with a <strong>physical page number</strong> and keeps the offset unchanged.</p>
+<h3 id="sv39-the-risc-v-page-table-format">Sv39: the RISC-V page table format</h3>
+<p>xv6 uses RISC-V's <strong>Sv39</strong> scheme: 39-bit virtual addresses, translated through a <strong>three-level</strong> page table tree.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Bits of the virtual address</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>63–39</td>
+<td>Must equal bit 38 (unused in xv6, which keeps addresses below 2³⁸)</td>
+</tr>
+<tr>
+<td>38–30</td>
+<td>Index into the level-2 (top) page table, 9 bits</td>
+</tr>
+<tr>
+<td>29–21</td>
+<td>Index into the level-1 page table, 9 bits</td>
+</tr>
+<tr>
+<td>20–12</td>
+<td>Index into the level-0 (leaf) page table, 9 bits</td>
+</tr>
+<tr>
+<td>11–0</td>
+<td>Offset inside the 4 KB page</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each page table is itself one 4 KB page holding 512 entries of 8 bytes (2⁹ = 512, which is why each index is 9 bits). The <code>satp</code> register holds the physical address of the top-level table. To translate, the hardware uses the first 9-bit index to pick an entry in the top table, which points to a level-1 table; the next index picks an entry there, which points to a leaf table; the last index picks the <strong>page table entry (PTE)</strong> that holds the physical page number. The offset is then added.</p>
+<p>A multi-level tree saves memory: a mostly empty address space only needs tables for the regions actually in use, rather than one huge flat array. The cost is three memory reads per translation, which the <strong>TLB</strong> (translation lookaside buffer) hides by caching recent translations. Whenever the kernel changes a PTE that may be cached, it must flush the TLB (<code>sfence.vma</code> on RISC-V); xv6 does this when switching page tables.</p>
+<h3 id="the-page-table-entry">The page table entry</h3>
+<p>A 64-bit Sv39 PTE holds the physical page number in bits 10–53 and the flags in bits 0–9:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Name</th>
+<th>Meaning when set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>V</td>
+<td>Valid: this entry is in use</td>
+</tr>
+<tr>
+<td>1</td>
+<td>R</td>
+<td>Readable</td>
+</tr>
+<tr>
+<td>2</td>
+<td>W</td>
+<td>Writable</td>
+</tr>
+<tr>
+<td>3</td>
+<td>X</td>
+<td>Executable</td>
+</tr>
+<tr>
+<td>4</td>
+<td>U</td>
+<td>Accessible from user mode</td>
+</tr>
+<tr>
+<td>5</td>
+<td>G</td>
+<td>Global mapping</td>
+</tr>
+<tr>
+<td>6</td>
+<td>A</td>
+<td>Accessed (set by hardware on use)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>D</td>
+<td>Dirty (set by hardware on write)</td>
+</tr>
+<tr>
+<td>8–9</td>
+<td>RSW</td>
+<td><strong>Reserved for software:</strong> ignored by the hardware, free for the OS</td>
+</tr>
+</tbody>
+</table></div>
+<p>A PTE with V set but R, W and X all clear is not a leaf: it points to the next-level table. The <strong>RSW</strong> bits are what make copy-on-write easy to mark: the kernel can store &quot;this page is copy-on-write&quot; right in the PTE without the hardware caring. In xv6, <code>PTE2PA</code> and <code>PA2PTE</code> convert between a PTE and a physical address, and <code>PTE_FLAGS</code> extracts the low 10 bits.</p>
+<h3 id="walking-the-page-table-in-software">Walking the page table in software</h3>
+<p>The kernel often needs to find or change a PTE itself, not just let the hardware use it. xv6's <code>walk(pagetable, va, alloc)</code> does the same three-level descent in C and returns a pointer to the leaf PTE; with <code>alloc</code> set it creates missing intermediate tables. <code>mappages</code> installs new mappings, <code>uvmunmap</code> removes them, and <code>walkaddr</code> returns the physical address for a user virtual address.</p>
+<h3 id="a-process-s-address-space-in-xv6">A process's address space in xv6</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Region (low to high)</th>
+<th>Contents</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text</td>
+<td>Program instructions</td>
+<td>R, X, U</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Global variables</td>
+<td>R, W, U</td>
+</tr>
+<tr>
+<td>Guard page</td>
+<td>Unmapped, catches stack overflow</td>
+<td>none (no U)</td>
+</tr>
+<tr>
+<td>Stack</td>
+<td>User stack, one page</td>
+<td>R, W, U</td>
+</tr>
+<tr>
+<td>Heap</td>
+<td>Grows with <code>sbrk</code></td>
+<td>R, W, U</td>
+</tr>
+<tr>
+<td>Trapframe</td>
+<td>Saved user registers (kernel use)</td>
+<td>R, W (no U)</td>
+</tr>
+<tr>
+<td>Trampoline</td>
+<td>Code for entering and leaving the kernel, at the top</td>
+<td>R, X (no U)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <strong>trapframe</strong> and <strong>trampoline</strong> are mapped at the top of every user address space but without the U bit, so user code cannot touch them. The trapframe matters for alarms; the writable data, stack and heap pages are what copy-on-write shares.</p>
+<h3 id="physical-memory-allocation-kalloc-and-kfree">Physical memory allocation: kalloc and kfree</h3>
+<p>The kernel hands out physical memory one page at a time. <code>kalloc()</code> takes a free 4 KB page off a <strong>free list</strong> (a linked list threaded through the free pages themselves) and <code>kfree(pa)</code> puts one back. A spinlock protects the list, because several CPUs may allocate at once. Stock xv6 assumes each physical page has exactly one owner, so <code>kfree</code> always frees immediately. Copy-on-write breaks that assumption, which is why it needs reference counts.</p>
+<h2 id="3-2-copy-on-write-fork">3.2 Copy-on-write fork</h2>
+<h3 id="what-fork-does-and-why-plain-copying-is-wasteful">What fork does, and why plain copying is wasteful</h3>
+<p><code>fork()</code> creates a child process that is an exact copy of the parent: same memory contents, same open files, same registers, except that <code>fork</code> returns 0 in the child and the child's pid in the parent. Stock xv6 implements the memory part in <code>uvmcopy</code> by allocating a new physical page for <strong>every</strong> user page of the parent and copying all 4096 bytes.</p>
+<p>This is often wasted work. The most common use of <code>fork</code> is the shell pattern:</p>
+<pre><code class="language-c">if (fork() == 0) {
+    exec(&quot;ls&quot;, argv);   /* child immediately replaces its whole memory */
+}
+wait(0);
+</code></pre>
+<p>The child copies the parent's entire memory, then <code>exec</code> throws all of it away and loads a new program. Even without <code>exec</code>, the child usually writes to only a few pages. Copying everything up front costs time proportional to the parent's size and doubles memory use for pages that are never changed.</p>
+<h3 id="the-idea-share-now-copy-on-the-first-write">The idea: share now, copy on the first write</h3>
+<p><strong>Copy-on-write (CoW)</strong> postpones the copy until it is actually needed, and does it one page at a time:</p>
+<ol>
+<li>At <code>fork</code>, the child's page table is made to point at the <strong>same physical pages</strong> as the parent's. No data is copied.</li>
+<li>Every shared page that was writable is made <strong>read-only in both</strong> page tables, and marked as a CoW page.</li>
+<li>Reads work normally in both processes, from the shared page.</li>
+<li>When either process <strong>writes</strong> to a CoW page, the hardware refuses (the PTE has no W bit) and raises a <strong>page fault</strong>.</li>
+<li>The kernel's fault handler sees that the page is CoW, allocates a new page, copies the old contents into it, maps the copy <strong>writable</strong> in the faulting process only, and returns. The faulting store instruction runs again and now succeeds.</li>
+</ol>
+<p>Pages that are never written are never copied. For a <code>fork</code> followed by <code>exec</code>, almost nothing is copied at all. Linux, the BSDs and macOS all implement <code>fork</code> this way.</p>
+<h3 id="telling-cow-pages-apart-from-read-only-pages">Telling CoW pages apart from read-only pages</h3>
+<p>After step 2, a CoW page and a genuinely read-only page (such as program text) both have W clear. A write to the first must be handled by copying; a write to the second is a real error and the process must be killed. The kernel needs one extra bit to tell them apart, and the PTE's <strong>RSW bits</strong> (bits 8–9, ignored by hardware) are exactly that kind of spare space. The project defines <code>PTE_COW</code> as bit 8.</p>
+<p>Only pages that were writable become CoW. A page that was already read-only is simply shared as it is: neither process can write it, so it never needs copying.</p>
+<h3 id="reference-counting">Reference counting</h3>
+<p>Sharing creates a new problem: <strong>when may a physical page be freed?</strong> In stock xv6 a page has one owner, so <code>kfree</code> frees immediately. With CoW, a page may be mapped by the parent, the child, and grandchildren. If one of them exits and calls <code>kfree</code> on the page, the others would be left pointing at freed memory that may be reused for something else: a use-after-free in the kernel.</p>
+<p>The fix is a <strong>reference count</strong> per physical page: the number of page tables that currently map it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Change to the count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kalloc</code> hands out a page</td>
+<td>Set to 1</td>
+</tr>
+<tr>
+<td><code>uvmcopy</code> shares a page with the child</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>CoW fault copies the page for one process</td>
+<td>Old page −1; new page starts at 1</td>
+</tr>
+<tr>
+<td>A process unmaps the page (exit, <code>exec</code>, shrinking <code>sbrk</code>)</td>
+<td>−1 through <code>kfree</code></td>
+</tr>
+<tr>
+<td>Count reaches 0</td>
+<td>The page goes back on the free list</td>
+</tr>
+</tbody>
+</table></div>
+<p>The counts are kept in an array indexed by physical page number: <code>(pa - KERNBASE) / PGSIZE</code>, one entry per page of RAM the allocator manages. The array needs a <strong>lock</strong>, because two CPUs may change the count of the same page at once (for example, parent and child faulting on the same shared page on different CPUs). An unprotected <code>count++</code> is a read-modify-write and can lose an update, leading to a page being freed too early or never.</p>
+<p><code>kfree</code> becomes &quot;decrement, and free only if it reached zero&quot;. At boot, <code>kinit</code> frees every page once to build the free list, so the counts must be set to 1 before that loop for them to end at 0.</p>
+<h3 id="the-page-fault">The page fault</h3>
+<p>On RISC-V, a trap's cause is in the <code>scause</code> register and, for a page fault, the faulting virtual address is in <code>stval</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>scause</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12</td>
+<td>Instruction page fault (fetch from a page without X)</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Load page fault (read from a page without R, or unmapped)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Store/AMO page fault (write to a page without W, or unmapped)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A write to a CoW page always produces <strong>scause 15</strong>. The handler (<code>cowfault</code> in the project) must:</p>
+<ol>
+<li>Round <code>stval</code> down to the page boundary and check that it is below the process's maximum address.</li>
+<li>Find the PTE with <code>walk</code>, and check that it is valid, user-accessible and CoW. If not, this is not a CoW fault and is handled (or the process killed) as before.</li>
+<li>If the reference count is 1, this process is the last user: simply set W, clear the CoW bit, and return. No copy is needed.</li>
+<li>Otherwise <code>kalloc</code> a new page (if memory is exhausted, the process is killed), copy 4096 bytes from the old page, and rewrite the PTE to point at the new page with W set and CoW cleared.</li>
+<li>Drop one reference to the old page with <code>kfree</code>.</li>
+</ol>
+<p>The order in step 4 matters: the new mapping must be in place before the old reference is dropped, otherwise another process could free the old page while it is still being copied from.</p>
+<h3 id="copyout-the-kernel-writing-into-user-memory">copyout: the kernel writing into user memory</h3>
+<p>There is one more path that writes to user pages: the <strong>kernel itself</strong>. System calls such as <code>read</code>, <code>pipe</code> and <code>wait</code> use <code>copyout</code> to write results into a user buffer. The kernel does not go through the user's page table in hardware; <code>copyout</code> uses <code>walkaddr</code> to find the physical address and writes it directly. A CoW page would therefore be written <strong>without any fault</strong>, silently changing a page that the other process still shares.</p>
+<p>So <code>copyout</code> must check each destination page itself: if its PTE is CoW, call the same <code>cowfault</code> routine first, then look up the (now private) physical address again and write there. This is the most commonly missed part of CoW and the reason the spec lists it as its own marking item.</p>
+<h3 id="what-the-tests-check">What the tests check</h3>
+<p>The standard <code>cowtest</code> program exercises exactly these cases:</p>
+<ul>
+<li><strong>simple</strong>: a process allocates more than half of physical memory and forks. Without CoW the fork fails for lack of memory; with CoW it succeeds, because nothing is copied.</li>
+<li><strong>three</strong>: several processes share pages and write to them in different orders, which checks the reference counts.</li>
+<li><strong>file</strong>: data is read from a pipe into a CoW buffer, which checks <code>copyout</code>.</li>
+</ul>
+<p><code>usertests</code> must also still pass, which checks that nothing else (exec, sbrk, exit, freeing) was broken by changing how pages are freed. A memory leak shows up there as a failure to get back all free pages after the tests.</p>
+<h3 id="trade-offs">Trade-offs</h3>
+<p>CoW makes <code>fork</code> fast and memory-efficient, but it is not free: each first write costs a trap, a page allocation and a copy, which is slower than the copy would have been inside <code>fork</code> if the child was going to write every page anyway. It also introduces <strong>overcommitment</strong>: <code>fork</code> succeeds even if there is not enough memory to give every process a private copy later, so a page fault can fail for lack of memory. xv6 kills the process in that case; Linux has its OOM killer for the same reason.</p>
+<h2 id="3-3-traps-timer-interrupts-and-alarms">3.3 Traps, timer interrupts and alarms</h2>
+<h3 id="traps-three-ways-into-the-kernel">Traps: three ways into the kernel</h3>
+<p>The CPU leaves user code and enters the kernel on a <strong>trap</strong>. RISC-V has three kinds, all handled by the same entry path:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Cause</th>
+<th>Example</th>
+<th><code>scause</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System call</td>
+<td>The program asks for a service with <code>ecall</code></td>
+<td><code>write</code>, <code>fork</code>, <code>sigalarm</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>Exception</td>
+<td>The current instruction cannot complete</td>
+<td>Page fault, illegal instruction</td>
+<td>12, 13, 15, 2 …</td>
+</tr>
+<tr>
+<td>Device interrupt</td>
+<td>A device needs attention, unrelated to the current instruction</td>
+<td>Timer tick, UART, disk</td>
+<td>Top bit set (interrupt)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The hardware does very little on a trap: it saves the user program counter in <code>sepc</code>, records the cause in <code>scause</code> (and a faulting address in <code>stval</code>), switches to supervisor mode, and jumps to the address in <code>stvec</code>. Everything else is software.</p>
+<h3 id="the-path-of-a-trap-from-user-space-in-xv6">The path of a trap from user space in xv6</h3>
+<ol>
+<li><strong><code>uservec</code></strong> (in the trampoline page, mapped at the same address in every page table) saves all 32 user registers into the process's <strong>trapframe</strong>, loads the kernel stack pointer and kernel page table from it, and jumps to <code>usertrap</code>.</li>
+<li><strong><code>usertrap</code></strong> (in <code>trap.c</code>) copies <code>sepc</code> into <code>trapframe-&gt;epc</code>, then decides by <code>scause</code>: a system call goes to <code>syscall()</code>, a device interrupt to <code>devintr()</code>, and a page fault to the fault handlers (the CoW handler is added here).</li>
+<li>On the way back, <strong><code>usertrapret</code></strong> sets <code>stvec</code> back to <code>uservec</code>, loads <code>sepc</code> from <code>trapframe-&gt;epc</code>, and jumps to <strong><code>userret</code></strong>, which restores all user registers from the trapframe and executes <code>sret</code> to return to user mode.</li>
+</ol>
+<p>The central point for alarms: <strong>when the kernel returns, user execution resumes at <code>trapframe-&gt;epc</code> with the registers in the trapframe.</strong> Change those values before returning, and the program continues somewhere else, with different registers, without knowing anything happened. For a system call, <code>usertrap</code> adds 4 to <code>epc</code> so the program resumes after the <code>ecall</code> instead of repeating it, and the return value goes into <code>trapframe-&gt;a0</code>.</p>
+<h3 id="timer-interrupts">Timer interrupts</h3>
+<p>A hardware timer fires periodically (in xv6 roughly every tenth of a second in QEMU). Each firing is a <strong>tick</strong>. The kernel uses ticks for two things: counting time (the global <code>ticks</code> counter, used by <code>sleep</code> and <code>uptime</code>) and <strong>preemption</strong>: on a timer interrupt from user space, <code>usertrap</code> calls <code>yield()</code> so another process can run. Without timer interrupts, a process in an infinite loop would never give up the CPU.</p>
+<p>A timer interrupt that arrives while a user process is running enters through the same <code>usertrap</code> path, with <code>devintr()</code> returning 2 to say &quot;this was the timer&quot;. That is the hook the alarm feature uses.</p>
+<h3 id="what-sigalarm-and-sigreturn-do">What sigalarm and sigreturn do</h3>
+<p>The task adds a primitive form of user-level timer signal, similar in spirit to Unix <code>SIGALRM</code> from Part 1:</p>
+<ul>
+<li><strong><code>sigalarm(n, fn)</code></strong>: after every <code>n</code> ticks of CPU time <strong>consumed by this process</strong>, the kernel should make the process call <code>fn</code>. <code>sigalarm(0, 0)</code> turns the alarm off.</li>
+<li><strong><code>sigreturn()</code></strong>: called by <code>fn</code> at its end; the process then resumes exactly where it was interrupted, as if nothing had happened.</li>
+</ul>
+<p>This is how a program can do periodic work (sample its own state, check a deadline) without polling, and it is a model of how real signal delivery works in Unix kernels.</p>
+<h3 id="the-state-the-kernel-needs">The state the kernel needs</h3>
+<p>Each process gains a few fields in <code>struct proc</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alarm interval</td>
+<td><code>n</code> from <code>sigalarm</code>; 0 means no alarm</td>
+</tr>
+<tr>
+<td>Handler address</td>
+<td><code>fn</code>, a <strong>user</strong> virtual address</td>
+</tr>
+<tr>
+<td>Ticks counter</td>
+<td>Ticks used since the handler last ran</td>
+</tr>
+<tr>
+<td>In-handler flag</td>
+<td>Set while the handler runs, to stop re-entry</td>
+</tr>
+<tr>
+<td>Saved trapframe</td>
+<td>A copy of all user registers at the moment of interruption</td>
+</tr>
+</tbody>
+</table></div>
+<p>They must be initialised in <code>allocproc</code> (and the saved-trapframe page freed in <code>freeproc</code>), because process slots are reused: without it, a new process could inherit an old process's alarm.</p>
+<h3 id="delivering-the-alarm-redirecting-the-return">Delivering the alarm: redirecting the return</h3>
+<p>On each timer interrupt from this process, <code>usertrap</code> increments the ticks counter. When it reaches the interval and the handler is not already running:</p>
+<ol>
+<li>Copy the whole current trapframe into the saved trapframe.</li>
+<li>Set <code>trapframe-&gt;epc = handler</code>.</li>
+<li>Set the in-handler flag and reset the ticks counter.</li>
+<li>Return to user space normally.</li>
+</ol>
+<p>Because of step 2, <code>userret</code> &quot;returns&quot; into the handler instead of to the interrupted instruction. The kernel never calls user code directly: running user code with kernel privileges would be a serious security hole, and the kernel does not even use the user page table. Instead it arranges for the <strong>normal return path</strong> to land in the handler, in user mode, with user privileges.</p>
+<h3 id="returning-with-sigreturn">Returning with sigreturn</h3>
+<p>The handler runs as ordinary user code. It may change any register. When it finishes it calls <code>sigreturn()</code>, a system call. The kernel:</p>
+<ol>
+<li>Copies the saved trapframe back over the current trapframe. This restores <strong>every</strong> register, including <code>epc</code> (the interrupted instruction) and <code>sp</code>.</li>
+<li>Clears the in-handler flag, so the alarm can fire again.</li>
+<li>Returns the saved <code>a0</code> as the system call's return value.</li>
+</ol>
+<p>Step 3 is a subtle point. The system call return path writes the return value into <code>trapframe-&gt;a0</code>. If <code>sigreturn</code> returned 0, it would overwrite the interrupted program's <code>a0</code> after it had just been restored, and the program would see one register changed at a random moment. Returning the saved <code>a0</code> makes the restore exact.</p>
+<p>The spec requires that <strong>no register changes</strong> across the alarm, because the interrupted code could be in the middle of any computation. Saving and restoring the whole trapframe, not just a few registers, is the only way to guarantee it.</p>
+<h3 id="edge-cases-the-spec-cares-about">Edge cases the spec cares about</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Why it matters</th>
+<th>How it is met</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Handler address may be 0</td>
+<td>In the test program the handler can be at virtual address 0, so 0 is a valid function</td>
+<td>The &quot;alarm active&quot; check is <code>interval &gt; 0</code>, never <code>handler != 0</code></td>
+</tr>
+<tr>
+<td>No re-entry</td>
+<td>If the handler takes more than n ticks, a second call would overwrite the saved trapframe and lose the original return point</td>
+<td>The in-handler flag blocks delivery until <code>sigreturn</code></td>
+</tr>
+<tr>
+<td>Periodic</td>
+<td>The alarm should keep firing every n ticks, not once</td>
+<td>The ticks counter is reset each time the handler starts</td>
+</tr>
+<tr>
+<td>Count only this process's time</td>
+<td>Ticks while other processes run should not count</td>
+<td>The counter is incremented only on timer interrupts that arrive while this process is in user mode</td>
+</tr>
+<tr>
+<td><code>sigalarm</code> result</td>
+<td>Return 0 on success</td>
+<td>Only invalid arguments (a negative interval) give -1</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="how-this-relates-to-real-unix-signals">How this relates to real Unix signals</h3>
+<p>Real kernels deliver signals the same way in principle: on the way back to user space, if a signal is pending, the kernel saves the interrupted context and redirects the return to the handler. The differences are in where the context is saved and how the return happens. Linux pushes the saved context onto the <strong>user stack</strong> in a signal frame and sets the return address to a small trampoline that calls <code>rt_sigreturn</code>; the handler returning normally therefore performs the restore. xv6's version keeps the saved context in the kernel and makes the handler call <code>sigreturn</code> itself, which is simpler and cannot be corrupted by the user program, at the cost of only one level of nesting.</p>
+<h3 id="what-the-tests-check-2">What the tests check</h3>
+<p><code>alarmtest</code> checks, in order: that the handler is called repeatedly while the program loops (<code>test0</code>); that after <code>sigreturn</code> the program continues with all registers intact (<code>test1</code>, which would break if any register changed); that the handler is not re-entered while running (<code>test2</code>); and that <code>a0</code> is restored correctly (<code>test3</code>). <code>usertests</code> must still pass, which checks that the new fields and the extra trapframe page did not break process creation or exit.</p>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Part 3 — xv6</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../osn/mp2-theory/part-2-mastermind.html"><small>← Previous</small><span>Part 2 — mastermind: A peer-to-peer game on a LAN</span></a><a class="pn pn-next" id="next-link" href="../../osn/mp2-theory/viva-questions.html"><small>Next →</small><span>Viva questions</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#3-1-virtual-memory-and-page-tables">3.1 Virtual memory and page tables</a><a class="l3" href="#why-virtual-memory">Why virtual memory</a><a class="l3" href="#pages">Pages</a><a class="l3" href="#sv39-the-risc-v-page-table-format">Sv39: the RISC-V page table format</a><a class="l3" href="#the-page-table-entry">The page table entry</a><a class="l3" href="#walking-the-page-table-in-software">Walking the page table in software</a><a class="l3" href="#a-process-s-address-space-in-xv6">A process's address space in xv6</a><a class="l3" href="#physical-memory-allocation-kalloc-and-kfree">Physical memory allocation: kalloc and kfree</a><a class="l2" href="#3-2-copy-on-write-fork">3.2 Copy-on-write fork</a><a class="l3" href="#what-fork-does-and-why-plain-copying-is-wasteful">What fork does, and why plain copying is wasteful</a><a class="l3" href="#the-idea-share-now-copy-on-the-first-write">The idea: share now, copy on the first write</a><a class="l3" href="#telling-cow-pages-apart-from-read-only-pages">Telling CoW pages apart from read-only pages</a><a class="l3" href="#reference-counting">Reference counting</a><a class="l3" href="#the-page-fault">The page fault</a><a class="l3" href="#copyout-the-kernel-writing-into-user-memory">copyout: the kernel writing into user memory</a><a class="l3" href="#what-the-tests-check">What the tests check</a><a class="l3" href="#trade-offs">Trade-offs</a><a class="l2" href="#3-3-traps-timer-interrupts-and-alarms">3.3 Traps, timer interrupts and alarms</a><a class="l3" href="#traps-three-ways-into-the-kernel">Traps: three ways into the kernel</a><a class="l3" href="#the-path-of-a-trap-from-user-space-in-xv6">The path of a trap from user space in xv6</a><a class="l3" href="#timer-interrupts">Timer interrupts</a><a class="l3" href="#what-sigalarm-and-sigreturn-do">What sigalarm and sigreturn do</a><a class="l3" href="#the-state-the-kernel-needs">The state the kernel needs</a><a class="l3" href="#delivering-the-alarm-redirecting-the-return">Delivering the alarm: redirecting the return</a><a class="l3" href="#returning-with-sigreturn">Returning with sigreturn</a><a class="l3" href="#edge-cases-the-spec-cares-about">Edge cases the spec cares about</a><a class="l3" href="#how-this-relates-to-real-unix-signals">How this relates to real Unix signals</a><a class="l3" href="#what-the-tests-check-2">What the tests check</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwpvzw06" defer></script>
+</body>
+</html>
