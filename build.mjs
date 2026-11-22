@@ -398,7 +398,7 @@ function page({ root, title, body, active, pageId = '', outline = '', cls = '' }
 <link rel="manifest" href="${root}manifest.webmanifest">
 <link rel="icon" href="${root}assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${root}assets/icon-192.png">
-<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);if(!localStorage.getItem('sm:user'))d.classList.add('sm-locked')}catch(e){}</script>
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);${AUTH_ON ? "if(!localStorage.getItem('sm:user'))d.classList.add('sm-locked');" : ''}}catch(e){}</script>
 ${fontsLink}
 <link rel="stylesheet" href="${root}assets/katex/katex.min.css">
 <link rel="stylesheet" href="${root}assets/style.css?v=${BUILD}">
@@ -482,12 +482,14 @@ ${fontsLink}
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="${root}assets/auth.js?v=${BUILD}" defer></script>
-<script src="${root}assets/app.js?v=${BUILD}" defer></script>
+${AUTH_ON ? `<script src="${root}assets/auth.js?v=${BUILD}" defer></script>
+` : ''}<script src="${root}assets/app.js?v=${BUILD}" defer></script>
 </body>
 </html>`;
 }
 
+// Roll-number sign-in is switched off until a separate Supabase project is set up (src/auth.js, src/profile.js, SQL in project files).
+const AUTH_ON = false;
 const written = [];
 function write(rel, html) {
   const p = path.join(OUT, rel);
@@ -603,9 +605,11 @@ const distLab = () => `<section class="dist-lab" aria-label="Interactive standar
     <div id="saved-box"></div>
   </div>`;
   write('index.html', page({ root: '', title: site.title, body, cls: 'is-home' }));
-  write('profile.html', page({ root: '', title: `Profile · ${site.title}`, cls: 'is-profile', body:
+  if (AUTH_ON) {
+    write('profile.html', page({ root: '', title: `Profile · ${site.title}`, cls: 'is-profile', body:
     '<article class="note"><header class="note-head"><h1>Profile</h1></header><div id="profile" class="profile"><p class="hint">Sign in to see your profile.</p></div></article>' +
     `<script src="assets/profile.js?v=${BUILD}" defer></script>` }));
+  }
 }
 
 const meta = { courses: [], titles: {} };
