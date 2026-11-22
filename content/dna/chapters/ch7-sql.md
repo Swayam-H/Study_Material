@@ -781,9 +781,348 @@ if (hours > 0) printf("GPA = %.2f\n", points / hours); else printf("No grades\n"
 3. The loop stops when SQLCODE is no longer 0 (100 means no more rows).
 4. Points are accumulated as grade value times credit hours, and the GPA is their total divided by the total hours.
 
-## C. Past papers (other years; style differs)
+### Problem 15 [SQL · Application · 6 pts · Elmasri 6.6]
 
-### Problem 15 [SQL · Application · 6 pts · M25 endsem Q1]
+Repeat 6.5 for the AIRLINE schema (Figure 5.8): list the referential integrity constraints and write the DDL. AIRPORT(Airport_code, Name, City, State); FLIGHT(Flight_number, Airline, Weekdays); FLIGHT_LEG(Flight_number, Leg_number, Departure_airport_code, Scheduled_departure_time, Arrival_airport_code, Scheduled_arrival_time); LEG_INSTANCE(Flight_number, Leg_number, Date, Number_of_available_seats, Airplane_id, Departure_airport_code, Departure_time, Arrival_airport_code, Arrival_time); FARE(Flight_number, Fare_code, Amount, Restrictions); AIRPLANE_TYPE(Airplane_type_name, Max_seats, Company); CAN_LAND(Airplane_type_name, Airport_code); AIRPLANE(Airplane_id, Total_number_of_seats, Airplane_type); SEAT_RESERVATION(Flight_number, Leg_number, Date, Seat_number, Customer_name, Customer_phone).
+
+*Solution.*
+
+**Assumptions.**
+1. The keys are the underlined attributes of Figure 5.8: a leg is (Flight_number, Leg_number); a leg instance adds Date; a reservation adds Seat_number. *(Reason: as in the figure.)*
+2. Deleting a flight removes its legs, fares, instances and reservations (CASCADE). Deleting an airport, airplane or airplane type that is in use is refused (RESTRICT). *(Reason: schedule data belongs to its flight, but reference data in use must not disappear silently.)*
+3. An instance's airplane may be unassigned at first, so Airplane_id may be NULL. *(Reason: planes are often assigned close to the date.)*
+
+**Referential integrity constraints.**
+1. FLIGHT_LEG.Flight_number → FLIGHT
+2. FLIGHT_LEG.Departure_airport_code → AIRPORT, and FLIGHT_LEG.Arrival_airport_code → AIRPORT
+3. LEG_INSTANCE.(Flight_number, Leg_number) → FLIGHT_LEG
+4. LEG_INSTANCE.Airplane_id → AIRPLANE
+5. LEG_INSTANCE.Departure_airport_code → AIRPORT, and LEG_INSTANCE.Arrival_airport_code → AIRPORT
+6. FARE.Flight_number → FLIGHT
+7. CAN_LAND.Airplane_type_name → AIRPLANE_TYPE, and CAN_LAND.Airport_code → AIRPORT
+8. AIRPLANE.Airplane_type → AIRPLANE_TYPE
+9. SEAT_RESERVATION.(Flight_number, Leg_number, Date) → LEG_INSTANCE
+
+**DDL.**
+
+```sql
+CREATE TABLE AIRPORT (
+  Airport_code CHAR(3) PRIMARY KEY,
+  Name VARCHAR(50) NOT NULL, City VARCHAR(30), State VARCHAR(20));
+CREATE TABLE FLIGHT (
+  Flight_number VARCHAR(8) PRIMARY KEY,
+  Airline VARCHAR(30) NOT NULL, Weekdays VARCHAR(7));
+CREATE TABLE FLIGHT_LEG (
+  Flight_number VARCHAR(8),
+  Leg_number INT,
+  Departure_airport_code CHAR(3) NOT NULL,
+  Scheduled_departure_time TIME,
+  Arrival_airport_code CHAR(3) NOT NULL,
+  Scheduled_arrival_time TIME,
+  PRIMARY KEY (Flight_number, Leg_number),
+  FOREIGN KEY (Flight_number) REFERENCES FLIGHT(Flight_number)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (Departure_airport_code) REFERENCES AIRPORT(Airport_code)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (Arrival_airport_code) REFERENCES AIRPORT(Airport_code)
+    ON DELETE RESTRICT ON UPDATE CASCADE);
+CREATE TABLE AIRPLANE_TYPE (
+  Airplane_type_name VARCHAR(20) PRIMARY KEY,
+  Max_seats INT CHECK (Max_seats > 0), Company VARCHAR(30));
+CREATE TABLE AIRPLANE (
+  Airplane_id VARCHAR(10) PRIMARY KEY,
+  Total_number_of_seats INT CHECK (Total_number_of_seats > 0),
+  Airplane_type VARCHAR(20) NOT NULL,
+  FOREIGN KEY (Airplane_type) REFERENCES AIRPLANE_TYPE(Airplane_type_name)
+    ON DELETE RESTRICT ON UPDATE CASCADE);
+CREATE TABLE LEG_INSTANCE (
+  Flight_number VARCHAR(8),
+  Leg_number INT,
+  Date DATE,
+  Number_of_available_seats INT CHECK (Number_of_available_seats >= 0),
+  Airplane_id VARCHAR(10),
+  Departure_airport_code CHAR(3), Departure_time TIME,
+  Arrival_airport_code CHAR(3), Arrival_time TIME,
+  PRIMARY KEY (Flight_number, Leg_number, Date),
+  FOREIGN KEY (Flight_number, Leg_number)
+    REFERENCES FLIGHT_LEG(Flight_number, Leg_number)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (Airplane_id) REFERENCES AIRPLANE(Airplane_id)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (Departure_airport_code) REFERENCES AIRPORT(Airport_code)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (Arrival_airport_code) REFERENCES AIRPORT(Airport_code)
+    ON DELETE RESTRICT ON UPDATE CASCADE);
+CREATE TABLE FARE (
+  Flight_number VARCHAR(8),
+  Fare_code VARCHAR(5),
+  Amount DECIMAL(8,2) NOT NULL, Restrictions VARCHAR(100),
+  PRIMARY KEY (Flight_number, Fare_code),
+  FOREIGN KEY (Flight_number) REFERENCES FLIGHT(Flight_number)
+    ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE TABLE CAN_LAND (
+  Airplane_type_name VARCHAR(20),
+  Airport_code CHAR(3),
+  PRIMARY KEY (Airplane_type_name, Airport_code),
+  FOREIGN KEY (Airplane_type_name) REFERENCES AIRPLANE_TYPE(Airplane_type_name)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (Airport_code) REFERENCES AIRPORT(Airport_code)
+    ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE TABLE SEAT_RESERVATION (
+  Flight_number VARCHAR(8),
+  Leg_number INT,
+  Date DATE,
+  Seat_number VARCHAR(4),
+  Customer_name VARCHAR(40) NOT NULL, Customer_phone VARCHAR(15),
+  PRIMARY KEY (Flight_number, Leg_number, Date, Seat_number),
+  FOREIGN KEY (Flight_number, Leg_number, Date)
+    REFERENCES LEG_INSTANCE(Flight_number, Leg_number, Date)
+    ON DELETE CASCADE ON UPDATE CASCADE);
+```
+
+**Explanation.**
+1. CAN_LAND is the only relation where CASCADE on an airport delete is right: if an airport closes, the fact that a type can land there goes with it.
+2. The tables are created in an order that lets every foreign key refer to a table that already exists.
+
+> **Examiner's note.** The composite foreign keys (3 and 9) are the usual loss: they must reference the full composite key, not just Flight_number. Two FKs from FLIGHT_LEG to AIRPORT need two separate FOREIGN KEY clauses.
+
+### Problem 16 [SQL · Concept · 6 pts · Elmasri 6.7]
+
+For each referential integrity constraint of LIBRARY (Figure 6.6), choose the action (reject, cascade, set NULL, set default) on deletion of the referenced tuple and on update of its primary key. Justify each choice.
+
+*Solution.*
+
+**Assumptions.**
+1. BOOK_LOANS rows are loans that are currently out. *(Reason: there is no return date.)*
+2. Primary keys rarely change, but when they do (a renumbered branch or card), the change should follow everywhere. *(Reason: an ID change does not change what the rows mean.)*
+
+**Choices.**
+
+| Foreign key | On delete | On update | Reason |
+| --- | --- | --- | --- |
+| BOOK.Publisher_name → PUBLISHER.Name | SET NULL | CASCADE | The book still exists if its publisher's record is removed; a renamed publisher should follow |
+| BOOK_AUTHORS.Book_id → BOOK | CASCADE | CASCADE | Author rows describe the book and mean nothing without it |
+| BOOK_COPIES.Book_id → BOOK | CASCADE | CASCADE | Removing a book from the catalogue removes its copy counts |
+| BOOK_COPIES.Branch_id → LIBRARY_BRANCH | CASCADE | CASCADE | Copy counts belong to the branch; a closed branch holds no copies |
+| BOOK_LOANS.Book_id → BOOK | REJECT | CASCADE | A book that is out on loan must not vanish; it must be returned first |
+| BOOK_LOANS.Branch_id → LIBRARY_BRANCH | REJECT | CASCADE | Outstanding loans must be settled before a branch is removed |
+| BOOK_LOANS.Card_no → BORROWER | REJECT | CASCADE | A borrower who still has books cannot be deleted, or the loans become untraceable |
+
+Set default is not used, because there is no sensible default book, branch or borrower.
+
+> **Examiner's note.** Any choice is accepted if the reason fits the meaning of the data. What loses marks is CASCADE on BOOK_LOANS.Card_no (deleting a borrower silently erases the record of books they still hold) or SET NULL on a foreign key that is part of the primary key, such as BOOK_COPIES.Book_id. That is impossible, because the key cannot be NULL.
+
+### Problem 17 [SQL · Concept · 5 pts · Elmasri 6.9]
+
+How can the DBMS enforce key and foreign key constraints? Is the technique difficult to implement? Can the checks run efficiently when updates are applied?
+
+*Solution.*
+
+**Key (and UNIQUE) constraints.**
+1. On every INSERT, and on every UPDATE of a key attribute, the DBMS must check that no other tuple has the same key value.
+2. Without help, this means scanning the whole table, which is slow.
+3. The DBMS therefore builds an **index** (usually a B+-tree or hash index) on every primary key and UNIQUE column. The check is then one index lookup, roughly O(log n), and the index is updated with the row.
+
+**Foreign key constraints.**
+1. On INSERT into the referencing table, or UPDATE of its FK, the DBMS looks up the value in the referenced table's primary-key index. If it is absent, it rejects the change.
+2. On DELETE from the referenced table, or UPDATE of its PK, the DBMS must find every referencing row and apply the declared action (reject, cascade, set NULL, set default). This is efficient only if there is an **index on the foreign key column** of the referencing table; otherwise it is a full scan of that table.
+
+**Difficulty and efficiency.**
+1. Implementing the checks is not difficult once indexes exist: they are lookups that run in the same transaction as the update.
+2. They are efficient for single-row changes. The cost grows with cascades, which can delete many rows across several tables, and with bulk loads, where DBMSs often allow checks to be **deferred** to commit time or disabled during the load.
+3. Other constraints, such as CHECK on one row, are cheap. Constraints across rows or tables (assertions) are expensive, which is why few DBMSs support them.
+
+### Problem 18 [SQL · Application · 6 pts · Elmasri 6.11 (the updates of 5.11)]
+
+Write the updates (a)–(k) of Exercise 5.11 as SQL statements, and say what the DBMS does with each on the Figure 5.6 state.
+
+*Solution.*
+
+**Assumptions.**
+1. Each statement is applied on its own to the original Figure 5.6 state. *(Reason: Exercise 5.11 says each is applied directly to that state.)*
+2. The foreign keys are declared with the default action, which is to reject a violating change. *(Reason: no triggered actions are given in Figure 5.5.)*
+
+| | SQL | Result |
+| --- | --- | --- |
+| a | `INSERT INTO EMPLOYEE VALUES ('Robert','F','Scott','943775543','1972-06-21','2365 Newcastle Rd, Bellaire, TX','M',58000,'888665555',1);` | Accepted |
+| b | `INSERT INTO PROJECT VALUES ('ProductA',4,'Bellaire',2);` | Rejected: department 2 does not exist |
+| c | `INSERT INTO DEPARTMENT VALUES ('Production',4,'943775543','2007-10-01');` | Rejected: Dnumber 4 already exists, and employee 943775543 does not exist |
+| d | `INSERT INTO WORKS_ON VALUES ('677678989',NULL,40.0);` | Rejected: Pno is part of the key and is NULL, and employee 677678989 does not exist |
+| e | `INSERT INTO DEPENDENT VALUES ('453453453','John','M','1990-12-12','Spouse');` | Accepted |
+| f | `DELETE FROM WORKS_ON WHERE Essn = '333445555';` | Accepted: nothing references WORKS_ON |
+| g | `DELETE FROM EMPLOYEE WHERE Ssn = '987654321';` | Rejected: Wallace is referenced by Super_ssn, Mgr_ssn, WORKS_ON and DEPENDENT |
+| h | `DELETE FROM PROJECT WHERE Pname = 'ProductX';` | Rejected: WORKS_ON rows refer to project 1 |
+| i | `UPDATE DEPARTMENT SET Mgr_ssn = '123456789', Mgr_start_date = '2007-10-01' WHERE Dnumber = 5;` | Accepted |
+| j | `UPDATE EMPLOYEE SET Super_ssn = '943775543' WHERE Ssn = '999887777';` | Rejected: employee 943775543 does not exist |
+| k | `UPDATE WORKS_ON SET Hours = 5.0 WHERE Essn = '999887777' AND Pno = 10;` | Accepted |
+
+The full constraint discussion, with the other ways of enforcing each one, is in the Chapter 1 Practice page (Elmasri 5.11).
+
+### Problem 19 [SQL · Application · 8 pts · Elmasri 6.12]
+
+On UNIVERSITY (Figure 1.2): (a) names of senior students majoring in CS; (b) names of courses taught by Professor King in 2007 and 2008; (c) for each section taught by King: course number, semester, year and number of students; (d) name and transcript (course name, course number, credit hours, semester, year, grade) of each senior CS student.
+
+*Solution.*
+
+**Assumptions.**
+1. Senior means Class = 4, and CS is stored as 'CS'. *(Reason: Elmasri codes classes 1 to 5, and the figure stores 'CS'.)*
+2. Years are stored as two digits ('07', '08'), as in the figure. *(Reason: the state shows Year 07 and 08.)*
+3. In (b), "in 2007 and 2008" means taught in either year. *(Reason: a list of courses over a period.)* For "in both years", see the note.
+4. In (c), sections with no students are kept with 0, and students are counted from GRADE_REPORT. *(Reason: GRADE_REPORT is the only record of who took a section.)*
+5. In (d), "completed" means the course has a grade in GRADE_REPORT. *(Reason: the only record of completion.)*
+
+**(a)**
+
+```sql
+SELECT Name
+FROM   STUDENT
+WHERE  Class = 4 AND Major = 'CS';
+```
+
+**(b)**
+
+```sql
+SELECT DISTINCT C.Course_name
+FROM   COURSE C JOIN SECTION S ON C.Course_number = S.Course_number
+WHERE  S.Instructor = 'King' AND S.Year IN ('07', '08');
+```
+
+DISTINCT removes a course King taught more than once.
+
+**(c)**
+
+```sql
+SELECT   S.Course_number, S.Semester, S.Year,
+         COUNT(G.Student_number) AS Num_students
+FROM     SECTION S LEFT JOIN GRADE_REPORT G
+         ON S.Section_identifier = G.Section_identifier
+WHERE    S.Instructor = 'King'
+GROUP BY S.Section_identifier, S.Course_number, S.Semester, S.Year;
+```
+
+Grouping by Section_identifier keeps two King sections of the same course in the same term apart. COUNT(G.Student_number) gives 0 for a section with no rows.
+
+**(d)**
+
+```sql
+SELECT   ST.Name, C.Course_name, C.Course_number, C.Credit_hours,
+         S.Semester, S.Year, G.Grade
+FROM     STUDENT ST
+         JOIN GRADE_REPORT G ON ST.Student_number = G.Student_number
+         JOIN SECTION S      ON G.Section_identifier = S.Section_identifier
+         JOIN COURSE C       ON S.Course_number = C.Course_number
+WHERE    ST.Class = 4 AND ST.Major = 'CS'
+ORDER BY ST.Name, S.Year, S.Semester;
+```
+
+**Results on Figure 1.2.** (a) Empty: Smith is class 1 and Brown class 2. (b) Discrete Mathematics (section 85, Fall 07). (c) (MATH2410, Fall, 07, 1): Brown took section 85. (d) Empty, for the same reason as (a).
+
+> **Examiner's note.** For "in both 2007 and 2008", intersect the courses of the two years: `SELECT … WHERE Year='07' INTERSECT SELECT … WHERE Year='08'`, which gives an empty result here. Writing `Year = '07' AND Year = '08'` on one row is the classic wrong answer: it is never true.
+
+### Problem 20 [SQL · Application · 5 pts · Elmasri 7.6]
+
+On UNIVERSITY (Figure 1.2): (a) names and majors of straight-A students (an A in all their courses); (b) names and majors of students with no A in any course.
+
+*Solution.*
+
+**Assumptions.**
+1. A student with no grades at all is **not** a straight-A student. *(Reason: "an A in all their courses" presumes they have taken some.)* The same student **does** count as having no A. *(Reason: they have no A grade.)* Both readings are stated so that the empty case is handled on purpose.
+2. A NULL grade (course in progress) is not a grade of A and does not count as a non-A grade either. *(Reason: the course is not completed.)*
+
+**(a)**
+
+```sql
+SELECT S.Name, S.Major
+FROM   STUDENT S
+WHERE  EXISTS (SELECT * FROM GRADE_REPORT G
+               WHERE G.Student_number = S.Student_number)
+  AND  NOT EXISTS (SELECT * FROM GRADE_REPORT G
+                   WHERE G.Student_number = S.Student_number
+                     AND G.Grade <> 'A');
+```
+
+The first condition says the student has grades. The second says none of them is something other than A. A NULL grade makes `G.Grade <> 'A'` UNKNOWN, so it is not counted against the student, which matches assumption 2.
+
+**(b)**
+
+```sql
+SELECT S.Name, S.Major
+FROM   STUDENT S
+WHERE  NOT EXISTS (SELECT * FROM GRADE_REPORT G
+                   WHERE G.Student_number = S.Student_number
+                     AND G.Grade = 'A');
+```
+
+**Results on Figure 1.2.** (a) Empty: Brown has A, A, B, A, and Smith has B, C. (b) Smith, CS.
+
+> **Examiner's note.** `WHERE Grade = 'A'` with GROUP BY and `HAVING COUNT(*) = COUNT(…)` also works. Writing (b) as `WHERE G.Grade <> 'A'` on a join is wrong: it returns Brown, because Brown has one B.
+
+## C. Review questions (short answers)
+
+### Problem 21 [SQL · Concept · 10 pts · Elmasri 7.1–7.4]
+
+(7.1) Describe the six clauses of an SQL retrieval query, what each can contain, and which are required. (7.2) Give the conceptual order in which they are executed. (7.3) How are NULLs treated in comparisons, in aggregates, and in grouping attributes? (7.4) Discuss nested queries, joined tables and outer joins, aggregates and grouping, triggers, assertions (and how they differ from triggers), WITH, CASE, views and their updatability, and schema change commands.
+
+*Solution.*
+
+**7.1. The six clauses.**
+
+| Clause | What it can contain | Required? |
+| --- | --- | --- |
+| SELECT | Attributes, expressions, aggregates, DISTINCT, aliases | Yes |
+| FROM | Tables, aliases, joined tables (JOIN … ON, NATURAL JOIN, outer joins), nested queries | Yes |
+| WHERE | Conditions on single rows: comparisons, AND/OR/NOT, LIKE, BETWEEN, IN, EXISTS, IS NULL, nested queries | No |
+| GROUP BY | Grouping attributes | No |
+| HAVING | Conditions on groups, usually with aggregates | No (needs GROUP BY, or applies to the whole table as one group) |
+| ORDER BY | Attributes or expressions, ASC or DESC | No |
+
+**7.2. Conceptual order.**
+1. **FROM**: form the product or join of the tables.
+2. **WHERE**: keep the rows that satisfy the condition.
+3. **GROUP BY**: form groups.
+4. **HAVING**: keep the groups that satisfy the condition.
+5. **SELECT**: compute the output columns and aggregates, and apply DISTINCT.
+6. **ORDER BY**: sort the result.
+
+This is why WHERE cannot use an aggregate, and why a SELECT alias cannot be used in WHERE. A real DBMS optimises the order, but the result must be the same as this order would give.
+
+**7.3. NULLs.**
+1. **Comparisons**: any comparison with NULL (=, <, <>) gives **UNKNOWN**, so SQL uses three-valued logic. WHERE and HAVING keep only rows where the condition is TRUE. Use IS NULL and IS NOT NULL to test for NULL.
+2. **Aggregates**: SUM, AVG, MIN, MAX and COUNT(A) ignore NULLs. COUNT(*) counts rows. On an empty set, COUNT gives 0 and the others give NULL.
+3. **Grouping**: all rows with NULL in the grouping attribute form **one group** of their own.
+
+**7.4. Constructs.**
+1. **Nested queries**: a SELECT inside WHERE, FROM or HAVING.
+   1. They are used with IN, comparison with ANY, SOME or ALL, and EXISTS or NOT EXISTS.
+   2. A nested query is **correlated** if it refers to the outer query's tuple; then it is evaluated once per outer tuple.
+   3. They are useful for "not", "all" and "compare with a computed value" queries.
+2. **Joined tables and outer joins**:
+   1. JOIN … ON, NATURAL JOIN, CROSS JOIN.
+   2. LEFT, RIGHT and FULL OUTER JOIN keep unmatched rows, padded with NULL.
+   3. They separate the join conditions from the filters and keep the "including those with none" cases.
+3. **Aggregates and grouping**: COUNT, SUM, AVG, MIN and MAX over the whole result or per group with GROUP BY, with HAVING to filter groups. They answer "for each … how many / how much".
+4. **Triggers**:
+   1. A rule of the form: **event** (BEFORE or AFTER INSERT, UPDATE or DELETE on a table), **condition** (WHEN), **action** (SQL statements).
+   2. It can run FOR EACH ROW or once per statement.
+   3. Uses: enforcing complex constraints, keeping derived values up to date, logging, and alerts. Example: notify the supervisor when an employee's salary exceeds theirs.
+5. **Assertions**:
+   1. CREATE ASSERTION name CHECK (condition), where the condition is usually NOT EXISTS (violating rows).
+   2. The DBMS must reject any change that would make the condition false.
+   3. **Difference from triggers**: an assertion only *states* a constraint, and the DBMS prevents violations. A trigger *acts* when an event happens, can do anything (not only reject), and fires only on the events listed.
+6. **WITH**: defines a named temporary result used in one query (a common table expression). It makes multi-step queries readable, and WITH RECURSIVE handles hierarchies such as all supervisees.
+7. **CASE**: chooses a value by conditions (CASE WHEN … THEN … ELSE … END). It can be used in SELECT, in UPDATE SET (raise by department) and in ORDER BY.
+8. **Views**:
+   1. CREATE VIEW name AS query gives a virtual table, computed when used or materialised.
+   2. Uses: simpler queries, security (show part of the data), and logical data independence.
+   3. **Updatability**: a view on one table that includes its primary key, with no aggregates, DISTINCT or GROUP BY, is updatable. Views with joins are generally not, and views with aggregates never are. WITH CHECK OPTION rejects updates through the view that would make the row leave the view.
+9. **Schema change commands**:
+   1. DROP TABLE or SCHEMA, with CASCADE (also drop dependent objects) or RESTRICT (refuse if anything depends on it).
+   2. ALTER TABLE ADD or DROP COLUMN, ALTER COLUMN SET or DROP DEFAULT, and ADD or DROP CONSTRAINT.
+   3. They let the schema evolve without rebuilding the database.
+
+## D. Last year's papers (different instructor, different style)
+
+### Problem 22 [SQL · Application · 6 pts · M25 endsem Q1]
 
 Hospital: Patients(PatientID, FirstName, LastName, DOB, BloodType), Doctors(DoctorID, FirstName, LastName, Specialty, HireDate), Admissions(AdmissionID, PatientID, DoctorID, AdmissionDate, Diagnosis). (a) Blood types shared by more than one patient, with PatientCount, descending. (b) Patients whose LastName is longer than five letters or whose BloodType is negative. (c) Set the diagnosis of Rebecca Adler's most recent admission to 'Cluster Headache' without using AdmissionID directly.
 
@@ -819,7 +1158,7 @@ WHERE PatientID = (SELECT PatientID FROM Patients WHERE FirstName = 'Rebecca' AN
 
 > **Examiner's note.** MySQL does not allow a subquery on the table being updated; wrap it in a derived table, or use ORDER BY AdmissionDate DESC LIMIT 1 in the UPDATE, and say which DBMS you assume.
 
-### Problem 16 [SQL · Application · 4 pts · M25 endsem Q1(d)B]
+### Problem 23 [SQL · Application · 4 pts · M25 endsem Q1(d)B]
 
 List every doctor and the number of admissions they handled, including doctors with zero, highest first, using a JOIN.
 
@@ -843,7 +1182,7 @@ ORDER BY NumAdmissions DESC;
 
 **Result on the sample data.** 701 (House) 2; 703, 704, 705 and 706 have 1 each; 702 (Cuddy) 0.
 
-### Problem 17 [SQL · Concept · 3 pts · M25 endsem Q3]
+### Problem 24 [SQL · Concept · 3 pts · M25 endsem Q3]
 
 Query A: SELECT EmployeeID, SUM(SaleAmount) FROM Sales WHERE SaleAmount > 100 GROUP BY EmployeeID. Query B: … GROUP BY EmployeeID HAVING SaleAmount > 100. Which is correct?
 
@@ -858,7 +1197,7 @@ Query A: SELECT EmployeeID, SUM(SaleAmount) FROM Sales WHERE SaleAmount > 100 GR
 
 **Final answer.** Use WHERE for conditions on individual rows and HAVING for conditions on groups (for example HAVING SUM(SaleAmount) > 1000).
 
-### Problem 18 [SQL · Numerical · 5 pts · M23 endsem Q3]
+### Problem 25 [SQL · Numerical · 5 pts · M23 endsem Q3]
 
 Students(1 Alice CS 21, 2 Bob Physics 22, 3 Charlie Physics 20, 4 David Mathematics 23, 5 Emily CS 22); Courses(101 Database Design, 102 Physics I, 103 Calculus II, 104 Genetics, 105 Organic Chem); Registrations(1→101 A, 2→102 B, 3→103 C, 4→104 B, 5→105 A). Give the output of: (a) students JOIN registrations JOIN courses WHERE grade = 'A' AND major = 'Computer Science', showing student_id, student_name, course_name, grade; (b) SELECT students.major, AVG(students.age) AS average_age FROM students RIGHT OUTER JOIN registrations ON … GROUP BY students.major ORDER BY average_age.
 
@@ -883,7 +1222,7 @@ Students(1 Alice CS 21, 2 Bob Physics 22, 3 Charlie Physics 20, 4 David Mathemat
 
 > **Examiner's note.** The 2023 key gave no marks for a row in the wrong position, because ORDER BY makes the order part of the answer.
 
-### Problem 19 [SQL · Application · 6 pts · M23 endsem Q2]
+### Problem 26 [SQL · Application · 6 pts · M23 endsem Q2]
 
 Restaurants(r_id, restaurant_name, location, cuisine_type), Orders(order_id, customer_id, restaurant_id, order_date, amount), Customers(c_id, customer_name, …), Chefs(chef_id, chef_name, specialty, years_of_experience, restaurant_id). (a) Revenue per restaurant in October of this year, descending. (b) The customer who spent the most. (c) Restaurants whose average order exceeds the overall average order. (d) Restaurants whose chefs average more than 7 years' experience.
 
@@ -924,7 +1263,7 @@ GROUP BY R.r_id, R.restaurant_name HAVING AVG(C.years_of_experience) > 7;
 
 > **Examiner's note.** The 2023 key accepted ORDER BY … LIMIT 1 for (b); in this year's style, either handle ties or state the assumption that the maximum is unique.
 
-### Problem 20 [SQL · Application · 3 pts · M25 endsem Q4]
+### Problem 27 [SQL · Application · 3 pts · M25 endsem Q4]
 
 The DBMS has no FULL OUTER JOIN. Compute the full outer join of A and B on attribute k with basic SQL.
 

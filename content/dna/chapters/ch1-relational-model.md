@@ -121,9 +121,270 @@ Learn this schema well: Ch 8 and Ch 6–7 examples, and many textbook exercises 
 
 Every solution below is written the way an answer should look on the exam script: **assumptions** first (each with its reason), then the **working** in full sentences, then a clearly marked **final answer**. The quoted *Examiner's notes* are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.
 
-## A. Keys
+## A. Textbook exercises set by Kamal
 
-### Problem 1 [Keys · Concept · 3 pts · M24 Quiz 2 Q1c]
+### Problem 1 [Constraints · Application · 10 pts · Elmasri 5.11]
+
+Each update below is applied directly to the COMPANY state of Figure 5.6. Discuss all integrity constraints violated by each, if any, and the different ways of enforcing them. (a) Insert ⟨'Robert', 'F', 'Scott', '943775543', '1972-06-21', '2365 Newcastle Rd, Bellaire, TX', M, 58000, '888665555', 1⟩ into EMPLOYEE. (b) Insert ⟨'ProductA', 4, 'Bellaire', 2⟩ into PROJECT. (c) Insert ⟨'Production', 4, '943775543', '2007-10-01'⟩ into DEPARTMENT. (d) Insert ⟨'677678989', NULL, '40.0'⟩ into WORKS_ON. (e) Insert ⟨'453453453', 'John', 'M', '1990-12-12', 'spouse'⟩ into DEPENDENT. (f) Delete the WORKS_ON tuples with Essn = '333445555'. (g) Delete the EMPLOYEE tuple with Ssn = '987654321'. (h) Delete the PROJECT tuple with Pname = 'ProductX'. (i) Modify Mgr_ssn and Mgr_start_date of department 5 to '123456789' and '2007-10-01'. (j) Modify Super_ssn of employee '999887777' to '943775543'. (k) Modify Hours of WORKS_ON (Essn '999887777', Pno 10) to '5.0'.
+
+*Solution.*
+
+**Assumptions.**
+1. Each operation is applied on its own to the original state, so Robert Scott from (a) does not exist in (c) or (j). *(Reason: "applied directly to the database state shown in Figure 5.6".)*
+2. The keys and foreign keys are those of Figure 5.7. Dname is also unique. *(Reason: Figure 5.5 and Section 5.2.)*
+
+**Working.**
+1. **(a) No violation.**
+   1. Ssn 943775543 is new, so the key holds.
+   2. Super_ssn 888665555 (Borg) and Dno 1 exist, so referential integrity holds.
+   3. The values are in their domains.
+2. **(b) Referential integrity violated.**
+   1. Pnumber 4 is new, so the key holds.
+   2. Dnum 2 does not exist in DEPARTMENT.
+   3. Enforcement options: **reject** the insertion; **insert department 2 first**, then the project; or set Dnum to NULL, if a project may exist without a department.
+3. **(c) Key constraint and referential integrity violated.**
+   1. Dnumber 4 already exists (Administration).
+   2. Mgr_ssn 943775543 is not an employee.
+   3. Enforcement options: **reject**; or correct the data, using a new Dnumber and inserting the manager as an employee first.
+4. **(d) Entity integrity and referential integrity violated.**
+   1. Pno is part of the primary key (Essn, Pno) and is NULL.
+   2. Essn 677678989 is not an employee.
+   3. Enforcement: **reject**, or ask for a valid Pno and insert the employee first. Entity integrity cannot be fixed by the DBMS; the user must supply a key value.
+5. **(e) No violation.** Essn 453453453 (Joyce English) exists, and (453453453, John) is a new key.
+6. **(f) No violation.** No relation refers to WORKS_ON, so deleting its tuples cannot break referential integrity.
+7. **(g) Referential integrity violated.** Wallace (987654321) is referenced in four places:
+   1. EMPLOYEE.Super_ssn of Zelaya and Jabbar.
+   2. DEPARTMENT.Mgr_ssn of department 4.
+   3. WORKS_ON (projects 20 and 30).
+   4. DEPENDENT (Abner).
+
+   The options are:
+   1. **Reject** the deletion (RESTRICT).
+   2. **Cascade**: delete her WORKS_ON and DEPENDENT tuples. Cascading on Super_ssn would delete her supervisees as well, which is clearly wrong.
+   3. **Set NULL**: set Zelaya's and Jabbar's Super_ssn to NULL, and department 4's Mgr_ssn to NULL if a department may have no manager. Otherwise set them to a new supervisor or manager first.
+
+   A sensible combination: CASCADE for WORKS_ON and DEPENDENT, SET NULL for Super_ssn, and RESTRICT for Mgr_ssn until a new manager is assigned.
+8. **(h) Referential integrity violated.** ProductX is Pnumber 1, referenced by WORKS_ON tuples (Smith and English).
+   1. **Reject**; or **cascade** by deleting those WORKS_ON tuples.
+   2. SET NULL is not possible, because Pno is part of WORKS_ON's key.
+9. **(i) No violation.** 123456789 (Smith) exists, and the date is valid.
+10. **(j) Referential integrity violated.** 943775543 is not an employee.
+    1. **Reject**; or insert the new supervisor first; or set Super_ssn to NULL.
+11. **(k) No violation.** Hours is not part of any key or foreign key, and 5.0 is in its domain.
+
+**Final answer.** (a), (e), (f), (i) and (k) violate nothing. (b) and (j) violate referential integrity. (c) violates the key constraint and referential integrity. (d) violates entity integrity and referential integrity. (g) and (h) violate referential integrity on deletion, and are handled by reject, cascade or set NULL as discussed.
+
+> **Examiner's note.** In (g), list every referencing relation, not just the first you notice. Saying that cascading Super_ssn would delete employees, and is therefore wrong, is the kind of judgement Kamal's A/B/C grading rewards.
+
+### Problem 2 [Constraints · Application · 8 pts · Elmasri 5.12]
+
+AIRLINE (Figure 5.8). Consider an update that enters a reservation on a particular flight or flight leg on a given date. (a) Give the operations for this update. (b) What constraints would you check? (c) Which are key, entity integrity and referential integrity constraints, and which are not? (d) Specify all referential integrity constraints of Figure 5.8.
+
+*Solution.*
+
+**Assumptions.**
+1. A reservation on a whole flight means one seat on **every leg** of that flight on that date. *(Reason: SEAT_RESERVATION is kept per leg instance.)*
+2. Number_of_available_seats in LEG_INSTANCE must be kept up to date. *(Reason: it is stored, not derived.)*
+
+**(a) Operations**, for each leg L of the flight (or the one leg):
+1. Read the LEG_INSTANCE tuple (Flight_number, L, Date) and check that Number_of_available_seats > 0.
+2. Insert ⟨Flight_number, L, Date, Seat_number, Customer_name, Customer_phone⟩ into SEAT_RESERVATION.
+3. Update that LEG_INSTANCE: Number_of_available_seats = Number_of_available_seats − 1.
+
+All of this runs as **one transaction**, so either every leg is booked or none is.
+
+**(b) Constraints to check.**
+1. The leg instance exists.
+2. The seat is not already reserved on that leg instance.
+3. No key attribute of the reservation is NULL.
+4. Available seats are more than 0 before the booking, and never negative after it.
+5. Seat_number is a valid seat of the airplane assigned to that instance (at most Total_number_of_seats).
+6. Customer_name is given.
+
+**(c) Classification.**
+1. **Key**: (Flight_number, Leg_number, Date, Seat_number) is unique in SEAT_RESERVATION, which is check 2.
+2. **Entity integrity**: none of those four key attributes is NULL, which is check 3.
+3. **Referential integrity**: (Flight_number, Leg_number, Date) exists in LEG_INSTANCE, which is check 1.
+4. **Not one of these three**: checks 4, 5 and 6. They are **semantic** constraints. Check 6 can be declared NOT NULL, and check 4 partly by CHECK (Number_of_available_seats >= 0). Check 5 needs a trigger or application code, because it compares with another table.
+
+**(d) Referential integrity constraints of Figure 5.8.**
+1. FLIGHT_LEG.Flight_number → FLIGHT.Flight_number
+2. FLIGHT_LEG.Departure_airport_code → AIRPORT.Airport_code
+3. FLIGHT_LEG.Arrival_airport_code → AIRPORT.Airport_code
+4. LEG_INSTANCE.(Flight_number, Leg_number) → FLIGHT_LEG.(Flight_number, Leg_number)
+5. LEG_INSTANCE.Airplane_id → AIRPLANE.Airplane_id
+6. LEG_INSTANCE.Departure_airport_code → AIRPORT.Airport_code
+7. LEG_INSTANCE.Arrival_airport_code → AIRPORT.Airport_code
+8. FARE.Flight_number → FLIGHT.Flight_number
+9. CAN_LAND.Airplane_type_name → AIRPLANE_TYPE.Airplane_type_name
+10. CAN_LAND.Airport_code → AIRPORT.Airport_code
+11. AIRPLANE.Airplane_type → AIRPLANE_TYPE.Airplane_type_name
+12. SEAT_RESERVATION.(Flight_number, Leg_number, Date) → LEG_INSTANCE.(Flight_number, Leg_number, Date)
+
+> **Examiner's note.** In (d), the composite foreign keys (4 and 12) and the two airport references from each leg table are the ones most often missed. The DDL for this schema is Problem 6.6 on the SQL Practice page.
+
+### Problem 3 [Foreign keys · Application · 4 pts · Elmasri 5.15]
+
+SALESPERSON(Ssn, Name, Start_year, Dept_no), TRIP(Ssn, From_city, To_city, Departure_date, Return_date, Trip_id), EXPENSE(Trip_id, Account#, Amount). A trip can be charged to one or more accounts. Specify the foreign keys, stating your assumptions.
+
+*Solution.*
+
+**Assumptions.**
+1. Keys: SALESPERSON(**Ssn**), TRIP(**Trip_id**), EXPENSE(**Trip_id, Account#**). *(Reason: Trip_id identifies a trip, and a trip has several account lines, one per account.)*
+2. Each trip is taken by one salesperson. *(Reason: TRIP has one Ssn.)*
+3. There is no ACCOUNT or DEPARTMENT relation, so Account# and Dept_no are not foreign keys here. *(Reason: those relations are not in the schema.)*
+
+**Foreign keys.**
+1. TRIP.Ssn → SALESPERSON.Ssn: every trip belongs to an existing salesperson.
+2. EXPENSE.Trip_id → TRIP.Trip_id: every expense line belongs to an existing trip.
+
+**Final answer.** Two foreign keys: **TRIP.Ssn → SALESPERSON** and **EXPENSE.Trip_id → TRIP**. Dept_no and Account# would become foreign keys if DEPARTMENT and ACCOUNT tables were added.
+
+### Problem 4 [Foreign keys · Application · 4 pts · Elmasri 5.16]
+
+STUDENT(Ssn, Name, Major, Bdate), COURSE(Course#, Cname, Dept), ENROLL(Ssn, Course#, Quarter, Grade), BOOK_ADOPTION(Course#, Quarter, Book_isbn), TEXT(Book_isbn, Book_title, Publisher, Author). Specify the foreign keys, stating your assumptions.
+
+*Solution.*
+
+**Assumptions.**
+1. Keys: STUDENT(**Ssn**), COURSE(**Course#**), ENROLL(**Ssn, Course#, Quarter**), BOOK_ADOPTION(**Course#, Quarter, Book_isbn**), TEXT(**Book_isbn**). *(Reason: a student can take a course in several quarters, and a course can adopt several books per quarter.)*
+2. A course can adopt a book in a quarter even if no student has enrolled yet. *(Reason: books are chosen before enrolment.)* So BOOK_ADOPTION does not reference ENROLL.
+3. There is no DEPARTMENT relation. *(Reason: not in the schema.)*
+
+**Foreign keys.**
+1. ENROLL.Ssn → STUDENT.Ssn
+2. ENROLL.Course# → COURSE.Course#
+3. BOOK_ADOPTION.Course# → COURSE.Course#
+4. BOOK_ADOPTION.Book_isbn → TEXT.Book_isbn
+
+**Final answer.** The four foreign keys above. STUDENT.Major and COURSE.Dept would reference a DEPARTMENT table if one existed.
+
+> **Examiner's note.** BOOK_ADOPTION.(Course#, Quarter) → ENROLL is wrong: (Course#, Quarter) is not a key of ENROLL, and a foreign key must reference a key.
+
+### Problem 5 [Foreign keys · Application · 6 pts · Elmasri 5.17]
+
+CAR(Serial_no, Model, Manufacturer, Price), OPTION(Serial_no, Option_name, Price), SALE(Salesperson_id, Serial_no, Date, Sale_price), SALESPERSON(Salesperson_id, Name, Phone). Specify the foreign keys, populate with a few tuples, and give an insertion into SALE and into SALESPERSON that violates referential integrity, and one that does not.
+
+*Solution.*
+
+**Assumptions.**
+1. Keys: CAR(**Serial_no**), OPTION(**Serial_no, Option_name**), SALE(**Salesperson_id, Serial_no**), SALESPERSON(**Salesperson_id**). *(Reason: an option is installed on one car; a car may be sold jointly by several salespeople.)*
+
+**Foreign keys.**
+1. OPTION.Serial_no → CAR.Serial_no
+2. SALE.Serial_no → CAR.Serial_no
+3. SALE.Salesperson_id → SALESPERSON.Salesperson_id
+
+**Sample state.**
+
+CAR:
+
+| Serial_no | Model | Manufacturer | Price |
+| --- | --- | --- | --- |
+| C1 | City | Honda | 900000 |
+| C2 | Nexon | Tata | 800000 |
+
+OPTION:
+
+| Serial_no | Option_name | Price |
+| --- | --- | --- |
+| C1 | Sunroof | 50000 |
+
+SALESPERSON:
+
+| Salesperson_id | Name | Phone |
+| --- | --- | --- |
+| S1 | Asha | 98450 11111 |
+| S2 | Ravi | 98450 22222 |
+
+SALE:
+
+| Salesperson_id | Serial_no | Date | Sale_price |
+| --- | --- | --- | --- |
+| S1 | C1 | 2026-11-01 | 940000 |
+
+**Insertions into SALE.**
+1. **Violates**: ⟨S3, C2, 2026-11-10, 800000⟩, because salesperson S3 does not exist. ⟨S1, C9, …⟩ would also violate, because car C9 does not exist.
+2. **Does not violate**: ⟨S2, C2, 2026-11-10, 790000⟩, because S2 and C2 both exist.
+
+**Insertions into SALESPERSON.**
+1. **None can violate referential integrity.** SALESPERSON has no foreign key; it is only *referenced*. So any new salesperson, such as ⟨S3, Meera, 98450 33333⟩, is fine as far as referential integrity goes.
+2. It could only violate the **key** constraint, for example by inserting S1 again.
+
+**Final answer.** There are three foreign keys: OPTION and SALE reference CAR, and SALE references SALESPERSON. A SALE insertion violates referential integrity when its salesperson or car is missing. A SALESPERSON insertion can never violate it, because that relation has no foreign key.
+
+> **Examiner's note.** The question invites you to invent a violating SALESPERSON insertion. Saying that none exists, and why, is the A answer.
+
+### Problem 6 [Keys · Concept · 5 pts · Elmasri 5.20]
+
+Universities cannot use SSNs as primary keys, and generated Student_ids (surrogate keys) are used instead. (a) Propose natural keys for a student record. (b) If a natural key includes last name, can the last name change? If so, how can a key include it and stay unique? (c) What are the advantages and disadvantages of surrogate keys?
+
+*Solution.*
+
+**Assumption.** A natural key must be unique for every student who will ever be in the database, and should not change. *(Reason: those are the properties a primary key needs.)*
+
+**(a) Natural candidates.**
+1. A government identity number other than SSN, such as a passport or national ID number. But not every student has one, and the privacy concerns are the same.
+2. {First_name, Last_name, Birth_date, Birth_place}: usually unique, but not guaranteed.
+3. {Email} assigned at admission. Unique, but it is really assigned by the university, so it is close to a surrogate.
+4. {Last_name, Birth_date, Admission_year, Sequence#}. This is unique by construction, but the Sequence# part is generated.
+
+Each of these is weaker than a generated ID on either uniqueness, availability or stability.
+
+**(b)** **No**: last names change, for example on marriage. Solutions:
+1. Store the last name **at the time of admission** as a separate, never-updated attribute (Admission_last_name) and use that in the key, while the current Last_name is an ordinary attribute.
+2. Combine the last name with something stable and unique, such as {Admission_last_name, Birth_date, Sequence#}.
+3. If the key value must change, declare ON UPDATE CASCADE on every foreign key that references it, so the change follows everywhere.
+
+**(c) Surrogate keys.**
+1. **Advantages**:
+   1. Unique by construction.
+   2. Never change.
+   3. Short and simple, so foreign keys and indexes are small and joins are fast.
+   4. Carry no personal information, which suits privacy rules.
+   5. Do not depend on data that may be missing.
+2. **Disadvantages**:
+   1. They have no meaning to users, who must look them up.
+   2. They do not stop duplicates of the real entity: the same person can be entered twice with two IDs unless a UNIQUE constraint is also placed on the natural attributes.
+   3. They need a generator (sequence) and an extra column.
+
+**Final answer.** Natural keys are possible but none is both guaranteed unique and stable, and names change. Keep a frozen admission name if one must be in the key. Surrogates are unique, stable and private, but meaningless, and need a UNIQUE constraint on natural attributes to prevent duplicate people.
+
+## B. Review questions (short answers)
+
+### Problem 7 [Relational model · Concept · 8 pts · Elmasri 5.1–5.5]
+
+(5.1) Define domain, attribute, n-tuple, relation schema, relation state, degree, relational database schema, relational database state. (5.2) Why are tuples not ordered? (5.3) Why are duplicate tuples not allowed? (5.4) What is the difference between a key and a superkey? (5.5) Why do we designate one candidate key as the primary key?
+
+*Solution.*
+
+**5.1.**
+1. **Domain** D: a set of atomic values, with a data type and format. Example: Usa_phone_numbers, 10-digit strings.
+2. **Attribute** A: the name of a role played by a domain in a relation schema. dom(A) is its domain.
+3. **n-tuple** t: an ordered list of n values ⟨v1, …, vn⟩, each vi in dom(Ai) or NULL.
+4. **Relation schema** R(A1, …, An): a relation name and a list of attributes.
+5. **Relation state** r(R): a set of n-tuples of R at some moment. Formally, r(R) ⊆ dom(A1) × … × dom(An).
+6. **Degree** (arity): the number of attributes n.
+7. **Relational database schema** S: a set of relation schemas {R1, …, Rm} together with a set of integrity constraints IC.
+8. **Relational database state**: a set of relation states {r1, …, rm}, one per schema, that satisfies the constraints in IC.
+
+**5.2.** A relation is a **set** of tuples, and sets have no order. The order in which tuples are stored or shown carries no meaning, so the model does not define one. (Physical storage may have an order, but that is below the logical level.)
+
+**5.3.** Again, because a relation is a set, and a set has no duplicate elements. Also, every tuple must be identifiable by its values. Two identical tuples could not be told apart, and that would break the idea of a key. (SQL tables are multisets and do allow duplicates, unless a key or DISTINCT is used.)
+
+**5.4.**
+1. A **superkey** is any set of attributes whose values are unique in every valid state. Every relation has at least one: the set of all its attributes.
+2. A **key** is a **minimal** superkey: removing any attribute makes it non-unique.
+3. Example: in EMPLOYEE, {Ssn, Ename} is a superkey but not a key; {Ssn} is a key.
+
+**5.5.**
+1. A relation can have several candidate keys.
+2. One is chosen as the **primary key** so that every other relation refers to tuples in the same way, through foreign keys to that key. The DBMS also enforces entity integrity on it (no NULL) and usually indexes it.
+3. The usual choice is the candidate key that is smallest, simplest and least likely to change. Example: Ssn rather than {Name, Address}. The others remain **unique keys**.
+
+## C. Last year's papers: keys
+
+### Problem 8 [Keys · Concept · 3 pts · M24 Quiz 2 Q1c]
 
 Differentiate between superkey, candidate key and primary key.
 
@@ -141,7 +402,7 @@ Differentiate between superkey, candidate key and primary key.
 - {Roll} and {Email} are candidate keys.
 - {Roll} is chosen as the primary key; {Email} remains an alternate (unique) key.
 
-### Problem 2 [Keys · Numerical · 3 pts · M25 Quiz 2 Q1b]
+### Problem 9 [Keys · Numerical · 3 pts · M25 Quiz 2 Q1b]
 
 A relation has 5 attributes, and exactly 3 of them are each unique on their own (each is a candidate key by itself), and there are no other candidate keys. How many superkeys are there?
 
@@ -155,7 +416,7 @@ A relation has 5 attributes, and exactly 3 of them are each unique on their own 
 
 **Final answer.** **28 superkeys.** In general, with n attributes and k single-attribute candidate keys, the count is $2^n - 2^{n-k}$.
 
-### Problem 3 [Keys · Numerical · 3 pts · M24 Quiz 2 Q1b]
+### Problem 10 [Keys · Numerical · 3 pts · M24 Quiz 2 Q1b]
 
 VEHICLE(Vehicle_ID, Registration, Model, Company, Year, Colour), where Vehicle_ID and Registration are each underlined separately (each is a key on its own). How many superkeys does VEHICLE have? Which of {Year, Colour}, {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company}, {Registration, Year, Colour, Company} are superkeys?
 
@@ -172,7 +433,7 @@ VEHICLE(Vehicle_ID, Registration, Model, Company, Year, Colour), where Vehicle_I
 
 **Final answer.** **48 superkeys.** Superkeys: {Vehicle_ID, Registration}, {Vehicle_ID, Model, Company}, {Registration, Year, Colour, Company}. Not a superkey: {Year, Colour}.
 
-### Problem 4 [Keys · Concept · 4 pts · M25 Quiz 2 Q1a]
+### Problem 11 [Keys · Concept · 4 pts · M25 Quiz 2 Q1a]
 
 You are shown a library issue table with 10 rows: StudentID, BookID, BookTitle, IssueDate, ReturnDate. In the sample, BookTitle happens to be different in every row. Is BookTitle a candidate key?
 
@@ -190,9 +451,9 @@ You are shown a library issue table with 10 rows: StudentID, BookID, BookTitle, 
 
 > **Examiner's note.** If you assume "this is the complete table and no rows will ever be added", then BookTitle is a minimal unique attribute *for this state*, and that answer is acceptable **only** with the assumption written down.
 
-## B. Constraint violations
+## D. Last year's papers: constraint violations
 
-### Problem 5 [Constraints · Application · 6 pts · M23 endsem Q1]
+### Problem 12 [Constraints · Application · 6 pts · M23 endsem Q1]
 
 MAJOR(**Name**, Department NOT NULL); STUDENT(**ID**, Name NOT NULL, Age > 0, GPA between 0 and 4, Major → MAJOR.Name). STUDENT has IDs 101–104; 103 is a Physics major. Name every constraint violated by each statement (independently):
 (a) INSERT INTO Student VALUES (104, 'Eve', 22, 4.1, 'Chemistry');
@@ -218,7 +479,7 @@ MAJOR(**Name**, Department NOT NULL); STUDENT(**ID**, Name NOT NULL, Age > 0, GP
 
 > **Examiner's note.** Mention what other actions would do in (c): ON DELETE CASCADE deletes student 103 as well; SET NULL sets 103's Major to NULL. Writing "entity integrity" for (a) lost a mark in the 2023 key.
 
-### Problem 6 [Constraints · Application · 3 pts · M24 Quiz 2 Q4]
+### Problem 13 [Constraints · Application · 3 pts · M24 Quiz 2 Q4]
 
 For a USERS(**uid**, name, age CHECK age > 0) and ORDERS(**oid**, uid → USERS, amount) database, give one example each of: an INSERT violating the key constraint; an INSERT violating entity integrity; a DELETE on ORDERS that violates referential integrity; an acceptable DELETE on ORDERS; an acceptable UPDATE on USERS; an UPDATE on USERS violating a domain constraint.
 
@@ -237,7 +498,7 @@ For a USERS(**uid**, name, age CHECK age > 0) and ORDERS(**oid**, uid → USERS,
 
 **Justification of the third row.** Referential integrity can be violated by a delete only in the *referenced* relation. ORDERS is the referencing relation and nothing references it, so no delete on ORDERS can violate referential integrity.
 
-### Problem 7 [Constraints · Concept · 2 pts]
+### Problem 14 [Constraints · Concept · 2 pts]
 
 Which update operations can violate referential integrity, and what are the options when a DELETE would?
 
@@ -254,7 +515,7 @@ Which update operations can violate referential integrity, and what are the opti
 - **SET NULL**: set the referencing foreign keys to NULL (only if they are not part of a primary key).
 - **SET DEFAULT**: set them to the declared default value.
 
-### Problem 8 [Foreign keys · Application · 3 pts · M24 Quiz 2 Q2, Elmasri 5.15]
+### Problem 15 [Foreign keys · Application · 3 pts · M24 Quiz 2 Q2, Elmasri 5.14]
 
 ORDER-PROCESSING: CUSTOMER(**Cust#**, Cname, City); ORDER(**Order#**, Odate, Cust#, Ord_amt); ORDER_ITEM(**Order#, Item#**, Qty); ITEM(**Item#**, Unit_price); SHIPMENT(**Order#, Warehouse#**, Ship_date); WAREHOUSE(**Warehouse#**, City). Specify the foreign keys.
 
