@@ -9,6 +9,7 @@ This is the map for the Data and Applications (CS4.301) final exam on **Monday 2
 - **"I do not know"** written as the whole answer to a question earns **20%** of it, for at most two questions. Use it instead of a blank or a guess you cannot justify.
 - **Graded by Kamal only**, no TAs. Each part gets **A** (almost perfect, nearly full marks), **C** (issues or lack of understanding, under a third of the marks) or **B** (the rest, about half). There is no per-error rubric: the complete answer is judged as a whole. A regrade request regrades the **whole script**, and the total can go down.
 - The exam length has not been announced.
+- **Kamal's last advice (22 Nov)**: go through the assignment solutions and see *how* each solution was reached, and solve textbook exercises. "You will have enough time to answer the questions." Don't over-prepare: come relaxed and with an open mind.
 - Every assignment this year said **"No clarifications. State and justify your assumptions."** Expect the same: an ambiguous question is deliberate, and your stated reading is part of the answer.
 
 ## Syllabus map
