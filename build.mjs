@@ -398,7 +398,7 @@ function page({ root, title, body, active, pageId = '', outline = '', cls = '' }
 <link rel="manifest" href="${root}manifest.webmanifest">
 <link rel="icon" href="${root}assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${root}assets/icon-192.png">
-<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);if(!localStorage.getItem('sm:user'))d.classList.add('sm-locked')}catch(e){}</script>
 ${fontsLink}
 <link rel="stylesheet" href="${root}assets/katex/katex.min.css">
 <link rel="stylesheet" href="${root}assets/style.css?v=${BUILD}">
@@ -482,6 +482,7 @@ ${fontsLink}
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
+<script src="${root}assets/auth.js?v=${BUILD}" defer></script>
 <script src="${root}assets/app.js?v=${BUILD}" defer></script>
 </body>
 </html>`;
@@ -710,7 +711,7 @@ for (const c of courses) {
   });
 }
 fs.writeFileSync(path.join(OUT, 'assets', 'meta.js'), 'window.NOTES_META=' + JSON.stringify(meta) + ';');
-const assetList = ['assets/style.css?v=' + BUILD, 'assets/app.js?v=' + BUILD, 'assets/meta.js', 'assets/search.js', 'assets/katex/katex.min.css', 'assets/icon.svg', 'manifest.webmanifest'];
+const assetList = ['assets/style.css?v=' + BUILD, 'assets/app.js?v=' + BUILD, 'assets/auth.js?v=' + BUILD, 'assets/meta.js', 'assets/search.js', 'assets/katex/katex.min.css', 'assets/icon.svg', 'manifest.webmanifest'];
 fs.writeFileSync(path.join(OUT, 'assets', 'pages.js'), 'window.NOTES_PAGES=' + JSON.stringify([...written, ...assetList]) + ';');
 
 const nCh = courses.reduce((a, c) => a + c.docs.reduce((b, d) => b + d.chapters.length, 0), 0);
