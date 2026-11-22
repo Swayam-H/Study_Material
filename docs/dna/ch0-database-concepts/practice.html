@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mws4sw6y">
+<link rel="stylesheet" href="../../assets/style.css?v=mws4yn57">
 </head>
 <body data-root="../../" data-page="dna/ch0-database-concepts/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -395,14 +395,8 @@
 <li><strong>Conceptual level</strong>: the <strong>conceptual schema</strong> describes the structure of the whole database for the whole community of users: entities, data types, relationships, user operations and constraints. It hides storage details. It is usually written in a representational model, such as relational tables, often derived from a conceptual ER design.</li>
 <li><strong>External or view level</strong>: each <strong>external schema</strong> describes the part of the database that one user group is interested in, and hides the rest. There can be many external schemas.</li>
 </ol>
-<p>Diagram to draw:</p>
-<pre><code>  End users:  [External view 1]  ...  [External view n]
-                        \   external/conceptual mapping   /
-                    [        Conceptual schema        ]
-                           conceptual/internal mapping
-                    [         Internal schema         ]
-                               Stored database
-</code></pre>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-24-three-schema.svg"><img class="fig" src="../../assets/fig/dna-24-three-schema.svg" alt="Three-schema architecture" loading="lazy"></a></p>
 <p><strong>Why mappings are needed.</strong></p>
 <ol>
 <li>Only the internal level actually exists in storage. The other two levels are descriptions. So when a user asks something in terms of an external schema, the DBMS must <strong>transform the request</strong> into one on the conceptual schema, and then into one on the internal schema, before it can process it against the stored data.</li>
@@ -456,6 +450,8 @@
 <li><strong>Application (web) server tier</strong>: holds the business rules, such as fare rules, seat availability and payment processing. It checks the customer's credentials, accepts their requests, forms the database queries, and builds the web pages. The rules live in one place, so a fare change is made once.</li>
 <li><strong>Database server tier</strong>: holds flights, seats, bookings and payments. Its concurrency control and recovery stop two customers from booking the same seat and make sure an interrupted payment leaves no half-made booking.</li>
 </ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-214-three-tier.svg"><img class="fig" src="../../assets/fig/dna-214-three-tier.svg" alt="Three-tier architecture" loading="lazy"></a></p>
 <p><strong>Why three-tier is right.</strong></p>
 <ol>
 <li><strong>Security</strong>: customers never connect to the database directly. Only the application server does, and only with the operations it allows, which matters for payment data.</li>
@@ -513,6 +509,6 @@ It suits a few internal users, such as airline agents, not the public.</li>
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mws4sw6y" defer></script>
+<script src="../../assets/app.js?v=mws4yn57" defer></script>
 </body>
 </html>

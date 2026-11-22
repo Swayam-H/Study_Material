@@ -133,6 +133,10 @@ Each update below is applied directly to the COMPANY state of Figure 5.6. Discus
 1. Each operation is applied on its own to the original state, so Robert Scott from (a) does not exist in (c) or (j). *(Reason: "applied directly to the database state shown in Figure 5.6".)*
 2. The keys and foreign keys are those of Figure 5.7. Dname is also unique. *(Reason: Figure 5.5 and Section 5.2.)*
 
+**The COMPANY schema the updates act on** (tap to enlarge).
+
+[![COMPANY schema with its foreign keys](fig/dna-p10-company-schema.svg)](../../assets/fig/dna-p10-company-schema.svg)
+
 **Working.**
 1. **(a) No violation.**
    1. Ssn 943775543 is new, so the key holds.
@@ -221,6 +225,10 @@ All of this runs as **one transaction**, so either every leg is booked or none i
 11. AIRPLANE.Airplane_type → AIRPLANE_TYPE.Airplane_type_name
 12. SEAT_RESERVATION.(Flight_number, Leg_number, Date) → LEG_INSTANCE.(Flight_number, Leg_number, Date)
 
+**(d) as a schema diagram** (tap to enlarge).
+
+[![AIRLINE schema with foreign keys](fig/dna-512-airline-schema.svg)](../../assets/fig/dna-512-airline-schema.svg)
+
 > **Examiner's note.** In (d), the composite foreign keys (4 and 12) and the two airport references from each leg table are the ones most often missed. The DDL for this schema is Problem 6.6 on the SQL Practice page.
 
 ### Problem 3 [Foreign keys · Application · 4 pts · Elmasri 5.15]
@@ -237,6 +245,10 @@ SALESPERSON(Ssn, Name, Start_year, Dept_no), TRIP(Ssn, From_city, To_city, Depar
 **Foreign keys.**
 1. TRIP.Ssn → SALESPERSON.Ssn: every trip belongs to an existing salesperson.
 2. EXPENSE.Trip_id → TRIP.Trip_id: every expense line belongs to an existing trip.
+
+**Schema diagram** (tap to enlarge).
+
+[![Foreign keys of 5.15](fig/dna-515-fk.svg)](../../assets/fig/dna-515-fk.svg)
 
 **Final answer.** Two foreign keys: **TRIP.Ssn → SALESPERSON** and **EXPENSE.Trip_id → TRIP**. Dept_no and Account# would become foreign keys if DEPARTMENT and ACCOUNT tables were added.
 
@@ -257,6 +269,10 @@ STUDENT(Ssn, Name, Major, Bdate), COURSE(Course#, Cname, Dept), ENROLL(Ssn, Cour
 3. BOOK_ADOPTION.Course# → COURSE.Course#
 4. BOOK_ADOPTION.Book_isbn → TEXT.Book_isbn
 
+**Schema diagram** (tap to enlarge).
+
+[![Foreign keys of 5.16](fig/dna-516-fk.svg)](../../assets/fig/dna-516-fk.svg)
+
 **Final answer.** The four foreign keys above. STUDENT.Major and COURSE.Dept would reference a DEPARTMENT table if one existed.
 
 > **Examiner's note.** BOOK_ADOPTION.(Course#, Quarter) → ENROLL is wrong: (Course#, Quarter) is not a key of ENROLL, and a foreign key must reference a key.
@@ -274,6 +290,10 @@ CAR(Serial_no, Model, Manufacturer, Price), OPTION(Serial_no, Option_name, Price
 1. OPTION.Serial_no → CAR.Serial_no
 2. SALE.Serial_no → CAR.Serial_no
 3. SALE.Salesperson_id → SALESPERSON.Salesperson_id
+
+**Schema diagram** (tap to enlarge).
+
+[![Foreign keys of 5.17](fig/dna-517-fk.svg)](../../assets/fig/dna-517-fk.svg)
 
 **Sample state.**
 

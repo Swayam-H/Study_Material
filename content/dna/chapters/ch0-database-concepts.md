@@ -102,6 +102,8 @@ The three-schema architecture has three levels. Each level has its own schema:
 
 **Logical is harder**, because application programs depend directly on the logical structure (names, columns, relationships) that they read. Physical changes are hidden from programs completely. Logical changes, by contrast, must be absorbed by rewriting the external-to-conceptual mappings, and that is not always possible: a removed item cannot appear in a view.
 
+[![Three-schema architecture](fig/dna-24-three-schema.svg)](../../assets/fig/dna-24-three-schema.svg)
+
 ## Languages and interfaces (Elmasri 2.3)
 
 | Term | Meaning |
@@ -139,6 +141,8 @@ A DBMS has these modules:
 - **Two-tier**: the client runs the user interface and the application programs. The server is the database (query and transaction) server. They talk through an API such as **ODBC** or **JDBC**. It is simple and works with existing systems, but each client holds application logic and connects to the database directly.
 - **Three-tier** (web): client (browser, GUI), **application server or web server** (business rules, application programs, checking credentials), and database server. The middle tier also improves **security**, because clients never reach the database directly.
 - **n-tier**: the application layer is split further, for example into a presentation (web) tier, a business-logic tier and a data-access tier, and spread over many machines. Each tier can be scaled, run in parallel and replaced on its own. Communication between tiers is often **encrypted**.
+
+[![Three-tier architecture](fig/dna-214-three-tier.svg)](../../assets/fig/dna-214-three-tier.svg)
 
 ## Classifying DBMSs (Elmasri 2.6)
 
@@ -459,16 +463,9 @@ Describe the three-schema architecture. Why do we need mappings among schema lev
 2. **Conceptual level**: the **conceptual schema** describes the structure of the whole database for the whole community of users: entities, data types, relationships, user operations and constraints. It hides storage details. It is usually written in a representational model, such as relational tables, often derived from a conceptual ER design.
 3. **External or view level**: each **external schema** describes the part of the database that one user group is interested in, and hides the rest. There can be many external schemas.
 
-Diagram to draw:
+**Diagram** (tap to enlarge).
 
-```
-  End users:  [External view 1]  ...  [External view n]
-                        \   external/conceptual mapping   /
-                    [        Conceptual schema        ]
-                           conceptual/internal mapping
-                    [         Internal schema         ]
-                               Stored database
-```
+[![Three-schema architecture](fig/dna-24-three-schema.svg)](../../assets/fig/dna-24-three-schema.svg)
 
 **Why mappings are needed.**
 1. Only the internal level actually exists in storage. The other two levels are descriptions. So when a user asks something in terms of an external schema, the DBMS must **transform the request** into one on the conceptual schema, and then into one on the internal schema, before it can process it against the stored data.
@@ -515,6 +512,10 @@ If you were designing a Web-based system to make airline reservations and sell a
 1. **Client tier**: the customer's browser or app shows forms and results. No business logic or database access is on the client.
 2. **Application (web) server tier**: holds the business rules, such as fare rules, seat availability and payment processing. It checks the customer's credentials, accepts their requests, forms the database queries, and builds the web pages. The rules live in one place, so a fare change is made once.
 3. **Database server tier**: holds flights, seats, bookings and payments. Its concurrency control and recovery stop two customers from booking the same seat and make sure an interrupted payment leaves no half-made booking.
+
+**Diagram** (tap to enlarge).
+
+[![Three-tier architecture](fig/dna-214-three-tier.svg)](../../assets/fig/dna-214-three-tier.svg)
 
 **Why three-tier is right.**
 1. **Security**: customers never connect to the database directly. Only the application server does, and only with the operations it allows, which matters for payment data.

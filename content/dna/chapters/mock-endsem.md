@@ -44,6 +44,10 @@ Draw an EER model with (min, max) constraints for a conference. A conference has
 - a PC member must not review a paper they wrote;
 - the Position values of a paper's authors are 1, 2, …, n without gaps.
 
+**EER diagram** (tap to enlarge).
+
+[![Conference EER diagram](fig/dna-mock1-conference.svg)](../../assets/fig/dna-mock1-conference.svg)
+
 **Final answer.** The EER diagram with the six entity types above (TRACK and REVIEW drawn as weak, with double rectangles and dashed partial keys), the overlapping partial specialization, and the six relationship types with the (min, max) pairs in the table.
 
 > **Examiner's note.** An A needs every (min, max), both weak entities with partial keys, the overlapping specialization with its reason, Position on WRITES (not on PAPER or AUTHOR), the multivalued Affiliation, and at least one stated assumption.
@@ -66,6 +70,10 @@ Map your model from Question 1 to relations. Show primary keys, foreign keys (as
 7. PC_MEMBER(**Email**); Email → PERSON
 8. WRITES(**PaperID, Email**, Position); PaperID → PAPER; Email → AUTHOR; UNIQUE (PaperID, Position)
 9. REVIEW(**PaperID, Review_no**, Score, Comments, Reviewer_email); PaperID → PAPER, ON DELETE CASCADE; Reviewer_email → PC_MEMBER, NOT NULL
+
+**Schema diagram** (tap to enlarge).
+
+[![Conference relational schema](fig/dna-mock2-schema.svg)](../../assets/fig/dna-mock2-schema.svg)
 
 **Explanation of the mapping.**
 1. Strong entity types (CONFERENCE, PAPER, PERSON) become relations keyed by their keys.

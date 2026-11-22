@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mws4sw6y">
+<link rel="stylesheet" href="../../assets/style.css?v=mws4yn57">
 </head>
 <body data-root="../../" data-page="dna/ch1-relational-model/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -105,6 +105,8 @@
 <li>Each operation is applied on its own to the original state, so Robert Scott from (a) does not exist in (c) or (j). <em>(Reason: &quot;applied directly to the database state shown in Figure 5.6&quot;.)</em></li>
 <li>The keys and foreign keys are those of Figure 5.7. Dname is also unique. <em>(Reason: Figure 5.5 and Section 5.2.)</em></li>
 </ol>
+<p><strong>The COMPANY schema the updates act on</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p10-company-schema.svg"><img class="fig" src="../../assets/fig/dna-p10-company-schema.svg" alt="COMPANY schema with its foreign keys" loading="lazy"></a></p>
 <p><strong>Working.</strong></p>
 <ol>
 <li>
@@ -233,6 +235,8 @@
 <li>AIRPLANE.Airplane_type → AIRPLANE_TYPE.Airplane_type_name</li>
 <li>SEAT_RESERVATION.(Flight_number, Leg_number, Date) → LEG_INSTANCE.(Flight_number, Leg_number, Date)</li>
 </ol>
+<p><strong>(d) as a schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-512-airline-schema.svg"><img class="fig" src="../../assets/fig/dna-512-airline-schema.svg" alt="AIRLINE schema with foreign keys" loading="lazy"></a></p>
 <blockquote>
 <p><strong>Examiner's note.</strong> In (d), the composite foreign keys (4 and 12) and the two airport references from each leg table are the ones most often missed. The DDL for this schema is Problem 6.6 on the SQL Practice page.</p>
 </blockquote>
@@ -252,6 +256,8 @@
 <li>TRIP.Ssn → SALESPERSON.Ssn: every trip belongs to an existing salesperson.</li>
 <li>EXPENSE.Trip_id → TRIP.Trip_id: every expense line belongs to an existing trip.</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-515-fk.svg"><img class="fig" src="../../assets/fig/dna-515-fk.svg" alt="Foreign keys of 5.15" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> Two foreign keys: <strong>TRIP.Ssn → SALESPERSON</strong> and <strong>EXPENSE.Trip_id → TRIP</strong>. Dept_no and Account# would become foreign keys if DEPARTMENT and ACCOUNT tables were added.</p>
 </details>
 <h3 id="problem-4-foreign-keys-application-4-pts-elmasri-5-16">Problem 4 [Foreign keys · Application · 4 pts · Elmasri 5.16]</h3>
@@ -271,6 +277,8 @@
 <li>BOOK_ADOPTION.Course# → COURSE.Course#</li>
 <li>BOOK_ADOPTION.Book_isbn → TEXT.Book_isbn</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-516-fk.svg"><img class="fig" src="../../assets/fig/dna-516-fk.svg" alt="Foreign keys of 5.16" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The four foreign keys above. STUDENT.Major and COURSE.Dept would reference a DEPARTMENT table if one existed.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> BOOK_ADOPTION.(Course#, Quarter) → ENROLL is wrong: (Course#, Quarter) is not a key of ENROLL, and a foreign key must reference a key.</p>
@@ -290,6 +298,8 @@
 <li>SALE.Serial_no → CAR.Serial_no</li>
 <li>SALE.Salesperson_id → SALESPERSON.Salesperson_id</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-517-fk.svg"><img class="fig" src="../../assets/fig/dna-517-fk.svg" alt="Foreign keys of 5.17" loading="lazy"></a></p>
 <p><strong>Sample state.</strong></p>
 <p>CAR:</p>
 <div class="table-wrap"><table>
@@ -663,6 +673,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mws4sw6y" defer></script>
+<script src="../../assets/app.js?v=mws4yn57" defer></script>
 </body>
 </html>

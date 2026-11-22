@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mws4sw6y">
+<link rel="stylesheet" href="../../assets/style.css?v=mws4yn57">
 </head>
 <body data-root="../../" data-page="dna/mock-endsem/mock-endsem" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,7 +87,7 @@
       <header class="note-head">
         
         <h1>Mock endsem</h1>
-        <p class="note-meta">19 min read · 6 practice problems</p>
+        <p class="note-meta">20 min read · 6 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
@@ -176,6 +176,8 @@ Position is an author's place in the author list (1 = first author). Score is an
 <li>a PC member must not review a paper they wrote;</li>
 <li>the Position values of a paper's authors are 1, 2, …, n without gaps.</li>
 </ul>
+<p><strong>EER diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-mock1-conference.svg"><img class="fig" src="../../assets/fig/dna-mock1-conference.svg" alt="Conference EER diagram" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The EER diagram with the six entity types above (TRACK and REVIEW drawn as weak, with double rectangles and dashed partial keys), the overlapping partial specialization, and the six relationship types with the (min, max) pairs in the table.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> An A needs every (min, max), both weak entities with partial keys, the overlapping specialization with its reason, Position on WRITES (not on PAPER or AUTHOR), the multivalued Affiliation, and at least one stated assumption.</p>
@@ -198,6 +200,8 @@ Position is an author's place in the author list (1 = first author). Score is an
 <li>WRITES(<strong>PaperID, Email</strong>, Position); PaperID → PAPER; Email → AUTHOR; UNIQUE (PaperID, Position)</li>
 <li>REVIEW(<strong>PaperID, Review_no</strong>, Score, Comments, Reviewer_email); PaperID → PAPER, ON DELETE CASCADE; Reviewer_email → PC_MEMBER, NOT NULL</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-mock2-schema.svg"><img class="fig" src="../../assets/fig/dna-mock2-schema.svg" alt="Conference relational schema" loading="lazy"></a></p>
 <p><strong>Explanation of the mapping.</strong></p>
 <ol>
 <li>Strong entity types (CONFERENCE, PAPER, PERSON) become relations keyed by their keys.</li>
@@ -408,6 +412,6 @@ SELECT Ssn, Level FROM L ORDER BY Level, Ssn;
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mws4sw6y" defer></script>
+<script src="../../assets/app.js?v=mws4yn57" defer></script>
 </body>
 </html>

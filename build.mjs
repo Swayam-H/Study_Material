@@ -627,7 +627,7 @@ for (const c of courses) {
 
   // practice
   const tagList = [...new Set(c.problems.flatMap(p => p.tags))];
-  fs.writeFileSync(path.join(OUT, c.slug, 'problems.js'), 'window.NOTES_PROBLEMS=' + JSON.stringify(c.problems) + ';');
+  fs.writeFileSync(path.join(OUT, c.slug, 'problems.js'), 'window.NOTES_PROBLEMS=' + JSON.stringify(c.problems).replace(/\.\.\/\.\.\/assets\//g, '../assets/') + ';');
   written.push(`${c.slug}/problems.js`);
   const pbody = `<div class="practice" data-course="${c.slug}">
     <nav class="crumbs"><a href="index.html">${esc(c.title)}</a><span>›</span><span>Practice</span></nav>

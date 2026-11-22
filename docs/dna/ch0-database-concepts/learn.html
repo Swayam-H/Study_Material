@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mws4sw6y">
+<link rel="stylesheet" href="../../assets/style.css?v=mws4yn57">
 </head>
 <body data-root="../../" data-page="dna/ch0-database-concepts/learn" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -263,6 +263,7 @@
 <li><strong>Physical</strong>: change the internal schema (reorganise files, add an index, move to other disks) without changing the conceptual schema. Example: adding an index on SECTION(Semester, Year) speeds a query and changes nothing users see.</li>
 </ul>
 <p><strong>Logical is harder</strong>, because application programs depend directly on the logical structure (names, columns, relationships) that they read. Physical changes are hidden from programs completely. Logical changes, by contrast, must be absorbed by rewriting the external-to-conceptual mappings, and that is not always possible: a removed item cannot appear in a view.</p>
+<p><a href="../../assets/fig/dna-24-three-schema.svg"><img class="fig" src="../../assets/fig/dna-24-three-schema.svg" alt="Three-schema architecture" loading="lazy"></a></p>
 <h2 id="languages-and-interfaces-elmasri-2-3">Languages and interfaces (Elmasri 2.3)</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -331,6 +332,7 @@
 <li><strong>Three-tier</strong> (web): client (browser, GUI), <strong>application server or web server</strong> (business rules, application programs, checking credentials), and database server. The middle tier also improves <strong>security</strong>, because clients never reach the database directly.</li>
 <li><strong>n-tier</strong>: the application layer is split further, for example into a presentation (web) tier, a business-logic tier and a data-access tier, and spread over many machines. Each tier can be scaled, run in parallel and replaced on its own. Communication between tiers is often <strong>encrypted</strong>.</li>
 </ul>
+<p><a href="../../assets/fig/dna-214-three-tier.svg"><img class="fig" src="../../assets/fig/dna-214-three-tier.svg" alt="Three-tier architecture" loading="lazy"></a></p>
 <h2 id="classifying-dbmss-elmasri-2-6">Classifying DBMSs (Elmasri 2.6)</h2>
 <p>DBMSs are classified by:</p>
 <ul>
@@ -372,6 +374,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mws4sw6y" defer></script>
+<script src="../../assets/app.js?v=mws4yn57" defer></script>
 </body>
 </html>

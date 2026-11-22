@@ -4,6 +4,10 @@ The ER model describes a mini-world as **entities**, their **attributes**, and t
 
 > **Study path.** Learn the notation table first; most lost marks in Assignment 2 were notation (weak entity not double-boxed, partial key not dashed, missing (min, max)). Then work through the TV show model in *Practice*: it is the individual paper's domain and also the input to Assignment 3.
 
+Every diagram on these pages uses the Chen notation of Elmasri, summarised here (tap to enlarge):
+
+[![Chen notation key](fig/dna-er-notation.svg)](../../assets/fig/dna-er-notation.svg)
+
 ## Entities and attributes
 
 An **entity** is a thing with independent existence (a person, a car, a course, a job). An **entity type** is the set of entities with the same attributes (EMPLOYEE); its current members are the **entity set**. In a diagram an entity type is a **rectangle**.
@@ -82,6 +86,8 @@ GA2 rubric in one line: **A** needs a hierarchy, a correct weak entity, (min, ma
 # Reference: ER and EER modelling
 
 ## Notation (Elmasri Fig 3.14, Fig 4.1)
+
+[![Chen notation key](fig/dna-er-notation.svg)](../../assets/fig/dna-er-notation.svg)
 
 | Construct | Symbol |
 | --- | --- |
