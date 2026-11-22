@@ -76,11 +76,13 @@ Write each relation as NAME(attr, attr, …) with the PK underlined (on paper) o
 - Map any ER/EER diagram in the order: strong, weak, 1:1, 1:N, M:N, multivalued, n-ary, specialization.
 - Say for each FK where it goes and why, with NOT NULL / UNIQUE where the constraint demands.
 - Pick 8A/8B/8C/8D from (d/o, total/partial) and defend it.
-- Reverse the process (relations → EER), see chapter on ER/EER Problem 7.
+- Reverse the process (relations → EER), see the ER/EER Practice page, Problem 18 (M24 Quiz 2 Q3).
 
 # Practice: Mapping EER to relations
 
 Every solution below is written the way an answer should look on the exam script: **assumptions** first (each with its reason), then the **working** in full sentences, then a clearly marked **final answer**. The quoted *Examiner's notes* are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.
+
+## A. Assignment 3 (this year)
 
 ### Problem 1 [Mapping · Application · 10 pts · Assignment 3 individual (EtoR-I)]
 
@@ -154,7 +156,321 @@ Map the EER-of-EER model (chapter on ER/EER, Problem 2) to relations. Focus on: 
 
 > **Examiner's note.** The diamond-by-diamond table is what proves that no relationship was left unmapped (major mistake M9). Write it.
 
-### Problem 3 [Mapping · Application · 8 pts · Elmasri Fig 9.1 / 9.2]
+## B. Textbook exercises set by Kamal (Elmasri 9.2–9.8)
+
+Each answer below follows the A3 rubric: one line per relation with its primary key (bold), every foreign key with its target, the mapping step used, and the assumptions that decided NOT NULL and UNIQUE.
+
+### Problem 3 [Mapping · Application · 10 pts · Elmasri 9.2]
+
+Map the UNIVERSITY ER schema of Figure 3.20 to relations.
+
+*Solution.*
+
+**The schema (Figure 3.20).**
+1. Entity types:
+   1. COLLEGE (**CName**, COffice, CPhone).
+   2. INSTRUCTOR (**Id**, Rank, IName, IOffice, IPhone).
+   3. DEPT (**DCode**, DName (unique), DOffice, DPhone).
+   4. COURSE (**CCode**, CoName (unique), Credits, Level, CDesc).
+   5. SECTION (**SecId**, SecNo, Sem, Year, CRoom(Bldg, RoomNo), DaysTime).
+   6. STUDENT (**SId**, SName(FName, MName, LName), Addr, Phone, Major, DOB).
+2. Relationships, with (min, max):
+   1. DEAN: COLLEGE (1,1), INSTRUCTOR (0,1).
+   2. ADMINS: COLLEGE (0,N), DEPT (1,1).
+   3. CHAIR: DEPT (1,1), INSTRUCTOR (0,1), with attribute CStartDate.
+   4. EMPLOYS: DEPT (0,N), INSTRUCTOR (1,1).
+   5. HAS: DEPT (0,N), STUDENT (0,1).
+   6. OFFERS: DEPT (0,N), COURSE (1,1).
+   7. SECS: COURSE (0,N), SECTION (1,1).
+   8. TEACHES: INSTRUCTOR (0,N), SECTION (1,1).
+   9. TAKES: STUDENT (0,N), SECTION (5,N), with attribute Grade.
+
+**Assumptions.**
+1. (min, max) values are read as printed in Figure 3.20. *(Reason: they decide NOT NULL.)* The text says a student "is assigned to one primary academic department", which would make HAS (1,1) for STUDENT and its foreign key NOT NULL.
+2. Grade may be NULL until it is recorded. *(Reason: "the grade is recorded when available".)*
+
+**Relational schema.**
+1. COLLEGE(**CName**, COffice, CPhone, Dean_id): Dean_id → INSTRUCTOR.Id, NOT NULL, UNIQUE. *(Step 3, 1:1 DEAN: the FK goes on the total side, COLLEGE.)*
+2. INSTRUCTOR(**Id**, Rank, IName, IOffice, IPhone, DCode): DCode → DEPT, NOT NULL. *(Step 4, EMPLOYS: N side; INSTRUCTOR is total.)*
+3. DEPT(**DCode**, DName UNIQUE, DOffice, DPhone, CName, Chair_id, CStartDate):
+   1. CName → COLLEGE, NOT NULL. *(Step 4, ADMINS.)*
+   2. Chair_id → INSTRUCTOR, NOT NULL, UNIQUE, and the relationship attribute CStartDate goes with it. *(Step 3, CHAIR: DEPT is total.)*
+4. COURSE(**CCode**, CoName UNIQUE, Credits, Level, CDesc, DCode): DCode → DEPT, NOT NULL. *(Step 4, OFFERS.)*
+5. SECTION(**SecId**, SecNo, Sem, Year, Bldg, RoomNo, DaysTime, CCode, Instructor_id):
+   1. CCode → COURSE, NOT NULL. *(Step 4, SECS.)*
+   2. Instructor_id → INSTRUCTOR, NOT NULL. *(Step 4, TEACHES.)*
+   3. CRoom is composite, so it is mapped as its parts. *(Step 1.)*
+   4. UNIQUE (SecNo, Sem, Year, CCode), UNIQUE (Sem, Year, Bldg, RoomNo, DaysTime) and UNIQUE (Sem, Year, DaysTime, Instructor_id). These are the constraints of Elmasri 3.16.
+6. STUDENT(**SId**, FName, MName, LName, Addr, Phone, Major, DOB, DCode): DCode → DEPT, NULL allowed. *(Step 4, HAS.)*
+7. TAKES(**SId, SecId**, Grade): SId → STUDENT, SecId → SECTION. *(Step 5, M:N.)*
+
+**Constraints lost in mapping.**
+1. "A section must have at least five students" (5,N) cannot be declared with keys or foreign keys. It needs an assertion or trigger.
+2. The same is true of the total participation of DEPT in CHAIR, *if* the FK were placed on the INSTRUCTOR side. Placing it on DEPT, as here, keeps it as NOT NULL.
+
+**Final answer.** The seven relations above. DEPT and INSTRUCTOR reference each other (DCode and Chair_id), and so do COLLEGE and INSTRUCTOR (through DEPT), so one of the FKs must be added after the tables exist, or checked at commit time.
+
+> **Examiner's note.** The A3 rubric's majors: an FK on the wrong side of a 1:N relationship, a missing NOT NULL where participation is total, and an M:N relationship (TAKES) not given its own relation. Writing the lost (5,N) constraint explicitly is what earns the A.
+
+### Problem 4 [Mapping · Application · 6 pts · Elmasri 9.3]
+
+Reverse engineering: map the LIBRARY relational schema (Figure 6.6, called 6.14 in the exercise) into an ER schema. State assumptions. The relations are BOOK(Book_id, Title, Publisher_name), BOOK_AUTHORS(Book_id, Author_name), PUBLISHER(Name, Address, Phone), BOOK_COPIES(Book_id, Branch_id, No_of_copies), BOOK_LOANS(Book_id, Branch_id, Card_no, Date_out, Due_date), LIBRARY_BRANCH(Branch_id, Branch_name, Address), BORROWER(Card_no, Name, Address, Phone).
+
+*Solution.*
+
+**Method.**
+1. A relation whose key is its own identifier becomes an **entity type**.
+2. A relation whose key consists only of foreign keys becomes a **relationship type**.
+3. A relation holding an owner key plus one value becomes a **multivalued attribute**.
+4. A non-key foreign key becomes a **1:N relationship**.
+
+**Assumptions.**
+1. Authors are only names, with no other data. *(Reason: BOOK_AUTHORS has only Author_name.)*
+2. The key of BOOK_LOANS is (Book_id, Branch_id, Card_no). So a borrower holds at most one copy of a given book from a given branch at a time. *(Reason: that is the key in the figure.)*
+
+**ER schema.**
+1. Entity types:
+   1. BOOK (**Book_id**, Title, {Author_name}), multivalued, from BOOK_AUTHORS.
+   2. PUBLISHER (**Name**, Address, Phone).
+   3. LIBRARY_BRANCH (**Branch_id**, Branch_name, Address).
+   4. BORROWER (**Card_no**, Name, Address, Phone).
+2. Relationship types:
+
+| Relationship | From | Participants and (min, max) | Attributes |
+| --- | --- | --- | --- |
+| PUBLISHED_BY | BOOK.Publisher_name | BOOK (1,1), PUBLISHER (0,N) | — |
+| COPIES | BOOK_COPIES | BOOK (0,N), LIBRARY_BRANCH (0,N) | No_of_copies |
+| LOANS (ternary) | BOOK_LOANS | BOOK (0,N), LIBRARY_BRANCH (0,N), BORROWER (0,N) | Date_out, Due_date |
+
+**Explanation.**
+1. LOANS is ternary because the key of BOOK_LOANS has three foreign keys and none is determined by the other two.
+2. If Author had more data, it would be an entity AUTHOR with an M:N relationship WRITES.
+
+**Final answer.** Four entity types and three relationship types, as above.
+
+> **Examiner's note.** BOOK_COPIES has copy counts, not individual copies, so there is no COPY entity. Modelling copies as entities is a design improvement, not a reverse-engineering result. Say so if you do it.
+
+### Problem 5 [Mapping · Application · 8 pts · Elmasri 9.4]
+
+Map the SHIP_TRACKING ER schema of Figure 9.8 to relations, with all primary and foreign keys.
+
+*Solution.*
+
+**The schema (Figure 9.8).**
+1. Entity types:
+   1. SHIP (**Sname**, Owner).
+   2. SHIP_TYPE (**Type**, Tonnage, Hull).
+   3. SHIP_MOVEMENT, weak with owner SHIP through HISTORY: partial key Time_stamp(Date, Time); attributes Longitude, Latitude.
+   4. PORT (**Pname**).
+   5. STATE/COUNTRY (**Name**, Continent).
+   6. SEA/OCEAN/LAKE (**Name**).
+   7. PORT_VISIT, weak with owners SHIP and PORT through SHIP_AT_PORT: partial key Start_date; attribute End_date.
+2. Relationships:
+   1. TYPE: SHIP N:1 SHIP_TYPE.
+   2. HOME_PORT: SHIP N:1 PORT.
+   3. IN: PORT N:1 STATE/COUNTRY.
+   4. ON: PORT N:1 SEA/OCEAN/LAKE.
+
+**Assumptions.**
+1. Port names are unique. *(Reason: Pname is the underlined key.)* If not, the key would be (Pname, State_country_name).
+2. Every ship has a type and a home port. *(Reason: maritime registration requires both.)*
+
+**Relational schema.**
+1. SHIP_TYPE(**Type**, Tonnage, Hull).
+2. STATE_COUNTRY(**Name**, Continent).
+3. BODY_OF_WATER(**Name**), for SEA/OCEAN/LAKE.
+4. PORT(**Pname**, State_country_name, Water_name): State_country_name → STATE_COUNTRY, Water_name → BODY_OF_WATER. *(Step 4, for IN and ON.)*
+5. SHIP(**Sname**, Owner, Type, Home_port): Type → SHIP_TYPE, NOT NULL; Home_port → PORT, NOT NULL. *(Step 4, for TYPE and HOME_PORT.)*
+6. SHIP_MOVEMENT(**Sname, Date, Time**, Longitude, Latitude): Sname → SHIP, ON DELETE CASCADE. *(Step 2: weak entity; the composite partial key is mapped as its parts.)*
+7. PORT_VISIT(**Sname, Pname, Start_date**, End_date): Sname → SHIP, Pname → PORT. *(Step 2: weak entity with two owners. The key is both owner keys plus the partial key.)*
+
+**Final answer.** The seven relations above. A ship cannot be at two ports at once, so (Sname, Start_date) is also unique in PORT_VISIT. That is a semantic constraint worth stating.
+
+### Problem 6 [Mapping · Application · 6 pts · Elmasri 9.5]
+
+Map the BANK ER schema (Elmasri Figure 3.22, called 3.21 in the exercise) to relations, with all primary and foreign keys. (The exercise also asks for the AIRLINE schema and the other schemas of 3.16–3.24.)
+
+*Solution.*
+
+**The schema.**
+1. BANK (**Code**, Name, Addr).
+2. BANK_BRANCH, weak with owner BANK through BRANCHES (1:N): partial key Branch_no; attribute Addr.
+3. ACCOUNT (**Acct_no**, Balance, Type), linked to a branch through ACCTS (1:N).
+4. LOAN (**Loan_no**, Amount, Type), linked to a branch through LOANS (1:N).
+5. CUSTOMER (**Ssn**, Name, Phone, Addr).
+6. A_C: ACCOUNT M:N CUSTOMER. L_C: LOAN M:N CUSTOMER.
+
+**Assumptions.**
+1. Every account and every loan belongs to one branch. *(Reason: total participation of ACCOUNT in ACCTS and LOAN in LOANS, as in the figure.)*
+2. Every account and loan has at least one customer, which cannot be enforced by keys. *(Reason: an account with no holder is meaningless.)*
+
+**Relational schema.**
+1. BANK(**Code**, Name, Addr).
+2. BANK_BRANCH(**Bank_code, Branch_no**, Addr): Bank_code → BANK, ON DELETE CASCADE. *(Step 2.)*
+3. ACCOUNT(**Acct_no**, Balance, Type, Bank_code, Branch_no): (Bank_code, Branch_no) → BANK_BRANCH, NOT NULL. *(Step 4. The FK is composite, because the branch's key is composite.)*
+4. LOAN(**Loan_no**, Amount, Type, Bank_code, Branch_no): (Bank_code, Branch_no) → BANK_BRANCH, NOT NULL. *(Step 4.)*
+5. CUSTOMER(**Ssn**, Name, Phone, Addr).
+6. A_C(**Ssn, Acct_no**): Ssn → CUSTOMER, Acct_no → ACCOUNT. *(Step 5.)*
+7. L_C(**Ssn, Loan_no**): Ssn → CUSTOMER, Loan_no → LOAN. *(Step 5.)*
+
+**The AIRLINE schema.** Mapping the AIRLINE ER diagram gives exactly the relational schema of Elmasri Figure 5.8. Its foreign keys are listed in the Chapter 1 Practice page (Elmasri 5.12 (d)), and its DDL is Problem 6.6 on the SQL Practice page.
+
+> **Examiner's note.** A foreign key that points to only *part* of BANK_BRANCH's key, such as just Branch_no, is a major error in the A3 rubric ("FK to part of a key").
+
+### Problem 7 [Mapping · Application · 12 pts · Elmasri 9.6]
+
+Map the EER diagrams of Figures 4.9 (UNIVERSITY) and 4.12 (SMALL_AIRPORT) to relations. Justify the mapping options.
+
+*Solution.*
+
+**Figure 4.12, SMALL_AIRPORT.**
+
+*Schema read from the figure.*
+1. Entity types:
+   1. PLANE_TYPE (**Model**, Capacity, Weight).
+   2. AIRPLANE (**Reg#**).
+   3. HANGAR (**Number**, Location, Capacity).
+   4. PERSON (**Ssn**, Name, Address, Phone).
+   5. CORPORATION (**Name**, Address, Phone).
+   6. OWNER, a category: PERSON ∪ CORPORATION.
+   7. EMPLOYEE (Salary, Shift) and PILOT (Lic_num, Restr), subclasses of PERSON.
+   8. SERVICE, weak with owner AIRPLANE through PLANE_SERVICE: partial key (Date, Workcode); attribute Hours.
+2. Relationships:
+   1. OF_TYPE: AIRPLANE N:1 PLANE_TYPE.
+   2. STORED_IN: AIRPLANE N:1 HANGAR.
+   3. OWNS: OWNER M:N AIRPLANE, with Pdate.
+   4. WORKS_ON: EMPLOYEE M:N PLANE_TYPE.
+   5. FLIES: PILOT M:N PLANE_TYPE.
+   6. MAINTAIN: EMPLOYEE M:N SERVICE.
+
+*Assumptions.*
+1. A person can be both an employee and a pilot, or neither (only an owner). So PERSON → {EMPLOYEE, PILOT} is **overlapping and partial**. *(Reason: pilots who are not airport staff own planes, and some staff are pilots.)*
+2. The category's superclasses have different keys (Ssn and Name). *(Reason: as in the figure.)*
+
+*Relations.*
+1. PLANE_TYPE(**Model**, Capacity, Weight).
+2. HANGAR(**Number**, Location, Capacity).
+3. AIRPLANE(**Reg#**, Model, Hangar_no): Model → PLANE_TYPE, NOT NULL; Hangar_no → HANGAR, NOT NULL.
+4. OWNER(**Owner_id**): a surrogate key for the category. *(Step 9: the superclasses have different keys.)*
+5. PERSON(**Ssn**, Name, Address, Phone, Owner_id): Owner_id → OWNER, UNIQUE, NULL allowed.
+6. CORPORATION(**Name**, Address, Phone, Owner_id): Owner_id → OWNER, UNIQUE, NULL allowed.
+7. OWNS(**Owner_id, Reg#**, Pdate): Owner_id → OWNER, Reg# → AIRPLANE.
+8. EMPLOYEE(**Ssn**, Salary, Shift): Ssn → PERSON. *(Option 8A.)*
+9. PILOT(**Ssn**, Lic_num, Restr): Ssn → PERSON. *(Option 8A.)*
+10. WORKS_ON(**Ssn, Model**): Ssn → EMPLOYEE, Model → PLANE_TYPE.
+11. FLIES(**Ssn, Model**): Ssn → PILOT, Model → PLANE_TYPE.
+12. SERVICE(**Reg#, Date, Workcode**, Hours): Reg# → AIRPLANE, ON DELETE CASCADE. *(Step 2.)*
+13. MAINTAIN(**Ssn, Reg#, Date, Workcode**): Ssn → EMPLOYEE; (Reg#, Date, Workcode) → SERVICE.
+
+*Why 8A.*
+1. The specialization is partial, so 8B is invalid.
+2. It is overlapping, so 8C is invalid.
+3. 8D would work, but EMPLOYEE and PILOT each take part in their own M:N relationships. Those relationships need a relation to reference, which 8A provides directly.
+
+**Figure 4.9, UNIVERSITY.**
+
+*Schema read from the figure.*
+1. PERSON (**Ssn**, Name(Fname, Minit, Lname), Bdate, Sex, Address(No, Street, Apt_no, City, State, Zip)) is specialized, **disjoint**, into FACULTY (Rank, Foffice, Fphone, Salary) and STUDENT (Class).
+2. GRAD_STUDENT is a subclass of STUDENT with defining predicate Class = 5, and has {Degrees(College, Degree, Year)}.
+3. INSTRUCTOR_RESEARCHER is a category: FACULTY ∪ GRAD_STUDENT.
+4. Other entity types: GRANT (**No**, Title, Agency, St_date); DEPARTMENT (**Dname**, Dphone, Office); COLLEGE (**Cname**, Coffice, Dean); COURSE (**C#**, Cname, Cdesc); SECTION (**Sec#**, Year, Qtr).
+5. CURRENT_SECTION is a predicate-defined subclass of SECTION (Qtr = Current_qtr and Year = Current_year).
+6. Relationships:
+
+| Relationship | Type | Attributes |
+| --- | --- | --- |
+| ADVISOR | FACULTY 1:N GRAD_STUDENT | |
+| COMMITTEE | FACULTY M:N GRAD_STUDENT | |
+| PI | FACULTY 1:N GRANT | |
+| SUPPORT | GRANT M:N INSTRUCTOR_RESEARCHER | Start, End, Time |
+| BELONGS | FACULTY M:N DEPARTMENT | |
+| CHAIRS | FACULTY 1:1 DEPARTMENT | |
+| CD | COLLEGE 1:N DEPARTMENT | |
+| DC | DEPARTMENT 1:N COURSE | |
+| CS | COURSE 1:N SECTION | |
+| TEACH | INSTRUCTOR_RESEARCHER 1:N SECTION | |
+| MAJOR, MINOR | STUDENT N:1 DEPARTMENT | |
+| TRANSCRIPT | STUDENT M:N SECTION | Grade |
+| REGISTERED | STUDENT M:N CURRENT_SECTION | |
+
+*Assumptions.*
+1. Sec# is unique across all sections. *(Reason: it is the only underlined attribute of SECTION.)*
+2. PERSON → {FACULTY, STUDENT} is partial, because staff and alumni exist. *(Reason: single line from PERSON in the figure.)*
+3. A student has one major and at most one minor. *(Reason: MAJOR and MINOR are N:1.)*
+4. A support period is identified by its start date. *(Reason: the same person can be supported by the same grant more than once.)*
+
+*Relations.*
+1. PERSON(**Ssn**, Fname, Minit, Lname, Bdate, Sex, No, Street, Apt_no, City, State, Zip). Composite attributes become their parts. *(Step 1.)*
+2. FACULTY(**Ssn**, Rank, Foffice, Fphone, Salary): Ssn → PERSON. *(8A.)*
+3. STUDENT(**Ssn**, Class, Major_dept, Minor_dept): Ssn → PERSON; Major_dept → DEPARTMENT, NOT NULL; Minor_dept → DEPARTMENT, NULL allowed. *(8A, and step 4 for MAJOR and MINOR.)*
+4. GRAD_STUDENT(**Ssn**, Advisor_ssn): Ssn → STUDENT; Advisor_ssn → FACULTY. *(8A, so that GRAD_STUDENT can take part in ADVISOR, COMMITTEE and the category.)*
+5. DEGREES(**Ssn, College, Degree**, Year): Ssn → GRAD_STUDENT. *(Step 6, multivalued.)*
+6. COMMITTEE(**Faculty_ssn, Grad_ssn**): Faculty_ssn → FACULTY, Grad_ssn → GRAD_STUDENT.
+7. INSTRUCTOR_RESEARCHER(**Ssn**): Ssn → PERSON. *(Step 9: both superclasses have the key Ssn, so no surrogate is needed.)*
+8. GRANT(**No**, Title, Agency, St_date, PI_ssn): PI_ssn → FACULTY, NOT NULL.
+9. SUPPORT(**Grant_no, IR_ssn, Start**, End, Time): Grant_no → GRANT, IR_ssn → INSTRUCTOR_RESEARCHER.
+10. COLLEGE(**Cname**, Coffice, Dean).
+11. DEPARTMENT(**Dname**, Dphone, Office, Cname, Chair_ssn): Cname → COLLEGE, NOT NULL; Chair_ssn → FACULTY, UNIQUE.
+12. BELONGS(**Faculty_ssn, Dname**).
+13. COURSE(**C#**, Cname, Cdesc, Dname): Dname → DEPARTMENT, NOT NULL.
+14. SECTION(**Sec#**, Year, Qtr, C#, Instructor_ssn): C# → COURSE, NOT NULL; Instructor_ssn → INSTRUCTOR_RESEARCHER.
+15. TRANSCRIPT(**Ssn, Sec#**, Grade): Ssn → STUDENT, Sec# → SECTION.
+16. REGISTERED(**Ssn, Sec#**): Ssn → STUDENT, Sec# → SECTION.
+
+*Justification.*
+1. **8A for PERSON**: the specialization is partial, so 8B is invalid. Each subclass has its own relationships.
+2. **8A for GRAD_STUDENT**: it has relationships of its own (ADVISOR, COMMITTEE and the category), which need a relation to reference. Its defining predicate (Class = 5) should be checked: Ssn in GRAD_STUDENT only if STUDENT.Class = 5.
+3. **CURRENT_SECTION gets no relation**: it has no attributes of its own and is defined by a predicate on SECTION. REGISTERED references SECTION, and a trigger or check enforces that the section is current.
+
+> **Examiner's note.** Both diagrams test the same three decisions: which 8A–8D option is valid for each specialization, how to map a category (a surrogate when the superclass keys differ, as in 4.12; not needed when they agree, as in 4.9), and what to do with a predicate-defined subclass.
+
+### Problem 8 [Mapping · Concept · 4 pts · Elmasri 9.7]
+
+Can a binary M:N relationship type be mapped without a new relation? Why or why not?
+
+*Solution.*
+
+**Answer.** **No**, not in a relational schema in first normal form.
+1. Suppose the foreign key is put in one participant, say a Pno column in EMPLOYEE for WORKS_ON.
+   1. An employee works on several projects, so the column would need a **set of values**. That violates 1NF, where every value is atomic.
+   2. Alternatively, the employee's tuple would be **repeated** once per project. Then Ssn is no longer a key, and all of the employee's other attributes are stored redundantly, which brings update anomalies.
+2. The same happens on the other side, because a project has several employees.
+3. Only a separate relation, whose key is the pair of foreign keys, stores each (employee, project) pair once, together with relationship attributes such as Hours, which depend on the pair.
+
+**Final answer.** No. Each side has many partners, so storing the relationship in either participant needs a multivalued attribute (not allowed in 1NF) or duplicated tuples (breaking the key). A new relation is required. Only in a non-1NF model (object or multivalued attributes) can it be avoided.
+
+### Problem 9 [Mapping · Application · 8 pts · Elmasri 9.8]
+
+Car dealer EER (Figure 9.9): VEHICLE(Vin, Price, Model) specialized (d) into CAR(Engine_size), TRUCK(Tonnage), SUV(No_seats); SALE relates VEHICLE (N), SALESPERSON(Sid, Name) (1) and CUSTOMER(Ssn, Name, Address(Street, City, State)) (1), with attribute Date. Map the schema, and show the VEHICLE design under each of the four options 8A–8D.
+
+*Solution.*
+
+**Assumptions.**
+1. Every vehicle is exactly one of car, truck or SUV, so the specialization is **disjoint and total**. *(Reason: the "d" in the figure; total is assumed for a dealer's stock.)* If it is partial, 8B becomes invalid.
+2. A vehicle is sold at most once. *(Reason: the 1 on SALESPERSON and CUSTOMER means one salesperson and one customer per vehicle sale.)* So Vin identifies a sale.
+
+**The rest of the schema.**
+1. SALESPERSON(**Sid**, Name).
+2. CUSTOMER(**Ssn**, Name, Street, City, State). The composite Address becomes its parts.
+3. SALE(**Vin**, Sid, Ssn, Date): Vin → VEHICLE (or the vehicle relations under 8B); Sid → SALESPERSON, NOT NULL; Ssn → CUSTOMER, NOT NULL.
+4. SALE is ternary (step 7), but the 1s reduce its key to Vin alone.
+
+**VEHICLE under the four options.**
+
+| Option | Relations | Comment |
+| --- | --- | --- |
+| **8A** (super + sub relations) | VEHICLE(**Vin**, Price, Model); CAR(**Vin**, Engine_size); TRUCK(**Vin**, Tonnage); SUV(**Vin**, No_seats); each sub Vin → VEHICLE | Always valid. Queries on all vehicles read one table; subclass attributes need a join |
+| **8B** (sub relations only) | CAR(**Vin**, Price, Model, Engine_size); TRUCK(**Vin**, Price, Model, Tonnage); SUV(**Vin**, Price, Model, No_seats) | Valid only because the specialization is total (and best if disjoint). SALE.Vin can no longer have one foreign key, because it would reference three tables |
+| **8C** (one relation, one type attribute) | VEHICLE(**Vin**, Price, Model, Vehicle_type, Engine_size, Tonnage, No_seats) | Valid because the specialization is disjoint. Two of the three subclass columns are NULL in every row |
+| **8D** (one relation, Boolean flags) | VEHICLE(**Vin**, Price, Model, Is_car, Is_truck, Is_suv, Engine_size, Tonnage, No_seats) | Valid, but meant for overlapping specializations. Here a CHECK that exactly one flag is true is needed |
+
+**Choice.** **8C**. There are few subclass attributes (one each), the specialization is disjoint, and SALE keeps a single foreign key to VEHICLE. 8A is the best choice if subclasses gain more attributes or their own relationships.
+
+> **Examiner's note.** The common errors are presenting 8B as valid with no mention of totality, and missing that 8B breaks the SALE foreign key.
+
+## C. Extra drills and last year's style
+
+### Problem 10 [Mapping · Application · 8 pts · Elmasri Fig 9.1 / 9.2]
 
 Map the COMPANY ER schema: EMPLOYEE (Ssn; Name composite; Address; Salary; Sex; Bdate), DEPARTMENT (Number, Name; multivalued Locations), PROJECT (Number, Name; Location), DEPENDENT (weak, partial key Name, owner EMPLOYEE; Sex, Bdate, Relationship); WORKS_FOR (1:N, total on both), MANAGES (1:1, Start_date, total on DEPARTMENT), CONTROLS (1:N, total on PROJECT), SUPERVISION (1:N recursive), WORKS_ON (M:N, Hours).
 
@@ -182,7 +498,7 @@ Map the COMPANY ER schema: EMPLOYEE (Ssn; Name composite; Address; Salary; Sex; 
 
 **Final answer.** The six relations above. Because EMPLOYEE.Dno and DEPARTMENT.Mgr_ssn reference each other, one of the two foreign keys must be added after both tables exist (ALTER TABLE) or checked at commit time.
 
-### Problem 4 [Mapping · Concept · 4 pts]
+### Problem 11 [Mapping · Concept · 4 pts]
 
 PERSON(Ssn, Name) specializes into STUDENT(Major) and EMPLOYEE(Salary), overlapping and partial. Which mapping options are valid? Give the schema for the best one.
 
@@ -199,7 +515,7 @@ PERSON(Ssn, Name) specializes into STUDENT(Major) and EMPLOYEE(Salary), overlapp
 
 **Final answer.** Valid options: **8A and 8D**. I choose **8A**, because it avoids NULL columns and lets each subclass take part in its own relationships; 8D is preferable only when subclasses have very few attributes.
 
-### Problem 5 [Mapping · Application · 4 pts]
+### Problem 12 [Mapping · Application · 4 pts]
 
 Map the ternary SUPPLY(SUPPLIER(Sname), PART(Part_no), PROJECT(Proj_name)) with attribute Quantity. What changes if each (project, part) pair has at most one supplier?
 
@@ -214,7 +530,7 @@ Map the ternary SUPPLY(SUPPLIER(Sname), PART(Part_no), PROJECT(Proj_name)) with 
 
 **Final answer.** SUPPLY(**Sname, Part_no, Proj_name**, Quantity), with three foreign keys. Under the extra constraint: SUPPLY(Sname, **Part_no, Proj_name**, Quantity).
 
-### Problem 6 [Mapping · Concept · 3 pts]
+### Problem 13 [Mapping · Concept · 3 pts]
 
 Map the category OWNER = PERSON ∪ BANK ∪ COMPANY, where PERSON has key Ssn, BANK has key Bname, COMPANY has key Cname, and OWNER owns REGISTERED_VEHICLE (1:N).
 
@@ -230,7 +546,7 @@ Map the category OWNER = PERSON ∪ BANK ∪ COMPANY, where PERSON has key Ssn, 
 
 **Final answer.** OWNER(**Owner_id**); PERSON(**Ssn**, …, Owner_id), BANK(**Bname**, …, Owner_id), COMPANY(**Cname**, …, Owner_id), each Owner_id → OWNER; REGISTERED_VEHICLE(**Vehicle_id**, …, Owner_id → OWNER).
 
-### Problem 7 [Mapping · Concept · 3 pts · past-paper style]
+### Problem 14 [Mapping · Concept · 3 pts · past-paper style]
 
 Why can a 1:N relationship's foreign key not go on the 1 side? Why must an M:N relationship get its own relation?
 
