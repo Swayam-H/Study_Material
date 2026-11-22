@@ -603,6 +603,9 @@ const distLab = () => `<section class="dist-lab" aria-label="Interactive standar
     <div id="saved-box"></div>
   </div>`;
   write('index.html', page({ root: '', title: site.title, body, cls: 'is-home' }));
+  write('profile.html', page({ root: '', title: `Profile · ${site.title}`, cls: 'is-profile', body:
+    '<article class="note"><header class="note-head"><h1>Profile</h1></header><div id="profile" class="profile"><p class="hint">Sign in to see your profile.</p></div></article>' +
+    `<script src="assets/profile.js?v=${BUILD}" defer></script>` }));
 }
 
 const meta = { courses: [], titles: {} };
@@ -711,7 +714,7 @@ for (const c of courses) {
   });
 }
 fs.writeFileSync(path.join(OUT, 'assets', 'meta.js'), 'window.NOTES_META=' + JSON.stringify(meta) + ';');
-const assetList = ['assets/style.css?v=' + BUILD, 'assets/app.js?v=' + BUILD, 'assets/auth.js?v=' + BUILD, 'assets/meta.js', 'assets/search.js', 'assets/katex/katex.min.css', 'assets/icon.svg', 'manifest.webmanifest'];
+const assetList = ['assets/style.css?v=' + BUILD, 'assets/app.js?v=' + BUILD, 'assets/auth.js?v=' + BUILD, 'assets/profile.js?v=' + BUILD, 'assets/meta.js', 'assets/search.js', 'assets/katex/katex.min.css', 'assets/icon.svg', 'manifest.webmanifest'];
 fs.writeFileSync(path.join(OUT, 'assets', 'pages.js'), 'window.NOTES_PAGES=' + JSON.stringify([...written, ...assetList]) + ';');
 
 const nCh = courses.reduce((a, c) => a + c.docs.reduce((b, d) => b + d.chapters.length, 0), 0);

@@ -52,6 +52,12 @@
   }
   var user = null;
   try { user = JSON.parse(LS.get('sm:user') || 'null'); } catch (e) {}
+  function cacheProfile(res) {
+    LS.set('sm:profile', JSON.stringify({ name: res.name || '', details: res.details || {}, created_at: res.created_at, has_recovery: !!res.has_recovery }));
+  }
+  window.SM = { rpc: rpc, snapshot: snapshot, stable: stable, user: user, esc: esc, LS: LS, cacheProfile: cacheProfile,
+    logout: function () { return logoutFn && logoutFn(false); } };
+  var logoutFn = null;
 
   // ---------- login gate ----------
   function gate(msg) {
@@ -69,6 +75,12 @@
           '<label>Password<input id="sm-pass" name="password" type="password" autocomplete="current-password" required minlength="4" placeholder="at least 4 characters"></label>' +
           '<button class="btn" id="sm-go" type="submit">Enter</button>' +
           '<p class="sm-err" id="sm-err" role="alert"></p>' +
+          '<button class="sm-link" id="sm-forgot" type="button">Forgot password?</button>' +
+          '<div id="sm-reset" hidden>' +
+            '<label>Recovery word<input id="sm-rw" autocomplete="off" placeholder="the word you set on your profile page"></label>' +
+            '<label>New password<input id="sm-np" type="password" autocomplete="new-password" minlength="4" placeholder="at least 4 characters"></label>' +
+            '<button class="btn" id="sm-do-reset" type="button">Reset password</button>' +
+          '</div>' +
           '<p class="sm-hint">First time? Type any password: it creates your account. Use the same one on your other devices. This is a simple lock for friends, so do not reuse an important password.</p>' +
         '</form>';
       document.body.appendChild(g);
@@ -85,6 +97,7 @@
           var keepLocal = !lastOwner || lastOwner === res.roll;
           var data = res.created ? (keepLocal ? local : {}) : (keepLocal ? merge(res.data || {}, local) : (res.data || {}));
           writeLocal(data);
+          cacheProfile(res);
           LS.set('sm:user', JSON.stringify({ roll: res.roll, pass: pass }));
           LS.set('sm:owner', res.roll);
           LS.set('sm:rev', res.updated_at);
@@ -98,6 +111,17 @@
         });
       });
     }
+    document.getElementById('sm-forgot').onclick = function () { var b = document.getElementById('sm-reset'); b.hidden = !b.hidden; };
+    document.getElementById('sm-do-reset').onclick = function () {
+      var err = document.getElementById('sm-err'), btn = this;
+      var roll = document.getElementById('sm-roll').value.trim().toUpperCase();
+      btn.disabled = true; err.style.color = ''; err.textContent = '';
+      rpc('sm_reset_password', { p_roll: roll, p_word: document.getElementById('sm-rw').value, p_new: document.getElementById('sm-np').value }).then(function () {
+        document.getElementById('sm-pass').value = document.getElementById('sm-np').value;
+        document.getElementById('sm-reset').hidden = true;
+        err.style.color = '#166534'; err.textContent = 'Password changed. Press Enter to sign in.';
+      }).catch(function (e) { err.textContent = e.message; }).then(function () { btn.disabled = false; });
+    };
     if (msg) document.getElementById('sm-err').textContent = msg;
     setTimeout(function () { var r = document.getElementById('sm-roll'); if (r) r.focus(); }, 50);
   }
@@ -120,6 +144,7 @@
   }
   function pull() {
     rpc('sm_login', { p_roll: user.roll, p_pass: user.pass }).then(function (res) {
+      cacheProfile(res);
       var rev = LS.get('sm:rev');
       if (rev && new Date(res.updated_at) <= new Date(rev)) { push(); return; }
       var local = snapshot(), unsynced = stable(local) !== LS.get('sm:last');
@@ -134,7 +159,7 @@
   function logout(expired) {
     var finish = function () {
       writeLocal({});
-      ['sm:user', 'sm:rev', 'sm:last'].forEach(function (k) { LS.set(k, null); });
+      ['sm:user', 'sm:rev', 'sm:last', 'sm:profile'].forEach(function (k) { LS.set(k, null); });
       if (expired) LS.set('sm:owner', null);
       location.reload();
     };
@@ -146,6 +171,7 @@
     });
   }
 
+  logoutFn = logout;
   var statusEl = null;
   function setStatus(s) { if (statusEl) statusEl.textContent = s; }
 
@@ -157,12 +183,13 @@
     };
     return '<table class="sm-board"><thead><tr><th>Roll</th><th>DnA solved</th><th>All solved</th><th>Pages read</th><th>Active</th></tr></thead><tbody>' +
       rows.map(function (r) {
-        return '<tr' + (r.roll === user.roll ? ' class="me"' : '') + '><td>' + esc(r.roll) + '</td><td>' + r.dna_solved + '</td><td>' + r.solved +
+        return '<tr' + (r.roll === user.roll ? ' class="me"' : '') + '><td>' + esc(r.roll) + (r.name ? ' <small>' + esc(r.name) + '</small>' : '') + '</td><td>' + r.dna_solved + '</td><td>' + r.solved +
           '</td><td>' + r.pages_read + '</td><td>' + ago(r.last_active) + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
 
   function mountAccount() {
+    var root = document.body.dataset.root || '';
     var actions = document.querySelector('.top-actions');
     if (!actions) return;
     var wrap = document.createElement('div');
@@ -172,6 +199,7 @@
       '<div class="settings-pop sm-pop" id="sm-pop" hidden>' +
         '<div class="settings-head">Signed in as ' + esc(user.roll) + '</div>' +
         '<p class="hint">Progress sync: <span id="sm-status">Connecting…</span></p>' +
+        '<a class="btn small wide" id="sm-profile" href="' + root + 'profile.html">Profile &amp; password</a>' +
         '<button class="btn small wide" id="sm-board-btn" type="button">Friends\' progress</button>' +
         '<div id="sm-board"></div>' +
         '<button class="btn small wide" id="sm-out" type="button">Sign out</button>' +
@@ -189,7 +217,7 @@
       var box = document.getElementById('sm-board');
       box.innerHTML = '<p class="hint">Loading…</p>';
       push();
-      rpc('sm_board', {}).then(function (rows) { box.innerHTML = boardHtml(rows || []); })
+      rpc('sm_board2', {}).then(function (rows) { box.innerHTML = boardHtml(rows || []); })
         .catch(function () { box.innerHTML = '<p class="hint">Cannot reach the server right now.</p>'; });
     });
     if (sessionStorage.getItem('sm:pulled')) { sessionStorage.removeItem('sm:pulled'); setStatus('Updated from your other device'); }
