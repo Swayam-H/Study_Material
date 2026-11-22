@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwrps41p">
+<link rel="stylesheet" href="../../assets/style.css?v=mws4mtad">
 </head>
 <body data-root="../../" data-page="dna/ch2-er-eer/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,7 +87,7 @@
       <header class="note-head">
         <p class="eyebrow">Practice</p>
         <h1>ER and EER modelling</h1>
-        <p class="note-meta">45 min read · 19 practice problems</p>
+        <p class="note-meta">46 min read · 19 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
@@ -171,6 +171,8 @@
 <li>Role is an attribute of APPEARS_IN, because it describes an actor <em>in a particular episode</em>, not the actor alone or the episode alone.</li>
 <li>Actors are related to episodes rather than shows, because roles are recorded per episode; &quot;appears in one or more shows&quot; then follows from (1,N) on episodes.</li>
 </ul>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-ia2-tvshow.svg"><img class="fig" src="../../assets/fig/dna-ia2-tvshow.svg" alt="EER diagram of the TV show database" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The EER diagram contains the five entity types above (two of them weak, with double rectangles, double diamonds and dashed partial keys), the five relationship types with the (min, max) pairs in the table, and an overlapping, total specialization of PERSON.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> Grade A needed: every line carrying a (min, max) pair, both weak entities correctly drawn with partial keys, a sensible d/o choice with a reason, and at least one multivalued and one composite attribute. Major mistakes: a strong entity with no key, a weak entity with no partial key, (1:N) written instead of (min, max), min greater than max.</p>
@@ -242,6 +244,8 @@
 </tbody>
 </table></div>
 <p><strong>Justification.</strong> A composite attribute has at least two components, hence (2,N). A weak entity type depends on exactly one owner, hence (1,1) on its side of the identifying relationship. Generalization combines at least two strong entity types, hence (2,N).</p>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-ga2-eer-of-eer.svg"><img class="fig" src="../../assets/fig/dna-ga2-eer-of-eer.svg" alt="EER diagram of the EER model itself" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The EER diagram consists of the entity types, specializations and relationship types listed above.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> The key accepted any equivalent model with stated assumptions. What is being tested is that you know every definition of chapters 3 and 4 precisely enough to model it.</p>
@@ -288,6 +292,8 @@
                     { Degree ( DegreeName, Month, Year ) },
                     { Transcript ( CourseName, Semester, Year, Grade ) } ) }
 </code></pre>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-317-nested-attr.svg"><img class="fig" src="../../assets/fig/dna-317-nested-attr.svg" alt="STUDENT with nested composite and multivalued attributes" loading="lazy"></a></p>
 <p><strong>Explanation.</strong></p>
 <ol>
 <li>PreviousCollege is <strong>multivalued</strong>, because a student has one entry per college.</li>
@@ -347,6 +353,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-322-sports.svg"><img class="fig" src="../../assets/fig/dna-322-sports.svg" alt="ER diagram of the sports database" loading="lazy"></a></p>
 <p><strong>Explanation.</strong></p>
 <ol>
 <li>The team of each player in a game is found through PLAYS_FOR, so PLAYED_IN does not need TEAM as a third participant.</li>
@@ -381,6 +389,8 @@
 <li>ER allows several keys, each underlined, but a simple attribute should belong to one composite attribute. So shared components either appear in several composites, which repeats them, or the extra keys are written as a note beside the diagram.</li>
 <li>Alternatively, add a surrogate SecId as the single underlined key and list K1–K3 as uniqueness constraints. Elmasri does this in Figure 3.20.</li>
 </ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-326-section-keys.svg"><img class="fig" src="../../assets/fig/dna-326-section-keys.svg" alt="SECTION with its keys" loading="lazy"></a></p>
 <blockquote>
 <p><strong>Examiner's note.</strong> Assumption 3 matters: if 'MWF 9:00' and 'MW 9:00' count as a clash, no key can express it, and it becomes a semantic constraint (a trigger after mapping).</p>
 </blockquote>
@@ -452,6 +462,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-416-hospital.svg"><img class="fig" src="../../assets/fig/dna-416-hospital.svg" alt="EER diagram of the hospital" loading="lazy"></a></p>
 <p><strong>Why PRESCRIBES is ternary.</strong> A prescription is one fact about a doctor, a patient and a medicine together. Three binary relationships could not say which doctor prescribed which medicine to which patient.</p>
 <p><strong>Other constraints.</strong></p>
 <ol>
@@ -499,6 +511,8 @@
 <li><strong>PAYMENT</strong>, a weak entity with owner LOAN through identifying relationship LOAN_PAY (LOAN (0,N), PAYMENT (1,1)). Partial key Payment_no; attributes Amount, Date, Time.</li>
 </ol>
 <p><strong>Generalization (optional).</strong> TRANSACTION and PAYMENT share Amount, Date and Time. They could be generalized into a superclass MONEY_MOVEMENT(Amount, Date, Time). I keep them separate, because they have different owners (account or loan) and different identifying relationships, so the superclass would have no common key.</p>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-417-bank.svg"><img class="fig" src="../../assets/fig/dna-417-bank.svg" alt="EER diagram of the modified BANK" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The BANK schema above with two attribute-defined, disjoint, total specializations (ACCOUNT and LOAN), and two new weak entity types (TRANSACTION, itself specialized, and PAYMENT).</p>
 </details>
 <h3 id="problem-9-eer-application-8-pts-elmasri-4-18">Problem 9 [EER · Application · 8 pts · Elmasri 4.18]</h3>
@@ -562,6 +576,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-418-olympics.svg"><img class="fig" src="../../assets/fig/dna-418-olympics.svg" alt="EER diagram of the Olympic facilities" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The schema above. Its key design choices: a disjoint, total, attribute-defined specialization of SPORTS_COMPLEX; sport areas as a multivalued composite attribute of MULTISPORT; and a separate FACILITY_TYPE entity for the per-type counts and budgets.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> Putting No_needed and Budget on SPORTS_COMPLEX is the usual mistake: it repeats one per-type value in every complex. Sport areas may also be a weak entity AREA (owner MULTISPORT) if events are held in a specific area.</p>
@@ -585,13 +601,14 @@
 <li>COPY, weak with owner BOOK (partial key Copy_no).</li>
 <li>MEMBER (<strong>Card_no</strong>, Ssn, Name, Campus_addr, Home_addr, {Phone}, Photo, Issue_date, Expiry_date).</li>
 <li>STAFF (<strong>Staff_id</strong>, Name).</li>
+<li>NOTICE, weak with owner MEMBER (partial key Notice_date).</li>
 </ol>
 </li>
 <li>Relationship types:
 <ol>
 <li>HAS_COPY (BOOK–COPY, identifying).</li>
 <li>BORROWS (MEMBER–COPY; Date_out, Due_date, Return_date).</li>
-<li>NOTIFIED (MEMBER, with notice date and type: overdue or renewal).</li>
+<li>NOTIFIED (identifying, MEMBER–NOTICE). NOTICE is a weak entity type with partial key Notice_date and attribute Kind (overdue or renewal).</li>
 </ol>
 </li>
 </ol>
@@ -632,10 +649,12 @@
 </tr>
 <tr>
 <td>NOTIFIED</td>
-<td>MEMBER (0,N)</td>
+<td>MEMBER (0,N), NOTICE (1,1)</td>
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-419-library.svg"><img class="fig" src="../../assets/fig/dna-419-library.svg" alt="EER diagram of the library" loading="lazy"></a></p>
 <p><strong>Details that do not affect the conceptual design.</strong> The counts (16,000 members, 100,000 titles, 250,000 volumes), the 10% of volumes on loan, the 5% of members sent reminders, the 5% of overdue books lost, the borrowing distribution (top 1% and top 10%) and the 20% inactive members. These affect physical design (sizes, indexes, statistics), not the entity types.</p>
 <p><strong>Semantic constraints</strong> (not expressible in the EER diagram).</p>
 <ol>
@@ -713,6 +732,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-420-museum.svg"><img class="fig" src="../../assets/fig/dna-420-museum.svg" alt="EER diagram of the art museum" loading="lazy"></a></p>
 <p><strong>Justification of the choices.</strong></p>
 <ol>
 <li>Two <strong>independent specializations</strong> of the same superclass, one by type and one by ownership. A painting can be borrowed and a statue owned, so these are two separate specializations, not one with eight subclasses.</li>
@@ -841,6 +862,8 @@
 <li><strong>PROFESSOR.</strong> A professor may teach no course, so the minimum is 0. A professor teaches at most 3 courses, each with at most 100 students, so the maximum is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">300</span></span></span></span>.</li>
 <li><strong>STUDENT.</strong> A student may attend no course, so the minimum is 0. A student attends at most 6 courses, each with at most 2 professors, so the maximum is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">12</span></span></span></span>.</li>
 </ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p14-ternary.svg"><img class="fig" src="../../assets/fig/dna-p14-ternary.svg" alt="Ternary TEACHES with its (min, max)" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> COURSE <strong>(1, 200)</strong>, PROFESSOR <strong>(0, 300)</strong>, STUDENT <strong>(0, 12)</strong>.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> Writing (1, 2) for COURSE confuses the per-pair limit with the triple count. Add that the per-pair limits (&quot;at most 2 professors per course&quot;) cannot be expressed by (min, max) on the ternary alone.</p>
@@ -858,6 +881,8 @@
 <li>SUPPLIES(s, j) = {(s1, j2), (s1, j1), (s2, j1)}</li>
 </ul>
 <p>From these pairs, (s1, p1, j1) looks possible: s1 can supply p1, j1 uses p1, and s1 supplies j1. Yet s1 never supplied p1 to j1. The binaries therefore lose information.</p>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p15-ternary-vs-binary.svg"><img class="fig" src="../../assets/fig/dna-p15-ternary-vs-binary.svg" alt="Ternary SUPPLY next to three binaries" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> They are not equivalent: the ternary stores exactly which triples occurred, which the binaries cannot reproduce. Binaries may be kept <em>in addition</em> to a ternary to express extra constraints, such as &quot;a supplier may supply only parts it can supply&quot;.</p>
 </details>
 <h3 id="problem-16-eer-concept-3-pts">Problem 16 [EER · Concept · 3 pts]</h3>
@@ -901,6 +926,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p16-spec-kinds.svg"><img class="fig" src="../../assets/fig/dna-p16-spec-kinds.svg" alt="The four kinds of specialization" loading="lazy"></a></p>
 </details>
 <h3 id="problem-17-eer-concept-3-pts">Problem 17 [EER · Concept · 3 pts]</h3>
 <p>What is the difference between a shared subclass and a category?</p>
@@ -911,6 +938,8 @@
 <li>A <strong>shared subclass</strong> has several superclasses and appears in a specialization lattice. Each of its entities belongs to <strong>all</strong> of its superclasses and inherits from all of them. Example: ENGINEERING_MANAGER is a subclass of both ENGINEER and MANAGER.</li>
 <li>A <strong>category</strong> (union type) is a subclass of the <strong>union</strong> of several superclasses, which usually have different keys. Each of its entities belongs to <strong>exactly one</strong> of the superclasses and inherits only from that one. Example: OWNER = PERSON ∪ BANK ∪ COMPANY. It is drawn with ∪ in the circle.</li>
 </ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p17-shared-vs-category.svg"><img class="fig" src="../../assets/fig/dna-p17-shared-vs-category.svg" alt="Shared subclass and category" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> A shared subclass is an intersection (member of all superclasses); a category is a union (member of one superclass).</p>
 </details>
 <h3 id="problem-18-eer-application-6-pts-m24-quiz-2-q3">Problem 18 [EER · Application · 6 pts · M24 Quiz 2 Q3]</h3>
@@ -931,6 +960,8 @@
 <li>DEPARTMENT.Mgr_ssn is a single foreign key, and an employee manages at most one department, so it is a <strong>1:1 relationship</strong> MANAGES: DEPARTMENT (1,1), EMPLOYEE (0,1).</li>
 <li>PROJECT.Dnum is a single foreign key, giving the <strong>1:N relationship</strong> CONTROLS: PROJECT (1,1), DEPARTMENT (0,N).</li>
 </ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p18-company.svg"><img class="fig" src="../../assets/fig/dna-p18-company.svg" alt="ER diagram reverse-engineered from the relations" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> Strong entities EMPLOYEE, DEPARTMENT, PROJECT; weak entity DEPENDENT; relationships DEPENDENTS_OF (identifying), WORKS_ON (M:N, Hours), WORKS_FOR (1:N), MANAGES (1:1), CONTROLS (1:N), with the (min, max) pairs above.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> The rule of thumb: a key made only of foreign keys means a relationship; a foreign key plus a partial key means a weak entity; a lone foreign key means a 1:N or 1:1 relationship.</p>
@@ -999,6 +1030,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p19-university.svg"><img class="fig" src="../../assets/fig/dna-p19-university.svg" alt="ER diagram of the UNIVERSITY drill" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The schema has the six entity types and eight relationship types above. Grade is an attribute of TAKES, because it describes a student in a particular section.</p>
 </details>
 </div>
@@ -1033,6 +1066,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwrps41p" defer></script>
+<script src="../../assets/app.js?v=mws4mtad" defer></script>
 </body>
 </html>

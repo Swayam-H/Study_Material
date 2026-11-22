@@ -169,6 +169,10 @@ Television show database. (a) A show is identified by title and year of release,
 - Role is an attribute of APPEARS_IN, because it describes an actor *in a particular episode*, not the actor alone or the episode alone.
 - Actors are related to episodes rather than shows, because roles are recorded per episode; "appears in one or more shows" then follows from (1,N) on episodes.
 
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the TV show database](fig/dna-ia2-tvshow.svg)](../../assets/fig/dna-ia2-tvshow.svg)
+
 **Final answer.** The EER diagram contains the five entity types above (two of them weak, with double rectangles, double diamonds and dashed partial keys), the five relationship types with the (min, max) pairs in the table, and an overlapping, total specialization of PERSON.
 
 > **Examiner's note.** Grade A needed: every line carrying a (min, max) pair, both weak entities correctly drawn with partial keys, a sensible d/o choice with a reason, and at least one multivalued and one composite attribute. Major mistakes: a strong entity with no key, a weak entity with no partial key, (1:N) written instead of (min, max), min greater than max.
@@ -206,6 +210,10 @@ Draw an EER model of the EER model itself: entities have attributes (simple or c
 | GENERALIZATION | STRONG_ENTITY_TYPE (2,N), ENTITY_TYPE as superclass (0,1) |
 
 **Justification.** A composite attribute has at least two components, hence (2,N). A weak entity type depends on exactly one owner, hence (1,1) on its side of the identifying relationship. Generalization combines at least two strong entity types, hence (2,N).
+
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the EER model itself](fig/dna-ga2-eer-of-eer.svg)](../../assets/fig/dna-ga2-eer-of-eer.svg)
 
 **Final answer.** The EER diagram consists of the entity types, specializations and relationship types listed above.
 
@@ -259,6 +267,10 @@ Design one attribute of STUDENT for previous college education: one entry per co
                     { Transcript ( CourseName, Semester, Year, Grade ) } ) }
 ```
 
+**Diagram** (tap to enlarge).
+
+[![STUDENT with nested composite and multivalued attributes](fig/dna-317-nested-attr.svg)](../../assets/fig/dna-317-nested-attr.svg)
+
 **Explanation.**
 1. PreviousCollege is **multivalued**, because a student has one entry per college.
 2. Each entry is **composite**: name, two dates and two nested multivalued attributes.
@@ -292,6 +304,10 @@ Design an ER schema for a sports league: teams have players, not all of whom pla
 | AWAY | GAME (1,1), TEAM (0,N) | — |
 | PLAYED_IN | PLAYER (0,N), GAME (22,N) | {Position} (multivalued), Minutes |
 
+**Diagram** (tap to enlarge).
+
+[![ER diagram of the sports database](fig/dna-322-sports.svg)](../../assets/fig/dna-322-sports.svg)
+
 **Explanation.**
 1. The team of each player in a game is found through PLAYS_FOR, so PLAYED_IN does not need TEAM as a third participant.
 2. GAME takes part in PLAYED_IN at least 22 times, which is 11 players per side.
@@ -322,6 +338,10 @@ Semester and Year are in all three keys, and Weekdays and Hours in two. Each key
 1. Show each key as a **composite attribute** with its own name and underline each one: Sec_key1(Course_number, Semester, Year, Section_number), Sec_key2(Semester, Year, Building, Room_no, Weekdays, Hours), Sec_key3(Semester, Year, Instructor, Weekdays, Hours).
 2. ER allows several keys, each underlined, but a simple attribute should belong to one composite attribute. So shared components either appear in several composites, which repeats them, or the extra keys are written as a note beside the diagram.
 3. Alternatively, add a surrogate SecId as the single underlined key and list K1–K3 as uniqueness constraints. Elmasri does this in Figure 3.20.
+
+**Diagram** (tap to enlarge).
+
+[![SECTION with its keys](fig/dna-326-section-keys.svg)](../../assets/fig/dna-326-section-keys.svg)
 
 > **Examiner's note.** Assumption 3 matters: if 'MWF 9:00' and 'MW 9:00' count as a clash, no key can express it, and it becomes a semantic constraint (a trigger after mapping).
 
@@ -364,6 +384,10 @@ Design an EER schema for an application you choose, with at least five entity ty
 | PAYS | PAYER (0,N), BILL (1,1) | — |
 | PRESCRIBES (ternary) | DOCTOR (0,N), PATIENT (0,N), MEDICINE (0,N) | Date, Dose |
 
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the hospital](fig/dna-416-hospital.svg)](../../assets/fig/dna-416-hospital.svg)
+
 **Why PRESCRIBES is ternary.** A prescription is one fact about a doctor, a patient and a medicine together. Three binary relationships could not say which doctor prescribed which medicine to which patient.
 
 **Other constraints.**
@@ -403,6 +427,10 @@ Modify the BANK ER schema (Elmasri Figure 3.22, called 3.21 in the exercise) to 
 
 **Generalization (optional).** TRANSACTION and PAYMENT share Amount, Date and Time. They could be generalized into a superclass MONEY_MOVEMENT(Amount, Date, Time). I keep them separate, because they have different owners (account or loan) and different identifying relationships, so the superclass would have no common key.
 
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the modified BANK](fig/dna-417-bank.svg)](../../assets/fig/dna-417-bank.svg)
+
 **Final answer.** The BANK schema above with two attribute-defined, disjoint, total specializations (ACCOUNT and LOAN), and two new weak entity types (TRANSACTION, itself specialized, and PAYMENT).
 
 ### Problem 9 [EER · Application · 8 pts · Elmasri 4.18]
@@ -436,6 +464,10 @@ Olympic facilities: draw an EER diagram for the narrative in Elmasri 4.18. (Spor
 | NEEDS | EVENT (0,N), EQUIPMENT (0,N) | Quantity |
 | MAINTAINED_WITH | SPORTS_COMPLEX (0,N), EQUIPMENT (0,N) | — |
 
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the Olympic facilities](fig/dna-418-olympics.svg)](../../assets/fig/dna-418-olympics.svg)
+
 **Final answer.** The schema above. Its key design choices: a disjoint, total, attribute-defined specialization of SPORTS_COMPLEX; sport areas as a multivalued composite attribute of MULTISPORT; and a separate FACILITY_TYPE entity for the per-type counts and budgets.
 
 > **Examiner's note.** Putting No_needed and Budget on SPORTS_COMPLEX is the usual mistake: it repeats one per-type value in every complex. Sport areas may also be a weak entity AREA (owner MULTISPORT) if events are held in a specific area.
@@ -457,10 +489,11 @@ Library case study (Georgia Tech Library, Elmasri 4.19): identify the classifica
    2. COPY, weak with owner BOOK (partial key Copy_no).
    3. MEMBER (**Card_no**, Ssn, Name, Campus_addr, Home_addr, {Phone}, Photo, Issue_date, Expiry_date).
    4. STAFF (**Staff_id**, Name).
+   5. NOTICE, weak with owner MEMBER (partial key Notice_date).
 2. Relationship types:
    1. HAS_COPY (BOOK–COPY, identifying).
    2. BORROWS (MEMBER–COPY; Date_out, Due_date, Return_date).
-   3. NOTIFIED (MEMBER, with notice date and type: overdue or renewal).
+   3. NOTIFIED (identifying, MEMBER–NOTICE). NOTICE is a weak entity type with partial key Notice_date and attribute Kind (overdue or renewal).
 
 **Specialization and generalization.**
 1. MEMBER → {PROFESSOR, OTHER_MEMBER}, disjoint and total. Professors have a different loan period and grace period, and their notices go to the campus address.
@@ -483,7 +516,11 @@ Library case study (Georgia Tech Library, Elmasri 4.19): identify the classifica
 | --- | --- |
 | HAS_COPY | HELD_BOOK (1,N), COPY (1,1) |
 | BORROWS (current loans) | MEMBER (0,5), COPY (0,1) |
-| NOTIFIED | MEMBER (0,N) |
+| NOTIFIED | MEMBER (0,N), NOTICE (1,1) |
+
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the library](fig/dna-419-library.svg)](../../assets/fig/dna-419-library.svg)
 
 **Details that do not affect the conceptual design.** The counts (16,000 members, 100,000 titles, 250,000 volumes), the 10% of volumes on loan, the 5% of members sent reminders, the 5% of overdue books lost, the borrowing distribution (top 1% and top 10%) and the 20% inactive members. These affect physical design (sizes, indexes, statistics), not the entity types.
 
@@ -533,6 +570,10 @@ Art museum: draw an EER schema for the requirements of Elmasri 4.20. (ART_OBJECT
 | CREATED_BY | ART_OBJECT (0,1), ARTIST (1,N) | Artist may be unknown; an artist in the database made at least one object |
 | BORROWED_FROM | BORROWED (1,1), COLLECTION (0,N) | Replaces the attribute "Collection" with a relationship to the COLLECTION entity |
 | DISPLAYED_IN | ART_OBJECT (0,N), EXHIBITION (1,N) | An exhibition shows several objects; an object may be in none or many |
+
+**Diagram** (tap to enlarge).
+
+[![EER diagram of the art museum](fig/dna-420-museum.svg)](../../assets/fig/dna-420-museum.svg)
 
 **Justification of the choices.**
 1. Two **independent specializations** of the same superclass, one by type and one by ownership. A painting can be borrowed and a statue owned, so these are two separate specializations, not one with eight subclasses.
@@ -648,6 +689,10 @@ TEACHES is a ternary relationship among PROFESSOR, COURSE and STUDENT (which pro
 2. **PROFESSOR.** A professor may teach no course, so the minimum is 0. A professor teaches at most 3 courses, each with at most 100 students, so the maximum is $3 \times 100 = 300$.
 3. **STUDENT.** A student may attend no course, so the minimum is 0. A student attends at most 6 courses, each with at most 2 professors, so the maximum is $6 \times 2 = 12$.
 
+**Diagram** (tap to enlarge).
+
+[![Ternary TEACHES with its (min, max)](fig/dna-p14-ternary.svg)](../../assets/fig/dna-p14-ternary.svg)
+
 **Final answer.** COURSE **(1, 200)**, PROFESSOR **(0, 300)**, STUDENT **(0, 12)**.
 
 > **Examiner's note.** Writing (1, 2) for COURSE confuses the per-pair limit with the triple count. Add that the per-pair limits ("at most 2 professors per course") cannot be expressed by (min, max) on the ternary alone.
@@ -666,6 +711,10 @@ Explain, with an example, why a ternary relationship is not equivalent to three 
 - SUPPLIES(s, j) = {(s1, j2), (s1, j1), (s2, j1)}
 
 From these pairs, (s1, p1, j1) looks possible: s1 can supply p1, j1 uses p1, and s1 supplies j1. Yet s1 never supplied p1 to j1. The binaries therefore lose information.
+
+**Diagram** (tap to enlarge).
+
+[![Ternary SUPPLY next to three binaries](fig/dna-p15-ternary-vs-binary.svg)](../../assets/fig/dna-p15-ternary-vs-binary.svg)
 
 **Final answer.** They are not equivalent: the ternary stores exactly which triples occurred, which the binaries cannot reproduce. Binaries may be kept *in addition* to a ternary to express extra constraints, such as "a supplier may supply only parts it can supply".
 
@@ -688,6 +737,10 @@ Distinguish total from partial and disjoint from overlapping specialization, wit
 | Overlapping, total | PART → {MANUFACTURED, PURCHASED} | a part can be both, and is at least one |
 | Overlapping, partial | PERSON → {ACTOR, DIRECTOR} | a person may be both, and the database also holds people who are neither |
 
+**Diagram** (tap to enlarge).
+
+[![The four kinds of specialization](fig/dna-p16-spec-kinds.svg)](../../assets/fig/dna-p16-spec-kinds.svg)
+
 ### Problem 17 [EER · Concept · 3 pts]
 
 What is the difference between a shared subclass and a category?
@@ -697,6 +750,10 @@ What is the difference between a shared subclass and a category?
 **Answer.**
 1. A **shared subclass** has several superclasses and appears in a specialization lattice. Each of its entities belongs to **all** of its superclasses and inherits from all of them. Example: ENGINEERING_MANAGER is a subclass of both ENGINEER and MANAGER.
 2. A **category** (union type) is a subclass of the **union** of several superclasses, which usually have different keys. Each of its entities belongs to **exactly one** of the superclasses and inherits only from that one. Example: OWNER = PERSON ∪ BANK ∪ COMPANY. It is drawn with ∪ in the circle.
+
+**Diagram** (tap to enlarge).
+
+[![Shared subclass and category](fig/dna-p17-shared-vs-category.svg)](../../assets/fig/dna-p17-shared-vs-category.svg)
 
 **Final answer.** A shared subclass is an intersection (member of all superclasses); a category is a union (member of one superclass).
 
@@ -717,6 +774,10 @@ Reverse-engineer an ER diagram from: EMPLOYEE(**Ssn**, Name, Dno), DEPARTMENT(**
 4. EMPLOYEE.Dno is a single foreign key, so it is a **1:N relationship** WORKS_FOR: EMPLOYEE (1,1), DEPARTMENT (1,N).
 5. DEPARTMENT.Mgr_ssn is a single foreign key, and an employee manages at most one department, so it is a **1:1 relationship** MANAGES: DEPARTMENT (1,1), EMPLOYEE (0,1).
 6. PROJECT.Dnum is a single foreign key, giving the **1:N relationship** CONTROLS: PROJECT (1,1), DEPARTMENT (0,N).
+
+**Diagram** (tap to enlarge).
+
+[![ER diagram reverse-engineered from the relations](fig/dna-p18-company.svg)](../../assets/fig/dna-p18-company.svg)
 
 **Final answer.** Strong entities EMPLOYEE, DEPARTMENT, PROJECT; weak entity DEPENDENT; relationships DEPENDENTS_OF (identifying), WORKS_ON (M:N, Hours), WORKS_FOR (1:N), MANAGES (1:1), CONTROLS (1:N), with the (min, max) pairs above.
 
@@ -747,6 +808,10 @@ A UNIVERSITY database: colleges have departments; departments offer courses with
 | TEACHES | INSTRUCTOR (0,N), SECTION (1,1) | — |
 | MAJORS | STUDENT (1,1), DEPT (0,N) | — |
 | TAKES | STUDENT (0,N), SECTION (0,N) | Grade |
+
+**Diagram** (tap to enlarge).
+
+[![ER diagram of the UNIVERSITY drill](fig/dna-p19-university.svg)](../../assets/fig/dna-p19-university.svg)
 
 **Final answer.** The schema has the six entity types and eight relationship types above. Grade is an attribute of TAKES, because it describes a student in a particular section.
 
