@@ -241,13 +241,13 @@ class Schema:
     """Relational schema diagram, Elmasri Fig 5.7 style.
     s = Schema(); s.rel('EMPLOYEE', ['Ssn*', 'Fname', 'Dno']); s.fk('EMPLOYEE.Dno', 'DEPARTMENT.Dnumber')
     A trailing * marks a primary-key attribute (underlined)."""
-    CH, ROWGAP, LEFT = 26, 58, 46
+    CH, ROWGAP, LEFT = 26, 52, 30
 
     def __init__(self, title=None):
         self.rels, self.fks, self.title = [], [], title
 
-    def rel(self, name, attrs):
-        self.rels.append((name, attrs))
+    def rel(self, name, attrs, same_row=False):
+        self.rels.append((name, attrs, same_row))
 
     def fk(self, src, dst):
         self.fks.append((src, dst))
@@ -255,15 +255,25 @@ class Schema:
     def svg(self):
         cells, y = {}, 0
         nf = len(self.fks)
-        lane_w = 9
+        lane_w = 8 if nf < 20 else 6
         left = self.LEFT + nf * lane_w
         out_shapes = []
         rows = []
         maxx = 0
-        for name, attrs in self.rels:
-            y += 22
-            out_shapes.append(f'<text x="{left}" y="{y-6}" font-size="12" font-weight="700" fill="{INK}" style="{FONT}">{escape(name)}</text>')
-            x = left
+        namecol = max([tw(n, 12) for n, _, sr in self.rels if not sr] + [0]) + 12
+        x = left
+        first = True
+        for name, attrs, same_row in self.rels:
+            if same_row and not first:
+                y -= self.CH + self.ROWGAP
+                x += 26
+                nx = x; x = x + tw(name, 12) + 8
+            else:
+                y += 8
+                nx = left; x = left + namecol
+            first = False
+            out_shapes.append(f'<text x="{nx}" y="{y+self.CH/2}" dominant-baseline="central" font-size="12" font-weight="700" fill="{INK}" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round" style="{FONT}">{escape(name)}</text>')
+            x0 = x
             for a in attrs:
                 pk = a.endswith('*'); a2 = a.rstrip('*')
                 w = max(tw(a2, 11) + 18, 44)
@@ -283,27 +293,37 @@ class Schema:
         arrows = []
         colors = ['#b4232a', '#1d6fb8', '#2f8a3a', '#9a4fb3', '#c06a00', '#00838f', '#6d4c41', '#ad1457']
         below_count, above_count = {}, {}
+        miny = 0; maxy = 0
         for i, (src, dst) in enumerate(self.fks):
-            if src not in cells or dst not in cells:
-                raise KeyError(f'{src} or {dst}')
-            sx, sy, sw = cells[src]; dx, dy, dw = cells[dst]
+            def span(ref):
+                rn, al = ref.split('.', 1)
+                cs = []
+                for a in al.split(','):
+                    if f'{rn}.{a.strip()}' not in cells:
+                        raise KeyError(f'{rn}.{a.strip()}')
+                    cs.append(cells[f'{rn}.{a.strip()}'])
+                x0 = min(c[0] for c in cs); x1 = max(c[0] + c[2] for c in cs)
+                return x0, cs[0][1], x1 - x0
+            sx, sy, sw = span(src); dx, dy, dw = span(dst)
             sname, dname = src.split('.')[0], dst.split('.')[0]
             col = colors[i % len(colors)]
             lx = self.LEFT - 10 + (nf - i) * lane_w
             bi = below_count.get(sname, 0); below_count[sname] = bi + 1
             ai = above_count.get(dname, 0); above_count[dname] = ai + 1
             y_src_lane = sy + self.CH + 8 + bi * 6
-            y_dst_lane = dy - 26 - ai * 5
+            y_dst_lane = dy - 26 - min(ai, 3) * 5
+            miny = min(miny, y_dst_lane)
+            maxy = max(maxy, y_src_lane)
             p0x = sx + sw / 2 + (bi % 3 - 1) * 4
             p1x = dx + dw / 2 + (ai % 3 - 1) * 5
             d = (f'M {p0x:.1f} {sy+self.CH} L {p0x:.1f} {y_src_lane:.1f} L {lx:.1f} {y_src_lane:.1f} '
                  f'L {lx:.1f} {y_dst_lane:.1f} L {p1x:.1f} {y_dst_lane:.1f} L {p1x:.1f} {dy-2}')
             arrows.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="1.4"/>')
             arrows.append(f'<path d="M {p1x-4:.1f} {dy-9} L {p1x:.1f} {dy-1} L {p1x+4:.1f} {dy-9} Z" fill="{col}"/>')
-        W = maxx + 16; H = y - self.ROWGAP + 16
-        top = 0; title = ''
+        W = maxx + 16; H = max(y - self.ROWGAP + 16, maxy + 8)
+        top = -min(0, miny - 8); title = ''
         if self.title:
-            top = 22
+            top += 22
             title = f'<text x="8" y="{-top+14}" font-size="13" font-weight="700" fill="{INK}" style="{FONT}">{escape(self.title)}</text>'
         return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 {-top} {W:.0f} {H+top:.0f}" width="{W:.0f}" height="{H+top:.0f}" role="img">'
                 f'<rect x="0" y="{-top}" width="{W:.0f}" height="{H+top:.0f}" fill="#fff"/>' + title

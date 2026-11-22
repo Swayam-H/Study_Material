@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mws4mtad">
+<link rel="stylesheet" href="../../assets/style.css?v=mws4sw6y">
 </head>
 <body data-root="../../" data-page="dna/ch3-mapping/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -168,6 +168,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-a3i-schema.svg"><img class="fig" src="../../assets/fig/dna-a3i-schema.svg" alt="Relational schema with foreign-key arrows" loading="lazy"></a></p>
 <p><strong>Explanation of the mapping.</strong></p>
 <ol>
 <li><strong>Strong entity types</strong> (PRODUCTION_COMPANY, TV_SHOW, PERSON) each become a relation. The composite attribute Address is replaced by its components Street, City and Country.</li>
@@ -204,6 +206,8 @@
 <li>REL_TYPE(<strong>Entity_Type1, Entity_Type2, Attr_Name</strong>); BINARY_REL_TYPE(<strong>Entity_Type1</strong>, Entity_Type2 NOT NULL UNIQUE).</li>
 <li>HAS_SUBCLASS(<strong>Superclass_Name, Attr_Name</strong>, Subclass_Name); GENERALIZATION(<strong>Subclass_Name, Attr_Name</strong>, Superclass_Name).</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-a3g-schema.svg"><img class="fig" src="../../assets/fig/dna-a3g-schema.svg" alt="Relational schema with foreign-key arrows" loading="lazy"></a></p>
 <p><strong>Explanation of the mapping.</strong></p>
 <ol>
 <li>Regular entity types become relations keyed by their identifiers.</li>
@@ -250,6 +254,8 @@
 </ol>
 </li>
 </ol>
+<p><strong>The ER schema being mapped</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-92-university-er.svg"><img class="fig" src="../../assets/fig/dna-92-university-er.svg" alt="The UNIVERSITY ER schema of Figure 3.20" loading="lazy"></a></p>
 <p><strong>Assumptions.</strong></p>
 <ol>
 <li>(min, max) values are read as printed in Figure 3.20. <em>(Reason: they decide NOT NULL.)</em> The text says a student &quot;is assigned to one primary academic department&quot;, which would make HAS (1,1) for STUDENT and its foreign key NOT NULL.</li>
@@ -277,6 +283,8 @@
 <li>STUDENT(<strong>SId</strong>, FName, MName, LName, Addr, Phone, Major, DOB, DCode): DCode → DEPT, NULL allowed. <em>(Step 4, HAS.)</em></li>
 <li>TAKES(<strong>SId, SecId</strong>, Grade): SId → STUDENT, SecId → SECTION. <em>(Step 5, M:N.)</em></li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-92-university-schema.svg"><img class="fig" src="../../assets/fig/dna-92-university-schema.svg" alt="UNIVERSITY relational schema" loading="lazy"></a></p>
 <p><strong>Constraints lost in mapping.</strong></p>
 <ol>
 <li>&quot;A section must have at least five students&quot; (5,N) cannot be declared with keys or foreign keys. It needs an assertion or trigger.</li>
@@ -345,6 +353,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>ER diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-93-library-er.svg"><img class="fig" src="../../assets/fig/dna-93-library-er.svg" alt="LIBRARY ER schema" loading="lazy"></a></p>
 <p><strong>Explanation.</strong></p>
 <ol>
 <li>LOANS is ternary because the key of BOOK_LOANS has three foreign keys and none is determined by the other two.</li>
@@ -396,6 +406,8 @@
 <li>SHIP_MOVEMENT(<strong>Sname, Date, Time</strong>, Longitude, Latitude): Sname → SHIP, ON DELETE CASCADE. <em>(Step 2: weak entity; the composite partial key is mapped as its parts.)</em></li>
 <li>PORT_VISIT(<strong>Sname, Pname, Start_date</strong>, End_date): Sname → SHIP, Pname → PORT. <em>(Step 2: weak entity with two owners. The key is both owner keys plus the partial key.)</em></li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-94-ship-schema.svg"><img class="fig" src="../../assets/fig/dna-94-ship-schema.svg" alt="SHIP_TRACKING relational schema" loading="lazy"></a></p>
 <p><strong>Final answer.</strong> The seven relations above. A ship cannot be at two ports at once, so (Sname, Start_date) is also unique in PORT_VISIT. That is a semantic constraint worth stating.</p>
 </details>
 <h3 id="problem-6-mapping-application-6-pts-elmasri-9-5">Problem 6 [Mapping · Application · 6 pts · Elmasri 9.5]</h3>
@@ -426,6 +438,8 @@
 <li>A_C(<strong>Ssn, Acct_no</strong>): Ssn → CUSTOMER, Acct_no → ACCOUNT. <em>(Step 5.)</em></li>
 <li>L_C(<strong>Ssn, Loan_no</strong>): Ssn → CUSTOMER, Loan_no → LOAN. <em>(Step 5.)</em></li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-95-bank-schema.svg"><img class="fig" src="../../assets/fig/dna-95-bank-schema.svg" alt="BANK relational schema" loading="lazy"></a></p>
 <p><strong>The AIRLINE schema.</strong> Mapping the AIRLINE ER diagram gives exactly the relational schema of Elmasri Figure 5.8. Its foreign keys are listed in the Chapter 1 Practice page (Elmasri 5.12 (d)), and its DDL is Problem 6.6 on the SQL Practice page.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> A foreign key that points to only <em>part</em> of BANK_BRANCH's key, such as just Branch_no, is a major error in the A3 rubric (&quot;FK to part of a key&quot;).</p>
@@ -482,6 +496,8 @@
 <li>SERVICE(<strong>Reg#, Date, Workcode</strong>, Hours): Reg# → AIRPLANE, ON DELETE CASCADE. <em>(Step 2.)</em></li>
 <li>MAINTAIN(<strong>Ssn, Reg#, Date, Workcode</strong>): Ssn → EMPLOYEE; (Reg#, Date, Workcode) → SERVICE.</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-96-airport-schema.svg"><img class="fig" src="../../assets/fig/dna-96-airport-schema.svg" alt="SMALL_AIRPORT relational schema" loading="lazy"></a></p>
 <p><em>Why 8A.</em></p>
 <ol>
 <li>The specialization is partial, so 8B is invalid.</li>
@@ -600,6 +616,8 @@
 <li>TRANSCRIPT(<strong>Ssn, Sec#</strong>, Grade): Ssn → STUDENT, Sec# → SECTION.</li>
 <li>REGISTERED(<strong>Ssn, Sec#</strong>): Ssn → STUDENT, Sec# → SECTION.</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-96-university-schema.svg"><img class="fig" src="../../assets/fig/dna-96-university-schema.svg" alt="UNIVERSITY EER relational schema" loading="lazy"></a></p>
 <p><em>Justification.</em></p>
 <ol>
 <li><strong>8A for PERSON</strong>: the specialization is partial, so 8B is invalid. Each subclass has its own relationships.</li>
@@ -675,6 +693,8 @@
 </tr>
 </tbody>
 </table></div>
+<p><strong>Schema diagrams</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-98-dealer-schema.svg"><img class="fig" src="../../assets/fig/dna-98-dealer-schema.svg" alt="VEHICLE under 8A to 8D" loading="lazy"></a></p>
 <p><strong>Choice.</strong> <strong>8C</strong>. There are few subclass attributes (one each), the specialization is disjoint, and SALE keeps a single foreign key to VEHICLE. 8A is the best choice if subclasses gain more attributes or their own relationships.</p>
 <blockquote>
 <p><strong>Examiner's note.</strong> The common errors are presenting 8B as valid with no mention of totality, and missing that 8B breaks the SALE foreign key.</p>
@@ -699,6 +719,8 @@
 <li>WORKS_ON(<strong>Essn, Pno</strong>, Hours); Essn → EMPLOYEE; Pno → PROJECT.</li>
 <li>DEPENDENT(<strong>Essn, Dependent_name</strong>, Sex, Bdate, Relationship); Essn → EMPLOYEE, ON DELETE CASCADE.</li>
 </ol>
+<p><strong>Schema diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p10-company-schema.svg"><img class="fig" src="../../assets/fig/dna-p10-company-schema.svg" alt="COMPANY relational schema" loading="lazy"></a></p>
 <p><strong>Explanation.</strong></p>
 <ol>
 <li>WORKS_FOR (1:N, total on EMPLOYEE) gives the NOT NULL foreign key Dno in EMPLOYEE.</li>
@@ -798,6 +820,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mws4mtad" defer></script>
+<script src="../../assets/app.js?v=mws4sw6y" defer></script>
 </body>
 </html>

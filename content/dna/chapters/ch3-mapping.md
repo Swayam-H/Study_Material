@@ -110,6 +110,10 @@ Map the television-show EER model (chapter on ER/EER, Problem 1) to relations. S
 | DIRECTS | Title†, Year†, Season_No†, Episode_No†, Dir_Name†, Dir_DOB† | episode key → EPISODE; (Dir_Name, Dir_DOB) → DIRECTOR |
 | APPEARS_IN | Title†, Year†, Season_No†, Episode_No†, Actor_Name†, Actor_DOB†, Role | episode key → EPISODE; (Actor_Name, Actor_DOB) → ACTOR |
 
+**Schema diagram** (tap to enlarge).
+
+[![Relational schema with foreign-key arrows](fig/dna-a3i-schema.svg)](../../assets/fig/dna-a3i-schema.svg)
+
 **Explanation of the mapping.**
 1. **Strong entity types** (PRODUCTION_COMPANY, TV_SHOW, PERSON) each become a relation. The composite attribute Address is replaced by its components Street, City and Country.
 2. **Weak entity types** take the owner's primary key plus their partial key as their primary key. EPISODE's owner SEASON is itself weak, so EPISODE carries SEASON's full three-part key. The identifying relationships need no separate relation.
@@ -143,6 +147,10 @@ Map the EER-of-EER model (chapter on ER/EER, Problem 2) to relations. Focus on: 
 7. CONSISTS_OF(**Composite_Name, Component_Name**); HAS_ATTRIBUTES(**Entity_Type_Name, Attr_Name**); DESCRIBED_BY(**Entity_Id, Attr_Name**).
 8. REL_TYPE(**Entity_Type1, Entity_Type2, Attr_Name**); BINARY_REL_TYPE(**Entity_Type1**, Entity_Type2 NOT NULL UNIQUE).
 9. HAS_SUBCLASS(**Superclass_Name, Attr_Name**, Subclass_Name); GENERALIZATION(**Subclass_Name, Attr_Name**, Superclass_Name).
+
+**Schema diagram** (tap to enlarge).
+
+[![Relational schema with foreign-key arrows](fig/dna-a3g-schema.svg)](../../assets/fig/dna-a3g-schema.svg)
 
 **Explanation of the mapping.**
 1. Regular entity types become relations keyed by their identifiers.
@@ -185,6 +193,10 @@ Map the UNIVERSITY ER schema of Figure 3.20 to relations.
    8. TEACHES: INSTRUCTOR (0,N), SECTION (1,1).
    9. TAKES: STUDENT (0,N), SECTION (5,N), with attribute Grade.
 
+**The ER schema being mapped** (tap to enlarge).
+
+[![The UNIVERSITY ER schema of Figure 3.20](fig/dna-92-university-er.svg)](../../assets/fig/dna-92-university-er.svg)
+
 **Assumptions.**
 1. (min, max) values are read as printed in Figure 3.20. *(Reason: they decide NOT NULL.)* The text says a student "is assigned to one primary academic department", which would make HAS (1,1) for STUDENT and its foreign key NOT NULL.
 2. Grade may be NULL until it is recorded. *(Reason: "the grade is recorded when available".)*
@@ -203,6 +215,10 @@ Map the UNIVERSITY ER schema of Figure 3.20 to relations.
    4. UNIQUE (SecNo, Sem, Year, CCode), UNIQUE (Sem, Year, Bldg, RoomNo, DaysTime) and UNIQUE (Sem, Year, DaysTime, Instructor_id). These are the constraints of Elmasri 3.16.
 6. STUDENT(**SId**, FName, MName, LName, Addr, Phone, Major, DOB, DCode): DCode → DEPT, NULL allowed. *(Step 4, HAS.)*
 7. TAKES(**SId, SecId**, Grade): SId → STUDENT, SecId → SECTION. *(Step 5, M:N.)*
+
+**Schema diagram** (tap to enlarge).
+
+[![UNIVERSITY relational schema](fig/dna-92-university-schema.svg)](../../assets/fig/dna-92-university-schema.svg)
 
 **Constraints lost in mapping.**
 1. "A section must have at least five students" (5,N) cannot be declared with keys or foreign keys. It needs an assertion or trigger.
@@ -241,6 +257,10 @@ Reverse engineering: map the LIBRARY relational schema (Figure 6.6, called 6.14 
 | PUBLISHED_BY | BOOK.Publisher_name | BOOK (1,1), PUBLISHER (0,N) | — |
 | COPIES | BOOK_COPIES | BOOK (0,N), LIBRARY_BRANCH (0,N) | No_of_copies |
 | LOANS (ternary) | BOOK_LOANS | BOOK (0,N), LIBRARY_BRANCH (0,N), BORROWER (0,N) | Date_out, Due_date |
+
+**ER diagram** (tap to enlarge).
+
+[![LIBRARY ER schema](fig/dna-93-library-er.svg)](../../assets/fig/dna-93-library-er.svg)
 
 **Explanation.**
 1. LOANS is ternary because the key of BOOK_LOANS has three foreign keys and none is determined by the other two.
@@ -284,6 +304,10 @@ Map the SHIP_TRACKING ER schema of Figure 9.8 to relations, with all primary and
 6. SHIP_MOVEMENT(**Sname, Date, Time**, Longitude, Latitude): Sname → SHIP, ON DELETE CASCADE. *(Step 2: weak entity; the composite partial key is mapped as its parts.)*
 7. PORT_VISIT(**Sname, Pname, Start_date**, End_date): Sname → SHIP, Pname → PORT. *(Step 2: weak entity with two owners. The key is both owner keys plus the partial key.)*
 
+**Schema diagram** (tap to enlarge).
+
+[![SHIP_TRACKING relational schema](fig/dna-94-ship-schema.svg)](../../assets/fig/dna-94-ship-schema.svg)
+
 **Final answer.** The seven relations above. A ship cannot be at two ports at once, so (Sname, Start_date) is also unique in PORT_VISIT. That is a semantic constraint worth stating.
 
 ### Problem 6 [Mapping · Application · 6 pts · Elmasri 9.5]
@@ -312,6 +336,10 @@ Map the BANK ER schema (Elmasri Figure 3.22, called 3.21 in the exercise) to rel
 5. CUSTOMER(**Ssn**, Name, Phone, Addr).
 6. A_C(**Ssn, Acct_no**): Ssn → CUSTOMER, Acct_no → ACCOUNT. *(Step 5.)*
 7. L_C(**Ssn, Loan_no**): Ssn → CUSTOMER, Loan_no → LOAN. *(Step 5.)*
+
+**Schema diagram** (tap to enlarge).
+
+[![BANK relational schema](fig/dna-95-bank-schema.svg)](../../assets/fig/dna-95-bank-schema.svg)
 
 **The AIRLINE schema.** Mapping the AIRLINE ER diagram gives exactly the relational schema of Elmasri Figure 5.8. Its foreign keys are listed in the Chapter 1 Practice page (Elmasri 5.12 (d)), and its DDL is Problem 6.6 on the SQL Practice page.
 
@@ -361,6 +389,10 @@ Map the EER diagrams of Figures 4.9 (UNIVERSITY) and 4.12 (SMALL_AIRPORT) to rel
 11. FLIES(**Ssn, Model**): Ssn → PILOT, Model → PLANE_TYPE.
 12. SERVICE(**Reg#, Date, Workcode**, Hours): Reg# → AIRPLANE, ON DELETE CASCADE. *(Step 2.)*
 13. MAINTAIN(**Ssn, Reg#, Date, Workcode**): Ssn → EMPLOYEE; (Reg#, Date, Workcode) → SERVICE.
+
+**Schema diagram** (tap to enlarge).
+
+[![SMALL_AIRPORT relational schema](fig/dna-96-airport-schema.svg)](../../assets/fig/dna-96-airport-schema.svg)
 
 *Why 8A.*
 1. The specialization is partial, so 8B is invalid.
@@ -417,6 +449,10 @@ Map the EER diagrams of Figures 4.9 (UNIVERSITY) and 4.12 (SMALL_AIRPORT) to rel
 15. TRANSCRIPT(**Ssn, Sec#**, Grade): Ssn → STUDENT, Sec# → SECTION.
 16. REGISTERED(**Ssn, Sec#**): Ssn → STUDENT, Sec# → SECTION.
 
+**Schema diagram** (tap to enlarge).
+
+[![UNIVERSITY EER relational schema](fig/dna-96-university-schema.svg)](../../assets/fig/dna-96-university-schema.svg)
+
 *Justification.*
 1. **8A for PERSON**: the specialization is partial, so 8B is invalid. Each subclass has its own relationships.
 2. **8A for GRAD_STUDENT**: it has relationships of its own (ADVISOR, COMMITTEE and the category), which need a relation to reference. Its defining predicate (Class = 5) should be checked: Ssn in GRAD_STUDENT only if STUDENT.Class = 5.
@@ -464,6 +500,10 @@ Car dealer EER (Figure 9.9): VEHICLE(Vin, Price, Model) specialized (d) into CAR
 | **8C** (one relation, one type attribute) | VEHICLE(**Vin**, Price, Model, Vehicle_type, Engine_size, Tonnage, No_seats) | Valid because the specialization is disjoint. Two of the three subclass columns are NULL in every row |
 | **8D** (one relation, Boolean flags) | VEHICLE(**Vin**, Price, Model, Is_car, Is_truck, Is_suv, Engine_size, Tonnage, No_seats) | Valid, but meant for overlapping specializations. Here a CHECK that exactly one flag is true is needed |
 
+**Schema diagrams** (tap to enlarge).
+
+[![VEHICLE under 8A to 8D](fig/dna-98-dealer-schema.svg)](../../assets/fig/dna-98-dealer-schema.svg)
+
 **Choice.** **8C**. There are few subclass attributes (one each), the specialization is disjoint, and SALE keeps a single foreign key to VEHICLE. 8A is the best choice if subclasses gain more attributes or their own relationships.
 
 > **Examiner's note.** The common errors are presenting 8B as valid with no mention of totality, and missing that 8B breaks the SALE foreign key.
@@ -487,6 +527,10 @@ Map the COMPANY ER schema: EMPLOYEE (Ssn; Name composite; Address; Salary; Sex; 
 4. PROJECT(**Pnumber**, Pname UNIQUE, Plocation, Dnum); Dnum → DEPARTMENT, NOT NULL.
 5. WORKS_ON(**Essn, Pno**, Hours); Essn → EMPLOYEE; Pno → PROJECT.
 6. DEPENDENT(**Essn, Dependent_name**, Sex, Bdate, Relationship); Essn → EMPLOYEE, ON DELETE CASCADE.
+
+**Schema diagram** (tap to enlarge).
+
+[![COMPANY relational schema](fig/dna-p10-company-schema.svg)](../../assets/fig/dna-p10-company-schema.svg)
 
 **Explanation.**
 1. WORKS_FOR (1:N, total on EMPLOYEE) gives the NOT NULL foreign key Dno in EMPLOYEE.
