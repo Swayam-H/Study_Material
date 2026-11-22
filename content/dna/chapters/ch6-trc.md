@@ -320,3 +320,39 @@ Which of these are safe? (a) $\{\, t \mid \neg\text{PERSONS}(t) \,\}$ (b) $\{\, 
 
 **Final answer.** (a) unsafe; (b) safe; (c) safe but not a valid query.
 
+
+## C. Review questions (short answers)
+
+The TA's list also has 8.28, which asks for **domain** calculus. Kamal said the exam covers tuple relational calculus only, so it is not worked here.
+
+### Problem 13 [TRC · Concept · 6 pts · Elmasri 8.9–8.12]
+
+(8.9) How does tuple relational calculus differ from domain relational calculus? (8.10) Discuss the meanings of ∃ and ∀. (8.11) Define, for tuple calculus: tuple variable, range relation, atom, formula, expression. (8.12) Define the same terms for domain calculus.
+
+*Solution.*
+
+**8.9.**
+1. In **TRC**, variables range over **tuples** of a relation: t.Salary is the Salary of the tuple t.
+2. In **DRC**, variables range over **values from attribute domains**. A relation of degree n needs n domain variables, as in EMPLOYEE(q, r, s, …).
+3. Both are declarative: they say *what* to retrieve, not how. Both have the same expressive power as the basic relational algebra (relationally complete, for safe expressions).
+4. SQL is based on TRC, while QBE is based on DRC.
+
+**8.10.**
+1. **(∃t)(F)** is TRUE if F is TRUE for **at least one** tuple t (in its range). It expresses "some" or "there is".
+2. **(∀t)(F)** is TRUE if F is TRUE for **every** tuple t in the universe, so it expresses "all" or "every".
+3. They are related by (∀t)(F) ≡ ¬(∃t)(¬F). In practice, ∀ is used as (∀x)(¬R(x) ∨ F), so that tuples outside the range relation do not falsify it.
+4. A variable inside a quantifier is **bound**. A variable that appears to the left of the bar is **free**.
+
+**8.11. TRC terms.**
+1. **Tuple variable**: a variable such as t whose values are tuples.
+2. **Range relation**: the relation t ranges over, stated by the atom R(t). For example, EMPLOYEE(t).
+3. **Atom**: one of R(t); t.A op s.B; or t.A op c, where op is one of =, <, ≤, >, ≥, ≠ and c is a constant.
+4. **Formula**: atoms combined with ∧, ∨ and ¬, and with the quantifiers ∃ and ∀.
+5. **Expression**: {t1.Aj, …, tn.Am | COND(t1, …, tn, tn+1, …)}, where the tuple variables to the left of the bar are the free variables of the formula COND.
+
+**8.12. DRC terms.**
+1. **Domain variable**: a variable such as x whose values come from an attribute's domain.
+2. **Range relation**: stated by the atom R(x1, …, xn), which says that ⟨x1, …, xn⟩ is a tuple of R.
+3. **Atom**: R(x1, …, xn); xi op xj; or xi op c.
+4. **Formula**: built from atoms with ∧, ∨, ¬, ∃ and ∀ over domain variables.
+5. **Expression**: {x1, x2, …, xn | COND(x1, …, xn, xn+1, …, xn+m)}.

@@ -288,7 +288,7 @@ $$ \begin{aligned} B_1 &\leftarrow \rho_{(\text{ISBN1},\,\text{Author},\,Y_1)}(\
 
 **Final answer.** ANSWER as derived above.
 
-## B. Textbook exercises set by Kamal (COMPANY schema)
+## B. Textbook exercises set by Kamal
 
 COMPANY: EMPLOYEE(Fname, Minit, Lname, **Ssn**, Bdate, Address, Sex, Salary, Super_ssn, Dno), DEPARTMENT(Dname, **Dnumber**, Mgr_ssn, Mgr_start_date), DEPT_LOCATIONS(**Dnumber, Dlocation**), PROJECT(Pname, **Pnumber**, Plocation, Dnum), WORKS_ON(**Essn, Pno**, Hours), DEPENDENT(**Essn, Dependent_name**, Sex, Bdate, Relationship).
 
@@ -414,9 +414,246 @@ the two rows of (b) and (NULL, NULL, NULL, 25, c, 3).
 **(f)** Only (10, a, 5) and (10, b, 5) agree on both P = A and R = C:
 (10, a, 5, 10, b, 5).
 
-## C. Past papers and extra drills
+### Problem 12 [RA · Numerical · 8 pts · Elmasri 8.15]
 
-### Problem 12 [RA · Application · 4 pts · M24 Quiz 4 Q1]
+Show the result of each sample query Q1–Q7 of Section 8.5 on the COMPANY state of Figure 5.6. (Q1: name and address of employees in Research. Q2: for each Stafford project, its number, controlling department, and the manager's last name, address and birth date. Q3: employees who work on all projects controlled by department 5. Q4: projects involving an employee named Smith as worker or as manager of the controlling department. Q5: employees with two or more dependents. Q6: employees with no dependents. Q7: managers with at least one dependent.)
+
+*Solution.*
+
+**Assumptions.**
+1. The state is exactly Figure 5.6: 8 employees, 3 departments, 6 projects, 16 WORKS_ON rows and 7 dependents. *(Reason: the question names that figure.)*
+2. Results are sets, so duplicates are removed. *(Reason: the relational algebra works on sets.)*
+
+**Q1. Research employees.** Research is department 5. The employees with Dno = 5 are Smith, Wong, Narayan and English.
+
+| Fname | Lname | Address |
+| --- | --- | --- |
+| John | Smith | 731 Fondren, Houston, TX |
+| Franklin | Wong | 638 Voss, Houston, TX |
+| Ramesh | Narayan | 975 Fire Oak, Humble, TX |
+| Joyce | English | 5631 Rice, Houston, TX |
+
+**Q2. Stafford projects.** Projects 10 (Computerization) and 30 (Newbenefits) are in Stafford, both controlled by department 4, whose manager is Wallace (987654321).
+
+| Pnumber | Dnum | Lname | Address | Bdate |
+| --- | --- | --- | --- | --- |
+| 10 | 4 | Wallace | 291 Berry, Bellaire, TX | 1941-06-20 |
+| 30 | 4 | Wallace | 291 Berry, Bellaire, TX | 1941-06-20 |
+
+**Q3. All projects of department 5.**
+1. Department 5 controls projects 1, 2 and 3.
+2. Smith works on 1 and 2; English on 1 and 2; Wong on 2, 3, 10 and 20; Narayan on 3. No employee works on all three.
+3. Result: **empty**.
+
+**Q4. Projects involving Smith.**
+1. The only Smith is John Smith (123456789). As a worker he is on projects 1 and 2.
+2. He manages no department, so the manager branch contributes nothing.
+3. Result: **{1, 2}**.
+
+**Q5. Two or more dependents.** Wong has 3 (Alice, Theodore, Joy), Smith has 3 (Michael, Alice, Elizabeth), Wallace has 1. Result: **Franklin Wong, John Smith**.
+
+**Q6. No dependents.** Employees with dependents are Wong, Wallace and Smith. Result: **Alicia Zelaya, Ramesh Narayan, Joyce English, Ahmad Jabbar, James Borg**.
+
+**Q7. Managers with a dependent.** The managers are Wong (department 5), Wallace (4) and Borg (1). Borg has no dependents. Result: **Franklin Wong, Jennifer Wallace**.
+
+> **Examiner's note.** Show the intermediate set for each step, as in Q3. "Empty" with the reason is a full answer; "empty" alone looks like a guess.
+
+### Problem 13 [RA · Application · 10 pts · Elmasri 8.18]
+
+LIBRARY schema (Figure 8.14): BOOK(Book_id, Title, Publisher_name), BOOK_AUTHORS(Book_id, Author_name), PUBLISHER(Name, Address, Phone), BOOK_COPIES(Book_id, Branch_id, No_of_copies), BOOK_LOANS(Book_id, Branch_id, Card_no, Date_out, Due_date), LIBRARY_BRANCH(Branch_id, Branch_name, Address), BORROWER(Card_no, Name, Address, Phone). (a) Copies of *The Lost Tribe* at Sharpstown. (b) Copies of *The Lost Tribe* at each branch. (c) Borrowers with no books checked out. (d) For each Sharpstown loan due today: title, borrower name and address. (e) For each branch: name and total books loaned out. (f) Name, address and number of books for borrowers with more than five books out. (g) For each book by Stephen King: title and number of copies at Central.
+
+*Solution.*
+
+**Assumptions.**
+1. BOOK_LOANS holds the loans that are currently out (there is no return date). *(Reason: the schema has no Return_date, so a returned book's row must be deleted.)*
+2. One title can have several Book_ids (editions), and the answer counts all of them. *(Reason: the question asks by title.)*
+3. Branch and book names are unique. *(Reason: the queries name them.)*
+4. "Today" is a constant, written TODAY. *(Reason: the algebra has no clock.)*
+5. Groups with nothing in them (a branch with no copies or no loans) are left out, unless the query says otherwise. *(Reason: an inner join drops them. A left outer join would keep them with NULL.)*
+
+**Shared steps.**
+
+$$\begin{aligned} \text{LT} &\leftarrow \pi_{\text{Book\_id}}(\sigma_{\text{Title}=\text{`The Lost Tribe'}}(\text{BOOK})) \\ \text{SH} &\leftarrow \pi_{\text{Branch\_id}}(\sigma_{\text{Branch\_name}=\text{`Sharpstown'}} \\ &\qquad (\text{LIBRARY\_BRANCH})) \end{aligned}$$
+
+**(a)**
+
+$$\begin{aligned} T &\leftarrow \text{BOOK\_COPIES} * \text{LT} * \text{SH} \\ \text{ANSWER} &\leftarrow \gamma_{\text{SUM(No\_of\_copies)}}(T) \end{aligned}$$
+
+The two natural joins keep only the BOOK_COPIES rows for that book at that branch. The SUM covers the case of several Book_ids with the same title.
+
+**(b)**
+
+$$\begin{aligned} T &\leftarrow \text{BOOK\_COPIES} * \text{LT} \\ &\qquad * \pi_{\text{Branch\_id},\text{Branch\_name}}(\text{LIBRARY\_BRANCH}) \\ \text{ANSWER} &\leftarrow \gamma_{\text{Branch\_name};\ \text{SUM(No\_of\_copies)}}(T) \end{aligned}$$
+
+**(c)**
+
+$$ \begin{aligned} \text{NONE} &\leftarrow \pi_{\text{Card\_no}}(\text{BORROWER}) \\ &\qquad - \pi_{\text{Card\_no}}(\text{BOOK\_LOANS}) \\ \text{ANSWER} &\leftarrow \pi_{\text{Name}}(\text{NONE} * \text{BORROWER}) \end{aligned} $$
+
+**(d)**
+
+$$\begin{aligned} L &\leftarrow \sigma_{\text{Due\_date}=\text{TODAY}}(\text{BOOK\_LOANS}) * \text{SH} \\ T &\leftarrow L * \pi_{\text{Book\_id},\text{Title}}(\text{BOOK}) \\ &\qquad * \pi_{\text{Card\_no},\text{Name},\text{Address}}(\text{BORROWER}) \\ \text{ANSWER} &\leftarrow \pi_{\text{Title},\text{Name},\text{Address}}(T) \end{aligned}$$
+
+Projecting BORROWER before the join keeps its Address apart from LIBRARY_BRANCH.Address, which never enters (SH has only Branch_id).
+
+**(e)**
+
+$$\begin{aligned} C &\leftarrow \gamma_{\text{Branch\_id};\ \text{COUNT(Book\_id)}\to\text{Total}}(\text{BOOK\_LOANS}) \\ \text{ANSWER} &\leftarrow \pi_{\text{Branch\_name},\text{Total}}(C * \text{LIBRARY\_BRANCH}) \end{aligned}$$
+
+Each BOOK_LOANS row is one copy out, so counting rows counts books loaned out.
+
+**(f)**
+
+$$\begin{aligned} C &\leftarrow \gamma_{\text{Card\_no};\ \text{COUNT(Book\_id)}\to\text{N}}(\text{BOOK\_LOANS}) \\ \text{ANSWER} &\leftarrow \pi_{\text{Name},\text{Address},\text{N}}(\sigma_{\text{N}>5}(C) * \text{BORROWER}) \end{aligned}$$
+
+**(g)**
+
+$$\begin{aligned} \text{SK} &\leftarrow \pi_{\text{Book\_id}}(\sigma_{\text{Author\_name}=\text{`Stephen King'}} \\ &\qquad (\text{BOOK\_AUTHORS})) \\ \text{CE} &\leftarrow \pi_{\text{Branch\_id}}(\sigma_{\text{Branch\_name}=\text{`Central'}} \\ &\qquad (\text{LIBRARY\_BRANCH})) \\ T &\leftarrow \text{SK} * \text{BOOK\_COPIES} * \text{CE} \\ &\qquad * \pi_{\text{Book\_id},\text{Title}}(\text{BOOK}) \\ \text{ANSWER} &\leftarrow \pi_{\text{Title},\text{No\_of\_copies}}(T) \end{aligned}$$
+
+"Authored or coauthored" needs no union here, because BOOK_AUTHORS lists every author of a book, not just the first.
+
+> **Examiner's note.** Two things lose marks here. (1) Natural joins that accidentally match the two Address columns or Name columns: project first, as in (d). (2) In (b), (e) and (g), branches or books with zero copies disappear. Say so, or use a left outer join if your reading needs zeros.
+
+### Problem 14 [RA · Application · 8 pts · Elmasri 8.19]
+
+Order processing (Exercise 5.14): CUSTOMER(Cust#, Cname, City), ORDER(Order#, Odate, Cust#, Ord_amt), ORDER_ITEM(Order#, Item#, Qty), ITEM(Item#, Unit_price), SHIPMENT(Order#, Warehouse#, Ship_date), WAREHOUSE(Warehouse#, City). An order can ship from several warehouses. (a) Order# and Ship_date of orders shipped from W2. (b) Order# and Warehouse# for orders of customer Jose Lopez. (c) Cname, No_of_orders, Avg_order_amt. (d) Orders not shipped within 30 days of ordering. (e) Order# of orders shipped from all warehouses in New York.
+
+*Solution.*
+
+**Assumptions.**
+1. Date subtraction (Ship_date − Odate, in days) is allowed in a selection condition. *(Reason: the question compares dates; the condition is a comparison of attribute values.)*
+2. An order is "not shipped within 30 days" if any of its shipments left more than 30 days after Odate. *(Reason: parts of an order ship separately, so a late part makes the order late.)* Orders with no shipment at all are not included.
+3. "Warehouses in New York" means WAREHOUSE.City = 'New York'. *(Reason: City is the only location attribute.)*
+
+**(a)**
+
+$$ \begin{aligned} &\pi_{\text{Order\#},\text{Ship\_date}}(\sigma_{\text{Warehouse\#}=\text{`W2'}}(\text{SHIPMENT})) \end{aligned} $$
+
+**(b)**
+
+$$\begin{aligned} T &\leftarrow \sigma_{\text{Cname}=\text{`Jose Lopez'}}(\text{CUSTOMER}) \\ &\qquad * \text{ORDER} * \text{SHIPMENT} \\ \text{ANSWER} &\leftarrow \pi_{\text{Order\#},\text{Warehouse\#}}(T) \end{aligned}$$
+
+CUSTOMER and ORDER join on Cust#, and ORDER and SHIPMENT join on Order#. CUSTOMER.City does not clash, because WAREHOUSE is not joined.
+
+**(c)**
+
+$$\begin{aligned} G &\leftarrow \gamma_{\substack{\text{Cust\#};\ \text{COUNT(Order\#)}\to\text{No\_of\_orders}, \\ \text{AVG(Ord\_amt)}\to\text{Avg\_order\_amt}}}(\text{ORDER}) \\ \text{ANSWER} &\leftarrow \pi_{\text{Cname},\text{No\_of\_orders},\text{Avg\_order\_amt}} \\ &\qquad (\text{CUSTOMER} * G) \end{aligned}$$
+
+Grouping by Cust#, not Cname, keeps two customers with the same name apart. Customers with no orders are left out; a left outer join from CUSTOMER would keep them.
+
+**(d)**
+
+$$\begin{aligned} T &\leftarrow \text{ORDER} * \text{SHIPMENT} \\ \text{ANSWER} &\leftarrow \pi_{\text{Order\#}}(\sigma_{\text{Ship\_date}-\text{Odate}>30}(T)) \end{aligned}$$
+
+**(e)**
+
+$$\begin{aligned} \text{NY} &\leftarrow \pi_{\text{Warehouse\#}}(\sigma_{\text{City}=\text{`New York'}}(\text{WAREHOUSE})) \\ \text{ANSWER} &\leftarrow \pi_{\text{Order\#},\text{Warehouse\#}}(\text{SHIPMENT}) \div \text{NY} \end{aligned}$$
+
+Division keeps the orders paired in SHIPMENT with every New York warehouse. If there is no New York warehouse, every shipped order qualifies vacuously.
+
+### Problem 15 [RA · Application · 5 pts · Elmasri 8.20]
+
+Sales trips (Exercise 5.15): SALESPERSON(Ssn, Name, Start_year, Dept_no), TRIP(Ssn, From_city, To_city, Departure_date, Return_date, Trip_id), EXPENSE(Trip_id, Account#, Amount). A trip can be charged to several accounts. (a) All attributes of trips that exceeded $2,000 in expenses. (b) Ssns of salespeople who took trips to Honolulu. (c) Total trip expenses of the salesperson with Ssn 234-56-7890.
+
+*Solution.*
+
+**Assumptions.**
+1. A trip's expenses are the sum of its EXPENSE rows across all accounts. *(Reason: a trip can be charged to several accounts, so one row is only part of the cost.)*
+2. "Trips to Honolulu" means To_city = 'Honolulu'. *(Reason: that is the destination attribute.)*
+
+**(a)**
+
+$$\begin{aligned} S &\leftarrow \gamma_{\text{Trip\_id};\ \text{SUM(Amount)}\to\text{Total}}(\text{EXPENSE}) \\ \text{BIG} &\leftarrow \pi_{\text{Trip\_id}}(\sigma_{\text{Total}>2000}(S)) \\ \text{ANSWER} &\leftarrow \text{TRIP} * \text{BIG} \end{aligned}$$
+
+Projecting BIG to Trip_id means the answer has exactly the attributes of TRIP.
+
+**(b)**
+
+$$\pi_{\text{Ssn}}(\sigma_{\text{To\_city}=\text{`Honolulu'}}(\text{TRIP}))$$
+
+**(c)**
+
+$$\begin{aligned} T &\leftarrow \pi_{\text{Trip\_id}}(\sigma_{\text{Ssn}=\text{`234-56-7890'}}(\text{TRIP})) \\ \text{ANSWER} &\leftarrow \gamma_{\text{SUM(Amount)}}(T * \text{EXPENSE}) \end{aligned}$$
+
+> **Examiner's note.** In (a), selecting Amount > 2000 on EXPENSE (one account line) is the common wrong answer. It misses trips whose total is over $2,000 but whose lines are each smaller.
+
+### Problem 16 [RA · Application · 8 pts · Elmasri 8.21]
+
+Enrolment (Exercise 5.16): STUDENT(Ssn, Name, Major, Bdate), COURSE(Course#, Cname, Dept), ENROLL(Ssn, Course#, Quarter, Grade), BOOK_ADOPTION(Course#, Quarter, Book_isbn), TEXT(Book_isbn, Book_title, Publisher, Author). (a) Number of courses taken by students named John Smith in Winter 2009 (Quarter = W09). (b) Course#, Book_isbn, Book_title for CS courses that have used more than two books. (c) Departments whose adopted books are all published by Pearson Publishing.
+
+*Solution.*
+
+**Assumptions.**
+1. In (a), the count is given per John Smith, with his Ssn, because there may be several students with that name. *(Reason: "all students named John Smith" suggests more than one.)* If one total is wanted, drop Ssn from the grouping.
+2. In (b), "used more than two books" counts distinct books adopted by the course in any quarter. *(Reason: the question does not restrict the quarter.)* All of those books are listed.
+3. In (c), only departments that have adopted at least one book are considered. *(Reason: a department with no adoptions would qualify only vacuously, and "has all its adopted books" presumes some exist.)*
+
+**(a)**
+
+$$\begin{aligned} T &\leftarrow \sigma_{\text{Name}=\text{`John Smith'}}(\text{STUDENT}) \\ &\qquad * \sigma_{\text{Quarter}=\text{`W09'}}(\text{ENROLL}) \\ \text{ANSWER} &\leftarrow \gamma_{\text{Ssn};\ \text{COUNT(Course\#)}\to\text{No\_courses}}(T) \end{aligned}$$
+
+**(b)**
+
+$$\begin{aligned} \text{BA} &\leftarrow \pi_{\text{Course\#},\text{Book\_isbn}}(\text{BOOK\_ADOPTION}) \\ \text{CS} &\leftarrow \pi_{\text{Course\#}}(\sigma_{\text{Dept}=\text{`CS'}}(\text{COURSE})) \\ N &\leftarrow \gamma_{\text{Course\#};\ \text{COUNT(Book\_isbn)}\to\text{Nb}}(\text{BA} * \text{CS}) \\ \text{MANY} &\leftarrow \pi_{\text{Course\#}}(\sigma_{\text{Nb}>2}(N)) \\ \text{ANSWER} &\leftarrow \pi_{\text{Course\#},\text{Book\_isbn},\text{Book\_title}} \\ &\qquad (\text{MANY} * \text{BA} * \text{TEXT}) \end{aligned}$$
+
+Projecting BOOK_ADOPTION onto (Course#, Book_isbn) first removes repeats of the same book in different quarters, so COUNT counts distinct books.
+
+**(c)**
+
+$$\begin{aligned} \text{AD} &\leftarrow \text{COURSE} * \text{BOOK\_ADOPTION} * \text{TEXT} \\ \text{ALL} &\leftarrow \pi_{\text{Dept}}(\text{AD}) \\ \text{BAD} &\leftarrow \pi_{\text{Dept}}(\sigma_{\text{Publisher}\ne\text{`Pearson Publishing'}}(\text{AD})) \\ \text{ANSWER} &\leftarrow \text{ALL} - \text{BAD} \end{aligned}$$
+
+This is the "all = those that have some, minus those with a counterexample" pattern. A department is removed if any adopted book is not from Pearson.
+
+> **Examiner's note.** (c) can also be written with division: π Dept, Book_isbn(AD) ÷ … does not fit directly, because the divisor would differ per department. The difference form is the clean one.
+
+## C. Review questions (short answers)
+
+### Problem 17 [RA · Concept · 8 pts · Elmasri 8.1–8.5]
+
+(8.1) List the relational algebra operations and the purpose of each. (8.2) What is union compatibility, and why do ∪, ∩ and − need it? (8.3) When is renaming needed? (8.4) Discuss the types of inner join. Why is theta join needed? (8.5) What role do foreign keys play in meaningful joins?
+
+*Solution.*
+
+**8.1. Operations.**
+
+| Operation | Purpose |
+| --- | --- |
+| SELECT σ | Keep the tuples that satisfy a condition |
+| PROJECT π | Keep chosen attributes; duplicates are removed |
+| RENAME ρ | Rename a relation or its attributes |
+| UNION ∪, INTERSECTION ∩, DIFFERENCE − | Set operations on union-compatible relations |
+| CARTESIAN PRODUCT × | Every combination of a tuple of R with a tuple of S |
+| JOIN ⋈ (theta, equi, natural) | Combine related tuples: a product followed by a selection |
+| DIVISION ÷ | Tuples related to *all* tuples of another relation ("every") |
+| AGGREGATE FUNCTION γ (ℑ) | Group and compute COUNT, SUM, AVG, MIN, MAX |
+| OUTER JOIN ⟕ ⟖ ⟗ | Join that keeps unmatched tuples, padded with NULL |
+| OUTER UNION | Union of partly compatible relations, padded with NULL |
+
+σ, π, ρ, ∪, − and × form a **complete set**: every other basic operation can be written with them.
+
+**8.2.**
+1. R(A1, …, An) and S(B1, …, Bn) are **union compatible** if they have the same degree n and dom(Ai) = dom(Bi) for every i.
+2. The result of ∪, ∩ or − must itself be a relation with one schema, and tuples are compared position by position. A tuple of R and a tuple of S can only be "the same tuple" if they have the same number of values with matching types.
+
+**8.3. Renaming is needed:**
+1. In a **self-join**, such as employees with their supervisor's name, because both copies of EMPLOYEE have the same attribute names.
+2. To make attributes **union compatible** by name, or to give a result column a meaningful name.
+3. To set up a **natural join** or **division**, which match attributes by name. For example, ρ(Pno)(π Pnumber(PROJECT)) before dividing WORKS_ON.
+4. To name **intermediate results** in a sequence of assignments.
+
+**8.4.**
+1. **Theta join** R ⋈θ S: any condition of the form Ai θ Bj, with θ one of =, <, ≤, >, ≥, ≠.
+2. **Equijoin**: a theta join that uses only =. Both join columns appear in the result.
+3. **Natural join** R * S: an equijoin on all attributes with the same name, keeping one copy of each.
+4. Theta join is needed for conditions that are not equality. Examples: "employees who earn more than their supervisor" (E.Salary > S.Salary) and "projects that started before the department's manager did".
+
+**8.5.** Most meaningful joins match a **foreign key with the primary key it references**, such as EMPLOYEE.Dno = DEPARTMENT.Dnumber.
+1. Each FK value then matches **at most one** tuple, so the join attaches the related entity's facts without creating false combinations.
+2. Referential integrity guarantees a match for every non-NULL FK, so no tuple is lost.
+3. Joins on attributes that are not a key–FK pair, such as Plocation = Dlocation, pair unrelated tuples and give spurious results.
+
+## D. Extra drills and last year's papers
+
+### Problem 18 [RA · Application · 4 pts · M24 Quiz 4 Q1]
 
 Show how this left outer join can be computed with basic RA operations: SELECT E.Lname, E.Fname, D.Dname FROM EMPLOYEE E LEFT OUTER JOIN DEPARTMENT D ON E.Dno = D.Dnumber.
 
@@ -434,7 +671,7 @@ $$ \begin{aligned} T_1 &\leftarrow \pi_{\text{Ssn},\text{Lname},\text{Fname},\te
 3. T3 pads those employees with a NULL Dname, which makes T3 union-compatible with T1.
 4. The union of T1 and T3 is exactly the left outer join.
 
-### Problem 13 [RA · Application · 4 pts]
+### Problem 19 [RA · Application · 4 pts]
 
 Write division using only π, ×, −, and explain each step on: "students who have taken every course offered by the CS department", TAKES(Sid, Cid), COURSE(Cid, Dept).
 
@@ -454,7 +691,7 @@ $$\begin{aligned} S &\leftarrow \pi_{\text{Cid}}(\sigma_{\text{Dept}=\text{`CS'}
 
 **Final answer.** $\pi_{\text{Sid}}(\text{TAKES}) - \pi_{\text{Sid}}\big((\pi_{\text{Sid}}(\text{TAKES}) \times S) - \text{TAKES}\big)$. If S is empty, every student qualifies, because "every course" over an empty set is vacuously true.
 
-### Problem 14 [RA · Application · 3 pts]
+### Problem 20 [RA · Application · 3 pts]
 
 Employees with the highest salary, without using the MAX aggregate.
 
@@ -468,7 +705,7 @@ $$ \begin{aligned} \text{LOWER} &\leftarrow \pi_{E.\text{Ssn}}\big(\rho_E(\text{
 
 **Explanation.** The self-join pairs each employee E with every employee F who earns more, so LOWER is the set of employees whom someone out-earns. Everyone else earns the maximum salary. All employees tied at the top are returned.
 
-### Problem 15 [RA · Application · 3 pts]
+### Problem 21 [RA · Application · 3 pts]
 
 Employees who work on at least two different projects.
 
