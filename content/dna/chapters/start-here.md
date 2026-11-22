@@ -14,17 +14,35 @@ This is the map for the Data and Applications (CS4.301) final exam on **Monday 2
 
 ## Syllabus map
 
-| Topic | Elmasri 7e | This year | Past papers | Chapter |
-| --- | --- | --- | --- | --- |
-| Relational model, keys, constraints | 5.1–5.3 | A1 (COMPANY), underlies all | M23 Q1, M24 Quiz 2, M25 Quiz 2 | [Ch 1](../ch1-relational-model/learn.html) |
-| ER/EER modelling | 3.1–3.7, 4.1–4.5 | A2: TV shows (I), EER of EER (G) | M23 Q7, M24 Quiz 2 Q3 | [Ch 2](../ch2-er-eer/learn.html) |
-| EER → relational mapping | 9.1–9.2 | A3: map both A2 models | M22 Q1 | [Ch 3](../ch3-mapping/learn.html) |
-| FDs and normalisation | 14.1–14.5, 15.1–15.3 | A4: proofs, 4-part NF problems | M23 Q4–Q6, M24 Quiz 4, M25 Q5–Q6 | [Ch 4](../ch4-normalisation/learn.html) |
-| Relational algebra | 8.1–8.5 | A5: BOOKS queries, join = ∩ proof | M24 Quiz 4 Q1 | [Ch 5](../ch5-relational-algebra/learn.html) |
-| Tuple relational calculus | 8.6 | (exam only) | — | [Ch 6](../ch6-trc/learn.html) |
-| SQL | 6.1–6.4, 7.1, 7.3, 7.4, 10.1, 10.2 | A1, A6: BOOKS queries, topological sort | M23 Q2–Q3, M25 Q1, Q3, Q4 | [Ch 7](../ch7-sql/learn.html) |
+The official endsem syllabus (from the TA, 22 Nov), matched to this site. The TA's chapter numbers are Elmasri 7e.
 
-Kamal's practice list (5 Nov): RA 8.15–8.17, 8.22; TRC 8.24–8.27, 8.29; SQL 6.5, 6.8, 6.10, 6.13, 6.15, 7.5, 7.7–7.9, 10.7. All of them are worked in the Practice pages.
+| Topic | Elmasri 7e | This year | Site chapter |
+| --- | --- | --- | --- |
+| Databases, data models, architecture | Ch 1, 2 | (exam only) | [Ch 0](../ch0-database-concepts/learn.html) |
+| Relational model, keys, constraints | Ch 5 | A1 (COMPANY), underlies all | [Ch 1](../ch1-relational-model/learn.html) |
+| ER and EER modelling | Ch 3, 4 | A2: TV shows (I), EER of EER (G) | [Ch 2](../ch2-er-eer/learn.html) |
+| ER/EER to relational mapping | Ch 9 | A3: map both A2 models | [Ch 3](../ch3-mapping/learn.html) |
+| FDs and normalisation | Ch 14, 15 | A4: proofs, 4-part NF problems | [Ch 4](../ch4-normalisation/learn.html) |
+| Relational algebra | Ch 8.1–8.5 (and 7 for SQL links) | A5: BOOKS queries, join = ∩ proof | [Ch 5](../ch5-relational-algebra/learn.html) |
+| Tuple relational calculus | Ch 8.6 | (exam only) | [Ch 6](../ch6-trc/learn.html) |
+| SQL | Ch 6, 7.1, 7.3, 7.4, 10.1, 10.2 | A1, A6: BOOKS queries, topological sort | [Ch 7](../ch7-sql/learn.html) |
+
+**What the professor and TA said (22 Nov).** Questions will be like the assignment questions, and "the principles remain the same". The assignment solutions are the best representative: study *how* each problem was approached. Textbook exercises are a good start, because they teach how to address a problem. You will have enough time in the exam.
+
+## The exercise list
+
+These are the textbook exercises the TA listed. The Practice page of each chapter works the problem-type exercises in the assignment style and answers the review questions briefly.
+
+| Topic | Exercises | Where |
+| --- | --- | --- |
+| Database | 1.1, 1.2, 1.3, 1.8–1.12 | [Ch 0 Practice](../ch0-database-concepts/practice.html) |
+| Data models and ER | 2.1–2.5, 2.14 | [Ch 0 Practice](../ch0-database-concepts/practice.html) |
+| ER and EER | 3.3–3.13, 3.16, 3.17, 3.22, 3.26, 4.2, 4.6, 4.7, 4.16–4.20 | [Ch 2 Practice](../ch2-er-eer/practice.html) |
+| Relational data model | 5.1–5.5, 5.11, 5.12, 5.15–5.17, 5.20, 9.2–9.8 | [Ch 1](../ch1-relational-model/practice.html), [Ch 3](../ch3-mapping/practice.html) Practice |
+| FDs and normalisation | 14.2–14.12, 14.19–14.34, 15.1–15.12, 15.21, 15.24 | [Ch 4 Practice](../ch4-normalisation/practice.html) |
+| Relational algebra | 7.1–7.9, 8.1–8.5, 8.9–8.12, 8.15–8.22 | [Ch 5](../ch5-relational-algebra/practice.html), [Ch 7](../ch7-sql/practice.html) Practice |
+| Tuple relational calculus | 8.24–8.30 | [Ch 6 Practice](../ch6-trc/practice.html) |
+| SQL | 6.5–6.13, 6.15, 7.5, 7.7–7.9, 10.7 | [Ch 7 Practice](../ch7-sql/practice.html) |
 
 ## This year versus last year's papers
 
@@ -45,18 +63,22 @@ What this means for you:
 3. **Expect a proof**. The two so far were short: an attribute on no right-hand side is in every key; natural join over all attributes is intersection. Both are proved by taking an arbitrary element and following the definition.
 4. **Expect the BOOKS schema** (A5 and A6 both used it). Every A5/A6 query is worked in RA, TRC and SQL on this site.
 
-## How to spend the last three days
+## From now to Monday 3 PM
+
+Kamal's advice is to understand how the assignment solutions were reached, do textbook exercises, and not over-prepare. So the plan is one pass per topic: redo the assignment from its key, do a few listed exercises, and stop.
 
 | When | Do | Pages |
 | --- | --- | --- |
-| Fri evening | Closure, keys, normal forms, the two decomposition algorithms; redo A4 Q2 and group Q3 without looking | Ch 4 |
-| Sat morning | Relational algebra patterns; redo all six A5 queries | Ch 5 |
-| Sat afternoon | TRC: ∃, ¬∃, ∀ as ¬∃¬; do 8.24, 8.29 and the A5 queries in TRC | Ch 6 |
-| Sat evening | SQL: evaluation order, NULLs, NOT EXISTS, LEFT JOIN counts, ties; redo A6 | Ch 7 |
-| Sun morning | EER notation and (min, max); mapping steps and 8A–8D; redo A2 and A3 individual | Ch 2, Ch 3 |
-| Sun afternoon | Sit the [mock endsem](../mock-endsem/mock-endsem.html) in one timed sitting (about 3 hours), then mark it A/B/C | Mock |
-| Sun evening | Write your two A4 sheets from the [cheat sheet](../cheat-sheet/cheat-sheet.html) and your mistakes | Cheat sheet |
-| Mon morning | Flashcards from the practice bank; reread the Reference pages | All |
+| Sun 4–6 PM | Normalisation: redo A4 (individual and group) from the key, then 14.19–14.24 | Ch 4 |
+| Sun 6–7:30 PM | RA and TRC: redo A5, then TRC 8.24–8.30 | Ch 5, Ch 6 |
+| Sun 8–9:30 PM | SQL: redo A6, then 6.5–6.13 | Ch 7 |
+| Sun 9:30–10:30 PM | EER and mapping: redo A2 and A3 individual; 3.16, 9.2–9.8 | Ch 2, Ch 3 |
+| Sun 10:30–11:30 PM | Write your two A4 sheets from the [cheat sheet](../cheat-sheet/cheat-sheet.html) and your mistakes. Then sleep | Cheat sheet |
+| Mon 9–10:30 AM | Database concepts: the definition questions 1.1, 2.1–2.5 and 2.14 | Ch 0 |
+| Mon 10:30 AM–12:30 PM | Your weakest two topics from the practice bank (Flashcard mode) | All |
+| Mon after 12:30 PM | Stop. Eat, reread your two sheets once, and go in rested | |
+
+The [mock endsem](../mock-endsem/mock-endsem.html) is optional now. Use one question from it if a topic still feels shaky.
 
 ## Using the practice bank
 

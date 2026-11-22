@@ -1,8 +1,27 @@
 # Cheat sheet
 
-You may bring **two handwritten A4 pages** (printed sheets are not allowed, even if the content was handwritten by a tool). Writing them is itself revision: copy this plan by hand, in your own words, and add the mistakes you made in the [mock endsem](../mock-endsem/mock-endsem.html). Page 1 is design and theory; page 2 is the query languages.
+You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing them is itself revision: copy this plan by hand, in your own words, and add the mistakes you made in the [mock endsem](../mock-endsem/mock-endsem.html). The layout assumes you write on both sides of each sheet. If only one side is allowed, keep the sections marked **must** and drop the rest.
 
-## Page 1, front: relational model, EER, mapping
+**What earns the space.** The exam is "like assignment questions" and you will have enough time, so the sheets are not for definitions you can explain in your own words. Put down:
+1. **Procedures with steps you might reorder or forget**: closure, minimal cover, BCNF split, 3NF synthesis, the dependency-preservation test, the mapping steps and 8A–8D. **Must.**
+2. **Notation you must draw exactly**: EER symbols, (min, max), division, outer joins, TRC quantifiers. **Must.**
+3. **Patterns that turn English into a query**: "none", "every", "including zero", "the maximum without MAX", ties. **Must.**
+4. **Lists the definition questions ask for by count**: the four DBMS actions, the four characteristics, the three levels, the two independences.
+5. **Your own mistakes** from A1–A6 and the mock. These are worth more than anything copied from here.
+
+**What to leave off**: long worked examples, full schemas (the paper gives them), history, and anything you have not used while practising.
+
+## Page 1, front, top: database concepts (Elmasri 1–2)
+
+**DBMS does**: define (catalog, meta-data), construct, manipulate (query, update, report), share; also protect and maintain. **DB approach vs files**: self-describing (catalog), program–data independence and abstraction, multiple views, sharing with concurrency control and atomic, isolated transactions. Files lead to uncontrolled redundancy (duplicated effort, wasted space, inconsistency). **Controlled** redundancy = kept on purpose, consistency enforced by the DBMS.
+
+**Models**: conceptual (ER), representational (relational, object), physical (access paths), self-describing (XML, NoSQL). Object = operations + OID + inheritance; XML = tagged tree, schema mixed in. **Schema** = intension, rarely changes; **state** = extension, changes on every update, must be valid.
+
+**Three levels**: external views → conceptual → internal; mappings transform requests and reformat results, and give independence. **Logical** (conceptual changes, views unchanged) is harder than **physical** (storage changes, conceptual unchanged), because programs depend on the logical structure. SDL internal, DDL conceptual, VDL external; SQL is DDL + VDL + DML. Nonprocedural = what, set at a time; procedural = how, record at a time.
+
+**Users**: DBA, designers, casual / parametric (canned transactions) / sophisticated / standalone end users, analysts and programmers. **Tiers**: 2-tier (client app + DB server via ODBC/JDBC); 3-tier (client, application/web server with rules and security, DB server) for the web; n-tier splits the middle tier.
+
+## Page 1, front: relational model, EER, mapping (must)
 
 **Keys.** Superkey: no two tuples agree. Key: minimal superkey. Prime: in some key. Counting superkeys among n attributes: one key of size k gives $2^{n-k}$; k single-attribute keys give $2^n - 2^{n-k}$; two keys K1, K2 give $2^{n-|K_1|} + 2^{n-|K_2|} - 2^{n-|K_1 \cup K_2|}$.
 
@@ -16,7 +35,7 @@ You may bring **two handwritten A4 pages** (printed sheets are not allowed, even
 
 **Rubric majors** (A2/A3): missing key, weak without owner key, FK to part of a key, FK on wrong side, M:N not separate, multivalued as column, attribute in wrong relation, specialization lost / 8C for overlapping, unmapped diamond, no arrows.
 
-## Page 1, back: functional dependencies and normal forms
+## Page 1, back: functional dependencies and normal forms (must)
 
 **Closure** $X^+$: start X, add right sides whose left sides are inside, repeat. X → B iff B ∈ $X^+$.
 
@@ -40,7 +59,7 @@ You may bring **two handwritten A4 pages** (printed sheets are not allowed, even
 
 **Proof patterns**: "add A → K for a key K makes A a key"; "n FDs (a cycle) make every subset a superkey"; "3NF + all keys single ⇒ BCNF".
 
-## Page 2, front: relational algebra and TRC
+## Page 2, front: relational algebra and TRC (must)
 
 **RA**: σ rows, π columns (removes duplicates), ρ rename, ∪ ∩ − (union-compatible), ×, ⋈c, natural ⋈ (same names, one copy), ⟕ ⟖ ⟗ (NULL padding), γ G; F(A)→N.
 - "not / no / never" → all − those that do.
@@ -60,7 +79,7 @@ You may bring **two handwritten A4 pages** (printed sheets are not allowed, even
 - Unsafe: {t | ¬R(t)}. No aggregates in TRC: say so.
 - Empty set: "all of none" is true; state whether such rows are included.
 
-## Page 2, back: SQL
+## Page 2, back: SQL (must, except embedded SQL)
 
 **Order**: FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY. WHERE has no aggregates; HAVING is for group conditions; ORDER BY may use aggregates not in the output.
 

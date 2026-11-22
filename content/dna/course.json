@@ -4,8 +4,9 @@
   "term": "Monsoon 2026",
   "blurb": "Databases from the ground up for the endsem on 23 Nov: the relational model, ER/EER design and mapping, normalisation, relational algebra, tuple relational calculus and SQL. Built from Elmasri and Navathe 7e, this year's six assignments with Kamal's keys and rubrics, and last year's papers.",
   "docs": [
-    { "slug": "start-here", "file": "chapters/start-here.md", "title": "Start here: the endsem map", "about": "Exam rules, syllabus to textbook sections to assignments, how this year differs from last year's papers, and a three-day plan" },
+    { "slug": "start-here", "file": "chapters/start-here.md", "title": "Start here: the endsem map", "about": "Exam rules, syllabus to textbook sections to assignments, the full exercise list, and a plan up to the exam" },
     { "slug": "videos", "file": "chapters/videos.md", "title": "Videos and quick checks", "about": "A lecture and a problem-solving video for each endsem topic, plus one worked problem per topic in Kamal's style" },
+    { "slug": "ch0-database-concepts", "file": "chapters/ch0-database-concepts.md", "title": "Chapter 0: Database concepts and architecture", "about": "Elmasri chapters 1 and 2: the database approach, users, DBMS advantages, data models, schemas and states, three-schema architecture, data independence, languages and client/server tiers; exercises 1.1 to 2.14" },
     { "slug": "ch1-relational-model", "file": "chapters/ch1-relational-model.md", "title": "Chapter 1: The relational model, keys and constraints", "about": "Relations, superkeys and candidate keys, counting superkeys, integrity constraints, update operations and violations" },
     { "slug": "ch2-er-eer", "file": "chapters/ch2-er-eer.md", "title": "Chapter 2: ER and EER modelling", "about": "Entities, attributes, relationships, (min, max), weak entities, ternary relationships, specialization and categories; Assignment 2" },
     { "slug": "ch3-mapping", "file": "chapters/ch3-mapping.md", "title": "Chapter 3: Mapping EER to relations", "about": "The seven mapping steps, specialization options 8A to 8D, categories, and the Assignment 3 rubric" },
