@@ -89,6 +89,7 @@ md.block.ruler.before('fence', 'math_block', mathBlock, { alt: ['paragraph', 're
 md.renderer.rules.math_inline = (t, i) => renderMath(t[i].content, false);
 md.renderer.rules.math_display = (t, i) => `<span class="math-d" data-tex="${esc(t[i].content.trim())}">${renderMath(t[i].content, true)}</span>`;
 md.renderer.rules.math_block = (t, i) => `<div class="math-d" data-tex="${esc(t[i].content.trim())}">${renderMath(t[i].content, true)}</div>\n`;
+md.renderer.rules.heading_open = (t, i, o, e, s) => s.renderToken(t, i, o) + (t[i].meta && t[i].meta.asg ? `<span class="asg-tag">${esc(t[i].meta.asg)}</span> ` : '');
 md.renderer.rules.table_open = () => '<div class="table-wrap"><table>\n';
 md.renderer.rules.table_close = () => '</table></div>\n';
 const defaultLink = md.renderer.rules.link_open || ((t, i, o, e, s) => s.renderToken(t, i, o));
@@ -133,8 +134,19 @@ function splitTitle(raw) {
   return { kicker, title, meta };
 }
 
+// "Assignment 5 group Q2(a)" / "A5 individual Q1(a) in TRC" -> "A5 · Group Q2(a)"
+function asgTag(src) {
+  const m = (src || '').match(/\b(?:Assignment\s*|A)(\d)\s+(individual|group)\b\s*([^\]·]*)/i);
+  if (!m) return null;
+  let rest = m[3].replace(/\((IA|GA)\d\)|\(EtoR-[IG]\)/g, '').trim();
+  const trc = /in TRC/i.test(rest); rest = rest.replace(/\s*in TRC/i, '').trim();
+  return `A${m[1]} · ${m[2][0].toUpperCase()}${m[2].slice(1).toLowerCase()}${rest ? ' ' + rest : ''}${trc ? ' (as TRC)' : ''}`;
+}
+
 function tagsOf(src, selfTest) {
   const t = [];
+  const am = (src || '').match(/\b(?:Assignment\s*|A)(\d)\s+(individual|group)\b/i);
+  if (am) t.push('Assignment ' + am[1]);
   if (selfTest) t.push('Self-test');
   if (/\bHW/i.test(src)) t.push('Homework');
   if (/Tutorial/i.test(src)) t.push('Tutorial');
@@ -286,6 +298,9 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
           const text = tokens[i + 1].content;
           const hid = uniq(slugify(text), seen);
           tk.attrSet('id', hid);
+          const pm = tk.tag === 'h3' && text.match(/^Problem \d+\s*\[([^\]]*)\]/);
+          const ag = pm && asgTag(pm[1]);
+          if (ag) tk.meta = { ...(tk.meta || {}), asg: ag };
           outline.push({ level: +tk.tag[1], id: hid, text });
         }
       }

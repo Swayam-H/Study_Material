@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwszyenz">
+<link rel="stylesheet" href="../../assets/style.css?v=mwt1bojt">
 </head>
 <body data-root="../../" data-page="dna/ch4-normalisation/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -96,7 +96,7 @@
       </header>
       <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
 <h2 id="a-assignment-4-this-year">A. Assignment 4 (this year)</h2>
-<h3 id="problem-1-fd-proof-5-pts-assignment-4-individual-q1">Problem 1 [FD · Proof · 5 pts · Assignment 4 individual Q1]</h3>
+<h3 id="problem-1-fd-proof-5-pts-assignment-4-individual-q1"><span class="asg-tag">A4 · Individual Q1</span> Problem 1 [FD · Proof · 5 pts · Assignment 4 individual Q1]</h3>
 <p>Let R(A, B, C, D, E, F, G, H) have FD set F, and suppose A belongs to no key of R. Specify one FD X → Y to add to F so that A becomes a key. Justify.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -114,7 +114,7 @@
 <p><strong>Examiner's note.</strong> A → R (or A → BCDEFGH) is also correct but was capped at 4 of 5, because it does not use the structure of R. A → B, or any FD with A on the right, earns nothing.</p>
 </blockquote>
 </details>
-<h3 id="problem-2-normalisation-application-20-pts-assignment-4-indi">Problem 2 [Normalisation · Application · 20 pts · Assignment 4 individual Q2]</h3>
+<h3 id="problem-2-normalisation-application-20-pts-assignment-4-indi"><span class="asg-tag">A4 · Individual Q2</span> Problem 2 [Normalisation · Application · 20 pts · Assignment 4 individual Q2]</h3>
 <p>R(A, C, F, G, K, L), G = {L → K, K → GAL, C → FG, F → A}. (a) Highest normal form. (b) BCNF decomposition. (c) Minimal cover. (d) 3NF synthesis from the cover.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -154,7 +154,7 @@
 <p><strong>Examiner's note.</strong> Decompositions and covers are not unique; the grader checks yours against the definitions. Also correct for (b): {(K, L, A, G), (C, F), (C, L)} or {(F, A), (C, F, G), (K, L), (C, K)}. Wrong: citing K → L or L → K as a 2NF violation (K and L are prime).</p>
 </blockquote>
 </details>
-<h3 id="problem-3-fd-proof-10-pts-assignment-4-group-q1">Problem 3 [FD · Proof · 10 pts · Assignment 4 group Q1]</h3>
+<h3 id="problem-3-fd-proof-10-pts-assignment-4-group-q1"><span class="asg-tag">A4 · Group Q1</span> Problem 3 [FD · Proof · 10 pts · Assignment 4 group Q1]</h3>
 <p>Prove or disprove: if attribute A appears on the right-hand side of no FD in F, then A belongs to every candidate key.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -174,7 +174,7 @@
 <p><strong>Examiner's note.</strong> Checking the statement on one or two examples is not a proof; an example can only disprove a universal claim.</p>
 </blockquote>
 </details>
-<h3 id="problem-4-fd-proof-10-pts-assignment-4-group-q2">Problem 4 [FD · Proof · 10 pts · Assignment 4 group Q2]</h3>
+<h3 id="problem-4-fd-proof-10-pts-assignment-4-group-q2"><span class="asg-tag">A4 · Group Q2</span> Problem 4 [FD · Proof · 10 pts · Assignment 4 group Q2]</h3>
 <p>For R(A1, …, An), find the minimum number of FDs that makes every non-empty subset of attributes a superkey; then give a 3NF decomposition.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -192,7 +192,7 @@
 <p><strong>Examiner's note.</strong> Common wrong counts: n − 1 (an open chain fails because <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.0213em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">}</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7713em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mbin mtight">+</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>) and n(n − 1) (sufficient but not minimal). Never decompose into single-attribute relations: their natural join is a Cartesian product, so the decomposition is lossy.</p>
 </blockquote>
 </details>
-<h3 id="problem-5-normalisation-application-20-pts-assignment-4-grou">Problem 5 [Normalisation · Application · 20 pts · Assignment 4 group Q3]</h3>
+<h3 id="problem-5-normalisation-application-20-pts-assignment-4-grou"><span class="asg-tag">A4 · Group Q3</span> Problem 5 [Normalisation · Application · 20 pts · Assignment 4 group Q3]</h3>
 <p>R(A, C, F, G, K, L), Σ = {L → A, F → GKL, C → AFK, K → F}. Same four parts.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -1070,6 +1070,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwszyenz" defer></script>
+<script src="../../assets/app.js?v=mwt1bojt" defer></script>
 </body>
 </html>

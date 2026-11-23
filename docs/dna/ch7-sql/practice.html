@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwszyenz">
+<link rel="stylesheet" href="../../assets/style.css?v=mwt1bojt">
 </head>
 <body data-root="../../" data-page="dna/ch7-sql/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -97,7 +97,7 @@
       <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
 <h2 id="a-assignment-6-this-year">A. Assignment 6 (this year)</h2>
 <p>Schema: BOOKS(<strong>ISBN</strong>, AuthorName, Title, Publisher, YearofBook), COAUTHORS(<strong>ISBN, JointAuthorName</strong>), PERSONS(<strong>Name</strong>, YearofBirth, Residence), PUBLISHERS(<strong>Publisher</strong>, City). The senior author is not repeated in COAUTHORS; author columns are never NULL.</p>
-<h3 id="problem-1-sql-application-5-pts-assignment-6-individual-a">Problem 1 [SQL · Application · 5 pts · Assignment 6 individual (a)]</h3>
+<h3 id="problem-1-sql-application-5-pts-assignment-6-individual-a"><span class="asg-tag">A6 · Individual (a)</span> Problem 1 [SQL · Application · 5 pts · Assignment 6 individual (a)]</h3>
 <p>For each publisher, list its authors ranked in descending order of the number of books they have published with that publisher as senior author. Output Publisher and AuthorName, grouped by publisher.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -125,7 +125,7 @@ ORDER BY Publisher, COUNT(*) DESC;
 <p><strong>Examiner's note.</strong> Common mistakes: GROUP BY Publisher only; ORDER BY COUNT(*) DESC without Publisher first; a missing DESC. A RANK() OVER (PARTITION BY Publisher …) window function is also accepted.</p>
 </blockquote>
 </details>
-<h3 id="problem-2-sql-application-5-pts-assignment-6-individual-b">Problem 2 [SQL · Application · 5 pts · Assignment 6 individual (b)]</h3>
+<h3 id="problem-2-sql-application-5-pts-assignment-6-individual-b"><span class="asg-tag">A6 · Individual (b)</span> Problem 2 [SQL · Application · 5 pts · Assignment 6 individual (b)]</h3>
 <p>List the book or books with the highest total number of authors (senior author plus coauthors). List all ties. Output ISBN and Title.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -155,7 +155,7 @@ WHERE  NumAuthors = (SELECT MAX(NumAuthors) FROM AuthorCount);
 <p><strong>Examiner's note.</strong> ORDER BY … DESC LIMIT 1 loses ties and was marked down. HAVING … &gt;= ALL (…), RANK() = 1 and a UNION of both author roles were accepted.</p>
 </blockquote>
 </details>
-<h3 id="problem-3-sql-application-5-pts-assignment-6-individual-c">Problem 3 [SQL · Application · 5 pts · Assignment 6 individual (c)]</h3>
+<h3 id="problem-3-sql-application-5-pts-assignment-6-individual-c"><span class="asg-tag">A6 · Individual (c)</span> Problem 3 [SQL · Application · 5 pts · Assignment 6 individual (c)]</h3>
 <p>List the Name of every person who is neither a senior author nor a coauthor of any book.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -177,7 +177,7 @@ WHERE  NOT EXISTS (SELECT * FROM BOOKS B     WHERE B.AuthorName      = P.Name)
 <p><strong>Examiner's note.</strong> NOT IN twice is also correct here, but only because of the assumption: a NULL in either subquery would make NOT IN return no rows. EXCEPT and two LEFT JOINs with IS NULL checks are also correct. Joining the conditions with OR is wrong.</p>
 </blockquote>
 </details>
-<h3 id="problem-4-sql-application-10-pts-assignment-6-group">Problem 4 [SQL · Application · 10 pts · Assignment 6 group]</h3>
+<h3 id="problem-4-sql-application-10-pts-assignment-6-group"><span class="asg-tag">A6 · Group</span> Problem 4 [SQL · Application · 10 pts · Assignment 6 group]</h3>
 <p>Kahn's algorithm (L ← empty; S ← nodes with no incoming edge; while S not empty: remove n from S, append n to L, for each edge n → m remove it and if m has no other incoming edges insert m into S; if edges remain return error else return L). (a) What is the output? (b) With the graph stored as G(FromNode, ToNode), give SQL for each step. (c) Run it on a four-node graph.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -1233,6 +1233,6 @@ SELECT * FROM A RIGHT JOIN B ON A.k = B.k WHERE A.k IS NULL;
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwszyenz" defer></script>
+<script src="../../assets/app.js?v=mwt1bojt" defer></script>
 </body>
 </html>

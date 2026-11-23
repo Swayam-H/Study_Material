@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwszyenz">
+<link rel="stylesheet" href="../../assets/style.css?v=mwt1bojt">
 </head>
 <body data-root="../../" data-page="dna/ch5-relational-algebra/practice" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -97,7 +97,7 @@
       <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
 <h2 id="a-assignment-5-this-year">A. Assignment 5 (this year)</h2>
 <p>Schema for A5 (individual paper): BOOKS(<strong>ISBN</strong>, AuthorName, Title, Publisher, YearofBook), COAUTHORS(<strong>ISBN, JointAuthorName</strong>), PERSONS(<strong>Name</strong>, YearofBirth, Residence), PUBLISHERS(<strong>Publisher</strong>, City). The group paper calls the attributes Author and JointAuthor. Assumptions used by the key: AuthorName, JointAuthorName → PERSONS.Name; BOOKS.Publisher → PUBLISHERS; COAUTHORS.ISBN → BOOKS; the senior author is not also listed as a coauthor; &quot;younger&quot; means a larger YearofBirth.</p>
-<h3 id="problem-1-ra-application-5-pts-assignment-5-individual-q1-a">Problem 1 [RA · Application · 5 pts · Assignment 5 individual Q1(a)]</h3>
+<h3 id="problem-1-ra-application-5-pts-assignment-5-individual-q1-a"><span class="asg-tag">A5 · Individual Q1(a)</span> Problem 1 [RA · Application · 5 pts · Assignment 5 individual Q1(a)]</h3>
 <p>Give the complete rows of books whose senior author is younger than all the coauthors of the book.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -121,7 +121,7 @@
 <p><strong>Examiner's note.</strong> If you assume instead that books without coauthors are excluded, replace π ISBN(BOOKS) by π ISBN(COAUTHORS); comparing SYear with the per-book MAX(CYear) is also accepted.</p>
 </blockquote>
 </details>
-<h3 id="problem-2-ra-application-5-pts-assignment-5-individual-q1-b">Problem 2 [RA · Application · 5 pts · Assignment 5 individual Q1(b)]</h3>
+<h3 id="problem-2-ra-application-5-pts-assignment-5-individual-q1-b"><span class="asg-tag">A5 · Individual Q1(b)</span> Problem 2 [RA · Application · 5 pts · Assignment 5 individual Q1(b)]</h3>
 <p>Give the book title and the number of authors for the book.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -143,7 +143,7 @@
 <p><strong>Examiner's note.</strong> Also accepted: a left outer join BOOKS ⟕ COAUTHORS grouped on ISBN, counting JointAuthorName (which ignores NULLs) and adding 1.</p>
 </blockquote>
 </details>
-<h3 id="problem-3-ra-application-5-pts-assignment-5-individual-q1-c">Problem 3 [RA · Application · 5 pts · Assignment 5 individual Q1(c)]</h3>
+<h3 id="problem-3-ra-application-5-pts-assignment-5-individual-q1-c"><span class="asg-tag">A5 · Individual Q1(c)</span> Problem 3 [RA · Application · 5 pts · Assignment 5 individual Q1(c)]</h3>
 <p>For each city, give the total number of books published and the total number of authors.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -167,7 +167,7 @@
 <p><strong>Examiner's note.</strong> Two other readings were accepted when stated: counting (book, author) pairs, or counting authors whose Residence is the city.</p>
 </blockquote>
 </details>
-<h3 id="problem-4-ra-proof-5-pts-assignment-5-group-q1">Problem 4 [RA · Proof · 5 pts · Assignment 5 group Q1]</h3>
+<h3 id="problem-4-ra-proof-5-pts-assignment-5-group-q1"><span class="asg-tag">A5 · Group Q1</span> Problem 4 [RA · Proof · 5 pts · Assignment 5 group Q1]</h3>
 <p>R(A1, …, An) and S(A1, …, An) have the same attributes. Show that the natural join over A1, …, An equals R ∩ S.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -182,7 +182,7 @@
 <li>By (1) and (2), and since both sides have the same schema, R * S = R ∩ S. ∎</li>
 </ol>
 </details>
-<h3 id="problem-5-ra-application-5-pts-assignment-5-group-q2-a">Problem 5 [RA · Application · 5 pts · Assignment 5 group Q2(a)]</h3>
+<h3 id="problem-5-ra-application-5-pts-assignment-5-group-q2-a"><span class="asg-tag">A5 · Group Q2(a)</span> Problem 5 [RA · Application · 5 pts · Assignment 5 group Q2(a)]</h3>
 <p>Give complete rows of books whose senior author lives in the city of the publisher.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -205,7 +205,7 @@
 <p><strong>Examiner's note.</strong> Also accepted: rename PERSONS to (Author, YearofBirth, City) and natural-join all three relations, so the city match happens inside the join.</p>
 </blockquote>
 </details>
-<h3 id="problem-6-ra-application-5-pts-assignment-5-group-q2-b">Problem 6 [RA · Application · 5 pts · Assignment 5 group Q2(b)]</h3>
+<h3 id="problem-6-ra-application-5-pts-assignment-5-group-q2-b"><span class="asg-tag">A5 · Group Q2(b)</span> Problem 6 [RA · Application · 5 pts · Assignment 5 group Q2(b)]</h3>
 <p>Give coauthor name and the number of books the coauthor published.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -227,7 +227,7 @@
 <p><strong>Examiner's note.</strong> If you state that only coauthored books count, γ JointAuthor; COUNT(ISBN) (COAUTHORS) is accepted.</p>
 </blockquote>
 </details>
-<h3 id="problem-7-ra-application-5-pts-assignment-5-group-q2-c">Problem 7 [RA · Application · 5 pts · Assignment 5 group Q2(c)]</h3>
+<h3 id="problem-7-ra-application-5-pts-assignment-5-group-q2-c"><span class="asg-tag">A5 · Group Q2(c)</span> Problem 7 [RA · Application · 5 pts · Assignment 5 group Q2(c)]</h3>
 <p>Give the complete rows of authors who published a book before a coauthor of a subsequent book of theirs was born.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em></p>
@@ -683,6 +683,6 @@ the two rows of (b) and (NULL, NULL, NULL, 25, c, 3).</p>
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwszyenz" defer></script>
+<script src="../../assets/app.js?v=mwt1bojt" defer></script>
 </body>
 </html>
