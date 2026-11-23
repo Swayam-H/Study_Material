@@ -35,6 +35,12 @@
       "about": "Files, directories, fds and offsets, links, fsync and rename, vsfs layout, inodes and the multi-level index, access-path I/O counts, caching, the xv6 file system (Tutorial 7)"
     },
     {
+      "slug": "revision",
+      "file": "revision.md",
+      "title": "Rapid revision, Lectures 1 to 19 (5 pages)",
+      "about": "Every lecture deck condensed: shorter than the chapter notes, fuller than the formula sheets"
+    },
+    {
       "slug": "endsem",
       "file": "endsem.md",
       "title": "Endsem practice (9 × 10 marks)",
