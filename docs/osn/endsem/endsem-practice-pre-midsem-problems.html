@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwtk9l5h">
+<link rel="stylesheet" href="../../assets/style.css?v=mwtkiw46">
 </head>
 <body data-root="../../" data-page="osn/endsem/endsem-practice-pre-midsem-problems" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,14 +87,14 @@
       <header class="note-head">
         
         <h1>Endsem practice: pre-midsem problems</h1>
-        <p class="note-meta">14 min read · 10 practice problems</p>
+        <p class="note-meta">16 min read · 11 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
           <span class="hint">Solutions stay collapsed until you click them.</span>
         </div>
       </header>
-      <div class="prose"><p><em>Lectures 1 to 9, in 10-mark exam style. These are new problems; the professor's sheet had none for this half.</em></p>
+      <div class="prose"><p><em>Lectures 1 to 9 in 10-mark exam style: new problems, because the professor's sheet had none for this half. Also redo the banks already in the chapter pages: C1 to C8 (Lectures 1 to 7) and N1 to N11 (networking, including the transport-layer sheet problems N6 to N9).</em></p>
 <p id="p-p1"><strong>P1.</strong> (a) What does this print, and in what order? [4] (b) Define zombie and orphan. What does xv6's exit() do with a dying process's children? [3] (c) Why are fork and exec separate calls? [3]</p>
 <pre><code class="language-c">int main() {
     int x = 1;
@@ -265,6 +265,68 @@
 <p>(b) <strong>Server</strong>: socket, bind, listen, accept (<strong>blocks</strong> until a client connects), recv (<strong>blocks</strong> until data arrives), send, close. <strong>Client</strong>: socket, connect (<strong>blocks</strong> for the handshake), send, recv (<strong>blocks</strong>), close. UDP has no listen, accept or connect: it uses sendto and recvfrom, and recvfrom blocks. A blocking call puts the process to sleep, so it is a context-switch point.</p>
 <p>(c) The listening socket keeps accepting new connections. Each accepted connection gets its own socket, identified by the 4-tuple (source IP, source port, destination IP, destination port). That is how one server on port 80 serves many clients at once.</p>
 </details>
+<hr>
+<p id="p-p11"><strong>P11.</strong> Process states (L02 s12-15). P0 needs 2 units of CPU, then issues an I/O that takes 3 units, then needs 1 more unit of CPU. P1 needs 4 units of CPU. P0 starts first. The OS switches to another process when the running one blocks, and a process that finishes its I/O becomes ready but does not preempt. (a) Give each process's state at times 1 to 7. [5] (b) How long would it take if the OS ran P1 only after P0 finished? [2] (c) Draw the state diagram, and say which transitions the OS triggers and which come from events. [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>P0</th>
+<th>P1</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Running</td>
+<td>Ready</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Running</td>
+<td>Ready</td>
+<td>P0 issues the I/O at the end of this unit</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Blocked</td>
+<td>Running</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Blocked</td>
+<td>Running</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Blocked</td>
+<td>Running</td>
+<td>P0's I/O completes</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Ready</td>
+<td>Running</td>
+<td>P1 finishes</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Running</td>
+<td>Done</td>
+<td>P0 finishes</td>
+</tr>
+</tbody>
+</table></div>
+<p>The CPU is busy for all 7 units.</p>
+<p>(b) 2 + 3 (CPU idle during the I/O) + 1 + 4 = <strong>10 units</strong>. Overlapping I/O with another process's computation saves 3 units.</p>
+<p>(c) Running → Ready is <strong>descheduled</strong> (OS, for example on a timer), and Ready → Running is <strong>scheduled</strong> (OS). Running → Blocked happens when the process starts I/O (its own call), and Blocked → Ready when the I/O completes (an interrupt). There is never a direct Blocked → Running edge.</p>
+</details>
 </div>
       <div class="done-row">
         <span class="done-label">End of Endsem practice: pre-midsem problems</span>
@@ -297,6 +359,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwtk9l5h" defer></script>
+<script src="../../assets/app.js?v=mwtkiw46" defer></script>
 </body>
 </html>

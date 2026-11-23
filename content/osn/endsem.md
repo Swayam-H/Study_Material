@@ -258,29 +258,49 @@ That is 4,299,210,752 bytes.
 
 # Endsem practice: post-midsem extras
 
-*Topics from L13 to L19 that the sheet skips. They are written in the same 10-mark style, with new numbers.*
+*These cover slide topics from L13 to L19 that neither the professor's sheet nor the practice banks in the chapter pages already test. Do the existing ones too. Each maps to topics the sheet skips:*
 
-**X1.** Reference string: 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5. (a) Count faults for FIFO with 3 frames and with 4 frames. [4] (b) Count faults for LRU with 3 and 4 frames, and for OPT with 3 frames. [4] (c) What is Belady's anomaly, and why can LRU never show it? [2]
+- *Page replacement and AMAT: M10, M11, M12, M13 (Memory page)*
+- *Threads, races, locks, semaphores, deadlock: S1 to S20 (Concurrency page). In particular S1 (counter race), S7 (priority inversion), S9 and S12 (producer/consumer), S15 and S16 (dining philosophers, deadlock)*
+- *File API and vsfs: F1 to F12 (File systems page)*
 
-*Solution.* (a) **FIFO with 3 frames: 9 faults.** Contents after each fault: [1], [1,2], [1,2,3], [2,3,4], [3,4,1], [4,1,2], [1,2,5]; then 1 and 2 hit; then [2,5,3], [5,3,4]; then 5 hits. **FIFO with 4 frames: 10 faults**: 1, 2, 3 and 4 miss, 1 and 2 hit, and then 5, 1, 2, 3, 4 and 5 all miss.
+**X1.** Hybrid paging and segmentation (L13 s8-11). 32-bit VAs and 4 KB pages. The top 2 bits pick the segment (01 code, 10 heap, 11 stack, 00 unused), then an 18-bit VPN, then a 12-bit offset. Each segment has a base register (the physical address of its page table) and a bounds register (the number of valid pages). Code bounds = 3, heap base = 0x2000 and heap bounds = 10, with 4-byte PTEs. (a) Where is the PTE for VA 0x80001234? [3] (b) What happens on VA 0x40003ABC? [2] (c) The process uses 3 code pages, 10 heap pages and 2 stack pages. Compare the page-table memory with a linear table. [3] (d) Give two drawbacks of the hybrid. [2]
 
-(b) **LRU with 3 frames: 10 faults** (only the two hits on 1, 2 after the 5). **LRU with 4 frames: 8 faults** (misses on 1, 2, 3, 4, 5, 3, 4, 5). **OPT with 3 frames: 7 faults** (1, 2, 3; 4 evicts 3; 5 evicts 4; 3 evicts 1; 4 evicts 2).
+*Solution.* (a) Top bits 10 = heap. VPN = (VA & VPN_MASK) >> 12 = 1, and the offset is 0x234. 1 < 10, so it is in bounds. AddressOfPTE = Base[heap] + VPN × 4 = 0x2000 + 4 = **0x2004**.
 
-(c) **Belady's anomaly** means more frames give more faults, as FIFO does here (9 → 10). LRU and OPT have the **stack property**: the pages held with N frames are always a subset of those held with N + 1 frames. So adding a frame can never cause an extra miss.
+(b) Top bits 01 = code, VPN = 3, offset 0xABC. Code bounds = 3, so valid VPNs are 0 to 2. 3 is out of bounds: an **exception**, and the process is likely killed.
 
----
+(c) A linear table needs 2^20 × 4 B = **4 MB**. The hybrid stores only 3 + 10 + 2 = 15 PTEs = **60 B**, because the unused pages between heap and stack cost no table space.
 
-**X2.** T_M = 100 ns and T_D = 10 ms. (a) Find the AMAT at a 99.9% hit rate. [3] (b) What hit rate keeps the AMAT under 200 ns? [3] (c) Describe, step by step, what happens on a TLB miss for a page that is valid but not present. [4]
-
-*Solution.* (a) AMAT = T_M + P_miss × T_D = 100 ns + 0.001 × 10^7 ns = **10.1 µs**.
-
-(b) 100 + P × 10^7 ≤ 200 gives P ≤ 10^−5, so the hit rate must be at least **99.999%**. Disk misses dominate everything.
-
-(c) The hardware walks the page table and finds valid = 1, present = 0, so it raises a page fault. The OS finds a free frame, running the replacement policy and writing back a dirty victim if needed. It reads the page from the swap address in the PTE, while the process is blocked. It updates the PTE (present = 1, PFN) and retries the instruction. The retry misses in the TLB again, the hardware inserts the entry, and a final retry hits.
+(d) It still needs segmentation, which assumes a fixed pattern of address-space use (a large sparse heap still wastes table space). Page tables are now variable-sized, so **external fragmentation** comes back when allocating them.
 
 ---
 
-**X3.** One producer and two consumers share a one-slot buffer.
+**X2.** Inverted page tables, and swapping page tables (L13 s26-27). (a) What is an inverted page table, and how big is it for 4 GB of RAM, 4 KB frames and 8-byte entries? [4] (b) Why does lookup need a hash table? [3] (c) What does it mean to swap page tables to disk? [3]
+
+*Solution.* (a) There is **one table for the whole system**, with one entry per **physical frame**, saying which process and VPN use that frame. 4 GB / 4 KB = 2^20 frames × 8 B = **8 MB in total**, however many processes run. Linear tables would need 4 MB *per process* on a 32-bit system.
+
+(b) The table is indexed by frame, but translation starts from (process, VPN). A linear search over 2^20 entries per TLB miss is too slow, so a hash on (PID, VPN) finds the entry.
+
+(c) The page tables themselves are placed in kernel virtual memory, so the OS can page parts of them out to disk under memory pressure. A TLB miss can then require a page fault just to bring in the page-table page.
+
+---
+
+**X3.** The swapping mechanism (L13 s33-43). (a) On a TLB miss, list the three cases the hardware or OS can find in the PTE, and what happens in each. [4] (b) Give the steps the OS takes to service a page fault when memory is full. [3] (c) What are the high and low watermarks, and why does the OS evict pages in clusters? [3]
+
+*Solution.* (a)
+
+1. **Valid and present**: insert the translation into the TLB and retry, which now hits.
+2. **Valid but not present**: page fault. The OS brings the page in from swap, updates the PTE and retries.
+3. **Not valid**: an illegal access, so a segmentation fault, and the OS kills the process.
+
+(b) Find a free frame. If there is none, run the replacement policy to choose a victim, write it back if it is dirty, and mark its PTE not present. Issue the disk read for the faulting page, blocking the process; another process runs meanwhile. When the I/O finishes, set present = 1 and the PFN in the PTE, and retry the instruction.
+
+(c) The OS does not wait until memory is completely full. When free pages fall below the **low watermark (LW)**, the **swap daemon** (page daemon) evicts pages until there are **high watermark (HW)** pages free, then sleeps. Writing many pages at once in a **cluster** lets the disk do one large sequential write instead of many seeks, which is far faster.
+
+---
+
+**X4.** Producer/consumer with condition variables (L16 s14-21). One producer and two consumers share a one-slot buffer.
 
 ```c
 void *consumer() { lock(&m); if (count == 0) wait(&cv, &m); get(); signal(&cv); unlock(&m); }
@@ -297,56 +317,44 @@ void *producer() { lock(&m); if (count == 1) wait(&cv, &m); put(); signal(&cv); 
 
 ---
 
-**X4.** In a semaphore bounded buffer (empty = MAX, full = 0, mutex = 1), the producer calls sem_wait(&mutex) *before* sem_wait(&empty), and the consumer likewise takes mutex before full. (a) Show the deadlock. [5] (b) Fix it, and say why the fix works. [5]
-
-*Solution.* (a) The buffer is empty. The consumer takes mutex, then blocks on full = 0 **while holding mutex**. The producer blocks on mutex. Neither can ever proceed.
-
-(b) Take mutex **inside** the counting semaphores: `sem_wait(&empty); sem_wait(&mutex); put(); sem_post(&mutex); sem_post(&full);`, and the mirror image in the consumer. A thread then only holds mutex while it can actually make progress, so there is no hold-and-wait across the two semaphores.
-
----
-
-**X5.** `counter = counter + 1` compiles to `mov 0x8049a1c, %eax; add $1, %eax; mov %eax, 0x8049a1c`. counter starts at 50, and two threads each run it once. (a) Trace an interleaving that ends with 51. [5] (b) Define critical section, race condition, indeterminate and mutual exclusion. [5]
+**X5.** Zemaphores and throttling (L17 s26-28). (a) Implement `Zem_wait` and `Zem_post` using one lock and one condition variable. [5] (b) How does a Zemaphore's value differ from a Dijkstra semaphore's? [2] (c) What is thread throttling, and what initial value does it use? [3]
 
 *Solution.* (a)
+```c
+typedef struct { int value; pthread_cond_t cond; pthread_mutex_t lock; } Zem_t;
+void Zem_init(Zem_t *s, int value) { s->value = value; /* init cond and lock */ }
+void Zem_wait(Zem_t *s) {
+    lock(&s->lock);
+    while (s->value <= 0) wait(&s->cond, &s->lock);
+    s->value--;
+    unlock(&s->lock);
+}
+void Zem_post(Zem_t *s) {
+    lock(&s->lock);
+    s->value++;
+    signal(&s->cond);
+    unlock(&s->lock);
+}
+```
+(b) In Dijkstra's version, sem_wait decrements first, so a negative value −k means k threads are waiting. A Zemaphore waits *before* decrementing, so its value **never goes below 0**. (This matches Linux.)
 
-| Step | T1 | T2 | eax (T1 / T2) | counter |
-| --- | --- | --- | --- | --- |
-| 1 | mov (load) | | 50 / – | 50 |
-| 2 | add | | 51 / – | 50 |
-| 3 | *interrupt, save T1's eax* | mov (load) | 51 / 50 | 50 |
-| 4 | | add | 51 / 51 | 50 |
-| 5 | | mov (store) | | **51** |
-| 6 | mov (store) | | | **51** |
-
-One update is lost.
-
-(b) **Critical section**: code that accesses a shared resource. **Race condition**: the result depends on the timing of the threads. **Indeterminate**: the output can differ from run to run. **Mutual exclusion**: only one thread may be in the critical section at a time.
-
----
-
-**X6.** A 100-byte file. `fd = open("f", O_RDONLY); read(fd, buf, 10);` then `fork()`. The child calls `read(fd, buf, 20)` and exits. The parent waits, then calls `lseek(fd, 0, SEEK_CUR)`. (a) What does it return, and why? [3] (b) What if the child had opened the file again itself? [2] (c) Run `echo x > a; ln a b; ln -s a s; rm a`. Give the link count of b, and say what `cat b` and `cat s` do. [3] (d) How do you update a file atomically? [2]
-
-*Solution.* (a) It returns **30**. After fork, the parent and child fd tables point to the **same open-file-table entry**, which holds one shared offset (10 + 20).
-
-(b) A separate open() creates a new entry with its own offset, so the parent's offset would stay at 10.
-
-(c) After `ln`, the inode's link count is 2; `rm a` drops it to **1**. `cat b` prints x. `cat s` fails (No such file), because s stores the **path** "a", which no longer exists: it is a dangling symlink.
-
-(d) Write to `f.tmp`, call `fsync()`, then `rename("f.tmp", "f")`. rename is atomic, so a crash leaves either the old file or the new one, never a mix.
+(c) **Admission control**: a semaphore initialised to **N** limits how many threads can be inside a region at once, for example a memory-hungry phase, so the system does not thrash. Initial values to remember: lock 1, ordering 0, bounded buffer empty = MAX and full = 0, throttling N.
 
 ---
 
-**X7.** Dining philosophers, with 5 philosophers and 5 forks. Each runs `sem_wait(left); sem_wait(right); eat; sem_post(right); sem_post(left);`. (a) Show the deadlock, and name the four conditions. [5] (b) Give the standard fix and the condition it breaks. [3] (c) Name one other fix. [2]
+**X6.** File API details (L18 s16-25). (a) `ls -l` shows `-rwxr-x--- 2 alice staff`. Give the octal mode, and say what group and others can do. What is the 2? [4] (b) What do r, w and x mean on a **directory**? [2] (c) You run `mkdir d; mkdir d/e; mkdir d/f`. What is the link count of d, and why? [2] (d) What does `mount` do? [2]
 
-*Solution.* (a) All five grab their left fork at the same time, then each waits forever for the right fork. The four conditions are **mutual exclusion, hold-and-wait, no preemption and circular wait**.
+*Solution.* (a) rwx = 7, r-x = 5, --- = 0, so the mode is **750**. The group can read and execute; others have no access. The 2 is the **hard-link count**: two directory entries name this inode.
 
-(b) Philosopher 4 picks up the **right fork first**. That breaks the **circular wait**, because there is now a total order on forks.
+(b) r = list the names in it, w = create, delete or rename entries (needs x as well), x = enter it (cd) and access files inside it by name.
 
-(c) Admission control: a semaphore initialised to 4 lets at most 4 philosophers try at once. Alternatively, pick up both forks atomically under one lock, which breaks hold-and-wait.
+(c) **4**: the entry `d` in its parent, `.` inside d, and `..` inside e and inside f. Every new subdirectory adds 1.
+
+(d) mount attaches a file system's root at a directory (the mount point) in the existing tree, so all file systems appear as one tree. For example, `mount -t ext3 /dev/sda1 /home/users`.
 
 ---
 
-**X8.** (a) Write CompareAndSwap and a spin lock using it. [3] (b) Write a lock using LoadLinked and StoreConditional. [3] (c) What is priority inversion, and how can it be fixed? [4]
+**X7.** Lock primitives (L15 s20-29). (a) Write CompareAndSwap and a spin lock built on it. [3] (b) Write a lock with LoadLinked and StoreConditional. [3] (c) With `yield` instead of spinning, N threads on one CPU contend and the holder is preempted. What is the cost, and what problem remains? [4]
 
 *Solution.* (a)
 ```c
@@ -366,11 +374,11 @@ void lock(lock_t *l) {
     }
 }
 ```
-(c) Low-priority L holds a lock, and high-priority H needs it and waits (or spins). A medium-priority M then preempts L, so H effectively waits for M. With a spin lock on one CPU, H can spin forever and L never runs. Fixes: **priority inheritance** (L temporarily runs at H's priority), or avoid spinning (yield or sleep).
+(c) Each waiter runs, finds the lock held and yields at once, so a round costs up to **N − 1 context switches** instead of N − 1 whole time slices. That is better than spinning, but context switches are still expensive with many threads. Starvation also remains: a thread can keep yielding while others get the lock. Hence queues with **park/unpark**.
 
 # Endsem practice: pre-midsem problems
 
-*Lectures 1 to 9, in 10-mark exam style. These are new problems; the professor's sheet had none for this half.*
+*Lectures 1 to 9 in 10-mark exam style: new problems, because the professor's sheet had none for this half. Also redo the banks already in the chapter pages: C1 to C8 (Lectures 1 to 7) and N1 to N11 (networking, including the transport-layer sheet problems N6 to N9).*
 
 **P1.** (a) What does this print, and in what order? [4] (b) Define zombie and orphan. What does xv6's exit() do with a dying process's children? [3] (c) Why are fork and exec separate calls? [3]
 
@@ -501,3 +509,25 @@ Slow start runs until round 4, when cwnd reaches ssthresh = 8. Congestion avoida
 (b) **Server**: socket, bind, listen, accept (**blocks** until a client connects), recv (**blocks** until data arrives), send, close. **Client**: socket, connect (**blocks** for the handshake), send, recv (**blocks**), close. UDP has no listen, accept or connect: it uses sendto and recvfrom, and recvfrom blocks. A blocking call puts the process to sleep, so it is a context-switch point.
 
 (c) The listening socket keeps accepting new connections. Each accepted connection gets its own socket, identified by the 4-tuple (source IP, source port, destination IP, destination port). That is how one server on port 80 serves many clients at once.
+
+---
+
+**P11.** Process states (L02 s12-15). P0 needs 2 units of CPU, then issues an I/O that takes 3 units, then needs 1 more unit of CPU. P1 needs 4 units of CPU. P0 starts first. The OS switches to another process when the running one blocks, and a process that finishes its I/O becomes ready but does not preempt. (a) Give each process's state at times 1 to 7. [5] (b) How long would it take if the OS ran P1 only after P0 finished? [2] (c) Draw the state diagram, and say which transitions the OS triggers and which come from events. [3]
+
+*Solution.* (a)
+
+| Time | P0 | P1 | Note |
+| --- | --- | --- | --- |
+| 1 | Running | Ready | |
+| 2 | Running | Ready | P0 issues the I/O at the end of this unit |
+| 3 | Blocked | Running | |
+| 4 | Blocked | Running | |
+| 5 | Blocked | Running | P0's I/O completes |
+| 6 | Ready | Running | P1 finishes |
+| 7 | Running | Done | P0 finishes |
+
+The CPU is busy for all 7 units.
+
+(b) 2 + 3 (CPU idle during the I/O) + 1 + 4 = **10 units**. Overlapping I/O with another process's computation saves 3 units.
+
+(c) Running → Ready is **descheduled** (OS, for example on a timer), and Ready → Running is **scheduled** (OS). Running → Blocked happens when the process starts I/O (its own call), and Blocked → Ready when the I/O completes (an interrupt). There is never a direct Blocked → Running edge.

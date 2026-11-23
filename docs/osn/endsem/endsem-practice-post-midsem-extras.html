@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwtk9l5h">
+<link rel="stylesheet" href="../../assets/style.css?v=mwtkiw46">
 </head>
 <body data-root="../../" data-page="osn/endsem/endsem-practice-post-midsem-extras" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,29 +87,47 @@
       <header class="note-head">
         
         <h1>Endsem practice: post-midsem extras</h1>
-        <p class="note-meta">9 min read · 8 practice problems</p>
+        <p class="note-meta">10 min read · 7 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
           <span class="hint">Solutions stay collapsed until you click them.</span>
         </div>
       </header>
-      <div class="prose"><p><em>Topics from L13 to L19 that the sheet skips. They are written in the same 10-mark style, with new numbers.</em></p>
-<p id="p-x1"><strong>X1.</strong> Reference string: 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5. (a) Count faults for FIFO with 3 frames and with 4 frames. [4] (b) Count faults for LRU with 3 and 4 frames, and for OPT with 3 frames. [4] (c) What is Belady's anomaly, and why can LRU never show it? [2]</p>
+      <div class="prose"><p><em>These cover slide topics from L13 to L19 that neither the professor's sheet nor the practice banks in the chapter pages already test. Do the existing ones too. Each maps to topics the sheet skips:</em></p>
+<ul>
+<li><em>Page replacement and AMAT: M10, M11, M12, M13 (Memory page)</em></li>
+<li><em>Threads, races, locks, semaphores, deadlock: S1 to S20 (Concurrency page). In particular S1 (counter race), S7 (priority inversion), S9 and S12 (producer/consumer), S15 and S16 (dining philosophers, deadlock)</em></li>
+<li><em>File API and vsfs: F1 to F12 (File systems page)</em></li>
+</ul>
+<p id="p-x1"><strong>X1.</strong> Hybrid paging and segmentation (L13 s8-11). 32-bit VAs and 4 KB pages. The top 2 bits pick the segment (01 code, 10 heap, 11 stack, 00 unused), then an 18-bit VPN, then a 12-bit offset. Each segment has a base register (the physical address of its page table) and a bounds register (the number of valid pages). Code bounds = 3, heap base = 0x2000 and heap bounds = 10, with 4-byte PTEs. (a) Where is the PTE for VA 0x80001234? [3] (b) What happens on VA 0x40003ABC? [2] (c) The process uses 3 code pages, 10 heap pages and 2 stack pages. Compare the page-table memory with a linear table. [3] (d) Give two drawbacks of the hybrid. [2]</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) <strong>FIFO with 3 frames: 9 faults.</strong> Contents after each fault: [1], [1,2], [1,2,3], [2,3,4], [3,4,1], [4,1,2], [1,2,5]; then 1 and 2 hit; then [2,5,3], [5,3,4]; then 5 hits. <strong>FIFO with 4 frames: 10 faults</strong>: 1, 2, 3 and 4 miss, 1 and 2 hit, and then 5, 1, 2, 3, 4 and 5 all miss.</p>
-<p>(b) <strong>LRU with 3 frames: 10 faults</strong> (only the two hits on 1, 2 after the 5). <strong>LRU with 4 frames: 8 faults</strong> (misses on 1, 2, 3, 4, 5, 3, 4, 5). <strong>OPT with 3 frames: 7 faults</strong> (1, 2, 3; 4 evicts 3; 5 evicts 4; 3 evicts 1; 4 evicts 2).</p>
-<p>(c) <strong>Belady's anomaly</strong> means more frames give more faults, as FIFO does here (9 → 10). LRU and OPT have the <strong>stack property</strong>: the pages held with N frames are always a subset of those held with N + 1 frames. So adding a frame can never cause an extra miss.</p>
+<p><em>Solution.</em> (a) Top bits 10 = heap. VPN = (VA &amp; VPN_MASK) &gt;&gt; 12 = 1, and the offset is 0x234. 1 &lt; 10, so it is in bounds. AddressOfPTE = Base[heap] + VPN × 4 = 0x2000 + 4 = <strong>0x2004</strong>.</p>
+<p>(b) Top bits 01 = code, VPN = 3, offset 0xABC. Code bounds = 3, so valid VPNs are 0 to 2. 3 is out of bounds: an <strong>exception</strong>, and the process is likely killed.</p>
+<p>(c) A linear table needs 2^20 × 4 B = <strong>4 MB</strong>. The hybrid stores only 3 + 10 + 2 = 15 PTEs = <strong>60 B</strong>, because the unused pages between heap and stack cost no table space.</p>
+<p>(d) It still needs segmentation, which assumes a fixed pattern of address-space use (a large sparse heap still wastes table space). Page tables are now variable-sized, so <strong>external fragmentation</strong> comes back when allocating them.</p>
 </details>
 <hr>
-<p id="p-x2"><strong>X2.</strong> T_M = 100 ns and T_D = 10 ms. (a) Find the AMAT at a 99.9% hit rate. [3] (b) What hit rate keeps the AMAT under 200 ns? [3] (c) Describe, step by step, what happens on a TLB miss for a page that is valid but not present. [4]</p>
+<p id="p-x2"><strong>X2.</strong> Inverted page tables, and swapping page tables (L13 s26-27). (a) What is an inverted page table, and how big is it for 4 GB of RAM, 4 KB frames and 8-byte entries? [4] (b) Why does lookup need a hash table? [3] (c) What does it mean to swap page tables to disk? [3]</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) AMAT = T_M + P_miss × T_D = 100 ns + 0.001 × 10^7 ns = <strong>10.1 µs</strong>.</p>
-<p>(b) 100 + P × 10^7 ≤ 200 gives P ≤ 10^−5, so the hit rate must be at least <strong>99.999%</strong>. Disk misses dominate everything.</p>
-<p>(c) The hardware walks the page table and finds valid = 1, present = 0, so it raises a page fault. The OS finds a free frame, running the replacement policy and writing back a dirty victim if needed. It reads the page from the swap address in the PTE, while the process is blocked. It updates the PTE (present = 1, PFN) and retries the instruction. The retry misses in the TLB again, the hardware inserts the entry, and a final retry hits.</p>
+<p><em>Solution.</em> (a) There is <strong>one table for the whole system</strong>, with one entry per <strong>physical frame</strong>, saying which process and VPN use that frame. 4 GB / 4 KB = 2^20 frames × 8 B = <strong>8 MB in total</strong>, however many processes run. Linear tables would need 4 MB <em>per process</em> on a 32-bit system.</p>
+<p>(b) The table is indexed by frame, but translation starts from (process, VPN). A linear search over 2^20 entries per TLB miss is too slow, so a hash on (PID, VPN) finds the entry.</p>
+<p>(c) The page tables themselves are placed in kernel virtual memory, so the OS can page parts of them out to disk under memory pressure. A TLB miss can then require a page fault just to bring in the page-table page.</p>
 </details>
 <hr>
-<p id="p-x3"><strong>X3.</strong> One producer and two consumers share a one-slot buffer.</p>
+<p id="p-x3"><strong>X3.</strong> The swapping mechanism (L13 s33-43). (a) On a TLB miss, list the three cases the hardware or OS can find in the PTE, and what happens in each. [4] (b) Give the steps the OS takes to service a page fault when memory is full. [3] (c) What are the high and low watermarks, and why does the OS evict pages in clusters? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em> (a)</p>
+<ol>
+<li><strong>Valid and present</strong>: insert the translation into the TLB and retry, which now hits.</li>
+<li><strong>Valid but not present</strong>: page fault. The OS brings the page in from swap, updates the PTE and retries.</li>
+<li><strong>Not valid</strong>: an illegal access, so a segmentation fault, and the OS kills the process.</li>
+</ol>
+<p>(b) Find a free frame. If there is none, run the replacement policy to choose a victim, write it back if it is dirty, and mark its PTE not present. Issue the disk read for the faulting page, blocking the process; another process runs meanwhile. When the I/O finishes, set present = 1 and the PFN in the PTE, and retry the instruction.</p>
+<p>(c) The OS does not wait until memory is completely full. When free pages fall below the <strong>low watermark (LW)</strong>, the <strong>swap daemon</strong> (page daemon) evicts pages until there are <strong>high watermark (HW)</strong> pages free, then sleeps. Writing many pages at once in a <strong>cluster</strong> lets the disk do one large sequential write instead of many seeks, which is far faster.</p>
+</details>
+<hr>
+<p id="p-x4"><strong>X4.</strong> Producer/consumer with condition variables (L16 s14-21). One producer and two consumers share a one-slot buffer.</p>
 <pre><code class="language-c">void *consumer() { lock(&amp;m); if (count == 0) wait(&amp;cv, &amp;m); get(); signal(&amp;cv); unlock(&amp;m); }
 void *producer() { lock(&amp;m); if (count == 1) wait(&amp;cv, &amp;m); put(); signal(&amp;cv); unlock(&amp;m); }
 </code></pre>
@@ -120,90 +138,37 @@ void *producer() { lock(&amp;m); if (count == 1) wait(&amp;cv, &amp;m); put(); s
 <p>(c) Use <code>while</code>, plus <strong>two CVs</strong>: producers wait on <code>empty</code> and signal <code>fill</code>, and consumers wait on <code>fill</code> and signal <code>empty</code>.</p>
 </details>
 <hr>
-<p id="p-x4"><strong>X4.</strong> In a semaphore bounded buffer (empty = MAX, full = 0, mutex = 1), the producer calls sem_wait(&amp;mutex) <em>before</em> sem_wait(&amp;empty), and the consumer likewise takes mutex before full. (a) Show the deadlock. [5] (b) Fix it, and say why the fix works. [5]</p>
-<details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) The buffer is empty. The consumer takes mutex, then blocks on full = 0 <strong>while holding mutex</strong>. The producer blocks on mutex. Neither can ever proceed.</p>
-<p>(b) Take mutex <strong>inside</strong> the counting semaphores: <code>sem_wait(&amp;empty); sem_wait(&amp;mutex); put(); sem_post(&amp;mutex); sem_post(&amp;full);</code>, and the mirror image in the consumer. A thread then only holds mutex while it can actually make progress, so there is no hold-and-wait across the two semaphores.</p>
-</details>
-<hr>
-<p id="p-x5"><strong>X5.</strong> <code>counter = counter + 1</code> compiles to <code>mov 0x8049a1c, %eax; add $1, %eax; mov %eax, 0x8049a1c</code>. counter starts at 50, and two threads each run it once. (a) Trace an interleaving that ends with 51. [5] (b) Define critical section, race condition, indeterminate and mutual exclusion. [5]</p>
+<p id="p-x5"><strong>X5.</strong> Zemaphores and throttling (L17 s26-28). (a) Implement <code>Zem_wait</code> and <code>Zem_post</code> using one lock and one condition variable. [5] (b) How does a Zemaphore's value differ from a Dijkstra semaphore's? [2] (c) What is thread throttling, and what initial value does it use? [3]</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em> (a)</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Step</th>
-<th>T1</th>
-<th>T2</th>
-<th>eax (T1 / T2)</th>
-<th>counter</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>mov (load)</td>
-<td></td>
-<td>50 / –</td>
-<td>50</td>
-</tr>
-<tr>
-<td>2</td>
-<td>add</td>
-<td></td>
-<td>51 / –</td>
-<td>50</td>
-</tr>
-<tr>
-<td>3</td>
-<td><em>interrupt, save T1's eax</em></td>
-<td>mov (load)</td>
-<td>51 / 50</td>
-<td>50</td>
-</tr>
-<tr>
-<td>4</td>
-<td></td>
-<td>add</td>
-<td>51 / 51</td>
-<td>50</td>
-</tr>
-<tr>
-<td>5</td>
-<td></td>
-<td>mov (store)</td>
-<td></td>
-<td><strong>51</strong></td>
-</tr>
-<tr>
-<td>6</td>
-<td>mov (store)</td>
-<td></td>
-<td></td>
-<td><strong>51</strong></td>
-</tr>
-</tbody>
-</table></div>
-<p>One update is lost.</p>
-<p>(b) <strong>Critical section</strong>: code that accesses a shared resource. <strong>Race condition</strong>: the result depends on the timing of the threads. <strong>Indeterminate</strong>: the output can differ from run to run. <strong>Mutual exclusion</strong>: only one thread may be in the critical section at a time.</p>
+<pre><code class="language-c">typedef struct { int value; pthread_cond_t cond; pthread_mutex_t lock; } Zem_t;
+void Zem_init(Zem_t *s, int value) { s-&gt;value = value; /* init cond and lock */ }
+void Zem_wait(Zem_t *s) {
+    lock(&amp;s-&gt;lock);
+    while (s-&gt;value &lt;= 0) wait(&amp;s-&gt;cond, &amp;s-&gt;lock);
+    s-&gt;value--;
+    unlock(&amp;s-&gt;lock);
+}
+void Zem_post(Zem_t *s) {
+    lock(&amp;s-&gt;lock);
+    s-&gt;value++;
+    signal(&amp;s-&gt;cond);
+    unlock(&amp;s-&gt;lock);
+}
+</code></pre>
+<p>(b) In Dijkstra's version, sem_wait decrements first, so a negative value −k means k threads are waiting. A Zemaphore waits <em>before</em> decrementing, so its value <strong>never goes below 0</strong>. (This matches Linux.)</p>
+<p>(c) <strong>Admission control</strong>: a semaphore initialised to <strong>N</strong> limits how many threads can be inside a region at once, for example a memory-hungry phase, so the system does not thrash. Initial values to remember: lock 1, ordering 0, bounded buffer empty = MAX and full = 0, throttling N.</p>
 </details>
 <hr>
-<p id="p-x6"><strong>X6.</strong> A 100-byte file. <code>fd = open(&quot;f&quot;, O_RDONLY); read(fd, buf, 10);</code> then <code>fork()</code>. The child calls <code>read(fd, buf, 20)</code> and exits. The parent waits, then calls <code>lseek(fd, 0, SEEK_CUR)</code>. (a) What does it return, and why? [3] (b) What if the child had opened the file again itself? [2] (c) Run <code>echo x &gt; a; ln a b; ln -s a s; rm a</code>. Give the link count of b, and say what <code>cat b</code> and <code>cat s</code> do. [3] (d) How do you update a file atomically? [2]</p>
+<p id="p-x6"><strong>X6.</strong> File API details (L18 s16-25). (a) <code>ls -l</code> shows <code>-rwxr-x--- 2 alice staff</code>. Give the octal mode, and say what group and others can do. What is the 2? [4] (b) What do r, w and x mean on a <strong>directory</strong>? [2] (c) You run <code>mkdir d; mkdir d/e; mkdir d/f</code>. What is the link count of d, and why? [2] (d) What does <code>mount</code> do? [2]</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) It returns <strong>30</strong>. After fork, the parent and child fd tables point to the <strong>same open-file-table entry</strong>, which holds one shared offset (10 + 20).</p>
-<p>(b) A separate open() creates a new entry with its own offset, so the parent's offset would stay at 10.</p>
-<p>(c) After <code>ln</code>, the inode's link count is 2; <code>rm a</code> drops it to <strong>1</strong>. <code>cat b</code> prints x. <code>cat s</code> fails (No such file), because s stores the <strong>path</strong> &quot;a&quot;, which no longer exists: it is a dangling symlink.</p>
-<p>(d) Write to <code>f.tmp</code>, call <code>fsync()</code>, then <code>rename(&quot;f.tmp&quot;, &quot;f&quot;)</code>. rename is atomic, so a crash leaves either the old file or the new one, never a mix.</p>
+<p><em>Solution.</em> (a) rwx = 7, r-x = 5, --- = 0, so the mode is <strong>750</strong>. The group can read and execute; others have no access. The 2 is the <strong>hard-link count</strong>: two directory entries name this inode.</p>
+<p>(b) r = list the names in it, w = create, delete or rename entries (needs x as well), x = enter it (cd) and access files inside it by name.</p>
+<p>(c) <strong>4</strong>: the entry <code>d</code> in its parent, <code>.</code> inside d, and <code>..</code> inside e and inside f. Every new subdirectory adds 1.</p>
+<p>(d) mount attaches a file system's root at a directory (the mount point) in the existing tree, so all file systems appear as one tree. For example, <code>mount -t ext3 /dev/sda1 /home/users</code>.</p>
 </details>
 <hr>
-<p id="p-x7"><strong>X7.</strong> Dining philosophers, with 5 philosophers and 5 forks. Each runs <code>sem_wait(left); sem_wait(right); eat; sem_post(right); sem_post(left);</code>. (a) Show the deadlock, and name the four conditions. [5] (b) Give the standard fix and the condition it breaks. [3] (c) Name one other fix. [2]</p>
-<details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) All five grab their left fork at the same time, then each waits forever for the right fork. The four conditions are <strong>mutual exclusion, hold-and-wait, no preemption and circular wait</strong>.</p>
-<p>(b) Philosopher 4 picks up the <strong>right fork first</strong>. That breaks the <strong>circular wait</strong>, because there is now a total order on forks.</p>
-<p>(c) Admission control: a semaphore initialised to 4 lets at most 4 philosophers try at once. Alternatively, pick up both forks atomically under one lock, which breaks hold-and-wait.</p>
-</details>
-<hr>
-<p id="p-x8"><strong>X8.</strong> (a) Write CompareAndSwap and a spin lock using it. [3] (b) Write a lock using LoadLinked and StoreConditional. [3] (c) What is priority inversion, and how can it be fixed? [4]</p>
+<p id="p-x7"><strong>X7.</strong> Lock primitives (L15 s20-29). (a) Write CompareAndSwap and a spin lock built on it. [3] (b) Write a lock with LoadLinked and StoreConditional. [3] (c) With <code>yield</code> instead of spinning, N threads on one CPU contend and the holder is preempted. What is the cost, and what problem remains? [4]</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em> (a)</p>
 <pre><code class="language-c">int CompareAndSwap(int *ptr, int expected, int new) {
@@ -221,7 +186,7 @@ void lock(lock_t *l) { while (CompareAndSwap(&amp;l-&gt;flag, 0, 1) == 1) ; }
     }
 }
 </code></pre>
-<p>(c) Low-priority L holds a lock, and high-priority H needs it and waits (or spins). A medium-priority M then preempts L, so H effectively waits for M. With a spin lock on one CPU, H can spin forever and L never runs. Fixes: <strong>priority inheritance</strong> (L temporarily runs at H's priority), or avoid spinning (yield or sleep).</p>
+<p>(c) Each waiter runs, finds the lock held and yields at once, so a round costs up to <strong>N − 1 context switches</strong> instead of N − 1 whole time slices. That is better than spinning, but context switches are still expensive with many threads. Starvation also remains: a thread can keep yielding while others get the lock. Hence queues with <strong>park/unpark</strong>.</p>
 </details>
 </div>
       <div class="done-row">
@@ -255,6 +220,6 @@ void lock(lock_t *l) { while (CompareAndSwap(&amp;l-&gt;flag, 0, 1) == 1) ; }
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwtk9l5h" defer></script>
+<script src="../../assets/app.js?v=mwtkiw46" defer></script>
 </body>
 </html>
