@@ -74,8 +74,14 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 - Natural join over all attributes = ∩ (proof: t ∈ both ⇔ (t, t) passes the σ).
 
 **TRC**: $\{t.A \mid \text{COND}\}$; left side = free variables; every variable ranged R(t); n variables ⇒ ≥ n − 1 join conditions.
-- ∃ = some; ¬∃ = none; ∀x P = ¬∃x ¬P; P ⇒ Q = ¬P ∨ Q.
-- "every project of dept 5": ¬∃x (PROJECT(x) ∧ x.Dnum = 5 ∧ ¬∃w (WORKS_ON(w) ∧ w.Essn = e.Ssn ∧ w.Pno = x.Pnumber)).
+- ∃ = some; ¬∃ = none; ∀x P = ¬∃x ¬P; P ⇒ Q = ¬P ∨ Q (so ¬A ∨ ¬B ∨ C = "if A and B then C").
+- **"all / every" (Q3: employees on every dept-5 project).** ∀ form, read "for every x, if x is a dept-5 project then e works on x":
+  $\{e.Lname, e.Fname \mid \text{EMPLOYEE}(e) \wedge (\forall x)(\neg\text{PROJECT}(x) \vee \neg(x.Dnum = 5) \vee (\exists w)(\text{WORKS\_ON}(w) \wedge w.Essn = e.Ssn \wedge w.Pno = x.Pnumber))\}$
+- **∃-only form** (negate the inside with De Morgan: ∨ becomes ∧, C becomes ¬C), "no dept-5 project that e does not work on":
+  $\neg(\exists x)(\text{PROJECT}(x) \wedge x.Dnum = 5 \wedge \neg(\exists w)(\text{WORKS\_ON}(w) \wedge w.Essn = e.Ssn \wedge w.Pno = x.Pnumber))$
+  SQL: `NOT EXISTS (SELECT * FROM PROJECT x WHERE x.Dnum=5 AND NOT EXISTS (SELECT * FROM WORKS_ON w WHERE w.Essn=e.Ssn AND w.Pno=x.Pnumber))`. RA: ÷.
+- **"no" (Q6: employees with no dependents).** One ¬∃: $\neg(\exists d)(\text{DEPENDENT}(d) \wedge e.Ssn = d.Essn)$.
+- **Rule of thumb**: all/every = two ¬∃ (or ∀ with ¬…∨), RA ÷, SQL double NOT EXISTS. no/none = one ¬∃, RA −, SQL NOT EXISTS. some = one ∃, RA join/σ, SQL EXISTS or join.
 - Unsafe: {t | ¬R(t)}. No aggregates in TRC: say so.
 - Empty set: "all of none" is true; state whether such rows are included.
 
