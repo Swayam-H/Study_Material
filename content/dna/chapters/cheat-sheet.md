@@ -29,7 +29,23 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 
 **Ternary (min, max)**: count triples. Course with ≤ 2 profs and ≤ 100 students → (1, 200).
 
-**Mapping steps.** 1 strong → relation (composite → parts). 2 weak → owner's full PK + partial key, FK CASCADE. 3 1:1 → FK on total side, UNIQUE (+NOT NULL). 4 1:N → FK on N side (+NOT NULL if total). 5 M:N → new relation, PK = both FKs, relationship attrs here. 6 multivalued → (owner PK, value). 7 n-ary → all FKs (drop a max-1 participant from the PK). Derived: not stored. Specialization: **8A** always works; **8B** total only; **8C** disjoint only; **8D** overlapping. Category with different keys: surrogate key.
+**EER → relational rules.**
+1. Strong entity → relation; simple attributes only (composite → its parts); a key becomes the PK.
+2. Weak entity → relation + owner's PK as FK; PK = owner PK + partial key; FK ON DELETE CASCADE.
+3. 1:1 → put the other side's PK as FK on the **total** side, UNIQUE (+ NOT NULL); relationship attributes go there too. Both total → may merge into one relation.
+4. 1:N → FK on the **N** side (+ NOT NULL if N side total); relationship attributes on the N side.
+5. M:N → new relation (PK₁, PK₂, attributes); PK = both FKs.
+6. Multivalued attribute → new relation (owner PK, value); PK = both.
+7. n-ary → new relation with every participant's PK as FK + attributes; PK = all FKs, minus the FK of any entity with max 1.
+8. Recursive → FK to the same relation, renamed by role (e.g. Super_ssn).
+9. Derived attributes → not stored.
+10. Specialization (superclass C with key k, subclasses S₁…Sₘ):
+   - **8A** C(k, C attrs) + Sᵢ(k, Sᵢ attrs), k FK → C. Always works.
+   - **8B** Sᵢ(k, C attrs, Sᵢ attrs) only. Total only (else entities in no subclass are lost); overlapping duplicates C attrs.
+   - **8C** one relation (k, all attrs, type t). Disjoint only; NULLs.
+   - **8D** one relation (k, all attrs, flags f₁…fₘ). Overlapping (also works disjoint).
+   - Shared subclass (member of all superclasses) → 8A or 8C with the common key.
+11. Category / union type (member of one superclass): superclasses have different keys → new surrogate key in the category relation, added as FK in each superclass relation; same key → reuse it.
 
 **Rubric majors** (A2/A3): missing key, weak without owner key, FK to part of a key, FK on wrong side, M:N not separate, multivalued as column, attribute in wrong relation, specialization lost / 8C for overlapping, unmapped diamond, no arrows.
 
@@ -92,11 +108,6 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 - **Conversions RA ↔ TRC ↔ SQL**: σ = condition = WHERE; π = left side = SELECT; ⋈ = ∃ + join condition = JOIN / EXISTS; ∪ = ∨ = UNION; ∩ = ∧ = INTERSECT / IN; − = ∧ ¬∃ = NOT EXISTS / EXCEPT; ÷ = ∀ = double NOT EXISTS.
   - RA rules: $R \cap S = R - (R - S)$; $R \bowtie_c S = \sigma_c(R \times S)$; $\sigma_{c_1}(\sigma_{c_2}R) = \sigma_{c_1 \wedge c_2}R$; ∪ ∩ ⋈ commute and associate, − does not.
   - SQL: $x > \text{ALL}(S) \equiv \neg\exists s\,(x \le s)$; $x > \text{ANY}(S) \equiv \exists s\,(x > s)$; NOT IN with a NULL returns nothing, NOT EXISTS is safe.
-- **Conversion rules.**
-  - SQL → RA: FROM = × (or ⋈ with the join condition); WHERE = σ; SELECT = π, applied last; GROUP BY + aggregate = γ; IN / EXISTS = ⋈; NOT IN / NOT EXISTS = −; double NOT EXISTS = ÷; UNION / INTERSECT / EXCEPT = ∪ ∩ −.
-  - RA → TRC: each relation = a variable with R(t); π = left side; σ = condition; ⋈ = ∃ over the non-output relation + join condition; − = ∧ ¬∃; ÷ = ∀ (or ¬∃ … ¬∃).
-  - TRC → SQL: free variable = outer FROM; ∃ = EXISTS (subquery); ¬∃ = NOT EXISTS; ∀ = NOT EXISTS (… NOT EXISTS …); ∧ ∨ ¬ = AND OR NOT.
-  - Do not convert: aggregates, ORDER BY and outer joins have no TRC form; say so.
 - Unsafe: {t | ¬R(t)}. No aggregates in TRC: say so.
 - Empty set: "all of none" is true; state whether such rows are included.
 
