@@ -35,6 +35,12 @@
       "about": "Files, directories, fds and offsets, links, fsync and rename, vsfs layout, inodes and the multi-level index, access-path I/O counts, caching, the xv6 file system (Tutorial 7)"
     },
     {
+      "slug": "endsem",
+      "file": "endsem.md",
+      "title": "Endsem practice (9 × 10 marks)",
+      "about": "The professor's 20 post-midsem sheet problems with full solutions, extra post-midsem problems on what the sheet skips, and new pre-midsem problems"
+    },
+    {
       "slug": "formula-sheet",
       "file": "formula-sheet.md",
       "title": "Formula sheet",
