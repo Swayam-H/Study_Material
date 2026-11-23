@@ -6,20 +6,9 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 1. **Procedures with steps you might reorder or forget**: closure, minimal cover, BCNF split, 3NF synthesis, the dependency-preservation test, the mapping steps and 8A–8D. **Must.**
 2. **Notation you must draw exactly**: (min, max), division, outer joins, TRC quantifiers. **Must.**
 3. **Patterns that turn English into a query**: "none", "every", "including zero", "the maximum without MAX", ties. **Must.**
-4. **Lists the definition questions ask for by count**: the four DBMS actions, the four characteristics, the three levels, the two independences.
-5. **Your own mistakes** from A1–A6 and the mock. These are worth more than anything copied from here.
+4. **Your own mistakes** from A1–A6 and the mock. These are worth more than anything copied from here.
 
 **What to leave off**: long worked examples, full schemas (the paper gives them), history, and anything you have not used while practising.
-
-## Page 1, front, top: database concepts (Elmasri 1–2)
-
-**DBMS does**: define (catalog, meta-data), construct, manipulate (query, update, report), share; also protect and maintain. **DB approach vs files**: self-describing (catalog), program–data independence and abstraction, multiple views, sharing with concurrency control and atomic, isolated transactions. Files lead to uncontrolled redundancy (duplicated effort, wasted space, inconsistency). **Controlled** redundancy = kept on purpose, consistency enforced by the DBMS.
-
-**Models**: conceptual (ER), representational (relational, object), physical (access paths), self-describing (XML, NoSQL). Object = operations + OID + inheritance; XML = tagged tree, schema mixed in. **Schema** = intension, rarely changes; **state** = extension, changes on every update, must be valid.
-
-**Three levels**: external views → conceptual → internal; mappings transform requests and reformat results, and give independence. **Logical** (conceptual changes, views unchanged) is harder than **physical** (storage changes, conceptual unchanged), because programs depend on the logical structure. SDL internal, DDL conceptual, VDL external; SQL is DDL + VDL + DML. Nonprocedural = what, set at a time; procedural = how, record at a time.
-
-**Users**: DBA, designers, casual / parametric (canned transactions) / sophisticated / standalone end users, analysts and programmers. **Tiers**: 2-tier (client app + DB server via ODBC/JDBC); 3-tier (client, application/web server with rules and security, DB server) for the web; n-tier splits the middle tier.
 
 ## Page 1, front: relational model and mapping (must)
 
