@@ -35,12 +35,15 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 7. n-ary → new relation with every participant's PK as FK + attributes; PK = all FKs, minus the FK of any entity with max 1.
 8. Recursive → FK to the same relation, renamed by role (e.g. Super_ssn).
 9. Derived attributes → not stored.
-10. Specialization (superclass C with key k, subclasses S₁…Sₘ):
-   - **8A** C(k, C attrs) + Sᵢ(k, Sᵢ attrs), k FK → C. Always works.
-   - **8B** Sᵢ(k, C attrs, Sᵢ attrs) only. Total only (else entities in no subclass are lost); overlapping duplicates C attrs.
-   - **8C** one relation (k, all attrs, type t). Disjoint only; NULLs.
-   - **8D** one relation (k, all attrs, flags f₁…fₘ). Overlapping (also works disjoint).
-   - Shared subclass (member of all superclasses) → 8A or 8C with the common key.
+10. Specialization: superclass C (key k, attrs A) with subclasses S₁…Sₘ. Read **d / o** in the circle and **single / double line** (partial / total) first.
+   - **8A** multiple relations, superclass + subclasses: C(k, A) and Sᵢ(k, Sᵢ attrs), k = PK of Sᵢ and FK → C. Works for **any** constraint. Cost: a join to get a full subclass entity.
+   - **8B** subclass relations only: Sᵢ(k, A, Sᵢ attrs), no C relation. Needs **total** (partial loses entities in no subclass). Best **disjoint** (overlapping repeats A in several Sᵢ). "All C" = UNION of the Sᵢ.
+   - **8C** one relation, one type attribute: L(k, A, S₁ attrs, …, Sₘ attrs, t), t = which subclass. **Disjoint only** (t holds one value); partial → t NULL. Attribute-defined → t is the defining attribute.
+   - **8D** one relation, m Boolean flags: L(k, A, all Sᵢ attrs, f₁…fₘ), fᵢ = in Sᵢ. Built for **overlapping** (also works disjoint); partial → all flags false.
+   - **Pick**: d + total → any; d + partial → 8A or 8C; o + total → 8A or 8D (8B duplicates); o + partial → 8A or 8D. Many subclass attributes or subclasses in relationships → 8A; few → 8C / 8D. Exam default when unsure: **8A**, and say why.
+   - 8C / 8D: subclass attributes are NULL for non-members; write which ones in your answer.
+   - Hierarchy or lattice: apply an option at each level (they can differ). Shared subclass (same key in all superclasses) → 8A or 8C/8D.
+   - Major error: 8C for overlapping; 8B for partial.
 11. Category / union type (member of one superclass): superclasses have different keys → new surrogate key in the category relation, added as FK in each superclass relation; same key → reuse it.
 
 **Rubric majors** (A2/A3): missing key, weak without owner key, FK to part of a key, FK on wrong side, M:N not separate, multivalued as column, attribute in wrong relation, specialization lost / 8C for overlapping, unmapped diamond, no arrows.

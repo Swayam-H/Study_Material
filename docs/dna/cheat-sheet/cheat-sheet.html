@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwsxdg0y">
+<link rel="stylesheet" href="../../assets/style.css?v=mwszyenz">
 </head>
 <body data-root="../../" data-page="dna/cheat-sheet/cheat-sheet" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,7 +87,7 @@
       <header class="note-head">
         
         <h1>Cheat sheet</h1>
-        <p class="note-meta">18 min read</p>
+        <p class="note-meta">19 min read</p>
         <div class="note-tools">
           
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
@@ -126,14 +126,17 @@
 <li>n-ary → new relation with every participant's PK as FK + attributes; PK = all FKs, minus the FK of any entity with max 1.</li>
 <li>Recursive → FK to the same relation, renamed by role (e.g. Super_ssn).</li>
 <li>Derived attributes → not stored.</li>
-<li>Specialization (superclass C with key k, subclasses S₁…Sₘ):</li>
+<li>Specialization: superclass C (key k, attrs A) with subclasses S₁…Sₘ. Read <strong>d / o</strong> in the circle and <strong>single / double line</strong> (partial / total) first.</li>
 </ol>
 <ul>
-<li><strong>8A</strong> C(k, C attrs) + Sᵢ(k, Sᵢ attrs), k FK → C. Always works.</li>
-<li><strong>8B</strong> Sᵢ(k, C attrs, Sᵢ attrs) only. Total only (else entities in no subclass are lost); overlapping duplicates C attrs.</li>
-<li><strong>8C</strong> one relation (k, all attrs, type t). Disjoint only; NULLs.</li>
-<li><strong>8D</strong> one relation (k, all attrs, flags f₁…fₘ). Overlapping (also works disjoint).</li>
-<li>Shared subclass (member of all superclasses) → 8A or 8C with the common key.</li>
+<li><strong>8A</strong> multiple relations, superclass + subclasses: C(k, A) and Sᵢ(k, Sᵢ attrs), k = PK of Sᵢ and FK → C. Works for <strong>any</strong> constraint. Cost: a join to get a full subclass entity.</li>
+<li><strong>8B</strong> subclass relations only: Sᵢ(k, A, Sᵢ attrs), no C relation. Needs <strong>total</strong> (partial loses entities in no subclass). Best <strong>disjoint</strong> (overlapping repeats A in several Sᵢ). &quot;All C&quot; = UNION of the Sᵢ.</li>
+<li><strong>8C</strong> one relation, one type attribute: L(k, A, S₁ attrs, …, Sₘ attrs, t), t = which subclass. <strong>Disjoint only</strong> (t holds one value); partial → t NULL. Attribute-defined → t is the defining attribute.</li>
+<li><strong>8D</strong> one relation, m Boolean flags: L(k, A, all Sᵢ attrs, f₁…fₘ), fᵢ = in Sᵢ. Built for <strong>overlapping</strong> (also works disjoint); partial → all flags false.</li>
+<li><strong>Pick</strong>: d + total → any; d + partial → 8A or 8C; o + total → 8A or 8D (8B duplicates); o + partial → 8A or 8D. Many subclass attributes or subclasses in relationships → 8A; few → 8C / 8D. Exam default when unsure: <strong>8A</strong>, and say why.</li>
+<li>8C / 8D: subclass attributes are NULL for non-members; write which ones in your answer.</li>
+<li>Hierarchy or lattice: apply an option at each level (they can differ). Shared subclass (same key in all superclasses) → 8A or 8C/8D.</li>
+<li>Major error: 8C for overlapping; 8B for partial.</li>
 </ul>
 <ol start="11">
 <li>Category / union type (member of one superclass): superclasses have different keys → new surrogate key in the category relation, added as FK in each superclass relation; same key → reuse it.</li>
@@ -292,6 +295,6 @@ SQL: <code>NOT EXISTS (SELECT * FROM PROJECT x WHERE x.Dnum=5 AND NOT EXISTS (SE
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwsxdg0y" defer></script>
+<script src="../../assets/app.js?v=mwszyenz" defer></script>
 </body>
 </html>
