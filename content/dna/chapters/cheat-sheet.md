@@ -16,6 +16,13 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 
 **Constraints.** Domain (type/CHECK), key (no duplicate key), entity integrity (PK not NULL), referential (FK value exists or NULL). Insert can violate all four; delete only referential (→ restrict / cascade / set null / set default); update: any.
 
+**Drawing EER from English** (A2, both papers):
+- "identified by X and Y" → composite key; "one or more" → (1, N); "zero or more" → (0, N); "exactly one" → (1, 1).
+- (min, max) sits next to the entity: how many relationship instances **each** entity of that type is in. Weak entity side is always (1, 1).
+- Value that depends on two entities (role of an actor **in an episode**) → attribute of the relationship, not of either entity.
+- "a director may also act" → overlapping specialization or two relationships to one PERSON; say which and why.
+- Every vague word → a written assumption.
+
 **Ternary (min, max)**: count triples. Course with ≤ 2 profs and ≤ 100 students → (1, 200).
 
 **EER → relational rules.**
@@ -82,6 +89,15 @@ Not unique; order can change the answer.
 
 **5NF**: JD(R1, …, Rn) holds if R = join of its projections; 5NF = every JD is implied by the keys.
 
+**The 4-part problem** (A4 individual Q2 and group Q3, 20 pts each; expect it again):
+- (a) Highest NF: all keys first (core method), then the first FD that breaks BCNF, 3NF, 2NF, each named.
+- (b) BCNF: each split as X → Y, $X^+$, $R_1$, $R_2$, projected FDs; final relations with keys; name the FDs lost.
+- (c) Minimal cover: show each step with the closure that justifies it.
+- (d) 3NF from (c): one relation per left side, add a key relation if needed, drop contained ones; say lossless + preserving.
+- Carry an error forward correctly: later parts are marked on your earlier answer.
+
+**Proofs** (A4 Q1, A4 group Q1–Q2, A5 group Q1): start from the definition. Prove: take an arbitrary key / tuple and show it; for equality of sets show ⊆ both ways. Disprove: smallest counterexample, R(A, B, C) with an explicit F, and compute the closure.
+
 **Proof patterns**: "add A → K for a key K makes A a key"; "n FDs (a cycle) make every subset a superkey"; "3NF + all keys single ⇒ BCNF"; "BCNF ⇒ 3NF ⇒ 2NF, not the reverse".
 
 ## Page 2, front: relational algebra and TRC (must)
@@ -93,7 +109,10 @@ Not unique; order can change the answer.
 - "compare two rows" → self-join with ρ.
 - "max" without MAX → all − those beaten by someone (self-join with <).
 - "for each, count, including zero" → ⟕ then γ COUNT(inner column).
-- Two roles (author or coauthor) → ∪ after ρ.
+- Two roles (author or coauthor) → ∪ after ρ; for "number of authors" count senior + coauthors.
+- "younger than **all** coauthors" → books − books with a coauthor at least as young (decide: books with no coauthor qualify? state it).
+- Compare years across rows (book before a coauthor was born) → join the chain (BOOKS, COAUTHORS, PERSONS), then σ on the two years.
+- γ syntax: $_{G}\gamma_{\text{COUNT}(A) \rightarrow N}(R)$; write the grouping attributes on the left.
 - Count separately what lives at different grain (books vs authors).
 - Left outer join = join ∪ ((R − π_R(join)) × NULLs).
 - Natural join over all attributes = ∩ (proof: t ∈ both ⇔ (t, t) passes the σ).
@@ -106,7 +125,6 @@ Not unique; order can change the answer.
   $\neg(\exists x)(\text{PROJECT}(x) \wedge x.Dnum = 5 \wedge \neg(\exists w)(\text{WORKS\_ON}(w) \wedge w.Essn = e.Ssn \wedge w.Pno = x.Pnumber))$
   SQL: `NOT EXISTS (SELECT * FROM PROJECT x WHERE x.Dnum=5 AND NOT EXISTS (SELECT * FROM WORKS_ON w WHERE w.Essn=e.Ssn AND w.Pno=x.Pnumber))`. RA: ÷.
 - **"no" (Q6: employees with no dependents).** One ¬∃: $\neg(\exists d)(\text{DEPENDENT}(d) \wedge e.Ssn = d.Essn)$.
-- **Rule of thumb**: all/every = two ¬∃ (or ∀ with ¬…∨), RA ÷, SQL double NOT EXISTS. no/none = one ¬∃, RA −, SQL NOT EXISTS. some = one ∃, RA join/σ, SQL EXISTS or join.
 - **Equivalences**: $(\forall x)P \equiv \neg(\exists x)\neg P$; $(\exists x)P \equiv \neg(\forall x)\neg P$; $P \Rightarrow Q \equiv \neg P \vee Q$; $\neg(P \wedge Q) \equiv \neg P \vee \neg Q$; $\neg(P \vee Q) \equiv \neg P \wedge \neg Q$.
   - Also: $\neg(P \Rightarrow Q) \equiv P \wedge \neg Q$; $\neg\neg P \equiv P$; $\neg(\exists x)P \equiv (\forall x)\neg P$; $\neg(\forall x)P \equiv (\exists x)\neg P$.
   - ∀ pairs with ⇒ (or ¬R ∨ …), ∃ pairs with ∧. Never $(\forall x)(R(x) \wedge \dots)$ or $(\exists x)(R(x) \Rightarrow \dots)$. Like quantifiers swap; ∀∃ does not.
@@ -131,6 +149,9 @@ Not unique; order can change the answer.
 - filter on the right table of a LEFT JOIN: in ON, not WHERE.
 - full outer without FULL: `LEFT JOIN UNION RIGHT JOIN`.
 - latest row: `date = (SELECT MAX(date) … same key)`.
+- rank within each group: `GROUP BY P, A ORDER BY P, COUNT(*) DESC` (or `RANK() OVER (PARTITION BY P ORDER BY COUNT(*) DESC)`).
+- both roles: `(SELECT ISBN, AuthorName AS N FROM BOOKS) UNION (SELECT ISBN, JointAuthorName FROM COAUTHORS)`, then count.
+- recursion: `WITH RECURSIVE T(a, b) AS (base SELECT UNION SELECT … FROM R, T WHERE R.x = T.a) SELECT * FROM T;`.
 
 **DDL**: PRIMARY KEY, UNIQUE, NOT NULL, DEFAULT, CHECK, FOREIGN KEY … REFERENCES … ON DELETE / UPDATE {RESTRICT, CASCADE, SET NULL, SET DEFAULT}; ALTER TABLE ADD/DROP COLUMN/CONSTRAINT; DROP … CASCADE | RESTRICT.
 
@@ -142,6 +163,8 @@ Not unique; order can change the answer.
 
 **Embedded SQL**: EXEC SQL …; host variables in DECLARE SECTION, used as :x; SQLCODE 0 ok, 100 no more rows; cursor DECLARE / OPEN / FETCH INTO / CLOSE; UPDATE … WHERE CURRENT OF c; dynamic SQL PREPARE / EXECUTE; SQLJ iterators. Impedance mismatch = sets vs one value at a time.
 
+**Stored procedure skeleton**: `CREATE PROCEDURE P() BEGIN DECLARE n INT; WHILE (SELECT COUNT(*) FROM S) > 0 DO SELECT MIN(x) INTO n FROM S; … END WHILE; IF … THEN … ELSE … END IF; END;`
+
 **Algorithm → SQL** (GA6): copy the table you modify; store list order explicitly (Pos); one statement per step; check the **reduced** table; MIN to pick one element; COUNT(*) > 0 for "not empty".
 
 ## Answer-writing checklist (every question)
@@ -150,4 +173,5 @@ Not unique; order can change the answer.
 2. Method visible: closures, ← steps, comments in SQL.
 3. Handle the edge cases out loud: empty sets, ties, zero counts, duplicates.
 4. Final answer clearly marked.
-5. If you truly cannot start a whole question, "I do not know" earns 20% (two questions at most).
+5. By type: EER → (min, max) on every line, keys underlined. Mapping → PKs underlined, FK arrows, one line per mapping step used. NF → every closure written. RA → name intermediate results. SQL → one comment per clause. Proof → definition first, then the argument.
+6. If you truly cannot start a whole question, "I do not know" earns 20% (two questions at most).
