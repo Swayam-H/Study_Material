@@ -4,7 +4,7 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 
 **What earns the space.** The exam is "like assignment questions" and you will have enough time, so the sheets are not for definitions you can explain in your own words. Put down:
 1. **Procedures with steps you might reorder or forget**: closure, minimal cover, BCNF split, 3NF synthesis, the dependency-preservation test, the mapping steps and 8A–8D. **Must.**
-2. **Notation you must draw exactly**: EER symbols, (min, max), division, outer joins, TRC quantifiers. **Must.**
+2. **Notation you must draw exactly**: (min, max), division, outer joins, TRC quantifiers. **Must.**
 3. **Patterns that turn English into a query**: "none", "every", "including zero", "the maximum without MAX", ties. **Must.**
 4. **Lists the definition questions ask for by count**: the four DBMS actions, the four characteristics, the three levels, the two independences.
 5. **Your own mistakes** from A1–A6 and the mock. These are worth more than anything copied from here.
@@ -21,13 +21,11 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 
 **Users**: DBA, designers, casual / parametric (canned transactions) / sophisticated / standalone end users, analysts and programmers. **Tiers**: 2-tier (client app + DB server via ODBC/JDBC); 3-tier (client, application/web server with rules and security, DB server) for the web; n-tier splits the middle tier.
 
-## Page 1, front: relational model, EER, mapping (must)
+## Page 1, front: relational model and mapping (must)
 
 **Keys.** Superkey: no two tuples agree. Key: minimal superkey. Prime: in some key. Counting superkeys among n attributes: one key of size k gives $2^{n-k}$; k single-attribute keys give $2^n - 2^{n-k}$; two keys K1, K2 give $2^{n-|K_1|} + 2^{n-|K_2|} - 2^{n-|K_1 \cup K_2|}$.
 
 **Constraints.** Domain (type/CHECK), key (no duplicate key), entity integrity (PK not NULL), referential (FK value exists or NULL). Insert can violate all four; delete only referential (→ restrict / cascade / set null / set default); update: any.
-
-**EER notation.** Weak = double box + double diamond + dashed-underlined partial key, (1,1) on the weak side. Multivalued = double oval. Derived = dashed oval. Composite = oval with sub-ovals. Total = double line. (min, max) beside the entity: each entity takes part in ≥ min, ≤ max instances. Specialization: circle with **d** or **o**; double line from superclass = total. Category = ∪ in circle (member of **one** superclass); shared subclass = member of **all**.
 
 **Ternary (min, max)**: count triples. Course with ≤ 2 profs and ≤ 100 students → (1, 200).
 
@@ -55,7 +53,13 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 
 **3NF synthesis**: minimal cover → one relation per left side → add a key relation if none → drop contained relations. Lossless + dependency-preserving.
 
-**Lossless binary**: $R_1 \cap R_2$ → $R_1$ or → $R_2$ (common attributes are a key of a side). **Dependency preservation**: Z = X; repeat Z ∪= ((Z ∩ Ri)⁺ ∩ Ri); check Y ⊆ Z.
+**Lossless binary**: $R_1 \cap R_2$ → $R_1$ or → $R_2$ (common attributes are a key of a side).
+
+**Lossless, 3+ relations (matrix test)**: one row per $R_i$, one column per attribute; cell = $a_j$ if $A_j \in R_i$, else $b_{ij}$. For each X → Y: rows that agree on all X columns get equal Y columns (copy an $a$ if any row has one, else one of the $b$s). Repeat until nothing changes. Lossless iff some row is all $a$.
+
+**Covers**: F covers G iff every X → Y in G has Y ⊆ $X^+$ (closure under F). F ≡ G iff each covers the other.
+
+**MVD and 4NF**: X ↠ Y: for each X value, the set of Y values is independent of the rest (R − X − Y), so swapping Y parts between two tuples gives tuples in R. Trivial if Y ⊆ X or X ∪ Y = R. Every FD is an MVD. 4NF: every non-trivial X ↠ Y has X a superkey. Split into XY and X(R − Y); lossless iff $R_1 \cap R_2$ ↠ $R_1 - R_2$. **Dependency preservation**: Z = X; repeat Z ∪= ((Z ∩ Ri)⁺ ∩ Ri); check Y ⊆ Z.
 
 **Proof patterns**: "add A → K for a key K makes A a key"; "n FDs (a cycle) make every subset a superkey"; "3NF + all keys single ⇒ BCNF".
 
@@ -108,6 +112,10 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 - latest row: `date = (SELECT MAX(date) … same key)`.
 
 **DDL**: PRIMARY KEY, UNIQUE, NOT NULL, DEFAULT, CHECK, FOREIGN KEY … REFERENCES … ON DELETE / UPDATE {RESTRICT, CASCADE, SET NULL, SET DEFAULT}; ALTER TABLE ADD/DROP COLUMN/CONSTRAINT; DROP … CASCADE | RESTRICT.
+
+**Assertions and triggers** (7.3):
+- `CREATE ASSERTION A CHECK (NOT EXISTS (SELECT … rows that break the rule …));` holds for the whole DB.
+- `CREATE TRIGGER T {BEFORE | AFTER} {INSERT | DELETE | UPDATE OF col} ON R FOR EACH ROW WHEN (cond using NEW. / OLD.) action;` is ECA (event, condition, action). INSERT has only NEW, DELETE only OLD. Without FOR EACH ROW it runs once per statement.
 
 **Views**: single-table with key ⇒ updatable; joins usually not; aggregates/GROUP BY never. WITH CHECK OPTION.
 
