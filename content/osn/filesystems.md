@@ -567,6 +567,64 @@ for (tot = 0; tot < n; tot += m, off += m, dst += m) {
 
 **Going further (Tut 7 s38).** RAID, disk partitioning (MBR, GPT), SATA and NVMe, journaling / write-ahead logging, network file systems, FUSE, character and block devices, initramfs, and other file systems (ext4, btrfs, NTFS).
 
+# File-system theory from the textbooks
+
+*Classic theory around L18 and L19, from Silberschatz ch 13-14 and OSTEP ch 39-42. The slides use vsfs; these are the general ideas that vsfs is one example of.*
+
+## Access methods (Silb 13.2)
+
+- **Sequential access:** read or write the next block in order; the offset moves forward automatically. This is the model for `read` and `write`, and it suits tapes.
+- **Direct (random) access:** read or write block $n$ in any order, as for databases. In UNIX this is `lseek` followed by `read`.
+- **Indexed access:** an index of keys points to blocks (for example, an ISAM file). It is built on top of direct access.
+
+## Directory structures (Silb 13.3)
+
+| Structure | Idea | Problem |
+| --- | --- | --- |
+| Single-level | One directory for everyone | Name clashes; no grouping |
+| Two-level | One directory per user | Hard to share between users |
+| Tree | Any depth, with absolute and relative paths | No sharing of a file between two directories |
+| Acyclic graph | A file or directory can appear in several places (hard and soft links) | Deleting a shared file: dangling links or reference counts; aliases when traversing |
+| General graph | Cycles allowed | Traversal can loop forever, and garbage collection is needed. UNIX avoids this by banning hard links to directories |
+
+UNIX is an acyclic graph: a tree of directories, plus hard links to files and symbolic links to anything.
+
+## Allocation methods (Silb 14.4)
+
+| Method | How a file is stored | Good at | Bad at |
+| --- | --- | --- | --- |
+| **Contiguous** | Start block $b$ and length $n$, so block $i$ is at $b + i$ | Fast sequential and random access, little metadata | **External fragmentation**; files are hard to grow (sizes must be known up front) |
+| **Extents** | A list of (start, length) runs | Compact metadata for big files (ext4) | Fragmentation within extents; a growing file needs more extents |
+| **Linked** | Each block points to the next | No external fragmentation; easy to grow | Random access needs walking the chain; a lost pointer loses the rest; pointer space in every block |
+| **FAT** | The links are kept in one table at the start of the disk (cached in memory) | Random access by following the table in memory | The table must be cached; no inodes, so no hard links |
+| **Indexed** | An index block lists all of a file's blocks | Random access without external fragmentation | Wastes an index block on a tiny file; a big file needs a linked, multilevel or combined index |
+
+The **UNIX inode** is the **combined scheme**: 12 direct pointers for small files, then single, double and triple indirect blocks for large ones (this is the vsfs multi-level index).
+
+## Free-space management (Silb 14.5)
+
+- **Bit vector (bitmap):** one bit per block. It is easy to find runs of free blocks, but it must fit in memory. For example, a 1 TB disk with 4 KB blocks has $2^{28}$ blocks, so its bitmap takes $2^{28}$ bits = **32 MB**.
+- **Linked list:** each free block points to the next. It wastes no extra space, but finding many free blocks needs many disk reads.
+- **Grouping:** the first free block stores the addresses of $n$ free blocks, the last of which stores the next $n$, and so on.
+- **Counting:** store (first free block, number of contiguous free blocks) pairs. This works well because space is often freed and allocated in runs.
+- vsfs and ext use bitmaps; XFS and ZFS use trees and space maps.
+
+## Crash consistency (OSTEP 42, beyond the slides)
+
+Appending one block to a file needs **three writes**: the data block (Db), the inode (I) and the data bitmap (B). A crash can land between any of them.
+
+| Writes that reached disk | Result |
+| --- | --- |
+| Db only | Consistent: as if the write never happened (the data is simply lost) |
+| I only | Inode points at garbage, and the bitmap disagrees with the inode: **inconsistent** |
+| B only | Block marked used but no inode points at it: a **space leak** |
+| I and B | Metadata consistent, but the file shows **garbage** data |
+| I and Db | The bitmap says the block is free: inconsistent |
+| B and Db | Space leak: no inode points at the block |
+
+- **fsck:** after a crash, scan the whole disk and fix the metadata (bitmaps, link counts, duplicate pointers). It is correct but extremely slow on large disks.
+- **Journaling (write-ahead logging):** first write the transaction to the journal (TxBegin, the blocks, then **TxEnd**, which is the commit point), then **checkpoint** the blocks to their real locations, then free the journal space. After a crash, replay committed transactions and ignore incomplete ones. **Metadata (ordered) journaling** writes the data block to its final place *before* committing the metadata, so it never needs to journal user data. xv6's log (Tutorial 7) is this idea.
+
 # Practice problems, Lectures 18 and 19
 
 Try each one before you open its solution. Problems marked **(slides)** come from the lecture's own simulations.
@@ -638,3 +696,37 @@ read(fd, buf, 100);
 **F15.** In xv6, why does `filewrite` split a large write into several `begin_op`/`end_op` transactions? Why does `writei` call `iupdate` even when the size did not change?
 
 *Solution.* A transaction must fit in the log: it may write at most `MAXOPBLOCKS` (10) blocks. Each written data block can also dirty a bitmap block, plus the inode, the indirect block and slop for unaligned ends, so `filewrite` limits each chunk to 3 data blocks. `writei` calls `iupdate` because `bmap` may have **allocated a new block** and stored it in `ip->addrs[]`, and that change must reach the on-disk inode.
+
+**F16 (theory).** Compare contiguous, linked (including FAT) and indexed allocation on sequential access, random access, fragmentation and file growth. Which one is the UNIX inode, and why?
+
+*Solution.* **Contiguous:** sequential and random access are both fast (block i is at start + i), but it causes **external fragmentation** and files are hard to grow. **Linked:** no external fragmentation and growth is easy, but random access must walk the chain (slow), and each block loses space to a pointer. **FAT** keeps the chain in a table in memory, which makes random access fast, but there are no inodes, so no hard links. **Indexed:** fast random access with no external fragmentation, but small files waste an index block, and large files need several levels. The UNIX inode is a **combined indexed scheme**: direct pointers for the many small files, and single, double and triple indirect blocks for the few large ones.
+
+---
+
+**F17 (theory).** A disk has 2 TB and 4 KB blocks. (a) How big is a free-space bitmap? (b) Compare the bitmap with a free list, grouping and counting.
+
+*Solution.* (a) 2 TB / 4 KB = $2^{41}/2^{12} = 2^{29}$ blocks, so $2^{29}$ bits = $2^{26}$ bytes = **64 MB**. (b) The **bitmap** makes runs of free blocks easy to find, but must be cached in memory to be fast. A **free list** costs no extra space, but finding n free blocks takes n disk reads. **Grouping** stores n free addresses per block, so one read finds many. **Counting** stores (start, length) runs, which is very compact when free space comes in contiguous runs.
+
+---
+
+**F18 (theory).** Describe single-level, two-level, tree, acyclic-graph and general-graph directories. Why does UNIX forbid hard links to directories?
+
+*Solution.* **Single-level:** one directory for everyone, so names clash. **Two-level:** one directory per user, which makes sharing hard. **Tree:** arbitrary depth, with absolute and relative paths, but no sharing. **Acyclic graph:** files can appear in several directories through links, so deletion needs reference counts (hard links) or leaves dangling links (soft links). **General graph:** cycles are allowed, so traversal can loop, and a file can be unreachable but still counted, which needs garbage collection. UNIX forbids hard links to directories so the directory structure stays **acyclic**: `..` stays well defined, tools like `find` cannot loop, and link counts reach 0 correctly.
+
+---
+
+**F19 (theory).** An append writes a data block, the inode and the data bitmap. For each case where exactly one or exactly two of these writes reach disk before a crash, say whether the file system is consistent and what the user sees.
+
+*Solution.* **Data only:** consistent; the append is simply lost. **Inode only:** inconsistent (the inode points to a block the bitmap says is free), and the file reads garbage. **Bitmap only:** inconsistent, with a **space leak** (the block is used but nothing points to it). **Inode and bitmap:** metadata consistent, but the file contains **garbage**. **Inode and data:** inconsistent with the bitmap (the block could later be given to another file). **Bitmap and data:** space leak, and the data is unreachable.
+
+---
+
+**F20 (theory).** Explain how journaling recovers from a crash. What is the commit point? How does metadata (ordered) journaling differ from data journaling, and why must the data block be written first?
+
+*Solution.* (1) **Journal write:** write TxBegin plus the new inode, bitmap (and data) blocks to the log. (2) **Commit:** write TxEnd. Once TxEnd is on disk, the transaction is **committed**: this is the commit point. (3) **Checkpoint:** write the blocks to their real locations. (4) **Free** the journal space. On recovery, replay every committed transaction and discard incomplete ones, so each update happens fully or not at all. **Data journaling** logs the user data too, so data is written twice. **Metadata journaling** logs only the inode and bitmap, and writes the data block to its final location **before** the commit. Otherwise a committed inode could point to a block still holding old garbage. Compared with fsck, recovery only reads the journal, not the whole disk.
+
+---
+
+**F21 (theory).** Give the three access methods, with one example where each is natural, and show how direct access is done with UNIX system calls.
+
+*Solution.* **Sequential:** read the next record in order, for example an editor loading a file or a compiler reading source. **Direct (random):** jump to block or record n, for example a database looking up a row. **Indexed:** look up a key in an index, then access the block directly, for example a sorted product file. In UNIX, direct access is `lseek(fd, n * recsize, SEEK_SET)` followed by `read(fd, buf, recsize)`.

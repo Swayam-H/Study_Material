@@ -1267,6 +1267,92 @@ Tutorial 6's advice: put a sanitizer target in your Makefile and run it before e
 
 **Where this leads next (Tutorial 6).** A single-threaded TCP echo server (Unit 2) handles one client and makes the second wait. One thread per connection fixes that in about ten lines. But it stops scaling at a few thousand connections, because every thread needs its own stack. That is the **C10K problem**, and it is why `select`, `poll` and `epoll` exist.
 
+# Concurrency theory from the textbooks
+
+*Theory that the L14 to L17 slides assume or only touch on, from OSTEP ch 26-32 and Silberschatz ch 4, 6-8. These are standard exam definitions and arguments.*
+
+## What a correct critical-section solution must give (Silb 6.2)
+
+A solution to the critical-section problem must satisfy all three conditions:
+
+1. **Mutual exclusion:** if one thread is in its critical section, no other thread can be in its own.
+2. **Progress:** if no thread is in the critical section and some want to enter, only those threads take part in deciding who goes next, and the decision cannot be postponed forever.
+3. **Bounded waiting:** after a thread asks to enter, there is a limit on how many times other threads can enter before it does. This rules out starvation.
+
+These map onto OSTEP's lock criteria: mutual exclusion is **correctness**, and bounded waiting is **fairness**. For example, a test-and-set spin lock gives mutual exclusion and progress, but **not** bounded waiting. A ticket lock gives all three.
+
+## Peterson's algorithm (Silb 6.3, OSTEP 28 aside)
+
+A software-only lock for two threads (0 and 1), using only loads and stores:
+
+```c
+int flag[2] = {0, 0};   // flag[i] = 1: thread i wants to enter
+int turn;               // whose turn it is to wait
+
+void lock(int self) {
+    int other = 1 - self;
+    flag[self] = 1;
+    turn = other;                                 // politely let the other go first
+    while (flag[other] == 1 && turn == other) ;   // spin
+}
+void unlock(int self) { flag[self] = 0; }
+```
+
+- **Mutual exclusion:** if both threads were inside, both flags would be 1. But `turn` holds a single value. The thread that wrote `turn` *last* sees its own condition true and spins, so both cannot pass.
+- **Progress:** if the other thread does not want in (flag[other] = 0), a thread enters at once.
+- **Bounded waiting:** a waiting thread gets in after at most **one** entry by the other, because the other thread sets turn back to the waiter before it can re-enter.
+- **Why it is not used today:** modern CPUs and compilers **reorder** loads and stores, so another thread may see `flag` and `turn` change in a different order. Peterson's algorithm then needs **memory barriers** (fences). It also spins, and it only handles two threads. Hardware atomic instructions are simpler.
+
+## Thread models and Amdahl's law (Silb 4.2-4.3)
+
+- **User-level threads** are managed by a library with no kernel help: fast to create and switch, but one blocking system call blocks the whole process, and they cannot run on several CPUs at once.
+- **Kernel-level threads** are scheduled by the OS: they work in parallel, and one can block without blocking the others. Creation and switching cost more.
+- **Mapping models:** **many-to-one** (all user threads on one kernel thread; no parallelism), **one-to-one** (Linux and Windows; most common, with a limit on the thread count), **many-to-many** (user threads multiplexed onto fewer kernel threads; flexible but complex), and the **two-level** variant.
+- **Amdahl's law:** if a fraction $S$ of a program is serial, the speedup on $N$ cores is at most
+
+$$
+\text{speedup} \le \frac{1}{S + \frac{1 - S}{N}}
+$$
+
+For example, with $S = 0.25$ and $N = 4$, the speedup is at most $1 / (0.25 + 0.1875) \approx 2.29$. As $N \to \infty$ it approaches $1/S = 4$. The serial part limits everything.
+
+- **Concurrency vs parallelism:** concurrency means several tasks make progress (possibly interleaved on one core); parallelism means they run at the same instant on different cores.
+
+## Lock-based concurrent data structures (OSTEP 29)
+
+The question for each structure: how do you add locks so it stays correct **and** scales across CPUs?
+
+| Structure | Simple approach | Scalable approach |
+| --- | --- | --- |
+| Counter | One lock around every update: correct, but slows badly as threads are added | **Approximate counter**: a local counter and lock per CPU, moved into the global counter every **S** updates |
+| Linked list | One lock for the whole list | Lock only the real critical section (do `malloc` outside it); hand-over-hand locking (a lock per node) is usually *slower* in practice |
+| Queue | One lock | **Michael and Scott**: separate head and tail locks plus a dummy node, so an enqueue and a dequeue can run at the same time |
+| Hash table | One lock | **One lock per bucket**, so operations on different buckets run in parallel; this scales very well |
+
+**Approximate counter trade-off:** with threshold $S$ and $C$ CPUs, the global value can lag the true count by up to about $S \times C$. A small $S$ gives an accurate counter that behaves almost like one lock (slow). A large $S$ scales almost perfectly, but the global value is less accurate. OSTEP shows $S = 1024$ giving nearly perfect scaling on 4 CPUs.
+
+General lessons: start with one big lock and make it finer only if performance needs it. Be careful with control flow: every early `return` must release the lock. More concurrency is not automatically faster.
+
+## Monitors and CV semantics (Silb 6.7, OSTEP 30)
+
+- A **monitor** is a language-level construct: an object whose methods run under one implicit lock, so only one thread is active inside it at a time. It also has condition variables. Java's `synchronized` plus `wait`/`notify` is an example.
+- **Hoare semantics:** `signal` hands the lock and the CPU straight to the woken thread, so the condition is guaranteed true when it runs. An `if` would then be enough.
+- **Mesa semantics** (used by pthreads, Java and almost every real system): `signal` only moves the waiter to the ready queue. Another thread may run first and change the state, and **spurious wake-ups** are allowed. So the waiter must re-check in a `while` loop.
+
+## Semaphores in the kernel (Silb 6.6)
+
+- The busy-waiting semaphore spins inside `wait`, which is called a **spinlock**. A blocking implementation keeps a **list of waiting processes**: `wait` decrements and, if the value is negative, adds the caller to the list and blocks it; `signal` increments and, if any process waits, removes one and wakes it.
+- `wait` and `signal` must themselves be atomic, so the kernel protects them with interrupts disabled (one CPU) or a spinlock (many CPUs). The spinning is short because these sections are tiny.
+- A LIFO waiting list can cause **starvation**; a FIFO list prevents it.
+- **Binary vs counting:** a binary semaphore takes values 0 and 1 and acts like a mutex; a counting semaphore controls a pool of N identical resources.
+
+## Deadlock theory (Silb 8, OSTEP 32)
+
+- **Resource-allocation graph:** an edge from a thread to a resource is a **request**, and an edge from a resource to a thread is an **assignment**. With one instance per resource, a **cycle means deadlock**. With several instances, a cycle means deadlock is *possible*, but not certain.
+- **Handling it:** **prevention** (make one of the four conditions impossible: lock ordering for circular wait, acquiring all locks at once for hold and wait, trylock and back off for no preemption, lock-free data structures for mutual exclusion); **avoidance** (only grant a request if the system stays in a **safe state**: the Banker's algorithm); **detection and recovery** (find cycles periodically, then kill or roll back a thread); or **ignore it** (most OSes for user code).
+- A **safe state** has an order in which every thread can get its maximum need and finish. Unsafe does not mean deadlocked, but it means deadlock cannot be ruled out.
+- **Livelock:** threads keep backing off and retrying (for example, with trylock) and none makes progress. Fix it with a random delay before retrying.
+
 # Practice problems, Lectures 14 to 17
 
 Try each one before you open its solution. Problems marked **(L08)** are the lecture's own review questions, and **(sheet)** ones come from the "Transport Layer - Practice Questions" PDF.
@@ -1545,3 +1631,49 @@ The state is **unsafe**. Unsafe does not mean deadlocked yet: it means a deadloc
 **100% CPU with no progress** suggests a **livelock**, or threads spinning on a lock or flag. Use `perf` or gdb backtraces to see where they are looping.
 
 ---
+
+**S21 (theory).** State the three requirements for a solution to the critical-section problem. For each of these, say which requirements it meets: (a) the load/store flag lock, (b) the test-and-set spin lock, (c) the ticket lock, (d) disabling interrupts on one CPU.
+
+*Solution.* The requirements are **mutual exclusion, progress and bounded waiting**. (a) The flag lock fails **mutual exclusion**: two threads can both see 0. (b) Test-and-set gives mutual exclusion and progress but **not bounded waiting**: a thread can lose every race. (c) The ticket lock meets **all three**, because tickets are served in FIFO order. (d) Disabling interrupts meets all three on a single CPU, but only if the code can be trusted not to keep interrupts off forever, and it does not work on several CPUs.
+
+---
+
+**S22 (theory).** Write Peterson's algorithm for two threads. Prove that it gives mutual exclusion and bounded waiting. Why does it fail on a modern multicore CPU without extra help?
+
+*Solution.* See the Peterson section above for the code: `flag[self] = 1; turn = other; while (flag[other] && turn == other) ;`. **Mutual exclusion:** suppose both are inside. Then both flags are 1, so T0 could only pass if turn = 0, and T1 only if turn = 1. turn holds one value, so this is impossible: whichever thread wrote turn last sees `turn == other` and spins. **Bounded waiting:** if T0 waits, then when T1 leaves and tries again, T1 sets turn = 0 and so lets T0 in first. T0 waits for at most one entry by T1. **Modern hardware:** CPUs and compilers may reorder the stores to flag and turn with the loads after them, so both threads can read the other's flag as 0. It needs memory barriers.
+
+---
+
+**S23 (theory).** A program spends 20% of its time in serial code. (a) What is the maximum speedup on 4 cores, and on 16? (b) What is the limit as the cores grow without bound? (c) Explain the difference between concurrency and parallelism.
+
+*Solution.* (a) On 4 cores: $1 / (0.2 + 0.8/4) = 1 / 0.4 = $ **2.5**. On 16 cores: $1 / (0.2 + 0.05) = $ **4**. (b) $1/0.2 = $ **5**, no matter how many cores. (c) **Concurrency:** several tasks are in progress at once, possibly by interleaving on one core. **Parallelism:** tasks run at the same instant on different cores. Parallelism needs several cores; concurrency does not.
+
+---
+
+**S24 (theory).** Compare user-level and kernel-level threads, and the many-to-one, one-to-one and many-to-many models. Which model does Linux use, and why?
+
+*Solution.* User-level threads are fast to create and switch (no system call), but one blocking system call blocks every thread in the process, and they cannot use several cores. Kernel threads can run in parallel and block independently, but each operation costs a system call. **Many-to-one:** no parallelism, and one block stops everything. **One-to-one:** true parallelism, at the cost of a kernel thread per user thread. **Many-to-many:** flexible, but complex to implement. Linux (and Windows) use **one-to-one**, because kernel threads are cheap enough today and the model is simple.
+
+---
+
+**S25 (theory).** An approximate counter has 4 CPUs and threshold S = 100. (a) Describe update and get. (b) How far can the global count lag behind the true count? (c) What happens if S = 1, and if S = 10⁶?
+
+*Solution.* (a) **Update:** lock the local (per-CPU) counter and increment it. If it reaches S, lock the global counter, add the local value to it, and reset the local one to 0. **Get:** lock the global counter and return it (an approximation). (b) Each CPU can hold up to S − 1 unflushed updates, so the lag is up to about **4 × 99 = 396**. (c) With S = 1, every update touches the global lock, so it is exact but does not scale, like one lock. With S = 10⁶, it scales almost perfectly, but the global value can be wrong by millions.
+
+---
+
+**S26 (theory).** Explain Hoare and Mesa semantics for `signal`. Show a case where `if` is safe under Hoare semantics but unsafe under Mesa semantics. Which do real systems use?
+
+*Solution.* **Hoare:** the signaller hands the lock and the CPU straight to the woken thread, so the condition is still true when that thread runs. **Mesa:** the woken thread only becomes ready, and runs later. Example: a consumer waits because count == 0. A producer puts an item and signals. Under Hoare, the consumer runs at once and the item is still there, so `if` is enough. Under Mesa, a second consumer can run first and take the item, so the woken consumer must re-check (`while`). Real systems (pthreads, Java, Linux) use **Mesa**, and also allow spurious wake-ups.
+
+---
+
+**S27 (theory).** Draw the resource-allocation graph for: T1 holds R1 and requests R2; T2 holds R2 and requests R3; T3 holds R3. (a) Is there a deadlock? (b) T3 now requests R1. Now? (c) If R2 had two instances, would a cycle always mean deadlock?
+
+*Solution.* The edges are R1 → T1, T1 → R2, R2 → T2, T2 → R3, R3 → T3. (a) **No cycle, so no deadlock.** T3 can finish and release R3, then T2, then T1. (b) Adding T3 → R1 creates the cycle T1 → R2 → T2 → R3 → T3 → R1 → T1. With one instance of each resource, a cycle **is** a deadlock. (c) **No.** With several instances, a cycle is necessary but not sufficient: another holder of R2 outside the cycle may finish and free an instance, which breaks the wait.
+
+---
+
+**S28 (theory).** How does a kernel implement a blocking semaphore? Why does it still need a spinlock or disabled interrupts, and why is that acceptable? How can the waiting list cause starvation?
+
+*Solution.* The semaphore holds a value and a **list of waiting processes**. `wait`: decrement; if the value is negative, add the caller to the list and block it (taking it off the run queue). `signal`: increment; if the value is ≤ 0, remove a process from the list and wake it (make it ready). The updates to the value and the list must be atomic, so the kernel disables interrupts (one CPU) or takes a spinlock (many CPUs). This is acceptable because the critical sections are only a few instructions long, unlike the application's critical section, which may be long. If the list is **LIFO**, a waiter can be overtaken forever (starvation). A **FIFO** list gives bounded waiting.
