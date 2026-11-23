@@ -82,6 +82,12 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
   SQL: `NOT EXISTS (SELECT * FROM PROJECT x WHERE x.Dnum=5 AND NOT EXISTS (SELECT * FROM WORKS_ON w WHERE w.Essn=e.Ssn AND w.Pno=x.Pnumber))`. RA: ÷.
 - **"no" (Q6: employees with no dependents).** One ¬∃: $\neg(\exists d)(\text{DEPENDENT}(d) \wedge e.Ssn = d.Essn)$.
 - **Rule of thumb**: all/every = two ¬∃ (or ∀ with ¬…∨), RA ÷, SQL double NOT EXISTS. no/none = one ¬∃, RA −, SQL NOT EXISTS. some = one ∃, RA join/σ, SQL EXISTS or join.
+- **Equivalences**: $(\forall x)P \equiv \neg(\exists x)\neg P$; $(\exists x)P \equiv \neg(\forall x)\neg P$; $P \Rightarrow Q \equiv \neg P \vee Q$; $\neg(P \wedge Q) \equiv \neg P \vee \neg Q$; $\neg(P \vee Q) \equiv \neg P \wedge \neg Q$.
+  - Also: $\neg(P \Rightarrow Q) \equiv P \wedge \neg Q$; $\neg\neg P \equiv P$; $\neg(\exists x)P \equiv (\forall x)\neg P$; $\neg(\forall x)P \equiv (\exists x)\neg P$.
+  - ∀ pairs with ⇒ (or ¬R ∨ …), ∃ pairs with ∧. Never $(\forall x)(R(x) \wedge \dots)$ or $(\exists x)(R(x) \Rightarrow \dots)$. Like quantifiers swap; ∀∃ does not.
+- **Conversions RA ↔ TRC ↔ SQL**: σ = condition = WHERE; π = left side = SELECT; ⋈ = ∃ + join condition = JOIN / EXISTS; ∪ = ∨ = UNION; ∩ = ∧ = INTERSECT / IN; − = ∧ ¬∃ = NOT EXISTS / EXCEPT; ÷ = ∀ = double NOT EXISTS.
+  - RA rules: $R \cap S = R - (R - S)$; $R \bowtie_c S = \sigma_c(R \times S)$; $\sigma_{c_1}(\sigma_{c_2}R) = \sigma_{c_1 \wedge c_2}R$; ∪ ∩ ⋈ commute and associate, − does not.
+  - SQL: $x > \text{ALL}(S) \equiv \neg\exists s\,(x \le s)$; $x > \text{ANY}(S) \equiv \exists s\,(x > s)$; NOT IN with a NULL returns nothing, NOT EXISTS is safe.
 - Unsafe: {t | ¬R(t)}. No aggregates in TRC: say so.
 - Empty set: "all of none" is true; state whether such rows are included.
 
