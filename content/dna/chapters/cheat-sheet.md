@@ -40,33 +40,49 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 
 ## Page 1, back: functional dependencies and normal forms (must)
 
-**Closure** $X^+$: start X, add right sides whose left sides are inside, repeat. X → B iff B ∈ $X^+$.
+**Guidelines and anomalies**: clear semantics per relation; no insert / delete / update anomalies; few NULLs; no spurious tuples (never join on a non-key attribute).
 
-**Keys from FDs**: attributes on no right side are in **every** key (proof: closure never adds them). Start from them, add attributes until $X^+$ = R, keep minimal ones.
+**Closure** $X^+$: start X, add right sides whose left sides are inside, repeat. X → B iff B ∈ $X^+$. X is a superkey iff $X^+$ = R.
 
-**Armstrong**: reflexivity, augmentation, transitivity; derived: union, decomposition, pseudotransitivity. Never "AB → C ⇒ A → C".
+**Armstrong**: reflexivity (Y ⊆ X ⇒ X → Y), augmentation (X → Y ⇒ XZ → YZ), transitivity; derived: union, decomposition, pseudotransitivity (X → Y, WY → Z ⇒ WX → Z). Never "AB → C ⇒ A → C"; "A → BC ⇒ A → B" is fine.
 
-**Normal forms** (check against all keys and $F^+$):
-- 2NF: no non-prime attribute depends on part of a key (single-attribute keys ⇒ 2NF).
-- 3NF: every non-trivial X → A: X superkey **or** A prime.
+**Finding all keys**:
+- Only on left sides, or on no side → in **every** key. Only on right sides → in **no** key. Both sides → test.
+- Core = the "every key" attributes. If core⁺ = R, it is the only key. Else add one "both" attribute at a time, then pairs; skip any superset of a key found.
+- Prime = in some key. Report every key, not just one.
+
+**Normal forms** (check against all keys and $F^+$, after splitting right sides):
+- 1NF: atomic values only; no multivalued, composite or nested attributes. Fix: new relation (key, value).
+- 2NF: no non-prime attribute partially depends on a key (X ⊂ key, X → non-prime). Single-attribute keys ⇒ 2NF.
+- 3NF: every non-trivial X → A: X superkey **or** A prime. Breaks via transitive: key → X → A, X not a key, A non-prime.
 - BCNF: every non-trivial X → A: X superkey. Two-attribute relations are BCNF.
-- Highest NF: report the violating FD for the next level.
+- Highest NF: test BCNF → 3NF → 2NF on each FD; state the FD that fails the next level.
 
-**Minimal cover**: split right sides → remove extraneous left attributes → remove redundant FDs, testing against the **current** set.
-
-**BCNF**: split violating X → Y into XY and R − (Y − X); re-project FDs; lossless, may lose FDs (AB → C, C → B).
-
-**3NF synthesis**: minimal cover → one relation per left side → add a key relation if none → drop contained relations. Lossless + dependency-preserving.
-
-**Lossless binary**: $R_1 \cap R_2$ → $R_1$ or → $R_2$ (common attributes are a key of a side).
-
-**Lossless, 3+ relations (matrix test)**: one row per $R_i$, one column per attribute; cell = $a_j$ if $A_j \in R_i$, else $b_{ij}$. For each X → Y: rows that agree on all X columns get equal Y columns (copy an $a$ if any row has one, else one of the $b$s). Repeat until nothing changes. Lossless iff some row is all $a$.
+**Minimal cover** (test each step against the **current** set):
+1. Split right sides to single attributes.
+2. Extraneous left attribute: in XB → A, B is extraneous if A ∈ $X^+$.
+3. Redundant FD: X → A is redundant if A ∈ $X^+$ computed without X → A.
+Not unique; order can change the answer.
 
 **Covers**: F covers G iff every X → Y in G has Y ⊆ $X^+$ (closure under F). F ≡ G iff each covers the other.
 
-**MVD and 4NF**: X ↠ Y: for each X value, the set of Y values is independent of the rest (R − X − Y), so swapping Y parts between two tuples gives tuples in R. Trivial if Y ⊆ X or X ∪ Y = R. Every FD is an MVD. 4NF: every non-trivial X ↠ Y has X a superkey. Split into XY and X(R − Y); lossless iff $R_1 \cap R_2$ ↠ $R_1 - R_2$. **Dependency preservation**: Z = X; repeat Z ∪= ((Z ∩ Ri)⁺ ∩ Ri); check Y ⊆ Z.
+**Projecting FDs onto Ri**: for each X ⊆ Ri, X → ($X^+$ ∩ Ri). Never just copy FDs whose attributes happen to fit.
 
-**Proof patterns**: "add A → K for a key K makes A a key"; "n FDs (a cycle) make every subset a superkey"; "3NF + all keys single ⇒ BCNF".
+**BCNF decomposition**: pick violating X → Y; split into $R_1 = X^+$ and $R_2 = R - (X^+ - X)$; project FDs; repeat on each part. Always lossless; may lose FDs (AB → C, C → B).
+
+**3NF synthesis**: minimal cover → one relation per left side (merge FDs with the same left side) → add a relation for one key if no relation holds a key → drop relations contained in others. Always lossless + dependency-preserving.
+
+**Lossless (nonadditive) binary**: $R_1 \cap R_2$ → $R_1 - R_2$ or → $R_2 - R_1$ (common attributes are a superkey of one side).
+
+**Lossless, 3+ relations (matrix test)**: one row per $R_i$, one column per attribute; cell = $a_j$ if $A_j \in R_i$, else $b_{ij}$. For each X → Y: rows that agree on all X columns get equal Y columns (copy an $a$ if any row has one, else one of the $b$s). Repeat until nothing changes. Lossless iff some row is all $a$.
+
+**Dependency preservation**: $(\bigcup \pi_{R_i}(F))^+ = F^+$. Test each X → Y: Z = X; repeat Z ∪= ((Z ∩ Ri)⁺ ∩ Ri) over all Ri; preserved iff Y ⊆ Z. An FD inside one Ri is preserved at once.
+
+**MVD and 4NF**: X ↠ Y: for each X value, the set of Y values is independent of the rest (R − X − Y), so swapping Y parts between two tuples gives tuples in R. Trivial if Y ⊆ X or X ∪ Y = R. Every FD is an MVD; X ↠ Y ⇒ X ↠ R − X − Y. 4NF: every non-trivial X ↠ Y has X a superkey. Split into XY and X(R − Y); lossless iff $R_1 \cap R_2$ ↠ $R_1 - R_2$.
+
+**5NF**: JD(R1, …, Rn) holds if R = join of its projections; 5NF = every JD is implied by the keys.
+
+**Proof patterns**: "add A → K for a key K makes A a key"; "n FDs (a cycle) make every subset a superkey"; "3NF + all keys single ⇒ BCNF"; "BCNF ⇒ 3NF ⇒ 2NF, not the reverse".
 
 ## Page 2, front: relational algebra and TRC (must)
 
