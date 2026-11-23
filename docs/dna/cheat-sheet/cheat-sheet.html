@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwsutia1">
+<link rel="stylesheet" href="../../assets/style.css?v=mwsuukpb">
 </head>
 <body data-root="../../" data-page="dna/cheat-sheet/cheat-sheet" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -170,6 +170,14 @@ SQL: <code>NOT EXISTS (SELECT * FROM PROJECT x WHERE x.Dnum=5 AND NOT EXISTS (SE
 <li>SQL: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">ALL</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">¬∃</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">s</span><span class="mclose">)</span></span></span></span>; <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">ANY</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∃</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">s</span><span class="mclose">)</span></span></span></span>; NOT IN with a NULL returns nothing, NOT EXISTS is safe.</li>
 </ul>
 </li>
+<li><strong>Conversion rules.</strong>
+<ul>
+<li>SQL → RA: FROM = × (or ⋈ with the join condition); WHERE = σ; SELECT = π, applied last; GROUP BY + aggregate = γ; IN / EXISTS = ⋈; NOT IN / NOT EXISTS = −; double NOT EXISTS = ÷; UNION / INTERSECT / EXCEPT = ∪ ∩ −.</li>
+<li>RA → TRC: each relation = a variable with R(t); π = left side; σ = condition; ⋈ = ∃ over the non-output relation + join condition; − = ∧ ¬∃; ÷ = ∀ (or ¬∃ … ¬∃).</li>
+<li>TRC → SQL: free variable = outer FROM; ∃ = EXISTS (subquery); ¬∃ = NOT EXISTS; ∀ = NOT EXISTS (… NOT EXISTS …); ∧ ∨ ¬ = AND OR NOT.</li>
+<li>Do not convert: aggregates, ORDER BY and outer joins have no TRC form; say so.</li>
+</ul>
+</li>
 <li>Unsafe: {t | ¬R(t)}. No aggregates in TRC: say so.</li>
 <li>Empty set: &quot;all of none&quot; is true; state whether such rows are included.</li>
 </ul>
@@ -236,6 +244,6 @@ SQL: <code>NOT EXISTS (SELECT * FROM PROJECT x WHERE x.Dnum=5 AND NOT EXISTS (SE
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwsutia1" defer></script>
+<script src="../../assets/app.js?v=mwsuukpb" defer></script>
 </body>
 </html>

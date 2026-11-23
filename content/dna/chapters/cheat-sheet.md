@@ -92,6 +92,11 @@ You may bring **two handwritten A4 sheets** (printouts are not allowed). Writing
 - **Conversions RA ↔ TRC ↔ SQL**: σ = condition = WHERE; π = left side = SELECT; ⋈ = ∃ + join condition = JOIN / EXISTS; ∪ = ∨ = UNION; ∩ = ∧ = INTERSECT / IN; − = ∧ ¬∃ = NOT EXISTS / EXCEPT; ÷ = ∀ = double NOT EXISTS.
   - RA rules: $R \cap S = R - (R - S)$; $R \bowtie_c S = \sigma_c(R \times S)$; $\sigma_{c_1}(\sigma_{c_2}R) = \sigma_{c_1 \wedge c_2}R$; ∪ ∩ ⋈ commute and associate, − does not.
   - SQL: $x > \text{ALL}(S) \equiv \neg\exists s\,(x \le s)$; $x > \text{ANY}(S) \equiv \exists s\,(x > s)$; NOT IN with a NULL returns nothing, NOT EXISTS is safe.
+- **Conversion rules.**
+  - SQL → RA: FROM = × (or ⋈ with the join condition); WHERE = σ; SELECT = π, applied last; GROUP BY + aggregate = γ; IN / EXISTS = ⋈; NOT IN / NOT EXISTS = −; double NOT EXISTS = ÷; UNION / INTERSECT / EXCEPT = ∪ ∩ −.
+  - RA → TRC: each relation = a variable with R(t); π = left side; σ = condition; ⋈ = ∃ over the non-output relation + join condition; − = ∧ ¬∃; ÷ = ∀ (or ¬∃ … ¬∃).
+  - TRC → SQL: free variable = outer FROM; ∃ = EXISTS (subquery); ¬∃ = NOT EXISTS; ∀ = NOT EXISTS (… NOT EXISTS …); ∧ ∨ ¬ = AND OR NOT.
+  - Do not convert: aggregates, ORDER BY and outer joins have no TRC form; say so.
 - Unsafe: {t | ¬R(t)}. No aggregates in TRC: say so.
 - Empty set: "all of none" is true; state whether such rows are included.
 
