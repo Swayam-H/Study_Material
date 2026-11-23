@@ -43,8 +43,8 @@
     {
       "slug": "formula-sheet",
       "file": "formula-sheet.md",
-      "title": "Formula sheet",
-      "about": "Every calculation rule from the course on one page"
+      "title": "Formula sheets (3 pages)",
+      "about": "Exam-ready rules, tables, code templates and check values: CPU and networking, memory, concurrency and file systems"
     },
     {
       "slug": "mp2-theory",
