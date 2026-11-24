@@ -41,6 +41,12 @@
       "about": "Every lecture deck condensed: shorter than the chapter notes, fuller than the formula sheets"
     },
     {
+      "slug": "theory-cheatsheet",
+      "file": "theory-cheatsheet.md",
+      "title": "Theory cheat sheet (3 pages)",
+      "about": "Definitions, why-answers and trade-offs for every unit, in copy-ready one-liners for the theory parts of the exam"
+    },
+    {
       "slug": "endsem",
       "file": "endsem.md",
       "title": "Endsem practice (9 × 10 marks)",
