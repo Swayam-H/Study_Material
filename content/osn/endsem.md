@@ -501,49 +501,65 @@ No bitmap is read or written: a read does not allocate anything.
 
 # Endsem practice: post-midsem extras
 
-*These cover slide topics from L13 to L19 that neither the professor's sheet nor the practice banks in the chapter pages already test. Do the existing ones too. Each maps to topics the sheet skips:*
+*These cover slide topics from L13 to L19 that the professor's sheet skips and that are most likely to be asked. Same exam format as E1 to E20: rule, working, answer, reason. Also redo the existing banks:*
 
 - *Page replacement and AMAT: M10, M11, M12, M13 (Memory page)*
-- *Threads, races, locks, semaphores, deadlock: S1 to S20 (Concurrency page). In particular S1 (counter race), S7 (priority inversion), S9 and S12 (producer/consumer), S15 and S16 (dining philosophers, deadlock)*
-- *File API and vsfs: F1 to F12 (File systems page)*
+- *Threads, races, locks, semaphores, deadlock: S1 to S28 (Concurrency page). In particular S1 (counter race), S7 (priority inversion), S9 and S12 (producer/consumer), S15 and S16 (dining philosophers, deadlock)*
+- *File API and vsfs: F1 to F21 (File systems page)*
 
-**X1.** Hybrid paging and segmentation (L13 s8-11). 32-bit VAs and 4 KB pages. The top 2 bits pick the segment (01 code, 10 heap, 11 stack, 00 unused), then an 18-bit VPN, then a 12-bit offset. Each segment has a base register (the physical address of its page table) and a bounds register (the number of valid pages). Code bounds = 3, heap base = 0x2000 and heap bounds = 10, with 4-byte PTEs. (a) Where is the PTE for VA 0x80001234? [3] (b) What happens on VA 0x40003ABC? [2] (c) The process uses 3 code pages, 10 heap pages and 2 stack pages. Compare the page-table memory with a linear table. [3] (d) Give two drawbacks of the hybrid. [2]
+**X1.** Page replacement trace (L13 s48-52). Reference string 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5. (a) Count the page faults for FIFO with 3 frames and with 4 frames. [4] (b) Count the faults for LRU with 3 and 4 frames, and for OPT with 3 frames. [4] (c) What is Belady's anomaly, and why can LRU never show it? [2]
 
-*Solution.* (a) Top bits 10 = heap. VPN = (VA & VPN_MASK) >> 12 = 1, and the offset is 0x234. 1 < 10, so it is in bounds. AddressOfPTE = Base[heap] + VPN × 4 = 0x2000 + 4 = **0x2004**.
+*Solution.*
 
-(b) Top bits 01 = code, VPN = 3, offset 0xABC. Code bounds = 3, so valid VPNs are 0 to 2. 3 is out of bounds: an **exception**, and the process is likely killed.
+**Method.** For each reference, check whether the page is in memory (hit) or not (miss, a page fault). On a miss with full frames, evict by the policy: FIFO evicts the page that has been in memory longest; LRU evicts the page whose last use is oldest; OPT evicts the page whose next use is furthest in the future (or never).
 
-(c) A linear table needs 2^20 × 4 B = **4 MB**. The hybrid stores only 3 + 10 + 2 = 15 PTEs = **60 B**, because the unused pages between heap and stack cost no table space.
+**(a) FIFO.** Frames shown oldest first.
 
-(d) It still needs segmentation, which assumes a fixed pattern of address-space use (a large sparse heap still wastes table space). Page tables are now variable-sized, so **external fragmentation** comes back when allocating them.
+| Ref | 1 | 2 | 3 | 4 | 1 | 2 | 5 | 1 | 2 | 3 | 4 | 5 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 3 frames | M [1] | M [1 2] | M [1 2 3] | M [2 3 4] | M [3 4 1] | M [4 1 2] | M [1 2 5] | H | H | M [2 5 3] | M [5 3 4] | H |
+| 4 frames | M | M | M | M [1 2 3 4] | H | H | M [2 3 4 5] | M [3 4 5 1] | M [4 5 1 2] | M [5 1 2 3] | M [1 2 3 4] | M [2 3 4 5] |
 
----
+FIFO with 3 frames: **9 faults**. FIFO with 4 frames: **10 faults**.
 
-**X2.** Inverted page tables, and swapping page tables (L13 s26-27). (a) What is an inverted page table, and how big is it for 4 GB of RAM, 4 KB frames and 8-byte entries? [4] (b) Why does lookup need a hash table? [3] (c) What does it mean to swap page tables to disk? [3]
+**(b) LRU** (evict the least recently used).
 
-*Solution.* (a) There is **one table for the whole system**, with one entry per **physical frame**, saying which process and VPN use that frame. 4 GB / 4 KB = 2^20 frames × 8 B = **8 MB in total**, however many processes run. Linear tables would need 4 MB *per process* on a 32-bit system.
+- **3 frames:** 1, 2, 3, 4 (evict 1), 1 (evict 2), 2 (evict 3), 5 (evict 4) are 7 misses; then 1 and 2 hit; 3 (evict 5), 4 (evict 1), 5 (evict 2) are 3 more misses. Total **10 faults**.
+- **4 frames:** 1, 2, 3, 4 miss; 1 and 2 hit; 5 (evict 3) misses; 1 and 2 hit; 3 (evict 4), 4 (evict 5), 5 (evict 1) miss. Total **8 faults**.
 
-(b) The table is indexed by frame, but translation starts from (process, VPN). A linear search over 2^20 entries per TLB miss is too slow, so a hash on (PID, VPN) finds the entry.
+**OPT, 3 frames:** 1, 2, 3 miss; 4 misses (evict 3, used furthest ahead); 1 and 2 hit; 5 misses (evict 4); 1 and 2 hit; 3 misses (evict 1, which is never used again); 4 misses (evict 2); 5 hits. Total **7 faults**, the minimum possible.
 
-(c) The page tables themselves are placed in kernel virtual memory, so the OS can page parts of them out to disk under memory pressure. A TLB miss can then require a page fault just to bring in the page-table page.
+| Policy | 3 frames | 4 frames |
+| --- | --- | --- |
+| FIFO | 9 | **10** |
+| LRU | 10 | 8 |
+| OPT | 7 | – |
 
----
-
-**X3.** The swapping mechanism (L13 s33-43). (a) On a TLB miss, list the three cases the hardware or OS can find in the PTE, and what happens in each. [4] (b) Give the steps the OS takes to service a page fault when memory is full. [3] (c) What are the high and low watermarks, and why does the OS evict pages in clusters? [3]
-
-*Solution.* (a)
-
-1. **Valid and present**: insert the translation into the TLB and retry, which now hits.
-2. **Valid but not present**: page fault. The OS brings the page in from swap, updates the PTE and retries.
-3. **Not valid**: an illegal access, so a segmentation fault, and the OS kills the process.
-
-(b) Find a free frame. If there is none, run the replacement policy to choose a victim, write it back if it is dirty, and mark its PTE not present. Issue the disk read for the faulting page, blocking the process; another process runs meanwhile. When the I/O finishes, set present = 1 and the PFN in the PTE, and retry the instruction.
-
-(c) The OS does not wait until memory is completely full. When free pages fall below the **low watermark (LW)**, the **swap daemon** (page daemon) evicts pages until there are **high watermark (HW)** pages free, then sleeps. Writing many pages at once in a **cluster** lets the disk do one large sequential write instead of many seeks, which is far faster.
+**(c) Belady's anomaly:** giving a process **more frames** produces **more** page faults, as FIFO does here (9 → 10). It happens because FIFO ignores how recently a page was used. LRU and OPT have the **stack property**: the set of pages in memory with N frames is always a **subset** of the set with N + 1 frames, so adding a frame can only turn misses into hits, never the reverse.
 
 ---
 
-**X4.** Producer/consumer with condition variables (L16 s14-21). One producer and two consumers share a one-slot buffer.
+**X2.** AMAT and the page-fault path (L13 s33-47). T_M = 100 ns and T_D = 10 ms. (a) Find the AMAT at a 99.9% hit rate. [3] (b) What hit rate keeps the AMAT under 200 ns? [3] (c) Describe step by step what happens on a TLB miss for a page that is valid but not present. [4]
+
+*Solution.*
+
+**(a)** $AMAT = T_M + P_{miss} \cdot T_D$. With P_miss = 0.001 and T_D = 10 ms = 10,000,000 ns: AMAT = 100 + 0.001 × 10,000,000 = 100 + 10,000 = 10,100 ns = **10.1 µs**. (At 90% hits: 100 + 0.1 × 10^7 = about 1 ms.)
+
+**(b)** Need 100 + P × 10^7 < 200, so P < 100 / 10^7 = 10^−5. The hit rate must be **above 99.999%**. The disk is about 100,000 times slower than memory, so even a tiny miss rate **dominates** the average.
+
+**(c) Steps:**
+
+1. The TLB lookup **misses**, so the hardware walks the page table and reads the PTE.
+2. The PTE has **valid = 1, present = 0**, so the hardware raises a **page fault** (trap to the OS).
+3. The **OS page-fault handler** finds the page's disk address (stored in the PTE).
+4. It finds a **free frame**. If none is free, the replacement policy picks a **victim**, and if the victim is dirty it is written to disk first.
+5. The OS issues the **disk read** and **blocks** the process; the scheduler runs another process while the I/O completes.
+6. When the I/O finishes, the OS sets **present = 1** and the **PFN** in the PTE.
+7. The faulting instruction is **retried**. It misses in the TLB again, the hardware now finds a present PTE, installs it in the TLB, and the next retry **hits**.
+
+---
+
+**X3.** Producer/consumer with condition variables (L16 s14-24). One producer and two consumers share a one-slot buffer.
 
 ```c
 void *consumer() { lock(&m); if (count == 0) wait(&cv, &m); get(); signal(&cv); unlock(&m); }
@@ -552,72 +568,176 @@ void *producer() { lock(&m); if (count == 1) wait(&cv, &m); put(); signal(&cv); 
 
 (a) Show how a consumer can call get() on an empty buffer. [4] (b) After changing `if` to `while`, show how all three threads can end up asleep. [4] (c) Give the final fix. [2]
 
-*Solution.* (a) Tc1 finds the buffer empty and waits. P fills the buffer and signals, so Tc1 becomes ready but does not run yet. Tc2 runs first and consumes. Tc1 then runs, does not recheck because of the `if`, and calls get() on an empty buffer.
+*Solution.*
 
-(b) Tc1 and Tc2 both wait. P fills, signals (waking Tc1) and then waits because the buffer is full. Tc1 consumes and signals, but there is **one CV**, and the signal wakes Tc2 instead of P. Tc2 sees an empty buffer and waits. Now all three are asleep.
+**(a) Problem with `if` (Mesa semantics).** Tc1 and Tc2 are consumers, P is the producer.
 
-(c) Use `while`, plus **two CVs**: producers wait on `empty` and signal `fill`, and consumers wait on `fill` and signal `empty`.
+| Step | Event | count |
+| --- | --- | --- |
+| 1 | Tc1 runs: buffer empty, `wait` (sleeps) | 0 |
+| 2 | P runs: `put()` fills the buffer, `signal` wakes Tc1 (now **ready**, not running) | 1 |
+| 3 | **Tc2 runs first**: count is 1, so it skips the wait, `get()` empties the buffer | 0 |
+| 4 | Tc1 runs: it was already past its `if`, so it does **not recheck**, and calls `get()` on an **empty buffer** | 0 (error) |
 
----
+**(b) Problem with one CV.** With `while` instead of `if`:
 
-**X5.** Zemaphores and throttling (L17 s26-28). (a) Implement `Zem_wait` and `Zem_post` using one lock and one condition variable. [5] (b) How does a Zemaphore's value differ from a Dijkstra semaphore's? [2] (c) What is thread throttling, and what initial value does it use? [3]
+| Step | Event |
+| --- | --- |
+| 1 | Tc1 and Tc2 both run first: count = 0, both wait on the CV |
+| 2 | P: `put()`, `signal` wakes one waiter (Tc1); then P loops and finds the buffer full, so it **waits** |
+| 3 | Tc1: `get()`, then `signal`: with **one** CV, the signal can wake **Tc2** (a consumer) instead of P |
+| 4 | Tc2: count = 0, waits again |
 
-*Solution.* (a)
+**All three threads are now asleep** (P waits for room, Tc1 finished and Tc2 waits for data, nothing is left to wake them). The signal woke the wrong **kind** of thread.
+
+**(c) Fix.** Use **`while`** (recheck after wake-up) **and two CVs**: a producer waits on `empty` and signals `fill`; a consumer waits on `fill` and signals `empty`. Then a consumer's signal can only wake a producer, and vice versa.
+
 ```c
-typedef struct { int value; pthread_cond_t cond; pthread_mutex_t lock; } Zem_t;
-void Zem_init(Zem_t *s, int value) { s->value = value; /* init cond and lock */ }
-void Zem_wait(Zem_t *s) {
-    lock(&s->lock);
-    while (s->value <= 0) wait(&s->cond, &s->lock);
-    s->value--;
-    unlock(&s->lock);
-}
-void Zem_post(Zem_t *s) {
-    lock(&s->lock);
-    s->value++;
-    signal(&s->cond);
-    unlock(&s->lock);
-}
+producer: lock; while (count == MAX) wait(&empty, &m); put(); signal(&fill);  unlock;
+consumer: lock; while (count == 0)   wait(&fill, &m);  get(); signal(&empty); unlock;
 ```
-(b) In Dijkstra's version, sem_wait decrements first, so a negative value −k means k threads are waiting. A Zemaphore waits *before* decrementing, so its value **never goes below 0**. (This matches Linux.)
-
-(c) **Admission control**: a semaphore initialised to **N** limits how many threads can be inside a region at once, for example a memory-hungry phase, so the system does not thrash. Initial values to remember: lock 1, ordering 0, bounded buffer empty = MAX and full = 0, throttling N.
 
 ---
 
-**X6.** File API details (L18 s16-25). (a) `ls -l` shows `-rwxr-x--- 2 alice staff`. Give the octal mode, and say what group and others can do. What is the 2? [4] (b) What do r, w and x mean on a **directory**? [2] (c) You run `mkdir d; mkdir d/e; mkdir d/f`. What is the link count of d, and why? [2] (d) What does `mount` do? [2]
+**X4.** Semaphore bounded buffer (L17 s13-19). empty = MAX, full = 0, mutex = 1. A first attempt takes `sem_wait(&mutex)` **before** `sem_wait(&empty)` in the producer, and `sem_wait(&mutex)` before `sem_wait(&full)` in the consumer. (a) Show the deadlock. [5] (b) Fix it, and say why the fix works. [5]
 
-*Solution.* (a) rwx = 7, r-x = 5, --- = 0, so the mode is **750**. The group can read and execute; others have no access. The 2 is the **hard-link count**: two directory entries name this inode.
+*Solution.*
 
-(b) r = list the names in it, w = create, delete or rename entries (needs x as well), x = enter it (cd) and access files inside it by name.
+**(a) Deadlock.** The buffer is empty (full = 0).
 
-(c) **4**: the entry `d` in its parent, `.` inside d, and `..` inside e and inside f. Every new subdirectory adds 1.
+| Step | Event |
+| --- | --- |
+| 1 | The consumer runs: `sem_wait(&mutex)` succeeds (mutex = 0), then `sem_wait(&full)` **blocks** (full = 0), **while still holding the mutex** |
+| 2 | The producer runs: `sem_wait(&mutex)` **blocks**, because the consumer holds it |
 
-(d) mount attaches a file system's root at a directory (the mount point) in the existing tree, so all file systems appear as one tree. For example, `mount -t ext3 /dev/sda1 /home/users`.
+The consumer waits for the producer to put an item (full), and the producer waits for the consumer to release the mutex: a **circular wait**, so both sleep forever. The cause is **hold and wait**: a thread blocks on `full` or `empty` while holding the mutex.
+
+**(b) Fix: shrink the mutex's scope** so it covers only the buffer update:
+
+```c
+producer:                       consumer:
+  sem_wait(&empty);               sem_wait(&full);
+  sem_wait(&mutex);               sem_wait(&mutex);
+  put(i);                         tmp = get();
+  sem_post(&mutex);               sem_post(&mutex);
+  sem_post(&full);                sem_post(&empty);
+```
+
+A thread now waits for **empty/full first, without holding the mutex**, so it cannot block anyone while it sleeps. It only takes the mutex once it knows there is room (or an item), so the critical section is short and always makes progress. (The mutex is still needed when MAX > 1: without it, two producers could write the same slot.)
 
 ---
 
-**X7.** Lock primitives (L15 s20-29). (a) Write CompareAndSwap and a spin lock built on it. [3] (b) Write a lock with LoadLinked and StoreConditional. [3] (c) With `yield` instead of spinning, N threads on one CPU contend and the holder is preempted. What is the cost, and what problem remains? [4]
+**X5.** The counter race (L14 s14-18). `counter = counter + 1` compiles to `mov counter, %eax; add $1, %eax; mov %eax, counter`. counter starts at 50, and two threads each run it once. (a) Trace an interleaving that ends with 51. [5] (b) Define critical section, race condition, indeterminate program and mutual exclusion. [5]
 
-*Solution.* (a)
+*Solution.*
+
+**(a)** Each thread has its own copy of the registers (saved and restored on a switch), but both share the memory location `counter`.
+
+| Step | Thread | Instruction | T1's eax | T2's eax | counter |
+| --- | --- | --- | --- | --- | --- |
+| 1 | T1 | load | 50 | | 50 |
+| 2 | T1 | add | 51 | | 50 |
+| 3 | | *timer interrupt, switch to T2 (T1's eax = 51 is saved)* | | | 50 |
+| 4 | T2 | load | | 50 | 50 |
+| 5 | T2 | add | | 51 | 50 |
+| 6 | T2 | store | | 51 | **51** |
+| 7 | | *switch back to T1* | | | 51 |
+| 8 | T1 | store | 51 | | **51** |
+
+Both increments ran, but the final value is **51, not 52**: one update was **lost**, because T2 read the old value (50) before T1 wrote its result.
+
+**(b)**
+- **Critical section:** a piece of code that accesses a shared resource (here, the three instructions that update `counter`) and must not be run by more than one thread at a time.
+- **Race condition:** several threads enter the critical section at about the same time, and the result **depends on the exact timing** of the scheduler.
+- **Indeterminate program:** a program with one or more race conditions, so its output **varies from run to run**.
+- **Mutual exclusion:** a guarantee that if one thread is in the critical section, **all others are kept out**. A lock provides it.
+
+---
+
+**X6.** File descriptors and links (L18 s6-22). A 100-byte file. `fd = open("f", O_RDONLY); read(fd, buf, 10);` then `fork()`. The child calls `read(fd, buf, 20)` and exits. The parent waits, then calls `lseek(fd, 0, SEEK_CUR)`. (a) What does it return, and why? [3] (b) What if the child had opened the file again itself? [2] (c) Run `echo x > a; ln a b; ln -s a s; rm a`. Give the link count of b, and say what `cat b` and `cat s` do. [3] (d) How do you update a file atomically? [2]
+
+*Solution.*
+
+**(a) It returns 30.** Each process has a **file-descriptor table**, whose entries point to a **system-wide open-file table**. After `fork`, the parent's and child's fd 3 point to the **same open-file-table entry**, which holds the **current offset**. The offset moves 0 → 10 (parent's read) → 30 (child's read of 20). `lseek(fd, 0, SEEK_CUR)` just reports the current offset, so it returns **30**.
+
+**(b)** A separate `open()` creates a **new** open-file-table entry with its **own offset** (starting at 0). The child's reads would then not move the parent's offset, and the parent would still report **10**.
+
+**(c)** `echo x > a` creates inode with link count 1. `ln a b` adds a second name for the **same inode**: count = 2. `ln -s a s` creates a new file whose data is the path "a" (it does not change the count). `rm a` is `unlink("a")`: count drops to **1**. `cat b` prints **x**, because the inode and data still exist. `cat s` **fails** (No such file or directory): the symlink holds the *path* "a", which no longer exists. It is a **dangling symlink**.
+
+**(d) Atomic update:** write the new contents to a temporary file `f.tmp`, call **`fsync()`** so the data is on disk, then **`rename("f.tmp", "f")`**. `rename` is **atomic**, so after a crash the file is either completely the old version or completely the new one, never half-written.
+
+---
+
+**X7.** Dining philosophers (L17 s23-25). 5 philosophers and 5 forks. Each runs `sem_wait(left); sem_wait(right); eat; sem_post(right); sem_post(left);`. (a) Show the deadlock, and name the four deadlock conditions. [5] (b) Give the standard fix and the condition it breaks. [3] (c) Name one other fix. [2]
+
+*Solution.*
+
+**(a)** If all five philosophers pick up their **left** fork at the same moment, each holds one fork and waits for the **right** fork, which is held by the neighbour. Everyone waits for the next, in a cycle: **deadlock**. The four necessary conditions: **(1) mutual exclusion** (a fork is used by one philosopher at a time), **(2) hold and wait** (a philosopher holds one fork while waiting for another), **(3) no preemption** (a fork cannot be taken away), **(4) circular wait** (each waits for a fork held by the next in a cycle).
+
+**(b) Fix: break the dependency.** Let **one philosopher (the last one) pick up the right fork first**, then the left. The forks are then acquired in a consistent global order, so the cycle cannot form. This breaks **circular wait**.
+
+**(c) Another fix:** **admission control**: a semaphore initialised to 4 lets at most 4 philosophers try to eat at once, so at least one can always get both forks. (Or pick up both forks atomically under one lock, which breaks hold and wait.)
+
+---
+
+**X8.** Lock implementations (L15 s15-33). (a) Write CompareAndSwap and a spin lock using it. [3] (b) Write a lock using LoadLinked and StoreConditional. [3] (c) What is priority inversion, and how is it fixed? [4]
+
+*Solution.*
+
+**(a)** CompareAndSwap atomically compares `*ptr` with `expected` and, if equal, writes `new`; it returns the old value:
+
 ```c
 int CompareAndSwap(int *ptr, int expected, int new) {
     int actual = *ptr;
     if (actual == expected) *ptr = new;
-    return actual;            // all of this happens atomically
+    return actual;          // all of this executes atomically
 }
-void lock(lock_t *l) { while (CompareAndSwap(&l->flag, 0, 1) == 1) ; }
+void lock(lock_t *l)   { while (CompareAndSwap(&l->flag, 0, 1) == 1) ; }   // spin until we swapped 0 to 1
+void unlock(lock_t *l) { l->flag = 0; }
 ```
-(b)
+
+**(b)** `LoadLinked` loads the value; `StoreConditional` stores only if **no other write to that address has happened since the load-linked**, returning 1 on success and 0 on failure:
+
 ```c
 void lock(lock_t *l) {
     while (1) {
-        while (LoadLinked(&l->flag) == 1) ;               // spin until free
-        if (StoreConditional(&l->flag, 1) == 1) return;   // fails if anyone wrote since LL
+        while (LoadLinked(&l->flag) == 1) ;               // spin while held
+        if (StoreConditional(&l->flag, 1) == 1) return;   // fails if another thread wrote in between; retry
     }
 }
 ```
-(c) Each waiter runs, finds the lock held and yields at once, so a round costs up to **N − 1 context switches** instead of N − 1 whole time slices. That is better than spinning, but context switches are still expensive with many threads. Starvation also remains: a thread can keep yielding while others get the lock. Hence queues with **park/unpark**.
+
+**(c) Priority inversion:** a low-priority thread L holds a lock that a high-priority thread H needs. H waits for L, but a **medium-priority** thread M keeps preempting L, so L cannot finish and release the lock: H is effectively blocked by M. (On one CPU with a spin lock, H can spin forever.) **Fixes:** **priority inheritance** (L temporarily runs at H's priority until it releases the lock), or avoid spinning (use sleeping locks).
+
+---
+
+**X9.** Hybrid paging and segmentation (L13 s8-11). 32-bit VAs and 4 KB pages. The top 2 bits pick the segment (01 code, 10 heap, 11 stack, 00 unused), then an 18-bit VPN, then a 12-bit offset. Each segment has a base register (physical address of its page table) and a bounds register (number of valid pages). Code bounds = 3, heap base = 0x2000 and heap bounds = 10, with 4-byte PTEs. (a) Where is the PTE for VA 0x80001234? [3] (b) What happens on VA 0x40003ABC? [2] (c) The process uses 3 code pages, 10 heap pages and 2 stack pages. Compare the page-table memory with a linear table. [3] (d) Give two drawbacks of the hybrid. [2]
+
+*Solution.*
+
+**(a)** 0x80001234 = 1000 0000 0000 0000 0001 0010 0011 0100. Top 2 bits = **10 = heap**. VPN = (VA & VPN_MASK) >> 12 = **1**, offset = 0x234. Check: VPN 1 < heap bounds 10, so valid. **AddressOfPTE = Base[heap] + VPN × sizeof(PTE) = 0x2000 + 1 × 4 = 0x2004.**
+
+**(b)** 0x40003ABC: top 2 bits = 01 = code; VPN = 3, offset = 0xABC. Code bounds = 3, so valid VPNs are 0, 1 and 2. VPN 3 is **out of bounds**, so the hardware raises an **exception** and the OS likely kills the process.
+
+**(c)** A linear table has 2^20 entries × 4 B = **4 MB**. The hybrid keeps only the valid pages' PTEs: (3 + 10 + 2) × 4 B = **60 B** in total. The unused region between heap and stack costs **nothing**.
+
+**(d)** (1) It still **needs segmentation**, which assumes a particular pattern of address-space use (for example, a large sparse heap still wastes table space). (2) Page tables are now **variable-sized**, so finding memory for them brings **external fragmentation** back.
+
+---
+
+**X10.** Inverted tables, swapping, and the L13 mechanisms. (a) What is an inverted page table, and how big is it for 4 GB of RAM, 4 KB frames and 8-byte entries? [4] (b) Why does lookup need a hash? [2] (c) On a TLB miss, what are the three cases the OS or hardware can find? [4]
+
+*Solution.*
+
+**(a)** An inverted page table has **one entry per physical frame** for the **whole system** (not one table per process). Each entry records which **(process, VPN)** currently uses that frame. 4 GB / 4 KB = 2^20 frames × 8 B = **8 MB in total**, regardless of the number of processes. (A per-process linear table would need 4 MB for each process.)
+
+**(b)** Translation starts from (PID, VPN), but the table is indexed by frame number. Searching 2^20 entries linearly on each TLB miss is far too slow, so a **hash table on (PID, VPN)** points to the right entry.
+
+**(c) Three cases on a TLB miss:**
+
+1. The PTE is **valid and present**: install the translation in the TLB and retry (a hit now).
+2. The PTE is **valid but not present**: a **page fault**; the OS brings the page in from swap, updates the PTE and retries.
+3. The PTE is **not valid**: an illegal access, so a **segmentation fault**; the OS kills the process.
 
 # Endsem practice: pre-midsem problems
 
@@ -636,141 +756,230 @@ int main() {
 }
 ```
 
-*Solution.* (a) It prints **3, 2, 1**, always in that order. The grandchild has x = 3 and prints first. The child (x = 2) waits for the grandchild, and the parent (x = 1) waits for the child. Each process has its own copy of x.
+*Solution.*
 
-(b) A **zombie** has exited, but its parent has not called wait() yet, so its process-table entry and exit status are kept. An **orphan** is a process whose parent exited first. xv6's exit() reparents the children to init, which waits on them, sets the process state to ZOMBIE, and wakes the parent.
+**(a) Trace.** After the first fork there are the **parent** (x = 1) and the **child** (x = 1). The parent goes to the `else` branch and waits. The child increments x to 2, then forks a **grandchild** (x = 2). The grandchild increments x to 3, **prints 3** and exits. The child's `wait` returns and it **prints 2**. The parent's `wait` returns and it **prints 1**.
 
-(c) Between fork and exec, the shell can change the child's environment, for example `close(1); open("out.txt", ...)` for redirection, or setting up pipes. The program it then runs inherits those changes without knowing about them.
+Output: **3, 2, 1**, always in this order, because each `wait` forces the parent to print after its child. Each process has its **own copy** of x (fork copies the address space), so a change in a child never affects the parent.
 
----
+**(b)** A **zombie** is a process that has **exited** but whose **parent has not yet called wait()**: its process-table entry and exit status remain until the parent collects them. An **orphan** is a process whose **parent has exited first**; the OS reparents it to **init**. In xv6, `exit()` closes the files, sets the process state to **ZOMBIE**, gives the dying process's **children to init** (which waits for them), and **wakes up the parent**. A zombie that is never waited for stays in the table forever (a leak).
 
-**P2.** Limited direct execution. (a) List the hardware and OS steps when a timer interrupt switches from process A to process B. [6] (b) Which registers are saved twice, by whom, and where? [2] (c) Why does the trap table have to be set up at boot, and why is a system-call *number* used instead of an address? [2]
-
-*Solution.* (a)
-
-1. **Hardware**: the timer interrupt fires. A's user registers are saved to A's kernel stack, the CPU switches to kernel mode, and it jumps to the trap handler.
-2. **OS**: the handler decides to switch and calls `switch()`, which saves A's kernel registers into A's proc structure.
-3. **OS**: it restores B's kernel registers from B's proc structure and switches to B's kernel stack.
-4. **OS**: return-from-trap.
-5. **Hardware**: restores B's user registers from B's kernel stack, switches to user mode, and jumps to B's PC.
-
-(b) The **user registers** are saved by the hardware onto the kernel stack (in xv6, the trapframe). The **kernel registers** are saved by the OS in `swtch()` into the proc structure (`struct context`: ra, sp and s0–s11).
-
-(c) The trap table is installed in kernel mode at boot, using a privileged instruction, so user code cannot redirect traps. User code passes a number, and the kernel validates it and looks up the handler. That way user code can never jump to an arbitrary kernel address.
+**(c)** Keeping them separate lets the shell run code **between fork and exec**, in the child, to **change the environment** without the program knowing: for `ls > out.txt`, the child does `close(1); open("out.txt", ...)` (the new file gets fd 1), then `exec("ls")`. The same pattern sets up **pipes** and changes the working directory. The program that is then exec'd inherits those fds, so **I/O redirection** needs no support inside the program.
 
 ---
 
-**P3.** Jobs: A arrives at 0 and needs 6; B arrives at 2 and needs 3; C at 4 needs 8; D at 6 needs 2. Find the average turnaround and response times for FIFO, SJF (non-preemptive), STCF and RR (q = 2; a new arrival joins the queue before the job that was just preempted). [10]
+**P2.** Limited direct execution (L04). (a) List the hardware and OS steps when a timer interrupt switches from process A to process B. [6] (b) Which registers are saved twice, by whom, and where? [2] (c) Why does the trap table have to be set up at boot, and why is a system-call *number* used instead of an address? [2]
 
 *Solution.*
 
-| Policy | Schedule | Completion A, B, C, D | Avg turnaround | Avg response |
-| --- | --- | --- | --- | --- |
-| FIFO | A 0–6, B 6–9, C 9–17, D 17–19 | 6, 9, 17, 19 | (6+7+13+13)/4 = **9.75** | (0+4+5+11)/4 = **5** |
-| SJF | A 0–6, D 6–8, B 8–11, C 11–19 | 6, 11, 19, 8 | (6+9+15+2)/4 = **8** | (0+6+7+0)/4 = **3.25** |
-| STCF | A 0–2, B 2–5, A 5–6, D 6–8, A 8–11, C 11–19 | 11, 5, 19, 8 | (11+3+15+2)/4 = **7.75** | (0+0+7+0)/4 = **1.75** |
-| RR | A 0–2, B 2–4, A 4–6, C 6–8, B 8–9, D 9–11, A 11–13, C 13–19 | 13, 9, 19, 11 | (13+7+15+5)/4 = **10** | (0+0+2+3)/4 = **1.25** |
+**(a) Steps:**
 
-STCF is best for turnaround and RR is best for response. Turnaround = completion − arrival, and response = first run − arrival.
+1. **Hardware:** the timer interrupt fires. The hardware saves A's **user registers** (including the PC) onto A's **kernel stack**, switches to **kernel mode**, and jumps to the **trap handler** found in the trap table.
+2. **OS:** the handler decides to switch to B and calls `switch()` (the scheduler).
+3. **OS:** `switch()` saves A's **kernel registers** into A's process structure (its `struct context`).
+4. **OS:** it restores B's kernel registers from B's process structure, which also **switches to B's kernel stack**.
+5. **OS:** the OS executes **return-from-trap**.
+6. **Hardware:** it restores B's user registers from B's kernel stack, switches to **user mode** and jumps to B's PC. B runs as if it had never stopped.
+
+**(b)** The **user registers** are saved **by the hardware** onto the **kernel stack** (in xv6, the trapframe). The **kernel registers** are saved **by the OS** (in `swtch()`) into the **process structure** (xv6: ra, sp, s0 to s11 in `struct context`).
+
+**(c)** The trap table is installed **at boot, in kernel mode, with a privileged instruction**, so the hardware knows where the kernel's handlers are and user code cannot redirect traps to its own code. User code gives a **number** (not an address) so that it can only reach **kernel code the OS has chosen**: the kernel validates the number and looks up the handler itself. An address would let a program jump into the middle of arbitrary kernel code. This is a **protection** mechanism.
+
+---
+
+**P3.** Scheduling. Jobs: A arrives at 0 and needs 6; B arrives at 2 and needs 3; C at 4 needs 8; D at 6 needs 2. Find the average turnaround and response times for FIFO, SJF (non-preemptive), STCF and RR (q = 2; a new arrival joins the queue before the job that was just preempted). [10]
+
+*Solution.*
+
+**Formulas.** Turnaround = completion − arrival. Response = first run − arrival.
+
+**FIFO:** A 0–6, B 6–9, C 9–17, D 17–19. Turnaround: A 6, B 7, C 13, D 13, average = 39 / 4 = **9.75**. Response: A 0, B 4, C 5, D 11, average = 20 / 4 = **5**.
+
+**SJF (non-preemptive):** at 0 only A is there, so A 0–6. At 6, B (3), C (8) and D (2) are waiting, so the shortest is D: D 6–8, then B 8–11, then C 11–19. Turnaround: A 6, B 9, C 15, D 2, average = 32 / 4 = **8**. Response: A 0, B 6, C 7, D 0, average = 13 / 4 = **3.25**.
+
+**STCF (preemptive SJF):** A runs 0–2. At 2, B (3) is shorter than A's remaining 4, so B runs 2–5 (C arrives at 4 with 8, not shorter than B's remaining 1). At 5, A (4) runs; at 6, D (2) is shorter than A's remaining 3, so D 6–8. Then A 8–11, then C 11–19. Completion: A 11, B 5, C 19, D 8. Turnaround: A 11, B 3, C 15, D 2, average = 31 / 4 = **7.75**. Response: A 0, B 0, C 7, D 0, average = 7 / 4 = **1.75**.
+
+**RR (q = 2):** the queue changes as follows (arrivals join ahead of the preempted job).
+
+| Time | Runs | Queue after (front first) |
+| --- | --- | --- |
+| 0–2 | A | B arrives at 2, goes before A: [B, A] |
+| 2–4 | B | C arrives at 4, goes before B: [A, C, B] |
+| 4–6 | A | D arrives at 6, goes before A: [C, B, D, A] |
+| 6–8 | C | [B, D, A, C] |
+| 8–9 | B (finishes) | [D, A, C] |
+| 9–11 | D (finishes) | [A, C] |
+| 11–13 | A (finishes) | [C] |
+| 13–19 | C (finishes) | |
+
+Completion: A 13, B 9, C 19, D 11. Turnaround: A 13, B 7, C 15, D 5, average = 40 / 4 = **10**. Response: A 0, B 0, C 2, D 3, average = 5 / 4 = **1.25**.
+
+| Policy | Avg turnaround | Avg response |
+| --- | --- | --- |
+| FIFO | 9.75 | 5 |
+| SJF | 8 | 3.25 |
+| STCF | **7.75** | 1.75 |
+| RR | 10 | **1.25** |
+
+**Conclusion:** STCF is best for turnaround, RR is best for response, and the two goals trade off.
 
 ---
 
 **P4.** MLFQ with three queues: Q2 (top, quantum 10 ms), Q1 (20 ms) and Q0 (round robin), with no boost. A is CPU-bound and needs 100 ms, arriving at 0. B needs 20 ms and arrives at 30. (a) Trace the schedule and give both turnaround times. [4] (b) Show how a job can game Rules 4a/4b, and give the fix. [3] (c) Why is a priority boost needed, and what goes wrong if it is too frequent? [3]
 
-*Solution.* (a) A runs 0–10 in Q2 and moves down to Q1. It runs 10–30 in Q1 and moves to Q0. B arrives at 30 in Q2 and runs 30–40, then moves to Q1. B runs 40–50 in Q1 and finishes. A resumes at 50 with 70 ms left and finishes at 120. **Turnaround: B = 20 and A = 120.** MLFQ approximates SJF without knowing job lengths.
+*Solution.*
 
-(b) Under the old rule, a job that gives up the CPU before its slice ends keeps its priority. A job can issue a pointless I/O at 9.9 ms of every 10 ms slice and stay at the top forever. Fix (the new Rule 4): count the **total allotment** used at a level, whatever the I/O pattern, and demote the job once it is used up.
+**(a) Rules used:** a new job starts at the top queue; a job that uses its whole allotment at a level moves down; the highest-priority non-empty queue runs.
 
-(c) Without a boost, a stream of interactive jobs can **starve** long jobs, and a job that becomes interactive stays stuck low. Rule 5 moves every job to the top every S ms. If S is too small, CPU-bound jobs keep returning to the top and interactive jobs lose their advantage. If S is too large, long jobs starve. The value of S is a tuning choice (Ousterhout's "voo-doo constant").
+| Time | Event |
+| --- | --- |
+| 0–10 | A runs in Q2, uses its 10 ms, moves to Q1 |
+| 10–30 | A runs in Q1, uses its 20 ms, moves to Q0 |
+| 30 | B arrives (needs 20 ms) and enters Q2, which has higher priority than A's Q0 |
+| 30–40 | B runs in Q2, uses 10 ms, moves to Q1 |
+| 40–50 | B runs in Q1, the remaining 10 ms: **B finishes at 50** |
+| 50–120 | A runs in Q0 with 100 − 10 − 20 = 70 ms left: **A finishes at 120** |
+
+**Turnaround: B = 50 − 30 = 20 ms; A = 120 ms.** The short job B overtakes the long job A, so MLFQ approximates SJF without knowing job lengths.
+
+**(b) Gaming (old Rule 4b):** the old rules let a job that **gave up the CPU before its slice ended stay at the same priority**. A job can issue a pointless I/O just before the end of each time slice (for example, at 9.9 ms of a 10 ms slice), so it is never demoted and monopolises the top queue. **Fix (new Rule 4):** account for the **total CPU time used at a level**, regardless of how many times the job gave up the CPU, and demote it once its allotment is used up.
+
+**(c)** Without a boost: **(1) starvation:** if there are many interactive jobs, long jobs sink to the bottom and never run; **(2) behaviour change:** a CPU-bound job that later becomes interactive stays stuck at the bottom. **Rule 5:** after some period S, **move all jobs to the top queue** (this guarantees progress and re-evaluates behaviour). **If S is too small,** CPU-bound jobs keep returning to the top and take CPU time from interactive jobs, so MLFQ degrades towards plain round robin. If S is too large, long jobs still starve between boosts. S is a "voo-doo constant" that must be tuned.
 
 ---
 
 **P5.** CFS with sched_latency = 48 ms and min_granularity = 6 ms. A and B have nice 0 (weight 1024), and C has nice −5 (weight 3121). (a) Give each process's time slice. [4] (b) Show how much each one's vruntime grows over one period. [3] (c) With 12 processes at nice 0, what slice does each get? [2] (d) Where does CFS put a process waking from a long sleep? [1]
 
-*Solution.* (a) The total weight is 1024 + 1024 + 3121 = 5169. A and B each get 48 × 1024 / 5169 = **9.51 ms**, and C gets 48 × 3121 / 5169 = **28.98 ms**.
+*Solution.*
 
-$$\text{slice}_k = \frac{w_k}{\sum w}\cdot\text{sched\_latency}, \qquad \text{vruntime}_k \mathrel{+}= \frac{1024}{w_k}\cdot\text{runtime}_k$$
+**(a) Formula:** $\text{slice}_k = \dfrac{w_k}{\sum w_i} \times \text{sched\_latency}$. Total weight = 1024 + 1024 + 3121 = 5169. A and B: 48 × 1024 / 5169 = **9.51 ms** each. C: 48 × 3121 / 5169 = **28.98 ms**. (They add up to 48 ms.)
 
-(b) A and B gain 9.51 × 1024/1024 = 9.51. C gains 28.98 × 1024/3121 = **9.51** too. vruntime advances equally, which is why weighted fairness works.
+**(b) Formula:** $\Delta vruntime = \dfrac{1024}{w_k} \times \text{runtime}$. A and B: 9.51 × 1024 / 1024 = **9.51**. C: 28.98 × 1024 / 3121 = **9.51**. **They are equal.** A higher-weight process gets a longer slice but its vruntime grows more slowly per ms, so when CFS keeps all vruntimes level (always running the one with the **lowest vruntime**), the heavier process receives proportionally more CPU.
 
-(c) 48 / 12 = 4 ms, which is below min_granularity, so each gets **6 ms** (one round takes 72 ms).
+**(c)** 48 / 12 = 4 ms, which is below min_granularity, so each process gets **6 ms** (the round then takes 12 × 6 = 72 ms).
 
-(d) CFS sets its vruntime to the **minimum vruntime** in the red-black tree. Otherwise its tiny vruntime would let it monopolise the CPU while it catches up.
-
----
-
-**P6.** Multiprocessor scheduling. (a) What is cache affinity, and how does single-queue scheduling (SQMS) hurt it? [3] (b) Give two scalability problems with SQMS. [2] (c) Under MQMS, A is alone on CPU 0, while B and D share CPU 1. What is the problem, and how is it fixed? [3] (d) Why is cache coherence needed, and how does bus snooping provide it? [2]
-
-*Solution.* (a) A process that runs on the same CPU again finds its data still in that CPU's cache, which makes it faster. SQMS gives each CPU whatever job is next in one global queue, so jobs bounce between CPUs and keep finding cold caches.
-
-(b) The single queue needs a **lock**, which becomes contended as the number of CPUs grows. There is also the affinity problem from (a), and extra mechanisms to fix it make SQMS more complex.
-
-(c) **Load imbalance**: A gets 100% of a CPU while B and D get 50% each. Fix it with **migration**, for example **work stealing**: a lightly loaded queue occasionally checks another queue and takes a job. Checking too often costs overhead, and too rarely leaves the imbalance.
-
-(d) Each CPU caches memory, so a write on one CPU can leave stale copies in the others. With **bus snooping**, every cache watches the shared bus and invalidates (or updates) its copy when it sees a write to that address.
+**(d)** Its vruntime is set to the **minimum vruntime in the red-black tree**, so it neither monopolises the CPU (with a tiny vruntime) nor is penalised for sleeping.
 
 ---
 
-**P7.** Network layers and devices. (a) Name the TCP/IP layers, the data unit at each, and the address each uses. [4] (b) Which header does a hub, a switch and a router each look at? [3] (c) A host sends a 1000-byte HTTP message over TCP/IP and Ethernet. Show the encapsulation, assuming 20-byte TCP and IP headers and an 18-byte Ethernet header and trailer. [3]
+**P6.** Multiprocessor scheduling (L07). (a) What is cache affinity, and how does single-queue scheduling (SQMS) hurt it? [3] (b) Give two scalability problems with SQMS. [2] (c) Under MQMS, A is alone on CPU 0, while B and D share CPU 1. What is the problem, and how is it fixed? [3] (d) Why is cache coherence needed, and how does bus snooping provide it? [2]
 
-*Solution.* (a) **Application**: message, with hostnames and ports used by the app. **Transport**: segment (TCP) or datagram (UDP), with port numbers. **Network**: packet (datagram), with IP addresses. **Link**: frame, with MAC addresses. The physical layer below carries bits.
+*Solution.*
 
-(b) A **hub** works at layer 1 and reads no header: it repeats bits to every port. A **switch** works at layer 2: it reads the **MAC** address and forwards only to the right port, learning which port leads to which MAC. A **router** works at layer 3: it reads the **IP** address and forwards between networks using its routing table.
+**(a)** **Cache affinity:** a process run again on the **same CPU** finds some of its data still in that CPU's cache (and TLB), so it runs faster. SQMS puts all jobs in one queue and each CPU takes whatever job is next, so a job **bounces between CPUs** and finds a cold cache each time.
 
-(c) 1000 B of data, plus the TCP header = a 1020 B segment, plus the IP header = a 1040 B packet, plus the Ethernet header and trailer = a **1058 B frame**. Each layer treats everything above it as data.
+**(b)** (1) The single queue needs a **lock**, and as the number of CPUs grows the lock becomes **heavily contended** (CPUs spend more time waiting for it), limiting scalability. (2) Poor affinity, as in (a); fixing it needs extra mechanisms that make it more complex.
 
----
+**(c)** **Load imbalance:** A gets a whole CPU, while B and D get only 50% each. **Fix: migration.** The OS moves jobs between queues, for example by **work stealing**: a CPU with a short queue occasionally **looks at another queue** and steals a job. Looking too often costs overhead; too rarely leaves the imbalance.
 
-**P8.** TCP. The client ISN is 1000 and the server ISN is 5000. (a) Give the seq and ack numbers of the three-way handshake. [3] (b) The client then sends 3 segments of 100 bytes. Give their seq numbers. The second segment is lost. What ACKs does the server send, and when does fast retransmit fire? [4] (c) Describe the 4-way close, and explain why TIME_WAIT exists. [3]
-
-*Solution.* (a) SYN: seq = 1000. SYN-ACK: seq = 5000, ack = 1001. ACK: seq = 1001, ack = 5001. (A SYN uses up one sequence number.)
-
-(b) The segments have seq = 1001, 1101 and 1201. The server ACKs 1101 after the first. The second is lost. When the third arrives, the ACK is still **1101** (a duplicate), because ACKs are **cumulative**. Fast retransmit fires after **three duplicate ACKs** for 1101, which takes three more segments arriving after the gap. The sender then resends 1101 without waiting for the timeout.
-
-(c) The client sends FIN, and the server ACKs. Later the server sends its own FIN, and the client ACKs. The client then stays in **TIME_WAIT** (twice the maximum segment lifetime), so it can resend the last ACK if that is lost, and so delayed old segments cannot be mistaken for part of a new connection on the same ports.
+**(d)** Each CPU caches memory, so a write on one CPU can leave **stale copies** in the other caches. With **bus snooping**, each cache **watches the shared bus**, and when it sees a write to an address it holds, it **invalidates** (or updates) its own copy.
 
 ---
 
-**P9.** (a) EstimatedRTT = 80 ms and DevRTT = 8 ms. A SampleRTT of 120 ms arrives. Find the new EstimatedRTT, DevRTT and TimeoutInterval, with α = 0.125 and β = 0.25. [4] (b) ssthresh = 8 and cwnd starts at 1. List cwnd for rounds 1 to 8. Three duplicate ACKs arrive at the end of round 8. Give rounds 9 to 11. Then there is a timeout at the end of round 11. Give rounds 12 to 15. [6]
+**P7.** Network layers and devices (L08). (a) Name the TCP/IP layers, the data unit at each, and the address each uses. [4] (b) Which header does a hub, a switch and a router each look at? [3] (c) A host sends a 1000-byte HTTP message over TCP/IP and Ethernet. Show the encapsulation, assuming 20-byte TCP and IP headers and an 18-byte Ethernet header and trailer. [3]
 
-*Solution.* (a) EstimatedRTT = 0.875 × 80 + 0.125 × 120 = **85**. DevRTT = 0.75 × 8 + 0.25 × |120 − 85| = 6 + 8.75 = **14.75** (K&R order: update the estimate first). Timeout = 85 + 4 × 14.75 = **144 ms**.
+*Solution.*
 
-(b)
+**(a)**
+
+| Layer | Data unit | Address used |
+| --- | --- | --- |
+| Application | message | (hostname, port in the app) |
+| Transport | segment (TCP) / datagram (UDP) | **port number** |
+| Network | packet (datagram) | **IP address** |
+| Link | frame | **MAC address** |
+| Physical | bits | – |
+
+**(b)** A **hub** works at layer 1 and reads **no header**: it repeats the bits to every port. A **switch** works at layer 2: it reads the **MAC address**, learns which port leads to which MAC, and forwards the frame only to the right port. A **router** works at layer 3: it reads the **IP address** and forwards the packet towards the destination network using its routing table.
+
+**(c)** Each layer wraps what it receives from above: 1000 B of data + 20 B TCP header = **1020 B segment**; + 20 B IP header = **1040 B packet**; + 18 B Ethernet header and trailer = **1058 B frame**. The receiver strips the headers in reverse order (**decapsulation**).
+
+---
+
+**P8.** TCP (L09). The client ISN is 1000 and the server ISN is 5000. (a) Give the seq and ack numbers of the three-way handshake. [3] (b) The client then sends 3 segments of 100 bytes. Give their seq numbers. The second segment is lost. What ACKs does the server send, and when does fast retransmit fire? [4] (c) Describe the 4-way close, and explain why TIME_WAIT exists. [3]
+
+*Solution.*
+
+**(a)** SYN uses one sequence number.
+
+| Segment | seq | ack |
+| --- | --- | --- |
+| 1. Client → server: SYN | 1000 | – |
+| 2. Server → client: SYN-ACK | 5000 | 1001 |
+| 3. Client → server: ACK | 1001 | 5001 |
+
+**(b)** Data segments: seq = **1001, 1101, 1201** (each 100 bytes). ACK numbers are **cumulative** and name the **next byte expected**. The server ACKs **1101** after segment 1. Segment 2 (seq 1101) is lost. When segment 3 arrives out of order, the server can only ACK what it has in order, so it sends **ACK 1101 again** (a **duplicate ACK**). **Fast retransmit** fires when the sender receives **three duplicate ACKs** for 1101 (that is, the original plus 3 duplicates, which needs more segments arriving after the gap): the sender then retransmits segment 2 **without waiting for the timeout**.
+
+**(c)** **Close:** the side that closes first sends **FIN**; the other side replies **ACK**; later the other side sends its own **FIN**; the first side replies **ACK**. The side that sent the last ACK then enters **TIME_WAIT** for 2 × MSL (maximum segment lifetime). **Why:** (1) if the final ACK is lost, the other side will retransmit its FIN, and the waiting side can still answer; (2) it lets **old delayed segments** from this connection expire, so they cannot be mistaken for part of a **new connection** reusing the same ports.
+
+---
+
+**P9.** TCP timers and congestion control. (a) EstimatedRTT = 80 ms and DevRTT = 8 ms. A SampleRTT of 120 ms arrives. Find the new EstimatedRTT, DevRTT and TimeoutInterval, with α = 0.125 and β = 0.25. [4] (b) ssthresh = 8 and cwnd starts at 1. List cwnd for rounds 1 to 8. Three duplicate ACKs arrive at the end of round 8. Give rounds 9 to 11. Then there is a timeout at the end of round 11. Give rounds 12 to 15. [6]
+
+*Solution.*
+
+**(a)** (K&R order: update EstimatedRTT first, then DevRTT using the new estimate.)
+
+- EstimatedRTT = 0.875 × 80 + 0.125 × 120 = 70 + 15 = **85 ms**.
+- DevRTT = 0.75 × 8 + 0.25 × |120 − 85| = 6 + 8.75 = **14.75 ms**.
+- TimeoutInterval = EstimatedRTT + 4 × DevRTT = 85 + 59 = **144 ms**.
+
+**(b)** **Slow start** doubles cwnd each round until it reaches ssthresh; then **congestion avoidance** adds 1 MSS per round. A loss by **3 duplicate ACKs** sets ssthresh = cwnd / 2 and cwnd = ssthresh (fast recovery). A **timeout** sets ssthresh = cwnd / 2 and cwnd = 1 (back to slow start).
 
 | Round | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | cwnd | 1 | 2 | 4 | 8 | 9 | 10 | 11 | 12 | 6 | 7 | 8 | 1 | 2 | 4 | 5 |
 
-Slow start runs until round 4, when cwnd reaches ssthresh = 8. Congestion avoidance then adds 1 per round. After the 3 duplicate ACKs, ssthresh = 12 / 2 = 6 and cwnd = 6 (fast recovery, Reno). After the timeout, ssthresh = 8 / 2 = 4 and cwnd = 1, so slow start runs again (1, 2, 4) and then grows linearly from 4.
+- Rounds 1–4: slow start (1, 2, 4, 8); cwnd reaches ssthresh = 8 at round 4.
+- Rounds 5–8: congestion avoidance (+1 per round): 9, 10, 11, 12.
+- End of round 8, **3 duplicate ACKs**: ssthresh = 12 / 2 = **6**, cwnd = **6** (round 9), then 7, 8 (rounds 10, 11).
+- End of round 11, **timeout**: ssthresh = 8 / 2 = **4**, cwnd = **1** (round 12). Slow start: 1, 2, 4 (reaches ssthresh = 4), then congestion avoidance: 5.
 
 ---
 
-**P10.** (a) Compute the UDP checksum of the 16-bit words 0x1234, 0xF00F and 0x0F0F. [4] (b) List the socket calls for a TCP server and a TCP client, and say which ones block. [4] (c) Why does accept() return a new socket? [2]
+**P10.** Checksums and sockets (L09). (a) Compute the UDP checksum of the 16-bit words 0x1234, 0xF00F and 0x0F0F. [4] (b) List the socket calls for a TCP server and a TCP client, and say which ones block. [4] (c) Why does accept() return a new socket? [2]
 
-*Solution.* (a) 0x1234 + 0xF00F = 0x10243. Wrap the carry around: 0x0243 + 1 = 0x0244. Then 0x0244 + 0x0F0F = 0x1153. The checksum is the ones' complement: **0xEEAC**. Check: 0x1153 + 0xEEAC = 0xFFFF.
+*Solution.*
 
-(b) **Server**: socket, bind, listen, accept (**blocks** until a client connects), recv (**blocks** until data arrives), send, close. **Client**: socket, connect (**blocks** for the handshake), send, recv (**blocks**), close. UDP has no listen, accept or connect: it uses sendto and recvfrom, and recvfrom blocks. A blocking call puts the process to sleep, so it is a context-switch point.
+**(a) Method:** add the words with **end-around carry** (any carry out of bit 16 is added back into the low bits), then take the **ones' complement**.
 
-(c) The listening socket keeps accepting new connections. Each accepted connection gets its own socket, identified by the 4-tuple (source IP, source port, destination IP, destination port). That is how one server on port 80 serves many clients at once.
+- 0x1234 + 0xF00F = 0x10243. The carry (1) wraps around: 0x0243 + 1 = **0x0244**.
+- 0x0244 + 0x0F0F = **0x1153** (no carry).
+- Ones' complement: 0xFFFF − 0x1153 = **0xEEAC**. This is the checksum.
+
+*Check at the receiver:* 0x1153 + 0xEEAC = 0xFFFF, so no error is detected.
+
+**(b)** **Server:** `socket()`, `bind()`, `listen()`, `accept()` (**blocks** until a client connects), `recv()` (**blocks** until data arrives), `send()`, `close()`. **Client:** `socket()`, `connect()` (**blocks** during the handshake), `send()`, `recv()` (**blocks**), `close()`. UDP has no listen, accept or connect: it uses `sendto()` and `recvfrom()` (which blocks). A blocking call puts the process to **sleep**, so it is a **context-switch point**.
+
+**(c)** The **listening socket** stays open to accept further connections. Each accepted connection gets its **own new socket**, identified by the **4-tuple** (source IP, source port, destination IP, destination port). That is how one server on port 80 can serve many clients at the same time: every connection has its own socket and state.
 
 ---
 
 **P11.** Process states (L02 s12-15). P0 needs 2 units of CPU, then issues an I/O that takes 3 units, then needs 1 more unit of CPU. P1 needs 4 units of CPU. P0 starts first. The OS switches to another process when the running one blocks, and a process that finishes its I/O becomes ready but does not preempt. (a) Give each process's state at times 1 to 7. [5] (b) How long would it take if the OS ran P1 only after P0 finished? [2] (c) Draw the state diagram, and say which transitions the OS triggers and which come from events. [3]
 
-*Solution.* (a)
+*Solution.*
 
-| Time | P0 | P1 | Note |
+**(a)**
+
+| Time unit | P0 | P1 | Note |
 | --- | --- | --- | --- |
 | 1 | Running | Ready | |
-| 2 | Running | Ready | P0 issues the I/O at the end of this unit |
-| 3 | Blocked | Running | |
+| 2 | Running | Ready | P0 issues its I/O at the end of this unit |
+| 3 | Blocked | Running | OS switches to P1 |
 | 4 | Blocked | Running | |
-| 5 | Blocked | Running | P0's I/O completes |
-| 6 | Ready | Running | P1 finishes |
-| 7 | Running | Done | P0 finishes |
+| 5 | Blocked | Running | P0's I/O completes at the end of this unit |
+| 6 | Ready | Running | P1 finishes (its 4th unit); P0 is ready but does not preempt |
+| 7 | Running | Done | P0 runs its last unit and finishes |
 
-The CPU is busy for all 7 units.
+The CPU is busy for all 7 units, because P1's computation **overlaps** P0's I/O.
 
-(b) 2 + 3 (CPU idle during the I/O) + 1 + 4 = **10 units**. Overlapping I/O with another process's computation saves 3 units.
+**(b)** If P1 ran only after P0 finished: P0 takes 2 + 3 (CPU idle during I/O) + 1 = 6 units, then P1 takes 4: **10 units**. Overlapping I/O with another process's computation saves 3 units.
 
-(c) Running → Ready is **descheduled** (OS, for example on a timer), and Ready → Running is **scheduled** (OS). Running → Blocked happens when the process starts I/O (its own call), and Blocked → Ready when the I/O completes (an interrupt). There is never a direct Blocked → Running edge.
+**(c) Transitions:**
+
+- **Ready → Running:** the OS **schedules** the process.
+- **Running → Ready:** the OS **deschedules** it (for example, timer interrupt, or yield).
+- **Running → Blocked:** the process starts **I/O** (its own system call).
+- **Blocked → Ready:** the **I/O completes** (an interrupt).
+
+There is **never a direct Blocked → Running** edge: after the I/O completes the process must wait in the ready queue until the scheduler picks it.
