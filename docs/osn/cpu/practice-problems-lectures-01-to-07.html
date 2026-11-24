@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwu173r0">
+<link rel="stylesheet" href="../../assets/style.css?v=mwu17xr0">
 </head>
 <body data-root="../../" data-page="osn/cpu/practice-problems-lectures-01-to-07" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,7 +87,7 @@
       <header class="note-head">
         
         <h1>Practice problems, Lectures 01 to 07</h1>
-        <p class="note-meta">8 min read · 8 practice problems</p>
+        <p class="note-meta">9 min read · 8 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
@@ -100,13 +100,35 @@
     fork();
 </code></pre>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>8 processes</strong> (2³). Every process that exists when <code>fork()</code> runs is duplicated, and the child continues the loop from the same <code>i</code>. Call the original P.</p>
+<p><em>Solution.</em> <strong>Rule:</strong> <code>fork()</code> duplicates the calling process, and the child continues from the next line, so the child also runs the rest of the loop. Each pass of the loop <strong>doubles</strong> the number of processes, so after 3 passes there are 2³ = <strong>8 processes</strong> (7 new ones plus the original). Call the original P.</p>
 <ul>
 <li>At i = 0, P creates C1.</li>
 <li>At i = 1, P creates C2, and C1 creates C1a.</li>
 <li>At i = 2, P creates C3, C1 creates C1b, C2 creates C2a, and C1a creates C1a-i.</li>
 </ul>
-<p>That gives 1 + 1 + 2 + 4 = 8.</p>
+<p>That gives 1 + 1 + 2 + 4 = 8. (General rule: n sequential forks give 2ⁿ processes, so 2ⁿ − 1 children.)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>After pass</th>
+<th>Processes alive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i = 0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>i = 1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>i = 2</td>
+<td><strong>8</strong></td>
+</tr>
+</tbody>
+</table></div>
 </details>
 <hr>
 <p id="p-c2"><strong>C2.</strong> What does this print, and in what order? Could the order ever change?</p>
@@ -122,12 +144,12 @@ if (rc == 0) {
 }
 </code></pre>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> It prints <code>child 15</code>, then <code>parent 4</code>, <strong>always in that order</strong>. The parent calls <code>wait(NULL)</code> before printing, so it cannot print until the child has exited. The child's change to <code>x</code> does not affect the parent's <code>x</code>, because after <code>fork</code> each process has its own copy of the address space. The parent's 5 becomes 4.</p>
+<p><em>Solution.</em> <strong>Trace:</strong> <code>fork()</code> returns 0 in the child and the child's pid in the parent. The child takes the <code>if</code> branch: x = 5 + 10 = 15 and prints <code>child 15</code>. The parent takes the <code>else</code> branch: it first waits. It prints <code>child 15</code>, then <code>parent 4</code>, <strong>always in that order</strong>. The parent calls <code>wait(NULL)</code> before printing, so it cannot print until the child has exited. The child's change to <code>x</code> does not affect the parent's <code>x</code>, because after <code>fork</code> each process has its own copy of the address space. The parent's 5 becomes 4.</p>
 </details>
 <hr>
 <p id="p-c3"><strong>C3.</strong> A program calls <code>execvp(&quot;ls&quot;, args)</code> and the next line is <code>printf(&quot;done\n&quot;)</code>. When does &quot;done&quot; print?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>Never, if <code>exec</code> succeeds.</strong> <code>exec</code> replaces the calling process's code, data, heap and stack with the new program, so the old program, including the <code>printf</code> line, no longer exists. <code>exec</code> only returns if it fails (for example, the file is not found), and then &quot;done&quot; prints.</p>
+<p><em>Solution.</em> <strong>Never, if <code>exec</code> succeeds.</strong> (Answer: &quot;done&quot; does not print.) <code>exec</code> replaces the calling process's code, data, heap and stack with the new program, so the old program, including the <code>printf</code> line, no longer exists. <code>exec</code> only returns if it fails (for example, the file is not found), and then &quot;done&quot; prints.</p>
 </details>
 <hr>
 <p id="p-c4"><strong>C4.</strong> Explain, step by step, how a shell runs <code>ls &gt; out.txt</code> using <code>fork</code>, <code>close</code>, <code>open</code> and <code>exec</code>. Why is it important that fork and exec are separate calls?</p>
@@ -140,7 +162,7 @@ if (rc == 0) {
 <li>The child calls <code>exec(&quot;ls&quot;, ...)</code>. <code>ls</code> writes to descriptor 1 as usual, but descriptor 1 is now the file.</li>
 <li>The parent shell calls <code>wait()</code>, then prints the next prompt.</li>
 </ol>
-<p>Because fork and exec are separate, the child can change its own environment (open files, redirections, pipes) in the gap <em>after</em> <code>fork</code> and <em>before</em> <code>exec</code>, without touching the shell itself and without <code>ls</code> knowing anything about it.</p>
+<p><strong>Why separate (exam answer):</strong> because fork and exec are separate, the child can change its own environment (open files, redirections, pipes) in the gap <em>after</em> <code>fork</code> and <em>before</em> <code>exec</code>, without touching the shell itself (the parent keeps its own stdout) and without <code>ls</code> knowing anything about it. If they were one call, the shell would have to pass every possible redirection option into it. The same gap is used for pipes (<code>ls | wc</code>) and for changing the working directory.</p>
 </details>
 <hr>
 <p id="p-c5"><strong>C5.</strong> In limited direct execution, how does the OS get the CPU back from a process stuck in <code>while (1);</code>? During the switch that follows, two different register saves happen. Who does each one, and where are the registers saved?</p>
@@ -155,7 +177,7 @@ if (rc == 0) {
 <hr>
 <p id="p-c6"><strong>C6.</strong> Three jobs arrive as follows. Job A arrives at 0 and needs 30. Jobs B and C both arrive at 10; B needs 10 and C needs 25. For <strong>FIFO, SJF, STCF and RR</strong> (time slice 10), give the schedule, the average turnaround time and the average response time. For RR, assume jobs that arrive at the same moment a slice ends join the queue ahead of the job that was just preempted.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A runs 0-30 if it is never preempted. B and C arrive at 10.</p>
+<p><em>Solution.</em> <strong>Formulas:</strong> turnaround = completion − arrival; response = first run − arrival. A runs 0–30 if it is never preempted. B and C arrive at 10.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -208,6 +230,7 @@ if (rc == 0) {
 <li><strong>STCF</strong> preempts A at t = 10, because B has 10 left and A has 20. At t = 20, A (20 left) beats C (25 left).</li>
 <li><strong>RR</strong> has the best response time but the worst turnaround, which is the trade-off from 1.4.</li>
 </ul>
+<p><em>RR queue trace (for the exam):</em> A runs 0–10 (20 left). B and C arrive at 10 and join <strong>ahead</strong> of A: queue [B, C, A]. B runs 10–20 and finishes. C runs 20–30 (15 left), queue [A, C]. A runs 30–40 (10 left), C 40–50 (5 left), A 50–60 (done), C 60–65 (done). Completion: A 60, B 20, C 65, so turnaround A 60, B 10, C 55 (average 41.7).</p>
 </details>
 <hr>
 <p id="p-c7"><strong>C7.</strong> (a) Which MLFQ rule stops a job from &quot;gaming&quot; the scheduler, and how did the old rules allow it? (b) What problem does the priority boost solve, and what goes wrong if the boost period S is too large or too small?</p>
@@ -219,7 +242,7 @@ if (rc == 0) {
 <hr>
 <p id="p-c8"><strong>C8.</strong> Two CPU-bound processes run under CFS with sched_latency = 48 ms. A has nice 0 (weight 1024) and B has nice 5 (weight 335). Compute each one's time slice, and how much each one's vruntime grows during its slice. What do you notice?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> The slice is in proportion to the weight:</p>
+<p><em>Solution.</em> <strong>Formulas:</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord">slice</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0436em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">sched_latency</span></span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.1574em;vertical-align:-0.836em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1024</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6679em;"></span><span class="mord text"><span class="mord">runtime</span></span></span></span></span>. The slice is in proportion to the weight:</p>
 <ul>
 <li>A: 48 × 1024 / (1024 + 335) = <strong>36.17 ms</strong></li>
 <li>B: 48 × 335 / 1359 = <strong>11.83 ms</strong></li>
@@ -263,6 +286,6 @@ if (rc == 0) {
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwu173r0" defer></script>
+<script src="../../assets/app.js?v=mwu17xr0" defer></script>
 </body>
 </html>

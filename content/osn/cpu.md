@@ -398,13 +398,19 @@ for (int i = 0; i < 3; i++)
     fork();
 ```
 
-*Solution.* **8 processes** (2³). Every process that exists when `fork()` runs is duplicated, and the child continues the loop from the same `i`. Call the original P.
+*Solution.* **Rule:** `fork()` duplicates the calling process, and the child continues from the next line, so the child also runs the rest of the loop. Each pass of the loop **doubles** the number of processes, so after 3 passes there are 2³ = **8 processes** (7 new ones plus the original). Call the original P.
 
 - At i = 0, P creates C1.
 - At i = 1, P creates C2, and C1 creates C1a.
 - At i = 2, P creates C3, C1 creates C1b, C2 creates C2a, and C1a creates C1a-i.
 
-That gives 1 + 1 + 2 + 4 = 8.
+That gives 1 + 1 + 2 + 4 = 8. (General rule: n sequential forks give 2ⁿ processes, so 2ⁿ − 1 children.)
+
+| After pass | Processes alive |
+| --- | --- |
+| i = 0 | 2 |
+| i = 1 | 4 |
+| i = 2 | **8** |
 
 ---
 
@@ -423,13 +429,13 @@ if (rc == 0) {
 }
 ```
 
-*Solution.* It prints `child 15`, then `parent 4`, **always in that order**. The parent calls `wait(NULL)` before printing, so it cannot print until the child has exited. The child's change to `x` does not affect the parent's `x`, because after `fork` each process has its own copy of the address space. The parent's 5 becomes 4.
+*Solution.* **Trace:** `fork()` returns 0 in the child and the child's pid in the parent. The child takes the `if` branch: x = 5 + 10 = 15 and prints `child 15`. The parent takes the `else` branch: it first waits. It prints `child 15`, then `parent 4`, **always in that order**. The parent calls `wait(NULL)` before printing, so it cannot print until the child has exited. The child's change to `x` does not affect the parent's `x`, because after `fork` each process has its own copy of the address space. The parent's 5 becomes 4.
 
 ---
 
 **C3.** A program calls `execvp("ls", args)` and the next line is `printf("done\n")`. When does "done" print?
 
-*Solution.* **Never, if `exec` succeeds.** `exec` replaces the calling process's code, data, heap and stack with the new program, so the old program, including the `printf` line, no longer exists. `exec` only returns if it fails (for example, the file is not found), and then "done" prints.
+*Solution.* **Never, if `exec` succeeds.** (Answer: "done" does not print.) `exec` replaces the calling process's code, data, heap and stack with the new program, so the old program, including the `printf` line, no longer exists. `exec` only returns if it fails (for example, the file is not found), and then "done" prints.
 
 ---
 
@@ -443,7 +449,7 @@ if (rc == 0) {
 4. The child calls `exec("ls", ...)`. `ls` writes to descriptor 1 as usual, but descriptor 1 is now the file.
 5. The parent shell calls `wait()`, then prints the next prompt.
 
-Because fork and exec are separate, the child can change its own environment (open files, redirections, pipes) in the gap *after* `fork` and *before* `exec`, without touching the shell itself and without `ls` knowing anything about it.
+**Why separate (exam answer):** because fork and exec are separate, the child can change its own environment (open files, redirections, pipes) in the gap *after* `fork` and *before* `exec`, without touching the shell itself (the parent keeps its own stdout) and without `ls` knowing anything about it. If they were one call, the shell would have to pass every possible redirection option into it. The same gap is used for pipes (`ls | wc`) and for changing the working directory.
 
 ---
 
@@ -460,7 +466,7 @@ The return-from-trap then restores B's user registers from B's kernel stack, and
 
 **C6.** Three jobs arrive as follows. Job A arrives at 0 and needs 30. Jobs B and C both arrive at 10; B needs 10 and C needs 25. For **FIFO, SJF, STCF and RR** (time slice 10), give the schedule, the average turnaround time and the average response time. For RR, assume jobs that arrive at the same moment a slice ends join the queue ahead of the job that was just preempted.
 
-*Solution.* A runs 0-30 if it is never preempted. B and C arrive at 10.
+*Solution.* **Formulas:** turnaround = completion − arrival; response = first run − arrival. A runs 0–30 if it is never preempted. B and C arrive at 10.
 
 | Policy | Schedule | Turnaround (A, B, C) | Avg | Response (A, B, C) | Avg |
 | --- | --- | --- | --- | --- | --- |
@@ -474,6 +480,8 @@ Points to notice:
 - **SJF is no better than FIFO here.** When B and C arrive, A is already running, and non-preemptive SJF cannot stop it.
 - **STCF** preempts A at t = 10, because B has 10 left and A has 20. At t = 20, A (20 left) beats C (25 left).
 - **RR** has the best response time but the worst turnaround, which is the trade-off from 1.4.
+
+*RR queue trace (for the exam):* A runs 0–10 (20 left). B and C arrive at 10 and join **ahead** of A: queue [B, C, A]. B runs 10–20 and finishes. C runs 20–30 (15 left), queue [A, C]. A runs 30–40 (10 left), C 40–50 (5 left), A 50–60 (done), C 60–65 (done). Completion: A 60, B 20, C 65, so turnaround A 60, B 10, C 55 (average 41.7).
 
 ---
 
@@ -489,7 +497,7 @@ Points to notice:
 
 **C8.** Two CPU-bound processes run under CFS with sched\_latency = 48 ms. A has nice 0 (weight 1024) and B has nice 5 (weight 335). Compute each one's time slice, and how much each one's vruntime grows during its slice. What do you notice?
 
-*Solution.* The slice is in proportion to the weight:
+*Solution.* **Formulas:** $\text{slice}_k = \dfrac{w_k}{\sum w}\times\text{sched\_latency}$ and $\Delta vruntime = \dfrac{1024}{w_k}\times\text{runtime}$. The slice is in proportion to the weight:
 
 - A: 48 × 1024 / (1024 + 335) = **36.17 ms**
 - B: 48 × 335 / 1359 = **11.83 ms**
