@@ -1,0 +1,22 @@
+{
+  "title": "Algorithm Analysis and Design",
+  "code": "AAD",
+  "term": "Monsoon 2026",
+  "blurb": "Everything for the endsem on 26 Nov: divide and conquer, FFT, graphs, stable and maximum matchings, Hall's theorem, greedy and Huffman, dynamic programming, max flow, randomized algorithms and fingerprinting, NP-hardness. Built from Lectures 1 to 22, the tutorials, both assignments, the midsem, both quizzes and Class Test I, with every exam problem solved against the official rubric.",
+  "docs": [
+    { "slug": "start-here", "file": "start-here.md", "title": "Start here: the endsem map", "about": "Syllabus, how the papers are marked, which lecture each exam question came from, and a plan for the last day" },
+    { "slug": "numbers-dc", "file": "numbers-dc.md", "title": "Lectures 1 to 3: numbers, divide and conquer, lower bounds", "about": "Peasant multiplication, Euclid, recursion trees, the master theorem, merge sort, Karatsuba, Strassen, the sorting lower bound, Hadamard transforms" },
+    { "slug": "fft", "file": "fft.md", "title": "Lectures 3, 4 and 8: polynomials and the FFT", "about": "Coefficient and value representations, roots of unity, the FFT recursion, the Fourier matrix and its inverse, polynomial multiplication, a polynomial from its roots" },
+    { "slug": "graphs", "file": "graphs.md", "title": "Lectures 4 and 5: graphs, shortest paths, MSTs", "about": "DFS and edge types, DAGs and topological order, SCCs, BFS, Dijkstra, Bellman–Ford, DAG shortest paths, cut property, Kruskal with union–find, Prim, MST uniqueness" },
+    { "slug": "matchings", "file": "matchings.md", "title": "Lectures 6 to 9: stable matchings, Hall, maximum matchings", "about": "Gale–Shapley and its proofs, proposer-optimality, Hall's theorem, SDRs, Latin squares, regular bipartite graphs, augmenting paths, Berge, Kuhn, König" },
+    { "slug": "greedy", "file": "greedy.md", "title": "Lecture 10: greedy algorithms and Huffman codes", "about": "Exchange arguments, prefix-free codes and trees, Huffman's algorithm and its proof, Kraft's inequality, k-ary Huffman, interval scheduling and interval partitioning" },
+    { "slug": "dp", "file": "dp.md", "title": "Lectures 11 to 13: dynamic programming", "about": "The five-step DP recipe, weighted interval scheduling, DAG paths, LIS in O(n log n), knapsack, sequence alignment, cloth cutting, pebbling, trees, and the assignment problems" },
+    { "slug": "maxflow", "file": "maxflow.md", "title": "Lectures 14 to 18: max flow and min cut", "about": "Flows, cuts, weak duality, residual graphs, Ford–Fulkerson, max-flow min-cut, integrality, Edmonds–Karp, and every reduction the course uses" },
+    { "slug": "randomized", "file": "randomized.md", "title": "Lectures 19 to 21: randomized algorithms and fingerprinting", "about": "Linearity of expectation, random MaxCut, the probabilistic method, Schwartz–Zippel, equality testing, Rabin–Karp" },
+    { "slug": "np", "file": "np.md", "title": "Lecture 22 and after: reductions and NP-hardness", "about": "Balanced brackets, streaming lower bounds, P, NP, reductions, 3-SAT, ETH, and the standard NP-hardness chain with proofs" },
+    { "slug": "midsem", "file": "midsem.md", "title": "Midsem, fully solved", "about": "All five midsem problems with the official rubric: Karatsuba, FFT, Gale–Shapley, Huffman, room assignment, SDRs and Latin squares, the battery DP" },
+    { "slug": "quizzes", "file": "quizzes.md", "title": "Quiz I, Quiz II and Class Test I, fully solved", "about": "Domino tiling via Hall, peasant multiplication, Hadamard in O(n log n), random acyclic subgraphs, matching as flow, Hall via max-flow min-cut, Edmonds–Karp trace, vertex capacities, Menger" },
+    { "slug": "practice", "file": "practice.md", "title": "Practice problems and assignments, solved", "about": "The Moodle practice set, magic squares and König, both assignments, and new endsem-style problems on every topic" },
+    { "slug": "cheatsheet", "file": "cheatsheet.md", "title": "Last-hour cheat sheet", "about": "Every algorithm, running time, theorem and proof skeleton on a few pages" }
+  ]
+}
