@@ -64,6 +64,13 @@
       "title": "Statistics practice quiz, L21 to L24",
       "about": "What past papers ask on estimation, plus a practice quiz with solutions",
       "pdf": "statistics-surprise-quiz.pdf"
+    },
+    {
+      "slug": "mock-endsem",
+      "file": "mock-endsem.md",
+      "title": "Mock endsem, timed (3 hours)",
+      "about": "Last year's endsem with Markov questions swapped for CLT and regression, full solutions",
+      "pdf": "mock-endsem.pdf"
     }
   ],
   "extras": [

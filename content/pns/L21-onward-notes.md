@@ -1360,6 +1360,168 @@ $x_1,\dots,x_n$ i.i.d. Exp$(\lambda)$, prior Gamma$(\alpha, \beta)$. Find the po
 
 For the exam, write the posterior derivation the long way like the official solution does (keep the normalising integral and evaluate it with the Gamma function), unless the question says "identify".
 
+## D. More practice: boundary MLEs, bias fixes, Laplace and conjugate priors
+
+These are new problems in the style of this year's quiz: MLEs where the maximum sits on a boundary, correcting a biased estimator, the Laplace distribution, and conjugate posteriors.
+
+### Problem 21 [Uniform(0, θ): MLE, bias and the fix]
+
+$X_1,\dots,X_n$ i.i.d. Uniform$[0,\theta]$. (a) Find the MLE. (b) Find its bias and MSE. (c) Make it unbiased and compare the MSE with that of the moment estimator $2\bar X$.
+
+**Solution.** (a) $L(\theta) = \theta^{-n}$ if $\theta\ge\max_i x_i$, and $0$ otherwise. $\theta^{-n}$ decreases in $\theta$, so take the smallest allowed value:
+$$\hat\theta_{ML} = M := \max_iX_i .$$
+Setting $\frac{d}{d\theta}\ln L = -\frac n\theta = 0$ has no solution. The maximum is at the boundary, which is the whole point of this kind of question.
+
+(b) $P(M\le m) = (m/\theta)^n$ on $[0,\theta]$, so $f_M(m) = nm^{n-1}/\theta^n$. Then
+$$E[M] = \frac{n}{n+1}\theta,\qquad E[M^2] = \frac{n}{n+2}\theta^2,\qquad \text{Var}(M) = \frac{n\theta^2}{(n+1)^2(n+2)} .$$
+The bias is $-\frac{\theta}{n+1}$ (it always underestimates, since $M\le\theta$), and
+$$\text{MSE}(M) = \text{Var}(M) + \text{bias}^2 = \frac{n\theta^2 + (n+2)\theta^2}{(n+1)^2(n+2)} = \boxed{\frac{2\theta^2}{(n+1)(n+2)}}.$$
+(c) $\tilde\theta = \frac{n+1}nM$ is unbiased, with $\text{MSE} = \text{Var}(\tilde\theta) = \frac{(n+1)^2}{n^2}\text{Var}(M) = \frac{\theta^2}{n(n+2)}$.
+
+$2\bar X$ is also unbiased, with $\text{MSE} = 4\cdot\frac{\theta^2}{12n} = \frac{\theta^2}{3n}$.
+
+Both MSEs of $M$ and $\tilde\theta$ shrink like $1/n^2$, far faster than the $1/n$ of $2\bar X$. And for $n\ge2$, $\tilde\theta$ beats $M$, since $\frac{1}{n(n+2)}<\frac{2}{(n+1)(n+2)}$ exactly when $n+1<2n$.
+
+### Problem 22 [Shifted exponential]
+
+$X_i$ i.i.d. with pdf $f(x;\theta) = e^{-(x-\theta)}$ for $x\ge\theta$. Find the MLE of $\theta$, its bias, and an unbiased version.
+
+**Solution.** $L(\theta) = \exp\big(-\sum_i(x_i - \theta)\big) = e^{n\theta - \sum x_i}$, as long as $\theta\le\min_ix_i$, and $0$ otherwise. This **increases** in $\theta$, so push $\theta$ up to the boundary:
+$$\hat\theta_{ML} = \min_iX_i .$$
+Write $X_i = \theta + E_i$ with $E_i\sim\text{Exp}(1)$. The minimum of $n$ independent Exp(1) variables is Exp$(n)$, so $E[\min_iX_i] = \theta + \frac1n$. The bias is $+\frac1n$, and $\min_iX_i - \frac1n$ is unbiased. The MLE is still consistent: $P(\min X_i - \theta>\epsilon) = e^{-n\epsilon}\to0$.
+
+### Problem 23 [Uniform(−θ, θ)]
+
+$X_i$ i.i.d. Uniform$[-\theta,\theta]$, $\theta>0$. Find the MLE and an unbiased estimator based on it.
+
+**Solution.** $L(\theta) = (2\theta)^{-n}$ when every $|x_i|\le\theta$, and $0$ otherwise. It decreases in $\theta$, so
+$$\hat\theta_{ML} = \max_i|X_i| .$$
+Each $|X_i|$ is Uniform$[0,\theta]$, so by Problem 21, $E[\max_i|X_i|] = \frac{n}{n+1}\theta$, and $\frac{n+1}n\max_i|X_i|$ is unbiased. A common mistake is $\max_iX_i$, which ignores the negative observations.
+
+### Problem 24 [Laplace location: the MLE is the median]
+
+$X_i$ i.i.d. with pdf $f(x;\theta) = \frac12e^{-|x-\theta|}$. (a) Show the MLE of $\theta$ is a sample median. (b) Compute it for the data $2, 5, 1, 9, 4$. (c) What happens if the 9 is mistyped as 90?
+
+**Solution.** (a) $\ln L(\theta) = -n\ln2 - \sum_i|x_i - \theta|$, so the MLE minimises $g(\theta) = \sum_i|x_i - \theta|$. Away from the data points,
+$$g'(\theta) = \#\{i : x_i<\theta\} - \#\{i : x_i>\theta\}.$$
+This is negative while fewer than half the points lie below $\theta$ and positive once more than half do. So $g$ is smallest at a median. For odd $n$ it's the middle value. For even $n$ every $\theta$ between the two middle values is an MLE, so the MLE is not unique.
+
+(b) Sorted: $1, 2, 4, 5, 9$, so $\hat\theta = \boxed{4}$. (The mean is $4.2$.)
+
+(c) The median stays $4$, while the mean jumps to $20.4$. This is the same robustness story as least absolute deviations in Part 6.
+
+### Problem 25 [Laplace scale]
+
+$X_i$ i.i.d. with pdf $f(x;b) = \frac1{2b}e^{-|x|/b}$, $b>0$. Find the MLE of $b$, and show it is unbiased. Find its MSE.
+
+**Solution.** $\ln L(b) = -n\ln(2b) - \frac1b\sum_i|x_i|$, so
+$$\frac{d}{db}\ln L = -\frac nb + \frac{\sum|x_i|}{b^2} = 0\implies\boxed{\hat b = \frac1n\sum_{i=1}^n|X_i|}.$$
+The derivative is positive below $\hat b$ and negative above it, so this is a maximum. $|X_i|$ has pdf $\frac1be^{-y/b}$ on $y\ge0$, i.e. it is exponential with mean $b$ and variance $b^2$. So $E[\hat b] = b$ (unbiased) and $\text{MSE} = \text{Var}(\hat b) = \frac{b^2}n$.
+
+### Problem 26 [A biased plug-in, and its correction]
+
+$X_i$ i.i.d. Bernoulli$(p)$. The MLE of $p$ is $\hat p = \bar X$, so by invariance the MLE of the variance $v = p(1-p)$ is $\hat v = \hat p(1-\hat p)$. Find its bias and an unbiased fix.
+
+**Solution.** $E[\hat p] = p$ and $E[\hat p^2] = \text{Var}(\hat p) + p^2 = \frac{p(1-p)}n + p^2$, so
+$$E[\hat v] = p - \frac{p(1-p)}n - p^2 = p(1-p)\Big(1 - \frac1n\Big).$$
+The bias is $-\frac{p(1-p)}n$, and
+$$\frac{n}{n-1}\hat p(1-\hat p)\quad\text{is unbiased.}$$
+This is the same $\frac{n}{n-1}$ correction as for the sample variance. Indeed, with 0/1 data, $\frac1n\sum(X_i - \bar X)^2 = \hat p(1-\hat p)$ exactly. **Invariance gives you the MLE of $g(\theta)$, but not an unbiased one.**
+
+### Problem 27 [Exponential: unbiased for the mean, biased for the rate]
+
+$X_i$ i.i.d. Exp$(\lambda)$. (a) Find the MLEs of $\lambda$, of the mean $\mu = 1/\lambda$, and of $P(X>1)$. (b) Which of the first two is unbiased? Fix the other.
+
+**Solution.** (a) $\ln L = n\ln\lambda - \lambda\sum x_i$ gives $\hat\lambda = 1/\bar X$. By invariance, $\hat\mu = \bar X$ and $\widehat{P(X>1)} = e^{-\hat\lambda} = e^{-1/\bar X}$.
+
+(b) $E[\bar X] = 1/\lambda$, so $\hat\mu$ is unbiased. For $\hat\lambda$, let $S = \sum X_i\sim\text{Gamma}(n,\lambda)$. Then
+$$E\Big[\frac1S\Big] = \int_0^\infty\frac1s\cdot\frac{\lambda^ns^{n-1}e^{-\lambda s}}{(n-1)!}\,ds = \frac{\lambda^n(n-2)!}{(n-1)!\,\lambda^{n-1}} = \frac{\lambda}{n-1}\qquad(n\ge2).$$
+So $E[\hat\lambda] = E[n/S] = \frac{n}{n-1}\lambda$: biased upwards. The fix is $\frac{n-1}{S} = \frac{n-1}{n\bar X}$. (By Jensen, $E[1/\bar X]>1/E[\bar X]$, so an upward bias was to be expected.)
+
+### Problem 28 [A power-family MLE]
+
+$X_i$ i.i.d. with pdf $f(x;\theta) = \theta x^{\theta-1}$ on $(0,1)$, $\theta>0$. Find the MLE, and evaluate it for the data $0.5, 0.25$.
+
+**Solution.** $\ln L = n\ln\theta + (\theta - 1)\sum\ln x_i$, so
+$$\frac n\theta + \sum_i\ln x_i = 0\implies\boxed{\hat\theta = -\frac{n}{\sum_i\ln X_i}}.$$
+It's positive because every $\ln x_i<0$. The second derivative is $-n/\theta^2<0$, so it is a maximum. For the data, $\sum\ln x_i = -\ln2 - 2\ln2 = -3\ln2$, so $\hat\theta = \frac{2}{3\ln2}\approx0.962$.
+
+### Problem 29 [Rayleigh]
+
+$X_i$ i.i.d. with pdf $f(x;\sigma) = \frac{x}{\sigma^2}e^{-x^2/(2\sigma^2)}$ for $x\ge0$. Find the MLE of $\sigma^2$. Is it unbiased? (Use $E[X^2] = 2\sigma^2$.)
+
+**Solution.** $\ln L = \sum\ln x_i - 2n\ln\sigma - \frac{\sum x_i^2}{2\sigma^2}$. Then
+$$\frac{d}{d\sigma}\ln L = -\frac{2n}\sigma + \frac{\sum x_i^2}{\sigma^3} = 0\implies\boxed{\hat\sigma^2 = \frac{1}{2n}\sum_{i=1}^nX_i^2}.$$
+$E[\hat\sigma^2] = \frac{1}{2n}\cdot n\cdot2\sigma^2 = \sigma^2$, so it's unbiased. But $\hat\sigma = \sqrt{\hat\sigma^2}$ (the MLE of $\sigma$, by invariance) is biased low, by Jensen: $E[\sqrt{Y}]<\sqrt{E[Y]}$.
+
+### Problem 30 [Two samples, one parameter]
+
+$X_1,\dots,X_n$ i.i.d. Poisson$(\lambda)$ and, independently, $Y_1,\dots,Y_m$ i.i.d. Poisson$(2\lambda)$. Find the MLE of $\lambda$ and its variance.
+
+**Solution.** The likelihood is the product of both samples' pmfs:
+$$\ln L = \Big(\sum x_i\Big)\ln\lambda - n\lambda + \Big(\sum y_j\Big)\ln(2\lambda) - 2m\lambda + C .$$
+$$\frac{d}{d\lambda}\ln L = \frac{\sum x_i + \sum y_j}{\lambda} - (n + 2m) = 0\implies\boxed{\hat\lambda = \frac{\sum_iX_i + \sum_jY_j}{n + 2m}}.$$
+The numerator is Poisson$\big((n + 2m)\lambda\big)$, so $E[\hat\lambda] = \lambda$ and $\text{Var}(\hat\lambda) = \frac{\lambda}{n + 2m}$. Each $Y$ counts like two $X$'s, which makes sense: it carries twice the rate.
+
+### Problem 31 [Beta–geometric: posterior, MAP, CE and prediction]
+
+Each day a student keeps attempting a problem until they solve it, and the attempt count is Geometric$(p)$: $P(Y = y\mid p) = p(1-p)^{y-1}$ for $y = 1, 2, \dots$. The prior is $p\sim\text{Beta}(2,2)$. Over three days the counts are $3, 1, 4$. (a) Find the posterior. (b) Find the MAP, the CE and the MLE. (c) Find the probability that tomorrow's first attempt succeeds.
+
+**Solution.** (a)
+$$f(p\mid y)\propto\underbrace{p^{1}(1-p)^{1}}_{\text{prior}}\cdot\underbrace{p^3(1-p)^{(3+1+4)-3}}_{\text{likelihood}} = p^4(1-p)^6 ,$$
+the kernel of $\boxed{\text{Beta}(5,7)}$. In general, the posterior is Beta$(\alpha + n,\ \beta + \sum y_i - n)$.
+
+(b) For Beta$(a,b)$, the mode is $\frac{a-1}{a+b-2}$ and the mean is $\frac{a}{a+b}$. So
+$$\hat p_{MAP} = \frac{4}{10} = 0.4,\qquad\hat p_{CE} = \frac5{12}\approx0.417,\qquad\hat p_{ML} = \frac{n}{\sum y_i} = \frac38 = 0.375 .$$
+The prior's mean is $\frac12$, so both Bayesian answers are pulled from the MLE towards $\frac12$.
+
+(c) $P(Y_4 = 1\mid\text{data}) = \int_0^1p\,f(p\mid y)\,dp = E[p\mid\text{data}] = \frac5{12}$. The predictive probability is the posterior mean.
+
+### Problem 32 [Gamma–exponential with numbers]
+
+Waiting times are Exp$(\lambda)$, and the prior is $\lambda\sim\text{Gamma}(2,1)$ (shape 2, rate 1). You observe $0.5, 1.5, 1.0$. Find the posterior, the MAP, the CE and the MLE.
+
+**Solution.** Likelihood × prior:
+$$\lambda^3e^{-3\lambda}\cdot\lambda^{2-1}e^{-\lambda} = \lambda^{4}e^{-4\lambda},$$
+which is $\boxed{\text{Gamma}(5,4)}$, i.e. Gamma$(\alpha + n,\ \beta + \sum x_i)$. The Gamma$(a,b)$ mode is $\frac{a-1}b$ and its mean is $\frac ab$:
+$$\hat\lambda_{MAP} = \frac44 = 1,\qquad\hat\lambda_{CE} = \frac54 = 1.25,\qquad\hat\lambda_{ML} = \frac{1}{\bar x} = 1 .$$
+Here the MAP happens to equal the MLE. The CE is larger, because the Gamma is right-skewed and its mean sits above its mode.
+
+### Problem 33 [A Bayesian boundary case] (tricky)
+
+$X_1,\dots,X_n$ i.i.d. Uniform$[0,\theta]$, with prior $f(\theta) = \theta^{-2}$ for $\theta\ge1$. Let $m = \max_ix_i$ and $c = \max(1, m)$. Find the posterior, the MAP and the CE.
+
+**Solution.** The likelihood is $\theta^{-n}$ for $\theta\ge m$, and the prior lives on $\theta\ge1$. So
+$$f(\theta\mid x)\propto\theta^{-(n+2)}\quad\text{for }\theta\ge c .$$
+Normalise: $\int_c^\infty\theta^{-(n+2)}\,d\theta = \frac{c^{-(n+1)}}{n+1}$, so
+$$f(\theta\mid x) = (n+1)\,c^{n+1}\,\theta^{-(n+2)},\qquad\theta\ge c .$$
+This decreases in $\theta$, so the MAP is at the boundary: $\hat\theta_{MAP} = c = \max(1, m)$. The CE is
+$$E[\theta\mid x] = (n+1)c^{n+1}\int_c^\infty\theta^{-(n+1)}\,d\theta = (n+1)c^{n+1}\cdot\frac{c^{-n}}{n} = \boxed{\frac{n+1}{n}\,c}.$$
+Compare Problem 21: the CE carries the same $\frac{n+1}{n}$ factor as the unbiased frequentist fix.
+
+### Problem 34 [A biased estimator can win]
+
+$K\sim\text{Binomial}(n,p)$. Compare the MSE of the MLE $K/n$ with that of the uniform-prior CE $\frac{K+1}{n+2}$.
+
+**Solution.** The MLE is unbiased, so its MSE is its variance, $\frac{p(1-p)}n$.
+
+For the CE, $E\big[\frac{K+1}{n+2}\big] = \frac{np+1}{n+2}$, so the bias is $\frac{1-2p}{n+2}$ and the variance is $\frac{np(1-p)}{(n+2)^2}$. Then
+$$\text{MSE}_{CE} = \frac{np(1-p) + (1-2p)^2}{(n+2)^2}.$$
+At $p = \frac12$ the bias vanishes and $\text{MSE}_{CE} = \frac{n}{4(n+2)^2}<\frac1{4n} = \text{MSE}_{ML}$. At $p = 0$, $\text{MSE}_{CE} = \frac{1}{(n+2)^2}>0 = \text{MSE}_{ML}$. So neither is better for every $p$. The CE trades a little bias for less variance, and wins when $p$ is near the prior's centre. That's the bias–variance tradeoff in one example.
+
+### Problem 35 [MAP with a Laplace prior] (hard)
+
+One observation $X\mid\theta\sim\mathcal N(\theta,1)$, and the prior is $f(\theta) = \frac12e^{-|\theta|}$. Find the MAP estimate as a function of $x$.
+
+**Solution.** Maximise the log posterior, up to constants:
+$$g(\theta) = -\frac{(x-\theta)^2}{2} - |\theta| .$$
+- On $\theta>0$: $g'(\theta) = x - \theta - 1$, which is zero at $\theta = x - 1$. That is valid only if $x>1$.
+- On $\theta<0$: $g'(\theta) = x - \theta + 1$, which is zero at $\theta = x + 1$. That is valid only if $x<-1$.
+- If $|x|\le1$: $g$ increases on $\theta<0$ and decreases on $\theta>0$, so the peak is at the kink, $\theta = 0$.
+
+$$\boxed{\hat\theta_{MAP} = \begin{cases}x - 1 & x>1\\ 0 & |x|\le1\\ x + 1 & x<-1\end{cases}}$$
+This "soft threshold" shrinks the data towards 0, and sets it exactly to 0 when the data is weak. Compare a Gaussian prior, which shrinks by a constant factor but never gives exactly 0. Notice too that the maximum at a kink can't be found by setting $g' = 0$, just like the boundary MLEs above.
+
 ---
 
 # Part 8 — Formula sheet and self-test

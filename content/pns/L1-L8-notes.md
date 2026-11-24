@@ -577,6 +577,91 @@ Intuition: each red marble is equally likely to be the one drawn (equal bag size
 - $P(B\mid A) = P(AB)/P(A)$; chain rule; total probability; Bayes = prior × likelihood, normalised.
 
 
+## Part B: extra worked examples and problems (continuity, conditioning and Bayes)
+
+These cover slides 36 to 46. Last year's HW 2 and Tutorial 2 problems on Bayes are in Lecture 3, part 2, Part B, so the ones here are new and aimed at the spots where people lose marks.
+
+**B1 (continuity of $P$, a coin tossed forever).** A fair coin is tossed forever. Let $A_n$ = "the first $n$ tosses are all heads" and $B_n$ = "at least one head in the first $n$ tosses". Use continuity of $P$ to find $P\big(\bigcap_n A_n\big)$ and $P\big(\bigcup_n B_n\big)$.
+
+*Solution.* $A_1\supseteq A_2\supseteq\cdots$ is decreasing, so continuity from above gives
+$$P\Big(\bigcap_nA_n\Big) = \lim_{n\to\infty}P(A_n) = \lim_{n\to\infty}2^{-n} = \boxed{0}.$$
+$\bigcap_nA_n$ is the event "every toss is a head". It is not empty (the outcome $HHH\cdots$ is in it), yet it has probability 0. $B_1\subseteq B_2\subseteq\cdots$ is increasing, so continuity from below gives
+$$P\Big(\bigcup_nB_n\Big) = \lim_{n\to\infty}\big(1 - 2^{-n}\big) = \boxed{1}.$$
+So a head eventually appears with probability 1. Check: the complement of $\bigcup_nB_n$ is "every toss is a tail", which has probability 0 by the same argument as the first part.
+
+**B2 (countably many sure events).** Suppose $P(A_n) = 1$ for every $n\ge1$. Show that $P\big(\bigcap_nA_n\big) = 1$.
+
+*Solution.* Pass to complements. $P(A_n^c) = 0$ for each $n$, and by countable subadditivity (a consequence of countable additivity, Lecture 2)
+$$P\Big(\Big(\bigcap_nA_n\Big)^c\Big) = P\Big(\bigcup_nA_n^c\Big)\le\sum_{n=1}^\infty P(A_n^c) = 0 .$$
+So $P\big(\bigcap_nA_n\big) = 1 - 0 = 1$. The same argument shows a countable union of probability-0 events has probability 0. It fails for uncountable unions: on $[0,1]$ with length, every point has probability 0 but their union has probability 1.
+
+**B3 (conditioning shrinks the sample space).** Two fair dice are rolled. Given that the sum is 8, what is the probability that at least one die shows a 6?
+
+*Solution.* Conditioning on $B$ = "sum is 8" makes $B$ the new sample space, and its outcomes stay equally likely:
+$$B = \{(2,6),(3,5),(4,4),(5,3),(6,2)\}.$$
+Two of the five contain a 6, so
+$$P(\text{at least one }6\mid\text{sum } 8) = \frac{P(A\cap B)}{P(B)} = \frac{2/36}{5/36} = \boxed{\tfrac25}.$$
+Compare with the unconditional $P(\text{at least one }6) = \frac{11}{36}\approx0.31$. Knowing the sum raised it to $0.4$.
+
+**B4 (the two-children trap).** A family has two children, each a girl or a boy with probability $\frac12$, independently. (a) Given that at least one is a girl, find $P(\text{both girls})$. (b) Given that the **older** child is a girl, find $P(\text{both girls})$.
+
+*Solution.* $\Omega = \{GG, GB, BG, BB\}$ (older first), each with probability $\frac14$.
+
+(a) "At least one girl" is $\{GG,GB,BG\}$, so $P(GG\mid\cdot) = \frac{1/4}{3/4} = \boxed{\tfrac13}$.
+
+(b) "Older is a girl" is $\{GG,GB\}$, so $P(GG\mid\cdot) = \frac{1/4}{2/4} = \boxed{\tfrac12}$.
+
+The two conditions sound alike but are different events, so they give different answers. Always write the conditioning event as a set before you compute.
+
+**B5 (chain rule, drawing without replacement).** Three cards are drawn from a standard deck without replacement. Find the probability that all three are hearts.
+
+*Solution.* Let $H_i$ = "card $i$ is a heart". By the chain rule (slide 41),
+$$P(H_1H_2H_3) = P(H_1)\,P(H_2\mid H_1)\,P(H_3\mid H_1H_2) = \frac{13}{52}\cdot\frac{12}{51}\cdot\frac{11}{50} = \frac{1716}{132600} = \boxed{\tfrac{11}{850}}\approx0.0129 .$$
+Check by counting: $\binom{13}3\big/\binom{52}3 = 286/22100 = 11/850$. Same answer.
+
+**B6 (total probability in two stages, Pólya's urn).** An urn has 3 red and 2 blue balls. A ball is drawn, then put back **together with one more ball of the same colour**, and a second ball is drawn. (a) Find $P(\text{second is red})$. (b) Given the second is red, find $P(\text{first was red})$.
+
+*Solution.* Let $R_1, R_2$ be "first red" and "second red".
+
+(a) By total probability over the first draw,
+$$P(R_2) = P(R_2\mid R_1)P(R_1) + P(R_2\mid R_1^c)P(R_1^c) = \frac46\cdot\frac35 + \frac36\cdot\frac25 = \frac{12}{30} + \frac6{30} = \boxed{\tfrac35}.$$
+That is the same as $P(R_1)$, which surprises most people. (It holds for every later draw too.)
+
+(b) By Bayes,
+$$P(R_1\mid R_2) = \frac{P(R_2\mid R_1)P(R_1)}{P(R_2)} = \frac{12/30}{18/30} = \boxed{\tfrac23}.$$
+A red second ball is evidence that the first was red, because a red first ball adds red to the urn.
+
+**B7 (Bayes with three causes).** Factories A, B and C make 50%, 30% and 20% of a company's bulbs. Their defect rates are 1%, 2% and 5%. A bulb chosen at random is defective. Which factory most likely made it?
+
+*Solution.* Total probability first:
+$$P(D) = 0.5(0.01) + 0.3(0.02) + 0.2(0.05) = 0.005 + 0.006 + 0.010 = 0.021 .$$
+Then Bayes for each factory:
+$$P(A\mid D) = \frac{0.005}{0.021} = \frac5{21},\qquad P(B\mid D) = \frac{0.006}{0.021} = \frac6{21},\qquad P(C\mid D) = \frac{0.010}{0.021} = \boxed{\tfrac{10}{21}}\approx0.48 .$$
+C makes the fewest bulbs but is the most likely source, because its likelihood $P(D\mid C)$ is so much larger. Posterior is proportional to prior × likelihood: $0.5\times0.01$, $0.3\times0.02$ and $0.2\times0.05$, in the ratio $5 : 6 : 10$.
+
+**B8 (Monty Hall, done with Bayes).** A car is behind one of three doors, each equally likely. You pick door 1. The host, who knows where the car is, opens a door you did not pick that hides a goat, choosing at random if he has a choice. He opens door 3. Should you switch to door 2?
+
+*Solution.* Let $C_i$ = "car behind door $i$" and $O_3$ = "host opens door 3". The likelihoods are
+$$P(O_3\mid C_1) = \tfrac12,\qquad P(O_3\mid C_2) = 1,\qquad P(O_3\mid C_3) = 0 .$$
+So $P(O_3) = \frac13\big(\frac12 + 1 + 0\big) = \frac12$, and
+$$P(C_2\mid O_3) = \frac{1\cdot\frac13}{\frac12} = \boxed{\tfrac23},\qquad P(C_1\mid O_3) = \frac{\frac12\cdot\frac13}{\frac12} = \tfrac13 .$$
+Switch. The host's action carries information because he is not allowed to open the car's door. If he had instead opened door 3 at random and it happened to show a goat, both remaining doors would have probability $\frac12$.
+
+**B9 (updating twice).** A disease has prevalence 1%. A test detects it with probability 0.95 and gives a false positive with probability 0.05. Results of repeated tests are independent given the person's true status. (a) Find $P(\text{disease}\mid\text{one positive})$. (b) Find $P(\text{disease}\mid\text{two positives})$.
+
+*Solution.* (a)
+$$P(D\mid+) = \frac{0.95(0.01)}{0.95(0.01) + 0.05(0.99)} = \frac{0.0095}{0.0590}\approx\boxed{0.161}.$$
+(b) Given the status, the two results are independent, so $P(++\mid D) = 0.95^2$ and $P(++\mid D^c) = 0.05^2$:
+$$P(D\mid++) = \frac{0.9025(0.01)}{0.9025(0.01) + 0.0025(0.99)} = \frac{0.009025}{0.0115}\approx\boxed{0.785}.$$
+You get the same answer by using the posterior from (a), $0.161$, as the new prior and updating on the second positive. Note the tests are **conditionally** independent given the status, not independent: a first positive makes a second positive more likely.
+
+**B10 (positive association is symmetric).** Let $P(A)>0$ and $P(B)>0$. Show that $P(A\mid B)>P(A)$ if and only if $P(B\mid A)>P(B)$.
+
+*Solution.* Multiply each inequality by the positive number in its denominator:
+$$P(A\mid B)>P(A)\iff P(AB)>P(A)P(B)\iff P(B\mid A)>P(B).$$
+So "$B$ makes $A$ more likely" and "$A$ makes $B$ more likely" are the same statement, namely $P(AB)>P(A)P(B)$. Replacing $>$ by $=$ gives the definition of independence in Lecture 3, part 2.
+
+
 # Lecture 3, part 2: Independence (Deck 1, slides 47 to 56)
 
 **Big picture.** Two events are independent when knowing one tells you nothing about the other: $P(A\mid B) = P(A)$, or equivalently $P(A\cap B) = P(A)P(B)$. The slides then sort out four ideas that students often confuse: **mutual vs pairwise** independence, **independent vs mutually exclusive**, the fact that **zero-probability events are independent of everything**, and **conditional independence**, which can hold without independence and vice versa.
@@ -1012,7 +1097,7 @@ This is the definition last year's Quiz 1 Q3 asked for, together with the Borel 
 
 **Notation from here on.** We write $P(X\in B)$, $P(X = x)$, $P(X\le x)$, all shorthand for $P$ of the pre-image. Most of the time we forget $\Omega$ altogether and work only with $P_X$ (Deck 2, slide 24 says exactly this).
 
-## Part B: extra worked examples
+## Part B: extra worked examples and problems
 
 **B1 (pre-images by hand).** Two dice, $X$ = sum, $Y$ = maximum. Write out $X^{-1}(\{4\})$, $Y^{-1}(\{2\})$ and $\{X = 4\}\cap\{Y = 2\}$, and find their probabilities.
 
@@ -1021,6 +1106,73 @@ This is the definition last year's Quiz 1 Q3 asked for, together with the Borel 
 **B2 (an induced measure on a continuous space).** Pick $\omega$ uniformly from $\Omega = [0,1]$ and let $X(\omega) = 2\omega + 1$. Find $P_X([2, 2.5])$ and $P_X(\{x : x > 2.9\})$.
 
 *Solution.* $X^{-1}([2,2.5]) = \{\omega : 2\le2\omega + 1\le2.5\} = [0.5, 0.75]$, so $P_X([2,2.5]) = 0.25$. $X^{-1}((2.9,\infty)) = (0.95, 1]$, probability $0.05$. In general $P_X$ is uniform on $[1,3]$ with "probability = length/2". Lecture 8 does this kind of computation systematically.
+
+
+**B3 (which functions are random variables?).** $\Omega = \{a,b,c,d\}$ with $\mathcal F = \{\emptyset,\{a,b\},\{c,d\},\Omega\}$. Let $X(a) = X(b) = 1$, $X(c) = X(d) = 2$, and $Y(a) = 1$, $Y(b) = 2$, $Y(c) = Y(d) = 3$. Which of $X$ and $Y$ are random variables on $(\Omega,\mathcal F)$?
+
+*Solution.* Check the half-lines $\{\le x\}$ (slide 6).
+
+For $X$: $\{X\le x\}$ is $\emptyset$ for $x<1$, $\{a,b\}$ for $1\le x<2$, and $\Omega$ for $x\ge2$. All are in $\mathcal F$, so **$X$ is a random variable**.
+
+For $Y$: $\{Y\le1\} = \{a\}\notin\mathcal F$, so **$Y$ is not**.
+
+The general rule here: a function is measurable with respect to this $\mathcal F$ exactly when it is constant on $\{a,b\}$ and constant on $\{c,d\}$. $\mathcal F$ cannot tell $a$ from $b$, so no random variable can either.
+
+**B4 (the σ-algebra a random variable generates).** Roll one die, $\Omega = \{1,\dots,6\}$. (a) Let $X(\omega) = 1$ if $\omega$ is odd and $0$ if it is even. List $\sigma(X) = \{X^{-1}(B) : B\in\mathcal B(\mathbb R)\}$. (b) Let $Y(\omega) = 2$ for $\omega\in\{1,2\}$, $1$ for $\omega\in\{3,4\}$ and $0$ for $\omega\in\{5,6\}$. How many sets are in $\sigma(Y)$?
+
+*Solution.* A pre-image only depends on which values of $X$ lie in $B$.
+
+(a) $X$ takes the values 0 and 1, so $X^{-1}(B)$ is one of $\emptyset$ (neither in $B$), $\{2,4,6\}$ (only 0), $\{1,3,5\}$ (only 1) or $\Omega$ (both). So
+$$\sigma(X) = \{\emptyset,\ \{1,3,5\},\ \{2,4,6\},\ \Omega\}.$$
+(b) $Y$ splits $\Omega$ into three blocks, $\{1,2\}$, $\{3,4\}$ and $\{5,6\}$. Each pre-image is a union of some of the blocks, and every union occurs, so $\sigma(Y)$ has $2^3 = \boxed{8}$ sets. $\sigma(Y)$ is the smallest σ-algebra on which $Y$ is a random variable. It holds exactly the information "which value did $Y$ take".
+
+**B5 (functions of a random variable).** Let $X$ be a random variable and $a, b$ constants. Show that $aX + b$ is a random variable.
+
+*Solution.* Check $\{aX + b\le x\}\in\mathcal F$ for every $x$.
+
+- If $a>0$: $\{aX + b\le x\} = \{X\le\frac{x-b}a\}\in\mathcal F$.
+- If $a<0$: dividing flips the inequality, so $\{aX + b\le x\} = \{X\ge c\}$ with $c = \frac{x-b}a$. This is the complement of $\{X<c\}$, and $\{X<c\} = \bigcup_{n\ge1}\{X\le c - \frac1n\}$ is a countable union of events. So $\{X\ge c\}\in\mathcal F$.
+- If $a = 0$: $aX + b = b$ is constant, and $\{b\le x\}$ is either $\emptyset$ or $\Omega$.
+
+In all three cases the set is in $\mathcal F$. The same idea (write the event using $\{X\le\cdot\}$ and countable set operations) shows that $X^2$, $|X|$ and $\mathbf 1\{X>c\}$ are random variables too.
+
+**B6 (pre-images behave, images don't).** (a) Prove $X^{-1}(B^c) = \big(X^{-1}(B)\big)^c$. (b) Give an example where the forward image fails: $X(A\cap C)\ne X(A)\cap X(C)$.
+
+*Solution.* (a) $\omega\in X^{-1}(B^c)\iff X(\omega)\in B^c\iff X(\omega)\notin B\iff\omega\notin X^{-1}(B)\iff\omega\in\big(X^{-1}(B)\big)^c$.
+
+(b) Take $\Omega = \{1,2\}$, $X(1) = X(2) = 0$, $A = \{1\}$ and $C = \{2\}$. Then $X(A\cap C) = X(\emptyset) = \emptyset$, but $X(A)\cap X(C) = \{0\}\cap\{0\} = \{0\}$.
+
+This is why the definition of a random variable uses **pre-images**. They respect complements, unions and intersections even when $X$ is many-to-one, so $P_X$ inherits the axioms from $P$ (slide 4).
+
+**B7 (an induced measure you can draw).** Pick $\omega$ uniformly from $\Omega = [0,1]$ and let $X(\omega) = \omega^2$. Find $P_X([0,\frac14])$, the CDF $F_X(x)$, and $P_X(\{\frac12\})$.
+
+*Solution.* For $0\le x\le1$, $X^{-1}([0,x]) = \{\omega : \omega^2\le x\} = [0,\sqrt x]$, which has length $\sqrt x$. So
+$$P_X\big([0,\tfrac14]\big) = \sqrt{\tfrac14} = \boxed{\tfrac12},\qquad F_X(x) = \begin{cases}0 & x<0\\ \sqrt x & 0\le x\le1\\ 1 & x>1.\end{cases}$$
+$X^{-1}(\{\frac12\}) = \{\frac1{\sqrt2}\}$, a single point, so $P_X(\{\frac12\}) = 0$. Note that $X$ is **not** uniform: half its probability sits in $[0,\frac14]$, because squaring squeezes small numbers together.
+
+**B8 (building an exponential from a uniform).** Pick $\omega$ uniformly from $(0,1]$ and let $X(\omega) = -\ln\omega$. Find $P(X>t)$ for $t\ge0$.
+
+*Solution.*
+$$\{X>t\} = \{\omega : -\ln\omega>t\} = \{\omega : \omega<e^{-t}\} = (0, e^{-t}),$$
+which has length $e^{-t}$. So $P(X>t) = e^{-t}$ for $t\ge0$, and $X$ is Exponential(1). This is the inverse-CDF method from the simulation lecture: a deterministic function of one uniform $\omega$ can produce any distribution you like.
+
+**B9 (same information, different values).** Toss a fair coin three times. Let $X$ = number of heads and $Y$ = (number of heads) − (number of tails). Find the distribution $P_Y$, and decide whether $\sigma(X) = \sigma(Y)$.
+
+*Solution.* The number of tails is $3 - X$, so $Y = X - (3 - X) = 2X - 3$. $X$ is Binomial$(3,\frac12)$, so
+
+| $y$ | $-3$ | $-1$ | $1$ | $3$ |
+|---|---|---|---|---|
+| $P_Y(\{y\})$ | $\tfrac18$ | $\tfrac38$ | $\tfrac38$ | $\tfrac18$ |
+
+$y\mapsto\frac{y+3}2$ undoes the map, so $\{Y = y\} = \{X = \frac{y+3}2\}$. The two variables have the same level sets, hence $\sigma(X) = \sigma(Y)$. A one-to-one relabelling changes the values but not the information.
+
+**B10 (a full exam-style answer).** $\Omega = \{1,2,3,4\}$, $\mathcal F = 2^\Omega$, $P$ uniform, and $X(\omega) = (\omega - 2)^2$. Find $X^{-1}(\{1\})$, the induced measure $P_X$, and $F_X(1.5)$.
+
+*Solution.* $X(1) = 1$, $X(2) = 0$, $X(3) = 1$, $X(4) = 4$. So $X^{-1}(\{1\}) = \{1,3\}$, and
+$$P_X(\{0\}) = P(\{2\}) = \tfrac14,\qquad P_X(\{1\}) = P(\{1,3\}) = \tfrac12,\qquad P_X(\{4\}) = P(\{4\}) = \tfrac14 ,$$
+with $P_X(B) = \sum_{x\in B\cap\{0,1,4\}}P_X(\{x\})$ for any Borel $B$. Finally
+$$F_X(1.5) = P_X\big((-\infty,1.5]\big) = P(\{1,2,3\}) = \boxed{\tfrac34}.$$
+Write each step as "pre-image, then $P$" and you get full marks for the "relationship between $P$, $P_X$ and $F_X$" part of the question.
 
 
 # Lecture 5: Discrete random variables, PMF, CDF and expectation (Deck 2, slides 8 to 17)
