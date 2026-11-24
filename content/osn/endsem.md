@@ -1,29 +1,39 @@
 # Endsem practice: the professor's sheet
 
-*Endsem: 24 Nov 2026, 9 AM. 9 questions × 10 marks. These are the 20 problems from the professor's post-midsem practice sheet (CS3.301_Questions.pdf), rewritten as 10-mark questions with full solutions.*
+*Endsem: 24 Nov 2026, 9 AM. 9 questions × 10 marks. These are the 20 problems from the professor's post-midsem practice sheet (CS3.301_Questions.pdf), rewritten as 10-mark questions. Every solution below is written the way you should write it in the exam: state the rule, show the working, box the answer, then add the one-line reason. Marks in brackets are a guess at how 10 marks split.*
 
-**How the sheet was made.** It has two questions per OSTEP chapter: 15, 16, 17, 18, 19, 20, 28, 30, 31 and 40. Most of the numbers come from the worked examples on the L11 to L19 slides, sometimes with small changes. Each question asks you to (a) calculate or trace, (b) say who does it and why, and (c) give the trade-off or the fix. The midsem reused sheet problems, so learn each **method**. If the numbers change, the method still works.
+**How the sheet was made.** It has two questions per OSTEP chapter: 15, 16, 17, 18, 19, 20, 28, 30, 31 and 40. Most numbers come from the worked examples on the L11 to L19 slides, sometimes with small changes. Each question asks you to (a) calculate or trace, (b) say who does it and why, and (c) give the trade-off or the fix. The midsem reused sheet problems, so learn each **method**; if the numbers change, the method still works.
 
-Marks in brackets are a guess at how 10 marks split.
+**How to write a 10-mark answer.** (1) Write the rule or formula first, one line. (2) Show each step, in a table if there are several addresses. (3) End each part with a clear answer. (4) For "why" parts, give the **mechanism** in one sentence and the **consequence** in another. Examiners give most marks for the method, so never write only a final number.
 
 ## Address translation and segmentation
 
 **E1 (sheet Q1).** A process has a 16 KB address space, loaded with base = 32 KB and bounds = 16 KB (bounds holds the size). (a) Translate 0, 1024, 3000, 4400, 16384 and 18000, or say which fault. [5] (b) Who sets base and bounds, when, and why must those instructions be privileged? [3] (c) Why does base and bounds waste memory? [2]
 
-*Solution.* (a) A VA is legal only if VA < bounds = 16384. Then PA = VA + 32768.
+*Solution.*
 
-| VA | Result |
-| --- | --- |
-| 0 | 32768 |
-| 1024 | 33792 |
-| 3000 | 35768 |
-| 4400 | **37168** (this faults in OSTEP's 4 KB version, but is valid here) |
-| 16384 | **Fault**: VA = bounds, and the last legal address is 16383 |
-| 18000 | **Fault** |
+**(a) Rule.** The hardware (MMU) first checks the **bounds**, then adds the **base**:
 
-(b) The OS sets them in kernel mode. It does this when it creates the process and on every context switch, restoring the values from the process's PCB. If a user program could change them, it could point base at another process's memory or at the kernel, so the instructions must be privileged.
+$$
+0 \le VA < \text{bounds} \;\Rightarrow\; PA = VA + \text{base}; \quad \text{otherwise raise an exception (fault)}
+$$
 
-(c) The whole address space is allocated in physical memory, including the unused gap between heap and stack. That waste is **internal fragmentation**.
+Here base = 32 KB = 32768 and bounds = 16 KB = 16384. Legal virtual addresses are 0 to 16383.
+
+| VA | Bounds check (VA < 16384?) | Working | Result |
+| --- | --- | --- | --- |
+| 0 | yes | 0 + 32768 | **32768** |
+| 1024 | yes | 1024 + 32768 | **33792** |
+| 3000 | yes | 3000 + 32768 | **35768** |
+| 4400 | yes | 4400 + 32768 | **37168** |
+| 16384 | **no** (VA = bounds) | the last legal address is 16383 | **Fault** |
+| 18000 | **no** (18000 > 16383) | | **Fault** |
+
+*Watch out:* with the textbook's 4 KB address space, 4400 would fault. Here the space is 16 KB, so it is valid. Always compare with *this* question's bounds. Also, the check is `VA < bounds`, **not** `VA <= bounds`.
+
+**(b)** The **OS**, running in **kernel mode**, sets the registers. It does so **when it creates the process** (loads the base chosen from the free list and the bounds from the address-space size) and **on every context switch**, where it saves the old process's values in its PCB and restores the new process's. The instructions must be **privileged** because, if a user program could write base or bounds, it could set them to cover another process's memory or the kernel, which destroys **protection and isolation**. A user attempt to execute them traps to the OS.
+
+**(c)** The whole address space (16 KB) is placed in one contiguous slot, including the large **unused gap between the heap and the stack**. That reserved but unused space inside the process's slot is **internal fragmentation**. A process with a small heap and a small stack still occupies its full slot. This motivates segmentation (a base and bounds pair per segment) and later paging.
 
 ---
 
@@ -31,13 +41,16 @@ Marks in brackets are a guess at how 10 marks split.
 
 *Solution.*
 
-1. The process is already descheduled, so it is not running.
-2. The OS copies the address space from the old region to the new one.
-3. The OS writes the new base into the saved base register in the process's PCB.
-4. The OS adds the old region to the free list.
-5. On the next context switch to this process, the new base is loaded into the MMU.
+**Steps** (the process is not running, so its memory is quiet):
 
-The process only ever uses **virtual** addresses. Its VAs and bounds are unchanged, and only the hidden VA-to-PA mapping moved. This is dynamic relocation.
+1. **Deschedule** the process (it is already in the ready or blocked state).
+2. **Choose a new region** from the **free list** that is big enough for the whole address space.
+3. **Copy** the address space (code, heap, stack) from the old region to the new one.
+4. **Update the saved base** in the process's **PCB** to the new region's start address. The bounds are unchanged because the size is unchanged.
+5. **Return the old region** to the free list.
+6. When the process is next scheduled, the OS **loads the new base** into the MMU's base register as part of the context switch.
+
+**Why the process never notices.** The process only ever generates **virtual addresses** that start at 0. The hardware adds the base **on every access**, so the process's addresses, pointers and bounds are unchanged; only the hidden VA-to-PA mapping moved. This is exactly why **dynamic relocation** (base and bounds) can move a process after it has started, whereas **static (software) relocation**, where a loader rewrites addresses once, cannot: the program would then hold stale physical addresses. The cost is that the copy takes time proportional to the size of the address space.
 
 ---
 
@@ -52,60 +65,112 @@ The process only ever uses **virtual** addresses. Its VAs and bounds are unchang
 
 (a) Translate 0x0100, 0x4200, 0x4C00, 0xFC00, 0xF000 and 0x8000. [7] (b) How does the hardware compute a stack address? [3]
 
-*Solution.* (a)
+*Solution.*
 
-| VA | Segment | Offset | Result |
-| --- | --- | --- | --- |
-| 0x0100 | code | 256 | 32768 + 256 = **33024** |
-| 0x4200 | heap | 0x200 = 512 | 34816 + 512 = **35328** |
-| 0x4C00 | heap | 0xC00 = 3072 | **Fault**: offset must be < 3072 (one byte past the end) |
-| 0xFC00 | stack | 0x3C00 = 15360 | 15360 − 16384 = −1024, so PA = 28672 − 1024 = **27648** |
-| 0xF000 | stack | 0x3000 = 12288 | −4096, more than 2 KB below base: **fault** |
-| 0x8000 | 10 | – | **Fault**: unused segment |
+**(a) Method.** Write the VA in binary: the top 2 bits give the segment, the low 14 bits give the offset. Then, for a forward-growing segment, check offset < size and compute PA = base + offset. For the stack (grows backwards): **negative offset = offset − 16384** (the maximum segment size), check that its magnitude is at most the size, then PA = base + negative offset.
 
-(b) For a stack address, the hardware takes the offset and subtracts the maximum segment size: negative offset = offset − 16 KB. It checks that |negative offset| ≤ segment size, and then PA = base + negative offset. A "grows positive" bit in the segment register tells the hardware which rule to use.
+Base values in bytes: code 32768, heap 34816, stack 28672. Sizes: code 2048, heap 3072, stack 2048.
+
+| VA | Segment (top 2 bits) | Offset (low 14 bits) | Check | PA |
+| --- | --- | --- | --- | --- |
+| 0x0100 | 00 = code | 0x0100 = 256 | 256 < 2048, ok | 32768 + 256 = **33024** |
+| 0x4200 | 01 = heap | 0x0200 = 512 | 512 < 3072, ok | 34816 + 512 = **35328** |
+| 0x4C00 | 01 = heap | 0x0C00 = 3072 | 3072 < 3072? **no** | **Fault** |
+| 0xFC00 | 11 = stack | 0x3C00 = 15360 | 15360 − 16384 = −1024, and 1024 ≤ 2048, ok | 28672 − 1024 = **27648** |
+| 0xF000 | 11 = stack | 0x3000 = 12288 | 12288 − 16384 = −4096, and 4096 > 2048 | **Fault** |
+| 0x8000 | 10 = unused | 0 | segment 10 is not mapped | **Fault** |
+
+*Watch out:* 0x4C00 is exactly one byte past the end of the heap (size 3072 means valid offsets 0 to 3071). 0xFC00 is the standard stack example: the offset must be converted to a **negative** one before adding to the base.
+
+**(b)** A stack segment grows toward lower addresses, so offsets are measured **backwards from the top** of the virtual segment. The hardware knows the direction from a **"grows positive" bit** in the segment register. Steps: (1) extract the segment bits and the offset; (2) subtract the maximum segment size (16 KB) from the offset to get a **negative offset**; (3) check that the magnitude of the negative offset does not exceed the segment size; (4) add the (negative) offset to the base: **PA = base + (offset − 16 KB)**. Example: offset 15360 gives −1024, and 28 KB − 1 KB = 27 KB = 27648.
 
 ---
 
 **E4 (sheet Q4).** (a) Explain external fragmentation with a small example, and why compaction is expensive. [6] (b) How can several processes share a code segment safely? [4]
 
-*Solution.* (a) Segments have different sizes, so allocating and freeing them leaves holes of different sizes between them. Example: free holes of 4 KB and 2 KB cannot satisfy a 5 KB segment, even though 6 KB is free. **Compaction** stops the processes, copies their segments together into one block, and updates their segment registers. That copies a lot of memory and pauses everything, and a growing segment can make the work wasted.
+*Solution.*
 
-(b) Each segment has **protection bits**. The code segment is marked read-execute, so every process can map the same physical code segment, and none of them can write to it. The hardware checks the bits on each access.
+**(a) External fragmentation** is free memory that is split into **small holes between allocated segments**, so that a request fails even though the *total* free space is large enough. Segments have different sizes, so allocating and freeing them leaves holes of different sizes.
+
+*Example:* three 4 KB segments A, B and C sit one after another (12 KB). A and C exit, leaving two 4 KB holes with B between them. Total free memory = 8 KB, but a new **6 KB** segment **cannot be placed**, because neither hole is big enough.
+
+**Compaction** rearranges segments to make one large hole. It is **expensive** because the OS must: (1) **stop** the affected processes; (2) **copy** every moved segment (memory-intensive, so cost proportional to the amount of memory moved); (3) **update** the base registers in each PCB. All of that is done while the processes are paused. A growing segment can also make the work wasted soon after.
+
+**(b) Sharing** works through **protection bits** kept for each segment. The code segment is marked **read-execute only**. Several processes then **map the same physical code segment** (each process's segment table points to the same physical base), and each keeps its own private data, heap and stack segments. Because the segment is read-only, no process can corrupt it, and the hardware checks the protection bits on every access (a write attempt traps). This saves physical memory: one copy of the code serves all processes.
 
 ## Free-space management
 
 **E5 (sheet Q5).** The free list holds chunks of 10, 30, 20 and 15 bytes, in that order. Requests arrive for 12, 18 and 9 bytes. Ignore headers; a chunk is split and the remainder stays in place. (a) Show the list after each request under first fit, best fit and worst fit. [7] (b) A request for 25 then arrives. Which policies succeed, and what does that suggest? [3]
 
-*Solution.* (a)
+*Solution.*
+
+**(a) Rules.** **First fit**: the first chunk that is big enough. **Best fit**: the *smallest* chunk that is big enough. **Worst fit**: the *largest* chunk. After the choice, the chunk shrinks by the request size and stays where it is.
+
+*First fit* (list 10, 30, 20, 15):
+- 12 → first chunk ≥ 12 is 30 → list **10, 18, 20, 15**
+- 18 → first chunk ≥ 18 is 18 (the second one) → list **10, 20, 15** (that chunk is used up)
+- 9 → first chunk ≥ 9 is 10 → list **1, 20, 15**
+
+*Best fit* (list 10, 30, 20, 15):
+- 12 → chunks ≥ 12 are 30, 20, 15; the smallest is 15 → list **10, 30, 20, 3**
+- 18 → chunks ≥ 18 are 30, 20; the smallest is 20 → list **10, 30, 2, 3**
+- 9 → chunks ≥ 9 are 10, 30; the smallest is 10 → list **1, 30, 2, 3**
+
+*Worst fit* (list 10, 30, 20, 15):
+- 12 → largest is 30 → list **10, 18, 20, 15**
+- 18 → largest is 20 → list **10, 18, 2, 15**
+- 9 → largest is 18 (list is 10, 18, 2, 15) → list **10, 9, 2, 15**
 
 | Policy | After 12 | After 18 | After 9 |
 | --- | --- | --- | --- |
-| First fit | 10, **18**, 20, 15 | 10, 20, 15 (the 18 is used up) | **1**, 20, 15 |
-| Best fit | 10, 30, 20, **3** | 10, 30, **2**, 3 | **1**, 30, 2, 3 |
-| Worst fit | 10, **18**, 20, 15 | 10, 18, **2**, 15 | 10, **9**, 2, 15 |
+| First fit | 10, 18, 20, 15 | 10, 20, 15 | 1, 20, 15 |
+| Best fit | 10, 30, 20, 3 | 10, 30, 2, 3 | 1, 30, 2, 3 |
+| Worst fit | 10, 18, 20, 15 | 10, 18, 2, 15 | 10, 9, 2, 15 |
 
-(b) Only **best fit** succeeds, using the 30. No policy is best for every workload. Here best fit kept a large chunk, but it also left tiny useless splinters (1, 2, 3).
+**(b)** A request for 25 bytes: the largest chunk in each final list is 20 (first fit), **30 (best fit)**, 15 (worst fit). So only **best fit succeeds**. *What it suggests:* **no policy is best for every request sequence**. Best fit preserved a large chunk here by using small chunks for small requests, but it leaves tiny **splinters** (1, 2 and 3 bytes) that are useless, and each request needs a full list search. Worst fit tries to leave big remainders but here chopped up the largest chunks. First fit is fast but fragments the front of the list.
 
 ---
 
 **E6 (sheet Q6).** A binary buddy allocator manages a 64 KB heap starting at 0. Requests arrive in order: A = 7 KB, B = 3 KB, C = 20 KB. (a) Which block does each get, and which splits are needed? [5] (b) What is the total internal fragmentation? [2] (c) A is freed, then B. Describe the coalescing. [3]
 
-*Solution.* (a) Round each request up to a power of two.
+*Solution.*
 
-- A needs 8 KB. Split 64 into 32 + 32, then [0, 32) into 16 + 16, then [0, 16) into 8 + 8. **A = [0, 8 KB)**.
-- B needs 4 KB. Split [8, 16) into 4 + 4. **B = [8, 12 KB)**.
-- C needs 32 KB. **C = [32, 64 KB)**.
+**(a) Method.** Round each request up to the next power of two. To satisfy it, split a free block in half repeatedly until a block of that size exists. The two halves of a split are **buddies**.
 
-(b) (8 − 7) + (4 − 3) + (32 − 20) = **14 KB**.
+- **A = 7 KB → 8 KB block.** Split 64 → 32 + 32; split the first 32 → 16 + 16; split the first 16 → 8 + 8. **A = [0, 8 KB).**
+- **B = 3 KB → 4 KB block.** Take the free 8 KB at [8, 16) and split it → 4 + 4. **B = [8, 12 KB).**
+- **C = 20 KB → 32 KB block.** The free 32 KB block at [32, 64) fits exactly, no split needed. **C = [32, 64 KB).**
 
-(c) When A is freed, its buddy [8, 16) is split and part of it holds B, so nothing merges. When B is freed, it merges with [12, 16) into [8, 16). That merges with [0, 8) into [0, 16), and that merges with [16, 32) into [0, 32). It stops there, because the buddy [32, 64) holds C.
+The free blocks now are [12, 16) (4 KB) and [16, 32) (16 KB).
+
+**(b) Internal fragmentation** = block size − request size: A: 8 − 7 = 1 KB; B: 4 − 3 = 1 KB; C: 32 − 20 = 12 KB. Total = **14 KB**.
+
+**(c) Coalescing rule:** when a block is freed, check its **buddy** (the other half of the block it was split from). If the buddy is **completely free**, merge the two into the next size up, and repeat upward.
+
+- **Free A [0, 8):** its buddy is [8, 16), which is **not free as a whole** (it was split, and B holds [8, 12)). So **no merge**; [0, 8) just becomes a free 8 KB block.
+- **Free B [8, 12):** its buddy is [12, 16), which is free → merge into [8, 16) (8 KB). Now [8, 16)'s buddy is [0, 8), which is free → merge into [0, 16) (16 KB). Now [0, 16)'s buddy is [16, 32), which is free → merge into [0, 32) (32 KB). Now [0, 32)'s buddy is [32, 64), which holds C → **stop**.
+
+Final free list: one 32 KB block at [0, 32). Address check: a block's buddy address = block address XOR block size.
 
 ## Paging and TLBs
 
 **E7 (sheet Q7).** 32-bit VAs, 4 KB pages, 4-byte PTEs and a linear page table. (a) VPN and offset bits? [2] (b) Table size per process, and for 100 processes? [3] (c) VA 0x00403A2C maps to a page whose PTE holds PFN 0x01F2. What is the PA? [3] (d) Without a TLB, how many memory references does one load need? [2]
 
-*Solution.* (a) 12-bit offset (2^12 = 4 KB) and a 20-bit VPN. (b) 2^20 × 4 B = **4 MB** per process, **400 MB** for 100 processes. (c) VPN = 0x00403 and offset = 0xA2C, so PA = **0x01F2A2C**: the PFN followed by the unchanged offset. (d) **2**: one to read the PTE and one for the data.
+*Solution.*
+
+**(a)** Page size 4 KB = 2^12, so the **offset = 12 bits**. **VPN = 32 − 12 = 20 bits**.
+
+**(b)** A linear table has one entry per virtual page: 2^20 entries × 4 bytes = 2^22 bytes = **4 MB per process**. For 100 processes: 100 × 4 MB = **400 MB**, just for page tables. This is why linear page tables are too big (next topic: multi-level tables).
+
+**(c)** Split the address 0x00403A2C: the low 12 bits (3 hex digits) are the offset: **offset = 0xA2C**. The rest is the VPN: 0x00403 (VPN = 0x403). The PTE for this VPN gives PFN = 0x01F2. The offset is not translated:
+
+$$
+PA = (\text{PFN} \ll 12) \mid \text{offset} = 0x01F2 \cdot 0x1000 + 0xA2C = \textbf{0x01F2A2C}
+$$
+
+(PFN digits followed by the 3 offset digits.)
+
+**(d)** **2 memory references**: one to read the **PTE** from the page table in memory, and one to access the **data** itself. (With a TLB hit, only 1.)
 
 ---
 
@@ -113,148 +178,326 @@ The process only ever uses **virtual** addresses. Its VAs and bounds are unchang
 
 *Solution.*
 
-- (a) The hardware raises an exception and the OS handles it. The address is not part of the address space, so the OS usually kills the process (segmentation fault).
-- (b) **Page fault.** The OS page-fault handler finds the swap address stored in the PTE and reads the page from disk; the process is blocked during the I/O. It evicts a page first if memory is full. It then sets present = 1 and the PFN, and retries the instruction.
-- (c) **Protection fault**: a trap to the OS, which usually kills the process. With copy-on-write (as in MP2), the OS instead copies the page, makes it writable and retries the instruction.
-- (d) A clean page can be dropped for free, but a dirty one must be written back to disk first, so the OS prefers clean pages. The reference (use) bit is set on each access, and the clock algorithm uses it to approximate LRU: it skips pages with use = 1, clearing the bit as it passes.
+**(a) valid = 0.** The page is **not part of the process's address space** (never allocated). The **hardware** (MMU) raises an exception and traps to the **OS**, which treats it as an **illegal memory access** and normally **kills the process** (segmentation fault).
+
+**(b) valid = 1, present = 0.** The page is in the address space but is **swapped out to disk**, so the access causes a **page fault**, handled by the **OS page-fault handler** (not the hardware). Steps: (1) the PTE holds the page's **disk address**; (2) the OS finds a free frame (if memory is full, it picks a victim page by the replacement policy and writes it back if dirty); (3) it issues a **disk read** and **blocks** the process (another process runs meanwhile); (4) on completion it updates the PTE (**present = 1**, new PFN); (5) it **retries the faulting instruction**, which now succeeds (after a TLB refill).
+
+**(c) Store to a read-only page** (protection bit does not allow writes). The hardware detects the violation and raises a **protection fault** that traps to the **OS**. Normally the OS **terminates the process**. (If the page was deliberately marked read-only for **copy-on-write**, as in your MP2 xv6 fork, the OS handler instead allocates a new frame, copies the page, maps it writable and retries.)
+
+**(d) Dirty bit.** Set by the hardware when the page is **written**. When choosing a victim, a **clean** page can simply be discarded (its copy on disk is up to date), but a **dirty** page must first be **written back** to disk, which costs an extra I/O. So the OS **prefers to evict clean pages**. **Reference (use) bit.** Set by the hardware whenever the page is **accessed**. The OS uses it to **approximate LRU**: in the **clock algorithm** the hand sweeps over the pages; a page with use = 1 is given a second chance (the bit is cleared), and the first page found with use = 0 is evicted.
 
 ---
 
 **E9 (sheet Q9).** An array of ten 4-byte ints a[0..9] starts at VA 100. Pages are 16 bytes, and the TLB starts empty. (a) Which pages hold the array? Mark each access as a hit or miss, and give the hit rate. [5] (b) The loop runs again right away. What is the hit rate, and which locality explains it? [2] (c) What would the first-loop hit rate be with 4 KB pages? [3]
 
-*Solution.* (a) The array covers bytes 100 to 139. VPN 6 (96–111) holds a[0..2], VPN 7 (112–127) holds a[3..6], and VPN 8 (128–143) holds a[7..9]. The pattern is miss, hit, hit, miss, hit, hit, hit, miss, hit, hit, so the hit rate is **70%**. Spatial locality.
+*Solution.*
 
-(b) **100%** (assuming the TLB still holds the three entries). Temporal locality.
+**(a)** Page size 16 bytes, so VPN = VA / 16. The array occupies bytes 100 to 139 (a[i] is at 100 + 4i).
 
-(c) Bytes 100 to 139 all fall in page 0, so there is 1 miss and the hit rate is **90%**. Bigger pages capture more spatial locality.
+| Element | VA | VPN (VA ÷ 16) | TLB result |
+| --- | --- | --- | --- |
+| a[0] | 100 | 6 (bytes 96–111) | **Miss** (first touch of page 6) |
+| a[1] | 104 | 6 | Hit |
+| a[2] | 108 | 6 | Hit |
+| a[3] | 112 | 7 (bytes 112–127) | **Miss** |
+| a[4] | 116 | 7 | Hit |
+| a[5] | 120 | 7 | Hit |
+| a[6] | 124 | 7 | Hit |
+| a[7] | 128 | 8 (bytes 128–143) | **Miss** |
+| a[8] | 132 | 8 | Hit |
+| a[9] | 136 | 8 | Hit |
+
+The array spans **virtual pages 6, 7 and 8**. Pattern: M H H M H H H M H H. **3 misses, 7 hits**, so the hit rate = 7 / 10 = **70%**. The misses are compulsory (cold) misses, one per new page.
+
+**(b)** On the second run all three translations (VPN 6, 7 and 8) are already in the TLB, so every access hits: **hit rate = 100%**. This is **temporal locality**: the same pages are re-referenced soon after.
+
+**(c)** With 4 KB pages, bytes 100 to 139 all lie in **page 0**, so the first access misses and the other nine hit: hit rate = **90%**. The page size exploits **spatial locality**: neighbouring addresses lie on the same page, so a larger page means more neighbours per TLB entry and fewer misses.
 
 ---
 
 **E10 (sheet Q10).** A TLB lookup takes 1 ns and a memory access 100 ns. On a miss, the hardware reads one PTE from memory. (a) Find the effective access time for hit rates of 98% and 90%. [5] (b) P1 and P2 both use VPN 10, mapped to different frames. What problem does this cause on a context switch? Give two fixes and their trade-offs. [5]
 
-*Solution.* (a) A hit costs 1 + 100 = 101 ns. A miss costs 1 + 100 (PTE) + 100 (data) = 201 ns.
+*Solution.*
 
-$$\text{EAT} = h(t_{TLB} + t_M) + (1-h)(t_{TLB} + 2t_M)$$
+**(a) Cases.** A **hit** costs one TLB lookup plus one memory access (the data): 1 + 100 = **101 ns**. A **miss** costs the lookup, one memory access for the PTE, then the data access: 1 + 100 + 100 = **201 ns**.
 
-- At 98%: 0.98 × 101 + 0.02 × 201 = **103 ns**.
-- At 90%: 90.9 + 20.1 = **111 ns**.
+$$
+EAT = h(t + m) + (1-h)(t + 2m)
+$$
 
-(b) After a switch, the TLB still holds P1's VPN 10 → PFN entry, so P2 would access P1's frame. **Fix 1: flush the TLB** on every switch. It is simple, but every switch then starts with a cold TLB and a burst of misses. **Fix 2: an address-space identifier (ASID)** in each entry, so entries from different processes can coexist. There is no flush, but it needs extra hardware bits and the OS must manage the ASIDs.
+- h = 0.98: EAT = 0.98 × 101 + 0.02 × 201 = 98.98 + 4.02 = **103 ns**.
+- h = 0.90: EAT = 0.90 × 101 + 0.10 × 201 = 90.9 + 20.1 = **111 ns**.
+
+A drop of 8 points in hit rate costs about 8 ns (8%) per access.
+
+**(b) The problem.** The TLB holds **VPN → PFN** translations but does not know which process they belong to. After a context switch from P1 to P2, the entry "VPN 10 → P1's frame" is still in the TLB. If P2 accesses VPN 10, it **hits the stale entry and reads P1's memory**: wrong data and a protection violation.
+
+**Fix 1: flush the TLB** (invalidate all entries) on every context switch. *Trade-off:* simple and needs no extra hardware, but the next process starts with an **empty (cold) TLB**, so every switch is followed by a burst of misses, which hurts performance if switches are frequent.
+
+**Fix 2: ASIDs (address-space identifiers).** Add an ASID field (like a PID) to each TLB entry, and the hardware matches both the VPN **and** the current process's ASID. *Trade-off:* entries from several processes can coexist, so **no flush** and warm TLBs after a switch. But it needs **extra hardware bits** in every TLB entry, and the OS must manage ASID allocation (and recycle them). It also lets two processes share a physical page through two entries with different ASIDs.
 
 ## Multi-level page tables
 
 **E11 (sheet Q11).** A 16 KB address space (14-bit VAs), 64-byte pages and 4-byte PTEs. The process uses only VPNs 0, 1 (code), 4, 5 (heap), 254 and 255 (stack). (a) VPN and offset bits? How large would a linear table be? [2] (b) With one page of PTEs per directory entry, how many bits index the directory and how many index a page of the table? [2] (c) How many pages does the two-level table need? [2] (d) Split 0x3F80 into directory index, table index and offset. Its PTE holds PFN 55. What is the PA? [4]
 
-*Solution.* (a) 6-bit offset, 8-bit VPN. A linear table has 256 × 4 B = **1 KB = 16 pages**. (b) A page holds 64 / 4 = 16 PTEs, so **4 bits** index a page of the table and **4 bits** index the directory. (c) The directory, plus the table page for VPNs 0–15, plus the table page for VPNs 240–255: **3 pages** instead of 16. (d) 0x3F80 = 11 1111 1000 0000. The VPN is 1111 1110 = 254: **directory index 15, table index 14, offset 0**. PA = 55 × 64 = **3520 (0xDC0)**.
+*Solution.*
+
+**(a)** 64-byte pages = 2^6, so **offset = 6 bits**; **VPN = 14 − 6 = 8 bits** (256 virtual pages). A linear table: 256 entries × 4 B = **1024 B = 1 KB = 16 pages** (1024 / 64).
+
+**(b)** One page holds 64 / 4 = **16 PTEs**, so a page of the table is indexed by **4 bits** (2^4 = 16). The directory needs one entry per page of the table: 256 PTEs / 16 = 16 pages, so **4 bits** (8 − 4) index the directory. The VA splits as **| 4-bit PD index | 4-bit PT index | 6-bit offset |**.
+
+**(c)** Needed pages: **1 page for the page directory**, plus only the table pages that contain a used VPN. VPNs 0, 1, 4 and 5 all lie in table page 0 (VPNs 0–15); VPNs 254 and 255 lie in table page 15 (VPNs 240–255). That is 2 table pages. **Total = 1 + 2 = 3 pages** (192 bytes) instead of 16 pages. The other 14 directory entries are marked invalid and cost nothing more.
+
+**(d)** 0x3F80 in binary (14 bits): 11 1111 1000 0000 → split **1111 | 1110 | 000000**.
+
+- PD index = 1111 = **15** → the directory entry points to table page 15.
+- PT index = 1110 = **14** → entry 14 of that page, which is VPN 15 × 16 + 14 = 254.
+- Offset = 000000 = **0**.
+
+The PTE holds PFN = 55, so PA = 55 × 64 + 0 = **3520** (= **0xDC0**).
 
 ---
 
 **E12 (sheet Q12).** 48-bit VAs, 4 KB pages, 8-byte PTEs, and every level must fit in one page. (a) How many levels are needed? [5] (b) How many memory references does a load need on a TLB miss, and what is the trade-off? [5]
 
-*Solution.* (a) One page holds 4096 / 8 = 512 PTEs, so each level uses 9 bits. The VPN is 48 − 12 = 36 bits, and 36 / 9 = **4 levels**. (b) **5**: one per level plus the data. Multi-level tables trade **time for space**. A TLB miss costs more memory references, but table pages exist only for the parts of the address space in use. They are also more complex to implement.
+*Solution.*
 
-*Likely twist:* RISC-V Sv39 (Tutorial 3 and xv6) has 39-bit VAs, so 27 VPN bits and **3 levels** of 9 bits.
+**(a)** Offset = 12 bits (4 KB), so VPN = 48 − 12 = **36 bits**. One page holds 4096 / 8 = **512 PTEs = 2^9**, so each level can index **9 bits**. Levels needed = ⌈36 / 9⌉ = **4 levels** (9 + 9 + 9 + 9 = 36).
+
+$$
+\text{levels} = \left\lceil \frac{\text{VPN bits}}{\log_2(\text{page size} / \text{PTE size})} \right\rceil = \left\lceil \frac{36}{9} \right\rceil = 4
+$$
+
+**(b)** On a TLB miss the hardware reads **one entry per level** (4 memory references to walk the table) and then the data itself: **4 + 1 = 5 memory references**. (On a TLB hit: 1.)
+
+**Trade-off:** multi-level tables trade **time for space**. *Space saved:* page-table pages are allocated only for the parts of the address space actually in use, so a sparse address space needs very little memory (unlike a linear table of 2^36 × 8 B = 512 GB). *Time and complexity cost:* a TLB miss costs several memory references instead of one extra, and the lookup logic is more complex. This is acceptable because the TLB makes misses rare.
+
+*Variant to expect:* RISC-V **Sv39** (the xv6 system you used): 39-bit VA, 4 KB pages, 8-byte PTEs → 27-bit VPN = 3 levels × 9 bits.
 
 ## Locks
 
 **E13 (sheet Q13).** `lock: while (m->flag == 1) ; m->flag = 1;` and `unlock: m->flag = 0;` (a) Give an interleaving with two threads in the critical section. [3] (b) Rewrite lock() with TestAndSet. [3] (c) Evaluate the spin lock for correctness, fairness and single-CPU performance. [4]
 
-*Solution.* (a) flag = 0. T1 reads flag = 0 and leaves the loop, then a timer interrupt switches to T2. T2 reads 0, sets flag = 1 and enters. T1 resumes, sets flag = 1 and enters as well. Both are inside.
+*Solution.*
 
-(b)
+**(a)** The bug is that **testing the flag and setting it are two separate steps**. Interleaving (flag = 0 initially):
+
+| Step | T1 | T2 | flag |
+| --- | --- | --- | --- |
+| 1 | `while (flag == 1)`: sees 0, exits the loop | | 0 |
+| 2 | *timer interrupt: switch to T2* | | 0 |
+| 3 | | `while (flag == 1)`: sees 0, exits | 0 |
+| 4 | | `flag = 1`; **enters the critical section** | 1 |
+| 5 | *switch back to T1* | | 1 |
+| 6 | `flag = 1`; **enters the critical section** | | 1 |
+
+**Both threads are now in the critical section**: mutual exclusion is violated.
+
+**(b)** `TestAndSet(ptr, new)` atomically returns the **old** value and stores the **new** one, so the test and the set cannot be separated:
+
 ```c
-void lock(lock_t *m) { while (TestAndSet(&m->flag, 1) == 1) ; }  // spin
+void lock(lock_t *m) {
+    while (TestAndSet(&m->flag, 1) == 1)
+        ;   // spin: old value 1 means someone else holds the lock
+}
 void unlock(lock_t *m) { m->flag = 0; }
 ```
 
-(c) **Correct**: yes, the test and the set happen as one atomic step. **Fair**: no, a thread can spin forever while others keep winning. **Performance on one CPU**: poor. If the holder is preempted, each waiter spins for its whole time slice, so N threads can waste N − 1 slices. On multiple CPUs it is reasonable when critical sections are short.
+If the old value was 0, the lock was free and this thread has just taken it (it left flag = 1); only one thread can ever see the old value 0.
+
+**(c)** **Correctness: yes.** The atomic test-and-set guarantees mutual exclusion. **Fairness: no.** There is no queue and no ordering, so a thread can spin forever while others keep winning (starvation). **Performance on a single CPU: very poor.** If the lock holder is preempted inside the critical section, every other thread runs and **spins for its whole time slice** without being able to get the lock (the holder cannot release it until it runs again). With N threads, up to N − 1 slices are wasted. (On several CPUs, spinning is reasonable when critical sections are short, because the holder runs on another CPU.)
 
 ---
 
 **E14 (sheet Q14).** A ticket lock: `myturn = FetchAndAdd(&ticket); while (turn != myturn) ;` and `unlock: turn++`, with ticket = turn = 0. (a) T1, T2 and T3 call lock in that order. Give each myturn and the order they enter. [3] (b) T1 calls unlock twice by mistake. What happens? [4] (c) Why is this fair when test-and-set is not? [3]
 
-*Solution.* (a) T1 gets 0, T2 gets 1 and T3 gets 2. They enter in the order T1, T2, T3.
+*Solution.*
 
-(b) The first unlock sets turn = 1, and T2 enters. The second sets turn = 2, and **T3 enters while T2 is still inside**. turn now stays one ahead of where it should be, so later threads keep overlapping in pairs. Mutual exclusion is broken from then on.
+**(a)** `FetchAndAdd` returns the old value of ticket and increments it atomically: **T1: myturn = 0** (ticket becomes 1), **T2: myturn = 1** (ticket becomes 2), **T3: myturn = 2** (ticket becomes 3). turn = 0, so only T1 passes the `while`. **Entry order: T1, T2, T3.** (T1's unlock makes turn = 1, letting T2 in; T2's unlock lets T3 in.)
 
-(c) Each thread gets a ticket and is served in ticket order (FIFO), so every thread eventually gets in. With test-and-set, whoever happens to run when the lock is released wins, so a thread can starve.
+**(b)** Double unlock by T1:
+
+- First `unlock`: turn = 1, so **T2** enters (correct).
+- Second `unlock` (by T1, mistaken): turn = 2, so **T3** now sees turn == myturn and **enters while T2 is still inside**. Two threads are in the critical section: **mutual exclusion is broken**.
+- Worse, turn is now permanently one ahead of the "correct" count, so later threads keep overlapping. The ticket lock relies on **exactly one unlock per lock**; an extra unlock destroys its invariant.
+
+**(c)** In a ticket lock each thread takes a **ticket number** and is served in **ticket order (FIFO)**: a thread that asked earlier always goes before one that asked later, so every thread gets in after a bounded number of others (**bounded waiting, no starvation**). With a test-and-set spin lock, when the lock is released **whichever thread happens to be running and executes its TestAndSet first wins**, so an unlucky thread can lose every time (starvation).
 
 ## Condition variables
 
 **E15 (sheet Q15).** Two broken joins. Version 1 (no state variable): exit = lock, signal, unlock; join = lock, wait, unlock. Version 2 (no lock): exit = `done = 1; signal`; join = `if (done == 0) wait`. (a) and (b) Give an interleaving in which each version makes the parent wait forever. [3 + 3] (c) Write the correct version. [4]
 
-*Solution.* (a) Version 1: the child runs first and calls thr_exit. Its signal finds no waiter and is lost. The parent then calls wait and sleeps forever.
+*Solution.*
 
-(b) Version 2: the parent checks done == 0 and is interrupted before it calls wait. The child sets done = 1 and signals, but nobody is waiting. The parent resumes, calls wait, and sleeps forever.
+**(a) Version 1 (no state variable).**
 
-(c)
+| Step | Parent | Child |
+| --- | --- | --- |
+| 1 | creates the child | |
+| 2 | | runs first: `thr_exit()`: lock, `signal(&c)`, unlock |
+| 3 | `thr_join()`: lock, `wait(&c)` | |
+
+The child's **signal found nobody waiting and was lost** (a condition variable has no memory). The parent then waits **forever** for a signal that will never come. A state variable (`done`) is needed so the parent can see that the child has already finished.
+
+**(b) Version 2 (no lock).**
+
+| Step | Parent | Child |
+| --- | --- | --- |
+| 1 | `thr_join()`: checks `done == 0`, true | |
+| 2 | *interrupt before it calls wait* | |
+| 3 | | `thr_exit()`: `done = 1; signal(&c)` (nobody is waiting yet: lost) |
+| 4 | calls `wait(&c)` | |
+
+The parent checked the condition, was interrupted **before it went to sleep**, and so missed the signal: it sleeps **forever**. The check and the wait must be one atomic step, which is what holding the **lock** (released atomically by `wait`) provides.
+
+**(c) Correct version:**
+
 ```c
-void thr_exit() { lock(&m); done = 1; signal(&c); unlock(&m); }
-void thr_join() { lock(&m); while (done == 0) wait(&c, &m); unlock(&m); }
+int done = 0;
+
+void thr_exit() {
+    lock(&m);
+    done = 1;          // record the state
+    signal(&c);        // wake the parent if it is waiting
+    unlock(&m);
+}
+
+void thr_join() {
+    lock(&m);
+    while (done == 0)  // while, not if
+        wait(&c, &m);  // atomically releases m and sleeps; re-acquires m on wake-up
+    unlock(&m);
+}
 ```
-Rules: always use a state variable, hold the lock around signal and wait, and check the condition in a while loop.
+
+*Rules to state:* (1) always keep a **state variable** that records the condition; (2) **hold the lock** when calling wait and signal; (3) always test the condition in a **while** loop.
 
 ---
 
-**E16 (sheet Q16).** allocate(n) waits on one CV while bytesLeft < n. free(n) adds n and calls signal. bytesLeft starts at 0. (a) Ta calls allocate(100) and Tb calls allocate(10), and both wait. Tc calls free(50). Show how a thread can stay asleep even though memory is free. [4] (b) Give the fix and its cost. [3] (c) Why must allocate use a while loop? [3]
+**E16 (sheet Q16).** allocate(n) waits on one CV while bytesLeft < n. free(n) adds n and calls signal. bytesLeft starts at 0. (a) Ta calls allocate(100) and Tb calls allocate(10), and both wait. Tc calls free(50). Show how a thread can stay asleep even though memory is available. [4] (b) Give the fix and its cost. [3] (c) Why must allocate use a while loop? [3]
 
-*Solution.* (a) free(50) sets bytesLeft = 50, and signal wakes one waiter. If it wakes Ta, Ta rechecks 50 < 100 and sleeps again. Tb, which needs only 10, is never woken.
+*Solution.*
 
-(b) Use **broadcast**, which wakes all waiters. This is a **covering condition**. The cost is that threads that still cannot proceed also wake up, recheck and sleep again, which wastes context switches.
+**(a)** Trace (one CV, one `signal`):
 
-(c) Under Mesa semantics, a woken thread does not run at once. Another thread can take the memory first, and spurious wake-ups can happen, so the condition must be rechecked after every wake-up.
+| Step | Action | bytesLeft | Waiting on the CV |
+| --- | --- | --- | --- |
+| 1 | Ta: allocate(100): 0 < 100, waits | 0 | Ta |
+| 2 | Tb: allocate(10): 0 < 10, waits | 0 | Ta, Tb |
+| 3 | Tc: free(50): bytesLeft = 50, **signal wakes one waiter**, suppose Ta | 50 | Tb |
+| 4 | Ta rechecks: 50 < 100, **waits again** | 50 | Tb, Ta |
+
+**Tb needs only 10 bytes and 50 are free, but Tb is never woken**, because the single signal woke the wrong thread (Ta) and was "used up". Tb stays asleep although memory is available.
+
+**(b) Fix: `broadcast`** (wake **all** waiters) in free(). Each woken thread rechecks its own condition (Tb sees 50 ≥ 10 and proceeds; Ta sees 50 < 100 and sleeps again). This is a **covering condition**: it covers all cases where a thread might be able to proceed. **Cost:** threads that cannot proceed are also woken, recheck and go back to sleep, which wastes **context switches**, a bigger cost as the number of waiters grows.
+
+**(c)** With **Mesa semantics** (used by pthreads and almost every real system), `signal` only makes the waiter **ready**, it does not run it immediately. Between the signal and the moment the woken thread re-acquires the lock, **another thread can run and change the state** (for example, take the memory), so the condition may no longer hold. Also, **spurious wake-ups** can happen. A `while` loop makes the thread **recheck the condition after every wake-up** and sleep again if it is false, so it only proceeds when the condition really is true. `if` would proceed on a stale assumption.
 
 ## Semaphores
 
 **E17 (sheet Q17).** Thread A prints A1 then A2. Thread B prints B1 then B2. (a) Using semaphores, ensure A1 comes before B2 and B1 comes before A2. Give initial values. [6] (b) What goes wrong if both threads call sem_wait before sem_post? [4]
 
-*Solution.* (a) This is the **rendezvous**. Use two semaphores, `aArrived` and `bArrived`, both starting at 0.
+*Solution.*
+
+**(a)** This is the **rendezvous** problem: each thread must finish its first step before the *other* thread starts its second step. Use **two semaphores, both initialised to 0** (an ordering semaphore starts at 0 because the event has not happened yet):
 
 ```c
-// Thread A                 // Thread B
-print("A1");                print("B1");
-sem_post(&aArrived);        sem_post(&bArrived);
-sem_wait(&bArrived);        sem_wait(&aArrived);
-print("A2");                print("B2");
+sem_t aDone, bDone;
+sem_init(&aDone, 0, 0);
+sem_init(&bDone, 0, 0);
+
+// Thread A                    // Thread B
+print("A1");                   print("B1");
+sem_post(&aDone);              sem_post(&bDone);   // signal: my first step is done
+sem_wait(&bDone);              sem_wait(&aDone);   // wait for the other's first step
+print("A2");                   print("B2");
 ```
 
-(b) **Deadlock.** Each thread waits for a post that the other only makes after its own wait, so both sleep forever.
+*Why it works:* A2 cannot print until B has posted `bDone`, which happens after B1, so B1 < A2. Symmetrically, A1 < B2. Each thread posts **before** it waits, so neither can block forever.
+
+**(b) Deadlock.** If both call `sem_wait` first, A waits for `bDone` (which only B's post can supply) and B waits for `aDone` (which only A's post can supply). Both are blocked in `sem_wait` and neither reaches its `sem_post`: a **circular wait**, so both sleep **forever**. The order post-then-wait is what makes the rendezvous safe.
 
 ---
 
 **E18 (sheet Q18).** The semaphore reader-writer lock, where the first reader waits on writelock and the last reader posts it. (a) What are the initial values of lock and writelock? Why do only the first and last readers touch writelock? [4] (b) Give a scenario in which a writer waits forever. [3] (c) Suggest a fix. [3]
 
-*Solution.* (a) Both start at **1**. `lock` protects the readers count. The first reader takes writelock for the whole group of readers, which blocks writers. Middle readers only update the count, and the last reader to leave releases writelock.
+*Solution.*
 
-(b) R1 holds the read lock, and W waits on writelock. R2 arrives before R1 leaves, then R3 before R2 leaves, and so on. readers never drops to 0, so W waits forever.
+**(a)** Both are **1**: `lock` is a binary semaphore (a mutex) that protects the shared `readers` counter, and `writelock` is a binary semaphore that gives a writer exclusive access (and that readers collectively hold). **Why only the first and last readers touch `writelock`:** many readers may read at the same time, so they need to block writers only once, as a group. The **first reader** (readers goes 0 → 1) acquires `writelock` on behalf of all readers, so any writer blocks. Readers that arrive later only increment the counter. The **last reader** to leave (readers goes 1 → 0) releases `writelock`, allowing a writer in. All the counter changes are protected by `lock`.
 
-(c) Writer priority: add a semaphore `turnstile` (initial 1). A writer does sem_wait(turnstile) before waiting on writelock and posts it after. Every reader does sem_wait(turnstile) and sem_post(turnstile) on entry, so new readers queue up behind a waiting writer. (This is Homework 04.)
+**(b) Writer starvation.** R1 holds the read lock (and so `writelock`). Writer W calls `acquire_write` and blocks on `writelock`. R2 arrives before R1 finishes, takes `lock`, sees readers = 2 (not the first reader), and reads. Then R3 arrives before R1 or R2 finishes, and so on. As long as there is always at least one reader inside, `readers` never reaches 0, so the last-reader release never happens and **W waits forever**.
+
+**(c) Fix: give waiting writers priority.** Add a semaphore `turnstile` (initial value 1). A **writer** does `sem_wait(&turnstile)` before waiting on `writelock` (holding the turnstile while it waits) and `sem_post(&turnstile)` after it releases. Every **reader** does `sem_wait(&turnstile); sem_post(&turnstile);` at the start of `acquire_read`, so once a writer is waiting, **new readers queue behind it** at the turnstile. Existing readers finish, `readers` reaches 0, the writer gets `writelock`. (Trade-off: this can now starve readers if writers keep arriving; fairness needs a more careful design. Your Homework 04 is this problem.)
 
 ## File system implementation
 
 **E19 (sheet Q19).** VSFS: 4 KB blocks and 256-byte inodes. Block 0 is the superblock, block 1 the inode bitmap, block 2 the data bitmap, and the inode table starts at block 3. (a) In which block, and at what byte address, is inode 37? [4] (b) An inode has 12 direct pointers, 1 single-indirect and 1 double-indirect pointer, and pointers are 4 bytes. What is the maximum file size? [4] (c) Why is this design a good fit for real files? [2]
 
-*Solution.* (a) Inode 37 starts 37 × 256 = 9472 bytes into the table. 9472 / 4096 gives inode-table block 2, so it is in **disk block 5**. Byte address = 12288 + 9472 = **21760**, which is offset (37 mod 16) × 256 = 1280 into the block. Sector = 21760 / 512 = **42** (it starts halfway through that sector). The slide used inode 32, which sits at the start of a block; 37 does not.
+*Solution.*
 
-(b) A block holds 4096 / 4 = 1024 pointers.
+**(a) Formula.**
 
-$$(12 + 1024 + 1024^2) \times 4\text{ KB} = 48\text{ KB} + 4\text{ MB} + 4\text{ GB} \approx 4.004\text{ GB}$$
+$$
+\text{offset in table} = i \times \text{sizeof(inode)} \qquad \text{address} = \text{inodeStartAddr} + \text{offset}
+$$
 
-That is 4,299,210,752 bytes.
+The inode table starts at block 3, so inodeStartAddr = 3 × 4096 = **12288** (12 KB).
 
-(c) Most files are small, so direct pointers serve them with no extra reads. The few large files pay for the indirection. The tree is deliberately unbalanced.
+- Offset in the table = 37 × 256 = **9472** bytes.
+- Block within the table = 9472 / 4096 = 2 (remainder 1280), so it is the **third block of the table: disk block 3 + 2 = block 5**.
+- **Byte address = 12288 + 9472 = 21760.** Check: block 5 starts at 5 × 4096 = 20480, and 21760 − 20480 = **1280** bytes into the block (= (37 mod 16) × 256, since 16 inodes fit per block).
+- (Sector = 21760 / 512 = 42, and the inode starts in the middle of that sector.)
+
+**(b)** A 4 KB block holds 4096 / 4 = **1024 pointers**. Reachable data blocks:
+
+- 12 direct pointers → 12 blocks = 48 KB
+- 1 single-indirect → 1024 blocks = 4 MB
+- 1 double-indirect → 1024 × 1024 = 1,048,576 blocks = 4 GB
+
+$$
+\text{max size} = (12 + 1024 + 1024^2) \times 4\text{ KB} = 1{,}048{,}612 \times 4096 = \textbf{4{,}299{,}210{,}752 bytes} \approx 4\text{ GB}
+$$
+
+**(c)** **Most files are small** (the file-size distribution is heavily skewed to small files), so the 12 direct pointers cover them with **no extra disk reads** and small inodes. The **few very large files** are reachable through indirect blocks, paying one or two extra reads. So the design is **space-efficient and fast for the common case** while still supporting huge files. This unbalanced tree is intentional.
 
 ---
 
 **E20 (sheet Q20).** Nothing is cached, and each directory fits in one block. List the disk I/Os for (a) `open("/foo/bar", O_RDONLY)` [3], (b) the first 4 KB `read()` [3], and (c) creating `/foo/bar` [4].
 
-*Solution.* (a) Read the root inode, root data, foo inode, foo data, then bar's inode: **5 reads** (2 × depth + 1).
+*Solution.*
 
-(b) Read bar's inode, read the data block, and write bar's inode to update its access time: **2 reads and 1 write**. No bitmap is touched.
+**(a) open("/foo/bar"): 5 reads.** Path traversal starts at the **root inode**, whose location is known (inode 2 in vsfs). For each directory in the path, read its inode, then its data block (to find the next name). Finally read the target's inode.
 
-(c) Read the root inode, root data, foo inode and foo data. Read the inode bitmap and write it back. Write foo's data (the new entry). Read bar's inode and write it (it shares a block with other inodes, so this is a read-modify-write). Write foo's inode. That is **10 I/Os: 6 reads and 4 writes**.
+1. Read the **root inode**.
+2. Read the **root directory's data block** (find "foo" → its inode number).
+3. Read **foo's inode**.
+4. Read **foo's data block** (find "bar" → its inode number).
+5. Read **bar's inode** (check permissions, allocate the file-table entry).
 
-*Likely follow-up:* each allocating write takes 5 I/Os (read inode, read data bitmap, write data bitmap, write data, write inode). Creating a 12 KB file therefore takes 10 + 3 × 5 = **25 I/Os**.
+General rule: **2 × (depth) + 1 reads** for a path of depth (number of directories) 2 → 5. No writes. The cost grows with the length of the pathname.
+
+**(b) First read() of 4 KB: 2 reads + 1 write = 3 I/Os.**
+
+1. **Read bar's inode** (find the first data block's pointer).
+2. **Read the data block.**
+3. **Write bar's inode** (to update the last-accessed time, atime).
+
+No bitmap is read or written: a read does not allocate anything.
+
+**(c) Create /foo/bar: 10 I/Os (6 reads + 4 writes).**
+
+1. Read the root inode.
+2. Read the root data (find "foo").
+3. Read foo's inode.
+4. Read foo's data (check that "bar" does not already exist).
+5. Read the **inode bitmap** (find a free inode).
+6. Write the **inode bitmap** (mark it allocated).
+7. Write **foo's data block** (add the entry (bar, new inode number)).
+8. Read the **new inode** (it shares a 4 KB block with other inodes, so the block must be read before part of it is modified).
+9. Write the **new inode** (initialise it).
+10. Write **foo's inode** (its modification time changes, and its size if the directory grew).
+
+*Likely follow-up from the slides:* each **allocating write** takes **5 I/Os** (read the inode, read the data bitmap, write the data bitmap, write the data block, write the inode). Creating a 12 KB file therefore takes 10 + 3 × 5 = **25 I/Os**.
 
 # Endsem practice: post-midsem extras
 
