@@ -42,7 +42,7 @@
       "slug": "l21-onward",
       "file": "L21-onward-notes.md",
       "title": "Lectures 21 to 24 and linear regression",
-      "about": "Point estimators, MLE, Bayesian inference, MAP",
+      "about": "Point estimators, MLE, Bayesian inference, MAP, linear regression (slides 1–36)",
       "pdf": "L21-onward-notes.pdf"
     },
     {
@@ -50,6 +50,20 @@
       "file": "midsem-L1-L12.md",
       "title": "Midsem revision, Lectures 1 to 12",
       "about": "One-sitting recap of the midsem syllabus"
+    },
+    {
+      "slug": "quiz2-solutions",
+      "file": "quiz2-solutions.md",
+      "title": "Quiz 2, worked solutions",
+      "about": "This year's Quiz 2 (MGFs, sampling, convergence, Gaussian vectors) solved step by step",
+      "pdf": "quiz2-solutions.pdf"
+    },
+    {
+      "slug": "stats-practice-quiz",
+      "file": "statistics-surprise-quiz.md",
+      "title": "Statistics practice quiz, L21 to L24",
+      "about": "What past papers ask on estimation, plus a practice quiz with solutions",
+      "pdf": "statistics-surprise-quiz.pdf"
     }
   ],
   "extras": [

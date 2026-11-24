@@ -19,11 +19,11 @@ Same style as the L14–L20 notes: casual, but still exam-level. Every derivatio
 | 3 | L22 (slides 21–30) | Maximum likelihood estimation, with every example on the slides | 50 min |
 | 4 | L23 (slides 31–49) | Bayesian inference: Beta–Binomial, Gaussian–Gaussian, Gamma–Poisson | 60 min |
 | 5 | L24 (slides 50–53) | Conjugate priors, MAP, conditional expectation estimator | 35 min |
-| 6 | Linear regression deck | A quick skim (it's not big for the exam) | 15 min |
+| 6 | Linear regression (slides 1–36 only) | Least squares, LS = Gaussian MLE, MLE of $\sigma^2$, Laplace noise. Slides 37–56 are not in the syllabus | 35 min |
 | 7 | — | Worked practice problems from last year's HW 11–12, Tut 11–12, Endsem | 60 min |
 | 8 | — | Formula sheet + self-test | 20 min |
 
-**Which file has which slides.** L21 to L24 are all slices of a single 53-slide deck (the slide numbers run continuously): L21 = slides 1–9, L22 = 10–30, L23 = 31–50, L24 = 50–53. Linear regression is its own 12-slide deck (`linear_regression.pdf`).
+**Which file has which slides.** L21 to L24 are all slices of a single 53-slide deck (the slide numbers run continuously): L21 = slides 1–9, L22 = 10–30, L23 = 31–50, L24 = 50–53. Linear regression is its own 12-slide deck (`linear_regression.pdf`, 56 PDF pages because the slides build up). Only PDF pages 1–36 are in the endsem syllabus; pages 37–56 are not.
 
 **Practice material.** Last year's HW 11 and Tutorial 11 match L21–L22 (estimators, MLE). HW 12 and Tutorial 12 match L23–L24 (Bayesian, MAP). Last year's Endsem Q5, Q6, Q9 and Q10(b) are on this material too. (Last year's HW 10 and Tutorial 10 are on Markov chains, which aren't in this year's slides, so skip those unless your instructor says otherwise.)
 
@@ -860,55 +860,200 @@ $$
 
 ---
 
-# Part 6 — Linear regression (skim)
+# Part 6 — Linear regression (slides 1–36)
 
-You said this one isn't a big deal for the exam, so here's just the storyline and the key formulas. The neat thing is that it's a reunion: every idea from L21–L24 shows up again.
+> **Endsem syllabus.** Only **slides 1–36** of `linear_regression.pdf` are examinable: the model, least squares, the intercept and slope, least squares as the Gaussian MLE, the MLE of $\sigma^2$, and the Laplace / least-absolute-deviations slide. **Slides 37–56 are NOT in the syllabus** (bias and MSE of $\hat\beta_0, \hat\beta_1$, the Bayesian view, the MAP estimate, and the posterior / CE estimate), so they're left out here.
 
-**The model.** Data pairs $(x_i, y_i)$. We assume
+The PDF has 56 pages because each slide builds up over several pages. Page ranges below are the PDF page numbers, so you can find each one quickly. The good news is that this deck is a reunion: least squares is just MLE from L22 applied to a line.
 
-$$
-Y_i = \beta_0^* + \beta_1^* x_i + \varepsilon_i, \qquad \varepsilon_i \text{ i.i.d.},\ E[\varepsilon_i] = 0,\ \text{Var}(\varepsilon_i) = \sigma^2.
-$$
+## The model (slides 1–6)
 
-The unknowns $(\beta_0^*, \beta_1^*)$ are our $\theta^*$.
-
-**Least squares.** Pick the line minimising the sum of squared residuals $J(\beta_0,\beta_1) = \sum (y_i - \beta_0 - \beta_1 x_i)^2$. Setting both partials to zero gives
+You get data pairs $\mathcal D = \{(x_i, y_i)\}_{i=1}^n$, for example hours studied and marks. The model is
 
 $$
-\boxed{\hat\beta_1 = \frac{S_{xy}}{S_{xx}}, \qquad \hat\beta_0 = \bar y - \hat\beta_1\bar x}, \qquad S_{xx} = \sum(x_i - \bar x)^2,\ \ S_{xy} = \sum(x_i - \bar x)(y_i - \bar y).
+Y_i = \beta_0^* + \beta_1^* x_i + \varepsilon_i,
 $$
 
-(The first equation, $\partial J/\partial\beta_0 = 0$, says the line passes through $(\bar x, \bar y)$.)
+where $\beta_0^*$ (intercept) and $\beta_1^*$ (slope) are unknown. They are our $\theta^*$. The noise terms $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d., independent of the $x_i$, with $E[\varepsilon_i] = 0$ and $\text{Var}(\varepsilon_i) = \sigma^2$.
 
-**Least squares = MLE under Gaussian noise.** If $\varepsilon_i\sim\mathcal N(0,\sigma^2)$, then $\ln L = -\frac n2\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}J(\beta_0,\beta_1)$, so maximising $\ln L$ is minimising $J$. Same thing we saw for the normal mean on slide 28.
-
-**MLE of the noise variance:** $\hat\sigma^2_{ML} = \frac1n\sum e_i^2$, where $e_i = y_i - \hat\beta_0 - \hat\beta_1 x_i$. Biased, just like the divide-by-$n$ sample variance. The unbiased version divides by $n - 2$ (two parameters estimated, two "degrees of freedom" lost, the same reason as $n-1$ before).
-
-**Different noise ⇒ different loss.** With Laplace noise $f(e) = \frac{1}{2b}e^{-|e|/b}$, the MLE minimises $\sum|e_i|$ instead (least absolute deviations). Squares punish outliers hard; absolute values don't. It's the mean-vs-median story.
-
-**Bias and MSE** (treating the $x_i$ as fixed, only the noise random): both estimators are unbiased, and
+So at each $x_i$, $Y_i$ is a random variable centred on the line:
 
 $$
-\text{MSE}(\hat\beta_1) = \frac{\sigma^2}{S_{xx}}, \qquad \text{MSE}(\hat\beta_0) = \sigma^2\Big(\frac1n + \frac{\bar x^2}{S_{xx}}\Big).
+E[Y_i \mid X_i = x_i] = \beta_0^* + \beta_1^* x_i, \qquad \text{Var}(Y_i \mid X_i = x_i) = \sigma^2 .
 $$
 
-So spreading your $x_i$ out (big $S_{xx}$) pins down the slope better. Makes sense.
+The picture on the slide shows this: a little distribution (blue) sitting on the line at every $x_i$, and the data point (red) is one draw from each.
 
-**Bayesian view = ridge regression.** Put independent $\mathcal N(0, \tau^2)$ priors on $\beta_0, \beta_1$. Then
+## Least squares (slides 7–11)
 
-$$
-\ln(\text{posterior}) = \text{const} - \frac{1}{2\sigma^2}J(\beta_0,\beta_1) - \frac{\beta_0^2 + \beta_1^2}{2\tau^2},
-$$
-
-so the MAP minimises $J + \lambda(\beta_0^2 + \beta_1^2)$ with $\lambda = \sigma^2/\tau^2$. With centred inputs ($\bar x = 0$):
+For a candidate line $\beta_0 + \beta_1 x$, the **residual** of point $i$ is
 
 $$
-\hat\beta_{0,MAP} = \frac{\sum y_i}{n + \lambda}, \qquad \hat\beta_{1,MAP} = \frac{S_{xy}}{S_{xx} + \lambda}.
+e_i = y_i - \beta_0 - \beta_1 x_i ,
 $$
 
-The prior adds $\lambda$ to each denominator, shrinking the estimates towards 0. With $\lambda = 1$, $\hat\beta_{0,MAP} = \frac{\sum y_i}{n+1}$, which is exactly Example 2 with $\mu_0 = 0$. And because the posterior is Gaussian, CE = MAP again.
+the vertical gap between the point and the line. We want all residuals small together, so we add up their squares:
 
-That's all you need from this deck. If anything comes up, it'll most likely be "show least squares is the MLE under Gaussian noise", or "show the MAP is the penalised least squares".
+$$
+J(\beta_0,\beta_1) = \sum_{i=1}^n e_i^2 = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 .
+$$
+
+The **least squares estimates** $(\hat\beta_0, \hat\beta_1)$ are the values that minimise $J$.
+
+## The intercept (slides 12–15)
+
+Write $\bar x = \frac1n\sum x_i$ and $\bar y = \frac1n\sum y_i$. Two facts you'll use constantly:
+
+$$
+\sum_{i=1}^n (x_i - \bar x) = 0, \qquad \sum_{i=1}^n (y_i - \bar y) = 0 .
+$$
+
+Set both partial derivatives of $J$ to zero:
+
+$$
+\frac{\partial J}{\partial \beta_0} = -2\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i) = 0, \qquad
+\frac{\partial J}{\partial \beta_1} = -2\sum_{i=1}^n x_i (y_i - \beta_0 - \beta_1 x_i) = 0 .
+$$
+
+Divide the first equation by $-2n$:
+
+$$
+\bar y - \beta_0 - \beta_1 \bar x = 0 \quad\Longrightarrow\quad \beta_0 = \bar y - \beta_1 \bar x .
+$$
+
+**Reading it.** The fitted line always passes through the point $(\bar x, \bar y)$.
+
+## The slope (slides 16–20)
+
+Substitute $\beta_0 = \bar y - \beta_1\bar x$ into the second equation. It becomes
+
+$$
+\sum_{i=1}^n x_i c_i = 0, \qquad \text{where } c_i = (y_i - \bar y) - \beta_1 (x_i - \bar x).
+$$
+
+Now the trick on the slide. The $c_i$ add up to zero, because both brackets do:
+
+$$
+\sum_i c_i = \sum_i (y_i - \bar y) - \beta_1 \sum_i (x_i - \bar x) = 0, \qquad\text{so}\qquad \sum_i \bar x\, c_i = 0 .
+$$
+
+Subtract this from $\sum_i x_i c_i = 0$:
+
+$$
+\sum_{i=1}^n (x_i - \bar x)\, c_i = 0
+\quad\Longrightarrow\quad
+\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y) = \beta_1 \sum_{i=1}^n (x_i - \bar x)^2 .
+$$
+
+With $S_{xx} = \sum_i (x_i - \bar x)^2$ and $S_{xy} = \sum_i (x_i - \bar x)(y_i - \bar y)$:
+
+$$
+\boxed{\hat\beta_1 = \frac{S_{xy}}{S_{xx}}, \qquad \hat\beta_0 = \bar y - \hat\beta_1 \bar x}
+$$
+
+**Handy forms for calculation.** $S_{xx} = \sum x_i^2 - n\bar x^2$ and $S_{xy} = \sum x_i y_i - n\bar x\bar y$. These are much quicker with numbers.
+
+## Least squares is the MLE under Gaussian noise (slides 21–26)
+
+Now assume $\varepsilon_i \sim \mathcal N(0, \sigma^2)$ i.i.d. Then $Y_1,\dots,Y_n$ are independent with $Y_i \sim \mathcal N(\beta_0^* + \beta_1^* x_i, \sigma^2)$. The likelihood is
+
+$$
+L(y_1,\dots,y_n;\beta_0,\beta_1) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\Big(-\frac{(y_i - \beta_0 - \beta_1 x_i)^2}{2\sigma^2}\Big),
+$$
+
+and taking logs,
+
+$$
+\ln L = -\frac n2 \ln(2\pi\sigma^2) - \frac{1}{2\sigma^2} J(\beta_0, \beta_1).
+$$
+
+The first term doesn't involve $(\beta_0, \beta_1)$, and $\frac{1}{2\sigma^2} > 0$. So maximising $\ln L$ is the same as minimising $J$:
+
+$$
+\boxed{(\hat\beta_0, \hat\beta_1)_{ML} = \arg\max_{\beta_0,\beta_1} \ln L = \arg\min_{\beta_0,\beta_1} J(\beta_0,\beta_1)}
+$$
+
+giving $\hat\beta_{1,ML} = S_{xy}/S_{xx}$ and $\hat\beta_{0,ML} = \bar y - \hat\beta_{1,ML}\bar x$. It's the same thing we saw for the normal mean in Part 3 (maximising the Gaussian likelihood minimises a sum of squares), now with a line instead of a single number.
+
+## MLE of the noise variance (slides 27–31)
+
+If $\sigma^2$ is unknown too, the log likelihood is the same expression with $\sigma^2$ as a third parameter:
+
+$$
+\ln L(\beta_0,\beta_1,\sigma^2) = -\frac n2 \ln(2\pi\sigma^2) - \frac{1}{2\sigma^2} J(\beta_0, \beta_1).
+$$
+
+For **every** fixed $\sigma^2$, the best $(\beta_0, \beta_1)$ is still $(\hat\beta_0, \hat\beta_1)$, since $\sigma^2$ only scales $J$. So plug those in and maximise over $\sigma^2$:
+
+$$
+\frac{\partial \ln L}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{J(\hat\beta_0,\hat\beta_1)}{2\sigma^4} = 0
+\quad\Longrightarrow\quad
+\boxed{\hat\sigma^2_{ML} = \frac{J(\hat\beta_0,\hat\beta_1)}{n} = \frac1n \sum_{i=1}^n e_i^2}, \qquad e_i = y_i - \hat\beta_0 - \hat\beta_1 x_i .
+$$
+
+Like the divide-by-$n$ sample variance, this is **biased**. The slide states (without proof) that $\frac{1}{n-2}\sum_i e_i^2$ is unbiased. The intuition is the same as $n - 1$ before: we estimated two parameters from the data, so we lose two degrees of freedom.
+
+## A different noise model gives a different loss (slides 32–36)
+
+Suppose the noise is **Laplace** instead: $f_\varepsilon(e) = \frac{1}{2b} e^{-|e|/b}$. Then
+
+$$
+\ln L = -n\ln(2b) - \frac1b \sum_{i=1}^n |e_i|, \qquad e_i = y_i - \beta_0 - \beta_1 x_i ,
+$$
+
+so the MLE minimises $\sum_i |e_i|$. That's **least absolute deviations (LAD)**.
+
+The takeaway is that **the noise model decides the loss**: Gaussian noise gives squared error, Laplace noise gives absolute error. On the slide's picture with one outlier, squaring punishes the outlier heavily and drags the least squares line towards it, while LAD stays with the rest of the data. It's the mean-vs-median story again.
+
+## Worked problems
+
+### Problem 1 [Least squares with numbers]
+
+Fit $y = \beta_0 + \beta_1 x$ by least squares to the points $(1, 2), (2, 3), (3, 5), (4, 6)$. Then give $\hat\sigma^2_{ML}$ and the unbiased estimate of $\sigma^2$.
+
+**Solution.** $n = 4$, $\bar x = 2.5$, $\bar y = 4$. Deviations: $x_i - \bar x = -1.5, -0.5, 0.5, 1.5$ and $y_i - \bar y = -2, -1, 1, 2$. So
+
+$$
+S_{xx} = 2.25 + 0.25 + 0.25 + 2.25 = 5, \qquad S_{xy} = 3 + 0.5 + 0.5 + 3 = 7 .
+$$
+
+$$
+\hat\beta_1 = \frac{7}{5} = 1.4, \qquad \hat\beta_0 = 4 - 1.4 \times 2.5 = 0.5 .
+$$
+
+Fitted values are $1.9, 3.3, 4.7, 6.1$, so the residuals are $e_i = 0.1, -0.3, 0.3, -0.1$, and $\sum e_i^2 = 0.01 + 0.09 + 0.09 + 0.01 = 0.2$. Then
+
+$$
+\hat\sigma^2_{ML} = \frac{0.2}{4} = 0.05, \qquad \frac{0.2}{n - 2} = \frac{0.2}{2} = 0.1 .
+$$
+
+Check: the residuals add up to 0, as they must (that's the $\partial J/\partial\beta_0 = 0$ equation).
+
+### Problem 2 [Regression through the origin]
+
+Suppose the model has no intercept: $Y_i = \beta x_i + \varepsilon_i$ with $\varepsilon_i \sim \mathcal N(0, \sigma^2)$ i.i.d. Find the MLE of $\beta$.
+
+**Solution.** As on slide 26, $\ln L = -\frac n2\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_i (y_i - \beta x_i)^2$, so the MLE minimises $J(\beta) = \sum_i (y_i - \beta x_i)^2$.
+
+$$
+\frac{dJ}{d\beta} = -2\sum_i x_i (y_i - \beta x_i) = 0 \quad\Longrightarrow\quad \hat\beta_{ML} = \frac{\sum_i x_i y_i}{\sum_i x_i^2} .
+$$
+
+$J''(\beta) = 2\sum x_i^2 > 0$, so this is a minimum. Note it is **not** $S_{xy}/S_{xx}$: without an intercept the line is forced through the origin, not through $(\bar x, \bar y)$.
+
+### Problem 3 [Which loss does the MLE use?]
+
+The noise is i.i.d. with pdf $f_\varepsilon(e) = \frac{1}{2b}e^{-|e|/b}$. Write down the log likelihood for $(\beta_0, \beta_1)$ and say what the MLE minimises. Why might you prefer it to least squares?
+
+**Solution.** $\ln L = \sum_i \ln\big(\frac{1}{2b} e^{-|y_i - \beta_0 - \beta_1 x_i|/b}\big) = -n\ln(2b) - \frac1b\sum_i |y_i - \beta_0 - \beta_1 x_i|$. The first term is constant and $\frac1b > 0$, so the MLE minimises $\sum_i |e_i|$ (least absolute deviations). It's preferable when the data has outliers: an absolute value grows linearly, so one far-off point can't drag the line the way a squared residual can.
+
+## Likely exam questions
+
+- "Derive the least squares estimates $\hat\beta_0, \hat\beta_1$." (slides 12–20)
+- "Show that least squares is the MLE when the noise is Gaussian." (slides 21–26)
+- "Find the MLE of $\sigma^2$." (slides 27–31)
+- "What does the MLE minimise under Laplace noise?" (slides 32–36)
+- A numerical fit like Problem 1.
 
 ---
 
