@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwu1454d">
+<link rel="stylesheet" href="../../assets/style.css?v=mwu173r0">
 </head>
 <body data-root="../../" data-page="osn/filesystems/practice-problems-lectures-18-and-19" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,7 +87,7 @@
       <header class="note-head">
         
         <h1>Practice problems, Lectures 18 and 19</h1>
-        <p class="note-meta">13 min read · 21 practice problems</p>
+        <p class="note-meta">17 min read · 21 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
@@ -103,47 +103,164 @@ read(fd, buf, 100);
 read(fd, buf, 100);
 </code></pre>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <code>open</code> returns 3 (0-2 are taken), offset 0. <code>read</code> returns 120, offset 120. <code>lseek</code> sets the offset to 300 − 50 = <strong>250</strong> and returns 250. The next <code>read</code> asks for 100 but only 50 remain: returns <strong>50</strong>, offset 300. The last <code>read</code> returns <strong>0</strong> (end of file), offset stays 300.</p>
+<p><em>Solution.</em> <strong>Rules:</strong> <code>open</code> returns the lowest free fd; <code>read</code> returns the number of bytes actually read (fewer at the end of the file, 0 at EOF) and advances the offset by that amount; <code>lseek(fd, off, SEEK_END)</code> sets the offset to file size + off.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Returns</th>
+<th>Offset after</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td><strong>3</strong> (fds 0, 1, 2 are taken)</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>read(fd, buf, 120)</code></td>
+<td><strong>120</strong></td>
+<td>120</td>
+</tr>
+<tr>
+<td><code>lseek(fd, -50, SEEK_END)</code></td>
+<td><strong>250</strong> (300 − 50)</td>
+<td>250</td>
+</tr>
+<tr>
+<td><code>read(fd, buf, 100)</code></td>
+<td><strong>50</strong> (only 50 bytes remain)</td>
+<td>300</td>
+</tr>
+<tr>
+<td><code>read(fd, buf, 100)</code></td>
+<td><strong>0</strong> (end of file)</td>
+<td>300</td>
+</tr>
+</tbody>
+</table></div>
 </details>
 <p id="p-f2"><strong>F2.</strong> A parent opens a file, then forks. The child reads 100 bytes, then exits. The parent then reads 100 bytes. Which bytes does the parent get? What changes if the child instead opens the file itself after the fork?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> After <code>fork()</code> both fds point to the <strong>same open-file-table entry</strong>, which holds one offset. The child's read moves it to 100, so the parent reads <strong>bytes 100-199</strong>. If the child calls <code>open()</code> itself, it gets a <strong>new table entry</strong> with its own offset, and the parent reads <strong>bytes 0-99</strong>.</p>
+<p><em>Solution.</em> Each process has an <strong>fd table</strong> whose entries point into the system-wide <strong>open-file table</strong>; each open-file entry holds the <strong>current offset</strong>, the mode and a reference count. After <code>fork()</code> the parent's and child's fds point to the <strong>same open-file-table entry</strong>, so they <strong>share one offset</strong> (the reference count becomes 2). The child's read moves the shared offset to 100, so the parent's read returns <strong>bytes 100 to 199</strong>. If the child calls <code>open()</code> itself, it gets a <strong>new table entry</strong> with its <strong>own offset</strong>, so the parent's offset is unaffected and it reads <strong>bytes 0 to 99</strong>.</p>
 </details>
 <p id="p-f3"><strong>F3.</strong> You run <code>echo hi &gt; a; ln a b; ln -s a c; rm a</code>. What do <code>cat b</code> and <code>cat c</code> print, and what are the link counts?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <code>ln a b</code> makes <code>b</code> a second name for a's inode (link count 2). <code>ln -s a c</code> makes a new inode whose data is the path <code>&quot;a&quot;</code>; it does not change a's count. <code>rm a</code> unlinks the name <code>a</code>: count drops to <strong>1</strong>. <code>cat b</code> prints <strong>hi</strong> (the inode is still reachable). <code>cat c</code> follows the path <code>a</code>, which no longer exists: <strong>&quot;No such file or directory&quot;</strong> (a dangling link).</p>
+<p><em>Solution.</em> Step by step:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+<th>Link count of the file's inode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>echo hi &gt; a</code></td>
+<td>creates inode I with name <code>a</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>ln a b</code></td>
+<td><code>b</code> is a second name for the <strong>same inode</strong></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>ln -s a c</code></td>
+<td><code>c</code> is a <strong>new inode</strong> whose data is the path &quot;a&quot;</td>
+<td>2 (unchanged)</td>
+</tr>
+<tr>
+<td><code>rm a</code></td>
+<td><code>unlink(&quot;a&quot;)</code> removes the name <code>a</code></td>
+<td><strong>1</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>cat b</code> prints <strong>hi</strong>: the inode and data still exist, reachable through <code>b</code>. <code>cat c</code> follows the stored path &quot;a&quot;, which no longer exists: <strong>&quot;No such file or directory&quot;</strong> (a <strong>dangling symlink</strong>). A file is really deleted only when its link count reaches 0 and no process has it open.</p>
 </details>
 <p id="p-f4"><strong>F4.</strong> Why are hard links to directories not allowed, and why can't a hard link cross file systems?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A hard link to a directory could create a <strong>cycle</strong> in the tree (a directory containing a link to its own ancestor), which breaks tools that walk the tree and makes <code>..</code> ambiguous. Inode numbers are only unique <strong>within one file system</strong>, so a directory entry on one FS cannot name an inode on another. Symbolic links store a path, so they have neither problem.</p>
+<p><em>Solution.</em> <strong>Directories:</strong> a hard link to a directory could create a <strong>cycle</strong> in the tree (a directory that contains a link to one of its own ancestors). That breaks tools that walk the tree (<code>find</code>, <code>du</code> would loop forever), makes <code>..</code> ambiguous (a directory could have several parents), and breaks reference counting (a cycle never reaches link count 0, so it is never freed). <strong>Across file systems:</strong> a directory entry stores only an <strong>inode number</strong>, and inode numbers are unique only <strong>within one file system</strong>, so an entry in one file system cannot name an inode in another. <strong>Symbolic links</strong> store a <strong>path</strong> instead, so they have neither problem.</p>
 </details>
 <p id="p-f5"><strong>F5.</strong> An editor wants a crash during save never to leave a half-written file. Give the sequence of calls and say why each is needed.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Write the new contents to <code>foo.txt.tmp</code>, <strong><code>fsync()</code></strong> it so the data really is on disk, <code>close()</code> it, then <strong><code>rename(&quot;foo.txt.tmp&quot;, &quot;foo.txt&quot;)</code></strong>. <code>rename</code> is atomic, so a crash leaves either the full old file or the full new one. Without the <code>fsync</code>, the rename could reach the disk before the data, and a crash would leave <code>foo.txt</code> pointing to empty or garbage blocks. For full safety, also <code>fsync</code> the directory after the rename.</p>
+<p><em>Solution.</em> <strong>Sequence and purpose:</strong></p>
+<ol>
+<li><code>open(&quot;foo.txt.tmp&quot;, O_CREAT | O_WRONLY | O_TRUNC)</code> and <code>write()</code> the new contents: the original file is untouched, so a crash now loses only the temp file.</li>
+<li><strong><code>fsync(fd)</code>:</strong> forces the temp file's data and inode to disk. Without it, the OS may still hold the data in memory when the rename reaches the disk.</li>
+<li><code>close(fd)</code>.</li>
+<li><strong><code>rename(&quot;foo.txt.tmp&quot;, &quot;foo.txt&quot;)</code>:</strong> this is <strong>atomic</strong>, so after a crash <code>foo.txt</code> is either the complete old file or the complete new file, never a mixture.</li>
+<li>(For full safety) <code>fsync</code> the <strong>directory</strong> so that the rename itself is durable.</li>
+</ol>
+<p>Without step 2, the rename could be written before the data, and a crash would leave <code>foo.txt</code> pointing to empty or garbage blocks.</p>
 </details>
 <p id="p-f6"><strong>F6. (slides)</strong> vsfs: 4 KB blocks, 256-byte inodes, inode table starting at 12 KB, 512-byte sectors. Find the inode block, the sector and the offset inside the block for inode 70. Then do inode 45.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Inode 70: 70 × 256 = 17920 B; 17920 ÷ 4096 = iblock <strong>4</strong>; address 12 + 4 × 4 = <strong>28 KB</strong>; sector 28672 ÷ 512 = <strong>56</strong>; offset (70 mod 16) × 256 = <strong>1536 B</strong>. Inode 45: 45 × 256 = 11520 B; iblock <strong>2</strong>; address 12 + 8 = <strong>20 KB</strong>; sector <strong>40</strong>; offset (45 mod 16) × 256 = 13 × 256 = <strong>3328 B</strong>.</p>
+<p><em>Solution.</em> <strong>Formulas (slides):</strong></p>
+<div class="math-d" data-tex="\text{blk} = \left\lfloor\frac{i \times 256}{4096}\right\rfloor \qquad \text{address} = 12\text{ KB} + \text{blk} \times 4\text{ KB} \qquad \text{sector} = \frac{\text{address}}{512} \qquad \text{offset in block} = (i \bmod 16) \times 256"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">blk</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">⌊</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4096</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">256</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">⌋</span></span></span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">address</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">12</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">blk</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:2em;"></span><span class="mord text"><span class="mord">sector</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">512</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">address</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:2em;"></span><span class="mord text"><span class="mord">offset in block</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.0556em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.0556em;"></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">16</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">256</span></span></span></span></span></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Inode 70</th>
+<th>Inode 45</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Offset in the table = i × 256</td>
+<td>17,920 B</td>
+<td>11,520 B</td>
+</tr>
+<tr>
+<td>Inode block = offset ÷ 4096</td>
+<td><strong>4</strong></td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>Block address = 12 KB + blk × 4 KB</td>
+<td>28 KB = 28,672</td>
+<td>20 KB = 20,480</td>
+</tr>
+<tr>
+<td>Sector = address ÷ 512</td>
+<td><strong>56</strong></td>
+<td><strong>40</strong></td>
+</tr>
+<tr>
+<td>Offset within block = (i mod 16) × 256</td>
+<td>6 × 256 = <strong>1536 B</strong></td>
+<td>13 × 256 = <strong>3328 B</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>(16 inodes fit in a 4 KB block.)</p>
 </details>
 <p id="p-f7"><strong>F7.</strong> A file system has 4 KB blocks, 4-byte block pointers, 12 direct pointers, and one single, one double and one triple indirect pointer. (a) What is the maximum file size? (b) Which pointer holds byte offset 100,000? (c) Byte offset 10,000,000?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">12</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">102</span><span class="mord"><span class="mord">4</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">102</span><span class="mord"><span class="mord">4</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span></span></span></span> <strong>4 TB</strong> (just over <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">42</span></span></span></span></span></span></span></span></span></span></span></span> bytes). (b) 100,000 ÷ 4096 = block <strong>24</strong>. 24 ≥ 12, so it is in the <strong>single indirect</strong> block at slot 24 − 12 = <strong>12</strong>. (c) 10,000,000 ÷ 4096 = block 2441. 2441 − 12 = 2429 ≥ 1024, so subtract again: 2429 − 1024 = 1405. That is in the <strong>double indirect</strong> tree: outer slot 1405 ÷ 1024 = <strong>1</strong>, inner slot 1405 mod 1024 = <strong>381</strong>.</p>
+<p><em>Solution.</em> <strong>(a)</strong> A block holds 4096 / 4 = 1024 pointers. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord text"><span class="mord">max</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">12</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">102</span><span class="mord"><span class="mord">4</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">102</span><span class="mord"><span class="mord">4</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span></span></span></span> <strong>4 TB</strong> (just over <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">42</span></span></span></span></span></span></span></span></span></span></span></span> bytes; the triple-indirect term dominates).</p>
+<p><strong>Method for (b) and (c):</strong> block index = offset ÷ 4096. If it is &lt; 12, a direct pointer serves it. Otherwise subtract 12; if the result is &lt; 1024, it is in the single-indirect block at that slot. Otherwise subtract 1024; if the result is &lt; 1024², it is in the double-indirect tree (outer slot = result ÷ 1024, inner slot = result mod 1024).</p>
+<p><strong>(b)</strong> 100,000 ÷ 4096 = 24.4, so block <strong>24</strong>. 24 ≥ 12, and 24 − 12 = 12 &lt; 1024: <strong>single-indirect pointer, slot 12</strong>.</p>
+<p><strong>(c)</strong> 10,000,000 ÷ 4096 = 2441.4, so block <strong>2441</strong>. 2441 − 12 = 2429 ≥ 1024, so subtract again: 2429 − 1024 = 1405 &lt; 1024². <strong>Double-indirect: outer slot 1405 ÷ 1024 = 1, inner slot 1405 mod 1024 = 381.</strong> (Disk reads to get the data: inode, double-indirect block, indirect block, data block.)</p>
 </details>
 <p id="p-f8"><strong>F8.</strong> Redo F7(a) for 1 KB blocks with the same pointers. Then compute xv6's maximum file size.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A 1 KB block holds 1024 / 4 = 256 pointers: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">12</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">256</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">25</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">25</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> blocks × 1 KB ≈ <strong>16 GB</strong> (16,843,020 KB). xv6 has only 12 direct pointers and one single indirect: (12 + 256) × 1 KB = <strong>268 KB</strong>.</p>
+<p><em>Solution.</em> A 1 KB block holds 1024 / 4 = <strong>256 pointers</strong>. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord text"><span class="mord">max</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">12</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">256</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">25</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">25</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">1</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord">16</span><span class="mord"><span class="mpunct">,</span></span><span class="mord">843</span><span class="mord"><span class="mpunct">,</span></span><span class="mord">020</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span></span></span></span> <strong>16 GB</strong>. <strong>xv6</strong> has only 12 direct pointers and one single-indirect pointer (NDIRECT = 12, NINDIRECT = 256): (12 + 256) blocks × 1 KB = <strong>268 KB</strong>.</p>
 </details>
 <p id="p-f9"><strong>F9.</strong> How many disk reads does <code>open(&quot;/usr/lib/libc.so&quot;)</code> need with a cold cache, assuming each directory fits in one block?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Depth 3: root inode, root data, <code>usr</code> inode, <code>usr</code> data, <code>lib</code> inode, <code>lib</code> data, <code>libc.so</code> inode = <strong>7 reads</strong> = 2 × 3 + 1. The superblock is already in memory after mount.</p>
+<p><em>Solution.</em> <strong>Rule:</strong> 2 reads for each directory in the path (its inode, then its data block), plus 1 read for the target's inode: 2 × depth + 1. Here the directories are <code>/</code>, <code>usr</code> and <code>lib</code> (depth 3): root inode, root data, <code>usr</code> inode, <code>usr</code> data, <code>lib</code> inode, <code>lib</code> data, then <code>libc.so</code>'s inode = <strong>7 reads</strong>. The superblock is already in memory after mount, and the root inode's location is known.</p>
 </details>
 <p id="p-f10"><strong>F10. (slides)</strong> How many I/Os does it take to create <code>/foo/bar</code> and write 12 KB to it in vsfs (4 KB blocks, cold cache)? Which are user data?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> Create = <strong>10</strong>: read root inode, read root data, read foo inode, read foo data, read + write the inode bitmap, write foo's data (new entry), read + write bar's inode, write foo's inode. Each of the 3 allocating writes = <strong>5</strong>: read bar's inode, read + write the data bitmap, write the data block, write bar's inode. Total = 10 + 15 = <strong>25</strong>, and <strong>only 3</strong> of them are user data.</p>
+<p><em>Solution.</em> <strong>Create = 10 I/Os:</strong> read the root inode, read the root data, read foo's inode, read foo's data (4 reads to walk the path); read the inode bitmap, write the inode bitmap; write foo's data (the new entry); read bar's new inode, write bar's inode; write foo's inode. <strong>Each allocating write = 5 I/Os:</strong> read bar's inode, read the data bitmap, write the data bitmap, write the data block, write bar's inode. 12 KB = 3 blocks of 4 KB, so 3 × 5 = 15. <strong>Total = 10 + 15 = 25 I/Os</strong>, and <strong>only 3 of them</strong> write user data; the rest is metadata overhead.</p>
 </details>
 <p id="p-f11"><strong>F11.</strong> Why does <code>read()</code> write the inode, and why does it never touch a bitmap? How could you avoid that write?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> It updates the inode's <strong>access time</strong> (<code>atime</code>). It touches no bitmap because reading never allocates or frees anything. Mount options like <code>noatime</code> or <code>relatime</code> skip or reduce the atime write.</p>
+<p><em>Solution.</em> A read must update the inode's <strong>last-access time</strong> (<code>atime</code>), so after reading the data it <strong>writes the inode back</strong> (read inode, read data, write inode = 3 I/Os per block). It touches <strong>no bitmap</strong> because reading never allocates or frees an inode or a block. To avoid the write, mount with <strong><code>noatime</code></strong> (never update atime) or <strong><code>relatime</code></strong> (update only if atime is older than mtime, or about once a day).</p>
 </details>
 <p id="p-f12"><strong>F12. (slides)</strong> In <code>vsfs.py</code> the state is <code>inodes [d a:0 r:2] [] [] []</code>, <code>data [(.,0) (..,0)] [] [] []</code>. Show the state after <code>mkdir(&quot;/g&quot;)</code>, then <code>creat(&quot;/g/q&quot;)</code>, then <code>link(&quot;/g/q&quot;, &quot;/w&quot;)</code>.</p>
 <details class="sol"><summary><span>Solution</span></summary>
@@ -151,7 +268,37 @@ read(fd, buf, 100);
 </details>
 <p id="p-f13"><strong>F13.</strong> Compare pointer-based allocation, extents and FAT on (a) metadata for a 1 GB contiguous file, (b) random access, (c) hard links.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) Pointers need one entry per block: 262,144 pointers plus indirect blocks. <strong>Extents need one</strong> (start, length). FAT needs one table entry per block. (b) Pointers: at most a few indirect reads. Extents: a short search over the extent list. FAT: <strong>walk the chain</strong> (fast only because the table is in memory). (c) Pointers and extents keep metadata in an inode, so hard links work. <strong>FAT has no inodes</strong>, so hard links are impossible.</p>
+<p><em>Solution.</em></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Pointer-based (inode)</th>
+<th>Extents</th>
+<th>FAT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) Metadata for a 1 GB contiguous file (262,144 blocks of 4 KB)</td>
+<td>One pointer per block (about 262,144 pointers plus indirect blocks)</td>
+<td><strong>One extent</strong> (start, length)</td>
+<td>One table entry per block (262,144 entries)</td>
+</tr>
+<tr>
+<td>(b) Random access</td>
+<td>Up to 3 extra indirect reads</td>
+<td>A short search over the extent list</td>
+<td><strong>Walk the chain</strong> (only fast because the table is cached in memory)</td>
+</tr>
+<tr>
+<td>(c) Hard links</td>
+<td>Yes (the link count is in the inode)</td>
+<td>Yes (inode-based)</td>
+<td><strong>No</strong>: there are no inodes, so no place for a link count</td>
+</tr>
+</tbody>
+</table></div>
 </details>
 <p id="p-f14"><strong>F14.</strong> Give one example each of batching, scheduling and avoidance by write buffering, and say what an application that cannot lose data should do.</p>
 <details class="sol"><summary><span>Solution</span></summary>
@@ -159,7 +306,7 @@ read(fd, buf, 100);
 </details>
 <p id="p-f15"><strong>F15.</strong> In xv6, why does <code>filewrite</code> split a large write into several <code>begin_op</code>/<code>end_op</code> transactions? Why does <code>writei</code> call <code>iupdate</code> even when the size did not change?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> A transaction must fit in the log: it may write at most <code>MAXOPBLOCKS</code> (10) blocks. Each written data block can also dirty a bitmap block, plus the inode, the indirect block and slop for unaligned ends, so <code>filewrite</code> limits each chunk to 3 data blocks. <code>writei</code> calls <code>iupdate</code> because <code>bmap</code> may have <strong>allocated a new block</strong> and stored it in <code>ip-&gt;addrs[]</code>, and that change must reach the on-disk inode.</p>
+<p><em>Solution.</em> <strong>Splitting:</strong> every file-system operation runs inside a transaction (<code>begin_op</code> ... <code>end_op</code>), and the transaction's modified blocks are first written to the <strong>log</strong>, which has limited room. One transaction may write at most <code>MAXOPBLOCKS</code> = 10 blocks. A single large write could touch far more: data blocks, bitmap blocks, the inode, the indirect block, and extra blocks if the start and end are not block-aligned. So <code>filewrite</code> writes in <strong>chunks of at most 3 data blocks</strong>, each in its own <code>begin_op</code>/<code>end_op</code>, so that every chunk fits in the log. Each chunk is atomic (all or nothing), but a crash between chunks leaves a partial write. <strong><code>iupdate</code>:</strong> <code>writei</code> always calls <code>iupdate(ip)</code> because <code>bmap</code> may have <strong>allocated a new block</strong> and stored its address in <code>ip-&gt;addrs[]</code> (and the size may have grown), and those changes in the in-memory inode must be written to the on-disk inode.</p>
 </details>
 <p id="p-f16"><strong>F16 (theory).</strong> Compare contiguous, linked (including FAT) and indexed allocation on sequential access, random access, fragmentation and file growth. Which one is the UNIX inode, and why?</p>
 <details class="sol"><summary><span>Solution</span></summary>
@@ -222,6 +369,6 @@ read(fd, buf, 100);
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwu1454d" defer></script>
+<script src="../../assets/app.js?v=mwu173r0" defer></script>
 </body>
 </html>

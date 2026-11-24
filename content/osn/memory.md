@@ -868,18 +868,20 @@ There are two fixes:
 
 # Practice problems, Lectures 10 to 13
 
-Try each one before you open its solution. Problems marked **(L08)** are the lecture's own review questions, and **(sheet)** ones come from the "Transport Layer - Practice Questions" PDF.
+Try each one before you open its solution. Every solution is written the way to answer it in the exam: the rule, the working, the final answer, then the reason.
 
 **M1.** A process has base = 16384 and bounds = 4096 (bounds is the size). Translate the virtual addresses 0, 1000, 4096 and 5000, or say which ones fault.
 
-*Solution.* A virtual address is legal only if it is **less than** bounds. Then PA = VA + base.
+*Solution.* **Rule:** the hardware first checks VA < bounds, then computes PA = VA + base. If VA ≥ bounds, it raises an exception and the OS handles it (usually by killing the process).
 
-| VA | Check | Result |
-| --- | --- | --- |
-| 0 | 0 < 4096 | 16384 |
-| 1000 | 1000 < 4096 | 17384 |
-| 4096 | 4096 is not < 4096 | **Fault** (the last legal address is 4095) |
-| 5000 | 5000 ≥ 4096 | **Fault** |
+| VA | Check (VA < 4096?) | Working | Result |
+| --- | --- | --- | --- |
+| 0 | yes | 0 + 16384 | **16384** |
+| 1000 | yes | 1000 + 16384 | **17384** |
+| 4096 | **no** (4096 is not < 4096) | the last legal address is 4095 | **Fault** |
+| 5000 | **no** (5000 ≥ 4096) | | **Fault** |
+
+*Watch out:* an address equal to the bounds is already illegal when bounds holds the *size*.
 
 ---
 
@@ -893,34 +895,31 @@ Try each one before you open its solution. Problems marked **(L08)** are the lec
 
 Translate the virtual addresses 1500, 5000, 7500, 16000 and 13000, or say which ones fault.
 
-*Solution.* The top 2 bits pick the segment, so each segment covers 4096 virtual addresses: 0-4095 is segment 00, 4096-8191 is 01, and 12288-16383 is 11. Subtract the segment's start to get the offset.
+*Solution.* **Method:** the top 2 bits give the segment, so each segment covers 4096 addresses: segment 00 is 0–4095, 01 is 4096–8191, 10 is 8192–12287 (unused) and 11 is 12288–16383. The offset is VA minus the segment's start. For a forward segment: check offset < size, then PA = base + offset. For the stack: negative offset = offset − 4096, check |negative offset| ≤ size, then PA = base + negative offset.
 
-| VA | Segment, offset | Check | Physical address |
-| --- | --- | --- | --- |
-| 1500 | Code, 1500 | 1500 < 2K | 32768 + 1500 = **34268** |
-| 5000 | Heap, 5000 − 4096 = 904 | 904 < 3K | 34816 + 904 = **35720** |
-| 7500 | Heap, 3404 | 3404 ≥ 3072 | **Fault** |
-| 16000 | Stack, 16000 − 12288 = 3712 | See below | **28288** |
-| 13000 | Stack, 712 | See below | **Fault** |
+Bases in bytes: code 32768, heap 34816, stack 28672.
 
-The stack grows downward, so its offset is converted to a negative one: negative offset = offset − max segment size (4096).
-
-- For 16000: 3712 − 4096 = −384. |−384| ≤ 2048, so it is legal. PA = 28672 − 384 = **28288**.
-- For 13000: 712 − 4096 = −3384. |−3384| > 2048, so it is beyond the stack's 2K: **fault**.
+| VA | Segment | Offset | Check | PA |
+| --- | --- | --- | --- | --- |
+| 1500 | code | 1500 | 1500 < 2048, ok | 32768 + 1500 = **34268** |
+| 5000 | heap | 5000 − 4096 = 904 | 904 < 3072, ok | 34816 + 904 = **35720** |
+| 7500 | heap | 7500 − 4096 = 3404 | 3404 ≥ 3072 | **Fault** |
+| 16000 | stack | 16000 − 12288 = 3712 | 3712 − 4096 = −384, and 384 ≤ 2048, ok | 28672 − 384 = **28288** |
+| 13000 | stack | 13000 − 12288 = 712 | 712 − 4096 = −3384, and 3384 > 2048 | **Fault** |
 
 ---
 
 **M3.** A free list holds chunks of 20, 10, 40 and 15 bytes, in that order. A request for 12 bytes arrives. Which chunk does each of best fit, worst fit and first fit choose, and how big is the leftover piece? Which strategy tends to leave many tiny unusable pieces, and why?
 
-*Solution.*
+*Solution.* **Rules:** best fit = the smallest chunk that is large enough; worst fit = the largest chunk; first fit = the first chunk in the list that is large enough.
 
-| Strategy | Chooses | Leftover |
-| --- | --- | --- |
-| Best fit (smallest that fits) | 15 | 3 |
-| Worst fit (largest) | 40 | 28 |
-| First fit (first that fits) | 20 | 8 |
+| Strategy | Candidates that fit (≥ 12) | Chooses | Leftover |
+| --- | --- | --- | --- |
+| First fit | 20 is first | **20** | 8 |
+| Best fit | 20, 40, 15 → smallest is 15 | **15** | 3 |
+| Worst fit | 20, 40, 15 → largest is 40 | **40** | 28 |
 
-**Best fit** tends to leave many tiny pieces: by choosing the closest fit, it makes the leftover as small as possible, and these slivers are often too small for any later request. Worst fit tries to keep leftovers large, but in practice it also fragments badly, and it must search the whole list.
+**Best fit** tends to leave many tiny pieces: by choosing the closest fit it makes each leftover as small as possible, and these slivers (such as the 3 here) are too small for any later request, so they accumulate as external fragmentation. Worst fit tries to keep leftovers large, but in practice also fragments badly, and both need a full search of the list (first fit stops early).
 
 ---
 
@@ -928,11 +927,11 @@ The stack grows downward, so its offset is converted to a negative one: negative
 
 *Solution.*
 
-(a) 10KB rounds up to the next power of two, 16KB. The allocator splits 128 into 64 + 64, then one 64 into 32 + 32, then one 32 into 16 + 16, and returns one 16KB block. Internal fragmentation is 16 − 10 = **6KB**.
+**(a)** Round 10 KB up to the next power of two: **16 KB**. Split until a 16 KB block exists: 128 → 64 + 64; 64 → 32 + 32; 32 → 16 + 16. One 16 KB block is allocated; the free blocks left are 16 KB, 32 KB and 64 KB. Internal fragmentation = 16 − 10 = **6 KB**.
 
-(b) 30KB rounds up to 32KB. There is a free 32KB block left over from the second split, so it is used directly, with 2KB of internal fragmentation. The free blocks are now one 16KB and one 64KB.
+**(b)** Round 30 KB up to **32 KB**. The free 32 KB block (left over from the second split) fits exactly, so it is used with no new split. Internal fragmentation = 2 KB. The free blocks are now one 16 KB and one 64 KB.
 
-(c) A block's buddy is found by flipping a single bit of its address (the bit that matches the block's size). When a block is freed, the allocator checks that one buddy; if it is also free, the two merge, and this repeats up the levels.
+**(c)** A block's **buddy** is found by flipping one bit of its address (the bit that equals the block size), so the check is a single address calculation. When a block is freed, the allocator checks whether its buddy is entirely free; if so the two merge into a block of twice the size, and the check repeats one level up. No searching of a list is needed.
 
 ---
 
@@ -940,35 +939,41 @@ The stack grows downward, so its offset is converted to a negative one: negative
 
 *Solution.*
 
-(a) 8KB = 2¹³, so the **offset is 13 bits** and the **VPN is 32 − 13 = 19 bits**. That is 2¹⁹ = 524,288 PTEs × 4 bytes = **2MB** per process.
+**(a)** 8 KB = 2^13, so the **offset is 13 bits** and the **VPN is 32 − 13 = 19 bits**. A linear table has 2^19 = 524,288 entries × 4 bytes = 2^21 bytes = **2 MB per process**.
 
-(b) 100 processes need **200MB** of page tables. That is why 3.7's smaller-table techniques exist.
+$$
+\text{table size} = 2^{\text{VPN bits}} \times \text{PTE size} = 2^{19} \times 4 = 2\text{ MB}
+$$
+
+**(b)** 100 processes × 2 MB = **200 MB** of page tables, even if each process uses very little memory. This is why smaller page-table techniques (bigger pages, hybrid, multi-level) are needed.
 
 ---
 
 **M6.** A 1KB address space uses 64-byte pages. The page table is: VPN 0 → PFN 5, VPN 1 → invalid, VPN 2 → PFN 9, VPN 3 → PFN 1. Translate virtual addresses 165, 112 and 200.
 
-*Solution.* A 1KB address space has 10-bit addresses. 64-byte pages mean a 6-bit offset, leaving a 4-bit VPN. VPN = VA / 64 and offset = VA mod 64.
+*Solution.* **Method:** 1 KB = 2^10, so addresses have 10 bits. 64-byte pages = 2^6, so the offset is 6 bits and the VPN is 4 bits. Then VPN = VA ÷ 64 (integer division), offset = VA mod 64, and PA = PFN × 64 + offset.
 
-| VA | VPN, offset | PTE | Physical address |
-| --- | --- | --- | --- |
-| 165 | 2, 37 | PFN 9 | 9 × 64 + 37 = **613** |
-| 112 | 1, 48 | Invalid | **Fault**: the OS usually kills the process |
-| 200 | 3, 8 | PFN 1 | 1 × 64 + 8 = **72** |
+| VA | VPN = VA ÷ 64 | Offset = VA mod 64 | PTE | PA |
+| --- | --- | --- | --- | --- |
+| 165 | 2 | 165 − 128 = 37 | PFN 9 | 9 × 64 + 37 = 576 + 37 = **613** |
+| 112 | 1 | 112 − 64 = 48 | **invalid** | **Fault** (the OS usually kills the process) |
+| 200 | 3 | 200 − 192 = 8 | PFN 1 | 1 × 64 + 8 = **72** |
 
 ---
 
 **M7.** An array of 12 four-byte ints starts at virtual address 120, and the page size is 32 bytes. A loop reads a\[0\] to a\[11\] once, starting with an empty TLB. How many TLB hits and misses are there, and what is the hit rate? What would happen if the loop ran a second time straight away? Which kind of locality does each pass show?
 
-*Solution.* The ints sit at 120, 124, ..., 164. Page = address / 32:
+*Solution.* **Method:** element a[i] is at 120 + 4i, and its page is address ÷ 32. The array occupies bytes 120 to 167.
 
-- Page 3 (96-127) holds a\[0\] and a\[1\]: one miss, then one hit.
-- Page 4 (128-159) holds a\[2\] to a\[9\]: one miss, then seven hits.
-- Page 5 (160-191) holds a\[10\] and a\[11\]: one miss, then one hit.
+| Page | Bytes | Elements | Result |
+| --- | --- | --- | --- |
+| 3 | 96–127 | a[0] (120), a[1] (124) | 1 miss, 1 hit |
+| 4 | 128–159 | a[2] to a[9] (128 to 156) | 1 miss, 7 hits |
+| 5 | 160–191 | a[10] (160), a[11] (164) | 1 miss, 1 hit |
 
-That is **3 misses and 9 hits, a 75% hit rate**. These hits come from **spatial locality**: neighbouring elements share a page.
+**3 misses and 9 hits: hit rate = 9 / 12 = 75%.** The hits come from **spatial locality** (neighbouring elements share a page).
 
-On an immediate second pass, all three translations are still in the TLB (assuming it holds at least three entries), so all 12 accesses hit. Those hits come from **temporal locality**: the same pages are used again soon.
+**Second pass straight away:** the three translations are still in the TLB (if it holds at least 3 entries), so **all 12 accesses hit: 100%**. That is **temporal locality** (the same pages are reused soon).
 
 ---
 
@@ -976,11 +981,14 @@ On an immediate second pass, all three translations are still in the TLB (assumi
 
 *Solution.*
 
-- On a TLB hit: 2 + 100 = 102 ns.
-- On a TLB miss: 2 + 100 (fetch the PTE) + 100 (fetch the data) = 202 ns.
-- EAT = 0.95 × 102 + 0.05 × 202 = 96.9 + 10.1 = **107 ns**.
+- **Hit:** TLB lookup + one memory access = 2 + 100 = **102 ns**.
+- **Miss:** TLB lookup + PTE fetch + data fetch = 2 + 100 + 100 = **202 ns**.
 
-With no TLB, every access needs the PTE and then the data: **200 ns**, nearly twice as slow.
+$$
+EAT = 0.95 \times 102 + 0.05 \times 202 = 96.9 + 10.1 = \textbf{107 ns}
+$$
+
+**With no TLB:** every access needs the PTE and then the data = **200 ns**, almost twice as slow. The TLB cuts the cost to just 7% above a single memory access.
 
 ---
 
@@ -993,24 +1001,23 @@ With no TLB, every access needs the PTE and then the data: **200 ns**, nearly tw
 
 *Solution.*
 
-(a) 0x1234 in 14 bits is `01 0010 0011 0100`.
+**(a) Layout:** 14-bit VA = | 4-bit PD index | 4-bit PT index | 6-bit offset |. 0x1234 in 14 bits is `01 0010 0011 0100` (0x1234 is 0001 0010 0011 0100 in 16 bits; drop the top 2 zero bits). Split: `0100 | 1000 | 110100`.
 
-- The offset is the low 6 bits: `110100` = **52**.
-- The VPN is the high 8 bits: `01001000` = 72.
-- The page-directory index is the top 4 bits of the VPN: `0100` = **4**.
-- The page-table index is the low 4 bits of the VPN: `1000` = **8**.
+- Page-directory index = `0100` = **4**.
+- Page-table index = `1000` = **8**.
+- Offset = `110100` = **52**. (The VPN is `01001000` = 72.)
 
-(b) PA = (PFN << 6) | offset = (0x31 << 6) + 52 = 0xC40 + 0x34 = **0xC74** (3188).
+**(b)** PDE[4] gives the page of the page table (PFN 0x20); entry 8 of it gives PFN 0x31. $PA = (PFN \ll 6) \mid offset = 0x31 \times 64 + 52 = 3136 + 52 = 3188 = \textbf{0xC74}$.
 
-(c) **3 memory accesses**: the page-directory entry, the page-table entry, and the data itself.
+**(c)** **3 memory accesses**: the page-directory entry, the page-table entry, then the data itself.
 
-(d) A 4KB page holds 4096 / 8 = 512 PTEs, so each level resolves 9 bits. The VPN is 48 − 12 = 36 bits, and 36 / 9 = **4 levels**. This is exactly x86-64's four-level layout.
+**(d)** One 4 KB page holds 4096 / 8 = 512 PTEs = 2^9, so each level indexes 9 bits. VPN = 48 − 12 = 36 bits, and 36 / 9 = **4 levels** (this is x86-64).
 
 ---
 
 **M10.** With 3 frames, and starting empty, run the reference string **7, 0, 1, 2, 0, 3, 0, 4, 2, 3** under OPT, FIFO and LRU. Give the number of hits for each. How many of the misses are compulsory (cold-start) misses?
 
-*Solution.* All three policies start with 3 compulsory misses (7, 0, 1).
+*Solution.* **Rules:** FIFO evicts the page that has been in memory longest. LRU evicts the page used least recently. OPT evicts the page whose next use is furthest in the future (never = furthest). All three start with 3 compulsory misses (7, 0, 1).
 
 | Ref | FIFO | Frames | LRU | Frames (least recent first) | OPT | Frames |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -1025,28 +1032,28 @@ With no TLB, every access needs the PTE and then the data: **200 ns**, nearly tw
 | 2 | M, evict 3 | 0 4 2 | M, evict 3 | 0 4 2 | **H** | 2 3 4 |
 | 3 | M, evict 0 | 4 2 3 | M, evict 0 | 4 2 3 | **H** | 2 3 4 |
 
-**Hits: OPT 4, LRU 2, FIFO 1.** There are 6 distinct pages, so 6 misses are compulsory. OPT's 6 misses are *all* compulsory: no policy could do better on this string.
+**Hits: OPT 4, LRU 2, FIFO 1.** There are 6 distinct pages (7, 0, 1, 2, 3, 4), so **6 misses are compulsory**. OPT's 6 misses are *all* compulsory, so no policy can do better on this string; FIFO has 9 misses and LRU 8.
 
 ---
 
 **M11.** Four frames hold pages A, B, C and D, with use bits 1, 0, 1, 1. The clock hand points at A. Page E is requested, and then page F. Which page is evicted each time, and what are the use bits and hand position afterwards?
 
-*Solution.*
+*Solution.* **Clock rule:** look at the page under the hand. If its use bit is 1, clear it to 0 and advance. If it is 0, evict it, load the new page there with use bit 1, and advance the hand past it.
 
-**Request E.** A's use bit is 1: clear it to 0 and move on. B's use bit is 0: **evict B**. E goes into B's frame with use bit 1, and the hand moves to C. The state is now A 0, E 1, C 1, D 1, hand at C.
+**Request E** (hand at A): A has use 1, so clear it (A = 0) and advance. B has use 0: **evict B**. E goes in B's frame with use bit 1, and the hand moves to C. State: A 0, E 1, C 1, D 1; hand at C.
 
-**Request F.** C is 1, so clear it and move on. D is 1, so clear it and move on. A is 0: **evict A**. F goes into A's frame with use bit 1, and the hand moves to E. The state is now F 1, E 1, C 0, D 0, hand at E.
+**Request F** (hand at C): C has use 1, so clear it and advance. D has use 1, so clear it and advance. A has use 0: **evict A**. F goes into A's frame with use bit 1, and the hand moves to E. State: F 1, E 1, C 0, D 0; hand at E.
 
 ---
 
 **M12.** Memory takes 100 ns and a disk access takes 10 ms. What is the AMAT with a hit rate of 99.9%, and with 99.99%? What does this say about how often a system can afford to page?
 
-*Solution.* AMAT = T\_M + P\_miss × T\_D.
+*Solution.* $AMAT = T_M + P_{miss} \times T_D$ (10 ms = 10,000,000 ns).
 
-- At 99.9%: 100 ns + 0.001 × 10 ms = 100 ns + 10 µs = **10.1 µs**, about 100 times slower than memory.
-- At 99.99%: 100 ns + 1 µs = **1.1 µs**, still 11 times slower.
+- At 99.9% (P_miss = 0.001): 100 + 0.001 × 10,000,000 = 100 + 10,000 = 10,100 ns = **10.1 µs**, about 100 times slower than memory.
+- At 99.99% (P_miss = 0.0001): 100 + 1,000 = 1,100 ns = **1.1 µs**, still 11 times slower.
 
-Even a tiny miss rate dominates, because disk is 100,000 times slower than memory. A system can only afford to page very rarely: in practice, each process's working set must fit in memory.
+**Conclusion:** disk is about 100,000 times slower than memory, so even a tiny miss rate **dominates** the average. A system can only afford to page very rarely: to keep the AMAT within a few percent of memory speed, the miss rate must be below about 1 in 100,000, so each process's working set must fit in memory.
 
 ---
 
@@ -1054,14 +1061,11 @@ Even a tiny miss rate dominates, because disk is 100,000 times slower than memor
 
 *Solution.*
 
-(a) **Thrashing** is when the working sets of the running processes add up to more than physical memory, so the system spends nearly all its time paging and does little useful work. Two responses:
+**(a)** **Thrashing** happens when the working sets of the running processes add up to **more than physical memory**, so the system keeps faulting and evicting pages that are needed again soon, spending nearly all its time on paging I/O and doing little useful work. Two responses: **(1) admission control**: run fewer processes (suspend some) so the rest fit in memory; **(2) an out-of-memory killer** (as in Linux): kill a memory-hungry process.
 
-- **Admission control**: run fewer processes (suspend some) so the rest fit in memory.
-- **An out-of-memory killer** (as in Linux): kill a memory-hungry process.
+**(b)** **Belady's anomaly:** with FIFO, giving a process more frames can cause more faults. LRU has the **stack property**: the set of pages in memory with N frames is always a subset of the set with N + 1 frames, so an extra frame can only turn misses into hits. FIFO ignores how recently a page was used, so it lacks this property.
 
-(b) LRU has the **stack property**: with N + 1 frames, the pages in memory are always a superset of those with N frames, so adding a frame can never add a miss. FIFO does not have this property, which is why adding a frame can make it worse.
-
-(c) A clean page is identical to its copy on disk, so it can simply be dropped. A dirty page must first be **written back to disk**, which costs an extra I/O.
+**(c)** A clean page is identical to its copy on disk, so it can simply be **dropped** (one I/O for the new page only). A dirty page must first be **written back to disk**, which costs an **extra I/O** before the frame can be reused.
 
 ---
 
@@ -1069,10 +1073,10 @@ Even a tiny miss rate dominates, because disk is 100,000 times slower than memor
 
 *Solution.*
 
-(a) So that a program cannot overwrite its own code, whether by a bug or by an attack. A write to a text page causes a page fault.
+**(a)** So that a program **cannot overwrite its own code**, by a bug or by an attack. A write to a text page causes a **page fault** (a protection fault), and the kernel kills the process. Read-only code can also be shared safely.
 
-(b) If the stack overflows, it runs into the guard page, which has no U bit, so user code cannot access it. The result is a **page fault**, instead of silently overwriting the memory below the stack.
+**(b)** The guard page sits just below the stack. It has **no U bit**, so user-mode code cannot access it. If the stack **overflows**, the process runs into the guard page and takes a **page fault**, instead of silently overwriting whatever lies below the stack (such as the heap or data).
 
-(c) `satp` holds the physical page number of the **root page table** of the current address space (plus the mode, Sv39). It changes whenever the CPU switches address space. In xv6, that happens on every trap into and out of the kernel (in the trampoline code), and when the scheduler switches to another process.
+**(c)** `satp` holds the **physical page number of the root page table** of the current address space (plus the mode, Sv39). It changes whenever the CPU **switches address space**: in xv6, on every trap between user and kernel (in the trampoline code, which is mapped in both page tables) and when the scheduler switches to a different process.
 
 ---

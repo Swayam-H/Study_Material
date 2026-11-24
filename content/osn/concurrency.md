@@ -1359,7 +1359,9 @@ Try each one before you open its solution. Problems marked **(L08)** are the lec
 
 **S1.** Two threads each run `counter++` three times, with no lock. counter starts at 0. What are the largest and the smallest possible final values? Give the interleaving that produces the smallest one.
 
-*Solution.* The largest is **6**: every increment runs without interruption. The smallest is **2**. Here is how:
+*Solution.* Each `counter++` is three instructions (load, add, store). A lost update happens when a thread stores a value computed from a stale load.
+
+**Largest = 6:** every increment runs without interruption. **Smallest = 2.** Here is how:
 
 1. T1 loads 0 into its register, then is interrupted.
 2. T2 runs two complete increments: counter = 2.
@@ -1368,7 +1370,7 @@ Try each one before you open its solution. Problems marked **(L08)** are the lec
 5. T1 runs its last two increments in full: counter = 3.
 6. T2 adds 1 to its stale 1 and stores **2**.
 
-The result cannot be 1. Every store writes (value loaded) + 1, so once any store has happened, memory holds at least 1. The final value comes from the last store, which is some thread's *last* increment. That increment loaded its value after the same thread's first increment had already stored, so it loaded at least 1 and stored at least 2.
+**Why it cannot be 1 (or 0):** every store writes (value loaded) + 1, so once any store has happened, memory holds at least 1. The final value comes from the last store, which is some thread's *last* increment. That increment loaded its value after the same thread's first increment had already stored, so it loaded at least 1 and stored at least 2.
 
 ---
 
@@ -1410,7 +1412,7 @@ The problem is the gap between the test and the set. `TestAndSet` does both in *
 
 **S4.** Four threads share one CPU and a test-and-set spin lock. The holder is preempted just after taking the lock. Roughly how much CPU time is wasted before the holder runs again, and why? How do `yield` and the queue lock each improve this?
 
-*Solution.* On one CPU, each of the other three threads gets scheduled in turn and spins for its **whole time slice**, because the lock cannot be released while its holder is not running. That is roughly **3 time slices wasted** for each time the holder is preempted (more if the scheduler is unlucky).
+*Solution.* **Reasoning:** on one CPU only one thread runs at a time, and the holder is not running. Each of the other three threads gets scheduled in turn, finds the lock held, and **spins for its whole time slice**, because the lock cannot be released until the holder runs again. That is roughly **3 time slices wasted** (N − 1 for N threads) each time the holder is preempted, and more if the scheduler is unlucky.
 
 - With **yield**, each waiter gives up the CPU as soon as it finds the lock held. That costs 3 context switches instead of 3 slices, but it still has overhead and starvation is still possible.
 - With the **queue lock**, waiters sleep and are not scheduled at all until the holder unparks them, so no time is wasted.
@@ -1431,7 +1433,7 @@ The problem is the gap between the test and the set. `TestAndSet` does both in *
 | T4 lock | 4 | 1 | T4 = 3 | T2 | T3, T4 |
 | T2 unlock | 4 | 2 |  | **T3** | T4 |
 
-Threads are served strictly in ticket order. That is what makes the ticket lock fair.
+**Rules used:** `lock()` takes `myturn = FetchAndAdd(&ticket)` (old value, then ticket++) and spins until `turn == myturn`; `unlock()` does `turn++`. Threads are served strictly in ticket order (T1, T2, T3, T4). That FIFO order is what makes the ticket lock **fair**: bounded waiting, no starvation.
 
 ---
 
@@ -1454,7 +1456,7 @@ With **`setpark()`**, the thread announces "I am about to park" *before* releasi
 
 **S7.** Low-priority thread L holds a spin lock. High-priority thread H wakes up and tries to take it. Explain what happens on one CPU, and how priority inheritance fixes it.
 
-*Solution.* H has the higher priority, so the scheduler always runs H, and H spins on the lock. L never gets the CPU, so it never finishes its critical section and never releases the lock. The system hangs, even though nothing is technically deadlocked. With **priority inheritance**, while H waits for a lock that L holds, L temporarily runs at H's priority. L gets the CPU, finishes, releases the lock, and drops back to its own priority, and then H proceeds.
+*Solution.* **Priority inversion.** H has the higher priority, so the scheduler always runs H, and H spins on the lock. L never gets the CPU, so it never finishes its critical section and never releases the lock. The system hangs, even though nothing is technically deadlocked. With **priority inheritance**, while H waits for a lock that L holds, L temporarily runs at H's priority. L gets the CPU, finishes, releases the lock, and drops back to its own priority, and then H proceeds.
 
 ---
 
@@ -1502,7 +1504,15 @@ Spurious wakeups are a second reason. Under Mesa semantics, always use `while`.
 
 **S10.** For each, give the semaphore's initial value: (a) thread B's line `b1` must run after thread A's line `a1`; (b) at most 5 threads may hold a database connection at once; (c) a plain mutex; (d) the `full` semaphore of a bounded buffer with 8 slots; (e) its `empty` semaphore.
 
-*Solution.* (a) **0**. (b) **5**. (c) **1**. (d) `full` = **0**. (e) `empty` = **8**.
+*Solution.* **Rule:** the initial value is the number of threads that may pass `sem_wait` before anyone has called `sem_post`.
+
+| Case | Initial value | Reason |
+| --- | --- | --- |
+| (a) ordering: b1 after a1 | **0** | B must wait until A posts; no one may pass at the start |
+| (b) at most 5 connections | **5** | five threads may pass at once; the sixth blocks (throttling) |
+| (c) mutex | **1** | exactly one thread may enter at a time |
+| (d) `full` of an 8-slot buffer | **0** | no slot is full at the start, so consumers must wait |
+| (e) `empty` of an 8-slot buffer | **8** | all 8 slots are free at the start, so producers can proceed |
 
 ---
 
@@ -1521,7 +1531,7 @@ Spurious wakeups are a second reason. Under Mesa semantics, always use `while`.
 | T1 post | −2 | T4, T5 (T3 woken) |
 | T2 post | −1 | T5 (T4 woken) |
 
-At every step, a negative value equals minus the number of waiting threads.
+**Rule:** `sem_wait` decrements the value and blocks if the new value is negative; `sem_post` increments it and wakes one waiter if any are waiting. At every step, a negative value equals **minus the number of waiting threads**. Check: after T5's wait, value −3 = three waiters (T3, T4, T5). After two posts, value −1 = one waiter (T5). Waiters are woken in FIFO order.
 
 ---
 
@@ -1587,13 +1597,24 @@ This is unfair: W arrived before R2, but R2 got in first. W must wait until read
 
 **S16.** For each technique, name the deadlock condition it removes: (a) always locking in address order; (b) taking a global lock around all lock acquisitions; (c) `trylock` that releases what it holds on failure; (d) a lock-free counter using compare-and-swap.
 
-*Solution.* (a) **Circular wait**. (b) **Hold and wait**. (c) **No preemption** (OSTEP's classification). Tutorial 6 files it under hold and wait, since after releasing, the thread never waits while holding a lock; both views are reasonable. (d) **Mutual exclusion**.
+*Solution.* The four conditions are mutual exclusion, hold and wait, no preemption and circular wait. Prevention removes one of them.
+
+| Technique | Condition removed | Why |
+| --- | --- | --- |
+| (a) lock in address (global) order | **Circular wait** | a total order on locks means no cycle of waits can form |
+| (b) a global lock around all acquisitions | **Hold and wait** | a thread acquires all its locks atomically, so it never waits while holding one |
+| (c) `trylock`, release everything on failure | **No preemption** (OSTEP's view) | a thread effectively gives up locks it holds instead of waiting (it may livelock; add a random delay). Tutorial 6 files this under hold and wait; both views are acceptable |
+| (d) lock-free counter with compare-and-swap | **Mutual exclusion** | no lock is held at all |
 
 ---
 
 **S17.** T1 holds A and waits for B. T2 holds B and waits for C. T3 holds C and is running, and will not request anything else. Is the system deadlocked? What if T3 then requests A?
 
-*Solution.* **Not deadlocked.** T3 is not waiting for anything, so it will finish and release C. Then T2 gets C, finishes, and releases B, and then T1 gets B. There is a chain, but no cycle. If T3 then requests A, there is a cycle: T1 waits for T2 (B), T2 waits for T3 (C), and T3 waits for T1 (A). All four conditions now hold: **deadlock**.
+*Solution.* **Method:** draw the wait-for graph (an edge from each waiting thread to the holder of what it wants) and look for a cycle. With one instance of each resource, a cycle means deadlock.
+
+**First situation:** T1 → T2 (T1 wants B, held by T2), T2 → T3 (T2 wants C, held by T3), and T3 waits for nothing. This is a chain with **no cycle**, so **not deadlocked**: T3 finishes and releases C, then T2 gets C, finishes and releases B, then T1 gets B.
+
+**If T3 then requests A:** T3 → T1 closes the cycle T1 → T2 → T3 → T1. All four conditions hold (mutual exclusion, hold and wait, no preemption, circular wait): **deadlock**. Fix by a global lock order.
 
 ---
 
@@ -1601,8 +1622,10 @@ This is unfair: W arrived before R2, but R2 got in first. W must wait until read
 
 *Solution.* The free units are 12 − (5 + 2 + 3) = **2**. The remaining needs are T0: 5, T1: 2, T2: 6.
 
-1. T1 can finish (needs 2, has 2 free). It returns its 4, so 4 are free.
-2. Now T0 needs 5 and T2 needs 6, but only 4 are free. Neither can be guaranteed to finish.
+**Method (Banker's safety check):** find a thread whose remaining need is at most the free units; assume it runs to completion and returns **everything it holds**; repeat. If all threads can finish in some order, the state is safe.
+
+1. T1 can finish: its need 2 ≤ free 2. After it gets its 2 it holds 4, finishes, and returns all 4, so **4 units are free**.
+2. Now T0 needs 5 and T2 needs 6, but only 4 are free. Neither can be guaranteed to finish, and no other thread can run.
 
 The state is **unsafe**. Unsafe does not mean deadlocked yet: it means a deadlock *can* happen if the threads ask for their maximums. This is exactly the state in 4.5's example after granting T2 one more unit, which is why the Banker's algorithm refuses that request.
 

@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwu1454d">
+<link rel="stylesheet" href="../../assets/style.css?v=mwu173r0">
 </head>
 <body data-root="../../" data-page="osn/concurrency/practice-problems-lectures-14-to-17" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -87,7 +87,7 @@
       <header class="note-head">
         
         <h1>Practice problems, Lectures 14 to 17</h1>
-        <p class="note-meta">25 min read · 28 practice problems</p>
+        <p class="note-meta">28 min read · 28 practice problems</p>
         <div class="note-tools">
           <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
           <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
@@ -97,7 +97,8 @@
       <div class="prose"><p>Try each one before you open its solution. Problems marked <strong>(L08)</strong> are the lecture's own review questions, and <strong>(sheet)</strong> ones come from the &quot;Transport Layer - Practice Questions&quot; PDF.</p>
 <p id="p-s1"><strong>S1.</strong> Two threads each run <code>counter++</code> three times, with no lock. counter starts at 0. What are the largest and the smallest possible final values? Give the interleaving that produces the smallest one.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> The largest is <strong>6</strong>: every increment runs without interruption. The smallest is <strong>2</strong>. Here is how:</p>
+<p><em>Solution.</em> Each <code>counter++</code> is three instructions (load, add, store). A lost update happens when a thread stores a value computed from a stale load.</p>
+<p><strong>Largest = 6:</strong> every increment runs without interruption. <strong>Smallest = 2.</strong> Here is how:</p>
 <ol>
 <li>T1 loads 0 into its register, then is interrupted.</li>
 <li>T2 runs two complete increments: counter = 2.</li>
@@ -106,7 +107,7 @@
 <li>T1 runs its last two increments in full: counter = 3.</li>
 <li>T2 adds 1 to its stale 1 and stores <strong>2</strong>.</li>
 </ol>
-<p>The result cannot be 1. Every store writes (value loaded) + 1, so once any store has happened, memory holds at least 1. The final value comes from the last store, which is some thread's <em>last</em> increment. That increment loaded its value after the same thread's first increment had already stored, so it loaded at least 1 and stored at least 2.</p>
+<p><strong>Why it cannot be 1 (or 0):</strong> every store writes (value loaded) + 1, so once any store has happened, memory holds at least 1. The final value comes from the last store, which is some thread's <em>last</em> increment. That increment loaded its value after the same thread's first increment had already stored, so it loaded at least 1 and stored at least 2.</p>
 </details>
 <hr>
 <p id="p-s2"><strong>S2.</strong> In the code below, which of <code>g</code>, <code>s</code>, <code>local</code>, <code>p</code> and <code>*p</code> are shared between two threads that both run <code>work()</code>?</p>
@@ -171,7 +172,7 @@ void *work(void *arg) {
 <hr>
 <p id="p-s4"><strong>S4.</strong> Four threads share one CPU and a test-and-set spin lock. The holder is preempted just after taking the lock. Roughly how much CPU time is wasted before the holder runs again, and why? How do <code>yield</code> and the queue lock each improve this?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> On one CPU, each of the other three threads gets scheduled in turn and spins for its <strong>whole time slice</strong>, because the lock cannot be released while its holder is not running. That is roughly <strong>3 time slices wasted</strong> for each time the holder is preempted (more if the scheduler is unlucky).</p>
+<p><em>Solution.</em> <strong>Reasoning:</strong> on one CPU only one thread runs at a time, and the holder is not running. Each of the other three threads gets scheduled in turn, finds the lock held, and <strong>spins for its whole time slice</strong>, because the lock cannot be released until the holder runs again. That is roughly <strong>3 time slices wasted</strong> (N − 1 for N threads) each time the holder is preempted, and more if the scheduler is unlucky.</p>
 <ul>
 <li>With <strong>yield</strong>, each waiter gives up the CPU as soon as it finds the lock held. That costs 3 context switches instead of 3 slices, but it still has overhead and starvation is still possible.</li>
 <li>With the <strong>queue lock</strong>, waiters sleep and are not scheduled at all until the holder unparks them, so no time is wasted.</li>
@@ -251,7 +252,7 @@ void *work(void *arg) {
 </tr>
 </tbody>
 </table></div>
-<p>Threads are served strictly in ticket order. That is what makes the ticket lock fair.</p>
+<p><strong>Rules used:</strong> <code>lock()</code> takes <code>myturn = FetchAndAdd(&amp;ticket)</code> (old value, then ticket++) and spins until <code>turn == myturn</code>; <code>unlock()</code> does <code>turn++</code>. Threads are served strictly in ticket order (T1, T2, T3, T4). That FIFO order is what makes the ticket lock <strong>fair</strong>: bounded waiting, no starvation.</p>
 </details>
 <hr>
 <p id="p-s6"><strong>S6.</strong> In the queue lock with <code>park</code>/<code>unpark</code>: (a) What would go wrong if a thread called <code>park()</code> <em>before</em> releasing the guard? (b) Describe the wakeup/waiting race that remains, and how <code>setpark()</code> fixes it.</p>
@@ -270,7 +271,7 @@ void *work(void *arg) {
 <hr>
 <p id="p-s7"><strong>S7.</strong> Low-priority thread L holds a spin lock. High-priority thread H wakes up and tries to take it. Explain what happens on one CPU, and how priority inheritance fixes it.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> H has the higher priority, so the scheduler always runs H, and H spins on the lock. L never gets the CPU, so it never finishes its critical section and never releases the lock. The system hangs, even though nothing is technically deadlocked. With <strong>priority inheritance</strong>, while H waits for a lock that L holds, L temporarily runs at H's priority. L gets the CPU, finishes, releases the lock, and drops back to its own priority, and then H proceeds.</p>
+<p><em>Solution.</em> <strong>Priority inversion.</strong> H has the higher priority, so the scheduler always runs H, and H spins on the lock. L never gets the CPU, so it never finishes its critical section and never releases the lock. The system hangs, even though nothing is technically deadlocked. With <strong>priority inheritance</strong>, while H waits for a lock that L holds, L temporarily runs at H's priority. L gets the CPU, finishes, releases the lock, and drops back to its own priority, and then H proceeds.</p>
 </details>
 <hr>
 <p id="p-s8"><strong>S8.</strong> Is this code correct? If not, give the interleaving that breaks it and fix it.</p>
@@ -310,7 +311,43 @@ pthread_mutex_unlock(&amp;m);
 <hr>
 <p id="p-s10"><strong>S10.</strong> For each, give the semaphore's initial value: (a) thread B's line <code>b1</code> must run after thread A's line <code>a1</code>; (b) at most 5 threads may hold a database connection at once; (c) a plain mutex; (d) the <code>full</code> semaphore of a bounded buffer with 8 slots; (e) its <code>empty</code> semaphore.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) <strong>0</strong>. (b) <strong>5</strong>. (c) <strong>1</strong>. (d) <code>full</code> = <strong>0</strong>. (e) <code>empty</code> = <strong>8</strong>.</p>
+<p><em>Solution.</em> <strong>Rule:</strong> the initial value is the number of threads that may pass <code>sem_wait</code> before anyone has called <code>sem_post</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Initial value</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) ordering: b1 after a1</td>
+<td><strong>0</strong></td>
+<td>B must wait until A posts; no one may pass at the start</td>
+</tr>
+<tr>
+<td>(b) at most 5 connections</td>
+<td><strong>5</strong></td>
+<td>five threads may pass at once; the sixth blocks (throttling)</td>
+</tr>
+<tr>
+<td>(c) mutex</td>
+<td><strong>1</strong></td>
+<td>exactly one thread may enter at a time</td>
+</tr>
+<tr>
+<td>(d) <code>full</code> of an 8-slot buffer</td>
+<td><strong>0</strong></td>
+<td>no slot is full at the start, so consumers must wait</td>
+</tr>
+<tr>
+<td>(e) <code>empty</code> of an 8-slot buffer</td>
+<td><strong>8</strong></td>
+<td>all 8 slots are free at the start, so producers can proceed</td>
+</tr>
+</tbody>
+</table></div>
 </details>
 <hr>
 <p id="p-s11"><strong>S11.</strong> A semaphore starts at 2. T1, T2, T3, T4 and T5 call <code>sem_wait</code> in that order, then T1 and T2 each call <code>sem_post</code>. After each call, give the value and the list of waiting threads.</p>
@@ -367,7 +404,7 @@ pthread_mutex_unlock(&amp;m);
 </tr>
 </tbody>
 </table></div>
-<p>At every step, a negative value equals minus the number of waiting threads.</p>
+<p><strong>Rule:</strong> <code>sem_wait</code> decrements the value and blocks if the new value is negative; <code>sem_post</code> increments it and wakes one waiter if any are waiting. At every step, a negative value equals <strong>minus the number of waiting threads</strong>. Check: after T5's wait, value −3 = three waiters (T3, T4, T5). After two posts, value −1 = one waiter (T5). Waiters are woken in FIFO order.</p>
 </details>
 <hr>
 <p id="p-s12"><strong>S12.</strong> In the bounded buffer with semaphores: (a) does the order of the two <code>sem_post</code> calls in the producer matter? (b) Does the order of the two <code>sem_wait</code> calls matter? Explain each.</p>
@@ -417,20 +454,54 @@ while (1) {                       while (1) {
 <hr>
 <p id="p-s16"><strong>S16.</strong> For each technique, name the deadlock condition it removes: (a) always locking in address order; (b) taking a global lock around all lock acquisitions; (c) <code>trylock</code> that releases what it holds on failure; (d) a lock-free counter using compare-and-swap.</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> (a) <strong>Circular wait</strong>. (b) <strong>Hold and wait</strong>. (c) <strong>No preemption</strong> (OSTEP's classification). Tutorial 6 files it under hold and wait, since after releasing, the thread never waits while holding a lock; both views are reasonable. (d) <strong>Mutual exclusion</strong>.</p>
+<p><em>Solution.</em> The four conditions are mutual exclusion, hold and wait, no preemption and circular wait. Prevention removes one of them.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Condition removed</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) lock in address (global) order</td>
+<td><strong>Circular wait</strong></td>
+<td>a total order on locks means no cycle of waits can form</td>
+</tr>
+<tr>
+<td>(b) a global lock around all acquisitions</td>
+<td><strong>Hold and wait</strong></td>
+<td>a thread acquires all its locks atomically, so it never waits while holding one</td>
+</tr>
+<tr>
+<td>(c) <code>trylock</code>, release everything on failure</td>
+<td><strong>No preemption</strong> (OSTEP's view)</td>
+<td>a thread effectively gives up locks it holds instead of waiting (it may livelock; add a random delay). Tutorial 6 files this under hold and wait; both views are acceptable</td>
+</tr>
+<tr>
+<td>(d) lock-free counter with compare-and-swap</td>
+<td><strong>Mutual exclusion</strong></td>
+<td>no lock is held at all</td>
+</tr>
+</tbody>
+</table></div>
 </details>
 <hr>
 <p id="p-s17"><strong>S17.</strong> T1 holds A and waits for B. T2 holds B and waits for C. T3 holds C and is running, and will not request anything else. Is the system deadlocked? What if T3 then requests A?</p>
 <details class="sol"><summary><span>Solution</span></summary>
-<p><em>Solution.</em> <strong>Not deadlocked.</strong> T3 is not waiting for anything, so it will finish and release C. Then T2 gets C, finishes, and releases B, and then T1 gets B. There is a chain, but no cycle. If T3 then requests A, there is a cycle: T1 waits for T2 (B), T2 waits for T3 (C), and T3 waits for T1 (A). All four conditions now hold: <strong>deadlock</strong>.</p>
+<p><em>Solution.</em> <strong>Method:</strong> draw the wait-for graph (an edge from each waiting thread to the holder of what it wants) and look for a cycle. With one instance of each resource, a cycle means deadlock.</p>
+<p><strong>First situation:</strong> T1 → T2 (T1 wants B, held by T2), T2 → T3 (T2 wants C, held by T3), and T3 waits for nothing. This is a chain with <strong>no cycle</strong>, so <strong>not deadlocked</strong>: T3 finishes and releases C, then T2 gets C, finishes and releases B, then T1 gets B.</p>
+<p><strong>If T3 then requests A:</strong> T3 → T1 closes the cycle T1 → T2 → T3 → T1. All four conditions hold (mutual exclusion, hold and wait, no preemption, circular wait): <strong>deadlock</strong>. Fix by a global lock order.</p>
 </details>
 <hr>
 <p id="p-s18"><strong>S18.</strong> There are 12 units of a resource. T0 has maximum 10 and holds 5; T1 has maximum 4 and holds 2; T2 has maximum 9 and holds 3. Is this state safe under the Banker's algorithm? Explain.</p>
 <details class="sol"><summary><span>Solution</span></summary>
 <p><em>Solution.</em> The free units are 12 − (5 + 2 + 3) = <strong>2</strong>. The remaining needs are T0: 5, T1: 2, T2: 6.</p>
+<p><strong>Method (Banker's safety check):</strong> find a thread whose remaining need is at most the free units; assume it runs to completion and returns <strong>everything it holds</strong>; repeat. If all threads can finish in some order, the state is safe.</p>
 <ol>
-<li>T1 can finish (needs 2, has 2 free). It returns its 4, so 4 are free.</li>
-<li>Now T0 needs 5 and T2 needs 6, but only 4 are free. Neither can be guaranteed to finish.</li>
+<li>T1 can finish: its need 2 ≤ free 2. After it gets its 2 it holds 4, finishes, and returns all 4, so <strong>4 units are free</strong>.</li>
+<li>Now T0 needs 5 and T2 needs 6, but only 4 are free. Neither can be guaranteed to finish, and no other thread can run.</li>
 </ol>
 <p>The state is <strong>unsafe</strong>. Unsafe does not mean deadlocked yet: it means a deadlock <em>can</em> happen if the threads ask for their maximums. This is exactly the state in 4.5's example after granting T2 one more unit, which is why the Banker's algorithm refuses that request.</p>
 </details>
@@ -525,6 +596,6 @@ while (1) {                       while (1) {
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwu1454d" defer></script>
+<script src="../../assets/app.js?v=mwu173r0" defer></script>
 </body>
 </html>

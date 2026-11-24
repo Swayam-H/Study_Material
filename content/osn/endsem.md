@@ -446,7 +446,7 @@ The inode table starts at block 3, so inodeStartAddr = 3 × 4096 = **12288** (12
 - Offset in the table = 37 × 256 = **9472** bytes.
 - Block within the table = 9472 / 4096 = 2 (remainder 1280), so it is the **third block of the table: disk block 3 + 2 = block 5**.
 - **Byte address = 12288 + 9472 = 21760.** Check: block 5 starts at 5 × 4096 = 20480, and 21760 − 20480 = **1280** bytes into the block (= (37 mod 16) × 256, since 16 inodes fit per block).
-- (Sector = 21760 / 512 = 42, and the inode starts in the middle of that sector.)
+- **Sector:** the slide formula gives the sector of the inode's *block*: 5 × 4096 = 20480 = 20 KB, so sector 20480 / 512 = **40**, with the inode at offset 1280 within the block. (The inode's own first byte, 21760, lies in sector 42, so a disk read fetches sectors 40 to 47 and the inode starts 1280 bytes in.)
 
 **(b)** A 4 KB block holds 4096 / 4 = **1024 pointers**. Reachable data blocks:
 

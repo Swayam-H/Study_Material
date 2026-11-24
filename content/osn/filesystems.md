@@ -639,47 +639,92 @@ read(fd, buf, 100);
 read(fd, buf, 100);
 ```
 
-*Solution.* `open` returns 3 (0-2 are taken), offset 0. `read` returns 120, offset 120. `lseek` sets the offset to 300 − 50 = **250** and returns 250. The next `read` asks for 100 but only 50 remain: returns **50**, offset 300. The last `read` returns **0** (end of file), offset stays 300.
+*Solution.* **Rules:** `open` returns the lowest free fd; `read` returns the number of bytes actually read (fewer at the end of the file, 0 at EOF) and advances the offset by that amount; `lseek(fd, off, SEEK_END)` sets the offset to file size + off.
+
+| Call | Returns | Offset after |
+| --- | --- | --- |
+| `open` | **3** (fds 0, 1, 2 are taken) | 0 |
+| `read(fd, buf, 120)` | **120** | 120 |
+| `lseek(fd, -50, SEEK_END)` | **250** (300 − 50) | 250 |
+| `read(fd, buf, 100)` | **50** (only 50 bytes remain) | 300 |
+| `read(fd, buf, 100)` | **0** (end of file) | 300 |
 
 **F2.** A parent opens a file, then forks. The child reads 100 bytes, then exits. The parent then reads 100 bytes. Which bytes does the parent get? What changes if the child instead opens the file itself after the fork?
 
-*Solution.* After `fork()` both fds point to the **same open-file-table entry**, which holds one offset. The child's read moves it to 100, so the parent reads **bytes 100-199**. If the child calls `open()` itself, it gets a **new table entry** with its own offset, and the parent reads **bytes 0-99**.
+*Solution.* Each process has an **fd table** whose entries point into the system-wide **open-file table**; each open-file entry holds the **current offset**, the mode and a reference count. After `fork()` the parent's and child's fds point to the **same open-file-table entry**, so they **share one offset** (the reference count becomes 2). The child's read moves the shared offset to 100, so the parent's read returns **bytes 100 to 199**. If the child calls `open()` itself, it gets a **new table entry** with its **own offset**, so the parent's offset is unaffected and it reads **bytes 0 to 99**.
 
 **F3.** You run `echo hi > a; ln a b; ln -s a c; rm a`. What do `cat b` and `cat c` print, and what are the link counts?
 
-*Solution.* `ln a b` makes `b` a second name for a's inode (link count 2). `ln -s a c` makes a new inode whose data is the path `"a"`; it does not change a's count. `rm a` unlinks the name `a`: count drops to **1**. `cat b` prints **hi** (the inode is still reachable). `cat c` follows the path `a`, which no longer exists: **"No such file or directory"** (a dangling link).
+*Solution.* Step by step:
+
+| Command | Effect | Link count of the file's inode |
+| --- | --- | --- |
+| `echo hi > a` | creates inode I with name `a` | 1 |
+| `ln a b` | `b` is a second name for the **same inode** | 2 |
+| `ln -s a c` | `c` is a **new inode** whose data is the path "a" | 2 (unchanged) |
+| `rm a` | `unlink("a")` removes the name `a` | **1** |
+
+`cat b` prints **hi**: the inode and data still exist, reachable through `b`. `cat c` follows the stored path "a", which no longer exists: **"No such file or directory"** (a **dangling symlink**). A file is really deleted only when its link count reaches 0 and no process has it open.
 
 **F4.** Why are hard links to directories not allowed, and why can't a hard link cross file systems?
 
-*Solution.* A hard link to a directory could create a **cycle** in the tree (a directory containing a link to its own ancestor), which breaks tools that walk the tree and makes `..` ambiguous. Inode numbers are only unique **within one file system**, so a directory entry on one FS cannot name an inode on another. Symbolic links store a path, so they have neither problem.
+*Solution.* **Directories:** a hard link to a directory could create a **cycle** in the tree (a directory that contains a link to one of its own ancestors). That breaks tools that walk the tree (`find`, `du` would loop forever), makes `..` ambiguous (a directory could have several parents), and breaks reference counting (a cycle never reaches link count 0, so it is never freed). **Across file systems:** a directory entry stores only an **inode number**, and inode numbers are unique only **within one file system**, so an entry in one file system cannot name an inode in another. **Symbolic links** store a **path** instead, so they have neither problem.
 
 **F5.** An editor wants a crash during save never to leave a half-written file. Give the sequence of calls and say why each is needed.
 
-*Solution.* Write the new contents to `foo.txt.tmp`, **`fsync()`** it so the data really is on disk, `close()` it, then **`rename("foo.txt.tmp", "foo.txt")`**. `rename` is atomic, so a crash leaves either the full old file or the full new one. Without the `fsync`, the rename could reach the disk before the data, and a crash would leave `foo.txt` pointing to empty or garbage blocks. For full safety, also `fsync` the directory after the rename.
+*Solution.* **Sequence and purpose:**
+
+1. `open("foo.txt.tmp", O_CREAT | O_WRONLY | O_TRUNC)` and `write()` the new contents: the original file is untouched, so a crash now loses only the temp file.
+2. **`fsync(fd)`:** forces the temp file's data and inode to disk. Without it, the OS may still hold the data in memory when the rename reaches the disk.
+3. `close(fd)`.
+4. **`rename("foo.txt.tmp", "foo.txt")`:** this is **atomic**, so after a crash `foo.txt` is either the complete old file or the complete new file, never a mixture.
+5. (For full safety) `fsync` the **directory** so that the rename itself is durable.
+
+Without step 2, the rename could be written before the data, and a crash would leave `foo.txt` pointing to empty or garbage blocks.
 
 **F6. (slides)** vsfs: 4 KB blocks, 256-byte inodes, inode table starting at 12 KB, 512-byte sectors. Find the inode block, the sector and the offset inside the block for inode 70. Then do inode 45.
 
-*Solution.* Inode 70: 70 × 256 = 17920 B; 17920 ÷ 4096 = iblock **4**; address 12 + 4 × 4 = **28 KB**; sector 28672 ÷ 512 = **56**; offset (70 mod 16) × 256 = **1536 B**. Inode 45: 45 × 256 = 11520 B; iblock **2**; address 12 + 8 = **20 KB**; sector **40**; offset (45 mod 16) × 256 = 13 × 256 = **3328 B**.
+*Solution.* **Formulas (slides):**
+
+$$
+\text{blk} = \left\lfloor\frac{i \times 256}{4096}\right\rfloor \qquad \text{address} = 12\text{ KB} + \text{blk} \times 4\text{ KB} \qquad \text{sector} = \frac{\text{address}}{512} \qquad \text{offset in block} = (i \bmod 16) \times 256
+$$
+
+| | Inode 70 | Inode 45 |
+| --- | --- | --- |
+| Offset in the table = i × 256 | 17,920 B | 11,520 B |
+| Inode block = offset ÷ 4096 | **4** | **2** |
+| Block address = 12 KB + blk × 4 KB | 28 KB = 28,672 | 20 KB = 20,480 |
+| Sector = address ÷ 512 | **56** | **40** |
+| Offset within block = (i mod 16) × 256 | 6 × 256 = **1536 B** | 13 × 256 = **3328 B** |
+
+(16 inodes fit in a 4 KB block.)
 
 **F7.** A file system has 4 KB blocks, 4-byte block pointers, 12 direct pointers, and one single, one double and one triple indirect pointer. (a) What is the maximum file size? (b) Which pointer holds byte offset 100,000? (c) Byte offset 10,000,000?
 
-*Solution.* (a) $(12 + 1024 + 1024^2 + 1024^3) \times 4\text{ KB} \approx$ **4 TB** (just over $2^{42}$ bytes). (b) 100,000 ÷ 4096 = block **24**. 24 ≥ 12, so it is in the **single indirect** block at slot 24 − 12 = **12**. (c) 10,000,000 ÷ 4096 = block 2441. 2441 − 12 = 2429 ≥ 1024, so subtract again: 2429 − 1024 = 1405. That is in the **double indirect** tree: outer slot 1405 ÷ 1024 = **1**, inner slot 1405 mod 1024 = **381**.
+*Solution.* **(a)** A block holds 4096 / 4 = 1024 pointers. $\text{max} = (12 + 1024 + 1024^2 + 1024^3) \times 4\text{ KB} \approx$ **4 TB** (just over $2^{42}$ bytes; the triple-indirect term dominates).
+
+**Method for (b) and (c):** block index = offset ÷ 4096. If it is < 12, a direct pointer serves it. Otherwise subtract 12; if the result is < 1024, it is in the single-indirect block at that slot. Otherwise subtract 1024; if the result is < 1024², it is in the double-indirect tree (outer slot = result ÷ 1024, inner slot = result mod 1024).
+
+**(b)** 100,000 ÷ 4096 = 24.4, so block **24**. 24 ≥ 12, and 24 − 12 = 12 < 1024: **single-indirect pointer, slot 12**.
+
+**(c)** 10,000,000 ÷ 4096 = 2441.4, so block **2441**. 2441 − 12 = 2429 ≥ 1024, so subtract again: 2429 − 1024 = 1405 < 1024². **Double-indirect: outer slot 1405 ÷ 1024 = 1, inner slot 1405 mod 1024 = 381.** (Disk reads to get the data: inode, double-indirect block, indirect block, data block.)
 
 **F8.** Redo F7(a) for 1 KB blocks with the same pointers. Then compute xv6's maximum file size.
 
-*Solution.* A 1 KB block holds 1024 / 4 = 256 pointers: $(12 + 256 + 256^2 + 256^3)$ blocks × 1 KB ≈ **16 GB** (16,843,020 KB). xv6 has only 12 direct pointers and one single indirect: (12 + 256) × 1 KB = **268 KB**.
+*Solution.* A 1 KB block holds 1024 / 4 = **256 pointers**. $\text{max} = (12 + 256 + 256^2 + 256^3) \times 1\text{ KB} = 16{,}843{,}020\text{ KB} \approx$ **16 GB**. **xv6** has only 12 direct pointers and one single-indirect pointer (NDIRECT = 12, NINDIRECT = 256): (12 + 256) blocks × 1 KB = **268 KB**.
 
 **F9.** How many disk reads does `open("/usr/lib/libc.so")` need with a cold cache, assuming each directory fits in one block?
 
-*Solution.* Depth 3: root inode, root data, `usr` inode, `usr` data, `lib` inode, `lib` data, `libc.so` inode = **7 reads** = 2 × 3 + 1. The superblock is already in memory after mount.
+*Solution.* **Rule:** 2 reads for each directory in the path (its inode, then its data block), plus 1 read for the target's inode: 2 × depth + 1. Here the directories are `/`, `usr` and `lib` (depth 3): root inode, root data, `usr` inode, `usr` data, `lib` inode, `lib` data, then `libc.so`'s inode = **7 reads**. The superblock is already in memory after mount, and the root inode's location is known.
 
 **F10. (slides)** How many I/Os does it take to create `/foo/bar` and write 12 KB to it in vsfs (4 KB blocks, cold cache)? Which are user data?
 
-*Solution.* Create = **10**: read root inode, read root data, read foo inode, read foo data, read + write the inode bitmap, write foo's data (new entry), read + write bar's inode, write foo's inode. Each of the 3 allocating writes = **5**: read bar's inode, read + write the data bitmap, write the data block, write bar's inode. Total = 10 + 15 = **25**, and **only 3** of them are user data.
+*Solution.* **Create = 10 I/Os:** read the root inode, read the root data, read foo's inode, read foo's data (4 reads to walk the path); read the inode bitmap, write the inode bitmap; write foo's data (the new entry); read bar's new inode, write bar's inode; write foo's inode. **Each allocating write = 5 I/Os:** read bar's inode, read the data bitmap, write the data bitmap, write the data block, write bar's inode. 12 KB = 3 blocks of 4 KB, so 3 × 5 = 15. **Total = 10 + 15 = 25 I/Os**, and **only 3 of them** write user data; the rest is metadata overhead.
 
 **F11.** Why does `read()` write the inode, and why does it never touch a bitmap? How could you avoid that write?
 
-*Solution.* It updates the inode's **access time** (`atime`). It touches no bitmap because reading never allocates or frees anything. Mount options like `noatime` or `relatime` skip or reduce the atime write.
+*Solution.* A read must update the inode's **last-access time** (`atime`), so after reading the data it **writes the inode back** (read inode, read data, write inode = 3 I/Os per block). It touches **no bitmap** because reading never allocates or frees an inode or a block. To avoid the write, mount with **`noatime`** (never update atime) or **`relatime`** (update only if atime is older than mtime, or about once a day).
 
 **F12. (slides)** In `vsfs.py` the state is `inodes [d a:0 r:2] [] [] []`, `data [(.,0) (..,0)] [] [] []`. Show the state after `mkdir("/g")`, then `creat("/g/q")`, then `link("/g/q", "/w")`.
 
@@ -687,7 +732,13 @@ read(fd, buf, 100);
 
 **F13.** Compare pointer-based allocation, extents and FAT on (a) metadata for a 1 GB contiguous file, (b) random access, (c) hard links.
 
-*Solution.* (a) Pointers need one entry per block: 262,144 pointers plus indirect blocks. **Extents need one** (start, length). FAT needs one table entry per block. (b) Pointers: at most a few indirect reads. Extents: a short search over the extent list. FAT: **walk the chain** (fast only because the table is in memory). (c) Pointers and extents keep metadata in an inode, so hard links work. **FAT has no inodes**, so hard links are impossible.
+*Solution.*
+
+| | Pointer-based (inode) | Extents | FAT |
+| --- | --- | --- | --- |
+| (a) Metadata for a 1 GB contiguous file (262,144 blocks of 4 KB) | One pointer per block (about 262,144 pointers plus indirect blocks) | **One extent** (start, length) | One table entry per block (262,144 entries) |
+| (b) Random access | Up to 3 extra indirect reads | A short search over the extent list | **Walk the chain** (only fast because the table is cached in memory) |
+| (c) Hard links | Yes (the link count is in the inode) | Yes (inode-based) | **No**: there are no inodes, so no place for a link count |
 
 **F14.** Give one example each of batching, scheduling and avoidance by write buffering, and say what an application that cannot lose data should do.
 
@@ -695,7 +746,7 @@ read(fd, buf, 100);
 
 **F15.** In xv6, why does `filewrite` split a large write into several `begin_op`/`end_op` transactions? Why does `writei` call `iupdate` even when the size did not change?
 
-*Solution.* A transaction must fit in the log: it may write at most `MAXOPBLOCKS` (10) blocks. Each written data block can also dirty a bitmap block, plus the inode, the indirect block and slop for unaligned ends, so `filewrite` limits each chunk to 3 data blocks. `writei` calls `iupdate` because `bmap` may have **allocated a new block** and stored it in `ip->addrs[]`, and that change must reach the on-disk inode.
+*Solution.* **Splitting:** every file-system operation runs inside a transaction (`begin_op` ... `end_op`), and the transaction's modified blocks are first written to the **log**, which has limited room. One transaction may write at most `MAXOPBLOCKS` = 10 blocks. A single large write could touch far more: data blocks, bitmap blocks, the inode, the indirect block, and extra blocks if the start and end are not block-aligned. So `filewrite` writes in **chunks of at most 3 data blocks**, each in its own `begin_op`/`end_op`, so that every chunk fits in the log. Each chunk is atomic (all or nothing), but a crash between chunks leaves a partial write. **`iupdate`:** `writei` always calls `iupdate(ip)` because `bmap` may have **allocated a new block** and stored its address in `ip->addrs[]` (and the size may have grown), and those changes in the in-memory inode must be written to the on-disk inode.
 
 **F16 (theory).** Compare contiguous, linked (including FAT) and indexed allocation on sequential access, random access, fragmentation and file growth. Which one is the UNIX inode, and why?
 
