@@ -23,6 +23,9 @@
 
   var done = store.get('notes:done', {});
   var probs = store.get('notes:probs', {});
+  var due = store.get('notes:due', {});
+  // problem ratings: 'done' = Got it, 'shaky' = Shaky, 'review' = Wrong. Shaky and wrong ones form the retry list.
+  var isRetry = function (v) { return v === 'review' || v === 'shaky'; };
   var saved = store.get('notes:saved', []);
 
   function showToast(msg) {
@@ -90,7 +93,7 @@
   // ---------- Export / Import Progress JSON ----------
   var expBtn = $('export-json-btn'), impBtn = $('import-json-btn'), impInput = $('import-json-input');
   if (expBtn) expBtn.addEventListener('click', function () {
-    var payload = JSON.stringify({ done: done, probs: probs, saved: saved, notes: store.get('notes:scratch', {}) }, null, 2);
+    var payload = JSON.stringify({ done: done, probs: probs, due: due, saved: saved, notes: store.get('notes:scratch', {}) }, null, 2);
     var blob = new Blob([payload], { type: 'application/json' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -108,6 +111,7 @@
           var d = JSON.parse(r.result);
           if (d.done) { done = d.done; store.set('notes:done', done); }
           if (d.probs) { probs = d.probs; store.set('notes:probs', probs); }
+          if (d.due) { due = d.due; store.set('notes:due', due); }
           if (d.saved) { saved = d.saved; store.set('notes:saved', saved); }
           if (d.notes) { store.set('notes:scratch', d.notes); }
           paint(); showToast('Restored study progress');
@@ -671,20 +675,20 @@
     var weak = [];
     ms.forEach(function (el) {
       var pre = el.dataset.mastery, n = +el.dataset.n || 1, s = 0, r = 0;
-      for (var k in probs) if (k.indexOf(pre) === 0) { if (probs[k] === 'done') s++; else if (probs[k] === 'review') r++; }
+      for (var k in probs) if (k.indexOf(pre) === 0) { if (probs[k] === 'done') s++; else if (isRetry(probs[k])) r++; }
       el.querySelector('.m-solved').style.width = (100 * s / n) + '%';
       el.querySelector('.m-review').style.width = (100 * r / n) + '%';
-      el.querySelector('.m-label').textContent = s + ' / ' + n + ' problems solved' + (r ? ' · ' + r + ' to review' : '');
+      el.querySelector('.m-label').textContent = s + ' / ' + n + ' got it' + (r ? ' · ' + r + ' to retry' : '');
       var lk = el.querySelector('.m-link');
-      if (r) { lk.hidden = false; lk.textContent = 'Review ' + r + ' →'; weak.push({ r: r, s: s, n: n, doc: el.dataset.doc, title: (el.closest('.doc-block').querySelector('h2') || {}).textContent || '' }); }
+      if (r) { lk.hidden = false; lk.textContent = 'Retry ' + r + ' →'; weak.push({ r: r, s: s, n: n, doc: el.dataset.doc, title: (el.closest('.doc-block').querySelector('h2') || {}).textContent || '' }); }
     });
     var box = $('weak-box'); if (!box) return;
     if (!weak.length) { box.hidden = true; return; }
     weak.sort(function (x, y) { return y.r - x.r; });
     var tot = weak.reduce(function (t, w) { return t + w.r; }, 0);
-    box.innerHTML = '<h2>Weak spots</h2><p>' + tot + ' problems marked “Review later”. Most in:</p><ul>' + weak.slice(0, 5).map(function (w) {
-      return '<li><a href="practice.html#review&doc=' + esc(w.doc) + '"><b>' + esc(w.title) + '</b><span>' + w.r + ' to review · ' + w.s + ' / ' + w.n + ' solved</span></a></li>';
-    }).join('') + '</ul><a class="btn small" href="practice.html#review">Redo all ' + tot + ' →</a>';
+    box.innerHTML = '<h2>Weak spots</h2><p>' + tot + ' problems rated shaky or wrong. Most in:</p><ul>' + weak.slice(0, 5).map(function (w) {
+      return '<li><a href="practice.html#review&doc=' + esc(w.doc) + '"><b>' + esc(w.title) + '</b><span>' + w.r + ' to retry · ' + w.s + ' / ' + w.n + ' got it</span></a></li>';
+    }).join('') + '</ul><a class="btn small" href="practice.html#review">Retry all ' + tot + ' →</a>';
     box.hidden = false;
   })();
 
@@ -694,7 +698,7 @@
       var m = window.NOTES_META; if (!m) return;
       var total = 0, nd = 0;
       m.courses.forEach(function (c) { total += c.nChapters; nd += countDone(c.slug + '/'); });
-      var np = 0, nr = 0; for (var k in probs) { if (probs[k] === 'done') np++; else if (probs[k] === 'review') nr++; }
+      var np = 0, nr = 0; for (var k in probs) { if (probs[k] === 'done') np++; else if (isRetry(probs[k])) nr++; }
       if ($('st-ch')) $('st-ch').textContent = nd + ' / ' + total;
       if ($('st-pr')) $('st-pr').textContent = np + ' / ' + ($('st-pr').dataset.total || '');
       if ($('st-rv')) $('st-rv').textContent = nr;
@@ -774,59 +778,134 @@
     showToast('Exported 123 formulas as Anki TSV deck');
   });
 
-  // ---------- Practice Bank (List Mode, Flashcard Deck Mode, Anki Export) ----------
+  // ---------- Practice Bank (attempt, reveal, rate, retry; list and deck modes; Anki export) ----------
   var plist = $('p-list');
   if (plist) {
-    var state = { q: '', doc: '', status: '', tags: {}, shown: 15, only: null, mode: 'list', deckIdx: 0 };
+    var DAY = 864e5;
+    var pBox = document.querySelector('.practice');
+    var topics = pBox && pBox.dataset.topics ? JSON.parse(pBox.dataset.topics) : [];
+    var focus = pBox && pBox.dataset.focus ? JSON.parse(pBox.dataset.focus) : [];
+    var state = { q: '', doc: '', status: '', topic: '', lec: '', diff: '', pri: '', tags: {}, shown: 15, only: null, mode: 'list', deckIdx: 0 };
     var statusOf = function (p) { return probs[p.id] || 'todo'; };
+    var isDue = function (p) { return isRetry(probs[p.id]) && (due[p.id] || 0) <= Date.now(); };
+    var RATE = { done: '✓ Got it', shaky: '~ Shaky', review: '✗ Wrong' };
+    var DIFF = { E: 'Easy', M: 'Medium', H: 'Hard' };
+    var stars = function (n) { return n === 3 ? '★★★' : n === 2 ? '★★' : '★'; };
+    var whenText = function (id) {
+      var t = due[id] || 0, d = Math.ceil((t - Date.now()) / DAY);
+      return d <= 0 ? 'due now' : d === 1 ? 'back tomorrow' : 'back in ' + d + ' days';
+    };
+    var footer = function (p) {
+      var st = statusOf(p), rated = st !== 'todo';
+      var h = '<div class="rate-row"><span class="rate-hint">' + (rated ? 'Your rating' : 'How did it go?') + '</span>' +
+        ['done', 'shaky', 'review'].map(function (v, i) {
+          return '<button type="button" data-set="' + v + '" class="' + (st === v ? 'on' : '') + '">' + RATE[v] + ' <kbd>' + (i + 1) + '</kbd></button>';
+        }).join('') + '</div>';
+      if (isRetry(st)) {
+        var t = due[p.id] || 0, d = Math.max(0, Math.round((t - Date.now()) / DAY));
+        h += '<div class="retry-row"><span class="rate-hint">Retry list: ' + whenText(p.id) + '</span>' +
+          [[0, 'Now'], [2, 'In 2 days'], [7, 'In a week']].map(function (o) {
+            var on = o[0] === 0 ? t <= Date.now() : d === o[0];
+            return '<button type="button" data-when="' + o[0] + '" class="' + (on ? 'on' : '') + '">' + o[1] + '</button>';
+          }).join('') + '</div>';
+      }
+      return h;
+    };
     var card = function (p) {
-      var st = statusOf(p);
-      return '<article class="p-card st-' + st + '" data-pid="' + esc(p.id) + '">' +
-        '<header><span class="p-tags">' + p.tags.map(function (t) { return '<i>' + esc(t) + '</i>'; }).join('') + (p.hard ? '<i class="hard">Hard</i>' : '') + '</span><a href="' + root + esc(p.u) + '">' + esc(p.c) + ' →</a></header>' +
+      var st = statusOf(p), rated = st !== 'todo';
+      var meta = (p.tp || []).map(function (t) { return '<i class="topic' + (focus.indexOf(t) >= 0 ? ' focus' : '') + '">' + esc(t) + '</i>'; }).join('') +
+        (p.lec ? '<i>' + esc(p.lec) + '</i>' : '') +
+        (p.df ? '<i class="diff d-' + p.df + '">' + DIFF[p.df] + '</i>' : (p.hard ? '<i class="hard">Hard</i>' : '')) +
+        (p.pr ? '<i class="pri" title="Exam priority">' + stars(p.pr) + '</i>' : '') +
+        p.tags.filter(function (t) { return t !== 'Other'; }).map(function (t) { return '<i class="src">' + esc(t) + '</i>'; }).join('');
+      return '<article class="p-card st-' + st + (rated ? ' revealed' : '') + '" data-pid="' + esc(p.id) + '">' +
+        '<header><span class="p-tags">' + meta + '</span><a href="' + root + esc(p.u) + '">' + esc(p.c) + ' →</a></header>' +
         '<div class="prose p-q">' + p.q + '</div>' +
         '<details class="sol"><summary><span>Solution</span></summary><div class="prose">' + p.a + '</div></details>' +
-        '<footer><button type="button" data-set="done" class="' + (st === 'done' ? 'on' : '') + '">✓ Solved (1)</button><button type="button" data-set="review" class="' + (st === 'review' ? 'on' : '') + '">↻ Review later (2)</button></footer></article>';
+        '<footer>' + footer(p) + '</footer></article>';
+    };
+    var match = function (p, skip) {
+      var tags = Object.keys(state.tags).filter(function (t) { return state.tags[t]; });
+      if (state.doc && p.d !== state.doc) return false;
+      if (skip !== 'topic' && state.topic && (p.tp || []).indexOf(state.topic) < 0) return false;
+      if (state.lec && p.lec !== state.lec) return false;
+      if (state.diff && p.df !== state.diff) return false;
+      if (state.pri && (p.pr || 0) < +state.pri) return false;
+      if (skip !== 'status' && state.status) {
+        var st = statusOf(p);
+        if (state.status === 'due' ? !isDue(p) : state.status === 'retry' ? !isRetry(st) : st !== state.status) return false;
+      }
+      if (tags.length && !p.tags.some(function (t) { return state.tags[t]; })) return false;
+      var q = state.q.trim().toLowerCase();
+      if (q) {
+        var hay = ((p.l || '') + ' ' + (p.s || '') + ' ' + (p.c || '') + ' ' + (p.tp || []).join(' ') + ' ' + (p.q || '')).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
     };
     var getFiltered = function () {
-      var all = window.NOTES_PROBLEMS || [], tags = Object.keys(state.tags).filter(function (t) { return state.tags[t]; });
-      var q = state.q.trim().toLowerCase();
-      return all.filter(function (p) {
-        if (state.only) return p.id === state.only;
-        if (state.doc && p.d !== state.doc) return false;
-        if (state.status && statusOf(p) !== state.status) return false;
-        if (tags.length && !p.tags.some(function (t) { return state.tags[t]; })) return false;
-        if (q) {
-          var hay = ((p.l || '') + ' ' + (p.s || '') + ' ' + (p.c || '') + ' ' + (p.q || '')).toLowerCase();
-          if (hay.indexOf(q) < 0) return false;
-        }
-        return true;
-      });
+      var all = window.NOTES_PROBLEMS || [];
+      if (state.only) return all.filter(function (p) { return p.id === state.only; });
+      var list = all.filter(function (p) { return match(p); });
+      if (state.status === 'due') list.sort(function (a, b) { return (statusOf(b) === 'review') - (statusOf(a) === 'review') || (due[a.id] || 0) - (due[b.id] || 0); });
+      return list;
     };
+
+    var paintRetryBar = function () {
+      var bar = $('retry-bar'); if (!bar) return;
+      var all = window.NOTES_PROBLEMS || [];
+      var nDue = all.filter(isDue).length, nAll = all.filter(function (p) { return isRetry(statusOf(p)); }).length;
+      if (!nAll) { bar.hidden = true; return; }
+      bar.hidden = false;
+      bar.innerHTML = '<div><b>Retry list</b><span>' + nDue + ' due now' + (nAll > nDue ? ' · ' + (nAll - nDue) + ' scheduled later' : '') + '</span></div>' +
+        (nDue ? '<button type="button" class="btn primary small" id="retry-go">Retry ' + nDue + ' now →</button>' : '<span class="rate-hint">Nothing due. Come back later.</span>');
+      var go = $('retry-go');
+      if (go) go.addEventListener('click', function () { setFilter('status', 'due'); scrollTo({ top: $('p-count').offsetTop - 90, behavior: 'smooth' }); });
+    };
+    var paintTopics = function () {
+      var box = $('topic-rows'); if (!box) return;
+      var all = window.NOTES_PROBLEMS || [];
+      var rows = topics.map(function (t) {
+        var ps = all.filter(function (p) { return (p.tp || []).indexOf(t) >= 0; });
+        var n = ps.length, g = 0, s = 0, w = 0;
+        ps.forEach(function (p) { var v = statusOf(p); if (v === 'done') g++; else if (v === 'shaky') s++; else if (v === 'review') w++; });
+        return { t: t, n: n, g: g, s: s, w: w, f: focus.indexOf(t) >= 0 };
+      }).filter(function (r) { return r.n; });
+      rows.sort(function (a, b) { return (b.f - a.f) || (topics.indexOf(a.t) - topics.indexOf(b.t)); });
+      var nAllRows = rows.length;
+      if (!state.allTopics) rows = rows.filter(function (r) { return r.f || r.g + r.s + r.w || r.t === state.topic; });
+      box.innerHTML = rows.map(function (r) {
+        var pc = function (x) { return (100 * x / r.n).toFixed(1) + '%'; };
+        return '<button type="button" class="t-row' + (state.topic === r.t ? ' on' : '') + (r.f ? ' focus' : '') + '" data-topic="' + esc(r.t) + '">' +
+          '<span class="t-name">' + (r.f ? '★ ' : '') + esc(r.t) + '</span>' +
+          '<span class="t-bar"><i class="g" style="width:' + pc(r.g) + '"></i><i class="s" style="width:' + pc(r.s) + '"></i><i class="w" style="width:' + pc(r.w) + '"></i></span>' +
+          '<span class="t-num">' + r.g + '/' + r.n + ' got it' + (r.s + r.w ? ' · <b>' + (r.s + r.w) + ' to retry</b>' : '') + '</span></button>';
+      }).join('') + (nAllRows > rows.length || state.allTopics ? '<button type="button" class="linkish t-more" id="t-more">' + (state.allTopics ? 'Show fewer topics' : 'Show all ' + nAllRows + ' topics') + '</button>' : '') + '<p class="t-legend"><i class="g"></i> Got it <i class="s"></i> Shaky <i class="w"></i> Wrong · ★ = your endsem focus topics. Click a topic to practise it.</p>';
+    };
+
     var render = function () {
       var all = window.NOTES_PROBLEMS || [], list = getFiltered();
-      var solved = all.filter(function (p) { return statusOf(p) === 'done'; }).length;
-      var rev = all.filter(function (p) { return statusOf(p) === 'review'; }).length;
+      var got = all.filter(function (p) { return statusOf(p) === 'done'; }).length;
       $('p-count').innerHTML = state.only
         ? 'Random pick · <button type="button" class="linkish" id="p-all">Back to all ' + all.length + ' problems</button>'
-        : list.length + ' matching problems · ' + solved + ' of ' + all.length + ' solved' + (rev ? ' · ' + rev + ' marked for review' : '');
+        : list.length + ' matching problems · ' + got + ' of ' + all.length + ' got it';
+      paintRetryBar(); paintTopics();
       if (!list.length) {
-        plist.innerHTML = '<p class="search-empty">No problems match these filters.</p>';
+        plist.innerHTML = '<p class="search-empty">' + (state.status === 'due' ? 'Nothing is due for retry right now.' : 'No problems match these filters.') + '</p>';
         $('p-more').hidden = true;
         return list;
       }
       if (state.mode === 'deck') {
         if (state.deckIdx >= list.length) state.deckIdx = 0;
         if (state.deckIdx < 0) state.deckIdx = list.length - 1;
-        var curP = list[state.deckIdx];
         plist.innerHTML =
           '<div class="deck-nav">' +
-            '<span>Card <b>' + (state.deckIdx + 1) + '</b> of <b>' + list.length + '</b> · Shortcuts: <kbd>Space</kbd> reveal, <kbd>1</kbd> solved, <kbd>2</kbd> review, <kbd>←/→</kbd> navigate</span>' +
+            '<span>Card <b>' + (state.deckIdx + 1) + '</b> of <b>' + list.length + '</b> · <kbd>Space</kbd> reveal, <kbd>1</kbd> got it, <kbd>2</kbd> shaky, <kbd>3</kbd> wrong, <kbd>←/→</kbd> move</span>' +
             '<div class="deck-nav-btns"><button type="button" class="btn small" id="deck-prev">← Prev</button><button type="button" class="btn small" id="deck-next">Next →</button></div>' +
-          '</div>' + card(curP);
+          '</div>' + card(list[state.deckIdx]);
         $('p-more').hidden = true;
-        var dp = $('deck-prev'), dn = $('deck-next');
-        if (dp) dp.addEventListener('click', function () { state.deckIdx--; render(); });
-        if (dn) dn.addEventListener('click', function () { state.deckIdx++; render(); });
+        $('deck-prev').addEventListener('click', function () { state.deckIdx--; render(); });
+        $('deck-next').addEventListener('click', function () { state.deckIdx++; render(); });
       } else {
         plist.innerHTML = list.slice(0, state.shown).map(card).join('');
         $('p-more').hidden = list.length <= state.shown;
@@ -835,29 +914,66 @@
       var back = $('p-all'); if (back) back.addEventListener('click', function () { state.only = null; render(); });
       return list;
     };
+    var reset = function () { state.shown = 15; state.only = null; state.deckIdx = 0; };
+    var setFilter = function (k, v) {
+      state[k] = v; reset();
+      var el = $({ status: 'f-status', topic: 'f-topic', lec: 'f-lec', diff: 'f-diff', pri: 'f-pri', doc: 'f-doc' }[k]);
+      if (el) el.value = v;
+      render();
+    };
+
     var random = function () {
       var all = window.NOTES_PROBLEMS || [];
-      var pool = all.filter(function (p) { return statusOf(p) !== 'done' && (!state.doc || p.d === state.doc); });
+      var pool = all.filter(function (p) { return match(p) && statusOf(p) !== 'done'; });
+      if (!pool.length) pool = all.filter(function (p) { return match(p); });
       if (!pool.length) pool = all;
       if (!pool.length) return;
       state.only = pool[Math.floor(Math.random() * pool.length)].id; render(); scrollTo({ top: 0 });
     };
+
+    var refreshCard = function (c) {
+      var p = (window.NOTES_PROBLEMS || []).filter(function (x) { return x.id === c.dataset.pid; })[0]; if (!p) return;
+      var st = statusOf(p);
+      c.className = 'p-card st-' + st + ' revealed';
+      c.querySelector('footer').innerHTML = footer(p);
+      paintRetryBar(); paintTopics();
+    };
+    var rate = function (c, v) {
+      var id = c.dataset.pid;
+      if (probs[id] === v) { delete probs[id]; delete due[id]; }
+      else {
+        probs[id] = v;
+        if (v === 'done') delete due[id];
+        else due[id] = Date.now() + (v === 'shaky' ? 2 * DAY : 0);
+      }
+      store.set('notes:probs', probs); store.set('notes:due', due);
+      refreshCard(c);
+      if (v === 'done' && state.status === 'due') showToast('Nice. Off the retry list.');
+    };
     plist.addEventListener('click', function (e) {
-      var b = e.target.closest('button[data-set]'); if (!b) return;
-      var c = b.closest('.p-card'), id = c.dataset.pid, v = b.dataset.set;
-      if (probs[id] === v) delete probs[id]; else probs[id] = v;
-      store.set('notes:probs', probs);
-      var st = probs[id] || 'todo';
-      c.className = 'p-card st-' + st;
-      $$('button[data-set]', c).forEach(function (x) { x.classList.toggle('on', x.dataset.set === st); });
+      var c = e.target.closest('.p-card'); if (!c) return;
+      var b = e.target.closest('button[data-set]');
+      if (b) return rate(c, b.dataset.set);
+      var w = e.target.closest('button[data-when]');
+      if (w) { due[c.dataset.pid] = Date.now() + (+w.dataset.when) * DAY; store.set('notes:due', due); refreshCard(c); }
     });
-    if ($('f-q')) $('f-q').addEventListener('input', function (e) { state.q = e.target.value; state.shown = 15; state.only = null; state.deckIdx = 0; render(); });
-    $('f-doc').addEventListener('change', function (e) { state.doc = e.target.value; state.shown = 15; state.only = null; state.deckIdx = 0; render(); });
-    $('f-status').addEventListener('change', function (e) { state.status = e.target.value; state.shown = 15; state.only = null; state.deckIdx = 0; render(); });
+    plist.addEventListener('toggle', function (e) {
+      if (e.target.matches && e.target.matches('details.sol') && e.target.open) e.target.closest('.p-card').classList.add('revealed');
+    }, true);
+
+    var bindSel = function (id, k) { var el = $(id); if (el) el.addEventListener('change', function (e) { setFilter(k, e.target.value); }); };
+    bindSel('f-doc', 'doc'); bindSel('f-status', 'status'); bindSel('f-topic', 'topic'); bindSel('f-lec', 'lec'); bindSel('f-diff', 'diff'); bindSel('f-pri', 'pri');
+    if ($('f-q')) $('f-q').addEventListener('input', function (e) { state.q = e.target.value; reset(); render(); });
     $('f-tags').addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b) return;
       state.tags[b.dataset.tag] = !state.tags[b.dataset.tag]; b.classList.toggle('on', state.tags[b.dataset.tag]);
-      state.shown = 15; state.only = null; state.deckIdx = 0; render();
+      reset(); render();
+    });
+    var tr = $('topic-rows');
+    if (tr) tr.addEventListener('click', function (e) {
+      if (e.target.closest('#t-more')) { state.allTopics = !state.allTopics; paintTopics(); return; }
+      var b = e.target.closest('.t-row'); if (!b) return;
+      setFilter('topic', state.topic === b.dataset.topic ? '' : b.dataset.topic);
     });
     $('p-more').addEventListener('click', function () { state.shown += 15; render(); });
     $('f-random').addEventListener('click', random);
@@ -876,7 +992,8 @@
       var rows = list.map(function (p) {
         var qTxt = p.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
         var aTxt = p.a.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-        return '[' + p.c + '] ' + qTxt + '\t' + aTxt + '\tMA6101::' + (p.tags[0] || 'Practice');
+        var tag = ((p.tp && p.tp[0]) || p.tags[0] || 'Practice').replace(/[^\w-]+/g, '_');
+        return '[' + p.c + '] ' + qTxt + '\t' + aTxt + '\tMA6101::' + tag;
       });
       var blob = new Blob([rows.join('\n')], { type: 'text/tab-separated-values;charset=utf-8' });
       var a = document.createElement('a');
@@ -894,29 +1011,29 @@
         ev.preventDefault();
         var det = cardEl.querySelector('details.sol');
         if (det) det.open = !det.open;
-      } else if (ev.key === 'ArrowRight') {
-        state.deckIdx++; render();
-      } else if (ev.key === 'ArrowLeft') {
-        state.deckIdx--; render();
-      } else if (ev.key === '1') {
-        var b1 = cardEl.querySelector('button[data-set="done"]'); if (b1) b1.click();
-      } else if (ev.key === '2') {
-        var b2 = cardEl.querySelector('button[data-set="review"]'); if (b2) b2.click();
+      } else if (ev.key === 'ArrowRight') { state.deckIdx++; render(); }
+      else if (ev.key === 'ArrowLeft') { state.deckIdx--; render(); }
+      else if (ev.key === '1' || ev.key === '2' || ev.key === '3') {
+        if (!cardEl.classList.contains('revealed')) { showToast('Reveal the solution first (Space)'); return; }
+        rate(cardEl, ['done', 'shaky', 'review'][+ev.key - 1]);
       }
     });
 
     var applyHash = function () {
       var h = location.hash.slice(1).split('&'), got = false;
       h.forEach(function (x) {
-        if (x === 'review') { state.status = 'review'; if ($('f-status')) $('f-status').value = 'review'; got = true; }
-        else if (x.indexOf('doc=') === 0) { state.doc = x.slice(4); if ($('f-doc')) $('f-doc').value = state.doc; got = true; }
+        if (x === 'review' || x === 'retry') { state.status = 'retry'; got = true; }
+        else if (x === 'due') { state.status = 'due'; got = true; }
+        else if (x.indexOf('doc=') === 0) { state.doc = x.slice(4); got = true; }
+        else if (x.indexOf('topic=') === 0) { state.topic = decodeURIComponent(x.slice(6)); got = true; }
       });
-      if (got) { state.shown = 15; state.only = null; state.deckIdx = 0; }
+      ['f-status', 'f-doc', 'f-topic'].forEach(function (id, i) { var el = $(id); if (el) el.value = state[['status', 'doc', 'topic'][i]]; });
+      if (got) reset();
       return got;
     };
     var start = function () { if (location.hash === '#random') random(); else { applyHash(); render(); } };
     if (window.NOTES_PROBLEMS) start(); else addEventListener('load', start);
-    addEventListener('hashchange', function () { if (location.hash === '#random' && window.NOTES_PROBLEMS) random(); });
+    addEventListener('hashchange', function () { if (!window.NOTES_PROBLEMS) return; if (location.hash === '#random') random(); else { applyHash(); render(); } });
   }
 
   // ---------- Search ----------

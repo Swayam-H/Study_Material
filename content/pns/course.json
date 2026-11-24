@@ -66,6 +66,13 @@
       "pdf": "statistics-surprise-quiz.pdf"
     },
     {
+      "slug": "mixed-problems",
+      "file": "mixed-problems.md",
+      "title": "Mixed problems, several topics at once",
+      "about": "15 endsem-style problems that chain Bayes, joint distributions, the CLT and estimation together",
+      "pdf": "mixed-problems.pdf"
+    },
+    {
       "slug": "mock-endsem",
       "file": "mock-endsem.md",
       "title": "Mock endsem, timed (3 hours)",

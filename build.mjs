@@ -158,6 +158,7 @@ function tagsOf(src, selfTest) {
   if (/\bDerivation\b/.test(src)) t.push('Derivation');
   if (/\bNumerical\b/.test(src)) t.push('Numerical');
   if (/\bDiscussion\b/.test(src)) t.push('Discussion');
+  if (/^Mixed\b/i.test(src)) t.push('Mixed');
   if (/Bertsekas/i.test(src)) t.push('Bertsekas');
   if (/probabilitycourse/i.test(src)) t.push('probabilitycourse');
   if (!t.length) t.push('Other');
@@ -263,6 +264,9 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
   const cfgPath = path.join(CONTENT, dir, 'course.json');
   if (!fs.existsSync(cfgPath)) continue;
   const course = { slug: dir, ...JSON.parse(fs.readFileSync(cfgPath, 'utf8')), problems: [], formulas: [], formulaSeen: new Set() };
+  // optional hand-made tags: content/<course>/tags.json = { topics, focus, problems: { id: { t, lec, diff, pri } } }
+  const tagPath = path.join(CONTENT, dir, 'tags.json');
+  course.tagInfo = fs.existsSync(tagPath) ? JSON.parse(fs.readFileSync(tagPath, 'utf8')) : null;
   for (const doc of course.docs) {
     currentFile = `${dir}/${doc.file}`;
     let src = fs.readFileSync(path.join(CONTENT, dir, doc.file), 'utf8').replace(/\r\n/g, '\n');
@@ -310,6 +314,9 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
       const rend = ranges => fix(ranges.map(([a, b]) => md.renderer.render(tokens.slice(a, b + 1), md.options, {})).join(''));
       const chProblems = study.problems.map(pr => {
         const rec = { id: `${id}#${pr.anchor}`, u: `${id}.html#${pr.anchor}`, l: pr.label, s: pr.src, tags: tagsOf(pr.src, pr.selfTest), hard: pr.hard, d: doc.slug, c: chTitle, q: rend(pr.stmt), a: rend(pr.sol) };
+        const ti = course.tagInfo && course.tagInfo.problems[rec.id];
+        if (ti) { rec.tp = ti.t; rec.lec = ti.lec; rec.df = ti.diff; rec.pr = ti.pri; if (ti.diff === 'H') rec.hard = true; }
+        else if (course.tagInfo) console.warn(`  untagged problem: ${rec.id}`);
         const tx = searchText(pr.stmt.map(([a, b]) => tokens.slice(a, b + 1).filter(x => x.type === 'inline').map(x => x.content).join(' ')).join(' '));
         searchIndex.push({ u: rec.u, c: `Problem · ${chTitle}`, t: `${pr.label}${pr.src ? ' (' + pr.src + ')' : ''}`, x: tx, k: 1 });
         return rec;
@@ -611,8 +618,8 @@ const distLab = () => `<section class="dist-lab" aria-label="Interactive standar
     </section>
     <section class="stats" id="stats">
       <div class="stat-item"><b id="st-ch">0 / ${nAll}</b><span>Chapters read</span></div>
-      <div class="stat-item"><b id="st-pr" data-total="${pAll}">0 / ${pAll}</b><span>Problems solved</span></div>
-      <div class="stat-item"><b id="st-rv">0</b><span>Marked for review</span></div>
+      <div class="stat-item"><b id="st-pr" data-total="${pAll}">0 / ${pAll}</b><span>Problems got right</span></div>
+      <div class="stat-item"><b id="st-rv">0</b><span>On the retry list</span></div>
       <div class="stat-item"><b id="st-sv">0</b><span>Bookmarked sections</span></div>
     </section>
     <h2 class="sec-title" id="courses">Courses</h2>
@@ -652,13 +659,16 @@ for (const c of courses) {
   const tagList = [...new Set(c.problems.flatMap(p => p.tags))];
   fs.writeFileSync(path.join(OUT, c.slug, 'problems.js'), 'window.NOTES_PROBLEMS=' + JSON.stringify(c.problems).replace(/\.\.\/\.\.\/assets\//g, '../assets/') + ';');
   written.push(`${c.slug}/problems.js`);
-  const pbody = `<div class="practice" data-course="${c.slug}">
+  const ti = c.tagInfo;
+  const lecOrder = l => l === 'Regression' ? 999 : parseInt(l.slice(1), 10) || 0;
+  const lecs = [...new Set(c.problems.map(p => p.lec).filter(Boolean))].sort((a, b) => lecOrder(a) - lecOrder(b));
+  const pbody = `<div class="practice" data-course="${c.slug}"${ti ? ` data-topics="${esc(JSON.stringify(ti.topics))}" data-focus="${esc(JSON.stringify(ti.focus))}"` : ''}>
     <nav class="crumbs"><a href="index.html">${esc(c.title)}</a><span>›</span><span>Practice</span></nav>
     <div class="practice-head-bar">
       <div>
         <p class="eyebrow">Practice &amp; Active Recall</p>
         <h1>Problem bank</h1>
-        <p class="lede">${c.problems.length} worked problems pulled from the notes. Switch between List view and Anki-style Flashcard Deck mode.</p>
+        <p class="lede">${c.problems.length} worked problems pulled from the notes. Try each one on paper, reveal the solution, then rate yourself: <b>Got it</b>, <b>Shaky</b> or <b>Wrong</b>. Shaky and wrong ones come back in your retry list.</p>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <div class="mode-switch" id="mode-switch">
@@ -668,13 +678,19 @@ for (const c of courses) {
         <button class="btn small" id="export-anki-probs" type="button" title="Download filtered problems as an Anki-importable TSV file">Export Anki TSV</button>
       </div>
     </div>
+    <div class="retry-bar" id="retry-bar" hidden></div>
+    ${ti ? '<details class="topic-dash" id="topic-dash" open><summary>Progress by topic</summary><div id="topic-rows" class="topic-rows"></div></details>' : ''}
     <div class="filters">
       <label class="field"><span>Keyword or label</span><input id="f-q" type="search" placeholder="Search problem text, topic, or label (e.g. Bayes, B3, CLT)…" autocomplete="off"></label>
       <label class="field"><span>Note set</span><select id="f-doc"><option value="">All note sets</option>${c.docs.filter(d => c.problems.some(p => p.d === d.slug)).map(d => `<option value="${d.slug}">${esc(d.title)}</option>`).join('')}</select></label>
-      <label class="field"><span>Status</span><select id="f-status"><option value="">Any status</option><option value="todo">Not attempted</option><option value="review">Review later</option><option value="done">Solved</option></select></label>
+      ${ti ? `<label class="field"><span>Topic</span><select id="f-topic"><option value="">All topics</option>${ti.topics.filter(t => c.problems.some(p => (p.tp || []).includes(t))).map(t => `<option value="${esc(t)}">${ti.focus.includes(t) ? '★ ' : ''}${esc(t)}</option>`).join('')}</select></label>
+      <label class="field"><span>Lecture</span><select id="f-lec"><option value="">All lectures</option>${lecs.map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('')}</select></label>
+      <label class="field"><span>Difficulty</span><select id="f-diff"><option value="">Any</option><option value="E">Easy</option><option value="M">Medium</option><option value="H">Hard</option></select></label>
+      <label class="field"><span>Exam priority</span><select id="f-pri"><option value="">Any</option><option value="3">★★★ seen in past exams</option><option value="2">★★ and up</option></select></label>` : ''}
+      <label class="field"><span>Status</span><select id="f-status"><option value="">Any status</option><option value="todo">Not attempted</option><option value="due">Due for retry</option><option value="retry">Shaky or wrong (all)</option><option value="done">Got it</option><option value="shaky">Shaky</option><option value="review">Wrong</option></select></label>
       <button class="btn primary" id="f-random" type="button">Random pick</button>
     </div>
-    <div class="chips" id="f-tags">${tagList.map(t => `<button type="button" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+    <div class="chips" id="f-tags"><span class="chips-label">Source</span>${tagList.map(t => `<button type="button" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>
     <p class="result-count" id="p-count"></p>
     <div id="p-list" class="p-list"><p class="search-empty">Loading problems…</p></div>
     <div class="more-row"><button class="btn" id="p-more" type="button" hidden>Show more</button></div>

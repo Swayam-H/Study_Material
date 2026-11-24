@@ -7,13 +7,13 @@ This is last year's endsem. Two of its questions were on Markov chains, which ar
 | Q | Topic | Lectures |
 |---|---|---|
 | 1 | MGFs | L14 |
-| 2 | Monte Carlo estimation | L15 |
+| 2 | Monte Carlo estimation | L15–L17 |
 | 3 | Sum of independent exponentials | L13 |
 | 4 | Mixture distributions | L11–L12 |
 | 5 | MLE for Uniform$[a,b]$ | L22 |
 | 6 | MLE for Poisson, bias and MSE | L21–L22 |
-| 7 | Convergence in distribution and in probability | L17 |
-| 8 | **New:** CLT approximation | L19 |
+| 7 | Convergence in distribution and in probability | L16–L18 |
+| 8 | **New:** CLT approximation | L18 |
 | 9 | Bayesian estimation, Gamma–exponential | L23–L24 |
 | 10 | **(a) New:** least squares as the Gaussian MLE; (b) MSE and the bias–variance tradeoff | Regression, L21 |
 

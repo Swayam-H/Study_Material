@@ -1,0 +1,2645 @@
+{
+ "topics": [
+  "Sets and axioms",
+  "σ-algebras and measurability",
+  "Conditional probability and Bayes",
+  "Independence",
+  "Counting",
+  "Discrete random variables",
+  "Continuous random variables",
+  "Gaussian",
+  "Functions of random variables",
+  "Joint distributions",
+  "Covariance and correlation",
+  "Conditional expectation",
+  "Sums and convolution",
+  "MGFs",
+  "Simulation and Monte Carlo",
+  "Convergence and LLN",
+  "CLT",
+  "Random and Gaussian vectors",
+  "Bias, MSE and consistency",
+  "MLE",
+  "Bayesian estimation (MAP, CE)",
+  "Linear regression"
+ ],
+ "focus": [
+  "MLE",
+  "Bayesian estimation (MAP, CE)",
+  "Bias, MSE and consistency",
+  "Conditional probability and Bayes",
+  "CLT",
+  "Joint distributions"
+ ],
+ "problems": {
+  "pns/l1-l8/lecture-1#p-b1": {
+   "t": [
+    "Sets and axioms"
+   ],
+   "lec": "L1",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-1#p-b2": {
+   "t": [
+    "Sets and axioms"
+   ],
+   "lec": "L1",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-1#p-b3": {
+   "t": [
+    "Sets and axioms"
+   ],
+   "lec": "L1",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-2#p-b1": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L2",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-2#p-b2": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L2",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-2#p-b3": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L2",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-2#p-b4": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L2",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-2#p-b5": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L2",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-2#p-b6": {
+   "t": [
+    "Sets and axioms",
+    "Counting"
+   ],
+   "lec": "L2",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b1": {
+   "t": [
+    "Sets and axioms"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b2": {
+   "t": [
+    "Sets and axioms"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b3": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b4": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b5": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b6": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b7": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b8": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b9": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-1#p-b10": {
+   "t": [
+    "Conditional probability and Bayes",
+    "Independence"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b1": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b2": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b3": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b4": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b5": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b6": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b7": {
+   "t": [
+    "Independence",
+    "Sets and axioms"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b8": {
+   "t": [
+    "Independence",
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b9": {
+   "t": [
+    "Independence"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b10": {
+   "t": [
+    "Independence"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b11": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-2#p-b12": {
+   "t": [
+    "Independence",
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b2": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b3": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b4": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b5": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b6": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b7": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b8": {
+   "t": [
+    "Counting"
+   ],
+   "lec": "L3",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-3-part-3#p-b9": {
+   "t": [
+    "Joint distributions",
+    "Continuous random variables"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-4#p-b1": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b2": {
+   "t": [
+    "σ-algebras and measurability",
+    "Functions of random variables"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b3": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b4": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b5": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b6": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b7": {
+   "t": [
+    "σ-algebras and measurability",
+    "Functions of random variables"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b8": {
+   "t": [
+    "σ-algebras and measurability",
+    "Functions of random variables"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b9": {
+   "t": [
+    "σ-algebras and measurability",
+    "Discrete random variables"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-4#p-b10": {
+   "t": [
+    "σ-algebras and measurability"
+   ],
+   "lec": "L4",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-5#p-b1": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b2": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b3": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b4": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b5": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b6": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b7": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b8": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-5#p-b9": {
+   "t": [
+    "Discrete random variables",
+    "Conditional expectation"
+   ],
+   "lec": "L5",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b1": {
+   "t": [
+    "Functions of random variables",
+    "Discrete random variables"
+   ],
+   "lec": "L6",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b2": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L6",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b3": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L6",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b4": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L6",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b5": {
+   "t": [
+    "Discrete random variables",
+    "Counting"
+   ],
+   "lec": "L6",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b6": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L6",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-6#p-b7": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L6",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b1": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b2": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b3": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b4": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b5": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b6": {
+   "t": [
+    "Continuous random variables",
+    "Functions of random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b7": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b8": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b9": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-7#p-b10": {
+   "t": [
+    "Continuous random variables",
+    "Independence"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l1-l8/lecture-7#p-b11": {
+   "t": [
+    "Continuous random variables",
+    "Functions of random variables"
+   ],
+   "lec": "L7",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-8#p-b1": {
+   "t": [
+    "Functions of random variables"
+   ],
+   "lec": "L8",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l1-l8/lecture-8#p-b2": {
+   "t": [
+    "Functions of random variables",
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L8",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l1-l8/lecture-8#p-b3": {
+   "t": [
+    "Functions of random variables"
+   ],
+   "lec": "L8",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-8#p-b4": {
+   "t": [
+    "Gaussian",
+    "Functions of random variables"
+   ],
+   "lec": "L8",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-8#p-b5": {
+   "t": [
+    "Functions of random variables"
+   ],
+   "lec": "L8",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-8#p-b6": {
+   "t": [
+    "Functions of random variables",
+    "Continuous random variables"
+   ],
+   "lec": "L8",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l1-l8/lecture-8#p-b7": {
+   "t": [
+    "Gaussian"
+   ],
+   "lec": "L8",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b1": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-9#p-b2": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b3": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b4": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b5": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b6": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b7": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-9#p-b8": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-9#p-b9": {
+   "t": [
+    "Joint distributions",
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L9",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b1": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b2": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b3": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b4": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-10#p-b5": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-10#p-b6": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b7": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b8": {
+   "t": [
+    "Covariance and correlation",
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-10#p-b9": {
+   "t": [
+    "Functions of random variables",
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b10": {
+   "t": [
+    "Functions of random variables",
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b11": {
+   "t": [
+    "Joint distributions",
+    "Functions of random variables"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-10#p-b12": {
+   "t": [
+    "Joint distributions",
+    "Independence"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b13": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-10#p-b14": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-10#p-b15": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-11#p-b1": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L11",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-11#p-b2": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L11",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-11#p-b3": {
+   "t": [
+    "Conditional expectation",
+    "Continuous random variables"
+   ],
+   "lec": "L11",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-11#p-b4": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L11",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-11#p-b5": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L11",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-11#p-b6": {
+   "t": [
+    "Conditional expectation",
+    "Gaussian"
+   ],
+   "lec": "L11",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-12#p-b1": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l9-l14/lecture-12#p-b2": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l9-l14/lecture-12#p-b3": {
+   "t": [
+    "Conditional expectation",
+    "Joint distributions"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-12#p-b4": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L12",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-12#p-b5": {
+   "t": [
+    "Conditional expectation",
+    "Joint distributions"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-12#p-b6": {
+   "t": [
+    "Conditional expectation",
+    "Discrete random variables"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-12#p-b7": {
+   "t": [
+    "Conditional expectation",
+    "Sums and convolution"
+   ],
+   "lec": "L12",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-12#p-b8": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-12#p-b9": {
+   "t": [
+    "Conditional expectation",
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-12#p-b10": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b1": {
+   "t": [
+    "Sums and convolution"
+   ],
+   "lec": "L13",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-13#p-b2": {
+   "t": [
+    "Sums and convolution"
+   ],
+   "lec": "L13",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-13#p-b3": {
+   "t": [
+    "Sums and convolution"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l9-l14/lecture-13#p-b4": {
+   "t": [
+    "Sums and convolution"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b5": {
+   "t": [
+    "Sums and convolution",
+    "Joint distributions"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-13#p-b6": {
+   "t": [
+    "Sums and convolution",
+    "Conditional expectation"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b7": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-13#p-b8": {
+   "t": [
+    "Conditional probability and Bayes",
+    "Continuous random variables"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b9": {
+   "t": [
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b10": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l9-l14/lecture-13#p-b11": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b12": {
+   "t": [
+    "Covariance and correlation",
+    "Discrete random variables"
+   ],
+   "lec": "L13",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l9-l14/lecture-13#p-b14": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t1": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t2": {
+   "t": [
+    "Continuous random variables"
+   ],
+   "lec": "L7",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t3": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t4": {
+   "t": [
+    "Joint distributions"
+   ],
+   "lec": "L10",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t5": {
+   "t": [
+    "Conditional expectation",
+    "Sums and convolution"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t6": {
+   "t": [
+    "Conditional probability and Bayes",
+    "Continuous random variables"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t7": {
+   "t": [
+    "Sums and convolution"
+   ],
+   "lec": "L13",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t8": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L10",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t9": {
+   "t": [
+    "Discrete random variables"
+   ],
+   "lec": "L5",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l9-l14/practice-map-formula-sheet-and-self-test#p-t10": {
+   "t": [
+    "Conditional expectation",
+    "Covariance and correlation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b1": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b2": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b3": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b4": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b5": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b6": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b7": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b8": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b9": {
+   "t": [
+    "MGFs",
+    "Conditional expectation"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b10": {
+   "t": [
+    "MGFs",
+    "Gaussian"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b11": {
+   "t": [
+    "MGFs",
+    "Sums and convolution"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b12": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-14-part-1#p-b13": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b1": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b2": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b7": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b12a": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b12b": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b14": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b15": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lectures-14-and-15#p-b16": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L14",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-16#p-b1": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-16#p-b2": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-16#p-b3": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-16#p-b4": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-16#p-b5": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-16#p-b6": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-16#p-b7": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-16#p-b8": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-16#p-b9": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-16#p-b11": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b1": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b2": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b3": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b4": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-17#p-b5": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-17#p-b6": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b7": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b8": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b9": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-17#p-b10": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-17#p-b11": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b1": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b2": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b3": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b4": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b5": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b6": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b8": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b9": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b10": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b11": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l14-l20/lecture-18#p-b12": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b13": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b14": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b15": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b16": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b17": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b18": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b19": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b20": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b21": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b22": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b23": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b25": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b26": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b27": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b28": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b29": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-18#p-b31": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b32": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-18#p-b33": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-19#p-b1": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Covariance and correlation"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b2": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Functions of random variables"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l14-l20/lecture-19#p-b3": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Functions of random variables"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b4": {
+   "t": [
+    "Covariance and correlation"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b5": {
+   "t": [
+    "Random and Gaussian vectors"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b6": {
+   "t": [
+    "Random and Gaussian vectors"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b7": {
+   "t": [
+    "Random and Gaussian vectors"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b8": {
+   "t": [
+    "Random and Gaussian vectors"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b9": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Joint distributions"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-19#p-b10": {
+   "t": [
+    "Covariance and correlation",
+    "Conditional expectation"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-19#p-b11": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-19#p-b12": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Sums and convolution"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-20#p-b1": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-20#p-b2": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-20#p-b3": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-20#p-b5": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-20#p-b6": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l14-l20/lecture-20#p-b7": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-20#p-b8": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-20#p-b9": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian",
+    "Conditional expectation"
+   ],
+   "lec": "L20",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/lecture-20#p-b12": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L20",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t1": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t2": {
+   "t": [
+    "MGFs",
+    "Sums and convolution"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t3": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t4": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t5": {
+   "t": [
+    "Simulation and Monte Carlo",
+    "CLT"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t6": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t7": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t8": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t9": {
+   "t": [
+    "Random and Gaussian vectors"
+   ],
+   "lec": "L19",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t10": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Gaussian"
+   ],
+   "lec": "L19",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t11": {
+   "t": [
+    "Convergence and LLN",
+    "Random and Gaussian vectors"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l21-onward/part-6-linear-regression-slides-1-36#problem-1-least-squares-with-numbers": {
+   "t": [
+    "Linear regression"
+   ],
+   "lec": "Regression",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l21-onward/part-6-linear-regression-slides-1-36#problem-2-regression-through-the-origin": {
+   "t": [
+    "Linear regression"
+   ],
+   "lec": "Regression",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/l21-onward/part-6-linear-regression-slides-1-36#problem-3-which-loss-does-the-mle-use": {
+   "t": [
+    "Linear regression",
+    "MLE"
+   ],
+   "lec": "Regression",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-1-hw-11-q1": {
+   "t": [
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L21",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-2-hw-11-q3": {
+   "t": [
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L21",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-3-tutorial-11-q5-hard": {
+   "t": [
+    "Bias, MSE and consistency",
+    "MLE"
+   ],
+   "lec": "L21",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-4-hw-11-q2": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-5-endsem-q5": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-6-hw-11-q10-tricky": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-7-tutorial-11-q8-subtle": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-8-endsem-q6": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-9-hw-11-q5": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-10-tutorial-12-q1-discrete-prior": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-11-tutorial-12-q2": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-12-tutorial-12-q3-gaussian-unequal-variances": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-13-tutorial-12-q4-gamma-poisson-with-data": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-14-tutorial-12-q6": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-15-hw-12-p1-truncated-prior": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-16-hw-12-p3-hard-triangular-prior": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-17-hw-12-p5-map-as-a-decision-rule": {
+   "t": [
+    "Bayesian estimation (MAP, CE)",
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-18-hw-12-p7-ml-vs-map-for-a-signal": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-19-hw-12-p8-ce-with-a-uniform-prior": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-20-endsem-q9": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-21-uniform-0-mle-bias-and-the-fix": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-22-shifted-exponential": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-23-uniform": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-24-laplace-location-the-mle-is-the-median": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-25-laplace-scale": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-26-a-biased-plug-in-and-its-correction": {
+   "t": [
+    "Bias, MSE and consistency",
+    "MLE"
+   ],
+   "lec": "L21",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-27-exponential-unbiased-for-the-mean-biased-for-the-": {
+   "t": [
+    "Bias, MSE and consistency",
+    "MLE"
+   ],
+   "lec": "L21",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-28-a-power-family-mle": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-29-rayleigh": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-30-two-samples-one-parameter": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-31-beta-geometric-posterior-map-ce-and-prediction": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-32-gamma-exponential-with-numbers": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-33-a-bayesian-boundary-case-tricky": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-34-a-biased-estimator-can-win": {
+   "t": [
+    "Bias, MSE and consistency",
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L21",
+   "diff": "M",
+   "pri": 1
+  },
+  "pns/l21-onward/part-7-worked-practice-problems#problem-35-map-with-a-laplace-prior-hard": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "H",
+   "pri": 1
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-1-endsem-q1-mgfs": {
+   "t": [
+    "MGFs"
+   ],
+   "lec": "L14",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-2-endsem-q2-monte-carlo-for": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-3-endsem-q3-sum-of-two-exponentials": {
+   "t": [
+    "Sums and convolution"
+   ],
+   "lec": "L13",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-4-endsem-q4-mixtures": {
+   "t": [
+    "Conditional expectation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-5-endsem-q5-mle-for-u-a-b": {
+   "t": [
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-6-endsem-q6-poisson-mle-bias-and-mse": {
+   "t": [
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "E",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-7-endsem-q7-convergence-of-u-5-1n-5-1n": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-8-new-replaces-the-markov-chain-question-clt-for-dic": {
+   "t": [
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-9-endsem-q9-gamma-prior-exponential-data": {
+   "t": [
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L23",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/mock-endsem/mock-endsem-solutions#problem-10-new-a-and-endsem-q10-b-least-squares-and-mse": {
+   "t": [
+    "Linear regression",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "Regression",
+   "diff": "M",
+   "pri": 3
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-1-mixed-bayes-poisson-prediction": {
+   "t": [
+    "Conditional probability and Bayes",
+    "Discrete random variables"
+   ],
+   "lec": "L3",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-2-mixed-joint-pdf-covariance-clt": {
+   "t": [
+    "Joint distributions",
+    "Covariance and correlation",
+    "CLT"
+   ],
+   "lec": "L10",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-3-mixed-uniform-prior-iterated-expectation-beta-post": {
+   "t": [
+    "Bayesian estimation (MAP, CE)",
+    "Conditional expectation",
+    "Conditional probability and Bayes"
+   ],
+   "lec": "L23",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-4-mixed-mle-clt-an-approximate-interval": {
+   "t": [
+    "MLE",
+    "CLT"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-5-mixed-polar-jacobian-rayleigh-mle": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Functions of random variables",
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L19",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-6-mixed-clt-inside-bayes-rule": {
+   "t": [
+    "Conditional probability and Bayes",
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-7-mixed-random-sums-total-variance-bayes": {
+   "t": [
+    "Conditional expectation",
+    "Conditional probability and Bayes",
+    "Covariance and correlation"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-8-mixed-mgfs-the-gamma-sum-exact-vs-clt": {
+   "t": [
+    "MGFs",
+    "Sums and convolution",
+    "CLT"
+   ],
+   "lec": "L14",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-9-mixed-mle-convergence-in-probability-and-in-distri": {
+   "t": [
+    "MLE",
+    "Convergence and LLN",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-10-mixed-gaussian-vectors-conditional-expectation-ma": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Conditional expectation",
+    "Bayesian estimation (MAP, CE)"
+   ],
+   "lec": "L20",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-11-mixed-counting-hypergeometric-likelihood-mle": {
+   "t": [
+    "Counting",
+    "MLE"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-12-mixed-minimum-of-exponentials-mle-bias": {
+   "t": [
+    "Continuous random variables",
+    "MLE",
+    "Bias, MSE and consistency"
+   ],
+   "lec": "L22",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-13-mixed-mixtures-bayes-total-variance": {
+   "t": [
+    "Conditional probability and Bayes",
+    "Conditional expectation",
+    "Gaussian"
+   ],
+   "lec": "L12",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-14-mixed-bivariate-normal-best-linear-predictor-leas": {
+   "t": [
+    "Random and Gaussian vectors",
+    "Linear regression",
+    "Conditional expectation"
+   ],
+   "lec": "Regression",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-15-mixed-monte-carlo-clt-sample-size": {
+   "t": [
+    "Simulation and Monte Carlo",
+    "CLT"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 2
+  }
+ }
+}
