@@ -38,6 +38,10 @@ Lecture 22 uses one idea twice. A **reduction** turns a fast algorithm for probl
 2. Bob turns $y$ into closers $S_B$, **right to left** (since the last opened must be the first closed): $0\mapsto$ `)` and $1\mapsto$ `]`. For $x = y = 0110$: $S_AS_B = $ `([[()]])`.
 3. **Claim 1.** $S_AS_B$ (length $n = 2m$) is balanced $\iff x = y$. The $i$-th opener (which encodes $x_i$) is closed by the $i$-th closer counted from the end (which encodes $y_i$), so the types match exactly when $x_i = y_i$.
 
+![Bracket reduction](fig/aad-bracket-reduction.svg)
+
+*Figure. Alice writes $x = 0110$ as openers and Bob writes $y = 0110$ as closers in reverse. Each opener is closed by the closer at the mirror position, so the string is balanced exactly when every pair has the same type, that is, when $x = y$.*
+
 **Theorem 2.** Any deterministic one-pass algorithm $A$ for two bracket types uses $s(n) \ge n/2 = \Omega(n)$ bits.
 
 *Proof.* Alice runs $A$ on $S_A$ and sends Bob $A$'s entire memory, which is $s(n)$ bits. Bob loads that memory and continues running $A$ on $S_B$. Now $A$ has processed $S_AS_B$ in one pass, so it says "balanced" iff $x = y$ (Claim 1). So Alice and Bob decided equality using $s(n)$ bits, and Theorem 1 gives $s(n) \ge m = n/2$. $\square$
@@ -238,6 +242,10 @@ The tutorial's map. Each arrow $A \to B$ means $A \le_P B$, and every problem he
 - 3-SAT → **NAE-3SAT → Max-Cut** (the tutorial's main result)
 - 3-SAT → 3-Colouring, 3-SAT → Subset Sum, 3-SAT → Hamiltonian Cycle → TSP (decision)
 
+![Reduction map](fig/aad-reduction-map.svg)
+
+*Figure. The tutorial's map of reductions. Every problem shown is NP-complete; the red chain is the one proved in full below.*
+
 The tutorial did the Max-Cut branch. The others were left for the practice sheet and are worked out after the main result.
 
 # Learn: 3-SAT, XOR-SAT and Max-Cut is NP-hard
@@ -349,6 +357,10 @@ $$\boxed{\text{3-SAT} \le_P \text{NAE-3SAT} \le_P \text{Max-Cut, so Max-Cut is N
 - $x_1 = 1, x_2 = 0, x_3 = 0$: $S = \{x_1, \neg x_2, \neg x_3\}$. Clause 1 is $(1, 0, 0)$ and clause 2 is $(0, 0, 1)$, both split. The cut is 3 variable edges + 2 + 2 = **7 = k**. ✓
 - $x_1 = x_2 = x_3 = 1$: triangle 1 lies entirely on one side and scores 0, so the cut is only $3 + 0 + 2 = 5 < 7$.
 
+![NAE to Max-Cut example](fig/aad-nae-maxcut.svg)
+
+*Figure. The tutorial example. Blue vertices are the true literals for $x = (1, 0, 0)$. All three vertical edges $x_i - \neg x_i$ are cut, and each clause triangle has exactly 2 cut edges, so the cut reaches $k = 7$.*
+
 # Learn: the other classic reductions (practice sheet)
 
 These are the remaining branches of the tutorial's map. The tutorial did Independent Set, Vertex Cover and Clique as warm-ups. The rest are the standard textbook proofs (KT 8, DPV 8) for the practice sheet.
@@ -376,6 +388,10 @@ Every reduction proof has the same four parts: (1) construction, (2) $\Rightarro
 **IS ∈ NP:** the certificate is the set $S$. Check $\lvert S\rvert \ge k$ and that no edge lies inside $S$: $O(n + m)$.
 
 **Construction.** Take a formula $\varphi$ with clauses $C_1..C_m$. For each clause make a **triangle** of 3 vertices, one for each of its literals. Add an edge between every two vertices whose literals are **opposites** ($x_i$ and $\neg x_i$). Set $k = m$.
+
+![3-SAT to Independent Set](fig/aad-sat-to-is.svg)
+
+*Figure. One triangle per clause, and a red edge between opposite literals. A satisfying assignment ($x_1 = 1$, $x_3 = 1$) picks one true literal per triangle, and those vertices are independent.*
 
 **($\Rightarrow$)** Take a satisfying assignment and, in each clause, pick the vertex of one true literal. That gives $m$ vertices, one per triangle, so no triangle edge is inside the set. No two are opposites, since $x_i$ and $\neg x_i$ can't both be true. So the set is independent.
 

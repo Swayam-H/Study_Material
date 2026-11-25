@@ -121,6 +121,10 @@ When $\lvert L\rvert = \lvert R\rvert$, a matching covering $L$ is a **perfect m
   - *Outside:* let $G'$ be the graph on $(L \setminus T) \cup (R \setminus N(T))$, with neighbourhoods $N'$. For $S \subseteq L \setminus T$, Hall's condition in $G$ gives $\lvert N(S \cup T)\rvert \ge \lvert S\rvert + \lvert T\rvert$. Also $N(S \cup T)$ splits into the disjoint parts $N'(S)$ and $N(T)$. Subtracting $\lvert N(T)\rvert = \lvert T\rvert$ leaves $\lvert N'(S)\rvert \ge \lvert S\rvert$. By induction $L \setminus T$ can be matched in $G'$.
   - Put the two matchings together.
 
+![Splitting at a tight set](fig/aad-hall-tight.svg)
+
+*Figure. Case 2 of the proof. The tight set $T$ is matched onto all of $N(T)$ by induction. What is left, $L \setminus T$ against $R \setminus N(T)$, still satisfies Hall, so it is matched by induction too.*
+
 **The proof by max-flow min-cut** (Quiz II Q2.3) is in the max-flow chapter.
 
 ## How to use Hall in an exam
@@ -132,6 +136,10 @@ When $\lvert L\rvert = \lvert R\rvert$, a matching covering $L$ is a **perfect m
 3. **Check $\lvert N(S)\rvert \ge \lvert S\rvert$ for an arbitrary $S$**, usually by **counting the edges** between $S$ and $N(S)$ in two ways (1 mark).
 
 To prove that **no** perfect matching exists, show one set $S$ with $\lvert N(S)\rvert < \lvert S\rvert$ (Quiz I Q1).
+
+![A Hall violation](fig/aad-hall-violation.svg)
+
+*Figure. Here $S = \{a_1, a_2, a_3\}$ has only two neighbours, $b_1$ and $b_2$. Three vertices cannot be matched into two, so no matching covers $L$, even though $a_4$ is fine.*
 
 ## Regular bipartite graphs (Lecture 10 exercises)
 
@@ -167,6 +175,10 @@ Claim: an $n \times n$ matrix of non-negative integers whose rows and columns al
 
 Colour the grid like a chessboard. Every domino covers one black and one white square. So a tiling is exactly a **perfect matching** in the bipartite graph of black squares vs white squares, with edges between squares that share a side. Having equal numbers of black and white squares is necessary but **not** enough. When the numbers are equal, look for a set $S$ of black squares with fewer white neighbours. The worked solution is on the quizzes page.
 
+![Mutilated 4 by 4 board](fig/aad-domino.svg)
+
+*Figure. Removing two opposite corners removes two squares of the same colour, leaving 6 dark and 8 light. The 8 light squares have only 6 dark neighbours in total, so Hall fails and there is no tiling.*
+
 # Learn: maximum matchings
 
 When there is no perfect matching we still want the largest matching possible. The algorithm grows the matching by one edge at a time, using **augmenting paths**. Sources: Lectures 8 and 9, Tutorial 3 (Maximum Matching), Cornell CS6820 notes §1.
@@ -194,6 +206,10 @@ If $P$ is an augmenting path for $M$, then $M \oplus P$ (the symmetric differenc
 - a vertex inside $P$ swaps its one $M$ edge for the other $P$ edge at it;
 - an endpoint of $P$ was free and gains exactly one edge.
 
+![Flipping an augmenting path](fig/aad-augment-flip.svg)
+
+*Figure. On the path $a - b - c - d$, the matching $\{bc\}$ is maximal but not maximum. The path is augmenting (both ends free), and flipping it gives $\{ab, cd\}$, one edge more.*
+
 ## Berge's lemma
 
 > **In short:** A matching is as large as possible exactly when no augmenting path exists.
@@ -210,6 +226,10 @@ $$\boxed{M \text{ is maximum} \iff \text{there is no } M\text{-augmenting path}}
 
 So that path is an augmenting path for $M$.
 
+![Components of the symmetric difference](fig/aad-berge.svg)
+
+*Figure. The components of $M \oplus M^*$ are alternating paths and even cycles. Cycles contain equally many edges of each matching, so if $M^*$ is bigger, some path has one more $M^*$ edge, and that path is augmenting for $M$.*
+
 **Lecture 8 exercise: where is bipartiteness used?** Nowhere. The proof only uses two facts: every vertex has degree at most 2 in $M \oplus M^*$, and the edges alternate. Alternation forces every cycle to be *even* in any graph, because an odd cycle cannot alternate between two matchings. So **Berge's lemma holds in every graph**. What needs bipartiteness is *finding* augmenting paths with a simple alternating search (Kuhn, below). In a general graph, an odd cycle (a "blossom") can hide an augmenting path from that search, which is why general graphs need Edmonds' blossom algorithm.
 
 **Lecture 8 exercise: the same exchange proves MST uniqueness.** Comparing two spanning trees through their symmetric difference, as we compared $M$ and $M^*$, shows that with distinct weights the MST is unique (graphs chapter).
@@ -221,6 +241,10 @@ So that path is an augmenting path for $M$.
 > **In short:** Direct the edges so that an augmenting path becomes an ordinary directed path, then search for it with DFS.
 
 Point unmatched edges $L \to R$ and matched edges $R \to L$. An augmenting path is now just a directed path from a free left vertex to a free right vertex, so DFS can find one.
+
+![Kuhn orientation](fig/aad-kuhn.svg)
+
+*Figure. With unmatched edges pointing right and matched edges pointing left, an augmenting path is just a directed path from a free left vertex ($u_1$) to a free right vertex ($v_3$), so DFS finds it.*
 
 ```
 try_kuhn(u):                       // u ∈ L
@@ -252,6 +276,10 @@ A **vertex cover** is a set $C$ of vertices that touches every edge.
 $$C = (L \setminus Z) \cup (R \cap Z).$$
 - **$C$ is a cover.** Take an edge $(u, v)$ with $u \in L$. If $u \notin Z$, then $u \in C$. If $u \in Z$, there are two cases. If $(u, v) \notin M$, the alternating path to $u$ extends to $v$, so $v \in Z \cap R \subseteq C$. If $(u, v) \in M$, then $u$ is matched, so it is not a free starting point, and the only way to reach it is through its partner $v$; so $v \in Z$.
 - **$\lvert C\rvert = \lvert M\rvert$.** Every $v \in R \cap Z$ is matched (otherwise we would have an augmenting path, but $M$ is maximum), and its partner is in $Z$. Every $u \in L \setminus Z$ is matched (free left vertices are in $Z$), and its partner is not in $Z$ (if the partner were in $Z$, $u$ would be too). So each matching edge puts exactly one endpoint into $C$, and every vertex of $C$ is the endpoint of a matching edge.
+
+![König cover from Z](fig/aad-konig.svg)
+
+*Figure. $M = \{u_1v_1, u_3v_2\}$ is maximum. From the free vertex $u_2$, alternating paths reach $v_1$ and then $u_1$, so $Z = \{u_1, u_2, v_1\}$. The cover $(L \setminus Z) \cup (R \cap Z) = \{u_3, v_1\}$ touches every edge and has size $2 = \lvert M\rvert$.*
 
 The flow proof: a minimum vertex cover corresponds to a minimum cut in the unit network with $\infty$ middle edges (practice page).
 

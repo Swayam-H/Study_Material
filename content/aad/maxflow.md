@@ -52,6 +52,10 @@ $$\boxed{\text{val}(f) \le C(P, Q) \text{ for every flow } f \text{ and every cu
 
 The greedy idea "find any $s$–$t$ path with spare room, push as much as it allows, repeat" can get stuck. **Diamond example:** edges $s\to u, s\to v, u\to v, u \to t, v \to t$, all of capacity 1. If greedy first sends 1 along $s \to u \to v \to t$, then $s\to u$ and $v \to t$ are full and no path with spare room is left, so it stops at value 1. The best is 2 ($s\to u\to t$ and $s \to v\to t$). Greedy needs a way to **undo** flow.
 
+![Diamond example](fig/aad-diamond.svg)
+
+*Figure. Left: after greedy uses the middle edge, no path with spare room is left. Right: the residual graph has a back edge $v \to u$, and the path $s \to v \to u \to t$ cancels the middle unit and reaches the optimum 2.*
+
 Practice set Problem 1(a) teaches the same lesson: "every $s$–$t$ path has a full edge" does **not** mean the flow is maximum.
 
 ## The residual graph
@@ -64,6 +68,10 @@ Given a flow $f$, the **residual graph** $G_f$ has, for each edge $(u, v) \in E$
 - a **backward** edge $(v, u)$ with $c_f(v, u) = f(u, v)$, if that is positive (room to cancel what was sent).
 
 Pushing $\Delta$ along a backward edge $(v, u)$ means **lowering** $f(u, v)$ by $\Delta$.
+
+![Residual edges](fig/aad-residual.svg)
+
+*Figure. An edge carrying 3 of its capacity 5 becomes two residual edges: 2 more units can be added forwards, and the 3 units already sent can be cancelled backwards.*
 
 ## The algorithm
 
@@ -112,6 +120,10 @@ Edges: $s\to a$ 7, $s\to b$ 8, $a\to c$ 4, $a\to d$ 5, $c \to d$ 2, $c\to t$ 5, 
 
 Now, in $G_f$, $s$ reaches $a$ (residual 1), $b$ (residual 4) and $d$ (through $a\to d$, residual 3). From $d$ there is nowhere new to go: $d\to t$ is full, and $f(c, d) = 0$, so there is no back edge $d\to c$. From $a$, the edge $a\to c$ is full. So $c$ and $t$ can't be reached. $P^* = \{s, a, b, d\}$ and $Q^* = \{c, t\}$. The forward edges across are $a \to c$ (4) and $d\to t$ (6), so $C = 10 = \text{val}(f)$. The flow is maximum.
 
+![Lecture 16 final flow](fig/aad-flow-lecture16.svg)
+
+*Figure. The final flow, each edge labelled flow/capacity. The vertices reachable from $s$ in the residual graph are $\{s, a, b, d\}$. Every edge leaving that set is full ($a \to c$, $d \to t$, in red) and the edge entering it ($c \to d$) is empty, so the cut equals the flow: 10.*
+
 ## Integrality
 
 > **In short:** With whole-number capacities every step pushes a whole number, so the final flow is whole numbers too.
@@ -158,6 +170,10 @@ Most flow questions say "design an algorithm for X". The answer always has the s
 > **In short:** Each left vertex can send one unit to one right vertex, so a whole-number flow is exactly a matching.
 
 **Construction.** Vertices $L \cup R \cup \{s, t\}$. Edges: $s \to u$ with capacity 1 for each $u \in L$; $u\to v$ with capacity 1 (or $\infty$) for each graph edge $(u, v)$; $v \to t$ with capacity 1 for each $v \in R$.
+
+![Matching network](fig/aad-matching-network.svg)
+
+*Figure. The bipartite matching network. An integral flow sends one unit through each matched pair, and the unit capacities on the $s$ and $t$ edges stop any vertex from being used twice.*
 
 **Matching → flow.** For each matched edge set $f(s,u) = f(u,v) = f(v,t) = 1$. Matched edges share no vertex, so each vertex carries at most one unit. This is a valid flow of value $\lvert M\rvert$, so max flow $\ge$ max matching.
 
@@ -207,6 +223,10 @@ Each vertex $v \ne s, t$ has a capacity $c(v)$ on the total flow passing through
 
 **Construction.** Split each $v$ into $v_{\text{in}}$ and $v_{\text{out}}$, joined by an edge $(v_{\text{in}}, v_{\text{out}})$ with capacity $c(v)$. Each original edge $(u, v)$ becomes $(u_{\text{out}}, v_{\text{in}})$ with capacity $c(u, v)$. $s$ and $t$ are not split: $s$ plays $s_{\text{out}}$ and $t$ plays $t_{\text{in}}$.
 
+![Vertex splitting](fig/aad-vertex-split.svg)
+
+*Figure. A vertex with a capacity becomes an entry vertex and an exit vertex joined by one edge with that capacity. Edges into $v$ now go into $v_{\text{in}}$, and edges out of $v$ leave from $v_{\text{out}}$.*
+
 **Correctness.** Every edge into $v$ now enters $v_{\text{in}}$, and the only way out of $v_{\text{in}}$ is the internal edge. By conservation at $v_{\text{in}}$, $\sum_u f(u, v) = f(v_{\text{in}}, v_{\text{out}}) \le c(v)$. In the same way, everything leaving $v$ goes out of $v_{\text{out}}$. So flows in $G$ that respect the vertex capacities match up one-to-one, with the same value, with flows in $G'$. A max flow in $G'$ is therefore a max flow in $G$.
 
 **Size and time.** $\lvert V'\rvert = 2n - 2$ and $\lvert E'\rvert = m + n - 2$. Run any max-flow algorithm on $G'$, for example Edmonds–Karp in $O(n m^2)$ up to constants.
@@ -238,6 +258,10 @@ Projects have profits $p_i$ (possibly negative) and prerequisites "$i$ requires 
 - Its capacity is the positive profits **not** taken plus the costs that **are** taken.
 
 So the min cut gives the most profitable closed set, with profit $= \sum_{p_i>0}p_i - $ min cut.
+
+![Project selection network](fig/aad-project-selection.svg)
+
+*Figure. Profits $+8, +5$ come from $s$, costs $6, 4$ go to $t$, and $\infty$ edges encode the prerequisites. The min cut (capacity 10) keeps all four projects on the source side, so the best profit is $13 - 10 = 3$. Taking only $A$ and $C$ would give 2.*
 
 ## Fewest removable edges to cut $s$ from $t$ (practice set Problem 3)
 

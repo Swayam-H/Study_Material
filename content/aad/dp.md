@@ -36,6 +36,10 @@ $$\boxed{\text{OPT}(j) = \max\{v_j + \text{OPT}(p(j)),\ \text{OPT}(j-1)\}, \quad
 
 Either job $j$ is in the best answer, and then none of jobs $p(j)+1..j-1$ are (they all overlap $j$), or it is not. Sorting and binary-searching for $p(\cdot)$ gives $O(n\log n)$. The lecture's memoised version without binary search is $O(n^2)$.
 
+![Weighted interval scheduling](fig/aad-weighted-intervals.svg)
+
+*Figure. Jobs sorted by finish time, with $p(j)$ on the right. The table fills as OPT = 2, 4, 6, 7, 8, 9: for example $\text{OPT}(6) = \max(3 + \text{OPT}(3), \text{OPT}(5)) = \max(9, 8) = 9$, taking jobs 1, 3 and 6.*
+
 ## Shortest paths in a DAG (Lecture 11)
 
 > **In short:** The best route to $v$ is the best route to one of its predecessors plus one edge.
@@ -80,6 +84,10 @@ Strings $x[1..m]$ and $y[1..n]$, with a scoring matrix $\delta$ that includes ga
 $$\boxed{A[i][j] = \max\{A[i-1][j-1] + \delta(x_i, y_j),\ A[i-1][j] + \delta(x_i, -),\ A[i][j-1] + \delta(-, y_j)\}}$$
 Base cases: $A[0][0] = 0$, $A[i][0] = \sum_{k \le i}\delta(x_k, -)$, $A[0][j] = \sum_{k\le j}\delta(-, y_k)$. $O(mn)$ time and space, or $O(\min(m,n))$ space if you only need the score. Edit distance is the same with min instead of max, and cost 1 for a mismatch or a gap.
 
+![Alignment recurrence](fig/aad-alignment-cell.svg)
+
+*Figure. Each cell is computed from three neighbours: up-left (match the two last characters), up (gap in $y$), and left (gap in $x$). Filling row by row guarantees all three are ready.*
+
 ## Cloth cutting (Lectures 12 and 13)
 
 > **In short:** A piece is either sold whole or cut once, and then the two parts are independent smaller problems.
@@ -95,6 +103,10 @@ The first cut splits the piece into two **independent** rectangles. Fill in incr
 Place pebbles so that no two are next to each other horizontally or vertically, and maximise the sum of the covered numbers.
 
 **(a) Patterns.** A column's pattern is a 4-bit string with no two adjacent 1s: 0000, 0001, 0010, 0100, 0101, 1000, 1001, 1010. There are **eight**, each with at most 2 pebbles (so $2n$ pebbles are always enough).
+
+![Pebbling patterns](fig/aad-pebbling-patterns.svg)
+
+*Figure. The 8 patterns a column of height 4 can have. Two patterns can sit in neighbouring columns iff they share no row ($p \mathbin{\&} q = 0$).*
 
 **(b) DP.** Patterns $p, q$ in neighbouring columns are **compatible** iff $p \mathbin{\&} q = 0$ (no shared row). Let $w(k, p)$ be the sum of column $k$'s numbers in the rows where $p$ has a 1.
 $$DP[k][p] = w(k, p) + \max_{q:\ p\,\&\,q = 0} DP[k-1][q], \qquad DP[1][p] = w(1, p).$$
@@ -116,6 +128,10 @@ For leaves, in $= c_v$ and out $= 0$. The answer is $\max(\text{in}[r], \text{ou
 *Time.* Each vertex does work proportional to its number of children, and the children add up to $n - 1$ over the whole tree: $O(n)$.
 
 *Reconstruction in $O(n)$.* Walk down from the root, carrying a flag saying whether the parent was chosen. At $v$: if the parent was chosen, $v$ is not; otherwise choose $v$ iff $\text{in}[v] \ge \text{out}[v]$. Pass the decision down to the children.
+
+![Tree independent set](fig/aad-tree-mis.svg)
+
+*Figure. Each vertex shows its weight and its in/out values, computed from the leaves up. For example $\text{in}[r] = 3 + \text{out}[a] + \text{out}[b] = 3 + 5 + 6 = 14$. Walking down from the root picks $r, c, d, e$.*
 
 ## Road signs: remove at most $k$ (Assignment 2 Q4)
 
