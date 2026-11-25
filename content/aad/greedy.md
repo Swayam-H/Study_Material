@@ -4,6 +4,8 @@ A greedy algorithm builds a solution one irrevocable choice at a time, always ta
 
 ## Two ways to prove a greedy algorithm optimal
 
+> **In short:** Either show greedy is never behind at any step, or show any optimal solution can be changed step by step into greedy's without getting worse.
+
 1. **Greedy stays ahead.** Show by induction that after each step, the greedy partial solution is at least as good as any other solution's corresponding part (interval scheduling).
 2. **Exchange argument.** Take any optimal solution that differs from greedy. Change it, one step at a time, to agree with greedy's choice without making it worse. So greedy's solution is optimal (Huffman, MST cut property).
 3. **Structural bound** (for "minimise the number of resources"): show every solution needs at least $d$, then show greedy never uses more than $d$ (interval partitioning).
@@ -14,17 +16,23 @@ To show a greedy rule is **wrong**, a single small counterexample is a full answ
 
 ## Prefix-free codes
 
+> **In short:** No codeword starts another one, so a bit stream decodes in only one way. Such codes are exactly leaves of a binary tree.
+
 A code assigns a bit string to each symbol. A code is **prefix-free** if no codeword is a prefix of another. Then any concatenation decodes uniquely: read bits until they spell a codeword, output it, repeat. Example from the lecture: with $A = 0$, $B = 10$, $C = 110$, $D = 111$, the stream 0110111 decodes as $A, C, D$. With $A = 0$, $B = 01$ it is ambiguous.
 
 A prefix-free code is the same thing as a **binary tree with the symbols at the leaves**: the path from the root (0 = left, 1 = right) spells the codeword. A symbol at an internal node would be a prefix of its descendants. In an optimal code the tree is **full** (every internal node has 2 children): a node with one child can be contracted, shortening codewords.
 
 ## The objective
 
+> **In short:** Total bits = sum of frequency × depth, so frequent symbols should sit high in the tree.
+
 With frequencies $f_i$ and depths (codeword lengths) $\ell_i$,
 $$\boxed{\text{cost}(T) = \sum_i f_i \ell_i = \sum_{\text{non-root nodes } v} f(v)}$$
 where an internal node's frequency is the sum of the frequencies of the leaves below it. The second form holds because a leaf at depth $\ell$ is counted once for each of the $\ell$ non-root nodes on its path. Lecture 10's example: $f_1 + 2f_2 + 2f_3 = f_1 + f_2 + f_3 + (f_2 + f_3)$.
 
 ## Huffman's algorithm
+
+> **In short:** Repeatedly merge the two rarest symbols into one.
 
 ```
 Huffman(f_1..f_n):
@@ -39,6 +47,8 @@ $n - 1$ merges, each $O(\log n)$ with a heap: **$O(n\log n)$**. (If the frequenc
 
 ## Why it is optimal
 
+> **In short:** The two rarest symbols can always be deepest siblings, and merging them leaves a smaller problem of the same kind.
+
 **Lemma (exchange).** If $x, y$ have the two smallest frequencies, some optimal tree has $x$ and $y$ as **siblings at maximum depth**.
 
 *Proof.* Take an optimal full tree $T$. Its deepest level has two sibling leaves $a, b$ (full tree). Swap $x$ with $a$: since $f_x \le f_a$ and $\ell_a \ge \ell_x$, the cost changes by $(f_a - f_x)(\ell_x - \ell_a) \le 0$. Likewise swap $y$ with $b$. The cost does not increase, so the new tree is still optimal and has $x, y$ as deepest siblings.
@@ -49,12 +59,16 @@ $n - 1$ merges, each $O(\log n)$ with a heap: **$O(n\log n)$**. (If the frequenc
 
 ## Kraft's inequality (Lecture 10 exercise)
 
+> **In short:** A codeword of length $\ell$ uses up a $2^{-\ell}$ share of all bit strings, and the shares cannot add to more than 1.
+
 For any prefix-free binary code with lengths $\ell_1, \ldots, \ell_m$:
 $$\boxed{\sum_{i=1}^m 2^{-\ell_i} \le 1}$$
 
 *Proof.* Let $L = \max \ell_i$. A codeword of length $\ell_i$ is a prefix of exactly $2^{L - \ell_i}$ strings of length $L$. Because no codeword is a prefix of another, these sets are disjoint. There are only $2^L$ strings of length $L$, so $\sum_i 2^{L-\ell_i} \le 2^L$; divide by $2^L$. (Equivalently: a random walk down the tree, flipping a fair coin at each node, reaches leaf $i$ with probability $2^{-\ell_i}$, and these events are disjoint.) Equality holds exactly for full trees.
 
 ## $k$-ary Huffman (Assignment 2 Q3)
+
+> **In short:** Every merge must take exactly $k$ nodes, so pad with zero-frequency dummies first.
 
 With an alphabet of $k$ symbols the tree is $k$-ary. Naively merging the $k$ smallest each time can fail.
 
@@ -70,6 +84,8 @@ With an alphabet of $k$ symbols the tree is $k$-ary. Naively merging the $k$ sma
 
 ## Interval scheduling: as many non-overlapping jobs as possible
 
+> **In short:** Always take the job that finishes first; it leaves the most room for the rest.
+
 **Greedy: repeatedly pick the job that finishes earliest**, discard those it overlaps, repeat. (Earliest start, shortest job and fewest conflicts all have counterexamples.)
 
 **Greedy stays ahead.** Let greedy pick $g_1, g_2, \ldots, g_k$ and an optimal solution $o_1, \ldots, o_m$, both sorted by finish time. Claim: $f(g_r) \le f(o_r)$ for every $r \le k$. True for $r = 1$ (greedy picks the earliest finish). If $f(g_{r-1}) \le f(o_{r-1}) \le s(o_r)$, then $o_r$ was still available when greedy chose $g_r$, so $f(g_r) \le f(o_r)$. If $m > k$, then $o_{k+1}$ starts after $f(o_k) \ge f(g_k)$ and would have been available to greedy, which stopped: contradiction. So $k = m$. Time $O(n\log n)$ for sorting.
@@ -77,6 +93,8 @@ With an alphabet of $k$ symbols the tree is $k$-ary. Naively merging the $k$ sma
 With **weights**, greedy fails and we need DP (next chapter).
 
 ## Interval partitioning: fewest rooms (Midsem Q3.2)
+
+> **In short:** You need as many rooms as the most lectures running at one moment, and greedy by start time achieves exactly that.
 
 All lectures must be scheduled; overlapping ones need different rooms. Minimise the number of rooms.
 

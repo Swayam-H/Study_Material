@@ -4,11 +4,15 @@ The Fast Fourier Transform multiplies two degree-$d$ polynomials in $O(d\log d)$
 
 ## The problem
 
+> **In short:** Multiplying polynomials directly pairs every term with every term, $O(d^2)$ work. We want $O(d\log d)$.
+
 Given $A(x) = a_0 + a_1x + \cdots + a_dx^d$ and $B(x) = b_0 + \cdots + b_dx^d$, find $C(x) = A(x)B(x) = c_0 + \cdots + c_{2d}x^{2d}$, where
 $$c_k = \sum_{i=0}^{k} a_i b_{k-i}$$
 (a **convolution**). Computing every $c_k$ directly costs $\Theta(d)$ each and $\Theta(d^2)$ in total.
 
 ## Two representations
+
+> **In short:** A polynomial can be stored as its coefficients or as its values at enough points. Multiplying is easy with values; the hard part is converting between the two.
 
 - **Coefficients**: $(a_0, \ldots, a_d)$.
 - **Values**: $A(x_0), \ldots, A(x_d)$ at any $d+1$ distinct points.
@@ -25,6 +29,8 @@ Evaluating at $n$ arbitrary points costs $O(n^2)$ (Horner's rule is $O(n)$ per p
 
 ## The even/odd split
 
+> **In short:** Evaluating $A$ at $x$ and at $-x$ shares almost all the work, because both use the same two half-size polynomials in $x^2$.
+
 Split $A$ by the parity of exponents:
 $$A(x) = A_e(x^2) + x\,A_o(x^2),$$
 where $A_e$ has the even-index coefficients $(a_0, a_2, a_4, \ldots)$ and $A_o$ the odd-index ones $(a_1, a_3, \ldots)$, each of half the degree. Example from Lecture 3: $A(x) = 3 + 4x + 6x^2 + 2x^3 + x^4 + 10x^5$ gives $A_e(y) = 3 + 6y + y^2$ and $A_o(y) = 4 + 2y + 10y^2$.
@@ -34,6 +40,8 @@ $$A(x_i) = A_e(x_i^2) + x_i A_o(x_i^2), \qquad A(-x_i) = A_e(x_i^2) - x_i A_o(x_
 so the $n$ evaluations need only $A_e$ and $A_o$ at the $n/2$ squares $x_i^2$. For the recursion to continue, the squares must **also** come in $\pm$ pairs, and their squares too, all the way down. Real numbers cannot do this (squares are positive). The complex $n$th roots of unity can.
 
 ## Roots of unity
+
+> **In short:** These are evenly spaced points on the unit circle. Squaring them gives the same kind of point set, half as large, so the split can repeat all the way down.
 
 $$\omega = e^{2\pi i/n} = \cos\tfrac{2\pi}{n} + i\sin\tfrac{2\pi}{n}, \qquad \omega^n = 1.$$
 The $n$th roots of unity are $1, \omega, \omega^2, \ldots, \omega^{n-1}$, evenly spaced on the unit circle. $\omega$ is a **primitive** $n$th root: $\omega^k \ne 1$ for $0 < k < n$.
@@ -47,6 +55,8 @@ Properties used by the FFT ($n$ even):
 Values to know for $n = 8$: $\omega = \frac{1+i}{\sqrt2}$, $\omega^2 = i$, $\omega^3 = \frac{-1+i}{\sqrt2}$, $\omega^4 = -1$, $\omega^5 = -\omega$, $\omega^6 = -i$, $\omega^7 = -\omega^3$. For $n = 4$: $1, i, -1, -i$.
 
 ## The FFT algorithm
+
+> **In short:** Evaluate the even and odd halves at the $n/2$ squared points, then combine each pair with a plus and a minus (the butterfly).
 
 $$\boxed{A(\omega^j) = A_e(\omega^{2j}) + \omega^j A_o(\omega^{2j}), \quad A(\omega^{j+n/2}) = A_e(\omega^{2j}) - \omega^j A_o(\omega^{2j})}$$
 
@@ -67,11 +77,15 @@ These four lines are exactly the four blanks of Midsem Q1.3 (0.5 marks each). Th
 
 ## The matrix view
 
+> **In short:** Evaluating at all roots of unity is one matrix–vector product, and the FFT is a fast way to do that product.
+
 Evaluation at the roots of unity is multiplication by the **Fourier matrix** $M_n(\omega)$, with $(M_n)_{jk} = \omega^{jk}$ for $j, k = 0..n-1$:
 $$\begin{pmatrix}A(1)\\A(\omega)\\\vdots\\A(\omega^{n-1})\end{pmatrix} = M_n(\omega)\begin{pmatrix}a_0\\a_1\\\vdots\\a_{n-1}\end{pmatrix}.$$
 The **(discrete) Fourier transform** of $a$ is the vector $M_n(\omega)a$. FFT is a fast way to compute it.
 
 ## Interpolation: the inverse FFT
+
+> **In short:** Going back from values to coefficients is the same FFT run with $\omega^{-1}$ instead of $\omega$, then divided by $n$.
 
 $$\boxed{M_n(\omega)^{-1} = \frac{1}{n}M_n(\omega^{-1})}$$
 
@@ -85,6 +99,8 @@ Lecture 8's intuition for row $m$: $a_m = \frac1n\sum_j A(\omega^j)\omega^{-jm} 
 
 ## Multiplying polynomials in $O(n\log n)$
 
+> **In short:** Convert both polynomials to values, multiply the values pointwise, and convert back.
+
 1. Let $n$ = the least power of two with $n \ge 2d + 1$ (deg $C \le 2d$, so $C$ has $2d+1$ coefficients). **Pad** $a$ and $b$ with zeros to length $n$.
 2. $\hat a = \mathrm{FFT}(a, \omega)$, $\hat b = \mathrm{FFT}(b, \omega)$.
 3. $\hat c_j = \hat a_j\hat b_j$ for each $j$.
@@ -95,6 +111,8 @@ Total $O(n\log n)$. Without padding, $n$ points cannot determine a polynomial of
 **Integer multiplication.** An $n$-digit integer is a polynomial evaluated at 10; multiply the polynomials with FFT and then propagate carries. This gives $O(n\log n)$ arithmetic operations on small numbers.
 
 ## A polynomial from its roots (Lecture 8, Assignment 1 Q1)
+
+> **In short:** Multiply the factors in a balanced tree, using FFT multiplication at every level.
 
 Given $z_0, \ldots, z_{n-1}$ (repeats allowed), find the coefficients of $P(x) = \prod_{i}(x - z_i)$, which vanishes exactly at the $z_i$ ($P(z_j) = 0$ iff $(x - z_j) \mid P$).
 

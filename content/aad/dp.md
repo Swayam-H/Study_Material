@@ -4,6 +4,8 @@ Dynamic programming solves a problem by writing its answer in terms of answers t
 
 ## The answer format the rubric wants
 
+> **In short:** Say what each table entry means, how it is computed from smaller entries, and in what order. Each part earns its own mark.
+
 Midsem Q5 marked these six parts separately, one mark each. Write every DP answer under these headings.
 
 1. **Table and meaning.** "$DP[i][j]$ = the maximum utility obtainable in ... starting from ... ." State what each index ranges over and **where the final answer is**.
@@ -17,12 +19,16 @@ Midsem Q5 marked these six parts separately, one mark each. Write every DP answe
 
 ## Why it works: optimal substructure and overlapping subproblems
 
+> **In short:** Best answers are built from best answers to smaller pieces, and the same pieces come up again and again, so store them.
+
 - **Optimal substructure.** An optimal solution contains optimal solutions to subproblems (cut-and-paste: if the remainder were not optimal, swap in a better one).
 - **Overlapping subproblems.** A plain recursion would solve the same subproblem many times (Fibonacci: exponential). Memoising or filling a table makes it polynomial in the number of distinct subproblems.
 
 Every DP is a **shortest or longest path in a DAG** whose vertices are subproblems and whose edges are decisions (Lecture 11).
 
 ## Weighted interval scheduling (Lecture 11)
+
+> **In short:** Either the last job is in the answer or it is not; try both.
 
 Jobs $u_i = (s_i, t_i)$ with values $v_i$; choose non-overlapping jobs of maximum total value. Sort by finish time; let $p(j)$ = the largest index $i < j$ whose job finishes before $j$ starts (0 if none).
 
@@ -32,9 +38,13 @@ Either job $j$ is in the optimum (then no job in $p(j)+1..j-1$ is, as they all o
 
 ## Shortest paths in a DAG (Lecture 11)
 
+> **In short:** The best route to $v$ is the best route to one of its predecessors plus one edge.
+
 Topologically sort; $\text{OPT}(v) = \min_{(u, v)\in E}\{\text{OPT}(u) + \ell(u, v)\}$, $\text{OPT}(s) = 0$. $O(n + m)$.
 
 ## Longest increasing subsequence (Assignment 2 Q1)
+
+> **In short:** For each length, remember the smallest possible last element; that list stays sorted, so binary search updates it.
 
 Distinct prices $p_1..p_n$; longest strictly increasing subsequence.
 
@@ -54,6 +64,8 @@ $$\boxed{p_k \text{ lies on some LIS} \iff L[k] + R[k] - 1 = \lambda}$$
 
 ## 0/1 knapsack (Tutorial 3)
 
+> **In short:** For each item and each remaining capacity, either take the item or skip it.
+
 Items with weights $w_i$ and values $v_i$, capacity $W$, each item at most once.
 $$K[i][c] = \max\{K[i-1][c],\ v_i + K[i-1][c - w_i] \text{ (if } w_i \le c)\}, \quad K[0][c] = 0.$$
 $O(nW)$ time, pseudo-polynomial. **1-D trick:** keep one row and loop $c$ from $W$ **down** to $w_i$, so each item is used at most once. Looping $c$ **upward** lets an item be reused: that is the **unbounded** knapsack.
@@ -62,17 +74,23 @@ $O(nW)$ time, pseudo-polynomial. **1-D trick:** keep one row and loop $c$ from $
 
 ## Sequence alignment and edit distance (Lecture 12)
 
+> **In short:** Look at the last column of the alignment: it matches two characters or puts a gap on one side.
+
 Strings $x[1..m]$, $y[1..n]$, scoring matrix $\delta$ including gap scores $\delta(-, c)$ and $\delta(c, -)$. $A[i][j]$ = the best score aligning $x[1..i]$ with $y[1..j]$. The last column is one of: $x_i$ with $y_j$; $x_i$ with a gap; a gap with $y_j$.
 $$\boxed{A[i][j] = \max\{A[i-1][j-1] + \delta(x_i, y_j),\ A[i-1][j] + \delta(x_i, -),\ A[i][j-1] + \delta(-, y_j)\}}$$
 $A[0][0] = 0$, $A[i][0] = \sum_{k \le i}\delta(x_k, -)$, $A[0][j] = \sum_{k\le j}\delta(-, y_k)$. $O(mn)$ time and space ($O(\min(m,n))$ space for the score alone). Edit distance is the same with min and costs 1 for a mismatch or gap.
 
 ## Cloth cutting (Lectures 12 and 13)
 
+> **In short:** A piece is either sold whole or cut once, and then the two parts are independent smaller problems.
+
 $X \times Y$ cloth, products $(a_i, b_i, c_i)$, guillotine cuts, rotation allowed. $P[x][y]$ = the best price of a product that is exactly $x \times y$ (0 if none).
 $$DP[x][y] = \max\Big\{P[x][y],\ \max_{1\le k<x}(DP[k][y] + DP[x-k][y]),\ \max_{1\le k<y}(DP[x][k] + DP[x][y-k])\Big\}$$
 The first cut splits the piece into two **independent** rectangles. Fill in increasing $x, y$. $O(XY(X+Y))$ time, $O(XY)$ space. Lecture 13 example: $4 \times 4$ cloth, products $1\times1$ for 2, $2\times2$ for 7, $4\times1$ for 5, $4\times4$ for 20: cutting into four $2\times2$ pieces gives 28 > 20.
 
 ## Pebbling a $4 \times n$ checkerboard (Lectures 12 and 13)
+
+> **In short:** Only 8 patterns can appear in a column, so carry the last column's pattern as the state.
 
 No two pebbles horizontally or vertically adjacent; maximise the sum covered.
 
@@ -83,6 +101,8 @@ $$DP[k][p] = w(k, p) + \max_{q:\ p\,\&\,q = 0} DP[k-1][q], \qquad DP[1][p] = w(1
 Answer $\max_p DP[n][p]$. At most $8 \times 8 = 64$ operations per column: $O(n)$. The only thing remembered about the past is the last column's pattern.
 
 ## Maximum-weight independent set on a tree (Assignment 2 Q2)
+
+> **In short:** Each vertex is either taken (its children are not) or skipped (each child chooses freely).
 
 Tree $T$, weights $c_v > 0$; choose non-adjacent vertices of maximum total weight. Root the tree anywhere. For each $v$:
 
@@ -99,6 +119,8 @@ Leaves: in $= c_v$, out $= 0$. Answer $\max(\text{in}[r], \text{out}[r])$. Compu
 
 ## Road signs: remove at most $k$ (Assignment 2 Q4)
 
+> **In short:** Remember the last kept sign and how many removals are left.
+
 Signs at $0 = d_1 < \cdots < d_n < l$ with paces $a_i$ (minutes per km); the pace of the last kept sign holds until the next kept sign or $l$. Remove at most $k$ signs, never sign 1; minimise the time.
 
 **Greedy fails.** $d = (0, 1, 5, 6)$, $a = (2, 4, 7, 8)$, $l = 10$, $k = 2$. Original time $2\cdot1 + 4\cdot4 + 7\cdot1 + 8\cdot4 = 57$. Single removals give: sign 2 → 49, sign 3 → 54, sign 4 → 53. Greedy removes sign 2 (49), then the best second removal (sign 3) gives 44. But removing signs 3 and 4 gives $2\cdot1 + 4\cdot9 = 38$. Removing sign 3 alone or sign 4 alone saves only 3 or 4 minutes, because the other slow sign still governs most of the road, but removing both saves 19. Greedy spends its first removal on sign 2 (the best single gain) and can then remove only one of the two slow signs. Gains interact, because removing a sign changes the stretch governed by the previous kept sign.
@@ -110,6 +132,8 @@ $$\min_{j,\ r:\ r + (n - j) \le k} T[j][r] + a_j(l - d_j).$$
 *Complexity.* $nk$ states (with $r \le k$), $O(n)$ choices of $j$ each: $O(n^2k)$ time, $O(nk)$ space. Store the minimising $j$ to reconstruct which signs stay.
 
 ## Minimum initial energy (Assignment 2 Q5)
+
+> **In short:** Work backwards from the goal, because the energy you need at a cell depends on what comes after it.
 
 Grid $g$, move right or down, strength must stay $\ge 1$ after every cell (including the first and last). Work **backwards**: $E[i][j]$ = the minimum strength needed when **entering** cell $(i, j)$, before its effect is applied.
 $$E[M-1][N-1] = \max(1,\ 1 - g[M-1][N-1]), \qquad E[i][j] = \max\big(1,\ \min(E[i+1][j], E[i][j+1]) - g[i][j]\big)$$
