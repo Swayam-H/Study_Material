@@ -2,21 +2,78 @@
 
 Lecture 22 uses one idea twice. A **reduction** turns a fast algorithm for problem X into a fast algorithm for problem Y; if Y is known to be hard, X must be hard too. First it proves a **memory** lower bound for checking brackets, then it defines **NP-hardness** the same way. Sources: Lecture 22, the Lecture 24 course summary, the NP tutorial.
 
-## Balanced brackets in one pass
+## One bracket type
 
-Input: a string over `( ) [ ]` read once, left to right (a **stream**). Decide whether it is balanced.
+**Problem.** A string $S = s_1\ldots s_n$ over `(` and `)` arrives one character at a time, in a single left-to-right pass (the **one-pass streaming model**). Accept iff every `(` is properly closed and no `)` comes before its partner.
 
-**One bracket type (DYCK₁).** Keep a counter: $+1$ for `(`, $-1$ for `)`. Balanced iff the counter never goes negative and ends at 0. Memory $O(\log n)$ bits.
+**Algorithm 1: stack, $O(n)$ space.** Push on `(`; on `)` pop, rejecting if the stack is empty; accept iff the stack ends empty. On `((( … )))` with $n/2$ openers first, the stack holds $n/2$ items halfway through: $\Theta(n)$ space.
 
-**Two types: counters fail.** Two independent counters accept `([)]`: both counters go up, down, and end at 0, but `[` is closed by `)`. Addition is commutative, so after `([` and after `[(` the counters are the same, yet the next legal closer differs. A stack works but uses $\Theta(n)$ memory.
+**Algorithm 2: counter, $O(\log n)$ space (DYCK₁).** Every stack entry is the same symbol `(`, so only their number matters. Keep $c$: $+1$ for `(`, $-1$ for `)`; reject as soon as $c < 0$ (a closer with no partner in this prefix); accept iff $c = 0$ at the end. $c \le n$, so it takes $\lceil\log_2(n+1)\rceil$ bits: about 30 bits for $n = 10^9$.
 
-**Lower bound: $\Omega(n)$ bits for two types (deterministic).** Reduce **equality** to bracket checking.
+## Two bracket types
 
-1. Alice turns $x \in \{0,1\}^{m}$ into $S_A$ by $0 \mapsto$ `(`, $1 \mapsto$ `[`, left to right. Bob turns $y$ into $S_B$ by $0\mapsto$ `)`, $1\mapsto$ `]`, **right to left**. ($x = y = 0110$ gives `([[()]])`.)
-2. $S_AS_B$ is balanced $\iff x = y$: the $i$-th opener is closed by the $i$-th closer from the end, which encodes $y_i$.
-3. If a streaming algorithm used $s$ bits, Alice runs it on $S_A$ and sends its memory ($s$ bits) to Bob, who continues on $S_B$. That decides equality with $s$ bits, so $s \ge m = n/2$.
+**Definition.** A string over `( ) [ ]` is balanced if (1) every opener is matched by a closer of the **same type** and (2) the nesting is last-opened, first-closed. The stack still works (check the type of the top before popping), in $O(n)$ space.
 
-**Randomised checksum, $O(\log n)$ bits.** Encode `(` $= +1$, `)` $= -1$, `[` $= +2$, `]` $= -2$. Keep depth $d$, weight $w = r^d \bmod p$ and a sum $H$. On an opener: $H \mathrel{+}= v\cdot w$, then $d{+}{+}$, $w \leftarrow wr$. On a closer: first $d{-}{-}$, $w \leftarrow wr^{-1}$, then $H \mathrel{+}= v\cdot w$. Accept iff $d$ never goes negative, $d$ ends at 0 and $H = 0$. A matched pair at the same depth adds $v - v = 0$; a mismatch leaves a nonzero polynomial in $r$ of degree $< n$, which vanishes at a random $r$ with probability $< n/p$ (Schwartz–Zippel). The course summary states this for the **1-hill** case (all openers come before all closers), where the pair matched at depth $d$ contributes $+v\cdot r^d - v\cdot r^d = 0$; the depth-tracked version above handles any stream the same way. The tutorial closes with the same moral as this section: a reduction turns a known lower bound (equality, or 3-SAT) into a new one.
+**Counters fail.** Keep $c_{\text{round}}$ and $c_{\text{square}}$. They are fooled by:
+
+- `([)]`: `[` was opened inside `(`, so must close first, but `)` arrives first. Both counters stay $\ge 0$ and end at $(0, 0)$.
+- `(([))[]]`: $c_{\text{round}}$ goes $0,1,2,2,1,0,0,0,0$ and $c_{\text{square}}$ goes $0,0,0,1,1,1,2,1,0$; both end at 0, yet `[` at position 3 is crossed with `))`.
+- `([[())])` and in general any string that opens and closes the same *numbers* of each type.
+
+**Why:** after `([` and after `[(` the counters hold the same values $(1, 1)$. Addition is commutative, so counters cannot remember the **order** in which brackets were opened, and the order decides which closer is legal next.
+
+## Lower bound: $\Omega(n)$ bits for two types (deterministic)
+
+**Recall (Lecture 20, Theorem 1).** If Alice holds $x \in \{0,1\}^m$ and Bob holds $y$, any deterministic one-message protocol deciding $x = y$ needs $\ge m$ bits: with fewer, two strings $x \ne x'$ get the same message (pigeonhole), and Bob holding $y = x$ cannot tell them apart.
+
+**The reduction.**
+
+1. Alice turns $x$ into openers $S_A$, left to right: $0 \mapsto$ `(`, $1 \mapsto$ `[`.
+2. Bob turns $y$ into closers $S_B$, **right to left** (the last opened must be the first closed): $0\mapsto$ `)`, $1\mapsto$ `]`. For $x = y = 0110$: $S_AS_B = $ `([[()]])`.
+3. **Claim 1.** $S_AS_B$ (length $n = 2m$) is balanced $\iff x = y$: the $i$-th opener (type $x_i$) is closed by the $i$-th closer from the end, which encodes $y_i$.
+
+**Theorem 2.** Any deterministic one-pass algorithm $A$ for two bracket types uses $s(n) \ge n/2 = \Omega(n)$ bits.
+
+*Proof.* Alice runs $A$ on $S_A$, then sends Bob $A$'s entire memory ($s(n)$ bits). Bob loads it and continues $A$ on $S_B$. $A$ has now processed $S_AS_B$ in one pass, so it answers "balanced" iff $x = y$ (Claim 1). Alice and Bob have decided equality with $s(n)$ bits, so $s(n) \ge m = n/2$ by Theorem 1. $\square$
+
+**Key takeaway: streaming memory = communication.** Pausing a one-pass algorithm mid-stream, its memory is a message from the first half of the input to the second. A communication lower bound becomes a space lower bound.
+
+## Randomised checksum in $O(\log n)$ bits
+
+Note that the hard strings above have a special shape, all $m$ openers first and then all $m$ closers ("1-hill"), and even this needs $\Omega(n)$ bits deterministically. With randomness we can beat it.
+
+**Two-polynomial view.** Encode `(`,`)` $\mapsto 1$ and `[`,`]` $\mapsto 2$. Openers $a_1..a_m$, closers (which arrive inside-out) $b_m, \ldots, b_1$. Balanced $\iff a_i = b_i$ for all $i$ $\iff P_{\text{open}}(z) = \sum_i a_iz^{i-1} \equiv P_{\text{close}}(z) = \sum_i b_iz^{i-1}$.
+
+**One polynomial.** Use signed values $v($`(`$) = +1$, $v($`)`$) = -1$, $v($`[`$) = +2$, $v($`]`$) = -2$, so a matching pair sums to 0. With the opener and closer at depth $d$ paired,
+$$P(x) = \sum_{d=0}^{m-1}\big(v(\text{open at } d) + v(\text{close at } d)\big)x^d.$$
+Balanced ⇒ every coefficient is 0, so $P \equiv 0$. A type mismatch at depth $d$ gives coefficient $\pm1 \ne 0$, so $P \not\equiv 0$.
+
+**Algorithm 3 (single checksum).** Pick a prime $p > n^2$ and random $r \in \{1..p-1\}$; precompute $r^{-1} \bmod p$. Keep depth $d = 0$, weight $w = r^d = 1$, checksum $H = 0$, flag `seen_close` = false.
+
+- **Opener** $s_i$: if `seen_close`, reject (an opener after a closer: not 1-hill). Else $H \leftarrow H + v(s_i)\,w$; $d \leftarrow d + 1$; $w \leftarrow wr$.
+- **Closer** $s_i$: `seen_close` ← true; if $d = 0$, reject. Else $d \leftarrow d - 1$; $w \leftarrow wr^{-1}$ (back to $r^{d}$); $H \leftarrow H + v(s_i)\,w$.
+- **End**: accept iff $d = 0$ and $H \equiv 0 \pmod p$.
+
+A closer first steps down to the depth of the opener it closes, then adds its value with the **same** weight $r^d$, so a matched pair contributes $+v\,r^d - v\,r^d = 0$.
+
+**Example 1, balanced `([()])`** with $p = 17$, $r = 3$, $r^{-1} = 6$ ($3\cdot6 = 18 \equiv 1$):
+
+| $s_i$ | depth used | term | $H$ |
+|---|---|---|---|
+| `(` | 0 | $+1\cdot1$ | 1 |
+| `[` | 1 | $+2\cdot3$ | 7 |
+| `(` | 2 | $+1\cdot9$ | 16 |
+| `)` | 2 | $-1\cdot9$ | 7 |
+| `]` | 1 | $-2\cdot3$ | 1 |
+| `)` | 0 | $-1\cdot1$ | 0 |
+
+$d = 0$ and $H = 0$: **accept**.
+
+**Example 2, crossed `([(]))`** (two `(`, two `)`, one `[`, one `]`, so counters are fooled): openers give $H = 1 + 6 + 9 = 16$. Then `]` closes depth 2: $16 - 2\cdot9 = -2 \equiv 15$; `)` closes depth 1: $15 - 3 = 12$; `)` closes depth 0: $12 - 1 = 11$. $H = 11 \ne 0$: **reject**. Indeed $P(x) = (1-1) + (2-1)x + (1-2)x^2 = x - x^2$ and $P(3) = -6 \equiv 11$.
+
+**Theorem 3 (error and space).** A valid string has $P \equiv 0$, so $H = 0$ always (one-sided error). An invalid string either fails the depth/phase checks (caught with certainty) or has $P \not\equiv 0$ of degree $\le m - 1 < n$, so by Schwartz–Zippel $\Pr[H = 0] \le \frac{n}{p} < \frac1n$ for $p > n^2$. Space: $p, r, r^{-1}, d, w, H$ are $O(\log p) = O(\log n)$ bits.
+
+The course summary calls this the 1-hill version (DYCK₂ restricted to "all opens, then all closes"). The tutorial closes with the same moral as this section: a reduction turns a known lower bound (equality, or 3-SAT) into a new one.
 
 # Learn: P, NP and reductions
 
@@ -155,9 +212,15 @@ The Max-Cut branch was done in the tutorial; the others were left for the practi
 
 ## 3-SAT versus XOR-SAT (Lecture 22 and the tutorial)
 
-**3-SAT**: a CNF formula, each clause an OR of 3 literals; is there a satisfying assignment? Brute force $O(m2^n)$, best known about $1.307^n$, and believed (ETH) to need $2^{\Theta(n)}$.
+**Definitions (Lecture 22).** Boolean variables $x_1..x_n$; a **literal** is $x_i$ or $\neg x_i$; a **clause** is an OR of literals, satisfied if at least one literal is 1; a **CNF** formula $\Phi = C_1 \wedge \cdots \wedge C_m$ is satisfied when every clause is. **3-SAT**: given a CNF formula with 3 literals per clause, is there a satisfying assignment?
 
-**3-XOR-SAT** (each clause an XOR) is in P. Each XOR clause is a linear equation mod 2 (with $\neg x = x + 1$), so Gaussian elimination solves the system in $O(n^3)$. The tutorial's worked example:
+**Brute force** tries all $2^n$ assignments, $O(m)$ each: $O(m2^n)$. For $n = 100$ that is about $1.26\times10^{30}$ steps, some $4\times10^{10}$ years at $10^{12}$ assignments per second. Fifty years of work only lowered the base (about $1.334^n$, then $1.307^n$), still $2^{cn}$.
+
+**ETH** (Impagliazzo and Paturi, 1999): there is a constant $c > 0$ such that 3-SAT cannot be solved in time $O(2^{cn})$; in other words no **subexponential** $2^{o(n)}$ algorithm (such as $2^{\sqrt n}$ or $2^{n/\log n}$) exists. Lecture 22 states Karp's theorem (1972) that 3-SAT $\le_P$ Max-Cut, so under ETH Max-Cut has no subexponential exact algorithm either.
+
+**3-XOR-SAT** (each clause an XOR) is in P. Lecture 22's version: $a \oplus b$ is addition mod 2 and $\neg x_i = x_i + 1$, so for example $\neg x_1 \oplus x_2 \oplus x_3 = 1$ becomes $x_1 + x_2 + x_3 \equiv 0 \pmod 2$ (the $+1$ moves to the right side). Gaussian elimination either reaches a contradiction $0 \equiv 1$ (unsatisfiable) or finds a solution, in $O(n^3)$ for $m = O(n)$.
+
+Each XOR clause is a linear equation mod 2 (with $\neg x = x + 1$), so Gaussian elimination solves the system in $O(n^3)$. The tutorial's worked example:
 
 $$x_1 \oplus x_2 \oplus x_3 = 1 \ (E_1), \qquad x_1 \oplus x_2 \oplus x_4 = 0 \ (E_2), \qquad x_2 \oplus x_3 \oplus x_4 = 1 \ (E_3)$$
 
@@ -334,3 +397,20 @@ Both constructions add $O(n)$ vertices and $O(n^2)$ edges: polynomial.
 **NP10 (the tutorial quiz joke, taken seriously).** The tutorial "quiz" demanded a maximum cut and a minimum vertex cover of the seating graph "since both are NP-hard". The seating graph is a grid of desks with edges between neighbours. Are these two problems hard on this graph?
 
 *Solution.* No. A grid is **bipartite** (colour desk $(r, c)$ by the parity of $r + c$; neighbours differ in parity). On a bipartite graph the maximum cut cuts **every** edge (take one colour class as $S$), found by BFS in $O(n + m)$. Minimum vertex cover on a bipartite graph equals the maximum matching (**König**), found by max flow in polynomial time. NP-hardness is a worst-case statement over all graphs; special classes can be easy.
+
+**NP11 (Lecture 22 review 1, counter fooling).** Give a string of length 6 over `( ) [ ]` that is not balanced but fools both counters.
+
+*Solution.* `([)]()`. $c_{\text{round}}$: $1, 1, 0, 0, 1, 0$; $c_{\text{square}}$: $0, 1, 1, 0, 0, 0$. Neither goes negative and both end at 0, but `)` at position 3 closes a `(` while `[` (opened later) is still open, so the string is not balanced. (Any string from the "counters fail" list padded to length 6 also works, e.g. `(([)])`.)
+
+**NP12 (Lecture 22 review 2, Algorithm 3 trace).** Trace Algorithm 3 on `([])` with $p = 17$, $r = 3$.
+
+*Solution.* `(` at depth 0: $H = 1$, $d = 1$, $w = 3$. `[` at depth 1: $H = 1 + 2\cdot3 = 7$, $d = 2$, $w = 9$. `]`: $d = 1$, $w = 9\cdot6 = 54 \equiv 3$, $H = 7 - 2\cdot3 = 1$. `)`: $d = 0$, $w = 3\cdot6 = 18 \equiv 1$, $H = 1 - 1 = 0$. End: $d = 0$, $H = 0$: accept.
+
+**NP13 (Lecture 22 review 3, Max-Cut versus bipartiteness).** What is the max cut of the 5-cycle $C_5$?
+
+*Solution.* **4.** Walking around the cycle, every cut edge switches sides, and we return to the starting vertex, so the number of cut edges is even: at most 4 of 5. Four is reached by alternating sides $S, \bar S, S, \bar S, S$ (only the edge between the first and last vertex is uncut). In equation form, cutting all 5 would need $x_1 \oplus x_2 = \cdots = x_5 \oplus x_1 = 1$; adding them gives $0 = 1$.
+
+**NP14 (Lecture 22, why the special case is enough).** The randomized Algorithm 3 only handles "all openers, then all closers". Why does Theorem 2 still show that no deterministic $O(\log n)$ algorithm handles even this case?
+
+*Solution.* The strings $S_AS_B$ used in the proof of Theorem 2 are themselves of this special shape. So any deterministic algorithm that is correct just on 1-hill strings already decides equality, and needs $\Omega(n)$ bits. Randomness (with error $< 1/n$) is what lets Algorithm 3 use $O(\log n)$ bits.
+

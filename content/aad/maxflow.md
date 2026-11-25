@@ -194,7 +194,24 @@ Removable edges get capacity 1; protected edges get capacity $\lvert E\rvert + 1
 
 ## Matrix rounding (Lecture 15 exercise)
 
-A matrix of reals whose row and column sums are integers can be rounded (each entry up or down) keeping every row and column sum. Network: $s \to$ row $i$ with capacity = row sum, row $i \to$ column $j$ with lower bound $\lfloor a_{ij}\rfloor$ and capacity $\lceil a_{ij}\rceil$, column $j \to t$ with capacity = column sum. The original matrix is a feasible (fractional) flow; by integrality an integral one exists, which is the rounding.
+**Problem.** $A = (a_{ij})$ is an $m\times n$ matrix of non-negative reals with row sums $R_i$ and column sums $C_j$. Find an integer matrix $B$ with every $b_{ij} \in \{\lfloor a_{ij}\rfloor, \lceil a_{ij}\rceil\}$, every row sum of $B$ in $\{\lfloor R_i\rfloor, \lceil R_i\rceil\}$ and every column sum in $\{\lfloor C_j\rfloor, \lceil C_j\rceil\}$.
+
+**Construction (a circulation with lower and upper bounds).** Vertices $s$, $t$, rows $r_1..r_m$, columns $c_1..c_n$.
+
+| Edge | Lower bound | Upper bound |
+|---|---|---|
+| $s\to r_i$ | $\lfloor R_i\rfloor$ | $\lceil R_i\rceil$ |
+| $r_i\to c_j$ | $\lfloor a_{ij}\rfloor$ | $\lceil a_{ij}\rceil$ |
+| $c_j\to t$ | $\lfloor C_j\rfloor$ | $\lceil C_j\rceil$ |
+| $t\to s$ (return edge) | $\lfloor\sum_i R_i\rfloor$ | $\lceil\sum_i R_i\rceil$ |
+
+All demands are 0 (it is a circulation).
+
+**A fractional circulation exists.** Set $f(s, r_i) = R_i$, $f(r_i, c_j) = a_{ij}$, $f(c_j, t) = C_j$, $f(t, s) = \sum_{i,j} a_{ij}$. Every value lies between its floor and ceiling, and conservation holds: at $r_i$, in $= R_i = \sum_j a_{ij} =$ out; at $c_j$, in $= \sum_i a_{ij} = C_j =$ out; at $s$ and $t$, both sides equal the total.
+
+**An integral one exists.** All bounds are integers. Feasibility of a circulation with lower bounds reduces (previous section) to a max-flow problem with integer capacities that saturates its source edges exactly when a circulation exists. The fractional circulation shows it does; by the **integrality theorem** that max flow can be taken integral, which converts back into an integral circulation $f^*$.
+
+**Read off the rounding.** $b_{ij} = f^*(r_i, c_j)$ is an integer in $[\lfloor a_{ij}\rfloor, \lceil a_{ij}\rceil]$; row $i$ of $B$ sums to $f^*(s, r_i) \in [\lfloor R_i\rfloor, \lceil R_i\rceil]$ by conservation at $r_i$; column $j$ sums to $f^*(c_j, t) \in [\lfloor C_j\rfloor, \lceil C_j\rceil]$. So a consistent rounding always exists, and max flow finds it in polynomial time.
 
 ## Min vertex cover in a bipartite graph (König, via flow)
 
@@ -213,3 +230,147 @@ Unit network with $\infty$ middle edges. A finite cut $(A, B)$ corresponds to th
 **MF3 (Lecture 15, Dilworth via flow sketch).** In a DAG, the minimum number of vertex-disjoint paths covering all vertices equals $n$ minus a maximum matching in the bipartite graph $(V_{\text{out}}, V_{\text{in}})$ with an edge $u_{\text{out}}v_{\text{in}}$ per DAG edge.
 
 *Solution.* Start with $n$ trivial paths. Each matched edge $u_{\text{out}}v_{\text{in}}$ glues the path ending at $u$ to the path starting at $v$, reducing the count by 1; matching constraints ensure each vertex has at most one successor and one predecessor, so the result is a set of disjoint paths. Conversely a path cover with $k$ paths uses $n - k$ edges, which form a matching. So min paths $= n - $ max matching.
+
+# Learn: the Lecture 15 exercise set, solved
+
+Lecture 15 (repeated as Lecture 17) ends with a long exercise set. The reductions in it (vertex capacities, Menger, project selection, circulations, matrix rounding) are in the previous chapter. This chapter solves the rest: the numerical warm-ups, the worst case for Ford–Fulkerson, both fixes with full proofs, the eight "packing versus covering" duality exercises, and the coal-and-steel case study.
+
+## Numerical warm-ups
+
+**LF1 (Lecture 15, valid flows).** The candidate flow (labels $f/c$) is $s\to a$ 5/6, $s\to b$ 4/4, $a\to b$ 2/3, $a\to c$ 3/5, $b\to c$ 6/7, $c\to t$ 8/10. (1) Check every capacity constraint. (2) Check conservation at $a$, $b$, $c$. Is it a feasible flow? (3) If not, find the defective node, the discrepancy, and a minimal fix that keeps the capacities. (4) What is $\text{val}(f)$ after the fix?
+
+*Solution.* (1) $5 \le 6$, $4 \le 4$, $2 \le 3$, $3 \le 5$, $6 \le 7$, $8 \le 10$: every edge satisfies $0 \le f(e) \le c(e)$.
+
+(2) Conservation, in = out:
+
+| Node | In | Out | Verdict |
+|---|---|---|---|
+| $a$ | $f(s,a) = 5$ | $f(a,b) + f(a,c) = 2 + 3 = 5$ | ✓ |
+| $b$ | $f(s,b) + f(a,b) = 4 + 2 = 6$ | $f(b,c) = 6$ | ✓ |
+| $c$ | $f(a,c) + f(b,c) = 3 + 6 = 9$ | $f(c,t) = 8$ | ✗ |
+
+Not feasible: conservation fails at $c$.
+
+(3) $c$ **accumulates** 1 unit (9 in, 8 out). The smallest fix is to raise $f(c,t)$ from 8 to 9, which is allowed since $9 \le 10$. (Lowering an inflow instead, say $f(b,c)$ to 5, would break conservation at $b$ and need a second change.)
+
+(4) $\text{val}(f) = f(s,a) + f(s,b) = 5 + 4 = 9$, which also equals the inflow to $t$, $f(c,t) = 9$, as it must.
+
+**LF2 (Lecture 15, cut capacities with opposing and internal edges).** Edges and capacities: $s\to u$ 8, $s\to v$ 5, $u\to w$ 4, $u\to v$ 3, $v\to w$ 2, $w\to v$ 7, $w\to t$ 6, $v\to t$ 1. Find $C(P, Q)$ for $P_1 = \{s\}$, $P_2 = \{s,u,v\}$, $P_3 = \{s,u,w\}$, $P_4 = \{s,u,v,w\}$, listing forward, backward and internal edges.
+
+*Solution.* Only **forward** edges ($P \to Q$) count toward capacity.
+
+| $P$ | Forward ($P\to Q$) | Backward ($Q\to P$) | Internal | $C(P,Q)$ |
+|---|---|---|---|---|
+| $\{s\}$ | $s\to u$ 8, $s\to v$ 5 | none | none | 13 |
+| $\{s,u,v\}$ | $u\to w$ 4, $v\to w$ 2, $v\to t$ 1 | $w\to v$ (7, not counted) | $s\to u$, $s\to v$, $u\to v$ | 7 |
+| $\{s,u,w\}$ | $s\to v$ 5, $u\to v$ 3, $w\to v$ 7, $w\to t$ 6 | $v\to w$ (2, not counted) | $s\to u$, $u\to w$ | 21 |
+| $\{s,u,v,w\}$ | $w\to t$ 6, $v\to t$ 1 | none | all other edges | 7 |
+
+The opposing pair $v\to w$ / $w\to v$ shows the point: whichever of the two points from $P$ to $Q$ counts, the other is ignored. The min cut has capacity 7. A flow of 7 exists ($s\to u\to w\to t$ 4, $s\to v\to w\to t$ 2, $s\to v\to t$ 1), so by weak duality both are optimal.
+
+**LF3 (Lecture 15, cut invariance with back-flow).** A flow of value 10: $f(s,a) = 7$, $f(s,b) = 3$, $f(a,b) = 2$, $f(a,t) = 5$, $f(b,t) = 5$. For $P = \{s, b\}$, $Q = \{a, t\}$: compute the flow out of $P$, the flow back into $P$, the net flow, and explain why the back-flow term matters.
+
+*Solution.* Out of $P$: $f(s,a) + f(b,t) = 7 + 5 = 12$. Back from $Q$ into $P$: $f(a,b) = 2$. Net: $f(P,Q) = 12 - 2 = 10 = \text{val}(f)$ ✓. Without the back-flow term we would report 12, more than the 10 units that leave $s$: the 2 units on $a\to b$ cross the cut forwards (on $s\to a$) and then backwards (on $a\to b$), and are counted twice unless the backward crossing is subtracted.
+
+**LF4 (Lecture 15, many sources and sinks, in full).** Factories $s_1..s_k$ each produce at most $S_i$; hubs $t_1..t_\ell$ each absorb at most $T_j$; intermediate nodes conserve flow. Reduce to single-source max flow, prove it, and interpret the min cut.
+
+*Solution.* **Construction.** $V' = V \cup \{s^*, t^*\}$; add $s^* \to s_i$ with capacity $S_i$ and $t_j \to t^*$ with capacity $T_j$; keep every original edge and capacity.
+
+**Correctness.** Given a feasible multi-source flow $f$ (each $s_i$ sends net $\le S_i$, each $t_j$ receives net $\le T_j$), set $f'(s^*, s_i)$ = net output of $s_i$ and $f'(t_j, t^*)$ = net intake of $t_j$. Capacities hold by the supply and demand limits, conservation now holds at $s_i$ and $t_j$ too, and $\text{val}(f') = \sum_i(\text{output of } s_i) = \text{val}(f)$. Conversely, restricting a flow $f'$ in $G'$ to $E$ gives a flow in which $s_i$ sends $f'(s^*, s_i) \le S_i$ and $t_j$ receives $f'(t_j, t^*) \le T_j$, of the same value. Values match both ways, so max flows correspond.
+
+**Min cut.** If the min cut consists of the edges out of $s^*$, production is the bottleneck; if it consists of original edges, the transmission lines are.
+
+## Ford–Fulkerson can be slow, and two fixes
+
+**LF5 (Lecture 15, worst case for Ford–Fulkerson).** (1) Give a family $G_M$ with at most 6 vertices and 10 edges where Ford–Fulkerson (with an unlucky path choice) needs exactly $2M$ augmentations to reach the max flow $2M$. (2) Trace the first 4 augmentations. (3) For $M = 2^{60}$, how long does this take at $10^9$ operations per second?
+
+*Solution.* (1) Vertices $s, u, v, t$; edges $s\to u$, $s\to v$, $u\to t$, $v\to t$ of capacity $M$, and a middle edge $u\to v$ of capacity 1. The max flow is $2M$ (the cut $\{s\}$ has capacity $2M$, and the two outer paths carry $M$ each).
+
+(2) Alternate between the two paths that use the middle edge:
+
+| Step | Path in $G_f$ | Bottleneck | Effect on $u\to v$ | Value |
+|---|---|---|---|---|
+| 1 | $s\to u\to v\to t$ | 1 | $f(u,v) = 1$; residual now has only the back edge $v\to u$ | 1 |
+| 2 | $s\to v\to u\to t$ (back edge $v\to u$) | 1 | cancels: $f(u,v) = 0$ | 2 |
+| 3 | $s\to u\to v\to t$ | 1 | $f(u,v) = 1$ again | 3 |
+| 4 | $s\to v\to u\to t$ | 1 | cancelled again | 4 |
+
+Each step pushes 1 unit and then undoes the middle edge, so the algorithm keeps "pushing and cancelling" the same bottleneck edge, and needs $2M$ augmentations. A sensible choice ($s\to u\to t$, then $s\to v\to t$) finishes in 2.
+
+(3) $2M = 2^{61} \approx 2.3\times10^{18}$ augmentations, each scanning about 10 edges: about $2.3\times10^{19}$ operations, so $2.3\times10^{10}$ seconds, roughly 700 years. That is (just) within the age of the universe, but useless. The $O(\lvert E\rvert\lvert f^*\rvert)$ bound is **pseudo-polynomial**: it depends on the numerical value $M$, which takes only $\log M$ bits to write.
+
+**LF6 (Lecture 15, capacity scaling).** Let $U = \max_e c(e)$ and $\Delta$ the largest power of 2 with $\Delta \le U$. In each phase augment only along paths in $G_f(\Delta)$ (residual edges with $c_f(e) \ge \Delta$); when none is left set $\Delta \leftarrow \lfloor\Delta/2\rfloor$; stop when $\Delta < 1$. (1) How many phases? (2) Prove each phase makes at most $2\lvert E\rvert$ augmentations. (3) Conclude the running time.
+
+*Solution.* (1) $\Delta$ runs through $2^{\lfloor\log_2 U\rfloor}, \ldots, 2, 1$: $1 + \lfloor\log_2 U\rfloor = O(\log U)$ phases. The last phase has $\Delta = 1$, which is plain Ford–Fulkerson, so the algorithm ends with a max flow (integer capacities).
+
+(2) **End of a $\Delta$-phase.** Let $A$ be the set of vertices reachable from $s$ in $G_f(\Delta)$; $t \notin A$. Every residual edge leaving $A$ has $c_f(e) < \Delta$, so the residual capacity of the cut $(A, V\setminus A)$ is less than $\lvert E\rvert\Delta$. (An original edge $(x, y)$ gives residual edges $x\to y$ and $y\to x$, and at most one of them goes from $A$ to $V\setminus A$, so at most $\lvert E\rvert$ residual edges leave $A$, each with capacity below $\Delta$.) Since any further flow must cross this cut in $G_f$, $\text{val}(f^*) - \text{val}(f) \le \lvert E\rvert\Delta$.
+
+**The next phase** uses $\Delta/2$: each augmentation pushes at least $\Delta/2$, so it makes at most $\lvert E\rvert\Delta / (\Delta/2) = 2\lvert E\rvert$ augmentations. **The first phase** also obeys this: $\text{val}(f^*) \le C(\{s\}, V\setminus\{s\}) \le \lvert E\rvert U < 2\lvert E\rvert\Delta$, and each augmentation pushes $\ge \Delta$.
+
+(3) $O(\log U)$ phases × $O(\lvert E\rvert)$ augmentations × $O(\lvert E\rvert)$ per BFS/DFS $= \boxed{O(\lvert E\rvert^2\log U)}$. This is **weakly polynomial**: polynomial in the input length, but it still depends (logarithmically) on the numbers.
+
+**LF7 (Lecture 15, Edmonds–Karp in full).** Ford–Fulkerson that always augments along a shortest path (fewest edges, by BFS). Let $\delta_f(s, v)$ be the BFS distance in $G_f$. Prove (1) $\delta_f(s, v)$ never decreases; (2) each edge is critical at most $\lvert V\rvert/2$ times; (3) the total time is $O(\lvert V\rvert\lvert E\rvert^2)$.
+
+*Solution.* (1) **Distances never decrease.** Let one augmentation turn $f$ into $f'$, and suppose some vertex got closer: $\delta'(v) < \delta(v)$. Among such vertices choose $v$ with the smallest $\delta'(v)$; $v \ne s$. Let $u$ be the vertex before $v$ on a shortest $s$–$v$ path in $G_{f'}$, so $\delta'(u) = \delta'(v) - 1$, and by the choice of $v$, $\delta'(u) \ge \delta(u)$.
+
+- If $(u, v)$ was already an edge of $G_f$: $\delta(v) \le \delta(u) + 1 \le \delta'(u) + 1 = \delta'(v)$, contradicting $\delta'(v) < \delta(v)$.
+- If $(u, v)$ is new in $G_{f'}$: it appeared because the augmentation pushed flow along $(v, u)$, which lies on a shortest path in $G_f$, so $\delta(u) = \delta(v) + 1$. Then $\delta(v) = \delta(u) - 1 \le \delta'(u) - 1 = \delta'(v) - 2 < \delta'(v)$, again a contradiction.
+
+(2) **Critical edges.** $(u, v)$ is **critical** if it is the bottleneck, $c_f(u,v) = \Delta$; it then vanishes from the residual graph. At that moment it is on a shortest path, so $\delta(v) = \delta(u) + 1$. To become critical again it must first reappear, which needs flow pushed along $(v, u)$ on a later shortest path, at a time $f''$ with $\delta''(u) = \delta''(v) + 1 \ge \delta(v) + 1 = \delta(u) + 2$ (using (1)). So between two consecutive times $(u, v)$ is critical, $\delta(u)$ grows by at least 2. Distances are at most $\lvert V\rvert - 1$ (or $\infty$ once unreachable), so $(u, v)$ is critical at most $(\lvert V\rvert - 1)/2 < \lvert V\rvert/2$ times.
+
+(3) Every augmentation has at least one critical edge, there are at most $2\lvert E\rvert$ residual edges, so there are at most $2\lvert E\rvert\cdot\lvert V\rvert/2 = \lvert V\rvert\lvert E\rvert$ augmentations, each $O(\lvert E\rvert)$ by BFS: $\boxed{O(\lvert V\rvert\lvert E\rvert^2)}$. This is **strongly polynomial**: no dependence on the capacities at all, so it also terminates with irrational capacities.
+
+## Packing versus covering: weak duality everywhere
+
+Max flow ≤ min cut is one instance of a general pattern: the size of any **packing** (things that cannot share) is at most the size of any **covering** (things that must touch every packed item), because each packed item uses up a **different** covering element. The lecture's exercises:
+
+**LF8 (Exercise 3, independent sets versus clique partitions).** If $V$ is partitioned into cliques $K_1..K_k$, show every independent set has at most one vertex from each clique, so $\alpha(G) \le k$; conclude $\alpha(G) \le \theta(G)$, the fewest cliques that partition $V$.
+
+*Solution.* Two vertices of the same clique are adjacent, and an independent set contains no adjacent pair, so it meets each $K_i$ in at most one vertex. The $K_i$ cover $V$, so $\lvert I\rvert = \sum_i \lvert I\cap K_i\rvert \le k$. This holds for every independent set $I$ and every clique partition, so the maximum of the left side is at most the minimum of the right: $\alpha(G) \le \theta(G)$. (Equality can fail: on $C_5$, $\alpha = 2$ but $\theta = 3$.)
+
+**LF9 (Exercise 4, intervals).** Call a set of intervals **compatible** if no two overlap, and a **clique** if they share a common point. (1) If the intervals are partitioned into $k$ cliques, show a compatible set has at most one interval from each, so max compatible $\le k$. (2) Relate this to $d$, the largest number of intervals overlapping at one point.
+
+*Solution.* (1) Two intervals in the same clique share a point, so they overlap; a compatible set takes at most one from each clique, hence at most $k$ in total. This is LF8 for the interval graph.
+
+(2) Read literally, "max compatible $\le d$" is **false** (two disjoint intervals have $d = 1$ and a compatible set of size 2). The correct duality pairs with (1): the greedy earliest-finish algorithm picks compatible intervals $J_1, J_2, \ldots, J_r$, and the finish points of the $J_i$ "stab" every interval (any interval not chosen overlaps some chosen $J_i$ that ends no later than it, so it contains that finish point). The intervals through each finish point form a clique, so $r$ cliques cover everything and max compatible $= r =$ min cliques: **equality** for intervals. The number $d$ belongs to the *other* duality: a point covered by $d$ intervals needs $d$ different rooms, so $d \le$ min rooms (a partition into compatible sets), and interval partitioning shows min rooms $= d$ (greedy chapter).
+
+**LF10 (Exercises 5 and 6, chains, antichains and Dilworth).** In a poset, a chain has every pair comparable and an antichain has no pair comparable. Let $a(P)$ = largest antichain, $c(P)$ = fewest chains partitioning $P$. (1) Show $a(P) \le c(P)$. (2) Give a 4-element poset with equality. (3) Prove $a(P) = c(P)$ (Dilworth).
+
+*Solution.* (1) Two elements of one chain are comparable, so an antichain has at most one element in each chain of a partition: $\lvert A\rvert \le k$ for every antichain and every chain partition, so $a(P) \le c(P)$.
+
+(2) $P = \{a, b, c, d\}$ with $a \prec b$ and $c \prec d$ only. Chains $\{a, b\}$, $\{c, d\}$ give $c(P) \le 2$; $\{a, c\}$ is an antichain, so $a(P) \ge 2$; with (1), $a(P) = c(P) = 2$.
+
+(3) **Dilworth via König.** Build a bipartite graph with left copies $x^-$ and right copies $x^+$ of each element, and an edge $x^-y^+$ whenever $x \prec y$.
+
+- **Matching → chains.** A matching $M$ says "$y$ follows $x$" for each edge $x^-y^+$; each element has at most one successor and one predecessor, and by transitivity following the edges gives chains. Each matched edge merges two chains, so there are $n - \lvert M\rvert$ chains: $c(P) \le n - \nu$, with $\nu$ the maximum matching.
+- **Cover → antichain.** By König there is a vertex cover $C$ with $\lvert C\rvert = \nu$. Let $A$ be the elements $x$ with neither $x^-$ nor $x^+$ in $C$; then $\lvert A\rvert \ge n - \lvert C\rvert = n - \nu$. If $x \prec y$ were both in $A$, the edge $x^-y^+$ would be uncovered. So $A$ is an antichain: $a(P) \ge n - \nu$.
+
+So $c(P) \le n - \nu \le a(P) \le c(P)$, and all are equal. (MF3 above is the same argument for path covers of a DAG.)
+
+**LF11 (Exercises 7 and 8, set packing versus hitting sets; paths versus cuts).** (1) A packing is a family of pairwise disjoint sets from $\mathcal{S}$; a hitting set $H$ meets every set of $\mathcal{S}$. Show $\lvert\mathcal{P}\rvert \le \lvert H\rvert$. (2) If $P_1..P_k$ are edge-disjoint $s$–$t$ paths and $C$ is an $s$–$t$ cut (a set of edges whose removal disconnects $t$ from $s$), show $k \le \lvert C\rvert$, and compare with matchings and vertex covers.
+
+*Solution.* (1) For each set $S \in \mathcal{P}$ pick an element $h_S \in S \cap H$ (exists since $H$ hits $S$). The sets in $\mathcal{P}$ are disjoint, so the $h_S$ are distinct: $S \mapsto h_S$ is an injection from $\mathcal{P}$ into $H$, so $\lvert\mathcal{P}\rvert \le \lvert H\rvert$. Weak duality: every packing is at most every cover, hence max packing ≤ min hitting set.
+
+(2) Each path $P_i$ goes from $s$ to $t$, so removing $C$ breaks it: $P_i$ contains an edge $e_i \in C$. The paths share no edges, so $e_1..e_k$ are distinct and $k \le \lvert C\rvert$. Same shape as **matching ≤ vertex cover**: each matching edge needs its own cover vertex (two matching edges share no endpoint). In both cases max flow–min cut (Menger, König) upgrades the inequality to an equality.
+
+## Two commodities: why the flow toolkit stops working
+
+**LF12 (Lecture 15 case study, coal and steel).** Coal goes from $s_1$ to $t_1$, steel from $s_2$ to $t_2$, 3 trains a day each, on shared tracks: $s_1\to j_1$ 3, $s_2\to j_1$ 1, $s_2\to j_2$ 3, $j_1\to j_2$ 2, $j_1\to t_1$ 3, $j_2\to t_2$ 3, $j_2\to t_1$ 1. Coal and steel together may not exceed a track's capacity. (1) Why not join $s_1, s_2$ to a super-source and $t_1, t_2$ to a super-sink? (2) Does "route as much coal as possible, then steel in what is left" work? (3) Can steel simply push coal backwards, as residual edges do?
+
+*Solution.* (1) Flow has no identity: a single max flow could send coal-origin units into $t_2$ and steel-origin units into $t_1$ (the super-sink only counts totals). Keeping them apart needs **conservation per commodity** at every vertex: $\sum_u f_i(u,v) = \sum_w f_i(v,w)$ for $i = 1, 2$ separately, with the shared constraint $f_1(e) + f_2(e) \le c(e)$. That is a multicommodity flow, not a max flow.
+
+In this network the demands can be met: coal on $s_1\to j_1\to t_1$ (3) and steel on $s_2\to j_2\to t_2$ (3) use disjoint tracks.
+
+(2) **Not in general.** The first phase is free to choose any max coal flow, and a bad choice can block steel. A small example: tracks $s_1\to u$, $u\to v$, $v\to t_1$, $s_1\to t_1$, $s_2\to u$, $v\to t_2$, all capacity 1, demands 1 each. If phase 1 routes its coal unit along $s_1\to u\to v\to t_1$, the shared track $u\to v$ is full and steel cannot move; routing coal on $s_1\to t_1$ instead lets steel use $s_2\to u\to v\to t_2$ and meets both demands. Maximising coal greedily also takes both coal routes and leaves steel nothing.
+
+(3) **No.** A residual back edge cancels flow *of the same commodity*, and conservation repairs itself because any unit is as good as any other. If steel "cancels" coal on $u\to v$, the cancelled coal unit is stranded at $u$; coal must **simultaneously** be rerouted along a completely different $s_1$–$t_1$ path ($s_1\to t_1$ above). One local undo becomes a global, coordinated change to another commodity's routing, which augmenting paths cannot express. That is why multicommodity flow is fundamentally harder: it is solved by linear programming, there is no max-flow min-cut equality in general, and integral multicommodity flow is NP-hard.
+
+## Textbook exercises the lectures assigned (KT 7)
+
+**LF13 (KT 7.4).** True or false: if $f$ is a maximum $s$–$t$ flow (positive integer capacities), then $f$ saturates every edge out of $s$.
+
+*Solution.* **False.** $s\to a$ capacity 10, $a\to t$ capacity 1: the max flow is 1 and $s\to a$ carries 1 of 10.
+
+**LF14 (KT 7.5).** True or false: if $(A, B)$ is a minimum $s$–$t$ cut, it remains a minimum cut after adding 1 to every capacity.
+
+*Solution.* **False.** A cut's capacity grows by its **number of forward edges**, so a min cut with many edges can be overtaken by one with few. Edges $s\to u$ (4), $u\to a$, $u\to b$, $u\to c$ (1 each), and $a\to t$, $b\to t$, $c\to t$ (5 each). The min cut is $(\{s,u\}, \text{rest})$ with capacity $1+1+1 = 3$; the cut $(\{s\}, \text{rest})$ has 4. After adding 1 everywhere they become $2+2+2 = 6$ and $5$, so $(\{s,u\}, \cdot)$ is no longer minimum. (Multiplying every capacity by $\lambda > 0$, by contrast, keeps every min cut minimum: MF2.)

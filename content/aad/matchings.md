@@ -146,6 +146,12 @@ $$\boxed{M \text{ is maximum} \iff \text{there is no } M\text{-augmenting path}}
 ($\Rightarrow$) By Lemma 1.
 ($\Leftarrow$) Suppose $\lvert M^*\rvert > \lvert M\rvert$. In $M \oplus M^*$ each vertex has degree $\le 2$ (at most one edge from each matching), so its components are paths and cycles, and their edges alternate between $M$ and $M^*$. Cycles alternate, hence are even, with equal numbers of each. Since $M^*$ has more edges overall, some component has more $M^*$ edges than $M$ edges: a path that starts and ends with an $M^*$ edge. Its endpoints are $M$-free (an endpoint meeting an $M$ edge $e$ would either have $e$ in the symmetric difference, making it interior, or $e \in M \cap M^*$, giving it two $M^*$ edges). So it is an $M$-augmenting path.
 
+**Lecture 8 exercise: where is bipartiteness used?** Nowhere. The proof only uses that every vertex has degree at most 2 in $M \oplus M^*$ and that edges alternate, which gives *even* alternating cycles in any graph (an odd cycle cannot alternate between two matchings). So **Berge's lemma holds in every graph**. What needs bipartiteness is *finding* augmenting paths by a simple alternating search (Kuhn, below): in a general graph an odd cycle (a "blossom") can hide an augmenting path from that search, which is why general graphs need Edmonds' blossom algorithm.
+
+**Lecture 8 exercise: the same exchange proves MST uniqueness.** Comparing two spanning trees by their symmetric difference, as we compared $M$ and $M^*$, shows that with distinct weights the MST is unique (graphs chapter).
+
+**Faster:** Hopcroft–Karp augments along many vertex-disjoint shortest augmenting paths per phase, needs $O(\sqrt V)$ phases, and runs in $O(E\sqrt V)$ instead of Kuhn's $O(VE)$.
+
 ## Finding augmenting paths: Kuhn's algorithm
 
 Orient unmatched edges $L \to R$ and matched edges $R \to L$. An augmenting path is then a directed path from a free left vertex to a free right vertex, so DFS finds one.
