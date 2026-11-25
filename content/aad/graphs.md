@@ -1,15 +1,15 @@
 # Learn: exploring graphs
 
-Graphs are the language for almost everything after the midsem: matchings, flows, cuts and reductions are all graph problems. This chapter covers the basic searches and what they tell you. Sources: Lecture 4, DPV ch. 3, Assignment 1 Q4.
+Almost everything after the midsem is a graph problem: matchings, flows, cuts and reductions. This chapter covers the basic ways to search a graph and what each search tells you. Sources: Lecture 4, DPV ch. 3, Assignment 1 Q4.
 
 ## Representation
 
 > **In short:** Adjacency lists store only the edges that exist, so a search over the graph costs $O(n + m)$.
 
-$G = (V, E)$, $n = |V|$, $m = |E|$.
+$G = (V, E)$, with $n = |V|$ vertices and $m = |E|$ edges.
 
-- **Adjacency matrix**: $n \times n$, $O(1)$ edge test, $O(n^2)$ space, $O(n)$ to list a vertex's neighbours.
-- **Adjacency list**: $O(n + m)$ space, neighbours listed in $O(\deg v)$. All the linear-time algorithms below use lists.
+- **Adjacency matrix:** an $n \times n$ table. Checking one edge is $O(1)$, but it uses $O(n^2)$ space and takes $O(n)$ to list a vertex's neighbours.
+- **Adjacency list:** each vertex keeps a list of its neighbours. $O(n + m)$ space, and listing $v$'s neighbours takes $O(\deg v)$. All the linear-time algorithms below use lists.
 
 ## Generic search ("whatever-first search", Assignment 1 Q4)
 
@@ -27,10 +27,10 @@ WhateverFirstSearch(s):
 
 **Claim.** It marks exactly the vertices reachable from $s$.
 
-- *Only reachable vertices are marked.* Induction on the order in which vertices enter the bag: $s$ is reachable; any other $w$ enters the bag only when some marked (hence, by induction, reachable) $v$ with an edge $v \to w$ is processed, so $w$ is reachable too.
-- *Every reachable vertex is marked.* Suppose $v$ is reachable but unmarked, with path $s = v_0, v_1, \ldots, v_k = v$. Let $v_i$ be the first unmarked vertex on it ($i \ge 1$, since $s$ is marked first). $v_{i-1}$ was marked, and at that moment $v_i$ was put in the bag. The loop runs until the bag is empty, so $v_i$ was taken out later and marked: contradiction.
+- *Everything marked is reachable.* Use induction on the order in which vertices enter the bag. $s$ is reachable. Any other $w$ enters the bag only when a marked vertex $v$ with an edge $v \to w$ is processed. By induction $v$ is reachable, so $w$ is too.
+- *Everything reachable is marked.* Suppose $v$ is reachable by a path $s = v_0, v_1, \ldots, v_k = v$ but is never marked. Let $v_i$ be the first unmarked vertex on the path ($i \ge 1$, since $s$ is marked first). $v_{i-1}$ was marked, and at that moment $v_i$ was put in the bag. The loop only stops when the bag is empty, so $v_i$ was taken out later and marked. Contradiction.
 
-A **stack** as the bag gives depth-first search, a **queue** gives breadth-first search, a **priority queue** keyed by distance gives Dijkstra, keyed by edge weight gives Prim. Each vertex is marked once and each edge pushes once, so $O(n + m)$ bag operations.
+The choice of bag gives the different searches: a **stack** gives depth-first search, a **queue** gives breadth-first search, a **priority queue** keyed by distance gives Dijkstra, and one keyed by edge weight gives Prim. Each vertex is marked once and each edge adds one item, so there are $O(n + m)$ bag operations.
 
 ## Depth-first search
 
@@ -42,7 +42,7 @@ explore(v):  visited[v] ← true; pre[v] ← clock++
              post[v] ← clock++
 DFS(G):      for each v: if not visited[v]: explore(v)
 ```
-Time $O(n + m)$. The tree edges form a **DFS forest**. For an edge $(u, v)$ in a directed graph:
+It takes $O(n + m)$ time. pre$[v]$ is when $v$ starts and post$[v]$ is when it finishes. The edges DFS follows form a **DFS forest**. Every edge $(u, v)$ of a directed graph is one of these types:
 
 | Type | Meaning | pre/post intervals |
 |---|---|---|
@@ -50,32 +50,34 @@ Time $O(n + m)$. The tree edges form a **DFS forest**. For an edge $(u, v)$ in a
 | Back | $v$ is an ancestor of $u$ | $[v\,[u\;\;]_u\,]_v$ |
 | Cross | neither; $v$ finished earlier | $[v\;\;]_v\;[u\;\;]_u$ |
 
-Intervals are always nested or disjoint (parenthesis property). In an undirected graph there are only tree and back edges.
+Two intervals [pre, post] are always either nested or disjoint, like brackets (the parenthesis property). An undirected graph has only tree and back edges.
 
 ## DAGs and topological order
 
 > **In short:** A cycle shows up as an edge back to a vertex still in progress. With no cycle, sorting by finish time gives an order where every edge points forward.
 
-**A directed graph has a cycle if and only if DFS finds a back edge.** (A back edge $u \to v$ plus the tree path $v \leadsto u$ is a cycle; conversely, in a cycle, the first vertex $v$ DFS reaches will have the whole cycle as descendants, so the cycle edge into $v$ is a back edge.)
+**A directed graph has a cycle if and only if DFS finds a back edge.**
+- A back edge $u \to v$ together with the tree path from $v$ down to $u$ is a cycle.
+- Conversely, take a cycle and let $v$ be the first of its vertices that DFS reaches. Everything on the cycle is reachable from $v$, so it all becomes a descendant of $v$. The cycle edge going into $v$ then goes from a descendant to an ancestor: a back edge.
 
-In a DAG, **every edge $u \to v$ has post$[u] >$ post$[v]$** (tree, forward and cross edges all satisfy it, and there are no back edges). So listing vertices in **decreasing post order** gives a **topological order**: every edge goes left to right. A DAG has at least one source (no incoming edges) and one sink.
+In a DAG, **every edge $u \to v$ has post$[u] >$ post$[v]$**. Tree, forward and cross edges all satisfy this, and a DAG has no back edges. So listing the vertices in **decreasing post order** gives a **topological order**, where every edge points left to right. Every DAG has at least one source (no incoming edges) and at least one sink (no outgoing edges).
 
-The opposite direction is the idea behind Quiz II Q1: **any** ordering of the vertices, keeping only the forward edges, gives a DAG.
+Quiz II Q1 uses the reverse idea: take **any** ordering of the vertices and keep only the edges that point forward. The result is always a DAG.
 
 ## Strongly connected components
 
 > **In short:** Groups of vertices that can all reach each other. Shrinking each group to a point leaves a DAG.
 
-$u$ and $v$ are strongly connected if each reaches the other. The SCCs partition $V$, and contracting each SCC gives a DAG (the **meta-graph**). Algorithm (Kosaraju, DPV 3.4), $O(n + m)$:
+$u$ and $v$ are strongly connected if each can reach the other. The SCCs split $V$ into groups, and shrinking each group to a single vertex gives a DAG (the **meta-graph**). Kosaraju's algorithm (DPV 3.4) runs in $O(n + m)$:
 
-1. Run DFS on the **reverse** graph $G^R$; the vertex with the highest post number lies in a **source** SCC of $G^R$, i.e. a **sink** SCC of $G$.
-2. Run explore in $G$ from vertices in decreasing post order of step 1. Each explore stays inside one sink component (everything it could leak into has already been visited), so each call finds exactly one SCC.
+1. Run DFS on the **reverse** graph $G^R$. The vertex with the highest post number lies in a **source** SCC of $G^R$, which is a **sink** SCC of $G$.
+2. In $G$, run explore from vertices in decreasing post order from step 1. Each explore starts in a sink component, and everything it could leak into has already been visited. So each call finds exactly one SCC.
 
 ## Backtracking
 
 > **In short:** Try choices one at a time and give up on a branch as soon as it cannot work.
 
-Some problems (3-colouring, SAT, game trees) have no known fast algorithm. **Backtracking** builds a solution one choice at a time (a recursion tree), and abandons a branch as soon as a partial choice already violates a constraint (e.g. two adjacent vertices with the same colour). It is still exponential in the worst case, but it prunes. Game trees are searched the same way with min/max at alternate levels.
+Some problems, like 3-colouring, SAT and game trees, have no known fast algorithm. **Backtracking** builds a solution one choice at a time, forming a recursion tree. It drops a branch as soon as the choices so far break a rule (for example, two neighbouring vertices with the same colour). The worst case is still exponential, but pruning cuts a lot of work. Game trees are searched the same way, taking min and max on alternate levels.
 
 # Learn: shortest paths
 
@@ -85,9 +87,11 @@ Sources: Lecture 5, Tutorial 2 (shortest paths), DPV ch. 4.
 
 > **In short:** Explore in rings of distance 0, 1, 2, ...; the first time BFS reaches a vertex is along a shortest path.
 
-BFS from $s$ with a FIFO queue sets $d[v] = d[u] + 1$ the first time $v$ is seen. **Invariant**: if the queue holds $v_1, \ldots, v_r$ front to back, then $d[v_1] \le \cdots \le d[v_r] \le d[v_1] + 1$. So vertices leave the queue in non-decreasing distance order, and $d[v]$ is the number of edges on a shortest path. Time $O(n + m)$.
+BFS from $s$ uses a FIFO queue and sets $d[v] = d[u] + 1$ the first time it sees $v$ (from $u$).
 
-BFS also tests **bipartiteness**: 2-colour by layer parity; the graph is bipartite iff no edge joins two vertices of the same layer (such an edge would close an odd cycle). This is the "is MaxCut = $\lvert E\rvert$?" test of Lecture 19.
+**Invariant.** If the queue holds $v_1, \ldots, v_r$ from front to back, then $d[v_1] \le \cdots \le d[v_r] \le d[v_1] + 1$. In words, the queue only ever holds two neighbouring distance values, in order. So vertices leave the queue in order of distance, and $d[v]$ is the number of edges on a shortest path. Time $O(n + m)$.
+
+BFS also tests **bipartiteness**. Colour each layer by whether its distance is even or odd. The graph is bipartite iff no edge joins two vertices in the same layer, because such an edge would close an odd cycle. This is the "is MaxCut $= \lvert E\rvert$?" test from Lecture 19.
 
 ## Dijkstra: non-negative weights
 
@@ -102,39 +106,43 @@ while H not empty:
             dist[v] ← dist[u] + w(u,v); prev[v] ← u; decreasekey(H, v)
 ```
 
-**Correctness (invariant).** Let $R$ be the set of extracted vertices. Claim: for every $u \in R$, dist$[u] = \delta(s, u)$.
+**Correctness (invariant).** Let $R$ be the set of vertices taken out so far, and $\delta(s,u)$ the true shortest distance. Claim: dist$[u] = \delta(s, u)$ for every $u \in R$.
 
-When $u$ is extracted, take a shortest path $P$ from $s$ to $u$ and let $(x, y)$ be its first edge leaving $R$ ($x \in R$, $y \notin R$). When $x$ was extracted, $(x, y)$ was relaxed, so dist$[y] \le \delta(x) + w(x,y) = \delta(y) \le \delta(u)$, using **$w \ge 0$** for the last step (the rest of $P$ after $y$ has non-negative length). Since $u$ was chosen with minimum dist, dist$[u] \le$ dist$[y] \le \delta(u)$. And dist$[u] \ge \delta(u)$ always (dist is the length of a real path). So dist$[u] = \delta(u)$.
+When $u$ is taken out, look at a shortest path $P$ from $s$ to $u$. Let $(x, y)$ be the first edge of $P$ that leaves $R$, so $x \in R$ and $y \notin R$.
+1. When $x$ was taken out, edge $(x, y)$ was relaxed, so dist$[y] \le \delta(x) + w(x,y) = \delta(y)$.
+2. $\delta(y) \le \delta(u)$, because the rest of $P$ after $y$ has non-negative length. **This is where $w \ge 0$ is needed.**
+3. $u$ was chosen with the smallest dist, so dist$[u] \le$ dist$[y] \le \delta(u)$.
+4. dist$[u] \ge \delta(u)$ always, since dist is the length of a real path. So dist$[u] = \delta(u)$.
 
 **Time.** $n$ deletemins and $m$ decreasekeys: $O((n + m)\log n)$ with a binary heap.
 
-**Negative edges break it.** With $s \to a$ (2), $s \to b$ (3), $b \to a$ ($-2$): Dijkstra finalises $a$ at 2, but the path $s \to b \to a$ costs 1.
+**Negative edges break it.** Take $s \to a$ (2), $s \to b$ (3), $b \to a$ ($-2$). Dijkstra finalises $a$ at distance 2, but the path $s \to b \to a$ costs only 1.
 
-**Tutorial 2 warm-up.** Multiplying all weights by $c > 0$ keeps every shortest path (every path's weight scales by the same $c$). Adding $c > 0$ to every weight does **not**: a path with $k$ edges gains $ck$, so paths with fewer edges gain less. Example: $s \to a \to t$ with weights 1, 1 and $s \to t$ with weight 3; after adding 2 the direct edge (5) beats the two-edge path (6).
+**Tutorial 2 warm-up.** Multiplying every weight by $c > 0$ keeps every shortest path, because every path's length scales by the same $c$. Adding $c > 0$ to every weight does **not**: a path with $k$ edges gains $ck$, so paths with fewer edges gain less. Example: $s \to a \to t$ with weights 1, 1, and $s \to t$ with weight 3. After adding 2, the direct edge (5) beats the two-edge path (6).
 
 ## Bellman–Ford: negative edges allowed
 
 > **In short:** Improve every distance estimate over and over. A shortest path has at most $n - 1$ edges, so $n - 1$ rounds are enough.
 
-A shortest path (with no negative cycles) has at most $n - 1$ edges. **Relax every edge, $n - 1$ times.**
+If there is no negative cycle, a shortest path has at most $n - 1$ edges. So: **relax every edge, $n - 1$ times.**
 
-**Why it works.** After round $k$, dist$[v] \le$ the length of the shortest $s$–$v$ path with at most $k$ edges (induction: such a path is a $(k-1)$-edge path plus one edge, which round $k$ relaxes). Round $n - 1$ covers every simple path.
+**Why it works.** After round $k$, dist$[v]$ is at most the length of the shortest $s$–$v$ path that uses at most $k$ edges. By induction: such a path is a $(k-1)$-edge path plus one last edge, and round $k$ relaxes that edge. Round $n - 1$ therefore covers every simple path.
 
-**Negative cycles.** Run one more round. If any dist still decreases, a negative cycle is reachable from $s$. Time $O(nm)$.
+**Negative cycles.** Run one extra round. If any dist still goes down, a negative cycle is reachable from $s$. Time $O(nm)$.
 
-**Arbitrage (Lecture 12 in-class quiz).** Trading ratios $r_{ij}$; an opportunity cycle has $\prod r_{ij} > 1$. Take weights $w_{ij} = -\log r_{ij}$: then $\prod r > 1 \iff \sum w < 0$. Add a super-source with 0-weight edges to every vertex and run Bellman–Ford; an opportunity exists iff there is a negative cycle. To output it, follow prev pointers from a vertex updated in round $n$ for $n$ steps (to land on the cycle), then walk prev until a vertex repeats. $O(nm)$.
+**Arbitrage (Lecture 12 in-class quiz).** You can trade currency $i$ for $j$ at rate $r_{ij}$. A money-making cycle has $\prod r_{ij} > 1$. Set weights $w_{ij} = -\log r_{ij}$, which turns products into sums: $\prod r > 1 \iff \sum w < 0$. Add a super-source with weight-0 edges to every vertex and run Bellman–Ford. An opportunity exists iff there is a negative cycle. To print it, start at a vertex updated in round $n$ and follow prev pointers $n$ times (this lands you on the cycle), then keep following prev until a vertex repeats. $O(nm)$.
 
 ## Shortest paths in a DAG
 
 > **In short:** In topological order each vertex's distance is final before it is used, so one pass is enough.
 
-Process vertices in topological order and relax each vertex's outgoing edges. Each edge is relaxed once, after its tail is final: $O(n + m)$, and negative weights are fine. **Longest** paths in a DAG work the same way (negate weights or use max). Lecture 11 writes it as a DP: $\text{OPT}(v) = \min_{(u,v)\in E}\{\text{OPT}(u) + \ell(u, v)\}$.
+Go through the vertices in topological order and relax each vertex's outgoing edges. Each edge is relaxed once, after its start vertex is final. This takes $O(n + m)$ and works even with negative weights. **Longest** paths in a DAG work the same way (negate the weights, or use max). Lecture 11 writes it as a DP: $\text{OPT}(v) = \min_{(u,v)\in E}\{\text{OPT}(u) + \ell(u, v)\}$.
 
 # Learn: minimum spanning trees
 
 Sources: Lecture 5, Tutorial 2 (Prim, DSU and Kruskal), DPV 5.1, Assignment 1 Q2.
 
-A **spanning tree** of a connected undirected graph has $n - 1$ edges, is connected and acyclic (any two of those three properties imply the third). An MST minimises total weight.
+A **spanning tree** of a connected undirected graph has three properties: it has $n - 1$ edges, it is connected, and it has no cycle. Any two of these imply the third. A minimum spanning tree (MST) is one with the smallest total weight.
 
 ## The cut property
 
@@ -142,41 +150,50 @@ A **spanning tree** of a connected undirected graph has $n - 1$ edges, is connec
 
 $$\boxed{\text{If } X \subseteq \text{some MST, no edge of } X \text{ crosses the cut } (S, V\setminus S), \text{ and } e \text{ is a lightest crossing edge, then } X \cup \{e\} \subseteq \text{some MST.}}$$
 
-**Proof (exchange).** Let $T$ be an MST containing $X$. If $e \in T$, done. Otherwise $T + e$ has a cycle, which crosses the cut at $e$ and so must cross it again at some edge $e'$. $T' = T + e - e'$ is a spanning tree (we broke the only cycle), and $w(e) \le w(e')$, so $w(T') \le w(T)$: $T'$ is an MST containing $X \cup \{e\}$ ($e' \notin X$ because no edge of $X$ crosses the cut).
+**Proof (exchange argument).** Let $T$ be an MST that contains $X$. If $e \in T$ we are done. Otherwise:
+1. Adding $e$ to $T$ creates a cycle. The cycle crosses the cut at $e$, so it must cross back at some other edge $e'$.
+2. $T' = T + e - e'$ is again a spanning tree, since removing $e'$ breaks the only cycle.
+3. $w(e) \le w(e')$, because $e$ is a lightest crossing edge. So $w(T') \le w(T)$ and $T'$ is also an MST.
+4. $e' \notin X$, because no edge of $X$ crosses the cut. So $T'$ contains $X \cup \{e\}$.
 
-**Cycle property.** The heaviest edge on a cycle (if strictly heaviest) is in no MST.
+**Cycle property.** If an edge is strictly the heaviest on some cycle, it is in no MST.
 
 ## Kruskal
 
 > **In short:** Take edges from cheapest to dearest, skipping any edge that would close a loop.
 
-Sort edges by weight; add each edge unless it closes a cycle. Correct by the cut property: when $e = (u, v)$ is added, take $S$ = the current component of $u$; $e$ is the lightest edge leaving $S$ (lighter ones were already processed, and none of those leaves $S$, else it would have been added).
+Sort the edges by weight. Add each one unless it would close a cycle.
 
-**Union–find (DSU)** decides "same component?". With union by rank and path compression each operation is $O(\alpha(n))$, essentially constant. Union by rank alone gives height $O(\log n)$. Total $O(m\log m)$ for sorting, $= O(m\log n)$.
+**Why it is correct (cut property).** When $e = (u, v)$ is added, let $S$ be the current component of $u$. Every lighter edge has already been looked at, and none of them leaves $S$ (otherwise it would have been added and $S$ would be bigger). So $e$ is the lightest edge leaving $S$.
+
+**Union–find (DSU)** answers "are these in the same component?". With union by rank and path compression, each operation costs $O(\alpha(n))$, which is practically constant. Union by rank alone keeps the trees $O(\log n)$ tall. The total is $O(m\log m) = O(m\log n)$, dominated by sorting.
 
 ## Prim
 
 > **In short:** Grow one tree, always adding the cheapest edge that leaves it.
 
-Grow one tree from a start vertex; repeatedly add the lightest edge leaving the tree. Correct by the cut property with $S$ = the current tree. Implementation is Dijkstra with key$[v] = \min_{u \in S} w(u, v)$ instead of a path length: $O((n+m)\log n)$.
+Start a tree at any vertex and keep adding the lightest edge that leaves the tree. It is correct by the cut property, with $S$ = the current tree. It is implemented exactly like Dijkstra, except that key$[v] = \min_{u \in S} w(u, v)$ instead of a path length: $O((n+m)\log n)$.
 
 ## MSTs with distinct weights are unique (Assignment 1 Q2b)
 
 > **In short:** If two MSTs differed, swapping the lightest edge where they differ would make one of them strictly cheaper.
 
-Suppose $T \ne T'$ are both MSTs. Let $e$ be the **lightest edge in exactly one** of them, say $e \in T \setminus T'$. $T' + e$ contains a cycle $C$. $C$ has an edge $e' \notin T$ (else $T$ would contain the cycle). $e' \in T' \setminus T$, so by the choice of $e$ and distinctness, $w(e') > w(e)$. Then $T' + e - e'$ is a spanning tree lighter than $T'$, a contradiction.
+Suppose $T \ne T'$ are both MSTs.
+1. Let $e$ be the **lightest edge that is in exactly one** of them, say $e \in T$ but $e \notin T'$.
+2. $T' + e$ contains a cycle $C$. Some edge $e'$ of $C$ is not in $T$, since otherwise $T$ would contain a cycle.
+3. So $e' \in T'$ but $e' \notin T$. By the choice of $e$, and since weights are distinct, $w(e') > w(e)$.
+4. Then $T' + e - e'$ is a spanning tree lighter than $T'$. Contradiction.
 
 ## Updating an MST with a new edge (Assignment 1 Q2a)
 
 > **In short:** The new edge makes exactly one loop. Drop the heaviest edge on that loop.
 
-New edge $e = (u, v)$ with cost $c$. Find the unique path $P$ from $u$ to $v$ in the current MST $T$ (DFS, $O(n)$) and its heaviest edge $f$.
+A new edge $e = (u, v)$ with cost $c$ arrives. Find the unique path $P$ from $u$ to $v$ in the current MST $T$ (DFS, $O(n)$) and its heaviest edge $f$.
 
-- If $c \ge w(f)$, $e$ is the heaviest edge on the cycle $P + e$; by the cycle property it is useless and $T$ stays.
-- If $c < w(f)$, the new MST is $T + e - f$.
+- If $c \ge w(f)$: $e$ is the heaviest edge on the cycle $P + e$, so by the cycle property it is useless, and $T$ stays as it is.
+- If $c < w(f)$: the new MST is $T + e - f$.
 
-**Why $T + e - f$ is an MST of $G + e$.** Every edge of $G$ not in $T$ is the heaviest on its cycle with $T$ (that is the cycle-property characterisation of MSTs). Adding $e$ and removing $f$ only changes cycles that went through $f$; in each, $f$ was the heaviest, and is now replaced by path pieces plus $e$, all lighter. Alternatively, run Kruskal on the $n$ edges $T + e$ only: any MST of $G + e$ uses only edges of $T \cup \{e\}$, because every other edge is heaviest on some cycle that avoids $e$. Time $O(n)$.
-
+**Why $T + e - f$ is an MST of $G + e$.** A tree is an MST exactly when every edge outside it is the heaviest on the cycle it makes with the tree. Adding $e$ and removing $f$ only changes the cycles that went through $f$. On each of those, $f$ was the heaviest, and it is replaced by path pieces plus $e$, which are all lighter. Another way: run Kruskal on just the $n$ edges of $T + e$. Every other edge of $G$ is the heaviest on some cycle that avoids $e$, so no MST of $G + e$ uses it. Time $O(n)$.
 ## Practice
 
 **GR1 (DPV 3.x).** Give a linear-time algorithm to test whether a directed graph has a cycle, and to output one.

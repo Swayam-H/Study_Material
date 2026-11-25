@@ -1,70 +1,70 @@
 # Learn: balanced brackets and lower bounds by reduction
 
-Lecture 22 uses one idea twice. A **reduction** turns a fast algorithm for problem X into a fast algorithm for problem Y; if Y is known to be hard, X must be hard too. First it proves a **memory** lower bound for checking brackets, then it defines **NP-hardness** the same way. Sources: Lecture 22, the Lecture 24 course summary, the NP tutorial.
+Lecture 22 uses one idea twice. A **reduction** turns a fast algorithm for problem X into a fast algorithm for problem Y. So if Y is known to be hard, X must be hard too. The lecture first uses this to prove a **memory** lower bound for checking brackets, and then defines **NP-hardness** the same way. Sources: Lecture 22, the Lecture 24 course summary, the NP tutorial.
 
 ## One bracket type
 
 > **In short:** With one bracket type only the count of open brackets matters, so a single counter is enough.
 
-**Problem.** A string $S = s_1\ldots s_n$ over `(` and `)` arrives one character at a time, in a single left-to-right pass (the **one-pass streaming model**). Accept iff every `(` is properly closed and no `)` comes before its partner.
+**Problem.** A string $S = s_1\ldots s_n$ of `(` and `)` arrives one character at a time, and we get a single left-to-right pass over it (the **one-pass streaming model**). Accept iff every `(` is properly closed and no `)` appears before its partner.
 
-**Algorithm 1: stack, $O(n)$ space.** Push on `(`; on `)` pop, rejecting if the stack is empty; accept iff the stack ends empty. On `((( … )))` with $n/2$ openers first, the stack holds $n/2$ items halfway through: $\Theta(n)$ space.
+**Algorithm 1: stack, $O(n)$ space.** Push on `(`. On `)`, pop, and reject if the stack is empty. Accept iff the stack is empty at the end. On `((( … )))` with $n/2$ openers first, the stack holds $n/2$ items halfway through: $\Theta(n)$ space.
 
-**Algorithm 2: counter, $O(\log n)$ space (DYCK₁).** Every stack entry is the same symbol `(`, so only their number matters. Keep $c$: $+1$ for `(`, $-1$ for `)`; reject as soon as $c < 0$ (a closer with no partner in this prefix); accept iff $c = 0$ at the end. $c \le n$, so it takes $\lceil\log_2(n+1)\rceil$ bits: about 30 bits for $n = 10^9$.
+**Algorithm 2: counter, $O(\log n)$ space (DYCK₁).** Every item on the stack is the same symbol `(`, so only how many there are matters. Keep a counter $c$: add 1 for `(` and subtract 1 for `)`. Reject as soon as $c < 0$ (a closer with no partner so far). Accept iff $c = 0$ at the end. Since $c \le n$, it needs $\lceil\log_2(n+1)\rceil$ bits: about 30 bits for $n = 10^9$.
 
 ## Two bracket types
 
 > **In short:** With two types the order of the open brackets matters, and counters cannot remember order.
 
-**Definition.** A string over `( ) [ ]` is balanced if (1) every opener is matched by a closer of the **same type** and (2) the nesting is last-opened, first-closed. The stack still works (check the type of the top before popping), in $O(n)$ space.
+**Definition.** A string of `( ) [ ]` is balanced if (1) every opener is closed by a closer of the **same type**, and (2) the last bracket opened is the first one closed. The stack still works (check the type on top before popping), using $O(n)$ space.
 
-**Counters fail.** Keep $c_{\text{round}}$ and $c_{\text{square}}$. They are fooled by:
+**Counters fail.** Keep one counter for round brackets, $c_{\text{round}}$, and one for square, $c_{\text{square}}$. These strings fool them:
 
-- `([)]`: `[` was opened inside `(`, so must close first, but `)` arrives first. Both counters stay $\ge 0$ and end at $(0, 0)$.
-- `(([))[]]`: $c_{\text{round}}$ goes $0,1,2,2,1,0,0,0,0$ and $c_{\text{square}}$ goes $0,0,0,1,1,1,2,1,0$; both end at 0, yet `[` at position 3 is crossed with `))`.
-- `([[())])` and in general any string that opens and closes the same *numbers* of each type.
+- `([)]`: `[` was opened inside `(`, so it must close first, but `)` comes first. Both counters stay $\ge 0$ and end at $(0, 0)$.
+- `(([))[]]`: $c_{\text{round}}$ goes $0,1,2,2,1,0,0,0,0$ and $c_{\text{square}}$ goes $0,0,0,1,1,1,2,1,0$. Both end at 0, yet the `[` at position 3 is crossed by `))`.
+- `([[())])`, and in general any string that opens and closes the same *number* of each type.
 
-**Why:** after `([` and after `[(` the counters hold the same values $(1, 1)$. Addition is commutative, so counters cannot remember the **order** in which brackets were opened, and the order decides which closer is legal next.
+**Why:** after `([` and after `[(` the counters hold the same values $(1, 1)$. Adding up counts ignores order, so counters can't remember the **order** in which brackets were opened, and that order decides which closer is allowed next.
 
 ## Lower bound: $\Omega(n)$ bits for two types (deterministic)
 
 > **In short:** A small-memory bracket checker would let Alice and Bob test equality with few bits, which is impossible.
 
-**Recall (Lecture 20, Theorem 1).** If Alice holds $x \in \{0,1\}^m$ and Bob holds $y$, any deterministic one-message protocol deciding $x = y$ needs $\ge m$ bits: with fewer, two strings $x \ne x'$ get the same message (pigeonhole), and Bob holding $y = x$ cannot tell them apart.
+**Recall (Lecture 20, Theorem 1).** Alice holds $x \in \{0,1\}^m$ and Bob holds $y$. Any deterministic protocol where Alice sends one message and Bob decides whether $x = y$ needs at least $m$ bits. With fewer bits, two strings $x \ne x'$ would get the same message (pigeonhole), and Bob holding $y = x$ couldn't tell them apart.
 
 **The reduction.**
 
-1. Alice turns $x$ into openers $S_A$, left to right: $0 \mapsto$ `(`, $1 \mapsto$ `[`.
-2. Bob turns $y$ into closers $S_B$, **right to left** (the last opened must be the first closed): $0\mapsto$ `)`, $1\mapsto$ `]`. For $x = y = 0110$: $S_AS_B = $ `([[()]])`.
-3. **Claim 1.** $S_AS_B$ (length $n = 2m$) is balanced $\iff x = y$: the $i$-th opener (type $x_i$) is closed by the $i$-th closer from the end, which encodes $y_i$.
+1. Alice turns $x$ into openers $S_A$, left to right: $0 \mapsto$ `(` and $1 \mapsto$ `[`.
+2. Bob turns $y$ into closers $S_B$, **right to left** (since the last opened must be the first closed): $0\mapsto$ `)` and $1\mapsto$ `]`. For $x = y = 0110$: $S_AS_B = $ `([[()]])`.
+3. **Claim 1.** $S_AS_B$ (length $n = 2m$) is balanced $\iff x = y$. The $i$-th opener (which encodes $x_i$) is closed by the $i$-th closer counted from the end (which encodes $y_i$), so the types match exactly when $x_i = y_i$.
 
 **Theorem 2.** Any deterministic one-pass algorithm $A$ for two bracket types uses $s(n) \ge n/2 = \Omega(n)$ bits.
 
-*Proof.* Alice runs $A$ on $S_A$, then sends Bob $A$'s entire memory ($s(n)$ bits). Bob loads it and continues $A$ on $S_B$. $A$ has now processed $S_AS_B$ in one pass, so it answers "balanced" iff $x = y$ (Claim 1). Alice and Bob have decided equality with $s(n)$ bits, so $s(n) \ge m = n/2$ by Theorem 1. $\square$
+*Proof.* Alice runs $A$ on $S_A$ and sends Bob $A$'s entire memory, which is $s(n)$ bits. Bob loads that memory and continues running $A$ on $S_B$. Now $A$ has processed $S_AS_B$ in one pass, so it says "balanced" iff $x = y$ (Claim 1). So Alice and Bob decided equality using $s(n)$ bits, and Theorem 1 gives $s(n) \ge m = n/2$. $\square$
 
-**Key takeaway: streaming memory = communication.** Pausing a one-pass algorithm mid-stream, its memory is a message from the first half of the input to the second. A communication lower bound becomes a space lower bound.
+**Key takeaway: streaming memory = communication.** If you pause a one-pass algorithm halfway, its memory is a message from the first half of the input to the second half. So a lower bound on communication becomes a lower bound on space.
 
 ## Randomised checksum in $O(\log n)$ bits
 
 > **In short:** Give each depth its own random weight so that matched pairs cancel and mismatches almost never do.
 
-Note that the hard strings above have a special shape, all $m$ openers first and then all $m$ closers ("1-hill"), and even this needs $\Omega(n)$ bits deterministically. With randomness we can beat it.
+The hard strings above have a special shape: all $m$ openers first, then all $m$ closers ("1-hill"). Even these need $\Omega(n)$ bits deterministically. With randomness we can do much better.
 
-**Two-polynomial view.** Encode `(`,`)` $\mapsto 1$ and `[`,`]` $\mapsto 2$. Openers $a_1..a_m$, closers (which arrive inside-out) $b_m, \ldots, b_1$. Balanced $\iff a_i = b_i$ for all $i$ $\iff P_{\text{open}}(z) = \sum_i a_iz^{i-1} \equiv P_{\text{close}}(z) = \sum_i b_iz^{i-1}$.
+**Two-polynomial view.** Encode `(` and `)` as 1, and `[` and `]` as 2. The openers are $a_1..a_m$, and the closers arrive from the inside out as $b_m, \ldots, b_1$. Then balanced $\iff a_i = b_i$ for all $i$ $\iff P_{\text{open}}(z) = \sum_i a_iz^{i-1}$ and $P_{\text{close}}(z) = \sum_i b_iz^{i-1}$ are the same polynomial.
 
-**One polynomial.** Use signed values $v($`(`$) = +1$, $v($`)`$) = -1$, $v($`[`$) = +2$, $v($`]`$) = -2$, so a matching pair sums to 0. With the opener and closer at depth $d$ paired,
+**One polynomial.** Use signed values $v($`(`$) = +1$, $v($`)`$) = -1$, $v($`[`$) = +2$, $v($`]`$) = -2$, so a correctly matched pair adds to 0. Pair the opener and closer at each depth $d$:
 $$P(x) = \sum_{d=0}^{m-1}\big(v(\text{open at } d) + v(\text{close at } d)\big)x^d.$$
-Balanced ⇒ every coefficient is 0, so $P \equiv 0$. A type mismatch at depth $d$ gives coefficient $\pm1 \ne 0$, so $P \not\equiv 0$.
+If the string is balanced, every coefficient is 0, so $P \equiv 0$. A type mismatch at depth $d$ gives a coefficient of $\pm1 \ne 0$, so $P \not\equiv 0$.
 
-**Algorithm 3 (single checksum).** Pick a prime $p > n^2$ and random $r \in \{1..p-1\}$; precompute $r^{-1} \bmod p$. Keep depth $d = 0$, weight $w = r^d = 1$, checksum $H = 0$, flag `seen_close` = false.
+**Algorithm 3 (single checksum).** Pick a prime $p > n^2$ and a random $r \in \{1..p-1\}$, and precompute $r^{-1} \bmod p$. Start with depth $d = 0$, weight $w = r^d = 1$, checksum $H = 0$, and a flag `seen_close` = false.
 
-- **Opener** $s_i$: if `seen_close`, reject (an opener after a closer: not 1-hill). Else $H \leftarrow H + v(s_i)\,w$; $d \leftarrow d + 1$; $w \leftarrow wr$.
-- **Closer** $s_i$: `seen_close` ← true; if $d = 0$, reject. Else $d \leftarrow d - 1$; $w \leftarrow wr^{-1}$ (back to $r^{d}$); $H \leftarrow H + v(s_i)\,w$.
-- **End**: accept iff $d = 0$ and $H \equiv 0 \pmod p$.
+- **Opener** $s_i$: if `seen_close` is set, reject (an opener after a closer means the string is not 1-hill). Otherwise $H \leftarrow H + v(s_i)\,w$, then $d \leftarrow d + 1$ and $w \leftarrow wr$.
+- **Closer** $s_i$: set `seen_close`. If $d = 0$, reject. Otherwise $d \leftarrow d - 1$ and $w \leftarrow wr^{-1}$ (back to $r^{d}$), then $H \leftarrow H + v(s_i)\,w$.
+- **End:** accept iff $d = 0$ and $H \equiv 0 \pmod p$.
 
-A closer first steps down to the depth of the opener it closes, then adds its value with the **same** weight $r^d$, so a matched pair contributes $+v\,r^d - v\,r^d = 0$.
+A closer first steps back down to the depth of the opener it closes, and then adds its value with the **same** weight $r^d$. So a matched pair contributes $+v\,r^d - v\,r^d = 0$.
 
-**Example 1, balanced `([()])`** with $p = 17$, $r = 3$, $r^{-1} = 6$ ($3\cdot6 = 18 \equiv 1$):
+**Example 1, balanced `([()])`**, with $p = 17$, $r = 3$, $r^{-1} = 6$ (since $3\cdot6 = 18 \equiv 1$):
 
 | $s_i$ | depth used | term | $H$ |
 |---|---|---|---|
@@ -77,21 +77,21 @@ A closer first steps down to the depth of the opener it closes, then adds its va
 
 $d = 0$ and $H = 0$: **accept**.
 
-**Example 2, crossed `([(]))`** (two `(`, two `)`, one `[`, one `]`, so counters are fooled): openers give $H = 1 + 6 + 9 = 16$. Then `]` closes depth 2: $16 - 2\cdot9 = -2 \equiv 15$; `)` closes depth 1: $15 - 3 = 12$; `)` closes depth 0: $12 - 1 = 11$. $H = 11 \ne 0$: **reject**. Indeed $P(x) = (1-1) + (2-1)x + (1-2)x^2 = x - x^2$ and $P(3) = -6 \equiv 11$.
+**Example 2, crossed `([(]))`** (two `(`, two `)`, one `[`, one `]`, so counters are fooled). The openers give $H = 1 + 6 + 9 = 16$. Then `]` closes depth 2: $16 - 2\cdot9 = -2 \equiv 15$. `)` closes depth 1: $15 - 3 = 12$. `)` closes depth 0: $12 - 1 = 11$. $H = 11 \ne 0$: **reject**. Check: $P(x) = (1-1) + (2-1)x + (1-2)x^2 = x - x^2$, and $P(3) = -6 \equiv 11$.
 
-**Theorem 3 (error and space).** A valid string has $P \equiv 0$, so $H = 0$ always (one-sided error). An invalid string either fails the depth/phase checks (caught with certainty) or has $P \not\equiv 0$ of degree $\le m - 1 < n$, so by Schwartz–Zippel $\Pr[H = 0] \le \frac{n}{p} < \frac1n$ for $p > n^2$. Space: $p, r, r^{-1}, d, w, H$ are $O(\log p) = O(\log n)$ bits.
+**Theorem 3 (error and space).** A valid string has $P \equiv 0$, so $H = 0$ every time: the error is one-sided. An invalid string either fails the depth or order checks (caught for sure), or has $P \not\equiv 0$ with degree $\le m - 1 < n$. In that case Schwartz–Zippel gives $\Pr[H = 0] \le \frac{n}{p} < \frac1n$ for $p > n^2$. Space: $p, r, r^{-1}, d, w, H$ each take $O(\log p) = O(\log n)$ bits.
 
-The course summary calls this the 1-hill version (DYCK₂ restricted to "all opens, then all closes"). The tutorial closes with the same moral as this section: a reduction turns a known lower bound (equality, or 3-SAT) into a new one.
+The course summary calls this the 1-hill version (DYCK₂ restricted to "all opens, then all closes"). The tutorial ends with the same lesson as this section: a reduction turns a known lower bound (for equality, or for 3-SAT) into a new one.
 
 # Learn: P, NP and reductions
 
-This chapter follows the NP tutorial ("NP, Reductions and Satisfiability", Samarth Singla) and the complexity pages of the Lecture 24 course summary. Its main result is the one the course promised in Lecture 22: **Max-Cut is NP-hard**, proved by the chain 3-SAT $\le_P$ NAE-3SAT $\le_P$ Max-Cut.
+This chapter follows the NP tutorial ("NP, Reductions and Satisfiability", Samarth Singla) and the complexity pages of the Lecture 24 course summary. Its main result is the one Lecture 22 promised: **Max-Cut is NP-hard**, proved by the chain 3-SAT $\le_P$ NAE-3SAT $\le_P$ Max-Cut.
 
 ## Efficient means polynomial time
 
 > **In short:** Polynomial running times stay usable as inputs grow; exponential ones explode almost at once.
 
-An algorithm is **efficient** if it runs in time $O(n^c)$ for a constant $c$, where $n$ is the input size. The tutorial's table (at $10^9$ operations per second) shows why the line is drawn there:
+An algorithm is **efficient** if it runs in time $O(n^c)$ for some constant $c$, where $n$ is the input size. The tutorial's table (at $10^9$ operations per second) shows why the line is drawn there:
 
 | Running time | $n = 100$ | $n = 1000$ |
 |---|---|---|
@@ -100,16 +100,16 @@ An algorithm is **efficient** if it runs in time $O(n^c)$ for a constant $c$, wh
 | $1.307^n$ (best known 3-SAT) | about 7 minutes | about $10^{116}$ s |
 | $2^n$ | about $4\times10^{13}$ years | about $10^{301}$ s |
 
-Polynomials are closed under composition: calling a polynomial-time routine a polynomial number of times is still polynomial. With $2^n$ time, doubling the computer's speed only lets you handle $n + 1$.
+Polynomials stay polynomial when combined: calling a polynomial-time routine a polynomial number of times is still polynomial. With $2^n$ time, a computer twice as fast only lets you go from $n$ to $n + 1$.
 
 ## Decision versus optimisation
 
 > **In short:** Asking only yes or no loses nothing, because a yes/no solver can recover the best value and a solution.
 
-The theory is stated for **decision problems** (YES/NO; a problem is the set of its YES instances). Optimisation versions become decision versions with a threshold: "is there a cut with $\ge k$ edges?", "is there an independent set of size $\ge k$?". Nothing is lost:
+The theory is about **decision problems**, which have YES/NO answers (formally, a problem is the set of its YES instances). An optimisation problem becomes a decision problem by adding a threshold: "is there a cut with $\ge k$ edges?", "is there an independent set of size $\ge k$?". Nothing is lost:
 
-- **Optimal value**: binary search on $k \in \{0, \ldots, \lvert E\rvert\}$ uses $O(\log\lvert E\rvert)$ calls to the decision version.
-- **An actual solution** (self-reducibility, for SAT): ask whether $\Phi[x_1 = 1]$ is satisfiable, fix $x_1$ accordingly, and repeat for $x_2, \ldots, x_n$. That is $n + 1$ calls.
+- **The best value:** binary search on $k \in \{0, \ldots, \lvert E\rvert\}$ needs $O(\log\lvert E\rvert)$ calls to the decision version.
+- **An actual solution** (self-reducibility, shown for SAT): ask whether $\Phi$ with $x_1 = 1$ is satisfiable, fix $x_1$ to match the answer, and repeat for $x_2, \ldots, x_n$. That is $n + 1$ calls.
 
 So if the decision version is hard, the optimisation version is hard too.
 
@@ -117,9 +117,9 @@ So if the decision version is hard, the optimisation version is hard too.
 
 > **In short:** Many problems are hard to solve but easy to check once someone hands you an answer.
 
-**P** is the set of decision problems solvable in time polynomial in the input size. Course examples: shortest paths, MST, sorting, max flow and min cut, bipartiteness ("can we cut every edge?"), 2-SAT, XOR-SAT, balanced brackets, pattern matching.
+**P** is the set of decision problems that can be solved in time polynomial in the input size. Examples from the course: shortest paths, MST, sorting, max flow and min cut, bipartiteness ("can we cut every edge?"), 2-SAT, XOR-SAT, balanced brackets, pattern matching.
 
-Finding and checking can differ enormously. Solving a hard Sudoku takes hours; checking a filled grid is one scan. Finding a satisfying assignment of a 3-SAT formula takes about $1.307^n$ with the best known algorithm; checking one is $O(m)$. **NP captures problems whose YES answers have a short proof that is quick to check.**
+Finding an answer and checking one can be very different. Solving a hard Sudoku takes hours, but checking a filled grid is one scan. Finding a satisfying assignment for a 3-SAT formula takes about $1.307^n$ time with the best known algorithm, but checking one takes $O(m)$. **NP is the class of problems whose YES answers have a short proof that is quick to check.**
 
 ## The class NP (verifier definition)
 
@@ -127,13 +127,13 @@ Finding and checking can differ enormously. Solving a hard Sudoku takes hours; c
 
 $$\boxed{L \in \text{NP} \iff \exists\ \text{poly-time } V,\ \text{polynomial } q:\ \ x \in L \iff \exists c,\ \lvert c\rvert \le q(\lvert x\rvert),\ V(x, c) = \text{Yes}}$$
 
-The string $c$ is the **certificate** (witness, proof).
+The string $c$ is called the **certificate** (or witness, or proof), and $V$ is the **verifier**.
 
-- **Completeness**: every YES instance has some certificate that convinces $V$.
-- **Soundness**: for a NO instance, no certificate fools $V$.
-- The certificate must be short (polynomial size) and verification fast (polynomial time).
+- **Completeness:** every YES instance has some certificate that convinces $V$.
+- **Soundness:** for a NO instance, no certificate can fool $V$.
+- The certificate must be short (polynomial size) and checking must be fast (polynomial time).
 
-NP stands for **nondeterministic polynomial time**: a machine that could guess $c$ and then verify it.
+NP stands for **nondeterministic polynomial time**: think of a machine that could guess $c$ and then check it.
 
 | Problem | Certificate | Verification |
 |---|---|---|
@@ -145,38 +145,38 @@ NP stands for **nondeterministic polynomial time**: a machine that could guess $
 | Hamiltonian Cycle | an ordering of the vertices | consecutive pairs are edges |
 | Composite($N$) | a factor $d$ | $1 < d < N$ and $d \mid N$ |
 
-Composite is also in P (the AKS primality test, 2002): **being in NP does not mean being hard.** Membership in NP is an *upper* bound on difficulty.
+Composite is also in P (the AKS primality test, 2002). So **being in NP does not mean being hard.** Being in NP is an *upper* bound on how hard a problem is.
 
 ### Worked template: Max-Cut (decision) is in NP
 
-Given $G = (V, E)$ and $k$, is there $S \subseteq V$ with $\lvert E(S, V\setminus S)\rvert \ge k$? Write all four lines:
+Given $G = (V, E)$ and $k$, is there an $S \subseteq V$ with $\lvert E(S, V\setminus S)\rvert \ge k$? Write all four lines:
 
-1. **Certificate**: a bit $x_u \in \{0,1\}$ for every vertex: $\lvert V\rvert$ bits, polynomial.
-2. **Verifier**: for each edge $(u,v)$ add 1 if $x_u \ne x_v$; accept iff the total is $\ge k$. Time $O(\lvert V\rvert + \lvert E\rvert)$.
-3. **Completeness**: if a cut of size $\ge k$ exists, its bit vector is accepted.
-4. **Soundness**: if every cut has fewer than $k$ edges, every bit vector gives a total below $k$, so $V$ rejects.
+1. **Certificate:** one bit $x_u \in \{0,1\}$ per vertex, saying which side it is on. That is $\lvert V\rvert$ bits, so polynomial.
+2. **Verifier:** for each edge $(u,v)$, add 1 if $x_u \ne x_v$. Accept iff the total is $\ge k$. Time $O(\lvert V\rvert + \lvert E\rvert)$.
+3. **Completeness:** if a cut with $\ge k$ edges exists, its bit vector is accepted.
+4. **Soundness:** if every cut has fewer than $k$ edges, every bit vector gives a total below $k$, so $V$ rejects.
 
 ## Two misconceptions the tutorial corrects
 
 > **In short:** NP does not mean "not polynomial", and NP-hard does not mean every instance is hard.
 
-**"NP means not polynomial."** False. Every problem in P is in NP. *Proof that P ⊆ NP:* if $L \in$ P is decided by $A$, take the verifier $V(x, c)$ that ignores $c$ and runs $A(x)$; any certificate, even the empty one, works.
+**"NP means not polynomial."** False: every problem in P is also in NP. *Proof that P ⊆ NP:* if $A$ solves $L \in$ P, use the verifier $V(x, c)$ that ignores $c$ and just runs $A(x)$. Any certificate works, even the empty one.
 
-**"NP-hard means every instance is hard."** False. Hardness is about the **worst case**. Special cases can be easy: Max-Cut on bipartite graphs (cut every edge), Independent Set on trees (a simple DP), 3-SAT where every clause has a positive literal (set every variable to 1).
+**"NP-hard means every instance is hard."** False: hardness is about the **worst case**. Special cases can be easy: Max-Cut on bipartite graphs (cut every edge), Independent Set on trees (a simple DP), 3-SAT where every clause has a positive literal (set every variable to 1).
 
 ## P versus NP
 
 > **In short:** Is checking really easier than solving? Nobody knows, but almost everyone thinks so.
 
-Is P = NP, that is, is every quickly checkable problem also quickly solvable? Open since 1971 (a Clay Millennium problem). Almost everyone believes P ≠ NP. If P = NP, much of cryptography breaks and finding proofs becomes as easy as checking them.
+Is P = NP? In other words, can every problem whose answers are quick to check also be solved quickly? This has been open since 1971 and is a Clay Millennium problem. Almost everyone believes P ≠ NP. If P = NP, much of cryptography would break, and finding proofs would be as easy as checking them.
 
-Some problems are not obviously in NP. **UNSAT** ("no assignment works") has no evident short proof of non-existence; such complements form **co-NP**.
+Some problems are not obviously in NP at all. **UNSAT** ("no assignment works") has no obvious short proof that nothing works. Complements of NP problems like this form the class **co-NP**.
 
 ## Reductions
 
 > **In short:** Turn instances of $A$ into instances of $B$ with the same answer; then $B$ is at least as hard as $A$.
 
-To solve $A$ using a solver for $B$: transform an instance $x$ of $A$ into an instance $f(x)$ of $B$ in polynomial time and ask the $B$-solver. We never write a solver for $B$; we only show how we would use one.
+To solve $A$ using a solver for $B$: turn an instance $x$ of $A$ into an instance $f(x)$ of $B$ in polynomial time, and ask the $B$-solver. We never write a solver for $B$. We only show how we would use one if we had it.
 
 | Term | Definition to write in the exam |
 |---|---|
@@ -187,13 +187,17 @@ To solve $A$ using a solver for $B$: transform an instance $x$ of $A$ into an in
 | **Cook–Levin** (1971, 1973) | SAT is NP-complete (and so is 3-SAT). Every other proof is a reduction from a known problem. |
 | **ETH** | 3-SAT cannot be solved in time $2^{o(n)}$, $n$ = number of variables. A conjecture stronger than P ≠ NP; it gives tight conditional lower bounds. |
 
-**Lemma.** If $A \le_P B$ and $B \in$ P, then $A \in$ P. (Contrapositive: if $A \le_P B$ and $A \notin$ P, then $B \notin$ P.)
+**Lemma.** If $A \le_P B$ and $B \in$ P, then $A \in$ P. (Turned around: if $A \le_P B$ and $A \notin$ P, then $B \notin$ P.)
 
-*Proof.* Let $f$ run in time $p(n)$ and $B$'s algorithm in time $r(n)$, both polynomials. On input $x$ with $\lvert x\rvert = n$: (1) compute $f(x)$ in time $p(n)$, so $\lvert f(x)\rvert \le p(n)$ (an algorithm cannot write more than it has time for); (2) run $B$'s algorithm on $f(x)$ in time $r(p(n))$. The answer is correct because $x \in A \iff f(x) \in B$. Total $p(n) + r(p(n))$: polynomial. $\square$
+*Proof.* Say $f$ runs in time $p(n)$ and $B$'s algorithm in time $r(n)$, both polynomials. On an input $x$ of size $n$:
+1. Compute $f(x)$ in time $p(n)$. Then $\lvert f(x)\rvert \le p(n)$, because an algorithm can't write more symbols than it has time for.
+2. Run $B$'s algorithm on $f(x)$, in time $r(p(n))$.
 
-**Reductions compose**: $A \le_P B \le_P C$ gives $A \le_P C$ by $g \circ f$. That is why we build chains from one root.
+The answer is right because $x \in A \iff f(x) \in B$. The total time $p(n) + r(p(n))$ is a polynomial. $\square$
 
-**Cook–Levin, proof idea.** For $L \in$ NP with a verifier $V$ running in time $T$, the whole run of $V$ is a $T \times T$ table of bits. "This table is a valid accepting run" is a set of local constraints, each a small CNF. The certificate bits are free variables, so the formula $\Phi$ is satisfiable $\iff x \in L$.
+**Reductions chain together:** $A \le_P B$ and $B \le_P C$ give $A \le_P C$, using $g \circ f$. That is why hardness proofs form chains from one starting problem.
+
+**Cook–Levin, the idea of the proof.** Take $L \in$ NP with a verifier $V$ running in time $T$. The whole run of $V$ can be written as a $T \times T$ table of bits. "This table is a valid run that accepts" is a set of local rules, each a small CNF formula. The certificate bits are left as free variables. So the resulting formula $\Phi$ is satisfiable $\iff x \in L$.
 
 ## The direction rule
 
@@ -201,7 +205,7 @@ To solve $A$ using a solver for $B$: transform an instance $x$ of $A$ into an in
 
 $$\boxed{\text{to prove } X \text{ NP-hard, reduce a KNOWN hard problem TO } X:\ \ \text{3-SAT} \le_P X}$$
 
-The arrow points towards the harder problem: **from what you know is hard, to what you want to prove hard.** The tutorial's direction check:
+The arrow points towards the harder problem: **from the one you know is hard, to the one you want to prove hard.** The tutorial's direction check:
 
 | Statement | Verdict |
 |---|---|
@@ -214,27 +218,27 @@ The arrow points towards the harder problem: **from what you know is hard, to wh
 
 > **In short:** In NP, then a reduction from a known hard problem, then both directions, then polynomial size.
 
-1. **$X \in$ NP**: name the certificate, say what the verifier checks, give its time.
-2. **Pick a known NP-complete $A$** (3-SAT is the usual choice) and say "we show $A \le_P X$".
-3. **Construct $f$** from instances of $A$ to instances of $X$. Direction: $A \to X$! Describe it exactly (vertices, edges, numbers, $k$) for an **arbitrary** instance.
-4. **($\Rightarrow$)** If $x$ is a YES instance of $A$, then $f(x)$ is a YES instance of $X$. Usually: turn a solution of $x$ into a solution of $f(x)$.
-5. **($\Leftarrow$)** If $f(x)$ is a YES instance of $X$, then $x$ is a YES instance of $A$. Usually: turn **any** solution of $f(x)$ back into a solution of $x$.
-6. **Polynomial time**: $f$ runs in polynomial time (so its output is polynomial size).
+1. **$X \in$ NP:** name the certificate, say what the verifier checks, and give its running time.
+2. **Pick a known NP-complete problem $A$** (usually 3-SAT) and write "we show $A \le_P X$".
+3. **Build $f$**, turning instances of $A$ into instances of $X$. Mind the direction: $A \to X$! Describe it exactly (vertices, edges, numbers, $k$) for an **arbitrary** instance.
+4. **($\Rightarrow$)** If $x$ is a YES instance of $A$, then $f(x)$ is a YES instance of $X$. Usually you turn a solution of $x$ into a solution of $f(x)$.
+5. **($\Leftarrow$)** If $f(x)$ is a YES instance of $X$, then $x$ is a YES instance of $A$. Usually you turn **any** solution of $f(x)$ back into a solution of $x$.
+6. **Polynomial time:** $f$ runs in polynomial time (so its output has polynomial size).
 
-Step 5 is where most marks are lost: the solution of $f(x)$ is arbitrary, not one you designed.
+Step 5 is where most marks are lost. The solution of $f(x)$ can be anything, not one you designed, so your argument must work for every possible solution.
 
 ## A map of classic reductions
 
 > **In short:** Every hardness proof traces back to SAT through a chain of reductions.
 
-The tutorial's map, every arrow $A \to B$ meaning $A \le_P B$ and every problem NP-complete:
+The tutorial's map. Each arrow $A \to B$ means $A \le_P B$, and every problem here is NP-complete:
 
 - SAT → 3-SAT
 - 3-SAT → Independent Set → Vertex Cover; Independent Set → Clique
 - 3-SAT → **NAE-3SAT → Max-Cut** (the tutorial's main result)
 - 3-SAT → 3-Colouring, 3-SAT → Subset Sum, 3-SAT → Hamiltonian Cycle → TSP (decision)
 
-The Max-Cut branch was done in the tutorial; the others were left for the practice sheet and are worked below the main result.
+The tutorial did the Max-Cut branch. The others were left for the practice sheet and are worked out after the main result.
 
 # Learn: 3-SAT, XOR-SAT and Max-Cut is NP-hard
 
@@ -242,25 +246,23 @@ The Max-Cut branch was done in the tutorial; the others were left for the practi
 
 > **In short:** XOR equations can be added to cancel variables, so elimination works; OR clauses cannot be cancelled.
 
-**Definitions (Lecture 22).** Boolean variables $x_1..x_n$; a **literal** is $x_i$ or $\neg x_i$; a **clause** is an OR of literals, satisfied if at least one literal is 1; a **CNF** formula $\Phi = C_1 \wedge \cdots \wedge C_m$ is satisfied when every clause is. **3-SAT**: given a CNF formula with 3 literals per clause, is there a satisfying assignment?
+**Definitions (Lecture 22).** We have Boolean variables $x_1..x_n$. A **literal** is $x_i$ or $\neg x_i$. A **clause** is an OR of literals; it is satisfied if at least one literal is 1. A **CNF** formula $\Phi = C_1 \wedge \cdots \wedge C_m$ is satisfied when every clause is. **3-SAT** asks: given a CNF formula with 3 literals per clause, is there an assignment that satisfies it?
 
-**Brute force** tries all $2^n$ assignments, $O(m)$ each: $O(m2^n)$. For $n = 100$ that is about $1.26\times10^{30}$ steps, some $4\times10^{10}$ years at $10^{12}$ assignments per second. Fifty years of work only lowered the base (about $1.334^n$, then $1.307^n$), still $2^{cn}$.
+**Brute force** tries all $2^n$ assignments at $O(m)$ each: $O(m2^n)$. For $n = 100$ that is about $1.26\times10^{30}$ steps, around $4\times10^{10}$ years at $10^{12}$ assignments per second. Fifty years of research has only lowered the base (to about $1.334^n$, then $1.307^n$). It is still $2^{cn}$.
 
-**ETH** (Impagliazzo and Paturi, 1999): there is a constant $c > 0$ such that 3-SAT cannot be solved in time $O(2^{cn})$; in other words no **subexponential** $2^{o(n)}$ algorithm (such as $2^{\sqrt n}$ or $2^{n/\log n}$) exists. Lecture 22 states Karp's theorem (1972) that 3-SAT $\le_P$ Max-Cut, so under ETH Max-Cut has no subexponential exact algorithm either.
+**ETH** (Impagliazzo and Paturi, 1999): there is a constant $c > 0$ such that 3-SAT cannot be solved in $O(2^{cn})$ time. In other words, there is no **subexponential** $2^{o(n)}$ algorithm, such as $2^{\sqrt n}$ or $2^{n/\log n}$. Lecture 22 states Karp's theorem (1972) that 3-SAT $\le_P$ Max-Cut, so under ETH Max-Cut has no subexponential exact algorithm either.
 
-**3-XOR-SAT** (each clause an XOR) is in P. Lecture 22's version: $a \oplus b$ is addition mod 2 and $\neg x_i = x_i + 1$, so for example $\neg x_1 \oplus x_2 \oplus x_3 = 1$ becomes $x_1 + x_2 + x_3 \equiv 0 \pmod 2$ (the $+1$ moves to the right side). Gaussian elimination either reaches a contradiction $0 \equiv 1$ (unsatisfiable) or finds a solution, in $O(n^3)$ for $m = O(n)$.
-
-Each XOR clause is a linear equation mod 2 (with $\neg x = x + 1$), so Gaussian elimination solves the system in $O(n^3)$. The tutorial's worked example:
+**3-XOR-SAT** (every clause is an XOR) is in P. The trick (Lecture 22): $a \oplus b$ is addition mod 2, and $\neg x_i = x_i + 1$. So every XOR clause is a linear equation mod 2. For example, $\neg x_1 \oplus x_2 \oplus x_3 = 1$ becomes $x_1 + x_2 + x_3 \equiv 0 \pmod 2$ (the $+1$ moves to the right side). Gaussian elimination then either reaches a contradiction $0 \equiv 1$ (unsatisfiable) or finds a solution, in $O(n^3)$ time for $m = O(n)$. The tutorial's worked example:
 
 $$x_1 \oplus x_2 \oplus x_3 = 1 \ (E_1), \qquad x_1 \oplus x_2 \oplus x_4 = 0 \ (E_2), \qquad x_2 \oplus x_3 \oplus x_4 = 1 \ (E_3)$$
 
-1. $E_1 \oplus E_2$: $x_3 \oplus x_4 = 1$ ($x_1, x_2$ cancel because $x \oplus x = 0$).
-2. Substitute into $E_3$: $x_2 \oplus 1 = 1$, so $x_2 = 0$.
-3. $x_4$ is free; choose $x_4 = 0$, so $x_3 = 1$; then $E_1$ gives $x_1 = 1 \oplus 0 \oplus 1 = 0$.
+1. Add $E_1$ and $E_2$: $x_3 \oplus x_4 = 1$. ($x_1$ and $x_2$ cancel because $x \oplus x = 0$.)
+2. Put this into $E_3$: $x_2 \oplus 1 = 1$, so $x_2 = 0$.
+3. $x_4$ is free. Choose $x_4 = 0$, so $x_3 = 1$. Then $E_1$ gives $x_1 = 1 \oplus 0 \oplus 1 = 0$.
 
 Solution $(x_1, x_2, x_3, x_4) = (0, 0, 1, 0)$. Check: $E_1 = 1$, $E_2 = 0$, $E_3 = 1$. ✓
 
-**The key ingredient is cancellation**: $x \oplus x = 0$, so equations can be added to eliminate variables. With OR, $x \vee x = x$: nothing cancels, and elimination has nothing to work with.
+**What makes it work is cancellation:** $x \oplus x = 0$, so adding equations removes variables. With OR, $x \vee x = x$: nothing cancels, so elimination has nothing to work with.
 
 ## The fragile boundary between easy and hard
 
@@ -276,90 +278,92 @@ Solution $(x_1, x_2, x_3, x_4) = (0, 0, 1, 0)$. Check: $E_1 = 1$, $E_2 = 0$, $E_
 | Shortest path | Longest simple path |
 | Eulerian circuit (each edge once) | Hamiltonian cycle (each vertex once) |
 
-A small change in the definition can make a problem jump from polynomial to (believed) exponential. That is why we need rigorous reductions, not intuition.
+A small change in the definition can make a problem jump from polynomial to (believed) exponential time. That is why we need careful reductions, not intuition.
 
 ## Max-Cut and its easy special case
 
 > **In short:** Cutting every edge is a bipartiteness test; cutting as many as possible is hard.
 
-Decision Max-Cut: given $G$ and $k$, is there $S$ with $\ge k$ edges crossing $(S, V\setminus S)$? Give each vertex a bit $x_u$; edge $(u,v)$ is cut $\iff x_u \oplus x_v = 1$.
+Decision Max-Cut: given $G$ and $k$, is there a set $S$ with at least $k$ edges crossing $(S, V\setminus S)$? Give each vertex a bit $x_u$ for its side. Edge $(u,v)$ is cut $\iff x_u \oplus x_v = 1$.
 
-- Cutting **all** $\lvert E\rvert$ edges means solving the XOR system $\{x_u \oplus x_v = 1\}$, which is exactly "is $G$ bipartite?": $O(\lvert V\rvert + \lvert E\rvert)$ by BFS.
-- Cutting **as many as possible** means maximising the number of satisfied equations: hard.
+- Cutting **every** edge means solving the XOR system $\{x_u \oplus x_v = 1\}$, which is exactly "is $G$ bipartite?". BFS answers it in $O(\lvert V\rvert + \lvert E\rvert)$.
+- Cutting **as many as possible** means satisfying as many of those equations as possible, and that is hard.
 
-Example: on the odd cycle $C_5$, each cut edge switches sides as you walk around, and you must return to the starting side, so an even number of edges is cut. The max cut is 4 (one edge uncut).
+Example: on the odd cycle $C_5$, each cut edge switches sides as you walk around, and you must end on the side you started from. So an even number of edges is cut, and the max cut is 4 (one edge stays uncut).
 
 ## Step 1a: 3-SAT ≤P NAE-4SAT
 
 > **In short:** Add one shared variable $z$ that plays the role of "false", so not-all-equal becomes at-least-one-true.
 
-**NAE-SAT (not-all-equal).** A clause is satisfied if its literals are **not all equal**: at least one true and at least one false.
+**NAE-SAT (not-all-equal).** A clause is satisfied if its literals are **not all equal**: at least one is true and at least one is false.
 
-**Why NAE is the right stepping stone: symmetry.** Flipping every variable keeps an NAE assignment valid (true and false swap, so "not all equal" is preserved). Max-Cut has the same symmetry (swap $S$ and $V\setminus S$). Ordinary SAT does not: flipping a satisfying assignment can break it.
+**Why NAE is the right stepping stone: symmetry.** Flipping every variable keeps an NAE assignment valid, because true and false swap and "not all equal" stays true. Max-Cut has the same symmetry: swapping $S$ and $V\setminus S$ changes nothing. Ordinary SAT does not: flipping a satisfying assignment can break it.
 
 **Construction.** Add one new variable $z$ to every clause: $(\ell_1 \vee \ell_2 \vee \ell_3) \mapsto \text{NAE}(\ell_1, \ell_2, \ell_3, z)$.
 
-- **($\Rightarrow$)** Take a satisfying assignment and set $z = 0$. Each clause has a true $\ell_i$ and a false $z$, so it is not all equal. ✓
-- **($\Leftarrow$)** Take an NAE assignment. If $z = 1$, flip every variable (still NAE by symmetry), so now $z = 0$. Not all equal with $z = 0$ forces some $\ell_i = 1$, so every original clause is satisfied. ✓
+- **($\Rightarrow$)** Take a satisfying assignment and set $z = 0$. Each clause has a true $\ell_i$ and a false $z$, so its literals are not all equal. ✓
+- **($\Leftarrow$)** Take an NAE assignment. If $z = 1$, flip every variable; it is still NAE by symmetry, and now $z = 0$. With $z = 0$, "not all equal" forces some $\ell_i = 1$. So every original clause is satisfied. ✓
 
-$z$ acts as the reference for "false", which removes the symmetry problem.
+$z$ serves as a fixed reference for "false", which removes the symmetry problem.
 
 ## Step 1b: NAE-4SAT ≤P NAE-3SAT
 
 > **In short:** Split each 4-literal clause into two 3-literal clauses joined by a fresh variable.
 
-Split each 4-clause with a fresh variable $w$:
+Split each 4-literal clause using a fresh variable $w$:
 
 $$\boxed{\text{NAE}(a, b, c, d) \ \mapsto\ \text{NAE}(a, b, w) \wedge \text{NAE}(\neg w, c, d)}$$
 
-- **($\Rightarrow$)** Suppose $a, b, c, d$ are not all equal.
-  - If $a \ne b$: the first clause holds for any $w$. Choose $w = c$, so $\neg w \ne c$ and the second holds.
-  - If $a = b$: choose $w = \neg a$, so the first holds. The second becomes $\text{NAE}(a, c, d)$; since $a = b$ and not all four are equal, $c$ or $d$ differs from $a$. ✓
-- **($\Leftarrow$)** Suppose $a = b = c = d = v$. The first clause forces $w = \neg v$, so the second is $\text{NAE}(v, v, v)$: violated. So if both new clauses hold, the old clause held.
+- **($\Rightarrow$)** Suppose $a, b, c, d$ are not all equal. We choose $w$:
+  - If $a \ne b$: the first clause holds whatever $w$ is. Choose $w = c$; then $\neg w \ne c$, so the second clause holds.
+  - If $a = b$: choose $w = \neg a$, so the first clause holds. The second becomes $\text{NAE}(a, c, d)$. Since $a = b$ and the four are not all equal, $c$ or $d$ differs from $a$, so it holds. ✓
+- **($\Leftarrow$)** Suppose instead that $a = b = c = d = v$. The first clause forces $w = \neg v$, and then the second is $\text{NAE}(v, v, v)$, which fails. So if both new clauses hold, the old clause held.
 
-**Size**: $n + 1 + m$ variables and $2m$ clauses: linear. So **NAE-3SAT is NP-hard**.
+**Size:** $n + 1 + m$ variables and $2m$ clauses, which is linear. So **NAE-3SAT is NP-hard**.
 
 ## Step 2: NAE-3SAT ≤P Max-Cut
 
 > **In short:** Sides of the cut are truth values; a triangle scores 2 exactly when its clause has both a true and a false literal.
 
-**Construction.** Given an NAE-3SAT formula with $n$ variables and $m$ clauses (each on 3 distinct variables):
+**Construction.** Start from an NAE-3SAT formula with $n$ variables and $m$ clauses (each clause on 3 different variables).
 
-1. **Literal vertices**: two vertices $x_i$ and $\neg x_i$ per variable. The side of the cut a literal is on is its truth value.
-2. **Variable edges**: one edge $x_i$ – $\neg x_i$ per variable. It scores 1 only if $x_i$ and $\neg x_i$ are on opposite sides (consistency).
-3. **Clause triangles**: for each clause, a triangle on its three literal vertices. It scores 2 if the clause is not-all-equal and 0 otherwise.
-4. **Target** $k = n + 2m$, the largest possible score.
+1. **Literal vertices:** two vertices, $x_i$ and $\neg x_i$, for each variable. The side a literal ends up on is its truth value.
+2. **Variable edges:** one edge $x_i$ – $\neg x_i$ per variable. It scores 1 only if $x_i$ and $\neg x_i$ are on opposite sides, which keeps the assignment consistent.
+3. **Clause triangles:** for each clause, a triangle on its three literal vertices. It scores 2 if the clause is not-all-equal and 0 otherwise.
+4. **Target:** $k = n + 2m$, the most the graph could possibly score.
 
-**Two counting facts.** There are exactly $n$ variable edges. A triangle has **at most 2** cut edges: with only two sides, two of its three vertices share a side. It has exactly 2 if its vertices are split and 0 if they all lie on one side. (If two clauses share a pair of literals, that triangle edge appears twice; count it twice, or give it weight 2.)
+**Two counting facts.** There are exactly $n$ variable edges. A triangle has **at most 2** cut edges, because with only two sides, two of its three corners must share a side. It has exactly 2 when its corners are split, and 0 when all three are on one side. (If two clauses share a pair of literals, that triangle edge appears twice: count it twice, or give it weight 2.)
 
-**($\Rightarrow$) NAE-satisfiable ⇒ a cut of size $\ge n + 2m$.** Put every true literal vertex in $S$ and every false one in $V \setminus S$. $x_i$ and $\neg x_i$ are always on opposite sides, so all $n$ variable edges are cut. Each clause is not-all-equal, so its triangle is split and gives 2. Total $n + 2m$.
+**($\Rightarrow$) NAE-satisfiable ⇒ a cut with at least $n + 2m$ edges.** Put every true literal vertex in $S$ and every false one outside. $x_i$ and $\neg x_i$ always land on opposite sides, so all $n$ variable edges are cut. Each clause is not-all-equal, so its triangle is split and scores 2. Total: $n + 2m$.
 
-**($\Leftarrow$) A cut of size $\ge n + 2m$ ⇒ NAE-satisfiable.** Triangles contribute at most $2m$ and variable edges at most $n$, so reaching $n + 2m$ needs both at their maximum. All variable edges cut means $x_i$ and $\neg x_i$ are on opposite sides, so "a literal is true iff it is in $S$" is a consistent assignment. Every triangle has 2 cut edges, so its literals are not all on one side: the clause is NAE-satisfied.
+**($\Leftarrow$) A cut with at least $n + 2m$ edges ⇒ NAE-satisfiable.** Triangles give at most $2m$ and variable edges at most $n$, so reaching $n + 2m$ needs both at their maximum.
+- All variable edges are cut, so $x_i$ and $\neg x_i$ are on opposite sides. So "a literal is true iff it is in $S$" is a consistent assignment.
+- Every triangle has 2 cut edges, so its literals are not all on one side. So each clause is NAE-satisfied.
 
-**Size**: $2n$ vertices, $n + 3m$ edges: polynomial.
+**Size:** $2n$ vertices and $n + 3m$ edges, which is polynomial.
 
 $$\boxed{\text{3-SAT} \le_P \text{NAE-3SAT} \le_P \text{Max-Cut, so Max-Cut is NP-hard (and NP-complete, being in NP).}}$$
 
-**Worked example (from the tutorial).** $\Phi = \text{NAE}(x_1, x_2, x_3) \wedge \text{NAE}(\neg x_1, x_2, \neg x_3)$: $n = 3$, $m = 2$, $k = 3 + 2\cdot2 = 7$.
+**Worked example (from the tutorial).** $\Phi = \text{NAE}(x_1, x_2, x_3) \wedge \text{NAE}(\neg x_1, x_2, \neg x_3)$, so $n = 3$, $m = 2$ and $k = 3 + 2\cdot2 = 7$.
 
-- $x_1 = 1, x_2 = 0, x_3 = 0$: $S = \{x_1, \neg x_2, \neg x_3\}$. Clause 1 is $(1, 0, 0)$ and clause 2 is $(0, 0, 1)$, both split. Cut = 3 variable edges + 2 + 2 = **7 = k**. ✓
-- $x_1 = x_2 = x_3 = 1$: triangle 1 lies on one side and scores 0, so the cut is only $3 + 0 + 2 = 5 < 7$.
+- $x_1 = 1, x_2 = 0, x_3 = 0$: $S = \{x_1, \neg x_2, \neg x_3\}$. Clause 1 is $(1, 0, 0)$ and clause 2 is $(0, 0, 1)$, both split. The cut is 3 variable edges + 2 + 2 = **7 = k**. ✓
+- $x_1 = x_2 = x_3 = 1$: triangle 1 lies entirely on one side and scores 0, so the cut is only $3 + 0 + 2 = 5 < 7$.
 
 # Learn: the other classic reductions (practice sheet)
 
-These are the remaining branches of the tutorial's map. Independent Set, Vertex Cover and Clique were done in the tutorial as warm-ups; the rest are the standard textbook proofs (KT 8, DPV 8) for the practice sheet.
+These are the remaining branches of the tutorial's map. The tutorial did Independent Set, Vertex Cover and Clique as warm-ups. The rest are the standard textbook proofs (KT 8, DPV 8) for the practice sheet.
 
 ## Independent Set ≤P Vertex Cover (tutorial warm-up)
 
 > **In short:** What is left over after an independent set is a vertex cover, and the other way round.
 
-**Observation**: $S$ is independent $\iff$ $V \setminus S$ is a vertex cover. For each edge, "not both endpoints in $S$" $\iff$ "at least one endpoint in $V\setminus S$". So $(G, k) \mapsto (G, n - k)$: IS $\ge k$ $\iff$ VC $\le n - k$. Both directions are this one line; write both.
+**Observation:** $S$ is independent $\iff$ $V \setminus S$ is a vertex cover. For each edge, "not both ends in $S$" means the same as "at least one end in $V\setminus S$". So map $(G, k) \mapsto (G, n - k)$: an independent set of size $\ge k$ exists iff a vertex cover of size $\le n - k$ exists. Both directions are this one line, but write both.
 
 ## Independent Set ≤P Clique (tutorial warm-up)
 
 > **In short:** Flip every edge to a non-edge: independent sets become cliques.
 
-$S$ is independent in $G$ $\iff$ $S$ is a clique in the **complement** $\bar G$. Map $(G, k)\mapsto (\bar G, k)$, $O(n^2)$.
+$S$ is independent in $G$ $\iff$ $S$ is a clique in the **complement** $\bar G$ (same vertices, edges exactly where $G$ has none). Map $(G, k)\mapsto (\bar G, k)$ in $O(n^2)$.
 
 Every reduction proof has the same four parts: (1) construction, (2) $\Rightarrow$, (3) $\Leftarrow$, (4) polynomial time.
 
@@ -367,41 +371,51 @@ Every reduction proof has the same four parts: (1) construction, (2) $\Rightarro
 
 > **In short:** Pick one true literal per clause; the conflict edges stop you from picking both $x$ and $\neg x$.
 
-**IS**: given $G$, $k$, is there a set of $k$ pairwise non-adjacent vertices?
+**IS:** given $G$ and $k$, are there $k$ vertices with no edge between any two of them?
 
-**IS ∈ NP**: certificate the set $S$; check $\lvert S\rvert \ge k$ and no edge inside $S$: $O(n + m)$.
+**IS ∈ NP:** the certificate is the set $S$. Check $\lvert S\rvert \ge k$ and that no edge lies inside $S$: $O(n + m)$.
 
-**Construction.** Formula $\varphi$ with clauses $C_1..C_m$. For each clause make a **triangle** of 3 vertices, one per literal. Add an edge between every pair of vertices labelled with **complementary** literals ($x_i$ and $\neg x_i$). Set $k = m$.
+**Construction.** Take a formula $\varphi$ with clauses $C_1..C_m$. For each clause make a **triangle** of 3 vertices, one for each of its literals. Add an edge between every two vertices whose literals are **opposites** ($x_i$ and $\neg x_i$). Set $k = m$.
 
-**($\Rightarrow$)** Take a satisfying assignment. In each clause pick one true literal's vertex. That is $m$ vertices, one per triangle (no triangle edge inside), and no two are complementary (both can't be true): independent.
+**($\Rightarrow$)** Take a satisfying assignment and, in each clause, pick the vertex of one true literal. That gives $m$ vertices, one per triangle, so no triangle edge is inside the set. No two are opposites, since $x_i$ and $\neg x_i$ can't both be true. So the set is independent.
 
-**($\Leftarrow$)** An independent set of size $m$ has exactly one vertex per triangle (two in one triangle would be adjacent). Set those literals true; this is consistent because no complementary pair was chosen (they are adjacent). Unset variables are arbitrary. Every clause has a true literal.
+**($\Leftarrow$)** An independent set of size $m$ has exactly one vertex in each triangle, since two in the same triangle would be adjacent. Set those literals to true. This is consistent, because opposite literals are joined by an edge and so were never both chosen. Variables not set this way can be anything. Every clause now has a true literal.
 
-**Size**: $3m$ vertices, $O(m^2)$ edges, polynomial.
+**Size:** $3m$ vertices and $O(m^2)$ edges, which is polynomial.
 
 ## Vertex Cover ≤P Set Cover
 
 > **In short:** Each vertex is the set of edges it touches.
 
-Universe $U = E$; for each vertex $v$ a set $S_v$ = the edges at $v$; same $k$. $k$ vertices cover all edges iff the corresponding $k$ sets cover $U$.
+Let the universe be $U = E$. For each vertex $v$, make the set $S_v$ of edges touching $v$, and keep the same $k$. Then $k$ vertices cover every edge iff the matching $k$ sets cover $U$.
 
 ## 3-SAT ≤P 3-Colouring
 
 > **In short:** Two colours stand for true and false; gadgets force every clause to contain a true literal.
 
-**Construction.** A triangle **T, F, B** (true, false, base). For each variable $x_i$, vertices $x_i$ and $\neg x_i$ joined to each other and to B, so one of them is coloured T and the other F. For each clause $(a \vee b \vee c)$, an **OR-gadget**: a 6-vertex graph whose output can be coloured T iff at least one input is T, and whose output is joined to F and B (forcing it to T).
+**Construction.**
+- A triangle **T, F, B** (true, false, base). Its three colours name the palette.
+- For each variable $x_i$, vertices $x_i$ and $\neg x_i$, joined to each other and to B. So one is coloured T and the other F.
+- For each clause $(a \vee b \vee c)$, an **OR-gadget**: a 6-vertex graph whose output can be coloured T iff at least one input is T. The output is joined to F and B, which forces it to be T.
 
-**($\Rightarrow$)** Colour literals by the assignment; every clause has a true input, so each gadget can be completed with output T.
-**($\Leftarrow$)** In any 3-colouring, call T's colour "true"; each variable pair gets T and F (it avoids B and the two differ); each gadget output is forced to T, which is possible only if some input literal is T. So the assignment satisfies every clause.
-**Size** $O(n + m)$.
+**($\Rightarrow$)** Colour the literals by the assignment. Every clause has a true input, so each gadget can be finished with output T.
 
-The gadget details are rarely asked; the structure (palette triangle, variable pairs, forced clause outputs) and the two directions are what earn marks.
+**($\Leftarrow$)** In any 3-colouring, call T's colour "true". Each variable pair gets T and F (both avoid B, and they differ). Each gadget output is forced to T, which is only possible if some input literal is T. So the assignment satisfies every clause.
+
+**Size:** $O(n + m)$.
+
+The gadget's inner details are rarely asked. The structure (palette triangle, variable pairs, forced clause outputs) and the two directions are what earn marks.
 
 ## 3-SAT ≤P Subset Sum (sketch)
 
 > **In short:** Write numbers with one digit per variable and per clause so that hitting the target means a consistent assignment satisfying every clause.
 
-Numbers written in base 10 with one digit per variable and one per clause. For each variable two numbers ($x_i$ true / false) with a 1 in the variable's digit and a 1 in each clause digit the literal satisfies; two slack numbers per clause (1 and 2 in the clause digit). Target: 1 in every variable digit and 4 in every clause digit. Picking exactly one of each variable pair is forced by the variable digit; a clause digit reaches 4 with slack only if at least one literal contributes. No carries occur (each digit sums to at most 5 < 10). The numbers have $n + m$ digits: polynomial in the input length. Subset Sum has an $O(nT)$ DP, which is only **pseudo-polynomial**, so there is no contradiction.
+Write numbers in base 10 with one digit position for each variable and one for each clause.
+- **Variable numbers:** for each variable, two numbers ($x_i$ true, $x_i$ false). Each has a 1 in the variable's digit and a 1 in the digit of every clause that literal satisfies.
+- **Slack numbers:** two per clause, with 1 and 2 in that clause's digit.
+- **Target:** 1 in every variable digit and 4 in every clause digit.
+
+The variable digit forces you to pick exactly one number from each variable pair. A clause digit can only reach 4 with the slack numbers if at least one literal adds to it. No carries happen, since each digit adds to at most 5 < 10. The numbers have $n + m$ digits, which is polynomial in the input length. Subset Sum does have an $O(nT)$ DP, but that is only **pseudo-polynomial** (it depends on the value $T$), so there is no contradiction.
 
 ## Practice
 

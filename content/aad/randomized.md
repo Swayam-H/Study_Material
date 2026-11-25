@@ -1,59 +1,59 @@
 # Learn: randomized algorithms and MaxCut
 
-Lecture 19 introduces algorithms that flip coins, and one proof technique you will use again and again: **define indicator variables, use linearity of expectation, conclude that some outcome is at least the average**. Quiz II Q1 was exactly this method applied to DAGs instead of cuts. Sources: Lecture 19, the Moodle practice set (Problems 2, 4, 6), Class Test II.
+Lecture 19 introduces algorithms that flip coins. It also introduces one proof technique you will use again and again: **define indicator variables, use linearity of expectation, and conclude that some outcome is at least the average**. Quiz II Q1 used exactly this method, on DAGs instead of cuts. Sources: Lecture 19, the Moodle practice set (Problems 2, 4, 6), Class Test II.
 
 ## Deterministic versus randomized
 
 > **In short:** Flipping coins can make every input behave like an average one, at the price of a small chance of bad luck.
 
-A **deterministic** algorithm always takes the same steps on the same input. A **randomized** algorithm also flips fair coins, so its running time and/or output are random variables even for a fixed input.
+A **deterministic** algorithm always does the same thing on the same input. A **randomized** algorithm also flips fair coins, so even on a fixed input its running time or output (or both) can vary.
 
-**Why randomize? QuickSort.** With a fixed pivot rule (first element, say), some input (here, a sorted array) gives splits of size 0 and $n-1$ every time: $\Theta(n^2)$. For **any** deterministic rule there is such a bad family. With a uniformly random pivot there are no bad inputs: the **expected** time is $O(n\log n)$ on **every** input; only unlucky coins are slow.
+**Why use randomness? QuickSort.** With a fixed pivot rule (say, the first element), some input splits into sizes 0 and $n-1$ every time; for that rule a sorted array does it, giving $\Theta(n^2)$. **Every** deterministic rule has such bad inputs. With a pivot chosen uniformly at random there are no bad inputs: the **expected** time is $O(n\log n)$ on **every** input, and only unlucky coin flips are slow.
 
-- **Monte Carlo**: always fast, may be wrong with small probability (fingerprinting below).
-- **Las Vegas**: always correct, running time is random (randomized QuickSort, Rabin–Karp with verification).
+- **Monte Carlo:** always fast, but wrong with a small probability (fingerprinting, below).
+- **Las Vegas:** always correct, but the running time is random (randomized QuickSort, Rabin–Karp with checking).
 
 ## Probability toolkit
 
 > **In short:** Linearity of expectation needs no independence at all, which makes it the tool for almost every proof here.
 
-- **Indicator variable**: $X_A = 1$ if event $A$ happens, else 0. $\mathbb{E}[X_A] = \Pr[A]$.
-- **Linearity of expectation**:
+- **Indicator variable:** $X_A = 1$ if event $A$ happens, else 0. Then $\mathbb{E}[X_A] = \Pr[A]$.
+- **Linearity of expectation:**
 $$\boxed{\mathbb{E}\Big[\sum_i X_i\Big] = \sum_i \mathbb{E}[X_i] \quad \text{always, independent or not}}$$
-This is the most important line in the chapter. The rubric gives marks for saying the variables need **not** be independent.
-- **Union bound**: $\Pr[A_1 \cup \cdots \cup A_k] \le \sum_i \Pr[A_i]$, also with no independence.
-- **Independence**: $\Pr[A \cap B] = \Pr[A]\Pr[B]$. **Pairwise** independence (every pair) is weaker than **mutual** independence (every subfamily).
-- **Averaging principle** (probabilistic method): if $\mathbb{E}[X] = \mu$ then some outcome has $X \ge \mu$ and some has $X \le \mu$. A random variable cannot always be below its mean.
-- **Markov**: for $X \ge 0$, $\Pr[X \ge a] \le \mathbb{E}[X]/a$.
-- **Repetition**: if one run succeeds with probability $\ge p$, then $k$ independent runs all fail with probability $\le (1-p)^k \le e^{-pk}$.
+This is the most important line in the chapter. The rubric gives marks for saying that the variables do **not** need to be independent.
+- **Union bound:** $\Pr[A_1 \cup \cdots \cup A_k] \le \sum_i \Pr[A_i]$. This doesn't need independence either.
+- **Independence:** $\Pr[A \cap B] = \Pr[A]\Pr[B]$. **Pairwise** independence (every pair is independent) is weaker than **mutual** independence (every group is).
+- **Averaging principle** (the probabilistic method): if $\mathbb{E}[X] = \mu$, then some outcome has $X \ge \mu$ and some has $X \le \mu$. A random variable can't always be below its average.
+- **Markov:** for $X \ge 0$, $\Pr[X \ge a] \le \mathbb{E}[X]/a$.
+- **Repetition:** if one run succeeds with probability $\ge p$, then $k$ independent runs all fail with probability $\le (1-p)^k \le e^{-pk}$.
 
 ## The MaxCut problem
 
 > **In short:** Split the vertices into two sides to cut as many edges as possible.
 
-$G = (V, E)$ undirected, $n$ vertices, $m$ edges. A **cut** is a partition $(S, \bar S)$; $\text{Cut}(S)$ is the set of edges with one end on each side. **MaxCut**: find $S$ maximising $\lvert\text{Cut}(S)\rvert$. MaxCut is NP-hard (np page); **MinCut** is polynomial (max flow). One word changes everything.
+$G = (V, E)$ is undirected with $n$ vertices and $m$ edges. A **cut** splits the vertices into two sides $(S, \bar S)$, and $\text{Cut}(S)$ is the set of edges with one end on each side. **MaxCut** asks for the $S$ with the largest $\lvert\text{Cut}(S)\rvert$. MaxCut is NP-hard (NP page), while **MinCut** is solvable in polynomial time (max flow). One word changes everything.
 
-**Is MaxCut $= m$?** Every edge is cut iff $G$ is bipartite (the two sides are the colour classes). BFS 2-colouring decides it in $O(n+m)$. An odd cycle cannot have all its edges cut: going round it the sides alternate, and an odd number of switches cannot return to the start. So MaxCut$(C_5) = 4$.
+**Is MaxCut $= m$?** Every edge can be cut iff $G$ is bipartite, with the two colour classes as the sides. BFS 2-colouring checks this in $O(n+m)$. An odd cycle can never have all its edges cut: going round it the sides alternate, and an odd number of switches can't bring you back to the starting side. So MaxCut$(C_5) = 4$.
 
 ## Greedy heuristics
 
 > **In short:** Greedy rules can get stuck below the optimum, but placing each vertex opposite most of its placed neighbours always cuts at least half the edges.
 
-**Attempt 1: max-degree greedy, and why it fails (Lecture 19 §3.1).** Start with $S = \emptyset$; scan vertices in decreasing order of degree and move $v$ into $S$ if that strictly increases the cut.
+**Attempt 1: max-degree greedy, and why it fails (Lecture 19 §3.1).** Start with $S = \emptyset$. Go through the vertices from highest degree to lowest, and move $v$ into $S$ if that strictly increases the cut.
 
-*Counterexample.* A tree with two adjacent hubs $u_1, u_2$ (degree 4), $u_1$ joined to leaves $a_1, a_2, a_3$ and $u_2$ to leaves $b_1, b_2, b_3$: 8 vertices, 7 edges.
+*Counterexample.* A tree with two neighbouring hubs $u_1, u_2$ (degree 4 each). $u_1$ is joined to leaves $a_1, a_2, a_3$ and $u_2$ to leaves $b_1, b_2, b_3$: 8 vertices, 7 edges.
 
-1. $u_1$ moves to $S$: the cut goes from 0 to 4.
-2. $u_2$ is next: moving it cuts $u_2b_1, u_2b_2, u_2b_3$ (+3) but un-cuts $u_1u_2$ (−1), a net +2, so it moves. Cut = 6.
-3. Every leaf now has its only neighbour in $S$; moving a leaf would lose 1. The algorithm stops at **6**.
+1. $u_1$ moves into $S$: the cut goes from 0 to 4.
+2. Next is $u_2$. Moving it cuts $u_2b_1, u_2b_2, u_2b_3$ (+3) but un-cuts $u_1u_2$ (−1), a net gain of 2, so it moves. Cut = 6.
+3. Now every leaf's only neighbour is in $S$, so moving a leaf would lose 1. The algorithm stops at **6**.
 
-But a tree is bipartite: $S = \{u_1, b_1, b_2, b_3\}$ cuts all **7** edges. Putting both hubs on the same side sacrificed the edge between them.
+But a tree is bipartite: $S = \{u_1, b_1, b_2, b_3\}$ cuts all **7** edges. Putting both hubs on the same side threw away the edge between them.
 
-**Sequential greedy** (Lecture 19 §3.2): place $v_1$ in $S$; for each next vertex $v$, put it on the side **opposite** the majority of its already-placed neighbours (in $\bar S$ if $d_S(v) > d_{\bar S}(v)$, else in $S$).
+**Sequential greedy** (Lecture 19 §3.2): put $v_1$ in $S$. For each next vertex $v$, put it on the side **opposite** most of its already-placed neighbours: in $\bar S$ if $d_S(v) > d_{\bar S}(v)$, otherwise in $S$.
 
-**Theorem (Exercise 1): sequential greedy cuts $\ge m/2$ edges.** When $v$ is placed, the edges from $v$ to already-placed neighbours are decided for the first time, and at least half of them, $\max(d_S(v), d_{\bar S}(v)) \ge \frac12(d_S(v) + d_{\bar S}(v))$, are cut. Every edge is decided exactly once, when its later endpoint is placed. Summing over all vertices, at least half of all edges are cut.
+**Theorem (Exercise 1): sequential greedy cuts at least $m/2$ edges.** When $v$ is placed, the edges from $v$ to its already-placed neighbours are decided, and at least half of them are cut, since $\max(d_S(v), d_{\bar S}(v)) \ge \frac12(d_S(v) + d_{\bar S}(v))$. Each edge is decided exactly once, when its later endpoint is placed. Adding up over all vertices, at least half of all edges are cut.
 
-**Worked trace: the house graph** (square $v_1v_2v_4v_3$ with roof $v_5$ joined to $v_1, v_2$; 6 edges), order $v_1..v_5$:
+**Worked trace: the house graph** (a square $v_1v_2v_4v_3$ with a roof vertex $v_5$ joined to $v_1, v_2$; 6 edges), in the order $v_1..v_5$:
 
 | Step | Vertex | Placed neighbours | Choice | Cut so far |
 |---|---|---|---|---|
@@ -63,13 +63,18 @@ But a tree is bipartite: $S = \{u_1, b_1, b_2, b_3\}$ cuts all **7** edges. Putt
 | 4 | $v_4$ | $v_2, v_3 \in \bar S$ | $S$ | 4 |
 | 5 | $v_5$ | $v_1 \in S$, $v_2 \in \bar S$ (tie) | $S$ | 5 |
 
-Cut 5 is optimal: the triangle $v_1v_2v_5$ always has an uncut edge.
+A cut of 5 is optimal, because the triangle $v_1v_2v_5$ always has an uncut edge.
 
-**Sequential greedy is not optimal, even with no ties (Lecture 19 §3.3).** 6 vertices, 11 edges: $v_1v_2$, $v_1v_3$, and all 9 edges between $\{v_1, v_2, v_3\}$ and $\{v_4, v_5, v_6\}$. In the order $v_1, \ldots, v_6$: $v_1 \in S$; $v_2$ and $v_3$ each see only $v_1 \in S$, so go to $\bar S$ (2 cut); $v_4, v_5, v_6$ each see $v_1 \in S$ and $v_2, v_3 \in \bar S$, so $d_{\bar S} = 2 > 1 = d_S$ forces them into $S$, cutting 2 and leaving $v_1v_i$ uncut. Total $1 + 1 + 2 + 2 + 2 = 8$. But $S^* = \{v_1, v_2, v_3\}$ cuts all **9** cross edges (only $v_1v_2$, $v_1v_3$ uncut). Greedy grabbed 2 early edges and paid 3 later.
+**Sequential greedy is not optimal, even without ties (Lecture 19 §3.3).** Take 6 vertices and 11 edges: $v_1v_2$, $v_1v_3$, and all 9 edges between $\{v_1, v_2, v_3\}$ and $\{v_4, v_5, v_6\}$. In the order $v_1, \ldots, v_6$:
+- $v_1$ goes in $S$.
+- $v_2$ and $v_3$ each see only $v_1 \in S$, so they go to $\bar S$ (2 edges cut).
+- $v_4, v_5, v_6$ each see $v_1 \in S$ and $v_2, v_3 \in \bar S$. Since $d_{\bar S} = 2 > 1 = d_S$, each goes into $S$, cutting 2 edges and leaving its edge to $v_1$ uncut.
 
-**Exercise 1 warm-up (triangle).** On a triangle in order $v_1, v_2, v_3$: $v_2$ has 1 back edge and greedy cuts it; $v_3$ has 2 back edges (to $v_1 \in S$, $v_2 \in \bar S$), a tie, and greedy cuts exactly 1. Total $2 \ge 3/2$. This is the proof below in miniature: every edge is a back edge of exactly one vertex (its later endpoint), so $\sum_i \lvert\text{BackEdges}(v_i)\rvert = m$, and step $i$ cuts $\max(d_S, d_{\bar S}) \ge \frac12\lvert\text{BackEdges}(v_i)\rvert$.
+The total is $1 + 1 + 2 + 2 + 2 = 8$. But $S^* = \{v_1, v_2, v_3\}$ cuts all **9** cross edges (only $v_1v_2$ and $v_1v_3$ are uncut). Greedy grabbed 2 edges early and paid 3 later.
 
-The output depends on the order. Practice set Problem 6: on the path $a-b-c-d$ in order $a, d, b, c$ it cuts only 2 of 3 edges, while in **BFS order** on a connected bipartite graph it cuts every edge (it reproduces the BFS 2-colouring, by induction over layers).
+**Exercise 1 warm-up (triangle).** On a triangle in the order $v_1, v_2, v_3$: $v_2$ has 1 back edge and greedy cuts it. $v_3$ has 2 back edges (to $v_1 \in S$ and $v_2 \in \bar S$), a tie, and greedy cuts exactly 1. Total $2 \ge 3/2$. This is the proof above in miniature. Every edge is a back edge of exactly one vertex (its later endpoint), so $\sum_i \lvert\text{BackEdges}(v_i)\rvert = m$, and step $i$ cuts $\max(d_S, d_{\bar S}) \ge \frac12\lvert\text{BackEdges}(v_i)\rvert$.
+
+The result depends on the order. Practice set Problem 6: on the path $a-b-c-d$ in the order $a, d, b, c$, it cuts only 2 of the 3 edges. In **BFS order** on a connected bipartite graph it cuts every edge, because it reproduces the BFS 2-colouring (induction over the layers).
 
 ## The random cut
 
@@ -79,7 +84,7 @@ The output depends on the order. Practice set Problem 6: on the path $a-b-c-d$ i
 
 **Theorem.** $\mathbb{E}[\lvert\text{Cut}(S)\rvert] = m/2$.
 
-*Proof.* For each edge $e = (u, v)$ let $X_e = 1$ if $e$ is cut. $e$ is cut iff $u, v$ land on different sides, which happens in 2 of the 4 equally likely outcomes ($S\bar S$, $\bar S S$), so $\mathbb{E}[X_e] = \frac12$. $\lvert\text{Cut}(S)\rvert = \sum_e X_e$: each cut edge contributes 1 and each uncut edge 0. On the path $1 - 2 - 3$ with $e_1 = 12$, $e_2 = 23$:
+*Proof.* For each edge $e = (u, v)$, let $X_e = 1$ if $e$ is cut. $e$ is cut iff $u$ and $v$ land on different sides, which is 2 of the 4 equally likely outcomes ($S\bar S$ and $\bar S S$). So $\mathbb{E}[X_e] = \frac12$. The cut size is $\lvert\text{Cut}(S)\rvert = \sum_e X_e$, since each cut edge adds 1 and each uncut edge adds 0. For example, on the path $1 - 2 - 3$ with $e_1 = 12$ and $e_2 = 23$:
 
 | $S$ | $X_{e_1}$ | $X_{e_2}$ | $\lvert\text{Cut}(S)\rvert$ |
 |---|---|---|---|
@@ -88,28 +93,28 @@ The output depends on the order. Practice set Problem 6: on the path $a-b-c-d$ i
 | $\{2\}$ | 1 | 1 | 2 |
 | $\{1,2\}$ | 0 | 1 | 1 |
 
-(and the complements give the same values). By linearity
+(The complements give the same values.) By linearity,
 $$\mathbb{E}[\lvert\text{Cut}(S)\rvert] = \sum_{e\in E}\mathbb{E}[X_e] = \frac m2.$$
 
-**Corollary (probabilistic method).** Every graph has a cut with at least $m/2$ edges: a random variable cannot always be below its average.
+**Corollary (probabilistic method).** Every graph has a cut with at least $m/2$ edges, because a random variable can't always be below its average.
 
-**Approximation ratio.** MaxCut $\le m$, so the random cut is a $\frac12$-approximation in expectation.
+**Approximation ratio.** MaxCut $\le m$, so in expectation the random cut is within a factor $\frac12$ of optimal.
 
-**Independence of edge indicators** (Lecture 19 §5.4). Any **two** edge indicators are independent (for edges $uv$, $vw$: $\Pr[\text{both cut}] = \Pr[u \ne v, v \ne w] = \frac14 = \frac12\cdot\frac12$), but a **triangle**'s three indicators are not mutually independent: all three cut is impossible ($\Pr = 0 \ne \frac18$). Linearity did not need any of this.
+**Are the edge indicators independent?** (Lecture 19 §5.4.) Any **two** of them are. For edges $uv$ and $vw$: $\Pr[\text{both cut}] = \Pr[u \ne v, v \ne w] = \frac14 = \frac12\cdot\frac12$. But the three edges of a **triangle** are not mutually independent: all three can never be cut together, so that probability is $0 \ne \frac18$. Linearity didn't need any of this.
 
-**How many repetitions for 99%?** Let $p = \Pr[\lvert\text{Cut}\rvert \ge m/2]$. The cut size is an integer $\le m$; values below $m/2$ are at most $\lceil m/2\rceil - 1 \le m/2 - \frac12$. So $\frac m2 = \mathbb{E} \le (1 - p)(\frac m2 - \frac12) + pm$, giving $p \ge \frac{1}{m+2}$. After $k$ runs, all fail with probability $\le (1 - \frac{1}{m+2})^k \le e^{-k/(m+2)}$. With $k = (m+2)\ln 100$, this is $\le 1\%$.
+**How many repeats for 99% success?** Let $p = \Pr[\lvert\text{Cut}\rvert \ge m/2]$. The cut size is an integer $\le m$, and any value below $m/2$ is at most $\lceil m/2\rceil - 1 \le m/2 - \frac12$. So $\frac m2 = \mathbb{E} \le (1 - p)(\frac m2 - \frac12) + pm$, which gives $p \ge \frac{1}{m+2}$. After $k$ runs, all of them fail with probability $\le (1 - \frac{1}{m+2})^k \le e^{-k/(m+2)}$. Taking $k = (m+2)\ln 100$ makes this at most $1\%$.
 
 ## The template for "every X has a Y with at least ..."
 
 > **In short:** If the average is at least $k$, some outcome is at least $k$.
 
-1. **Random object**: choose the structure at random (vertex sides, a permutation, a truth assignment, a colouring).
-2. **Indicator per item** (edge, clause, group): compute its probability of being good, with a **justification** (counting, symmetry, independence).
-3. **Linearity**: $\mathbb{E}[\text{number good}] = \sum \Pr[\text{item good}]$; mention that independence is not needed.
-4. **Averaging**: some outcome is at least the expectation; that outcome is the object you wanted.
-5. If the bound is "$< 1$ bad item expected", conclude that some outcome has **zero** bad items (the count is a non-negative integer).
+1. **Pick a random object:** choose the structure at random (sides of the vertices, a permutation, a truth assignment, a colouring).
+2. **One indicator per item** (edge, clause, group): find the probability that the item is good, and **say why** (counting, symmetry, independence).
+3. **Linearity:** $\mathbb{E}[\text{number good}] = \sum \Pr[\text{item good}]$. Mention that independence is not needed.
+4. **Averaging:** some outcome is at least the expectation, and that outcome is the object you wanted.
+5. If you showed "fewer than 1 bad item expected", conclude that some outcome has **zero** bad items, since the count is a non-negative integer.
 
-Quiz II Q1 rubric: 1.5 for indicators + linearity, 1.0 for the averaging conclusion, and the probability itself was worth 0.5 for the number and 1.0 for the reason.
+Quiz II Q1 rubric: 1.5 for indicators plus linearity and 1.0 for the averaging conclusion. The probability itself was worth 0.5 for the number and 1.0 for the reason.
 
 ## Lecture 19 exercises, solved
 
@@ -141,72 +146,74 @@ Quiz II Q1 rubric: 1.5 for indicators + linearity, 1.0 for the averaging conclus
 
 # Learn: fingerprinting and Rabin–Karp
 
-Lectures 20 and 21 use one fact: **two different polynomials of degree $\le d$ agree on at most $d$ points of a field**, so evaluating both at a random point catches a difference with probability $\ge 1 - d/p$. In this course "randomized hashing" means this polynomial fingerprinting, not universal hash tables. Sources: Lectures 20, 21, the Class Test II paper with its solutions, and the Lecture 24 course summary.
+Lectures 20 and 21 rest on one fact: **two different polynomials of degree $\le d$ agree on at most $d$ points of a field**. So if you evaluate both at a random point, you spot the difference with probability at least $1 - d/p$. In this course "randomized hashing" means this polynomial fingerprinting, not universal hash tables. Sources: Lectures 20, 21, the Class Test II paper with its solutions, and the Lecture 24 course summary.
 
 ## Equality needs $n$ bits deterministically
 
 > **In short:** With fewer than $n$ bits, two different files must send the same message, and Bob cannot tell them apart.
 
-Alice has $a \in \{0,1\}^n$, Bob has $b$; Alice sends one message and Bob must decide whether $a = b$, **always correctly**.
+Alice has a string $a \in \{0,1\}^n$ and Bob has $b$. Alice sends one message, and Bob must decide whether $a = b$, and he must **always be right**.
 
-*Claim.* Some message needs $\ge n$ bits. If all messages had $\le n-1$ bits, there would be at most $2^{n-1}$ messages for $2^n$ strings, so two strings $a \ne a'$ would get the same message (pigeonhole). Give Bob $b = a'$: when Alice holds $a'$ the answer is "equal", when she holds $a$ it is "not equal", but Bob sees the same message and the same $b$ in both cases, so he answers the same: one answer is wrong.
+*Claim.* Some message needs at least $n$ bits. Suppose every message had at most $n-1$ bits. Then there are at most $2^{n-1}$ possible messages for $2^n$ strings, so two different strings $a \ne a'$ get the same message (pigeonhole). Now give Bob $b = a'$. If Alice holds $a'$ the right answer is "equal"; if she holds $a$ it is "not equal". But Bob sees the same message and the same $b$ both times, so he gives the same answer, and one of the two is wrong.
 
 ## The fingerprint protocol
 
 > **In short:** Treat the bits as coefficients of a polynomial and compare its values at one random point. Two different polynomials rarely agree there.
 
-Read $a$ as the coefficients of $P_a(x) = \sum_{i=0}^{n-1} a_ix^i$. Fix a prime $p$ (say $p \approx n^2$). Alice picks $r \in \{0, \ldots, p-1\}$ uniformly and sends $(r, P_a(r) \bmod p)$. Bob accepts iff $P_b(r) \equiv P_a(r) \pmod p$.
+Treat the bits of $a$ as coefficients: $P_a(x) = \sum_{i=0}^{n-1} a_ix^i$. Fix a prime $p$ (say $p \approx n^2$). Alice picks $r \in \{0, \ldots, p-1\}$ at random and sends $(r, P_a(r) \bmod p)$. Bob says "equal" iff $P_b(r) \equiv P_a(r) \pmod p$.
 
-- **If $a = b$**: always accepts (one-sided error).
-- **If $a \ne b$**: $D = P_a - P_b$ is a nonzero polynomial of degree $\le n-1$ over the field $\mathbb{Z}_p$ (this is why $p$ must be **prime**: $\mathbb{Z}_p$ is a field, so a degree-$d$ polynomial has at most $d$ roots). Bob wrongly accepts iff $r$ is a root of $D$:
+- **If $a = b$:** Bob always says "equal". The error is only one-sided.
+- **If $a \ne b$:** $D = P_a - P_b$ is a nonzero polynomial of degree $\le n-1$ over $\mathbb{Z}_p$. Because $p$ is **prime**, $\mathbb{Z}_p$ is a field, and a nonzero degree-$d$ polynomial over a field has at most $d$ roots. Bob is wrong only if $r$ happens to be a root of $D$:
 $$\boxed{\Pr[\text{error}] \le \frac{n-1}{p}}$$
-(Schwartz–Zippel, one-variable case).
-- **Cost**: $2\lceil\log_2 p\rceil = O(\log n)$ bits instead of $n$. With $p \approx n^2$ the error is $\le 1/n$. A 4 GB file ($n \approx 2^{35}$ bits) with a 100-bit prime: 200 bits sent, error $\le 2^{35}/2^{100} = 2^{-65}$.
+(This is Schwartz–Zippel with one variable.)
+- **Cost:** $2\lceil\log_2 p\rceil = O(\log n)$ bits instead of $n$. With $p \approx n^2$, the error is at most $1/n$. Example: a 4 GB file ($n \approx 2^{35}$ bits) with a 100-bit prime sends 200 bits, with error $\le 2^{35}/2^{100} = 2^{-65}$.
 
-**By hand:** $a = 1011$, $b = 1101$, $p = 11$, $r = 3$. $P_a(x) = 1 + x^2 + x^3$, $P_a(3) = 37 \equiv 4$; $P_b(x) = 1 + x + x^3$, $P_b(3) = 31 \equiv 9$. Different, so Bob detects the difference. The colliding seeds are the roots of $D = x^2 - x = x(x-1)$: $r \in \{0, 1\}$, so the error is $2/11 \le 3/11$.
+**By hand:** $a = 1011$, $b = 1101$, $p = 11$, $r = 3$. $P_a(x) = 1 + x^2 + x^3$, so $P_a(3) = 37 \equiv 4$. $P_b(x) = 1 + x + x^3$, so $P_b(3) = 31 \equiv 9$. They differ, so Bob detects the difference. The unlucky choices of $r$ are the roots of $D = x^2 - x = x(x-1)$, namely $r \in \{0, 1\}$, so the error is $2/11 \le 3/11$.
 
 ## Rabin–Karp string matching (Lecture 21)
 
 > **In short:** Fingerprint every window of the text, and update each window's fingerprint from the previous one in constant time.
 
-Find all occurrences of a pattern $t$ of length $m$ in a text $s$ of length $n$. Hash each length-$m$ window as a number in base $r$ modulo $p$:
+Find every place a pattern $t$ of length $m$ occurs in a text $s$ of length $n$. Hash each length-$m$ window of the text as a base-$r$ number mod $p$:
 $$H(i) = \big(s[i]r^{m-1} + s[i+1]r^{m-2} + \cdots + s[i+m-1]\big) \bmod p.$$
 
-**Why hashing is needed.** Comparing the pattern with each of the $n - m + 1$ windows costs $O(m)$ each, $O(nm)$ in the worst case (text $aaa\ldots a$, pattern $aa\ldots ab$: every window matches until its last character). Hashing replaces each $O(m)$ comparison by an $O(1)$ comparison of numbers, but only if the window hashes can be updated in $O(1)$.
+**Why hashing helps.** Comparing the pattern with each of the $n - m + 1$ windows character by character costs $O(m)$ each, so $O(nm)$ in the worst case (text $aaa\ldots a$, pattern $aa\ldots ab$: every window matches until its last character). Hashing replaces each $O(m)$ comparison by comparing two numbers in $O(1)$, as long as the window hashes can be updated in $O(1)$.
 
-**Rolling update in $O(1)$.** With $R = r^{m-1} \bmod p$ precomputed:
+**Rolling update in $O(1)$.** Precompute $R = r^{m-1} \bmod p$. Then
 $$\boxed{H(i+1) = \big(r\,(H(i) - s[i]\,R) + s[i+m]\big) \bmod p}$$
-(remove the outgoing character, shift every power up by one, add the incoming character).
+In words: remove the character leaving the window, shift every power up by one, and add the character entering.
 
-**Error.** A non-matching window collides with probability $\le \frac{m-1}{p}$ over a random $r$ (Schwartz–Zippel). There are $\le n$ windows, so by the **union bound** $\Pr[\text{any false match}] \le \frac{nm}{p}$; choose $p \ge n^2m$ for error $\le 1/n$.
+**Error.** For a random $r$, a window that does not match collides with probability $\le \frac{m-1}{p}$ (Schwartz–Zippel). There are at most $n$ windows, so by the **union bound** $\Pr[\text{any false match}] \le \frac{nm}{p}$. Choose $p \ge n^2m$ to make this at most $1/n$.
 
-**Time.** $O(m)$ for $R$, $H_t$ and $H(0)$; then $O(1)$ per window: $O(n + m)$.
+**Time.** $O(m)$ to compute $R$, $H_t$ and $H(0)$, then $O(1)$ per window: $O(n + m)$ in total.
 
-**Las Vegas version.** On every hash match, compare the window with $t$ character by character ($O(m)$). Now the output is always correct. A false alarm costs $O(m)$ and happens with probability $\le m/p$ per window, so the expected wasted work is $\le n\cdot\frac mp\cdot O(m)$, which is $O(m)$ for $p \ge nm$. Total expected time $O(n + m + m\cdot\#\text{matches})$.
+**Las Vegas version.** Whenever the hashes match, check the window against $t$ character by character ($O(m)$). Now the answer is always correct. A false alarm costs $O(m)$ and happens with probability $\le m/p$ per window, so the expected wasted work is $\le n\cdot\frac mp\cdot O(m)$, which is $O(m)$ for $p \ge nm$. Total expected time: $O(n + m + m\cdot\#\text{matches})$.
 
-**Trace** ($s = 314152$, $t = 415$, $r = 10$, $p = 13$): $R = 100 \bmod 13 = 9$, $H_t = 415 \bmod 13 = 12$, $H(0) = 314 \bmod 13 = 2$. $H(1) = 10(2 - 3\cdot9) + 1 = -249 \equiv 11$; $H(2) = 10(11 - 9) + 5 = 25 \equiv 12$ (**match** at $i = 2$); $H(3) = 10(12 - 36) + 2 = -238 \equiv 9$. Always reduce a negative value into $0..p-1$.
+**Trace** ($s = 314152$, $t = 415$, $r = 10$, $p = 13$): $R = 100 \bmod 13 = 9$, $H_t = 415 \bmod 13 = 12$, $H(0) = 314 \bmod 13 = 2$. Then $H(1) = 10(2 - 3\cdot9) + 1 = -249 \equiv 11$; $H(2) = 10(11 - 9) + 5 = 25 \equiv 12$ (**match** at $i = 2$); $H(3) = 10(12 - 36) + 2 = -238 \equiv 9$. Always bring a negative value back into $0..p-1$.
 
 ## Streaming palindrome check (Class Test II Q1)
 
 > **In short:** Fingerprint the string forwards and backwards at the same time; they match exactly when it is a palindrome.
 
-The same idea works on a stream: compare a string with its reverse without storing it. For $S = s_1\ldots s_\ell$ ($\ell \le n$, alphabet $\{0..k-1\}$) let
+The same idea works on a stream: compare a string with its reverse without storing it. For $S = s_1\ldots s_\ell$ ($\ell \le n$, symbols from $\{0..k-1\}$), define
 
 $$F_\ell(x) = \sum_{i=1}^{\ell} s_ix^{\ell-i}, \qquad R_\ell(x) = \sum_{i=1}^{\ell} s_ix^{i-1}, \qquad \boxed{P(x) = F_\ell(x) - R_\ell(x) = \sum_{j=0}^{\ell-1}(s_{\ell-j} - s_{j+1})x^j}$$
 
-$P \equiv 0$ $\iff$ $s_{\ell-j} = s_{j+1}$ for all $j$ $\iff$ $S$ is a palindrome. For odd $\ell$ the middle coefficient is $s_{m+1} - s_{m+1} = 0$ automatically. Degree $\le n - 1$.
+$F$ reads the string forwards and $R$ reads it backwards. $P \equiv 0$ $\iff$ $s_{\ell-j} = s_{j+1}$ for every $j$ $\iff$ $S$ is a palindrome. For odd $\ell$ the middle coefficient is $s_{m+1} - s_{m+1} = 0$ automatically. The degree is $\le n - 1$.
 
-Both halves update term by term: $F_i = x F_{i-1} + s_i$ (Horner) and $R_i = R_{i-1} + s_ix^{i-1}$. Evaluated at a random $r \bmod p$ that is three numbers $H_F, H_R$ and $\text{pow} = r^{i-1}$, so the space is $O(\log p) = O(\log k + \log n + \log\frac1\varepsilon)$ bits, with $p > \max(k, n/\varepsilon)$ and error $\le (n-1)/p$. $p > k$ makes sure two different symbols stay different mod $p$. The full solved question with the rubric and hand traces is on the quizzes page.
+Both update one symbol at a time: $F_i = x F_{i-1} + s_i$ (Horner) and $R_i = R_{i-1} + s_ix^{i-1}$. At a random $r \bmod p$ this means keeping three numbers, $H_F$, $H_R$ and $\text{pow} = r^{i-1}$. So the space is $O(\log p) = O(\log k + \log n + \log\frac1\varepsilon)$ bits, with $p > \max(k, n/\varepsilon)$ and error $\le (n-1)/p$. The condition $p > k$ makes sure two different symbols stay different mod $p$. The full solved question with the rubric and hand traces is on the quizzes page.
 
 ## 2D Rabin–Karp (Class Test II Q2)
 
 > **In short:** Give every pixel its own power of $x$, then roll the hash down the columns and across the rows.
 
-To find an $m\times m$ icon in an $n\times n$ image, give every pixel of an $m\times m$ grid its own power of $x$: base $x$ down a column, base $x^m$ across columns,
+To find an $m\times m$ icon in an $n\times n$ image, give every pixel of an $m\times m$ block its own power of $x$. Use base $x$ going down a column and base $x^m$ going across columns:
 
-$$P_S(x) = \sum_{j=0}^{m-1}\Big(\sum_{u=0}^{m-1} S[u][j]\,x^{m-1-u}\Big)(x^m)^{m-1-j},$$
+$$P_S(x) = \sum_{j=0}^{m-1}\Big(\sum_{u=0}^{m-1} S[u][j]\,x^{m-1-u}\Big)(x^m)^{m-1-j}.$$
 
-so pixel $(u, j)$ gets the exponent $(m-1-j)m + (m-1-u)$, all distinct in $0..m^2-1$, and the degree is $m^2 - 1$. Two passes of the 1D rolling hash compute all $(n-m+1)^2$ fingerprints in $O(n^2)$: first slide vertical strips of height $m$ down each column (base $r$), then slide windows of $m$ strips along each row (base $R = r^m$). By Schwartz–Zippel one window collides with probability $\le (m^2-1)/p$, and by the union bound over $\le n^2$ windows the total is $\le n^2m^2/p$; choose $p > \max(k, n^2m^2/\varepsilon)$, so each hash uses $O(\log k + \log m + \log n)$ bits.
+Pixel $(u, j)$ gets exponent $(m-1-j)m + (m-1-u)$. These are all different and run over $0..m^2-1$, so the degree is $m^2 - 1$.
+
+Two passes of the 1D rolling hash compute all $(n-m+1)^2$ fingerprints in $O(n^2)$. First slide strips of height $m$ down each column (base $r$). Then slide windows of $m$ strips along each row (base $R = r^m$). By Schwartz–Zippel one window collides with probability $\le (m^2-1)/p$. By the union bound over at most $n^2$ windows, the total is $\le n^2m^2/p$. Choose $p > \max(k, n^2m^2/\varepsilon)$; each hash then uses $O(\log k + \log m + \log n)$ bits.
 
 ## Practice
 

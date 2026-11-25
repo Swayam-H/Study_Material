@@ -1,56 +1,56 @@
 # Learn: polynomial multiplication and the FFT
 
-The Fast Fourier Transform multiplies two degree-$d$ polynomials in $O(d\log d)$ instead of $O(d^2)$. It is divide and conquer on a clever choice of evaluation points, the complex roots of unity. The midsem gave it 4 of 30 marks (an 8-point transform by hand and the pseudocode), and Assignment 1 Q1 used it. Sources: Lectures 3, 4 and 8; DPV 2.6; Tutorial 1.
+The Fast Fourier Transform multiplies two degree-$d$ polynomials in $O(d\log d)$ time instead of $O(d^2)$. It is divide and conquer, made possible by a clever choice of points to evaluate at: the complex roots of unity. The midsem gave it 4 of 30 marks (an 8-point transform by hand, plus the pseudocode), and Assignment 1 Q1 used it. Sources: Lectures 3, 4 and 8; DPV 2.6; Tutorial 1.
 
 ## The problem
 
 > **In short:** Multiplying polynomials directly pairs every term with every term, $O(d^2)$ work. We want $O(d\log d)$.
 
-Given $A(x) = a_0 + a_1x + \cdots + a_dx^d$ and $B(x) = b_0 + \cdots + b_dx^d$, find $C(x) = A(x)B(x) = c_0 + \cdots + c_{2d}x^{2d}$, where
-$$c_k = \sum_{i=0}^{k} a_i b_{k-i}$$
-(a **convolution**). Computing every $c_k$ directly costs $\Theta(d)$ each and $\Theta(d^2)$ in total.
+Given $A(x) = a_0 + a_1x + \cdots + a_dx^d$ and $B(x) = b_0 + \cdots + b_dx^d$, find $C(x) = A(x)B(x) = c_0 + \cdots + c_{2d}x^{2d}$. Each coefficient is
+$$c_k = \sum_{i=0}^{k} a_i b_{k-i},$$
+which is called a **convolution**. Computing each $c_k$ directly costs $\Theta(d)$, so $\Theta(d^2)$ for all of them.
 
 ## Two representations
 
 > **In short:** A polynomial can be stored as its coefficients or as its values at enough points. Multiplying is easy with values; the hard part is converting between the two.
 
-- **Coefficients**: $(a_0, \ldots, a_d)$.
-- **Values**: $A(x_0), \ldots, A(x_d)$ at any $d+1$ distinct points.
+- **Coefficients:** the list $(a_0, \ldots, a_d)$.
+- **Values:** $A(x_0), \ldots, A(x_d)$ at any $d+1$ different points.
 
-**Fact.** A degree-$d$ polynomial is determined by its values at any $d+1$ distinct points (a nonzero polynomial of degree $\le d$ has at most $d$ roots, so two polynomials agreeing at $d+1$ points have a difference with too many roots).
+**Fact.** The values at any $d+1$ different points pin down a degree-$d$ polynomial completely. Reason: if two such polynomials agreed at $d+1$ points, their difference would have degree $\le d$ but $d+1$ roots, so it must be zero.
 
-In the value representation, multiplication is easy: $C(x_k) = A(x_k)B(x_k)$, which is $O(n)$. $C$ has degree $2d$, so we need $n \ge 2d+1$ points. The plan:
+With values, multiplying is easy: $C(x_k) = A(x_k)B(x_k)$ at each point, $O(n)$ in total. Since $C$ has degree $2d$, we need $n \ge 2d+1$ points. The plan:
 
-1. **Evaluate** $A$ and $B$ at $n$ points ($n$ = a power of 2, $n \ge 2d+1$).
-2. **Multiply** pointwise: $O(n)$.
-3. **Interpolate** to get $C$'s coefficients.
+1. **Evaluate** $A$ and $B$ at $n$ points ($n$ a power of 2, $n \ge 2d+1$).
+2. **Multiply** the values point by point: $O(n)$.
+3. **Interpolate**: turn $C$'s values back into coefficients.
 
-Evaluating at $n$ arbitrary points costs $O(n^2)$ (Horner's rule is $O(n)$ per point). The FFT does steps 1 and 3 in $O(n\log n)$ by choosing the points cleverly.
+At arbitrary points, step 1 costs $O(n^2)$ (Horner's rule takes $O(n)$ per point). The FFT does steps 1 and 3 in $O(n\log n)$ by picking the points cleverly.
 
 ## The even/odd split
 
 > **In short:** Evaluating $A$ at $x$ and at $-x$ shares almost all the work, because both use the same two half-size polynomials in $x^2$.
 
-Split $A$ by the parity of exponents:
-$$A(x) = A_e(x^2) + x\,A_o(x^2),$$
-where $A_e$ has the even-index coefficients $(a_0, a_2, a_4, \ldots)$ and $A_o$ the odd-index ones $(a_1, a_3, \ldots)$, each of half the degree. Example from Lecture 3: $A(x) = 3 + 4x + 6x^2 + 2x^3 + x^4 + 10x^5$ gives $A_e(y) = 3 + 6y + y^2$ and $A_o(y) = 4 + 2y + 10y^2$.
+Split $A$ into its even and odd powers:
+$$A(x) = A_e(x^2) + x\,A_o(x^2).$$
+$A_e$ uses the even-index coefficients $(a_0, a_2, a_4, \ldots)$ and $A_o$ the odd-index ones $(a_1, a_3, \ldots)$. Each has half the degree. Example from Lecture 3: $A(x) = 3 + 4x + 6x^2 + 2x^3 + x^4 + 10x^5$ gives $A_e(y) = 3 + 6y + y^2$ and $A_o(y) = 4 + 2y + 10y^2$.
 
-If the points come in **$\pm$ pairs** $\pm x_0, \ldots, \pm x_{n/2-1}$, then
-$$A(x_i) = A_e(x_i^2) + x_i A_o(x_i^2), \qquad A(-x_i) = A_e(x_i^2) - x_i A_o(x_i^2),$$
-so the $n$ evaluations need only $A_e$ and $A_o$ at the $n/2$ squares $x_i^2$. For the recursion to continue, the squares must **also** come in $\pm$ pairs, and their squares too, all the way down. Real numbers cannot do this (squares are positive). The complex $n$th roots of unity can.
+Now suppose the points come in **$\pm$ pairs** $\pm x_0, \ldots, \pm x_{n/2-1}$. Since $x$ and $-x$ have the same square,
+$$A(x_i) = A_e(x_i^2) + x_i A_o(x_i^2), \qquad A(-x_i) = A_e(x_i^2) - x_i A_o(x_i^2).$$
+So all $n$ values need only $A_e$ and $A_o$ at the $n/2$ squares $x_i^2$: two half-size problems. To keep recursing, the squares must **also** come in $\pm$ pairs, and their squares too, all the way down. Real numbers can't do this, because squares of reals are never negative. The complex $n$th roots of unity can.
 
 ## Roots of unity
 
 > **In short:** These are evenly spaced points on the unit circle. Squaring them gives the same kind of point set, half as large, so the split can repeat all the way down.
 
 $$\omega = e^{2\pi i/n} = \cos\tfrac{2\pi}{n} + i\sin\tfrac{2\pi}{n}, \qquad \omega^n = 1.$$
-The $n$th roots of unity are $1, \omega, \omega^2, \ldots, \omega^{n-1}$, evenly spaced on the unit circle. $\omega$ is a **primitive** $n$th root: $\omega^k \ne 1$ for $0 < k < n$.
+The $n$th roots of unity are $1, \omega, \omega^2, \ldots, \omega^{n-1}$, spaced evenly around the unit circle. $\omega$ is a **primitive** $n$th root, meaning $\omega^k \ne 1$ for $0 < k < n$.
 
-Properties used by the FFT ($n$ even):
+Three properties the FFT uses ($n$ even):
 
-- **$\pm$ pairs**: $\omega^{j + n/2} = -\omega^j$, because $\omega^{n/2} = e^{\pi i} = -1$.
-- **Squares are roots of half the order**: $(\omega^j)^2 = (\omega^2)^j$ and $\omega^2$ is a primitive $(n/2)$th root of unity.
-- **Sum to zero**: for $d \not\equiv 0 \pmod n$, $\sum_{\ell=0}^{n-1} \omega^{\ell d} = \frac{\omega^{nd} - 1}{\omega^d - 1} = 0$; for $d \equiv 0$ the sum is $n$.
+- **They come in $\pm$ pairs:** $\omega^{j + n/2} = -\omega^j$, because $\omega^{n/2} = e^{\pi i} = -1$ (half a turn).
+- **Their squares are roots of half the order:** $(\omega^j)^2 = (\omega^2)^j$, and $\omega^2$ is a primitive $(n/2)$th root of unity.
+- **They sum to zero:** if $d \not\equiv 0 \pmod n$, then $\sum_{\ell=0}^{n-1} \omega^{\ell d} = \frac{\omega^{nd} - 1}{\omega^d - 1} = 0$. If $d \equiv 0$, the sum is $n$.
 
 Values to know for $n = 8$: $\omega = \frac{1+i}{\sqrt2}$, $\omega^2 = i$, $\omega^3 = \frac{-1+i}{\sqrt2}$, $\omega^4 = -1$, $\omega^5 = -\omega$, $\omega^6 = -i$, $\omega^7 = -\omega^3$. For $n = 4$: $1, i, -1, -i$.
 
@@ -71,17 +71,17 @@ FFT(a = (a_0, ..., a_{n-1}), ω):        // n a power of 2, ω a primitive n-th 
     return (r_0, ..., r_{n-1})
 ```
 
-These four lines are exactly the four blanks of Midsem Q1.3 (0.5 marks each). The pair of lines in the loop is the **butterfly**. Note $-\omega^j = \omega^{j+n/2}$, so $r_{j+n/2} = s_j + \omega^{j+n/2}s'_j$ is also accepted.
+These four lines are exactly the four blanks in Midsem Q1.3 (0.5 marks each). The two lines inside the loop are called the **butterfly**. Since $-\omega^j = \omega^{j+n/2}$, writing $r_{j+n/2} = s_j + \omega^{j+n/2}s'_j$ is also accepted.
 
-**Running time.** Two half-size calls plus $O(n)$ combining: $T(n) = 2T(n/2) + O(n) = O(n\log n)$.
+**Running time.** Two half-size calls plus $O(n)$ work to combine: $T(n) = 2T(n/2) + O(n) = O(n\log n)$.
 
 ## The matrix view
 
 > **In short:** Evaluating at all roots of unity is one matrix–vector product, and the FFT is a fast way to do that product.
 
-Evaluation at the roots of unity is multiplication by the **Fourier matrix** $M_n(\omega)$, with $(M_n)_{jk} = \omega^{jk}$ for $j, k = 0..n-1$:
+Evaluating at all the roots of unity is the same as multiplying by the **Fourier matrix** $M_n(\omega)$, whose entries are $(M_n)_{jk} = \omega^{jk}$ for $j, k = 0..n-1$:
 $$\begin{pmatrix}A(1)\\A(\omega)\\\vdots\\A(\omega^{n-1})\end{pmatrix} = M_n(\omega)\begin{pmatrix}a_0\\a_1\\\vdots\\a_{n-1}\end{pmatrix}.$$
-The **(discrete) Fourier transform** of $a$ is the vector $M_n(\omega)a$. FFT is a fast way to compute it.
+The vector $M_n(\omega)a$ is called the **(discrete) Fourier transform** of $a$. The FFT computes it fast.
 
 ## Interpolation: the inverse FFT
 
@@ -89,39 +89,44 @@ The **(discrete) Fourier transform** of $a$ is the vector $M_n(\omega)a$. FFT is
 
 $$\boxed{M_n(\omega)^{-1} = \frac{1}{n}M_n(\omega^{-1})}$$
 
-**Proof.** Entry $(j, k)$ of $M_n(\omega)M_n(\omega^{-1})$ is $\sum_{\ell} \omega^{j\ell}\omega^{-\ell k} = \sum_\ell \omega^{\ell(j-k)}$. If $j = k$ this is $n$. If $j \neq k$ then $0 < |j - k| < n$, so $\omega^{j-k} \ne 1$ and the geometric sum is $\frac{\omega^{n(j-k)} - 1}{\omega^{j-k}-1} = 0$. So the product is $nI$.
+**Proof.** Entry $(j, k)$ of $M_n(\omega)M_n(\omega^{-1})$ is $\sum_{\ell} \omega^{j\ell}\omega^{-\ell k} = \sum_\ell \omega^{\ell(j-k)}$.
+- If $j = k$, every term is 1, so the sum is $n$.
+- If $j \neq k$, then $0 < |j - k| < n$, so $\omega^{j-k} \ne 1$, and the geometric sum is $\frac{\omega^{n(j-k)} - 1}{\omega^{j-k}-1} = 0$.
 
-Another view (Lecture 4): the columns of $M_n$ are orthogonal under the complex inner product $\langle u, v\rangle = \sum u_\ell \overline{v_\ell}$, each of length $\sqrt n$; $M_n/\sqrt n$ is unitary, and the inverse of a unitary matrix is its conjugate transpose. Since $\overline{\omega} = \omega^{-1}$, that gives the same formula.
+So the product is $nI$.
 
-So **interpolation is the same FFT, run with $\omega^{-1}$, then divided by $n$**. $\omega^{-1}$ is again a primitive $n$th root of unity, so the same code works. In Lecture 8's code, `inv` flips the sign of the angle and divides each butterfly output by 2; over $\log_2 n$ levels that divides by $n$.
+**Another view (Lecture 4).** The columns of $M_n$ are orthogonal under the complex inner product $\langle u, v\rangle = \sum u_\ell \overline{v_\ell}$, and each has length $\sqrt n$. So $M_n/\sqrt n$ is unitary, and the inverse of a unitary matrix is its conjugate transpose. Since $\overline{\omega} = \omega^{-1}$, this gives the same formula.
 
-Lecture 8's intuition for row $m$: $a_m = \frac1n\sum_j A(\omega^j)\omega^{-jm} = \frac1n\sum_k a_k\sum_j \omega^{j(k-m)}$. Untwisting by $\omega^{-jm}$ makes the $k = m$ term stand still (its $n$ unit steps add to $n$) while every other term keeps turning and its steps close into a loop that sums to 0.
+So **interpolation is the same FFT, run with $\omega^{-1}$, then divided by $n$**. $\omega^{-1}$ is also a primitive $n$th root of unity, so the same code works. In Lecture 8's code, the `inv` flag flips the sign of the angle and divides each butterfly output by 2. Over $\log_2 n$ levels that divides by $n$ in total.
+
+**Lecture 8's picture for row $m$:** $a_m = \frac1n\sum_j A(\omega^j)\omega^{-jm} = \frac1n\sum_k a_k\sum_j \omega^{j(k-m)}$. Multiplying by $\omega^{-jm}$ "untwists" term $k = m$, so its $n$ steps all point the same way and add up to $n$. Every other term keeps turning, its steps go round a full loop, and they cancel to 0.
 
 ## Multiplying polynomials in $O(n\log n)$
 
 > **In short:** Convert both polynomials to values, multiply the values pointwise, and convert back.
 
-1. Let $n$ = the least power of two with $n \ge 2d + 1$ (deg $C \le 2d$, so $C$ has $2d+1$ coefficients). **Pad** $a$ and $b$ with zeros to length $n$.
-2. $\hat a = \mathrm{FFT}(a, \omega)$, $\hat b = \mathrm{FFT}(b, \omega)$.
+1. Let $n$ be the smallest power of two with $n \ge 2d + 1$ ($C$ has degree up to $2d$, so up to $2d+1$ coefficients). **Pad** $a$ and $b$ with zeros to length $n$.
+2. $\hat a = \mathrm{FFT}(a, \omega)$ and $\hat b = \mathrm{FFT}(b, \omega)$.
 3. $\hat c_j = \hat a_j\hat b_j$ for each $j$.
 4. $c = \frac1n\mathrm{FFT}(\hat c, \omega^{-1})$. Round to integers if the inputs were integers.
 
-Total $O(n\log n)$. Without padding, $n$ points cannot determine a polynomial of degree $\ge n$, and the product "wraps around" (cyclic convolution).
+Total $O(n\log n)$. Why pad: $n$ values cannot pin down a polynomial of degree $n$ or more. Without padding the product "wraps around" (a cyclic convolution).
 
-**Integer multiplication.** An $n$-digit integer is a polynomial evaluated at 10; multiply the polynomials with FFT and then propagate carries. This gives $O(n\log n)$ arithmetic operations on small numbers.
+**Integer multiplication.** An $n$-digit integer is a polynomial evaluated at $x = 10$. Multiply the polynomials with the FFT, then fix up the carries. This uses $O(n\log n)$ arithmetic operations on small numbers.
 
 ## A polynomial from its roots (Lecture 8, Assignment 1 Q1)
 
 > **In short:** Multiply the factors in a balanced tree, using FFT multiplication at every level.
 
-Given $z_0, \ldots, z_{n-1}$ (repeats allowed), find the coefficients of $P(x) = \prod_{i}(x - z_i)$, which vanishes exactly at the $z_i$ ($P(z_j) = 0$ iff $(x - z_j) \mid P$).
+Given $z_0, \ldots, z_{n-1}$ (repeats allowed), find the coefficients of $P(x) = \prod_{i}(x - z_i)$. This is the polynomial that is zero exactly at the $z_i$, since $P(z_j) = 0$ iff $(x - z_j)$ divides $P$.
 
-- **One factor at a time** costs $\Theta(i)$ at step $i$, $\Theta(n^2)$ total. FFT does not help when one operand has only two terms.
-- **Balanced product tree**: recursively compute $L(x) = \prod_{i < n/2}(x - z_i)$ and $R(x) = \prod_{i \ge n/2}(x - z_i)$, each of degree $n/2$, then multiply them with FFT in $O(n\log n)$:
+- **One factor at a time** costs $\Theta(i)$ at step $i$, so $\Theta(n^2)$ in total. The FFT doesn't help here, because one of the two operands has only two terms.
+- **Balanced product tree:** recursively compute $L(x) = \prod_{i < n/2}(x - z_i)$ and $R(x) = \prod_{i \ge n/2}(x - z_i)$, each of degree $n/2$, then multiply them with the FFT in $O(n\log n)$:
 $$\boxed{T(n) = 2T(n/2) + O(n\log n) = O(n\log^2 n)}$$
-**Proof of the bound** (recursion tree). Level $j$ has $2^j$ nodes each multiplying polynomials of degree $n/2^{j+1}$, costing $O(\frac{n}{2^j}\log\frac{n}{2^j}) \le O(\frac{n}{2^j}\log n)$ each, so $O(n\log n)$ per level. There are $\log_2 n$ levels, so $O(n\log^2 n)$ overall. The master theorem in the basic form does not apply (the driving term is $n\log n$, not $n^d$); sum the levels.
-**Correctness** by induction: the node for indices $[l, r)$ returns $\prod_{i\in[l,r)}(x - z_i)$; the root returns $P$, which has degree $n$ and leading coefficient 1.
 
+**Proof of the bound** (recursion tree). Level $j$ has $2^j$ nodes. Each multiplies two polynomials of degree $n/2^{j+1}$, costing $O(\frac{n}{2^j}\log\frac{n}{2^j}) \le O(\frac{n}{2^j}\log n)$. So each level costs $O(n\log n)$, and $\log_2 n$ levels give $O(n\log^2 n)$. The basic master theorem does not apply here, because the extra term is $n\log n$, not $n^d$. Add up the levels instead.
+
+**Correctness** by induction: the node for indices $[l, r)$ returns $\prod_{i\in[l,r)}(x - z_i)$. So the root returns $P$, which has degree $n$ and leading coefficient 1.
 ## Practice
 
 **FF1 (DPV 2.7).** What is the sum of the $n$th roots of unity? Their product, if $n$ is odd?
