@@ -96,7 +96,7 @@ Quiz II Q1 rubric: 1.5 for indicators + linearity, 1.0 for the averaging conclus
 
 # Learn: fingerprinting and Rabin–Karp
 
-Lectures 20 and 21 use one fact: **two different polynomials of degree $\le d$ agree on at most $d$ points of a field**, so evaluating both at a random point catches a difference with probability $\ge 1 - d/p$. In this course "randomized hashing" means this polynomial fingerprinting, not universal hash tables. Sources: Lectures 20, 21, Class Test II.
+Lectures 20 and 21 use one fact: **two different polynomials of degree $\le d$ agree on at most $d$ points of a field**, so evaluating both at a random point catches a difference with probability $\ge 1 - d/p$. In this course "randomized hashing" means this polynomial fingerprinting, not universal hash tables. Sources: Lectures 20, 21, the Class Test II paper with its solutions, and the Lecture 24 course summary.
 
 ## Equality needs $n$ bits deterministically
 
@@ -114,7 +114,7 @@ $$\boxed{\Pr[\text{error}] \le \frac{n-1}{p}}$$
 (Schwartz–Zippel, one-variable case).
 - **Cost**: $2\lceil\log_2 p\rceil = O(\log n)$ bits instead of $n$. With $p \approx n^2$ the error is $\le 1/n$. A 4 GB file ($n \approx 2^{35}$ bits) with a 100-bit prime: 200 bits sent, error $\le 2^{35}/2^{100} = 2^{-65}$.
 
-**By hand** (Class Test II pack): $a = 1011$, $b = 1101$, $p = 11$, $r = 3$. $P_a(x) = 1 + x^2 + x^3$, $P_a(3) = 37 \equiv 4$; $P_b(x) = 1 + x + x^3$, $P_b(3) = 31 \equiv 9$. Different, so Bob detects the difference. The colliding seeds are the roots of $D = x^2 - x = x(x-1)$: $r \in \{0, 1\}$, so the error is $2/11 \le 3/11$.
+**By hand:** $a = 1011$, $b = 1101$, $p = 11$, $r = 3$. $P_a(x) = 1 + x^2 + x^3$, $P_a(3) = 37 \equiv 4$; $P_b(x) = 1 + x + x^3$, $P_b(3) = 31 \equiv 9$. Different, so Bob detects the difference. The colliding seeds are the roots of $D = x^2 - x = x(x-1)$: $r \in \{0, 1\}$, so the error is $2/11 \le 3/11$.
 
 ## Rabin–Karp string matching (Lecture 21)
 
@@ -132,6 +132,24 @@ $$\boxed{H(i+1) = \big(r\,(H(i) - s[i]\,R) + s[i+m]\big) \bmod p}$$
 **Las Vegas version.** On every hash match, compare the window with $t$ character by character ($O(m)$). Now the output is always correct. A false alarm costs $O(m)$ and happens with probability $\le m/p$ per window, so the expected wasted work is $\le n\cdot\frac mp\cdot O(m)$, which is $O(m)$ for $p \ge nm$. Total expected time $O(n + m + m\cdot\#\text{matches})$.
 
 **Trace** ($s = 314152$, $t = 415$, $r = 10$, $p = 13$): $R = 100 \bmod 13 = 9$, $H_t = 415 \bmod 13 = 12$, $H(0) = 314 \bmod 13 = 2$. $H(1) = 10(2 - 3\cdot9) + 1 = -249 \equiv 11$; $H(2) = 10(11 - 9) + 5 = 25 \equiv 12$ (**match** at $i = 2$); $H(3) = 10(12 - 36) + 2 = -238 \equiv 9$. Always reduce a negative value into $0..p-1$.
+
+## Streaming palindrome check (Class Test II Q1)
+
+The same idea works on a stream: compare a string with its reverse without storing it. For $S = s_1\ldots s_\ell$ ($\ell \le n$, alphabet $\{0..k-1\}$) let
+
+$$F_\ell(x) = \sum_{i=1}^{\ell} s_ix^{\ell-i}, \qquad R_\ell(x) = \sum_{i=1}^{\ell} s_ix^{i-1}, \qquad \boxed{P(x) = F_\ell(x) - R_\ell(x) = \sum_{j=0}^{\ell-1}(s_{\ell-j} - s_{j+1})x^j}$$
+
+$P \equiv 0$ $\iff$ $s_{\ell-j} = s_{j+1}$ for all $j$ $\iff$ $S$ is a palindrome. For odd $\ell$ the middle coefficient is $s_{m+1} - s_{m+1} = 0$ automatically. Degree $\le n - 1$.
+
+Both halves update term by term: $F_i = x F_{i-1} + s_i$ (Horner) and $R_i = R_{i-1} + s_ix^{i-1}$. Evaluated at a random $r \bmod p$ that is three numbers $H_F, H_R$ and $\text{pow} = r^{i-1}$, so the space is $O(\log p) = O(\log k + \log n + \log\frac1\varepsilon)$ bits, with $p > \max(k, n/\varepsilon)$ and error $\le (n-1)/p$. $p > k$ makes sure two different symbols stay different mod $p$. The full solved question with the rubric and hand traces is on the quizzes page.
+
+## 2D Rabin–Karp (Class Test II Q2)
+
+To find an $m\times m$ icon in an $n\times n$ image, give every pixel of an $m\times m$ grid its own power of $x$: base $x$ down a column, base $x^m$ across columns,
+
+$$P_S(x) = \sum_{j=0}^{m-1}\Big(\sum_{u=0}^{m-1} S[u][j]\,x^{m-1-u}\Big)(x^m)^{m-1-j},$$
+
+so pixel $(u, j)$ gets the exponent $(m-1-j)m + (m-1-u)$, all distinct in $0..m^2-1$, and the degree is $m^2 - 1$. Two passes of the 1D rolling hash compute all $(n-m+1)^2$ fingerprints in $O(n^2)$: first slide vertical strips of height $m$ down each column (base $r$), then slide windows of $m$ strips along each row (base $R = r^m$). By Schwartz–Zippel one window collides with probability $\le (m^2-1)/p$, and by the union bound over $\le n^2$ windows the total is $\le n^2m^2/p$; choose $p > \max(k, n^2m^2/\varepsilon)$, so each hash uses $O(\log k + \log m + \log n)$ bits.
 
 ## Practice
 

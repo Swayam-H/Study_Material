@@ -30,6 +30,8 @@ Everything on one page per area. If a line here is unfamiliar, go back to its ch
 | Random cut | $\mathbb{E} = m/2$ | $\frac12$-approximation |
 | Fingerprint equality | $O(\log n)$ bits, error $\le (n-1)/p$ | $p$ prime |
 | Rabin–Karp | $O(n + m)$, error $\le nm/p$ | union bound |
+| Streaming palindrome | $O(\log k + \log n)$ bits, error $\le (n-1)/p$ | $p > \max(k, n/\varepsilon)$ |
+| 2D Rabin–Karp ($m\times m$ in $n\times n$) | $O(n^2)$, error $\le n^2m^2/p$ | vertical then horizontal roll, $R = r^m$ |
 
 ## Master theorem
 
@@ -88,10 +90,16 @@ $T(n) = aT(n/b) + O(n^d)$: $O(n^d)$ if $d > \log_b a$; $O(n^d\log n)$ if $d = \l
 - Sequential greedy: each vertex cuts at least half of its edges to placed neighbours ⇒ $\ge m/2$.
 - Fingerprint: $P_a(r)\bmod p$; nonzero degree-$d$ polynomial over a field has $\le d$ roots; one-sided error; deterministic equality needs $n$ bits (pigeonhole).
 - Rolling hash: $H(i+1) = r(H(i) - s[i]R) + s[i+m]$, $R = r^{m-1}\bmod p$; reduce negatives mod $p$.
+- Palindrome: $P = F - R = \sum_j (s_{\ell-j} - s_{j+1})x^j$; $H_F \leftarrow H_Fr + s_i$, $H_R \leftarrow H_R + s_i\,\text{pow}$, $\text{pow} \leftarrow \text{pow}\cdot r$. Need $p > k$ too.
+- 2D: pixel $(u, j)$ gets $x^{(m-1-j)m + (m-1-u)}$, degree $m^2 - 1$.
 
 ## NP facts
 
 - To show $X$ NP-hard: **known ≤P X** (from the known, to the new). Then five parts: $X\in$ NP (certificate, check, time) · direction · construction · both directions · polynomial size.
+- NP = poly-time verifier + poly-size certificate (completeness, soundness). P ⊆ NP. NP-hard ≠ every instance hard.
+- Decision ⇒ value by binary search ($O(\log m)$ calls) ⇒ solution by self-reducibility ($n + 1$ calls).
+- **3-SAT → NAE-4SAT**: add $z$ to every clause (flip all if $z = 1$). **NAE-4 → NAE-3**: $\text{NAE}(a,b,w)\wedge\text{NAE}(\neg w,c,d)$, fresh $w$.
+- **NAE-3SAT → Max-Cut**: vertices $x_i, \neg x_i$; edge $x_i\neg x_i$; triangle per clause; $k = n + 2m$. A triangle has ≤ 2 cut edges, so hitting $k$ forces every variable edge cut and every triangle split.
 - 3-SAT → IS: triangle per clause, edges between complementary literals, $k = m$.
 - IS ↔ VC: $S$ independent $\iff$ $V\setminus S$ is a cover ($k\mapsto n-k$). IS ↔ Clique: complement graph.
 - VC → Set Cover: universe = edges, $S_v$ = edges at $v$.

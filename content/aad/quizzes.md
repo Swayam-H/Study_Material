@@ -156,3 +156,122 @@ $$\max\#\text{paths} \ge \text{val}(f^*) = C(P^*, Q^*) \ge \min\lvert F\rvert \g
 and all are equal.
 
 **Algorithm (2 marks).** (i) Set $c(e) = 1$ and run Ford–Fulkerson: the value is at most $\deg^+(s)\le\lvert V\rvert - 1$, so at most $\lvert V\rvert$ augmentations of $O(\lvert E\rvert)$ each: $O(\lvert V\rvert\lvert E\rvert)$. (ii) **Decompose**: starting at $s$, follow any edge with $f^* = 1$; by conservation every vertex entered can be left, so the walk reaches $t$ (if it revisits a vertex, cut out the cycle); record the path, set its edges to 0, repeat $\text{val}(f^*)$ times. Each path is found in $O(\lvert E\rvert)$ (or $O(\lvert V\rvert)$ edges after removing cycles), total $O(\lvert V\rvert\lvert E\rvert)$. The paths are edge-disjoint because each edge carries at most one unit and is zeroed after use. (iii) The min edge set is the set of edges leaving the vertices reachable from $s$ in $G_{f^*}$.
+
+# Class Test II: streaming palindromes and 2D pattern matching
+
+Class Test II was 10 marks (two questions of 1.5 + 1.5 + 2), both on Lectures 20 and 21: polynomial fingerprinting, Schwartz–Zippel and the rolling hash. The theory is in the fingerprinting chapter. The solutions below follow the official solutions and rubric.
+
+**CTB1 (Class Test II Q1, 5 marks).** A stream of characters forms a string $S = s_1s_2\ldots s_\ell$ of length $\ell \le n$ over an alphabet of size $k$; $\ell$ is given before the string. Design a small-space one-pass streaming algorithm to check whether $S$ is a palindrome. (1) [1.5] Define a polynomial $P(x)$ that can be updated term by term as each $s_i$ arrives, such that $P \equiv 0$ (all coefficients 0) iff $S$ is a palindrome. What is its maximum degree? (2) [1.5] Give pseudocode for a randomized streaming algorithm that evaluates $P(r) \bmod p$ in small space. (3) [2] How large should the prime $p$ be? State the error probability and space, showing the dependence on $n$ and $k$.
+
+*Solution.* **The idea.** Comparing $s_1 = s_\ell$, $s_2 = s_{\ell-1}, \ldots$ naively needs the whole string, $\Theta(n\log k)$ bits. Instead reduce "is it a palindrome?" to "is this polynomial identically zero?" and test that at a random point (polynomial identity testing).
+
+**(1) The polynomial (1.5 marks).** Encode the string forwards and backwards:
+$$F_\ell(x) = \sum_{i=1}^{\ell} s_i\,x^{\ell-i}, \qquad R_\ell(x) = \sum_{i=1}^{\ell} s_i\,x^{i-1},$$
+$$P(x) = F_\ell(x) - R_\ell(x) = \sum_{i=1}^{\ell} s_i\,(x^{\ell-i} - x^{i-1}) = \sum_{j=0}^{\ell-1}(s_{\ell-j} - s_{j+1})\,x^j.$$
+
+- **Zero iff palindrome**: the coefficient of $x^j$ is $s_{\ell-j} - s_{j+1}$, so $P \equiv 0$ $\iff$ $s_{\ell-j} = s_{j+1}$ for every $j$ $\iff$ $S$ reads the same both ways.
+- **Odd and even lengths**: for even $\ell = 2m$ every $j$ pairs two different positions. For odd $\ell = 2m+1$ the middle character gives coefficient $(s_{m+1} - s_{m+1})x^m = 0$, so it cancels on its own. Example: $\ell = 5$ gives $P = (s_5 - s_1) + (s_4 - s_2)x + 0\cdot x^2 + (s_2 - s_4)x^3 + (s_1 - s_5)x^4$.
+- **Term-by-term update** when $s_i$ arrives: $F_i(x) = x\,F_{i-1}(x) + s_i$ (Horner's rule) and $R_i(x) = R_{i-1}(x) + s_i\,x^{i-1}$. After the last character both have degree $\ell - 1$ and line up, so the algorithm does not even need $\ell$ in advance.
+- **Degree** $\deg P = \ell - 1 \le n - 1$.
+
+Rubric: 0.75 for defining $P$ and showing the term-by-term construction; 0.75 for $P \equiv 0 \iff$ palindrome (noting that the middle term vanishes for odd $\ell$) and $\deg P \le n - 1$.
+
+**(2) The streaming algorithm (1.5 marks).**
+
+```
+Streaming-Palindrome-Check(stream s_1 ... s_l, symbols in {0..k-1}):
+  choose a prime p > max(k, n/eps); pick r uniformly from {0..p-1}
+  HF <- 0;  HR <- 0;  pow <- 1
+  for each arriving s_i:
+      HF  <- (HF * r + s_i)   mod p     // Horner: HF = F_i(r)
+      HR  <- (HR + s_i * pow) mod p     // adds s_i * r^(i-1): HR = R_i(r)
+      pow <- (pow * r)        mod p     // now pow = r^i
+  H <- (HF - HR) mod p
+  if H == 0: return PALINDROME  else: return NOT PALINDROME
+```
+
+At every step $H_F - H_R \equiv P_i(r) \pmod p$ for the prefix of length $i$, whatever its parity. Rubric: 1.0 for correct $O(1)$-per-character updates of $H_F$, $H_R$, pow; 0.5 for the initialisation and the final test $(H_F - H_R) \bmod p = 0$.
+
+**Trace A: $S = ababa$** with $a\mapsto1$, $b\mapsto2$, $p = 11$, $r = 3$. Here $P \equiv 0$.
+
+| Step | $s_i$ | $H_F = H_F\cdot3 + s_i$ | $H_R = H_R + s_i\cdot\text{pow}$ | pow after |
+|---|---|---|---|---|
+| 1 | 1 | $0\cdot3 + 1 = 1$ | $0 + 1\cdot1 = 1$ | 3 |
+| 2 | 2 | $1\cdot3 + 2 = 5$ | $1 + 2\cdot3 = 7$ | 9 |
+| 3 | 1 | $5\cdot3 + 1 = 16 \equiv 5$ | $7 + 1\cdot9 = 16 \equiv 5$ | $27 \equiv 5$ |
+| 4 | 2 | $5\cdot3 + 2 = 17 \equiv 6$ | $5 + 2\cdot5 = 15 \equiv 4$ | $15 \equiv 4$ |
+| 5 | 1 | $6\cdot3 + 1 = 19 \equiv 8$ | $4 + 1\cdot4 = 8$ | $12 \equiv 1$ |
+
+$H = 8 - 8 = 0$: **PALINDROME**. The prefixes $aba$ (step 3) and $ababa$ (step 5) are odd palindromes, and $H_F = H_R$ holds at exactly those steps.
+
+**Trace B: $S = abaca$** with $c\mapsto3$, same $p$ and $r$. Now $s_2 = 2 \ne s_4 = 3$ and $P(x) = (3-2)x^3 + (2-3)x = x^3 - x \not\equiv 0$.
+
+| Step | $s_i$ | $H_F$ | $H_R$ | pow after |
+|---|---|---|---|---|
+| 1–3 | 1, 2, 1 | 1, 5, 5 | 1, 7, 5 | 3, 9, 5 |
+| 4 | 3 | $5\cdot3 + 3 = 18 \equiv 7$ | $5 + 3\cdot5 = 20 \equiv 9$ | 4 |
+| 5 | 1 | $7\cdot3 + 1 = 22 \equiv 0$ | $9 + 1\cdot4 = 13 \equiv 2$ | 1 |
+
+$H = (0 - 2) \bmod 11 = 9 \ne 0$: **NOT PALINDROME**. Check: $P(3) = 27 - 3 = 24 \equiv 2$, and indeed $H_R - H_F \equiv 2$.
+
+**(3) Prime, error and space (2 marks).**
+
+- **$p > k$ (alphabet)**: symbols lie in $\{0..k-1\}$, so two different symbols differ by $0 < \lvert s_{\ell-j} - s_{j+1}\rvert < k$. With $p > k$ this difference is nonzero mod $p$, so a non-palindrome gives a polynomial that is nonzero **over $\mathbb{Z}_p$**.
+- **Error (Schwartz–Zippel)**: if $S$ is a palindrome, $P \equiv 0$ and the test always accepts (one-sided error). If not, $P \not\equiv 0$ has degree $\le n - 1$, so at most $n - 1$ roots in the field $\mathbb{Z}_p$, and
+$$\Pr[P(r) \equiv 0 \pmod p] \le \frac{\deg P}{p} \le \frac{n-1}{p} < \frac np.$$
+- **Choice of $p$**: for error at most $\varepsilon$ (for example $\varepsilon = 1/n$) take $\boxed{p > \max(k,\ n/\varepsilon)}$.
+- **Space**: five numbers in $\mathbb{Z}_p$ ($p, r, H_F, H_R, \text{pow}$), so $O(\log p) = O(\log k + \log n + \log\frac1\varepsilon)$ bits; with $\varepsilon = 1/n$ that is $O(\log k + \log n)$, against $\Theta(n\log k)$ to store the string.
+
+Rubric: 1.0 for explaining both $p > k$ and $\Pr[\text{error}] \le (n-1)/p$ via Schwartz–Zippel; 1.0 for $p > \max(k, n/\varepsilon)$ and space $O(\log p) = O(\log k + \log n)$ bits.
+
+**CTB2 (Class Test II Q2, 5 marks).** You are given an $n\times n$ image $I$ and an $m\times m$ icon $T$ ($m \le n$), each pixel from an alphabet of size $k$. Check whether $T$ appears anywhere as an $m\times m$ subgrid of $I$. (1) [1.5] Represent any $m\times m$ subgrid as a single univariate polynomial $P(x)$ so that two grids are identical iff their polynomials are identical. What is its degree? (2) [1.5] Compute the fingerprints of all $(n-m+1)^2$ subgrids in $O(n^2)$ total time with a 2-stage rolling hash. (3) [2] Bound the total false-positive probability with Schwartz–Zippel and the union bound. How large should $p$ be, and how does the space per hash depend on $k$, $m$, $n$?
+
+*Solution.* **(1) One polynomial per subgrid (1.5 marks).** For a subgrid $S[0..m-1][0..m-1]$:
+
+- **Columns, base $x$**: column $j$ becomes $C_j(x) = \sum_{u=0}^{m-1} S[u][j]\,x^{m-1-u}$, degree $m - 1$.
+- **Rows of columns, base $x^m$**: combine the columns with powers of $X = x^m$:
+$$P_S(x) = \sum_{j=0}^{m-1} C_j(x)\,(x^m)^{m-1-j} = \sum_{j=0}^{m-1}\sum_{u=0}^{m-1} S[u][j]\,x^{(m-1-j)m + (m-1-u)}.$$
+- **No two pixels share a power**: pixel $(u, j)$ gets exponent $(m-1-j)m + (m-1-u)$. As $j$ and $u$ range over $0..m-1$ this is a base-$m$ number with digits $m-1-j$ and $m-1-u$, so the exponents are exactly $0, 1, \ldots, m^2 - 1$, each once. For $m = 3$ the exponents are
+
+| | column 0 | column 1 | column 2 |
+|---|---|---|---|
+| row 0 | $x^8$ | $x^5$ | $x^2$ |
+| row 1 | $x^7$ | $x^4$ | $x^1$ |
+| row 2 | $x^6$ | $x^3$ | $x^0$ |
+
+So the coefficients of $P_S$ are exactly the pixels, and two grids are equal iff their polynomials are equal: $S = T \iff P_S - P_T \equiv 0$.
+- **Degree** $m^2 - 1$ (from pixel $(0, 0)$).
+
+Rubric: 1.0 for a univariate polynomial giving all $m^2$ pixels distinct exponents $0..m^2-1$; 0.5 for stating $\deg P_S = m^2 - 1$.
+
+**(2) Two-stage rolling hash in $O(n^2)$ (1.5 marks).** Recomputing $P_S(r)$ from scratch at every position costs $O(m^2)$ each, $O(n^2m^2)$ in all. Instead:
+
+*Stage 1, vertical strips (base $r$), 0.75 marks.* For column $j$ and top row $i$, let $C[i][j] = \sum_{u=0}^{m-1} I[i+u][j]\,r^{m-1-u} \bmod p$ be the hash of the height-$m$ strip. Sliding down one row: the top pixel $I[i][j]$ had weight $r^{m-1}$, so subtract $I[i][j]\,r^{m-1}$; multiply by $r$ to raise every remaining exponent by 1; add the new bottom pixel $I[i+m][j]$ with weight 1:
+$$\boxed{C[i+1][j] = \big((C[i][j] - I[i][j]\,r^{m-1})\cdot r + I[i+m][j]\big) \bmod p}$$
+$O(m)$ for $C[0][j]$ plus $O(1)$ per slide is $O(n)$ per column, $O(n^2)$ for all columns.
+
+*Stage 2, horizontal windows (base $R = r^m$), 0.75 marks.* For row $i$, the subgrid at $(i, j)$ is the $m$ strips $C[i][j..j+m-1]$, with hash $H[i][j] = \sum_{v=0}^{m-1} C[i][j+v]\,R^{m-1-v} \bmod p$. This is exactly $P_S(r)$. Sliding right: subtract the leftmost strip $C[i][j]\,R^{m-1}$, multiply by $R$, add the new strip $C[i][j+m]$:
+$$\boxed{H[i][j+1] = \big((H[i][j] - C[i][j]\,R^{m-1})\cdot R + C[i][j+m]\big) \bmod p}$$
+$O(n)$ per row, $O(n^2)$ for all $(n-m+1)^2$ subgrids.
+
+Full algorithm: choose a prime $p > \max(k, n^2m^2/\varepsilon)$ and a random $r$; precompute $r^{m-1}$, $R = r^m$ and $R^{m-1}$; compute $H_T = P_T(r)$ in $O(m^2)$; run stage 1, then stage 2, reporting FOUND at the first $H[i][j] = H_T$. Total $O(m^2) + O(n^2) + O(n^2) = O(n^2)$.
+
+**Worked example** ($n = 3$, $m = 2$, $p = 17$, $r = 2$, so $r^{m-1} = 2$ and $R = 4$). Image rows $I = (1, 2, 1), (3, 4, 2), (2, 1, 3)$; icon rows $T = (4, 2), (1, 3)$, which is the bottom-right $2\times2$ block of $I$.
+
+- Icon: columns $4\cdot2 + 1 = 9$ and $2\cdot2 + 3 = 7$, so $H_T = (9\cdot4 + 7) \bmod 17 = 43 \bmod 17 = 9$.
+- Stage 1, row 0: $C[0][\cdot] = (1\cdot2 + 3,\ 2\cdot2 + 4,\ 1\cdot2 + 2) = (5, 8, 4)$. Slide down: $C[1][0] = (5 - 1\cdot2)\cdot2 + 2 = 8$, $C[1][1] = (8 - 2\cdot2)\cdot2 + 1 = 9$, $C[1][2] = (4 - 1\cdot2)\cdot2 + 3 = 7$. So $C = \begin{pmatrix}5 & 8 & 4\\ 8 & 9 & 7\end{pmatrix}$.
+- Stage 2, row 0: $H[0][0] = (5\cdot4 + 8) \bmod 17 = 28 \bmod 17 = 11 \ne 9$; $H[0][1] = ((11 - 5\cdot4)\cdot4 + 4) \bmod 17 = (-32) \bmod 17 = 2 \ne 9$.
+- Stage 2, row 1: $H[1][0] = (8\cdot4 + 9) \bmod 17 = 41 \bmod 17 = 7 \ne 9$; $H[1][1] = ((7 - 8\cdot4)\cdot4 + 7) \bmod 17 = (-93) \bmod 17 = 9 = H_T$: **FOUND at $(1, 1)$**.
+
+**(3) Error, prime and space (2 marks).**
+
+- **One window**: take $p > k$ so different pixel values stay different mod $p$. For a subgrid $S \ne T$, $D = P_S - P_T \not\equiv 0$ has degree $\le m^2 - 1$, so by Schwartz–Zippel
+$$\Pr[P_S(r) \equiv P_T(r) \pmod p] \le \frac{m^2 - 1}{p} < \frac{m^2}{p}.$$
+- **All windows (union bound)** over $(n-m+1)^2 \le n^2$ positions:
+$$\Pr[\text{any false positive}] \le (n-m+1)^2\cdot\frac{m^2-1}{p} < \frac{n^2m^2}{p}.$$
+- **Prime**: for total error $\le \varepsilon$ take $\boxed{p > \max(k,\ n^2m^2/\varepsilon)}$.
+- **Space per hash**: $O(\log p) = O(\log k + \log n + \log m + \log\frac1\varepsilon)$ bits.
+
+Rubric: 1.0 for the Schwartz–Zippel bound $(m^2-1)/p$ and the union bound over $\le n^2$ windows giving $n^2m^2/p$; 1.0 for $p > \max(k, n^2m^2/\varepsilon)$ and $O(\log k + \log m + \log n)$ bits per hash.
+
+**What to take from Class Test II.** Both questions are the Lecture 20–21 recipe applied to a new object: (1) encode the objects as polynomials whose coefficients are the data, so "equal" becomes "the difference polynomial is zero"; (2) evaluate at a random $r$ modulo a prime, updating in $O(1)$ per step; (3) bound one error by degree$/p$ (Schwartz–Zippel) and many errors by the union bound; (4) choose $p$ larger than the alphabet and than (number of tests × degree)$/\varepsilon$. Expect the endsem to do the same with yet another object.
