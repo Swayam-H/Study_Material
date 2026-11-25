@@ -49,6 +49,10 @@ $G = (V, E)$ is undirected with $n$ vertices and $m$ edges. A **cut** splits the
 
 But a tree is bipartite: $S = \{u_1, b_1, b_2, b_3\}$ cuts all **7** edges. Putting both hubs on the same side threw away the edge between them.
 
+![Max-degree greedy failure](fig/aad-maxdeg-greedy.svg)
+
+*Figure. Blue vertices are in $S$ and red edges are cut. Greedy puts both hubs in $S$ and loses the edge between them (6 edges). Splitting the hubs cuts all 7.*
+
 **Sequential greedy** (Lecture 19 §3.2): put $v_1$ in $S$. For each next vertex $v$, put it on the side **opposite** most of its already-placed neighbours: in $\bar S$ if $d_S(v) > d_{\bar S}(v)$, otherwise in $S$.
 
 **Theorem (Exercise 1): sequential greedy cuts at least $m/2$ edges.** When $v$ is placed, the edges from $v$ to its already-placed neighbours are decided, and at least half of them are cut, since $\max(d_S(v), d_{\bar S}(v)) \ge \frac12(d_S(v) + d_{\bar S}(v))$. Each edge is decided exactly once, when its later endpoint is placed. Adding up over all vertices, at least half of all edges are cut.
@@ -64,6 +68,10 @@ But a tree is bipartite: $S = \{u_1, b_1, b_2, b_3\}$ cuts all **7** edges. Putt
 | 5 | $v_5$ | $v_1 \in S$, $v_2 \in \bar S$ (tie) | $S$ | 5 |
 
 A cut of 5 is optimal, because the triangle $v_1v_2v_5$ always has an uncut edge.
+
+![House graph cut](fig/aad-house-cut.svg)
+
+*Figure. The result of sequential greedy on the house graph: $S = \{v_1, v_4, v_5\}$. Five of the six edges are cut, and the roof triangle makes 6 impossible.*
 
 **Sequential greedy is not optimal, even without ties (Lecture 19 §3.3).** Take 6 vertices and 11 edges: $v_1v_2$, $v_1v_3$, and all 9 edges between $\{v_1, v_2, v_3\}$ and $\{v_4, v_5, v_6\}$. In the order $v_1, \ldots, v_6$:
 - $v_1$ goes in $S$.
@@ -190,6 +198,10 @@ In words: remove the character leaving the window, shift every power up by one, 
 **Las Vegas version.** Whenever the hashes match, check the window against $t$ character by character ($O(m)$). Now the answer is always correct. A false alarm costs $O(m)$ and happens with probability $\le m/p$ per window, so the expected wasted work is $\le n\cdot\frac mp\cdot O(m)$, which is $O(m)$ for $p \ge nm$. Total expected time: $O(n + m + m\cdot\#\text{matches})$.
 
 **Trace** ($s = 314152$, $t = 415$, $r = 10$, $p = 13$): $R = 100 \bmod 13 = 9$, $H_t = 415 \bmod 13 = 12$, $H(0) = 314 \bmod 13 = 2$. Then $H(1) = 10(2 - 3\cdot9) + 1 = -249 \equiv 11$; $H(2) = 10(11 - 9) + 5 = 25 \equiv 12$ (**match** at $i = 2$); $H(3) = 10(12 - 36) + 2 = -238 \equiv 9$. Always bring a negative value back into $0..p-1$.
+
+![Rabin-Karp windows](fig/aad-rabin-karp.svg)
+
+*Figure. The window slides one position at a time and its hash is updated in $O(1)$. Only the window at $i = 2$ has the pattern's hash 12, and it really is 415.*
 
 ## Streaming palindrome check (Class Test II Q1)
 

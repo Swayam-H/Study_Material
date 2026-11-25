@@ -22,6 +22,10 @@ A code gives each symbol a bit string, its codeword. A code is **prefix-free** i
 
 A prefix-free code is the same thing as a **binary tree with the symbols at the leaves**. The path from the root spells the codeword (left = 0, right = 1). A symbol cannot sit at an internal node, because its codeword would be a prefix of the ones below it. In an optimal code the tree is **full** (every internal node has 2 children): a node with only one child could be removed, making codewords shorter.
 
+![Code tree](fig/aad-huffman-tree.svg)
+
+*Figure. The lecture code $A = 0$, $B = 10$, $C = 110$, $D = 111$ as a tree: left is 0, right is 1, symbols at the leaves. With frequencies $.5, .25, .125, .125$ this is exactly the tree Huffman builds, and each internal node carries the total frequency below it.*
+
 ## The objective
 
 > **In short:** Total bits = sum of frequency × depth, so frequent symbols should sit high in the tree.
@@ -80,6 +84,10 @@ With $k$ code symbols instead of 2, the tree is $k$-ary. Simply merging the $k$ 
 
 **Counterexample:** $k = 3$, four symbols each of frequency 1. The naive method merges three 1s into a node of weight 3. Now only two nodes remain, so the root gets just 2 children. The depths are $1, 2, 2, 2$, costing $1 + 2 + 2 + 2 = 7$. Better: give the root three children, two leaves and one internal node holding the other two leaves. Depths $1, 1, 2, 2$, cost 6.
 
+![k-ary Huffman counterexample](fig/aad-kary-huffman.svg)
+
+*Figure. Ternary codes for four symbols of frequency 1. Merging three straight away leaves the root with only two children (cost 7). Adding one dummy of frequency 0 first puts the short-of-children node at the bottom instead (cost 6).*
+
 **Why it fails.** Each merge turns $k$ nodes into 1, so it reduces the count by $k-1$. To end at exactly 1 node, a full $k$-ary tree with $n$ leaves needs $n - 1 \equiv 0 \pmod{k-1}$. Otherwise the **last** merge has fewer than $k$ children. That wastes a short codeword at the top, the most valuable place, instead of at the bottom.
 
 **Fix.** Add dummy symbols of frequency 0 until $n - 1 \equiv 0 \pmod{k-1}$ (at most $k - 2$ dummies), then always merge the $k$ smallest. The dummies end up at the deepest level, where they cost nothing, so the under-full node is at the bottom. In the example, add one 0: merge $\{0, 1, 1\}$ into 2, then $\{1, 1, 2\}$, for cost 6. The exchange proof works as before: the $k$ smallest can be made deepest siblings.
@@ -93,6 +101,10 @@ With $k$ code symbols instead of 2, the tree is $k$-ary. Simply merging the $k$ 
 > **In short:** Always take the job that finishes first; it leaves the most room for the rest.
 
 **Greedy: pick the job that finishes earliest**, throw out the jobs that overlap it, and repeat. (Earliest start, shortest job and fewest conflicts all have counterexamples.)
+
+![Interval scheduling](fig/aad-interval-scheduling.svg)
+
+*Figure. Earliest finish takes B (ends at 4), then D (starts at 5), then G: three jobs. Earliest start would take A, then F, and only fit two.*
 
 **Proof: greedy stays ahead.** Let greedy pick $g_1, \ldots, g_k$ and an optimal solution pick $o_1, \ldots, o_m$, both sorted by finish time $f$ (start time is $s$). Claim: $f(g_r) \le f(o_r)$ for every $r \le k$.
 - $r = 1$: greedy picks the earliest finish of all.
@@ -113,6 +125,10 @@ The **depth** $d$ is the largest number of lectures in progress at the same mome
 **Greedy.** Sort by **start** time. Put each lecture into a room that is free by then (the room whose last lecture ends earliest, if it has ended). If no room is free, open a new one. A min-heap of room finish times finds the earliest-free room in $O(\log n)$.
 
 **Why it is optimal.** Suppose greedy opens room $k + 1$ for a lecture starting at time $s$. Then all $k$ existing rooms have a lecture ending after $s$. Those lectures started at or before $s$, since lectures are handled in order of start time. So $k + 1$ lectures are all running just after $s$, which means $d \ge k + 1$. So greedy never uses more than $d$ rooms, and no solution can use fewer. Time $O(n\log n)$, space $O(n)$. The full write-up with pseudocode is on the midsem page.
+
+![Interval partitioning](fig/aad-interval-partitioning.svg)
+
+*Figure. Lectures handled in order of start time. Room 3 is opened for $c$ only because $a$ and $b$ are both still running at time 2, which already shows depth 3. Later lectures reuse rooms that have freed up.*
 
 ## Practice
 
