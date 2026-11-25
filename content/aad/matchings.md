@@ -4,9 +4,13 @@ The stable matching problem is the course's first example where the hard part is
 
 ## The problem
 
+> **In short:** Pair everyone so that no two people would both rather be with each other than with their assigned partners.
+
 There are $n$ men and $n$ women. Each person ranks all members of the other side. A **perfect matching** pairs everyone. A pair $(m, w)$ **not** matched to each other is a **blocking pair** (rogue couple, instability) if $m$ prefers $w$ to his partner **and** $w$ prefers $m$ to her partner. A perfect matching is **stable** if it has no blocking pair.
 
 ## The Gale–Shapley algorithm (proposer version)
+
+> **In short:** Proposers go down their lists; receivers keep the best offer so far and trade up when a better one arrives.
 
 The lecture uses women proposing; the algorithm is symmetric. Written with men proposing:
 
@@ -30,13 +34,19 @@ Two monotonicity facts drive every proof:
 
 ## Theorem 1: termination in at most $n^2$ proposals
 
+> **In short:** Nobody proposes to the same person twice, and there are only $n^2$ pairs.
+
 Each proposal is from a man to a woman he has never proposed to. There are $n^2$ (man, woman) pairs, so at most $n^2$ proposals. With an array `next[m]` and a ranking table `rank[w][m]` (built in $O(n^2)$), each proposal is $O(1)$, so the algorithm runs in $O(n^2)$ time, which is linear in the input size (the preference lists have $2n^2$ entries).
 
 ## Theorem 2: everyone is matched
 
+> **In short:** A receiver who has been proposed to stays engaged forever, so a man left over would mean every woman is engaged to someone else, which is too many men.
+
 Suppose the loop ends with a man $m$ free. He stops only after proposing to all $n$ women. Each woman who received a proposal is engaged from then on. So all $n$ women are engaged, to $n$ different men, but there are only $n$ men and $m$ is not one of them: contradiction. (This is the Assignment 1 Q3 requirement: the algorithm cannot stop with an unmatched man while a woman is available.)
 
 ## Theorem 3: the output is stable
+
+> **In short:** If $m$ liked $w$ more, he proposed to her earlier; she then only traded up, so she cannot prefer $m$ to her final partner.
 
 Suppose $(m, w)$ is a blocking pair in the output $S$: $m$ prefers $w$ to his partner $w'$ and $w$ prefers $m$ to her partner $m'$.
 
@@ -44,6 +54,8 @@ Suppose $(m, w)$ is a blocking pair in the output $S$: $m$ prefers $w$ to his pa
 - **Case 2: $m$ proposed to $w$.** She rejected him at some point (then or later), for someone she prefers. Since receivers only trade up, her final partner $m'$ is someone she prefers to $m$. Contradiction.
 
 ## Theorem 4: proposer-optimal, receiver-pessimal
+
+> **In short:** Proposers are never rejected by a partner they could have in some stable matching, so each ends with the best one possible. Receivers get the worst.
 
 Call $w$ a **valid partner** of $m$ if some stable matching pairs them. Let best$(m)$ be his highest-ranked valid partner.
 
@@ -62,6 +74,8 @@ $$\boxed{S_W \le_m S' \le_m S_M \text{ for every stable } S'}$$
 
 ## Uniqueness when both versions agree (Midsem Q2.2)
 
+> **In short:** Men-proposing is best for men and women-proposing is best for women. If they agree, no other stable matching fits in between.
+
 **Claim.** If men-proposing and women-proposing GS give the same matching $S$, then $S$ is the only stable matching.
 
 *Proof.* Let $S'$ be any stable matching and suppose $S' \ne S$. Then some man $m$ has a different partner in $S'$; let $w$ be his partner in $S$. Because $S = S_M$ is man-optimal, $m$ prefers $w$ to his $S'$ partner. Because $S = S_W$ is woman-optimal, $w$ prefers $m$ to her $S'$ partner (she has a different partner in $S'$, since $m$ does). So $(m, w)$ blocks $S'$, contradicting stability of $S'$. Hence $S' = S$.
@@ -74,6 +88,8 @@ Hall's theorem says exactly when a bipartite graph has a matching that covers on
 
 ## Statement
 
+> **In short:** One side can be fully matched exactly when every group on that side has at least as many neighbours as members.
+
 For a bipartite graph $G = (L \cup R, E)$ and $S \subseteq L$, let $N(S) \subseteq R$ be the set of vertices adjacent to some vertex of $S$.
 
 $$\boxed{G \text{ has a matching covering } L \iff \lvert N(S)\rvert \ge \lvert S\rvert \text{ for every } S \subseteq L}$$
@@ -81,6 +97,8 @@ $$\boxed{G \text{ has a matching covering } L \iff \lvert N(S)\rvert \ge \lvert 
 When $\lvert L\rvert = \lvert R\rvert$ a matching covering $L$ is a **perfect matching**.
 
 ## Proof
+
+> **In short:** Necessity is counting. For sufficiency, either every group has spare neighbours (match one edge and recurse), or some group is exactly tight (solve it and the rest separately).
 
 **($\Rightarrow$), easy.** If $M$ covers $L$, the vertices of $S$ are matched to $\lvert S\rvert$ **distinct** vertices, all in $N(S)$.
 
@@ -93,6 +111,8 @@ When $\lvert L\rvert = \lvert R\rvert$ a matching covering $L$ is a **perfect ma
 
 ## How to use Hall in an exam
 
+> **In short:** Build the graph, say what a matching means, check the neighbour condition by counting, and state Hall's theorem when you use it.
+
 1. **Build the bipartite graph** and say what a perfect matching means in the problem (rubric: 0.5–1 mark).
 2. **State Hall's theorem** (1 mark).
 3. **Verify $\lvert N(S)\rvert \ge \lvert S\rvert$ for an arbitrary $S$**, usually by **double counting edges** between $S$ and $N(S)$ (1 mark).
@@ -101,11 +121,15 @@ To prove **no** perfect matching exists, exhibit one set $S$ with $\lvert N(S)\r
 
 ## Regular bipartite graphs (Lecture 10 exercises)
 
+> **In short:** When every vertex has the same degree, counting edges proves Hall's condition at once.
+
 **Every $d$-regular bipartite graph ($d \ge 1$) has a perfect matching.** Count edges leaving $S \subseteq L$: exactly $d\lvert S\rvert$. They all land in $N(S)$, which receives at most $d\lvert N(S)\rvert$ edges in total. So $d\lvert S\rvert \le d\lvert N(S)\rvert$. (Also $\lvert L\rvert = \lvert R\rvert$ because $d\lvert L\rvert = \lvert E\rvert = d\lvert R\rvert$.)
 
 **Every $d$-regular bipartite graph is a union of $d$ disjoint perfect matchings.** Take a perfect matching $M$ and remove it; every vertex loses exactly one edge, so the rest is $(d-1)$-regular bipartite. Induct down to $d = 0$.
 
 ## Systems of distinct representatives (Midsem Q4.1)
+
+> **In short:** Choosing one different element from each set is a matching between sets and elements.
 
 Sets $S_1, \ldots, S_m$ have an **SDR** if there are distinct $s_i \in S_i$. Build $L = \{S_1, \ldots, S_m\}$, $R$ = the elements, edges for membership; an SDR is a matching covering $L$. Hall's condition becomes: **every $k$ of the sets together contain at least $k$ elements.**
 
@@ -113,13 +137,19 @@ If each set has $r$ elements, each element of $\{1..n\}$ is in exactly $d$ sets,
 
 ## Latin rectangles extend to Latin squares (Midsem Q4.2)
 
+> **In short:** The missing numbers per column form a regular bipartite graph, so a perfect matching (the next row) exists.
+
 An $r \times n$ Latin rectangle ($r < n$) can always get one more row: column $j$ is missing a set $S_j$ of $n - r$ numbers, and each number is missing from exactly $n - r$ columns. That is a $(n-r)$-regular bipartite graph (columns vs numbers), which has a perfect matching: the new row. Repeat until $r = n$.
 
 ## Doubly stochastic integer matrices (Lecture 15 problem, "magic squares")
 
+> **In short:** Equal row and column sums make a regular bipartite multigraph; peel off one perfect matching at a time.
+
 An $n \times n$ non-negative integer matrix with every row and column sum $d$ is a sum of $d$ permutation matrices. Make the bipartite multigraph rows vs columns with $M_{ij}$ parallel edges between row $i$ and column $j$. It is $d$-regular, so it has a perfect matching, i.e. a permutation matrix $P \le M$ entrywise; $M - P$ has line sums $d - 1$; induct. (Full solution in the practice page.)
 
 ## Domino tilings (Quiz I Q1)
+
+> **In short:** Each domino covers one black and one white square, so a tiling is a perfect matching between the colours.
 
 Colour the grid like a chessboard. Every domino covers one black and one white square, so a tiling is exactly a **perfect matching** in the bipartite graph (black squares vs white squares, edges between side-adjacent squares). A first check: equal numbers of black and white squares are necessary but **not** sufficient. When they are equal, find a set $S$ of black squares with fewer white neighbours. Worked solution in the quizzes page.
 
@@ -129,17 +159,23 @@ When no perfect matching exists we still want the largest matching. The algorith
 
 ## Definitions
 
+> **In short:** Maximal means you cannot add an edge; maximum means no matching is bigger. They are different.
+
 A **matching** $M$: no two edges share a vertex. **Maximal**: no edge can be added. **Maximum**: largest possible size. Every maximum matching is maximal, not vice versa (a path $a - b - c - d$ with $M = \{bc\}$ is maximal, size 1, but $\{ab, cd\}$ has size 2). A maximal matching has at least half the size of a maximum one (each edge of a maximum matching touches a vertex of the maximal one, and each such vertex is in at most one).
 
 Relative to $M$: a vertex is **matched** or **free**. An **alternating path** alternates between edges not in $M$ and in $M$. An **augmenting path** is an alternating path whose two endpoints are both free.
 
 ## Lemma 1 (flip)
 
+> **In short:** Swapping the edges along an augmenting path gains exactly one edge.
+
 If $P$ is $M$-augmenting then $M \oplus P$ (symmetric difference) is a matching of size $\lvert M\rvert + 1$.
 
 *Proof.* $P$ has odd length $2k+1$: $k+1$ edges outside $M$ and $k$ inside. Flipping swaps them, so the size goes up by one. Matching property, vertex by vertex: off $P$ nothing changes; an interior vertex trades its one $M$ edge for one other $P$ edge; an endpoint was free and gains exactly one edge.
 
 ## Berge's lemma
+
+> **In short:** A matching is as large as possible exactly when no augmenting path exists.
 
 $$\boxed{M \text{ is maximum} \iff \text{there is no } M\text{-augmenting path}}$$
 
@@ -153,6 +189,8 @@ $$\boxed{M \text{ is maximum} \iff \text{there is no } M\text{-augmenting path}}
 **Faster:** Hopcroft–Karp augments along many vertex-disjoint shortest augmenting paths per phase, needs $O(\sqrt V)$ phases, and runs in $O(E\sqrt V)$ instead of Kuhn's $O(VE)$.
 
 ## Finding augmenting paths: Kuhn's algorithm
+
+> **In short:** Direct the edges so that an augmenting path becomes an ordinary directed path, then search for it with DFS.
 
 Orient unmatched edges $L \to R$ and matched edges $R \to L$. An augmenting path is then a directed path from a free left vertex to a free right vertex, so DFS finds one.
 
@@ -173,6 +211,8 @@ Each search is $O(m)$ and there are $n$ searches: **$O(nm)$**. Correct by Lemma 
 The same answer comes from max flow on $s \to L \to R \to t$ with unit capacities; Ford–Fulkerson on that network does exactly Kuhn's search, since residual back edges are the matched edges reversed.
 
 ## König's theorem
+
+> **In short:** In bipartite graphs the largest matching and the smallest vertex cover have the same size.
 
 $$\boxed{\text{in a bipartite graph, max matching size} = \text{min vertex cover size}}$$
 

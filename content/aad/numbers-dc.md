@@ -4,6 +4,8 @@ Lecture 1 starts the course with the oldest algorithms there are: adding and mul
 
 ## Asymptotic notation
 
+> **In short:** Big-O ignores constant factors and small inputs, so we compare only how fast running times grow as $n$ gets large.
+
 For functions $f, g$ on the positive integers:
 
 - $f = O(g)$ if there are constants $c > 0$, $n_0$ with $f(n) \le c\,g(n)$ for all $n \ge n_0$ ("$f$ grows no faster than $g$").
@@ -15,9 +17,13 @@ Rules worth writing down without proof: constants and lower-order terms drop out
 
 ## Input size counts digits, not values
 
+> **In short:** A number as large as a billion is only about 30 bits long, and running time is measured against that length, not against the value itself.
+
 An algorithm on an integer $x$ is measured in $n$ = the **number of digits (bits)** of $x$, which is about $\log x$. So "polynomial time" for multiplication means polynomial in $\log x$. This matters again in DP: an $O(TB)$ table is **pseudo-polynomial** because $B$ is a value, not a length (Midsem Q5 rubric note).
 
 ## Adding and multiplying digit strings
+
+> **In short:** The school methods are the baseline to beat: adding is linear, multiplying is quadratic, and adding $y$ to itself $x$ times is hopelessly slow.
 
 **Grade-school addition** of two $n$-digit numbers walks right to left with a carry. The carry is at most 1 in base 10 (and in any base $b$: $(b-1)+(b-1)+1 = 2b-1 < 2b$). Time $\Theta(n)$, which is optimal because the output has $n$ digits.
 
@@ -26,6 +32,8 @@ An algorithm on an integer $x$ is measured in $n$ = the **number of digits (bits
 **Lattice (grade-school) multiplication** forms all $n \cdot m$ digit products and adds along diagonals with carries. Time $\Theta(nm)$, so $\Theta(n^2)$ for two $n$-digit numbers.
 
 ## Peasant multiplication (Quiz I Q2)
+
+> **In short:** Halve $x$, double $y$, and add $y$ to the answer whenever $x$ is odd. This reads $x$ in binary one bit at a time.
 
 ```
 PeasantMultiply(x, y):
@@ -56,6 +64,8 @@ $$\boxed{\text{prod} + x \cdot y = x_0 \cdot y_0.}$$
 
 ## Euclid's GCD
 
+> **In short:** Replacing the bigger number by its remainder keeps the same common divisors, and the numbers shrink fast.
+
 $\gcd(a, b) = \gcd(b, a \bmod b)$, with $\gcd(a, 0) = a$.
 
 **Why.** Write $a = bq + r$. Any common divisor of $a$ and $b$ divides $r = a - bq$; any common divisor of $b$ and $r$ divides $a = bq + r$. So the pairs $(a, b)$ and $(b, r)$ have the same set of common divisors, hence the same greatest one.
@@ -63,6 +73,8 @@ $\gcd(a, b) = \gcd(b, a \bmod b)$, with $\gcd(a, 0) = a$.
 **Running time.** If $a \ge b$ then $a \bmod b < a/2$ (if $b \le a/2$ then $r < b \le a/2$; otherwise $r = a - b < a/2$). So every two steps both numbers at least halve, and there are $O(\log a)$ steps, i.e. $O(n)$ divisions for $n$-bit inputs.
 
 ## Fibonacci (Pingala) numbers
+
+> **In short:** Plain recursion recomputes the same values exponentially often; remembering each value once makes it linear.
 
 $F_0 = 0$, $F_1 = 1$, $F_n = F_{n-1} + F_{n-2}$. The naive recursion makes $T(n) = T(n-1) + T(n-2) + O(1) \ge F_n \approx 1.618^n$ calls, which is exponential, because it recomputes the same values. Storing each $F_k$ once (iterating upward) takes $O(n)$ additions. This is the first example of **dynamic programming**: remember answers to overlapping subproblems. With $2 \times 2$ matrix powers, $\begin{pmatrix}1&1\\1&0\end{pmatrix}^n$ by repeated squaring needs only $O(\log n)$ matrix multiplications.
 
@@ -72,6 +84,8 @@ Divide and conquer solves a problem by splitting it into smaller instances of th
 
 ## The recipe
 
+> **In short:** Break the problem into smaller copies of itself, solve those recursively, then glue the answers together.
+
 1. **Divide** the input into $a$ subproblems of size $n/b$.
 2. **Conquer** them recursively (base case: tiny inputs solved directly).
 3. **Combine** the answers in $O(n^d)$ time.
@@ -79,6 +93,8 @@ Divide and conquer solves a problem by splitting it into smaller instances of th
 The running time satisfies $T(n) = a\,T(n/b) + O(n^d)$.
 
 ## Solving recurrences with a recursion tree
+
+> **In short:** Add up the work level by level. Whichever end of the tree (top or bottom) does the most work decides the answer.
 
 Draw the tree. Level $j$ has $a^j$ nodes, each on a problem of size $n/b^j$, each doing $(n/b^j)^d$ work. So
 $$\text{work at level } j = a^j \left(\frac{n}{b^j}\right)^d = n^d \left(\frac{a}{b^d}\right)^j = n^d r^j, \qquad r = \frac{a}{b^d}.$$
@@ -89,6 +105,8 @@ The total over $\log_b n$ levels is a geometric series in $r$, and a geometric s
 - $r > 1$: the leaves dominate, $T = \Theta(n^{\log_b a})$ (there are $a^{\log_b n} = n^{\log_b a}$ leaves).
 
 ## Master theorem
+
+> **In short:** Compare the combine cost $n^d$ with the number of leaves $n^{\log_b a}$: the bigger one wins, and a tie costs an extra $\log n$.
 
 $$\boxed{T(n) = aT(n/b) + O(n^d) \implies T(n) = \begin{cases} O(n^d) & d > \log_b a \\ O(n^d \log n) & d = \log_b a \\ O(n^{\log_b a}) & d < \log_b a \end{cases}}$$
 
@@ -102,9 +120,13 @@ Examples: merge sort $2T(n/2) + n$ gives $n\log n$; binary search $T(n/2) + 1$ g
 
 ## Merge sort
 
+> **In short:** Sort each half, then zip the two sorted halves together in one pass.
+
 Split the array in half, sort each half recursively, merge the two sorted halves in linear time by repeatedly taking the smaller front element. $T(n) = 2T(n/2) + O(n) = O(n \log n)$. Correctness by induction on $n$: the halves come back sorted, and merge outputs the smallest remaining element at each step.
 
 ## Gauss's trick and Karatsuba
+
+> **In short:** Get the middle term from one extra multiplication instead of two, so each level makes 3 recursive products, not 4.
 
 Gauss noticed that $(a + bi)(c + di) = ac - bd + (bc + ad)i$ needs only **three** real multiplications, because $bc + ad = (a + b)(c + d) - ac - bd$.
 
@@ -120,11 +142,15 @@ $T(n) = 3T(n/2) + O(n) = O(n^{\log_2 3}) \approx O(n^{1.585})$. Four products wo
 
 ## Strassen's matrix multiplication
 
+> **In short:** The same trick for matrices: 7 block products instead of 8.
+
 Block-multiplying $n \times n$ matrices as $2 \times 2$ block matrices needs 8 products of $n/2$ blocks: $8T(n/2) + O(n^2) = O(n^3)$. Strassen found 7 products (with 18 additions), giving $7T(n/2) + O(n^2) = O(n^{\log_2 7}) \approx O(n^{2.81})$. You do not need the 7 formulas; you need the recurrence and why 7 beats 8.
 
 **Squaring is as hard as multiplying (DPV 2.27, Tutorial 1).** If you can square an $n\times n$ matrix in $S(n)$, then for $A, B$ form $M = \begin{pmatrix}0 & A\\ B & 0\end{pmatrix}$; $M^2 = \begin{pmatrix}AB & 0\\ 0 & BA\end{pmatrix}$, so one squaring of a $2n \times 2n$ matrix gives $AB$. Hence multiplication costs $O(S(2n)) = O(S(n))$ for polynomial $S$.
 
 ## The Hadamard transform in $O(n\log n)$ (Quiz I Q3)
+
+> **In short:** Both halves of the answer reuse the same two half-size products, so compute each one once.
 
 $H_0 = [1]$, $H_k = \begin{pmatrix} H_{k-1} & H_{k-1}\\ H_{k-1} & -H_{k-1}\end{pmatrix}$, a $2^k \times 2^k$ matrix. To compute $H_k v$ for $v$ of length $n = 2^k$, split $v = (v_1, v_2)$ into halves of length $n/2$:
 $$H_k v = \begin{pmatrix} H_{k-1}v_1 + H_{k-1}v_2 \\ H_{k-1}v_1 - H_{k-1}v_2\end{pmatrix}.$$
@@ -136,9 +162,13 @@ A lower bound says **no** algorithm in some model can beat a given time. Sources
 
 ## The trivial output bound
 
+> **In short:** An algorithm must at least read its input and write its output.
+
 Multiplying two $n$-digit numbers produces up to $2n$ digits, and any algorithm must at least write them, so multiplication is $\Omega(n)$. The same reasoning gives $\Omega(n)$ for reading the input in almost any problem.
 
 ## Sorting needs $\Omega(n\log n)$ comparisons
+
+> **In short:** Each yes/no comparison can at most halve the set of orderings still possible, and there are $n!$ of them to tell apart.
 
 In the **comparison model** the algorithm learns about the input only by asking "is $a_i < a_j$?". Model any such algorithm on inputs of size $n$ as a binary **decision tree**: each internal node is a comparison, each leaf is an output permutation.
 

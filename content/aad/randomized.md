@@ -4,6 +4,8 @@ Lecture 19 introduces algorithms that flip coins, and one proof technique you wi
 
 ## Deterministic versus randomized
 
+> **In short:** Flipping coins can make every input behave like an average one, at the price of a small chance of bad luck.
+
 A **deterministic** algorithm always takes the same steps on the same input. A **randomized** algorithm also flips fair coins, so its running time and/or output are random variables even for a fixed input.
 
 **Why randomize? QuickSort.** With a fixed pivot rule (first element, say), some input (here, a sorted array) gives splits of size 0 and $n-1$ every time: $\Theta(n^2)$. For **any** deterministic rule there is such a bad family. With a uniformly random pivot there are no bad inputs: the **expected** time is $O(n\log n)$ on **every** input; only unlucky coins are slow.
@@ -12,6 +14,8 @@ A **deterministic** algorithm always takes the same steps on the same input. A *
 - **Las Vegas**: always correct, running time is random (randomized QuickSort, Rabin–Karp with verification).
 
 ## Probability toolkit
+
+> **In short:** Linearity of expectation needs no independence at all, which makes it the tool for almost every proof here.
 
 - **Indicator variable**: $X_A = 1$ if event $A$ happens, else 0. $\mathbb{E}[X_A] = \Pr[A]$.
 - **Linearity of expectation**:
@@ -25,11 +29,15 @@ This is the most important line in the chapter. The rubric gives marks for sayin
 
 ## The MaxCut problem
 
+> **In short:** Split the vertices into two sides to cut as many edges as possible.
+
 $G = (V, E)$ undirected, $n$ vertices, $m$ edges. A **cut** is a partition $(S, \bar S)$; $\text{Cut}(S)$ is the set of edges with one end on each side. **MaxCut**: find $S$ maximising $\lvert\text{Cut}(S)\rvert$. MaxCut is NP-hard (np page); **MinCut** is polynomial (max flow). One word changes everything.
 
 **Is MaxCut $= m$?** Every edge is cut iff $G$ is bipartite (the two sides are the colour classes). BFS 2-colouring decides it in $O(n+m)$. An odd cycle cannot have all its edges cut: going round it the sides alternate, and an odd number of switches cannot return to the start. So MaxCut$(C_5) = 4$.
 
 ## Greedy heuristics
+
+> **In short:** Greedy rules can get stuck below the optimum, but placing each vertex opposite most of its placed neighbours always cuts at least half the edges.
 
 **Attempt 1: max-degree greedy, and why it fails (Lecture 19 §3.1).** Start with $S = \emptyset$; scan vertices in decreasing order of degree and move $v$ into $S$ if that strictly increases the cut.
 
@@ -65,6 +73,8 @@ The output depends on the order. Practice set Problem 6: on the path $a-b-c-d$ i
 
 ## The random cut
 
+> **In short:** Put each vertex on a random side. Each edge is cut half the time, so on average half the edges are cut.
+
 **Algorithm.** Put each vertex in $S$ independently with probability $\frac12$.
 
 **Theorem.** $\mathbb{E}[\lvert\text{Cut}(S)\rvert] = m/2$.
@@ -90,6 +100,8 @@ $$\mathbb{E}[\lvert\text{Cut}(S)\rvert] = \sum_{e\in E}\mathbb{E}[X_e] = \frac m
 **How many repetitions for 99%?** Let $p = \Pr[\lvert\text{Cut}\rvert \ge m/2]$. The cut size is an integer $\le m$; values below $m/2$ are at most $\lceil m/2\rceil - 1 \le m/2 - \frac12$. So $\frac m2 = \mathbb{E} \le (1 - p)(\frac m2 - \frac12) + pm$, giving $p \ge \frac{1}{m+2}$. After $k$ runs, all fail with probability $\le (1 - \frac{1}{m+2})^k \le e^{-k/(m+2)}$. With $k = (m+2)\ln 100$, this is $\le 1\%$.
 
 ## The template for "every X has a Y with at least ..."
+
+> **In short:** If the average is at least $k$, some outcome is at least $k$.
 
 1. **Random object**: choose the structure at random (vertex sides, a permutation, a truth assignment, a colouring).
 2. **Indicator per item** (edge, clause, group): compute its probability of being good, with a **justification** (counting, symmetry, independence).
@@ -133,11 +145,15 @@ Lectures 20 and 21 use one fact: **two different polynomials of degree $\le d$ a
 
 ## Equality needs $n$ bits deterministically
 
+> **In short:** With fewer than $n$ bits, two different files must send the same message, and Bob cannot tell them apart.
+
 Alice has $a \in \{0,1\}^n$, Bob has $b$; Alice sends one message and Bob must decide whether $a = b$, **always correctly**.
 
 *Claim.* Some message needs $\ge n$ bits. If all messages had $\le n-1$ bits, there would be at most $2^{n-1}$ messages for $2^n$ strings, so two strings $a \ne a'$ would get the same message (pigeonhole). Give Bob $b = a'$: when Alice holds $a'$ the answer is "equal", when she holds $a$ it is "not equal", but Bob sees the same message and the same $b$ in both cases, so he answers the same: one answer is wrong.
 
 ## The fingerprint protocol
+
+> **In short:** Treat the bits as coefficients of a polynomial and compare its values at one random point. Two different polynomials rarely agree there.
 
 Read $a$ as the coefficients of $P_a(x) = \sum_{i=0}^{n-1} a_ix^i$. Fix a prime $p$ (say $p \approx n^2$). Alice picks $r \in \{0, \ldots, p-1\}$ uniformly and sends $(r, P_a(r) \bmod p)$. Bob accepts iff $P_b(r) \equiv P_a(r) \pmod p$.
 
@@ -150,6 +166,8 @@ $$\boxed{\Pr[\text{error}] \le \frac{n-1}{p}}$$
 **By hand:** $a = 1011$, $b = 1101$, $p = 11$, $r = 3$. $P_a(x) = 1 + x^2 + x^3$, $P_a(3) = 37 \equiv 4$; $P_b(x) = 1 + x + x^3$, $P_b(3) = 31 \equiv 9$. Different, so Bob detects the difference. The colliding seeds are the roots of $D = x^2 - x = x(x-1)$: $r \in \{0, 1\}$, so the error is $2/11 \le 3/11$.
 
 ## Rabin–Karp string matching (Lecture 21)
+
+> **In short:** Fingerprint every window of the text, and update each window's fingerprint from the previous one in constant time.
 
 Find all occurrences of a pattern $t$ of length $m$ in a text $s$ of length $n$. Hash each length-$m$ window as a number in base $r$ modulo $p$:
 $$H(i) = \big(s[i]r^{m-1} + s[i+1]r^{m-2} + \cdots + s[i+m-1]\big) \bmod p.$$
@@ -170,6 +188,8 @@ $$\boxed{H(i+1) = \big(r\,(H(i) - s[i]\,R) + s[i+m]\big) \bmod p}$$
 
 ## Streaming palindrome check (Class Test II Q1)
 
+> **In short:** Fingerprint the string forwards and backwards at the same time; they match exactly when it is a palindrome.
+
 The same idea works on a stream: compare a string with its reverse without storing it. For $S = s_1\ldots s_\ell$ ($\ell \le n$, alphabet $\{0..k-1\}$) let
 
 $$F_\ell(x) = \sum_{i=1}^{\ell} s_ix^{\ell-i}, \qquad R_\ell(x) = \sum_{i=1}^{\ell} s_ix^{i-1}, \qquad \boxed{P(x) = F_\ell(x) - R_\ell(x) = \sum_{j=0}^{\ell-1}(s_{\ell-j} - s_{j+1})x^j}$$
@@ -179,6 +199,8 @@ $P \equiv 0$ $\iff$ $s_{\ell-j} = s_{j+1}$ for all $j$ $\iff$ $S$ is a palindrom
 Both halves update term by term: $F_i = x F_{i-1} + s_i$ (Horner) and $R_i = R_{i-1} + s_ix^{i-1}$. Evaluated at a random $r \bmod p$ that is three numbers $H_F, H_R$ and $\text{pow} = r^{i-1}$, so the space is $O(\log p) = O(\log k + \log n + \log\frac1\varepsilon)$ bits, with $p > \max(k, n/\varepsilon)$ and error $\le (n-1)/p$. $p > k$ makes sure two different symbols stay different mod $p$. The full solved question with the rubric and hand traces is on the quizzes page.
 
 ## 2D Rabin–Karp (Class Test II Q2)
+
+> **In short:** Give every pixel its own power of $x$, then roll the hash down the columns and across the rows.
 
 To find an $m\times m$ icon in an $n\times n$ image, give every pixel of an $m\times m$ grid its own power of $x$: base $x$ down a column, base $x^m$ across columns,
 

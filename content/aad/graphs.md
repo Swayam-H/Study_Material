@@ -4,12 +4,16 @@ Graphs are the language for almost everything after the midsem: matchings, flows
 
 ## Representation
 
+> **In short:** Adjacency lists store only the edges that exist, so a search over the graph costs $O(n + m)$.
+
 $G = (V, E)$, $n = |V|$, $m = |E|$.
 
 - **Adjacency matrix**: $n \times n$, $O(1)$ edge test, $O(n^2)$ space, $O(n)$ to list a vertex's neighbours.
 - **Adjacency list**: $O(n + m)$ space, neighbours listed in $O(\deg v)$. All the linear-time algorithms below use lists.
 
 ## Generic search ("whatever-first search", Assignment 1 Q4)
+
+> **In short:** Keep a bag of vertices to explore. Which vertex you take out next (stack, queue or heap) gives DFS, BFS or Dijkstra.
 
 ```
 WhateverFirstSearch(s):
@@ -30,6 +34,8 @@ A **stack** as the bag gives depth-first search, a **queue** gives breadth-first
 
 ## Depth-first search
 
+> **In short:** Go as deep as possible, then back up. The order in which vertices start and finish reveals cycles and dependencies.
+
 ```
 explore(v):  visited[v] ← true; pre[v] ← clock++
              for each edge v→u: if not visited[u]: explore(u)
@@ -48,6 +54,8 @@ Intervals are always nested or disjoint (parenthesis property). In an undirected
 
 ## DAGs and topological order
 
+> **In short:** A cycle shows up as an edge back to a vertex still in progress. With no cycle, sorting by finish time gives an order where every edge points forward.
+
 **A directed graph has a cycle if and only if DFS finds a back edge.** (A back edge $u \to v$ plus the tree path $v \leadsto u$ is a cycle; conversely, in a cycle, the first vertex $v$ DFS reaches will have the whole cycle as descendants, so the cycle edge into $v$ is a back edge.)
 
 In a DAG, **every edge $u \to v$ has post$[u] >$ post$[v]$** (tree, forward and cross edges all satisfy it, and there are no back edges). So listing vertices in **decreasing post order** gives a **topological order**: every edge goes left to right. A DAG has at least one source (no incoming edges) and one sink.
@@ -56,12 +64,16 @@ The opposite direction is the idea behind Quiz II Q1: **any** ordering of the ve
 
 ## Strongly connected components
 
+> **In short:** Groups of vertices that can all reach each other. Shrinking each group to a point leaves a DAG.
+
 $u$ and $v$ are strongly connected if each reaches the other. The SCCs partition $V$, and contracting each SCC gives a DAG (the **meta-graph**). Algorithm (Kosaraju, DPV 3.4), $O(n + m)$:
 
 1. Run DFS on the **reverse** graph $G^R$; the vertex with the highest post number lies in a **source** SCC of $G^R$, i.e. a **sink** SCC of $G$.
 2. Run explore in $G$ from vertices in decreasing post order of step 1. Each explore stays inside one sink component (everything it could leak into has already been visited), so each call finds exactly one SCC.
 
 ## Backtracking
+
+> **In short:** Try choices one at a time and give up on a branch as soon as it cannot work.
 
 Some problems (3-colouring, SAT, game trees) have no known fast algorithm. **Backtracking** builds a solution one choice at a time (a recursion tree), and abandons a branch as soon as a partial choice already violates a constraint (e.g. two adjacent vertices with the same colour). It is still exponential in the worst case, but it prunes. Game trees are searched the same way with min/max at alternate levels.
 
@@ -71,11 +83,15 @@ Sources: Lecture 5, Tutorial 2 (shortest paths), DPV ch. 4.
 
 ## BFS: unit weights
 
+> **In short:** Explore in rings of distance 0, 1, 2, ...; the first time BFS reaches a vertex is along a shortest path.
+
 BFS from $s$ with a FIFO queue sets $d[v] = d[u] + 1$ the first time $v$ is seen. **Invariant**: if the queue holds $v_1, \ldots, v_r$ front to back, then $d[v_1] \le \cdots \le d[v_r] \le d[v_1] + 1$. So vertices leave the queue in non-decreasing distance order, and $d[v]$ is the number of edges on a shortest path. Time $O(n + m)$.
 
 BFS also tests **bipartiteness**: 2-colour by layer parity; the graph is bipartite iff no edge joins two vertices of the same layer (such an edge would close an odd cycle). This is the "is MaxCut = $\lvert E\rvert$?" test of Lecture 19.
 
 ## Dijkstra: non-negative weights
+
+> **In short:** Always finalise the closest unfinished vertex. With no negative edges, nothing found later can give it a shorter route.
 
 ```
 dist[s] ← 0; dist[v] ← ∞ otherwise; H ← priority queue on dist
@@ -98,6 +114,8 @@ When $u$ is extracted, take a shortest path $P$ from $s$ to $u$ and let $(x, y)$
 
 ## Bellman–Ford: negative edges allowed
 
+> **In short:** Improve every distance estimate over and over. A shortest path has at most $n - 1$ edges, so $n - 1$ rounds are enough.
+
 A shortest path (with no negative cycles) has at most $n - 1$ edges. **Relax every edge, $n - 1$ times.**
 
 **Why it works.** After round $k$, dist$[v] \le$ the length of the shortest $s$–$v$ path with at most $k$ edges (induction: such a path is a $(k-1)$-edge path plus one edge, which round $k$ relaxes). Round $n - 1$ covers every simple path.
@@ -107,6 +125,8 @@ A shortest path (with no negative cycles) has at most $n - 1$ edges. **Relax eve
 **Arbitrage (Lecture 12 in-class quiz).** Trading ratios $r_{ij}$; an opportunity cycle has $\prod r_{ij} > 1$. Take weights $w_{ij} = -\log r_{ij}$: then $\prod r > 1 \iff \sum w < 0$. Add a super-source with 0-weight edges to every vertex and run Bellman–Ford; an opportunity exists iff there is a negative cycle. To output it, follow prev pointers from a vertex updated in round $n$ for $n$ steps (to land on the cycle), then walk prev until a vertex repeats. $O(nm)$.
 
 ## Shortest paths in a DAG
+
+> **In short:** In topological order each vertex's distance is final before it is used, so one pass is enough.
 
 Process vertices in topological order and relax each vertex's outgoing edges. Each edge is relaxed once, after its tail is final: $O(n + m)$, and negative weights are fine. **Longest** paths in a DAG work the same way (negate weights or use max). Lecture 11 writes it as a DP: $\text{OPT}(v) = \min_{(u,v)\in E}\{\text{OPT}(u) + \ell(u, v)\}$.
 
@@ -118,6 +138,8 @@ A **spanning tree** of a connected undirected graph has $n - 1$ edges, is connec
 
 ## The cut property
 
+> **In short:** Split the vertices into two groups however you like: the cheapest edge between them is always safe to take.
+
 $$\boxed{\text{If } X \subseteq \text{some MST, no edge of } X \text{ crosses the cut } (S, V\setminus S), \text{ and } e \text{ is a lightest crossing edge, then } X \cup \{e\} \subseteq \text{some MST.}}$$
 
 **Proof (exchange).** Let $T$ be an MST containing $X$. If $e \in T$, done. Otherwise $T + e$ has a cycle, which crosses the cut at $e$ and so must cross it again at some edge $e'$. $T' = T + e - e'$ is a spanning tree (we broke the only cycle), and $w(e) \le w(e')$, so $w(T') \le w(T)$: $T'$ is an MST containing $X \cup \{e\}$ ($e' \notin X$ because no edge of $X$ crosses the cut).
@@ -126,19 +148,27 @@ $$\boxed{\text{If } X \subseteq \text{some MST, no edge of } X \text{ crosses th
 
 ## Kruskal
 
+> **In short:** Take edges from cheapest to dearest, skipping any edge that would close a loop.
+
 Sort edges by weight; add each edge unless it closes a cycle. Correct by the cut property: when $e = (u, v)$ is added, take $S$ = the current component of $u$; $e$ is the lightest edge leaving $S$ (lighter ones were already processed, and none of those leaves $S$, else it would have been added).
 
 **Union–find (DSU)** decides "same component?". With union by rank and path compression each operation is $O(\alpha(n))$, essentially constant. Union by rank alone gives height $O(\log n)$. Total $O(m\log m)$ for sorting, $= O(m\log n)$.
 
 ## Prim
 
+> **In short:** Grow one tree, always adding the cheapest edge that leaves it.
+
 Grow one tree from a start vertex; repeatedly add the lightest edge leaving the tree. Correct by the cut property with $S$ = the current tree. Implementation is Dijkstra with key$[v] = \min_{u \in S} w(u, v)$ instead of a path length: $O((n+m)\log n)$.
 
 ## MSTs with distinct weights are unique (Assignment 1 Q2b)
 
+> **In short:** If two MSTs differed, swapping the lightest edge where they differ would make one of them strictly cheaper.
+
 Suppose $T \ne T'$ are both MSTs. Let $e$ be the **lightest edge in exactly one** of them, say $e \in T \setminus T'$. $T' + e$ contains a cycle $C$. $C$ has an edge $e' \notin T$ (else $T$ would contain the cycle). $e' \in T' \setminus T$, so by the choice of $e$ and distinctness, $w(e') > w(e)$. Then $T' + e - e'$ is a spanning tree lighter than $T'$, a contradiction.
 
 ## Updating an MST with a new edge (Assignment 1 Q2a)
+
+> **In short:** The new edge makes exactly one loop. Drop the heaviest edge on that loop.
 
 New edge $e = (u, v)$ with cost $c$. Find the unique path $P$ from $u$ to $v$ in the current MST $T$ (DFS, $O(n)$) and its heaviest edge $f$.
 
