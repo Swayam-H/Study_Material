@@ -31,11 +31,35 @@ $G = (V, E)$ undirected, $n$ vertices, $m$ edges. A **cut** is a partition $(S, 
 
 ## Greedy heuristics
 
-**Greedy rules can fail.** Natural rules such as "move the highest-degree vertex across if it helps" can get stuck below the optimum, and even good rules depend on the processing order (below). What we can prove is a guarantee of half the edges.
+**Attempt 1: max-degree greedy, and why it fails (Lecture 19 §3.1).** Start with $S = \emptyset$; scan vertices in decreasing order of degree and move $v$ into $S$ if that strictly increases the cut.
+
+*Counterexample.* A tree with two adjacent hubs $u_1, u_2$ (degree 4), $u_1$ joined to leaves $a_1, a_2, a_3$ and $u_2$ to leaves $b_1, b_2, b_3$: 8 vertices, 7 edges.
+
+1. $u_1$ moves to $S$: the cut goes from 0 to 4.
+2. $u_2$ is next: moving it cuts $u_2b_1, u_2b_2, u_2b_3$ (+3) but un-cuts $u_1u_2$ (−1), a net +2, so it moves. Cut = 6.
+3. Every leaf now has its only neighbour in $S$; moving a leaf would lose 1. The algorithm stops at **6**.
+
+But a tree is bipartite: $S = \{u_1, b_1, b_2, b_3\}$ cuts all **7** edges. Putting both hubs on the same side sacrificed the edge between them.
 
 **Sequential greedy** (Lecture 19 §3.2): place $v_1$ in $S$; for each next vertex $v$, put it on the side **opposite** the majority of its already-placed neighbours (in $\bar S$ if $d_S(v) > d_{\bar S}(v)$, else in $S$).
 
 **Theorem (Exercise 1): sequential greedy cuts $\ge m/2$ edges.** When $v$ is placed, the edges from $v$ to already-placed neighbours are decided for the first time, and at least half of them, $\max(d_S(v), d_{\bar S}(v)) \ge \frac12(d_S(v) + d_{\bar S}(v))$, are cut. Every edge is decided exactly once, when its later endpoint is placed. Summing over all vertices, at least half of all edges are cut.
+
+**Worked trace: the house graph** (square $v_1v_2v_4v_3$ with roof $v_5$ joined to $v_1, v_2$; 6 edges), order $v_1..v_5$:
+
+| Step | Vertex | Placed neighbours | Choice | Cut so far |
+|---|---|---|---|---|
+| 1 | $v_1$ | none | $S$ | 0 |
+| 2 | $v_2$ | $v_1\in S$ | $\bar S$ | 1 |
+| 3 | $v_3$ | $v_1 \in S$ | $\bar S$ | 2 |
+| 4 | $v_4$ | $v_2, v_3 \in \bar S$ | $S$ | 4 |
+| 5 | $v_5$ | $v_1 \in S$, $v_2 \in \bar S$ (tie) | $S$ | 5 |
+
+Cut 5 is optimal: the triangle $v_1v_2v_5$ always has an uncut edge.
+
+**Sequential greedy is not optimal, even with no ties (Lecture 19 §3.3).** 6 vertices, 11 edges: $v_1v_2$, $v_1v_3$, and all 9 edges between $\{v_1, v_2, v_3\}$ and $\{v_4, v_5, v_6\}$. In the order $v_1, \ldots, v_6$: $v_1 \in S$; $v_2$ and $v_3$ each see only $v_1 \in S$, so go to $\bar S$ (2 cut); $v_4, v_5, v_6$ each see $v_1 \in S$ and $v_2, v_3 \in \bar S$, so $d_{\bar S} = 2 > 1 = d_S$ forces them into $S$, cutting 2 and leaving $v_1v_i$ uncut. Total $1 + 1 + 2 + 2 + 2 = 8$. But $S^* = \{v_1, v_2, v_3\}$ cuts all **9** cross edges (only $v_1v_2$, $v_1v_3$ uncut). Greedy grabbed 2 early edges and paid 3 later.
+
+**Exercise 1 warm-up (triangle).** On a triangle in order $v_1, v_2, v_3$: $v_2$ has 1 back edge and greedy cuts it; $v_3$ has 2 back edges (to $v_1 \in S$, $v_2 \in \bar S$), a tie, and greedy cuts exactly 1. Total $2 \ge 3/2$. This is the proof below in miniature: every edge is a back edge of exactly one vertex (its later endpoint), so $\sum_i \lvert\text{BackEdges}(v_i)\rvert = m$, and step $i$ cuts $\max(d_S, d_{\bar S}) \ge \frac12\lvert\text{BackEdges}(v_i)\rvert$.
 
 The output depends on the order. Practice set Problem 6: on the path $a-b-c-d$ in order $a, d, b, c$ it cuts only 2 of 3 edges, while in **BFS order** on a connected bipartite graph it cuts every edge (it reproduces the BFS 2-colouring, by induction over layers).
 
@@ -45,7 +69,16 @@ The output depends on the order. Practice set Problem 6: on the path $a-b-c-d$ i
 
 **Theorem.** $\mathbb{E}[\lvert\text{Cut}(S)\rvert] = m/2$.
 
-*Proof.* For each edge $e = (u, v)$ let $X_e = 1$ if $e$ is cut. $e$ is cut iff $u, v$ land on different sides, which happens in 2 of the 4 equally likely outcomes ($S\bar S$, $\bar S S$), so $\mathbb{E}[X_e] = \frac12$. $\lvert\text{Cut}(S)\rvert = \sum_e X_e$, and by linearity
+*Proof.* For each edge $e = (u, v)$ let $X_e = 1$ if $e$ is cut. $e$ is cut iff $u, v$ land on different sides, which happens in 2 of the 4 equally likely outcomes ($S\bar S$, $\bar S S$), so $\mathbb{E}[X_e] = \frac12$. $\lvert\text{Cut}(S)\rvert = \sum_e X_e$: each cut edge contributes 1 and each uncut edge 0. On the path $1 - 2 - 3$ with $e_1 = 12$, $e_2 = 23$:
+
+| $S$ | $X_{e_1}$ | $X_{e_2}$ | $\lvert\text{Cut}(S)\rvert$ |
+|---|---|---|---|
+| $\emptyset$ | 0 | 0 | 0 |
+| $\{1\}$ | 1 | 0 | 1 |
+| $\{2\}$ | 1 | 1 | 2 |
+| $\{1,2\}$ | 0 | 1 | 1 |
+
+(and the complements give the same values). By linearity
 $$\mathbb{E}[\lvert\text{Cut}(S)\rvert] = \sum_{e\in E}\mathbb{E}[X_e] = \frac m2.$$
 
 **Corollary (probabilistic method).** Every graph has a cut with at least $m/2$ edges: a random variable cannot always be below its average.
@@ -120,6 +153,8 @@ $$\boxed{\Pr[\text{error}] \le \frac{n-1}{p}}$$
 
 Find all occurrences of a pattern $t$ of length $m$ in a text $s$ of length $n$. Hash each length-$m$ window as a number in base $r$ modulo $p$:
 $$H(i) = \big(s[i]r^{m-1} + s[i+1]r^{m-2} + \cdots + s[i+m-1]\big) \bmod p.$$
+
+**Why hashing is needed.** Comparing the pattern with each of the $n - m + 1$ windows costs $O(m)$ each, $O(nm)$ in the worst case (text $aaa\ldots a$, pattern $aa\ldots ab$: every window matches until its last character). Hashing replaces each $O(m)$ comparison by an $O(1)$ comparison of numbers, but only if the window hashes can be updated in $O(1)$.
 
 **Rolling update in $O(1)$.** With $R = r^{m-1} \bmod p$ precomputed:
 $$\boxed{H(i+1) = \big(r\,(H(i) - s[i]\,R) + s[i+m]\big) \bmod p}$$
