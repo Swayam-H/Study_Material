@@ -11,7 +11,7 @@
 <script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../../assets/style.css?v=mwvp0vhr">
+<link rel="stylesheet" href="../../assets/style.css?v=mwvqagv0">
 </head>
 <body data-root="../../" data-page="aad/greedy/learn" class="">
 <div class="read-bar" id="read-bar"></div>
@@ -104,17 +104,17 @@
           
         </div>
       </header>
-      <div class="prose"><p>A greedy algorithm builds a solution one irrevocable choice at a time, always taking what looks best now. It is usually easy to state and hard to prove. The midsem gave greedy 6 of 30 marks (Huffman, 2; room assignment, 4), and Assignment 2 Q3 asked for <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span>-ary Huffman. Sources: Lecture 10, Tutorial 3 (Huffman), DPV 5.2, KT ch. 4.</p>
+      <div class="prose"><p>A greedy algorithm builds its answer one choice at a time, always taking whatever looks best right now and never going back. Greedy algorithms are usually easy to state and hard to prove correct. The midsem gave greedy 6 of 30 marks (Huffman 2, room assignment 4), and Assignment 2 Q3 asked for <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span>-ary Huffman. Sources: Lecture 10, Tutorial 3 (Huffman), DPV 5.2, KT ch. 4.</p>
 <h2 id="two-ways-to-prove-a-greedy-algorithm-optimal">Two ways to prove a greedy algorithm optimal</h2>
 <blockquote>
 <p><strong>In short:</strong> Either show greedy is never behind at any step, or show any optimal solution can be changed step by step into greedy's without getting worse.</p>
 </blockquote>
 <ol>
-<li><strong>Greedy stays ahead.</strong> Show by induction that after each step, the greedy partial solution is at least as good as any other solution's corresponding part (interval scheduling).</li>
-<li><strong>Exchange argument.</strong> Take any optimal solution that differs from greedy. Change it, one step at a time, to agree with greedy's choice without making it worse. So greedy's solution is optimal (Huffman, MST cut property).</li>
-<li><strong>Structural bound</strong> (for &quot;minimise the number of resources&quot;): show every solution needs at least <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span>, then show greedy never uses more than <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span> (interval partitioning).</li>
+<li><strong>Greedy stays ahead.</strong> Show by induction that after every step, greedy's partial answer is at least as good as the matching part of any other solution (interval scheduling).</li>
+<li><strong>Exchange argument.</strong> Take any optimal solution that differs from greedy's. Change it one step at a time to agree with greedy's choices, never making it worse. So greedy's answer is optimal too (Huffman, the MST cut property).</li>
+<li><strong>Lower bound</strong> (for &quot;use as few resources as possible&quot;): show that every solution needs at least <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span>, then show greedy never uses more than <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span> (interval partitioning).</li>
 </ol>
-<p>To show a greedy rule is <strong>wrong</strong>, a single small counterexample is a full answer (Assignment 2 Q3.1 and Q4.1).</p>
+<p>To show a greedy rule is <strong>wrong</strong>, one small counterexample is a complete answer (Assignment 2 Q3.1 and Q4.1).</p>
 </div>
       <div class="done-row">
         <span class="done-label">End of Learn</span>
@@ -147,6 +147,6 @@
 </aside>
 <button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
 <div class="scrim" id="scrim" hidden></div>
-<script src="../../assets/app.js?v=mwvp0vhr" defer></script>
+<script src="../../assets/app.js?v=mwvqagv0" defer></script>
 </body>
 </html>

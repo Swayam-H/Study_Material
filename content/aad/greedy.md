@@ -1,16 +1,16 @@
 # Learn: greedy algorithms
 
-A greedy algorithm builds a solution one irrevocable choice at a time, always taking what looks best now. It is usually easy to state and hard to prove. The midsem gave greedy 6 of 30 marks (Huffman, 2; room assignment, 4), and Assignment 2 Q3 asked for $k$-ary Huffman. Sources: Lecture 10, Tutorial 3 (Huffman), DPV 5.2, KT ch. 4.
+A greedy algorithm builds its answer one choice at a time, always taking whatever looks best right now and never going back. Greedy algorithms are usually easy to state and hard to prove correct. The midsem gave greedy 6 of 30 marks (Huffman 2, room assignment 4), and Assignment 2 Q3 asked for $k$-ary Huffman. Sources: Lecture 10, Tutorial 3 (Huffman), DPV 5.2, KT ch. 4.
 
 ## Two ways to prove a greedy algorithm optimal
 
 > **In short:** Either show greedy is never behind at any step, or show any optimal solution can be changed step by step into greedy's without getting worse.
 
-1. **Greedy stays ahead.** Show by induction that after each step, the greedy partial solution is at least as good as any other solution's corresponding part (interval scheduling).
-2. **Exchange argument.** Take any optimal solution that differs from greedy. Change it, one step at a time, to agree with greedy's choice without making it worse. So greedy's solution is optimal (Huffman, MST cut property).
-3. **Structural bound** (for "minimise the number of resources"): show every solution needs at least $d$, then show greedy never uses more than $d$ (interval partitioning).
+1. **Greedy stays ahead.** Show by induction that after every step, greedy's partial answer is at least as good as the matching part of any other solution (interval scheduling).
+2. **Exchange argument.** Take any optimal solution that differs from greedy's. Change it one step at a time to agree with greedy's choices, never making it worse. So greedy's answer is optimal too (Huffman, the MST cut property).
+3. **Lower bound** (for "use as few resources as possible"): show that every solution needs at least $d$, then show greedy never uses more than $d$ (interval partitioning).
 
-To show a greedy rule is **wrong**, a single small counterexample is a full answer (Assignment 2 Q3.1 and Q4.1).
+To show a greedy rule is **wrong**, one small counterexample is a complete answer (Assignment 2 Q3.1 and Q4.1).
 
 # Learn: Huffman coding
 
@@ -18,17 +18,17 @@ To show a greedy rule is **wrong**, a single small counterexample is a full answ
 
 > **In short:** No codeword starts another one, so a bit stream decodes in only one way. Such codes are exactly leaves of a binary tree.
 
-A code assigns a bit string to each symbol. A code is **prefix-free** if no codeword is a prefix of another. Then any concatenation decodes uniquely: read bits until they spell a codeword, output it, repeat. Example from the lecture: with $A = 0$, $B = 10$, $C = 110$, $D = 111$, the stream 0110111 decodes as $A, C, D$. With $A = 0$, $B = 01$ it is ambiguous.
+A code gives each symbol a bit string, its codeword. A code is **prefix-free** if no codeword is the beginning of another. Then any stream of codewords decodes in only one way: read bits until they spell a codeword, output it, and repeat. Lecture example: with $A = 0$, $B = 10$, $C = 110$, $D = 111$, the stream 0110111 reads as $A, C, D$. With $A = 0$ and $B = 01$, the stream 01 could be $B$ or $A$ followed by something else, so it is ambiguous.
 
-A prefix-free code is the same thing as a **binary tree with the symbols at the leaves**: the path from the root (0 = left, 1 = right) spells the codeword. A symbol at an internal node would be a prefix of its descendants. In an optimal code the tree is **full** (every internal node has 2 children): a node with one child can be contracted, shortening codewords.
+A prefix-free code is the same thing as a **binary tree with the symbols at the leaves**. The path from the root spells the codeword (left = 0, right = 1). A symbol cannot sit at an internal node, because its codeword would be a prefix of the ones below it. In an optimal code the tree is **full** (every internal node has 2 children): a node with only one child could be removed, making codewords shorter.
 
 ## The objective
 
 > **In short:** Total bits = sum of frequency × depth, so frequent symbols should sit high in the tree.
 
-With frequencies $f_i$ and depths (codeword lengths) $\ell_i$,
+If symbol $i$ has frequency $f_i$ and depth (codeword length) $\ell_i$, then
 $$\boxed{\text{cost}(T) = \sum_i f_i \ell_i = \sum_{\text{non-root nodes } v} f(v)}$$
-where an internal node's frequency is the sum of the frequencies of the leaves below it. The second form holds because a leaf at depth $\ell$ is counted once for each of the $\ell$ non-root nodes on its path. Lecture 10's example: $f_1 + 2f_2 + 2f_3 = f_1 + f_2 + f_3 + (f_2 + f_3)$.
+Here an internal node's frequency is the total frequency of the leaves below it. The two sums are equal because a leaf at depth $\ell$ is counted once for each of the $\ell$ non-root nodes on its path. Lecture 10's example: $f_1 + 2f_2 + 2f_3 = f_1 + f_2 + f_3 + (f_2 + f_3)$.
 
 ## Huffman's algorithm
 
@@ -43,19 +43,23 @@ Huffman(f_1..f_n):
         insert(H, z)
     return the single remaining node (the root)
 ```
-$n - 1$ merges, each $O(\log n)$ with a heap: **$O(n\log n)$**. (If the frequencies are already sorted, two queues give $O(n)$.)
+There are $n - 1$ merges, each $O(\log n)$ with a heap, so **$O(n\log n)$**. (If the frequencies come already sorted, two plain queues give $O(n)$.)
 
 ## Why it is optimal
 
 > **In short:** The two rarest symbols can always be deepest siblings, and merging them leaves a smaller problem of the same kind.
 
-**Lemma (exchange).** If $x, y$ have the two smallest frequencies, some optimal tree has $x$ and $y$ as **siblings at maximum depth**.
+**Lemma (exchange).** If $x$ and $y$ have the two smallest frequencies, then some optimal tree has $x$ and $y$ as **siblings at the deepest level**.
 
-*Proof.* Take an optimal full tree $T$. Its deepest level has two sibling leaves $a, b$ (full tree). Swap $x$ with $a$: since $f_x \le f_a$ and $\ell_a \ge \ell_x$, the cost changes by $(f_a - f_x)(\ell_x - \ell_a) \le 0$. Likewise swap $y$ with $b$. The cost does not increase, so the new tree is still optimal and has $x, y$ as deepest siblings.
+*Proof.* Take an optimal full tree $T$. Because it is full, its deepest level has two sibling leaves $a, b$. Swap $x$ with $a$. Since $f_x \le f_a$ and $\ell_a \ge \ell_x$, the cost changes by $(f_a - f_x)(\ell_x - \ell_a) \le 0$: the rarer symbol moved down, the commoner one moved up. Swap $y$ with $b$ the same way. The cost did not go up, so the new tree is still optimal, and $x, y$ are now deepest siblings.
 
 **Theorem.** Huffman's tree is optimal.
 
-*Proof by induction on $n$.* $n = 2$ is trivial. Replace $x, y$ by a single symbol $z$ with $f_z = f_x + f_y$. For any tree $T'$ on the reduced alphabet, expanding $z$ into a node with children $x, y$ gives a tree $T$ with $\text{cost}(T) = \text{cost}(T') + f_x + f_y$. Huffman on $n$ symbols is "merge $x, y$, then Huffman on the reduced alphabet", which is optimal there by induction. By the lemma some optimal tree on $n$ symbols has $x, y$ as siblings, and contracting them gives a tree $T'$ on the reduced alphabet; so $\text{OPT}_n = \text{OPT}_{n-1} + f_x + f_y$, which is exactly what Huffman achieves.
+*Proof by induction on $n$.* $n = 2$ is obvious. Otherwise:
+1. Replace $x$ and $y$ by one new symbol $z$ with $f_z = f_x + f_y$.
+2. For any tree $T'$ on this smaller alphabet, turning leaf $z$ into a node with children $x, y$ gives a tree $T$ with $\text{cost}(T) = \text{cost}(T') + f_x + f_y$. (Both $x$ and $y$ sit one level below $z$.)
+3. Huffman on $n$ symbols is "merge $x, y$, then run Huffman on the smaller alphabet". By induction that second part is optimal.
+4. By the lemma, some optimal tree on $n$ symbols has $x, y$ as siblings, and merging them gives a tree on the smaller alphabet. So $\text{OPT}_n = \text{OPT}_{n-1} + f_x + f_y$, which is exactly the cost Huffman gets.
 
 ## Kraft's inequality (Lecture 10 exercise)
 
@@ -64,21 +68,23 @@ $n - 1$ merges, each $O(\log n)$ with a heap: **$O(n\log n)$**. (If the frequenc
 For any prefix-free binary code with lengths $\ell_1, \ldots, \ell_m$:
 $$\boxed{\sum_{i=1}^m 2^{-\ell_i} \le 1}$$
 
-*Proof.* Let $L = \max \ell_i$. A codeword of length $\ell_i$ is a prefix of exactly $2^{L - \ell_i}$ strings of length $L$. Because no codeword is a prefix of another, these sets are disjoint. There are only $2^L$ strings of length $L$, so $\sum_i 2^{L-\ell_i} \le 2^L$; divide by $2^L$. (Equivalently: a random walk down the tree, flipping a fair coin at each node, reaches leaf $i$ with probability $2^{-\ell_i}$, and these events are disjoint.) Equality holds exactly for full trees.
+*Proof.* Let $L = \max \ell_i$. A codeword of length $\ell_i$ is the beginning of exactly $2^{L - \ell_i}$ strings of length $L$. Since no codeword is a prefix of another, these groups of strings don't overlap. There are only $2^L$ strings of length $L$, so $\sum_i 2^{L-\ell_i} \le 2^L$. Divide by $2^L$.
+
+Another way to see it: walk down the tree from the root, flipping a fair coin at each node to pick left or right. You reach leaf $i$ with probability $2^{-\ell_i}$, and these events can't happen together, so the probabilities add to at most 1. Equality holds exactly for full trees.
 
 ## $k$-ary Huffman (Assignment 2 Q3)
 
 > **In short:** Every merge must take exactly $k$ nodes, so pad with zero-frequency dummies first.
 
-With an alphabet of $k$ symbols the tree is $k$-ary. Naively merging the $k$ smallest each time can fail.
+With $k$ code symbols instead of 2, the tree is $k$-ary. Simply merging the $k$ smallest each time can fail.
 
-**Counterexample**, $k = 3$, four symbols each of frequency 1. Naive: merge three 1s into a node of weight 3; now only two nodes remain, so the root gets just 2 children. Depths are $1, 2, 2, 2$, cost $1 + 2 + 2 + 2 = 7$. Better: root with three children, two of them leaves and one an internal node with the other two leaves: depths $1, 1, 2, 2$, cost 6.
+**Counterexample:** $k = 3$, four symbols each of frequency 1. The naive method merges three 1s into a node of weight 3. Now only two nodes remain, so the root gets just 2 children. The depths are $1, 2, 2, 2$, costing $1 + 2 + 2 + 2 = 7$. Better: give the root three children, two leaves and one internal node holding the other two leaves. Depths $1, 1, 2, 2$, cost 6.
 
-**Why it fails.** A full $k$-ary tree with $n$ leaves needs $n - 1 \equiv 0 \pmod{k-1}$ (each merge turns $k$ nodes into 1, reducing the count by $k-1$, and we need to reach exactly 1). Otherwise the **last** merge has fewer than $k$ children, which wastes a short codeword at the top, the most valuable place, instead of at the bottom.
+**Why it fails.** Each merge turns $k$ nodes into 1, so it reduces the count by $k-1$. To end at exactly 1 node, a full $k$-ary tree with $n$ leaves needs $n - 1 \equiv 0 \pmod{k-1}$. Otherwise the **last** merge has fewer than $k$ children. That wastes a short codeword at the top, the most valuable place, instead of at the bottom.
 
-**Fix.** Add dummy symbols of frequency 0 until $n - 1 \equiv 0 \pmod{k-1}$ (at most $k - 2$ dummies), then always merge the $k$ smallest. The dummies sit at the deepest level where they cost nothing, so the under-full node is at the bottom. In the example, add one 0: merge $\{0, 1, 1\}$ into 2, then $\{1, 1, 2\}$: cost 6. The exchange proof goes through as before (the $k$ smallest can be made deepest siblings).
+**Fix.** Add dummy symbols of frequency 0 until $n - 1 \equiv 0 \pmod{k-1}$ (at most $k - 2$ dummies), then always merge the $k$ smallest. The dummies end up at the deepest level, where they cost nothing, so the under-full node is at the bottom. In the example, add one 0: merge $\{0, 1, 1\}$ into 2, then $\{1, 1, 2\}$, for cost 6. The exchange proof works as before: the $k$ smallest can be made deepest siblings.
 
-**Time.** $O(n)$ dummies at most $k - 2$, $\lceil (n-1)/(k-1)\rceil$ merges, each $k$ deletemins and an insert: $O(n\log n)$ total (each node is inserted and deleted once).
+**Time.** At most $k - 2$ dummies, and $\lceil (n-1)/(k-1)\rceil$ merges, each with $k$ deletemins and one insert. Each node is inserted and deleted once, so $O(n\log n)$ in total.
 
 # Learn: interval scheduling and partitioning
 
@@ -86,9 +92,13 @@ With an alphabet of $k$ symbols the tree is $k$-ary. Naively merging the $k$ sma
 
 > **In short:** Always take the job that finishes first; it leaves the most room for the rest.
 
-**Greedy: repeatedly pick the job that finishes earliest**, discard those it overlaps, repeat. (Earliest start, shortest job and fewest conflicts all have counterexamples.)
+**Greedy: pick the job that finishes earliest**, throw out the jobs that overlap it, and repeat. (Earliest start, shortest job and fewest conflicts all have counterexamples.)
 
-**Greedy stays ahead.** Let greedy pick $g_1, g_2, \ldots, g_k$ and an optimal solution $o_1, \ldots, o_m$, both sorted by finish time. Claim: $f(g_r) \le f(o_r)$ for every $r \le k$. True for $r = 1$ (greedy picks the earliest finish). If $f(g_{r-1}) \le f(o_{r-1}) \le s(o_r)$, then $o_r$ was still available when greedy chose $g_r$, so $f(g_r) \le f(o_r)$. If $m > k$, then $o_{k+1}$ starts after $f(o_k) \ge f(g_k)$ and would have been available to greedy, which stopped: contradiction. So $k = m$. Time $O(n\log n)$ for sorting.
+**Proof: greedy stays ahead.** Let greedy pick $g_1, \ldots, g_k$ and an optimal solution pick $o_1, \ldots, o_m$, both sorted by finish time $f$ (start time is $s$). Claim: $f(g_r) \le f(o_r)$ for every $r \le k$.
+- $r = 1$: greedy picks the earliest finish of all.
+- Step: if $f(g_{r-1}) \le f(o_{r-1}) \le s(o_r)$, then $o_r$ was still available when greedy chose $g_r$. Greedy took the earliest finisher, so $f(g_r) \le f(o_r)$.
+
+Now suppose $m > k$. Then $o_{k+1}$ starts after $f(o_k) \ge f(g_k)$, so it was still available to greedy, but greedy stopped. Contradiction, so $k = m$. Time $O(n\log n)$ for sorting.
 
 With **weights**, greedy fails and we need DP (next chapter).
 
@@ -96,13 +106,13 @@ With **weights**, greedy fails and we need DP (next chapter).
 
 > **In short:** You need as many rooms as the most lectures running at one moment, and greedy by start time achieves exactly that.
 
-All lectures must be scheduled; overlapping ones need different rooms. Minimise the number of rooms.
+Every lecture must be scheduled, and overlapping lectures need different rooms. Use as few rooms as possible.
 
-**Depth** $d$ = the maximum number of lectures that are all in progress at one time. **Every** solution needs at least $d$ rooms.
+The **depth** $d$ is the largest number of lectures in progress at the same moment. **Every** solution needs at least $d$ rooms.
 
-**Greedy.** Sort by **start** time. For each lecture, put it in a room that is free (the room whose last lecture ends earliest, if it ends by this start); otherwise open a new room. A min-heap of room finish times finds the earliest-free room in $O(\log n)$.
+**Greedy.** Sort by **start** time. Put each lecture into a room that is free by then (the room whose last lecture ends earliest, if it has ended). If no room is free, open a new one. A min-heap of room finish times finds the earliest-free room in $O(\log n)$.
 
-**Optimality.** When greedy opens room $k + 1$ for a lecture starting at $s$, all $k$ rooms have a lecture ending after $s$, and those lectures started at or before $s$ (lectures are processed by start time). So $k + 1$ lectures are all in progress just after $s$: $d \ge k + 1$. Hence greedy never uses more than $d$ rooms, and nobody can use fewer. Time $O(n\log n)$, space $O(n)$. Full write-up with pseudocode in the midsem page.
+**Why it is optimal.** Suppose greedy opens room $k + 1$ for a lecture starting at time $s$. Then all $k$ existing rooms have a lecture ending after $s$. Those lectures started at or before $s$, since lectures are handled in order of start time. So $k + 1$ lectures are all running just after $s$, which means $d \ge k + 1$. So greedy never uses more than $d$ rooms, and no solution can use fewer. Time $O(n\log n)$, space $O(n)$. The full write-up with pseudocode is on the midsem page.
 
 ## Practice
 

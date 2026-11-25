@@ -1,27 +1,27 @@
 # Learn: flows, cuts and duality
 
-Max flow is the largest post-midsem topic. Class Test I was entirely max flow (an Edmonds–Karp trace and two reductions), Quiz II Q2 was matching and Hall via max-flow min-cut, and Lectures 14 to 18 plus a revision session were spent on it. The endsem will almost certainly have a trace or a reduction from this chapter. Sources: Lectures 14–18, KT ch. 7, DPV 7.2, the Moodle practice set.
+Max flow is the biggest topic after the midsem. Class Test I was all max flow (an Edmonds–Karp trace and two reductions), Quiz II Q2 was matching and Hall via max-flow min-cut, and Lectures 14 to 18 plus a revision session covered it. The endsem will almost certainly have a trace or a reduction from this chapter. Sources: Lectures 14–18, KT ch. 7, DPV 7.2, the Moodle practice set.
 
 ## Flow networks
 
 > **In short:** Push as much as possible from $s$ to $t$ through pipes with limits, with nothing lost or created at the junctions.
 
-A **flow network** is a directed graph $G = (V, E)$ with a source $s$, a sink $t$ and capacities $c(u, v) \ge 0$. A **flow** $f: E \to \mathbb{R}_{\ge 0}$ satisfies
+A **flow network** is a directed graph $G = (V, E)$ with a source $s$, a sink $t$, and a capacity $c(u, v) \ge 0$ on each edge. A **flow** $f: E \to \mathbb{R}_{\ge 0}$ must obey two rules:
 
-1. **Capacity**: $0 \le f(u, v) \le c(u, v)$ for every edge;
-2. **Conservation**: $\sum_{v} f(v, u) = \sum_{w} f(u, w)$ for every $u \ne s, t$ (flow in = flow out).
+1. **Capacity:** $0 \le f(u, v) \le c(u, v)$ on every edge.
+2. **Conservation:** at every vertex $u \ne s, t$, flow in = flow out, that is $\sum_{v} f(v, u) = \sum_{w} f(u, w)$.
 
-The **value** is the net flow out of the source:
+The **value** of a flow is the net amount leaving the source:
 $$\text{val}(f) = \sum_v f(s, v) - \sum_u f(u, s).$$
-Goal: a flow of maximum value.
+The goal is a flow with the largest value.
 
 ## Cuts
 
 > **In short:** A cut is a wall between $s$ and $t$; its capacity is the total of the pipes crossing it in the $s$-to-$t$ direction.
 
-An **$s$–$t$ cut** $(P, Q)$ is a partition of $V$ with $s \in P$, $t \in Q$. Its **capacity** counts only edges going **forward**, from $P$ to $Q$:
+An **$s$–$t$ cut** $(P, Q)$ splits $V$ into two sides with $s \in P$ and $t \in Q$. Its **capacity** adds up only the edges going **forward**, from $P$ to $Q$:
 $$C(P, Q) = \sum_{u\in P,\ v\in Q} c(u, v).$$
-Edges from $Q$ back to $P$ do not count, and neither do edges inside $P$ or inside $Q$.
+Edges going back from $Q$ to $P$ don't count, and neither do edges inside one side.
 
 ## Cut invariance
 
@@ -29,7 +29,10 @@ Edges from $Q$ back to $P$ do not count, and neither do edges inside $P$ or insi
 
 $$\boxed{\text{for every flow } f \text{ and cut } (P, Q):\quad \text{val}(f) = f(P \to Q) - f(Q \to P)}$$
 
-*Proof.* Sum the conservation equations (out − in) over all $u \in P$. For $u \ne s$ each term is 0; for $s$ it is val$(f)$. So $\text{val}(f) = \sum_{u\in P}(\text{out}(u) - \text{in}(u))$. An edge with both ends in $P$ appears once as an outflow and once as an inflow and cancels. What remains is the flow on edges leaving $P$ minus the flow on edges entering $P$.
+*Proof.* For each $u \in P$, write down out$(u)$ − in$(u)$ and add these up.
+- For $u \ne s$ the term is 0 (conservation). For $s$ it is val$(f)$. So the sum is val$(f)$.
+- Now count the same sum edge by edge. An edge with both ends in $P$ appears once as an outflow and once as an inflow, so it cancels.
+- What is left is the flow on edges leaving $P$ minus the flow on edges entering $P$.
 
 ## Weak duality
 
@@ -37,9 +40,9 @@ $$\boxed{\text{for every flow } f \text{ and cut } (P, Q):\quad \text{val}(f) = 
 
 $$\boxed{\text{val}(f) \le C(P, Q) \text{ for every flow } f \text{ and every cut } (P, Q)}$$
 
-*Proof.* $\text{val}(f) = f(P\to Q) - f(Q \to P) \le f(P \to Q) \le C(P, Q)$, using $f \ge 0$ and the capacity constraint.
+*Proof.* $\text{val}(f) = f(P\to Q) - f(Q \to P) \le f(P \to Q) \le C(P, Q)$. The first step uses $f \ge 0$ and the second the capacity rule.
 
-**Certificate of optimality.** If some flow $f^*$ and cut $(P^*, Q^*)$ have $\text{val}(f^*) = C(P^*, Q^*)$, then $f^*$ is a maximum flow **and** $(P^*, Q^*)$ is a minimum cut (every flow is $\le C(P^*,Q^*) = \text{val}(f^*)$, every cut is $\ge \text{val}(f^*) = C(P^*,Q^*)$). To prove a flow is optimal in an exam, **exhibit one cut** with matching capacity (CT I Q1.2, 2 marks).
+**Certificate of optimality.** Suppose a flow $f^*$ and a cut $(P^*, Q^*)$ have $\text{val}(f^*) = C(P^*, Q^*)$. Then $f^*$ is a maximum flow **and** $(P^*, Q^*)$ is a minimum cut: every flow is $\le C(P^*,Q^*) = \text{val}(f^*)$, and every cut is $\ge \text{val}(f^*) = C(P^*,Q^*)$. So to prove a flow is optimal in an exam, **show one cut** with the same capacity (CT I Q1.2, 2 marks).
 
 # Learn: Ford–Fulkerson
 
@@ -47,20 +50,20 @@ $$\boxed{\text{val}(f) \le C(P, Q) \text{ for every flow } f \text{ and every cu
 
 > **In short:** Pushing flow along any path can block better routes, so we need a way to take flow back.
 
-Greedy "find any $s$–$t$ path with spare capacity, push the bottleneck, repeat" can get stuck. **Diamond**: edges $s\to u, s\to v, u\to v, u \to t, v \to t$, all capacity 1. If greedy first sends 1 along $s \to u \to v \to t$, then $s\to u$ and $v \to t$ are full and no path with spare capacity remains: value 1. The optimum is 2 ($s\to u\to t$ and $s \to v\to t$). Greedy needs a way to **undo** flow.
+The greedy idea "find any $s$–$t$ path with spare room, push as much as it allows, repeat" can get stuck. **Diamond example:** edges $s\to u, s\to v, u\to v, u \to t, v \to t$, all of capacity 1. If greedy first sends 1 along $s \to u \to v \to t$, then $s\to u$ and $v \to t$ are full and no path with spare room is left, so it stops at value 1. The best is 2 ($s\to u\to t$ and $s \to v\to t$). Greedy needs a way to **undo** flow.
 
-Practice set Problem 1(a) is the same lesson: "every $s$–$t$ path has a saturated edge" does **not** mean the flow is maximum.
+Practice set Problem 1(a) teaches the same lesson: "every $s$–$t$ path has a full edge" does **not** mean the flow is maximum.
 
 ## The residual graph
 
 > **In short:** It shows what you can still do: add flow on edges with spare room, or cancel flow already sent.
 
-Given $f$, the **residual graph** $G_f$ has, for each edge $(u, v) \in E$:
+Given a flow $f$, the **residual graph** $G_f$ has, for each edge $(u, v) \in E$:
 
-- a **forward** edge $(u, v)$ with residual capacity $c_f(u, v) = c(u, v) - f(u, v)$ if this is positive (room to add);
-- a **backward** edge $(v, u)$ with $c_f(v, u) = f(u, v)$ if this is positive (room to cancel).
+- a **forward** edge $(u, v)$ with residual capacity $c_f(u, v) = c(u, v) - f(u, v)$, if that is positive (room to add more);
+- a **backward** edge $(v, u)$ with $c_f(v, u) = f(u, v)$, if that is positive (room to cancel what was sent).
 
-Pushing $\Delta$ along a backward edge $(v, u)$ means **decreasing** $f(u, v)$ by $\Delta$.
+Pushing $\Delta$ along a backward edge $(v, u)$ means **lowering** $f(u, v)$ by $\Delta$.
 
 ## The algorithm
 
@@ -77,7 +80,7 @@ FordFulkerson(G, s, t):
     return f
 ```
 
-Each augmentation keeps $f$ feasible (capacities hold by the choice of $\Delta$; at an inner vertex of $p$, one unit "in" and one unit "out" are changed by the same $\Delta$ in a way that keeps in = out) and increases the value by $\Delta$ (the first edge of $p$ leaves $s$, and a simple path never re-enters $s$).
+Each augmentation keeps $f$ a valid flow. Capacities hold because of how $\Delta$ is chosen. At each inner vertex of $p$, the path changes one incoming and one outgoing amount by the same $\Delta$ in a way that keeps in = out. The value goes up by $\Delta$, because the first edge of $p$ leaves $s$ and a simple path never comes back to $s$.
 
 ## Max-flow min-cut theorem
 
@@ -85,20 +88,20 @@ Each augmentation keeps $f$ feasible (capacities hold by the choice of $\Delta$;
 
 $$\boxed{\max_f \text{val}(f) = \min_{(P,Q)} C(P, Q)}$$
 
-*Proof via the algorithm's output.* When Ford–Fulkerson stops, let $P^*$ = the vertices reachable from $s$ in $G_f$, and $Q^* = V \setminus P^*$.
+*Proof, using what the algorithm stops with.* When Ford–Fulkerson stops, let $P^*$ be the set of vertices reachable from $s$ in $G_f$, and $Q^* = V \setminus P^*$.
 
-1. $s \in P^*$, and $t \in Q^*$ (otherwise there would be an augmenting path). So $(P^*, Q^*)$ is an $s$–$t$ cut.
-2. For an edge $(u, v)$ with $u \in P^*$, $v \in Q^*$: the forward residual edge must be absent (else $v$ would be reachable), so $f(u, v) = c(u, v)$. **Saturated.**
-3. For an edge $(v, u)$ with $v \in Q^*$, $u \in P^*$: the backward residual edge $(u, v)$ must be absent, so $f(v, u) = 0$. **Empty.**
+1. $s \in P^*$, and $t \in Q^*$ (otherwise there would still be an augmenting path). So $(P^*, Q^*)$ is an $s$–$t$ cut.
+2. Take an edge $(u, v)$ going forward, $u \in P^*$, $v \in Q^*$. Its forward residual edge must be missing, or $v$ would be reachable. So $f(u, v) = c(u, v)$: the edge is **full**.
+3. Take an edge $(v, u)$ going backward, $v \in Q^*$, $u \in P^*$. Its backward residual edge $(u, v)$ must be missing, so $f(v, u) = 0$: the edge is **empty**.
 4. By cut invariance, $\text{val}(f) = \sum_{P^*\to Q^*} c - 0 = C(P^*, Q^*)$.
 
-By the certificate, $f$ is maximum and $(P^*, Q^*)$ is a minimum cut. This also gives the **three equivalent conditions**: $f$ is maximum $\iff$ $G_f$ has no $s$–$t$ path $\iff$ $\text{val}(f) = C(P, Q)$ for some cut.
+By the certificate, $f$ is a maximum flow and $(P^*, Q^*)$ is a minimum cut. This also shows **three conditions are equivalent**: $f$ is maximum $\iff$ $G_f$ has no $s$–$t$ path $\iff$ $\text{val}(f) = C(P, Q)$ for some cut.
 
-**Finding a min cut** after computing a max flow: BFS/DFS from $s$ in $G_f$; $P^*$ is what you reach. (CT I accepted both $P^* = \{s\}$ and $P^* = V\setminus\{t\}$ there, since both cuts had capacity 16.)
+**Finding a min cut** once you have a max flow: run BFS or DFS from $s$ in $G_f$; $P^*$ is everything you reach. (In CT I both $P^* = \{s\}$ and $P^* = V\setminus\{t\}$ were accepted, since both cuts had capacity 16.)
 
 ## Worked example (Lecture 16)
 
-Edges: $s\to a$ 7, $s\to b$ 8, $a\to c$ 4, $a\to d$ 5, $c \to d$ 2, $c\to t$ 5, $b \to d$ 4, $d\to t$ 6 (plus a capacity-3 edge between $a$ and $b$ that stays unused).
+Edges: $s\to a$ 7, $s\to b$ 8, $a\to c$ 4, $a\to d$ 5, $c \to d$ 2, $c\to t$ 5, $b \to d$ 4, $d\to t$ 6 (plus a capacity-3 edge between $a$ and $b$ that is never used).
 
 | Iteration | Augmenting path in $G_f$ | $\Delta$ | Value | Note |
 |---|---|---|---|---|
@@ -107,7 +110,7 @@ Edges: $s\to a$ 7, $s\to b$ 8, $a\to c$ 4, $a\to d$ 5, $c \to d$ 2, $c\to t$ 5, 
 | 3 | $s\to a\to c\to t$ | 2 | 8 | $a\to c$ saturated |
 | 4 | $s\to a\to d\to c\to t$ | 2 | 10 | uses back edge $d\to c$: $f(c,d)$ drops 2 → 0 |
 
-Now in $G_f$, $s$ reaches $a$ (residual 1), $b$ (residual 4) and $d$ (via $a\to d$, residual 3). From $d$ there is nowhere new to go: $d\to t$ is full, and $f(c, d) = 0$ so there is no back edge $d\to c$. From $a$, $a\to c$ is full. So $c$ and $t$ are unreachable. $P^* = \{s, a, b, d\}$, $Q^* = \{c, t\}$. Forward edges across: $a \to c$ (4) and $d\to t$ (6). $C = 10 = \text{val}(f)$. Maximum.
+Now, in $G_f$, $s$ reaches $a$ (residual 1), $b$ (residual 4) and $d$ (through $a\to d$, residual 3). From $d$ there is nowhere new to go: $d\to t$ is full, and $f(c, d) = 0$, so there is no back edge $d\to c$. From $a$, the edge $a\to c$ is full. So $c$ and $t$ can't be reached. $P^* = \{s, a, b, d\}$ and $Q^* = \{c, t\}$. The forward edges across are $a \to c$ (4) and $d\to t$ (6), so $C = 10 = \text{val}(f)$. The flow is maximum.
 
 ## Integrality
 
@@ -115,15 +118,15 @@ Now in $G_f$, $s$ reaches $a$ (residual 1), $b$ (residual 4) and $d$ (via $a\to 
 
 $$\boxed{\text{if all capacities are integers, there is a maximum flow with every } f(e) \text{ an integer}}$$
 
-*Proof.* Ford–Fulkerson starts at 0; if all flows are integers, all residual capacities are integers, so $\Delta$ is an integer and the flows stay integers (induction on iterations). It stops at a maximum flow.
+*Proof.* Ford–Fulkerson starts with all flows 0. If all flows are integers, so are all residual capacities, so $\Delta$ is an integer and the flows stay integers (induction on iterations). The algorithm stops at a maximum flow.
 
-It does **not** say every maximum flow is integral (practice set Problem 5(c): split one unit as $\frac12 + \frac12$ over two paths). Whenever you turn a flow into a matching, a set of paths or a 0/1 choice, **cite this theorem** (rubric marks it explicitly).
+It does **not** say that every maximum flow is integral (practice set Problem 5(c): split one unit as $\frac12 + \frac12$ over two paths). Whenever you turn a flow into a matching, a set of paths or a 0/1 choice, **cite this theorem**. The rubric gives a mark for it.
 
 ## Running time
 
 > **In short:** Each step adds at least 1 unit, so the number of steps can be as large as the flow value itself.
 
-With integer capacities each augmentation adds $\Delta \ge 1$, so there are at most $\lvert f^*\rvert$ augmentations, each found by BFS/DFS in $O(m)$: **$O(m\lvert f^*\rvert)$**. This is pseudo-polynomial: with capacities like $10^9$ and an unlucky choice of paths that keeps crossing a capacity-1 middle edge back and forth, it can take $2\cdot10^9$ iterations. With irrational capacities it may not even terminate.
+With integer capacities each augmentation adds $\Delta \ge 1$. So there are at most $\lvert f^*\rvert$ augmentations, each found by BFS or DFS in $O(m)$: **$O(m\lvert f^*\rvert)$** in total. That is only pseudo-polynomial. With capacities like $10^9$ and unlucky paths that keep crossing a capacity-1 middle edge back and forth, it can take $2\cdot10^9$ iterations. With irrational capacities it might never stop.
 
 ## Edmonds–Karp: shortest augmenting paths
 
@@ -133,31 +136,34 @@ Always augment along a **shortest** path in $G_f$ (fewest edges, found by BFS).
 
 $$\boxed{\text{Edmonds–Karp makes } O(nm) \text{ augmentations, so runs in } O(nm^2)}$$
 
-*Proof sketch.* (1) The BFS distance $d_f(s, v)$ never decreases for any $v$: new residual edges are reverses of edges on a shortest path, which go from distance $i+1$ to $i$ and cannot create shortcuts. (2) An edge $(u, v)$ is **critical** (the bottleneck, removed from $G_f$) when $d(v) = d(u) + 1$. For it to be critical again, $(v, u)$ must first be used, which needs $d'(u) = d'(v) + 1 \ge d(v) + 1 = d(u) + 2$. So each time an edge is critical again, $d(u)$ has grown by 2; distances are at most $n$, so each edge is critical $O(n)$ times. Every augmentation has a critical edge, and there are $O(m)$ residual edges: $O(nm)$ augmentations, each $O(m)$.
+*Proof sketch.*
+1. **Distances never shrink.** For every $v$, the BFS distance $d_f(s, v)$ never decreases. The only new residual edges are reverses of edges on a shortest path. Those go from distance $i+1$ back to $i$, so they cannot create shortcuts.
+2. **Each edge is the bottleneck $O(n)$ times.** An edge $(u, v)$ is **critical** when it is the bottleneck and disappears from $G_f$; at that moment $d(v) = d(u) + 1$. Before it can be critical again, the reverse edge $(v, u)$ must be used, which needs $d'(u) = d'(v) + 1 \ge d(v) + 1 = d(u) + 2$. So $d(u)$ grows by 2 between critical moments. Distances are at most $n$, so each edge is critical $O(n)$ times.
+3. **Total.** Every augmentation has a critical edge, and there are $O(m)$ residual edges, so there are $O(nm)$ augmentations, each costing $O(m)$.
 
-**Capacity scaling** is the other fix: only augment along paths with bottleneck $\ge \Delta$, halving $\Delta$ from the largest power of two $\le C_{\max}$; $O(m^2\log C_{\max})$.
+**Capacity scaling** is another fix: only use paths whose bottleneck is at least $\Delta$, starting with $\Delta$ = the largest power of two $\le C_{\max}$ and halving it each phase. $O(m^2\log C_{\max})$.
 
 ## Flow decomposition
 
 > **In short:** A 0/1 flow is a bundle of separate paths; trace them out one by one.
 
-An integral flow of value $k$ on a unit-capacity network decomposes into $k$ edge-disjoint $s$–$t$ paths (plus cycles): follow edges with $f = 1$ from $s$; by conservation you can always leave a vertex you entered, until you reach $t$; zero out that path and repeat. A cycle found on the way can be deleted without changing the value (practice set Problem 5(d)). $O(nm)$ total.
+An integral flow of value $k$ in a unit-capacity network splits into $k$ edge-disjoint $s$–$t$ paths (plus maybe some cycles). Start at $s$ and follow edges with $f = 1$. By conservation, whenever you enter a vertex you can leave it again, so you eventually reach $t$. Set that path's flow to zero and repeat. A cycle found on the way can be deleted without changing the value (practice set Problem 5(d)). $O(nm)$ in total.
 
 # Learn: reductions to max flow
 
-Most flow questions are "design an algorithm for X". The answer is always: **build a network, prove the correspondence both ways, cite max-flow min-cut and integrality, give the size and time.** CT I marked these as construction 3 / proof 2 / size 1.
+Most flow questions say "design an algorithm for X". The answer always has the same shape: **build a network, prove the correspondence in both directions, cite max-flow min-cut and integrality, and give the network size and running time.** CT I marked these as construction 3, proof 2, size 1.
 
 ## Bipartite matching (Quiz II Q2.1–2.2)
 
 > **In short:** Each left vertex can send one unit to one right vertex, so a whole-number flow is exactly a matching.
 
-**Construction.** $V' = L \cup R \cup \{s, t\}$; edges $s \to u$ (capacity 1) for $u \in L$, $u\to v$ (capacity 1, or $\infty$) for each edge $(u, v)$, $v \to t$ (capacity 1) for $v \in R$.
+**Construction.** Vertices $L \cup R \cup \{s, t\}$. Edges: $s \to u$ with capacity 1 for each $u \in L$; $u\to v$ with capacity 1 (or $\infty$) for each graph edge $(u, v)$; $v \to t$ with capacity 1 for each $v \in R$.
 
-**Matching → flow.** For each matched edge set $f(s,u) = f(u,v) = f(v,t) = 1$. Disjointness means each vertex carries at most one unit: feasible, value $\lvert M\rvert$. So max flow $\ge$ max matching.
+**Matching → flow.** For each matched edge set $f(s,u) = f(u,v) = f(v,t) = 1$. Matched edges share no vertex, so each vertex carries at most one unit. This is a valid flow of value $\lvert M\rvert$, so max flow $\ge$ max matching.
 
-**Flow → matching.** By **integrality** take an integral max flow, so every $f(e) \in \{0, 1\}$ on the unit edges. Let $M = \{(u,v) : f(u,v) = 1\}$. At $u \in L$ inflow is at most $c(s, u) = 1$, so at most one edge leaves $u$ with flow; symmetrically at $v \in R$. So $M$ is a matching of size $\text{val}(f)$ (cut invariance on the cut $\{s\} \cup L$). So max matching $\ge$ max flow.
+**Flow → matching.** By **integrality**, take an integral max flow, so each unit edge carries 0 or 1. Let $M = \{(u,v) : f(u,v) = 1\}$. At $u \in L$ at most 1 unit can come in (from $s$), so at most one edge out of $u$ carries flow; the same holds at each $v \in R$. So $M$ is a matching, and its size is $\text{val}(f)$ (cut invariance on the cut $\{s\} \cup L$). So max matching $\ge$ max flow.
 
-Ford–Fulkerson takes at most $n$ augmentations of $O(m)$: $O(nm)$.
+Ford–Fulkerson makes at most $n$ augmentations of $O(m)$ each: $O(nm)$.
 
 ## Hall's theorem via max-flow min-cut (Quiz II Q2.3)
 
@@ -165,76 +171,83 @@ Ford–Fulkerson takes at most $n$ augmentations of $O(m)$: $O(nm)$.
 
 Use the network above with **$c(u, v) = \infty$** on the middle edges.
 
-($\Rightarrow$) A matching covering $L$ sends each $u\in S$ to a distinct partner in $N(S)$, so $\lvert N(S)\rvert \ge \lvert S\rvert$.
+($\Rightarrow$) A matching covering $L$ sends the vertices of $S$ to different partners, all in $N(S)$, so $\lvert N(S)\rvert \ge \lvert S\rvert$.
 
-($\Leftarrow$) The cut $(\{s\}, \text{rest})$ has capacity $\lvert L\rvert$, so the min cut is $\le \lvert L\rvert$. Take **any** finite cut $(A, B)$; let $S = A \cap L$, $T = A \cap R$. No $\infty$ edge goes from $A$ to $B$, so every neighbour of $S$ is in $A$: $N(S) \subseteq T$. The edges crossing forward are $s\to u$ for $u \in L\setminus S$ and $v\to t$ for $v\in T$:
-$$C(A, B) = \lvert L\setminus S\rvert + \lvert T\rvert \ge \lvert L\rvert - \lvert S\rvert + \lvert N(S)\rvert \ge \lvert L\rvert,$$
-using Hall's condition. So the min cut is exactly $\lvert L\rvert$, and by MFMC the max flow is $\lvert L\rvert$; by the previous part this is a matching covering $L$.
+($\Leftarrow$) The cut $(\{s\}, \text{rest})$ has capacity $\lvert L\rvert$, so the min cut is at most $\lvert L\rvert$. We show every finite cut is at least $\lvert L\rvert$. Take **any** finite cut $(A, B)$, and let $S = A \cap L$ and $T = A \cap R$.
+- No $\infty$ edge can go from $A$ to $B$, so every neighbour of $S$ is in $A$: $N(S) \subseteq T$.
+- The forward edges across are $s\to u$ for $u \in L\setminus S$ and $v\to t$ for $v\in T$. So, using Hall's condition at the end,
+$$C(A, B) = \lvert L\setminus S\rvert + \lvert T\rvert \ge \lvert L\rvert - \lvert S\rvert + \lvert N(S)\rvert \ge \lvert L\rvert.$$
+
+So the min cut is exactly $\lvert L\rvert$. By MFMC the max flow is $\lvert L\rvert$, and by the previous section that is a matching covering $L$.
 
 ## Edge-disjoint paths: Menger's theorem (CT I Q3)
 
 > **In short:** With capacity 1 on every edge, a flow of $k$ is $k$ paths that share no edge, and a cut is a set of edges to delete.
 
-**Claim.** The maximum number of pairwise edge-disjoint directed $s$–$t$ paths equals the minimum number of edges whose removal disconnects $t$ from $s$.
+**Claim.** The largest number of directed $s$–$t$ paths that share no edge equals the smallest number of edges whose removal cuts $t$ off from $s$.
 
 Give every edge capacity 1.
 
-- **Weak direction (paths ≤ cut).** $k$ edge-disjoint paths: any disconnecting set $F$ must contain an edge of each path, and the paths share no edges, so $\lvert F\rvert \ge k$.
+- **Easy direction (paths ≤ cut).** Given $k$ edge-disjoint paths, any set $F$ of edges that cuts $t$ off must contain an edge from each path. The paths share no edges, so $\lvert F\rvert \ge k$.
 - **Paths → flow.** $k$ edge-disjoint paths give a 0/1 flow of value $k$.
-- **Flow → paths.** By integrality take a 0/1 max flow $f^*$; flow decomposition gives $\text{val}(f^*)$ edge-disjoint paths.
-- **Cut → edge set.** By MFMC some cut $(P^*, Q^*)$ has $C(P^*, Q^*) = \text{val}(f^*)$; with unit capacities this is the number of edges from $P^*$ to $Q^*$, and deleting them leaves no path out of $P^*$.
+- **Flow → paths.** By integrality take a 0/1 max flow $f^*$. Flow decomposition splits it into $\text{val}(f^*)$ edge-disjoint paths.
+- **Cut → edge set.** By MFMC some cut $(P^*, Q^*)$ has $C(P^*, Q^*) = \text{val}(f^*)$. With unit capacities, this is the number of edges from $P^*$ to $Q^*$. Deleting them leaves no way out of $P^*$.
 
-So max #paths $= \text{val}(f^*) = C(P^*, Q^*) \ge$ min disconnecting set $\ge$ max #paths: all equal.
+So max #paths $= \text{val}(f^*) = C(P^*, Q^*) \ge$ smallest cutting set $\ge$ max #paths, and all of these are equal.
 
-**Algorithm.** Max flow with unit capacities: at most $n - 1$ augmentations (the value is at most $\deg^+(s)$), each $O(m)$, so $O(nm)$; then decompose in $O(nm)$.
+**Algorithm.** Max flow with unit capacities: at most $n - 1$ augmentations (the value is at most the out-degree of $s$), each $O(m)$, so $O(nm)$. Then decompose in $O(nm)$.
 
-**Vertex-disjoint paths**: split vertices (next) with capacity 1, then the same argument.
+**Vertex-disjoint paths:** split each vertex (next section) with capacity 1, then use the same argument.
 
 ## Vertex capacities (CT I Q2)
 
 > **In short:** Turn each vertex into an entry and an exit joined by one edge that carries the vertex's limit.
 
-Each vertex $v \ne s, t$ has capacity $c(v)$ on the total flow through it.
+Each vertex $v \ne s, t$ has a capacity $c(v)$ on the total flow passing through it.
 
-**Construction.** Split each $v$ into $v_{\text{in}}$ and $v_{\text{out}}$ joined by an edge $(v_{\text{in}}, v_{\text{out}})$ of capacity $c(v)$. Every original edge $(u, v)$ becomes $(u_{\text{out}}, v_{\text{in}})$ with capacity $c(u, v)$ ($s$ and $t$ are not split: $s$ acts as $s_{\text{out}}$, $t$ as $t_{\text{in}}$).
+**Construction.** Split each $v$ into $v_{\text{in}}$ and $v_{\text{out}}$, joined by an edge $(v_{\text{in}}, v_{\text{out}})$ with capacity $c(v)$. Each original edge $(u, v)$ becomes $(u_{\text{out}}, v_{\text{in}})$ with capacity $c(u, v)$. $s$ and $t$ are not split: $s$ plays $s_{\text{out}}$ and $t$ plays $t_{\text{in}}$.
 
-**Correctness.** All edges into $v$ now enter $v_{\text{in}}$, whose only exit is the internal edge; by conservation at $v_{\text{in}}$, $\sum_u f(u, v) = f(v_{\text{in}}, v_{\text{out}}) \le c(v)$. Similarly everything leaving goes out of $v_{\text{out}}$. So flows in $G$ satisfying vertex capacities correspond one-to-one (same value) to flows in $G'$; a max flow in $G'$ is a max flow in $G$.
+**Correctness.** Every edge into $v$ now enters $v_{\text{in}}$, and the only way out of $v_{\text{in}}$ is the internal edge. By conservation at $v_{\text{in}}$, $\sum_u f(u, v) = f(v_{\text{in}}, v_{\text{out}}) \le c(v)$. In the same way, everything leaving $v$ goes out of $v_{\text{out}}$. So flows in $G$ that respect the vertex capacities match up one-to-one, with the same value, with flows in $G'$. A max flow in $G'$ is therefore a max flow in $G$.
 
-**Size and time.** $\lvert V'\rvert = 2n - 2$, $\lvert E'\rvert = m + n - 2$. Any max-flow algorithm on $G'$, e.g. Edmonds–Karp in $O(n m^2)$ up to constants.
+**Size and time.** $\lvert V'\rvert = 2n - 2$ and $\lvert E'\rvert = m + n - 2$. Run any max-flow algorithm on $G'$, for example Edmonds–Karp in $O(n m^2)$ up to constants.
 
 ## Many sources and sinks (Lecture 15 exercise)
 
 > **In short:** Add one super-source feeding all sources and one super-sink collecting from all sinks.
 
-Add a super-source $s^*$ with edges $s^* \to s_i$ of capacity $\infty$ (or the supply of $s_i$), and a super-sink $t^*$ with $t_j \to t^*$. Flows correspond one-to-one.
+Add a super-source $s^*$ with edges $s^* \to s_i$ of capacity $\infty$ (or the supply of $s_i$), and a super-sink $t^*$ with edges $t_j \to t^*$. Flows in the two networks match up one-to-one.
 
 ## Circulations with demands and lower bounds (Lecture 15 exercise)
 
 > **In short:** Send the required minimums first, then use max flow to fix the imbalances they leave.
 
-Demands $d(v)$ (negative = supply, positive = demand), $\sum_v d(v) = 0$; find $f$ with $0 \le f \le c$ and in − out $= d(v)$. Add $s^*$ with edges $s^* \to v$ of capacity $-d(v)$ for suppliers, and $v\to t^*$ of capacity $d(v)$ for demanders. A feasible circulation exists iff the max flow saturates all of them, i.e. equals $D = \sum_{d(v)>0} d(v)$.
+Each vertex has a demand $d(v)$ (negative means it supplies, positive means it needs), with $\sum_v d(v) = 0$. Find $f$ with $0 \le f \le c$ and in − out $= d(v)$ at every vertex. Add $s^*$ with edges $s^* \to v$ of capacity $-d(v)$ for suppliers, and edges $v\to t^*$ of capacity $d(v)$ for vertices with demand. A feasible circulation exists iff the max flow fills all of these edges, that is, equals $D = \sum_{d(v)>0} d(v)$.
 
-**Lower bounds** $\ell(e) \le f(e)$: pre-send $\ell(e)$ on each edge. Set $c'(e) = c(e) - \ell(e)$ and adjust demands: $d'(v) = d(v) - (\text{in}_\ell(v) - \text{out}_\ell(v))$. Solve the demand problem on $c'$, then add $\ell$ back.
+**Lower bounds** $\ell(e) \le f(e)$: first send $\ell(e)$ along each edge. Then set $c'(e) = c(e) - \ell(e)$ and adjust the demands to $d'(v) = d(v) - (\text{in}_\ell(v) - \text{out}_\ell(v))$. Solve the demand problem with $c'$, then add $\ell$ back.
 
 ## Project selection / maximum-weight closure (Lecture 15 exercise)
 
 > **In short:** Infinite edges stop a cut from separating a project from its prerequisite, so a min cut is a legal plan, and the cheapest cut is the most profitable plan.
 
-Projects with profits $p_i$ (possibly negative), and prerequisites "$i$ requires $j$". Choose a prerequisite-closed set of maximum profit.
+Projects have profits $p_i$ (possibly negative) and prerequisites "$i$ requires $j$". Choose a set of projects that includes all prerequisites of its members (a closed set) with the largest total profit.
 
-**Construction.** $s \to i$ with capacity $p_i$ if $p_i > 0$; $i \to t$ with capacity $-p_i$ if $p_i < 0$; $i \to j$ with capacity $\infty$ for each "$i$ requires $j$".
+**Construction.** $s \to i$ with capacity $p_i$ if $p_i > 0$; $i \to t$ with capacity $-p_i$ if $p_i < 0$; and $i \to j$ with capacity $\infty$ for each "$i$ requires $j$".
 
-**Claim.** For a cut $(A, B)$, $A \setminus \{s\}$ is closed iff $C(A, B) < \infty$, and then $C(A, B) = \sum_{p_i > 0} p_i - \text{profit}(A \setminus\{s\})$. (A finite cut has no $\infty$ edge leaving $A$, i.e. no chosen project with an unchosen prerequisite. Its capacity is the positive profits **not** taken plus the costs **taken**.) So the min cut gives the max-profit closed set; profit $= \sum_{p_i>0}p_i - $ min cut.
+**Claim.** For a cut $(A, B)$, the set $A \setminus \{s\}$ is closed iff $C(A, B) < \infty$, and then $C(A, B) = \sum_{p_i > 0} p_i - \text{profit}(A \setminus\{s\})$.
+- A finite cut has no $\infty$ edge leaving $A$, so no chosen project has an unchosen prerequisite.
+- Its capacity is the positive profits **not** taken plus the costs that **are** taken.
+
+So the min cut gives the most profitable closed set, with profit $= \sum_{p_i>0}p_i - $ min cut.
 
 ## Fewest removable edges to cut $s$ from $t$ (practice set Problem 3)
 
-Removable edges get capacity 1; protected edges get capacity $\lvert E\rvert + 1$. If $t$ is reachable from $s$ through protected edges alone, answer "impossible". Otherwise the set $P_0$ reachable along protected edges gives a cut of capacity $\le \lvert E\rvert$ using only removable edges, so no min cut contains a protected edge, and the min cut capacity is the answer. Full solution in the practice page.
+Give removable edges capacity 1 and protected edges capacity $\lvert E\rvert + 1$. If $t$ can be reached from $s$ using protected edges only, the answer is "impossible". Otherwise, let $P_0$ be the set reachable along protected edges; it gives a cut of capacity $\le \lvert E\rvert$ that uses only removable edges. So no min cut uses a protected edge, and the min cut capacity is the answer. The full solution is on the practice page.
 
 ## Matrix rounding (Lecture 15 exercise)
 
 > **In short:** The real matrix is a fractional flow; integrality turns it into a whole-number one with the same row and column limits.
 
-**Problem.** $A = (a_{ij})$ is an $m\times n$ matrix of non-negative reals with row sums $R_i$ and column sums $C_j$. Find an integer matrix $B$ with every $b_{ij} \in \{\lfloor a_{ij}\rfloor, \lceil a_{ij}\rceil\}$, every row sum of $B$ in $\{\lfloor R_i\rfloor, \lceil R_i\rceil\}$ and every column sum in $\{\lfloor C_j\rfloor, \lceil C_j\rceil\}$.
+**Problem.** $A = (a_{ij})$ is an $m\times n$ matrix of non-negative reals with row sums $R_i$ and column sums $C_j$. Find an integer matrix $B$ where each $b_{ij}$ is $\lfloor a_{ij}\rfloor$ or $\lceil a_{ij}\rceil$, each row sum is $\lfloor R_i\rfloor$ or $\lceil R_i\rceil$, and each column sum is $\lfloor C_j\rfloor$ or $\lceil C_j\rceil$.
 
 **Construction (a circulation with lower and upper bounds).** Vertices $s$, $t$, rows $r_1..r_m$, columns $c_1..c_n$.
 
@@ -245,19 +258,19 @@ Removable edges get capacity 1; protected edges get capacity $\lvert E\rvert + 1
 | $c_j\to t$ | $\lfloor C_j\rfloor$ | $\lceil C_j\rceil$ |
 | $t\to s$ (return edge) | $\lfloor\sum_i R_i\rfloor$ | $\lceil\sum_i R_i\rceil$ |
 
-All demands are 0 (it is a circulation).
+Every demand is 0 (it is a circulation).
 
-**A fractional circulation exists.** Set $f(s, r_i) = R_i$, $f(r_i, c_j) = a_{ij}$, $f(c_j, t) = C_j$, $f(t, s) = \sum_{i,j} a_{ij}$. Every value lies between its floor and ceiling, and conservation holds: at $r_i$, in $= R_i = \sum_j a_{ij} =$ out; at $c_j$, in $= \sum_i a_{ij} = C_j =$ out; at $s$ and $t$, both sides equal the total.
+**A fractional circulation exists.** Set $f(s, r_i) = R_i$, $f(r_i, c_j) = a_{ij}$, $f(c_j, t) = C_j$ and $f(t, s) = \sum_{i,j} a_{ij}$. Every value lies between its floor and ceiling. Conservation holds: at $r_i$, in $= R_i = \sum_j a_{ij} =$ out; at $c_j$, in $= \sum_i a_{ij} = C_j =$ out; at $s$ and $t$ both sides equal the total.
 
-**An integral one exists.** All bounds are integers. Feasibility of a circulation with lower bounds reduces (previous section) to a max-flow problem with integer capacities that saturates its source edges exactly when a circulation exists. The fractional circulation shows it does; by the **integrality theorem** that max flow can be taken integral, which converts back into an integral circulation $f^*$.
+**An integral one exists.** All the bounds are integers. A circulation with lower bounds reduces (previous section) to a max-flow problem with integer capacities, which fills its source edges exactly when a circulation exists. The fractional circulation shows one does. By the **integrality theorem** that max flow can be taken integral, and it converts back into an integral circulation $f^*$.
 
-**Read off the rounding.** $b_{ij} = f^*(r_i, c_j)$ is an integer in $[\lfloor a_{ij}\rfloor, \lceil a_{ij}\rceil]$; row $i$ of $B$ sums to $f^*(s, r_i) \in [\lfloor R_i\rfloor, \lceil R_i\rceil]$ by conservation at $r_i$; column $j$ sums to $f^*(c_j, t) \in [\lfloor C_j\rfloor, \lceil C_j\rceil]$. So a consistent rounding always exists, and max flow finds it in polynomial time.
+**Read off the rounding.** $b_{ij} = f^*(r_i, c_j)$ is an integer between $\lfloor a_{ij}\rfloor$ and $\lceil a_{ij}\rceil$. By conservation at $r_i$, row $i$ of $B$ sums to $f^*(s, r_i)$, which lies in $[\lfloor R_i\rfloor, \lceil R_i\rceil]$. Likewise column $j$ sums to $f^*(c_j, t) \in [\lfloor C_j\rfloor, \lceil C_j\rceil]$. So a consistent rounding always exists, and max flow finds it in polynomial time.
 
 ## Min vertex cover in a bipartite graph (König, via flow)
 
 > **In short:** Read the cover off the min cut of the matching network.
 
-Unit network with $\infty$ middle edges. A finite cut $(A, B)$ corresponds to the cover $(L\cap B) \cup (R \cap A)$: an edge $(u, v)$ with $u \in A\cap L$ forces $v \in A$ (no $\infty$ edge leaves $A$), so every edge has an endpoint in the set. Its capacity is exactly the size of that cover, and conversely each cover gives such a cut. So min cover = min cut = max flow = max matching.
+Use the unit network with $\infty$ middle edges. A finite cut $(A, B)$ corresponds to the cover $(L\cap B) \cup (R \cap A)$. It is a cover because an edge $(u, v)$ with $u \in A\cap L$ forces $v \in A$ (no $\infty$ edge leaves $A$), so every edge has an endpoint in the set. The cut's capacity is exactly the size of this cover, and every cover gives such a cut. So min cover = min cut = max flow = max matching.
 
 ## Practice
 
