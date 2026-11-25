@@ -1,6 +1,6 @@
 # Start here: the AAD endsem map
 
-The endsem is on **Thursday 26 November 2026** and is worth **35 marks** (Moodle evaluation table: 2 quizzes × 10, midsem 25, endsem 35, 2 class tests × 5, 5 assignment/tutorial quizzes × 2). The instructor is Girish Varma. These notes are built from Lectures 1 to 22, the three tutorials, Assignments 1 and 2, the midsem paper with its solutions and rubric, Quiz I with its rubric, Quiz II with solutions, Class Test I with solutions, and the Moodle practice sets. The textbooks behind the lectures are Dasgupta–Papadimitriou–Vazirani (DPV) and Kleinberg–Tardos (KT).
+The endsem is on **Thursday 26 November 2026** and is worth **35 marks** (Moodle evaluation table: 2 quizzes × 10, midsem 25, endsem 35, 2 class tests × 5, 5 assignment/tutorial quizzes × 2). The instructor is Girish Varma. These notes are built from Lectures 1 to 24 (Lecture 24 is the course summary), the tutorials including the NP tutorial, Assignments 1 and 2, the midsem paper with its solutions and rubric, Quiz I with its rubric, Quiz II with solutions, Class Test I and Class Test II with solutions, and the Moodle practice sets. The textbooks behind the lectures are Dasgupta–Papadimitriou–Vazirani (DPV) and Kleinberg–Tardos (KT).
 
 > **How to use this course.** Read a chapter's theory, then close it and do its worked problems without looking. Then do the midsem and quiz pages as timed papers. The last page is a cheat sheet for the final hour.
 
@@ -14,6 +14,7 @@ Every paper so far has had the same shape, and the endsem will almost certainly 
 | Midsem | 5 × 6 marks | Karatsuba trace, an 8-point FFT, FFT pseudocode, Gale–Shapley both ways, uniqueness proof, Huffman, room assignment greedy, SDRs, Latin squares, a DP in six marked parts |
 | Class Test I | 8 + 6 + 6 | Edmonds–Karp trace with a backward edge, vertex capacities, Menger's theorem |
 | Quiz II | 5 + 5 | Random permutation gives a DAG with $m/2$ edges; matching as flow and Hall via max-flow min-cut |
+| Class Test II | 5 + 5 | Streaming palindrome check by fingerprinting; 2D Rabin–Karp for an icon in an image |
 
 Three kinds of question repeat:
 
@@ -52,9 +53,9 @@ These rules come straight from the rubrics.
 | Max flow, min cut, reductions | 14–18 | KT 7, DPV 7.2 | Max flow |
 | Randomized MaxCut, probabilistic method | 19 | | Randomized |
 | Fingerprinting, Rabin–Karp | 20, 21 | | Randomized |
-| Balanced brackets, reductions, NP-hardness | 22 and the 16 Nov lecture | KT 8, DPV 8 | NP |
+| Balanced brackets, reductions, NP-hardness | 22, NP tutorial, 24 (summary) | KT 8, DPV 8 | NP |
 
-The 16 Nov lecture "NP and Reductions II" and the 18 Nov tutorial were not in the course folder, so the NP chapter uses the standard KT/DPV reduction chain, which is what such a lecture normally covers.
+The NP chapter now follows the NP tutorial: the verifier definition, the direction check, the reduction recipe, XOR-SAT by elimination, and the main result 3-SAT ≤P NAE-3SAT ≤P Max-Cut with full proofs. The other classic reductions (3-SAT → Independent Set, 3-Colouring, Subset Sum) are the tutorial's "practice sheet" branches, written from KT/DPV. The course summary (Lecture 24) lists the endsem topics: D&C and FFT, stable and maximum matchings, Hall, greedy, DP, max flow, random MaxCut, fingerprinting and Rabin–Karp, streaming brackets, P, NP, reductions and ETH.
 
 ## Where exam questions come from
 
@@ -71,6 +72,7 @@ Most questions are lecture exercises lifted almost word for word, or a lecture m
 | CT I Q2, Q3 | Lecture 15–17 exercises "Vertex capacities" and "Menger's theorem" |
 | Quiz II Q1 | Lecture 19 random-cut method applied to DAGs |
 | Quiz II Q2 | Lecture 15 bipartite matching exercise plus Hall from Lecture 7 |
+| CT II Q1, Q2 | Lecture 20–21 fingerprinting and Rabin–Karp applied to palindromes and to 2D images |
 
 So for the endsem: **do every lecture exercise in the flow and randomized chapters**, and expect at least one reduction-to-flow proof, one linearity-of-expectation proof, one NP-hardness reduction and one DP.
 
@@ -80,7 +82,7 @@ If you have about 12 hours:
 
 1. **2 h — Max flow** (biggest post-midsem topic). Learn the residual graph, the termination proof, and the five reductions. Redo CT I without notes.
 2. **1.5 h — Randomized.** The MaxCut template, then fingerprinting and Rabin–Karp with one hand trace each. Redo Quiz II Q1.
-3. **1.5 h — NP.** Definitions, the direction rule, then 3-SAT → Independent Set, Vertex Cover, Clique, 3-Colouring, Subset Sum.
+3. **1.5 h — NP.** Definitions and the verifier template, the direction check, then 3-SAT → NAE-3SAT → Max-Cut (the tutorial's main proof), then 3-SAT → Independent Set, Vertex Cover, Clique. Redo Class Test II for fingerprinting.
 4. **1.5 h — DP.** The six-part answer format, then LIS, knapsack, alignment, tree DP and the battery problem.
 5. **1.5 h — Matchings and Hall.** Gale–Shapley trace and proofs, Hall applications, Berge, König.
 6. **1 h — FFT and D&C.** One 8-point FFT by hand, the master theorem cases, Karatsuba.
