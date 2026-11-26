@@ -148,15 +148,16 @@ A fair die is rolled 100 times and $S$ is the total.
 (b) Use the CLT, with a continuity correction, to approximate $P(S\ge380)$.
 (c) Roughly how many rolls $n$ are needed so that the average $\bar X_n$ is within $0.1$ of $3.5$ with probability about $0.95$?
 
-**Solution.** (a) One roll has mean $3.5$ and variance $\frac{91}6 - 3.5^2 = \frac{35}{12}$. So
+**Solution.** (a) One roll: $E[X] = 3.5$ and $E[X^2] = \frac{1 + 4 + 9 + 16 + 25 + 36}{6} = \frac{91}6$, so $\operatorname{Var}(X) = \frac{91}6 - 3.5^2 = \frac{35}{12}$. For 100 independent rolls,
 $$E[S] = 350,\qquad\text{Var}(S) = 100\cdot\frac{35}{12} = \frac{875}{3}\approx291.7,\qquad\text{sd}\approx17.08 .$$
-(b) $S$ takes integer values, so $P(S\ge380) = P(S\ge379.5)$. By the CLT,
-$$P(S\ge379.5)\approx P\Big(Z\ge\frac{379.5 - 350}{17.08}\Big) = P(Z\ge1.73)\approx0.042 .$$
-(Without the correction you get $P(Z\ge1.76)\approx0.039$, which also earns most of the marks if the method is clear.)
 
-(c) $\bar X_n\approx\mathcal N\big(3.5, \frac{35}{12n}\big)$. We need $0.1 = 1.96\sqrt{35/(12n)}$, so
+(b) $S$ is integer-valued, so $P(S\ge380) = P(S\ge379.5)$. By the CLT,
+$$P(S\ge379.5)\approx P\Big(Z\ge\frac{379.5 - 350}{17.08}\Big) = P(Z\ge1.73)\approx0.042 .$$
+(Without the correction, $P(Z\ge1.76)\approx0.039$.)
+
+(c) $\bar X_n\approx\mathcal N\big(3.5, \frac{35}{12n}\big)$. We need $P(|\bar X_n - 3.5|\le0.1)\approx0.95$, so $0.1 = 1.96\sqrt{\frac{35}{12n}}$:
 $$n = \Big(\frac{1.96}{0.1}\Big)^2\cdot\frac{35}{12}\approx384.2\cdot2.917\approx1121 .$$
-So about 1,121 rolls. Chebyshev would demand $n\ge\frac{35/12}{0.05\cdot0.01}\approx5833$: the CLT gives a much sharper (approximate) answer.
+**About 1,121 rolls.** For comparison, Chebyshev would require $\frac{35/12}{n\cdot0.01}\le0.05$, i.e. $n\ge5833$. The CLT answer is approximate but much sharper.
 
 ### Problem 9 [Endsem Q9] — Gamma prior, exponential data
 

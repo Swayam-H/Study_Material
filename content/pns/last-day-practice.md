@@ -159,29 +159,45 @@ Each bound improves on the last, and none reaches the truth. This is the usual e
 
 $X_1, X_2,\dots$ are i.i.d. $\mathcal U[0,1]$. Find the almost sure limits of (a) $\frac1n\sum_{i=1}^nX_i^2$, (b) $(X_1X_2\cdots X_n)^{1/n}$, (c) $\frac1n\#\{i\le n : X_i\le0.3\}$.
 
-**Solution.** (a) The $X_i^2$ are i.i.d. with $E[X_1^2] = \frac13$, so the limit is $\frac13$.
+**Solution.** In each part, write the quantity as an average of i.i.d. terms with finite mean, then apply the SLLN.
 
-(b) Take logs: $\ln(X_1\cdots X_n)^{1/n} = \frac1n\sum\ln X_i\to E[\ln X_1] = \int_0^1\ln x\,dx = -1$ a.s. The exponential is continuous, so $(X_1\cdots X_n)^{1/n}\to e^{-1}\approx0.368$ a.s. Compare the arithmetic mean, which tends to $0.5$.
+(a) The $X_i^2$ are i.i.d. with $E[X_1^2] = \int_0^1x^2\,dx = \frac13$. **Limit $\frac13$.**
 
-(c) The indicators $\mathbf 1\{X_i\le0.3\}$ are i.i.d. Bernoulli$(0.3)$, so the fraction tends to $0.3$ a.s. In general, the empirical CDF converges to the true CDF at every point.
+(b) A product is not an average, but its log is:
+$$\ln\big(X_1\cdots X_n\big)^{1/n} = \frac1n\sum_{i=1}^n\ln X_i\xrightarrow{a.s.}E[\ln X_1] = \int_0^1\ln x\,dx = \big[x\ln x - x\big]_0^1 = -1 .$$
+$e^x$ is continuous, so $(X_1\cdots X_n)^{1/n}\xrightarrow{a.s.}e^{-1}\approx0.368$. **Limit $e^{-1}$.** (The arithmetic mean tends to $0.5$; the geometric mean is smaller.)
+
+(c) $\frac1n\#\{i\le n : X_i\le0.3\} = \frac1n\sum_i\mathbf 1\{X_i\le0.3\}$, an average of i.i.d. Bernoulli$(0.3)$ terms. **Limit $0.3$.** In general, the empirical CDF converges to the true CDF at every point.
 
 ### Problem 2 [SLLN: when it applies, and when it fails]
 
 (a) State the SLLN carefully. (b) Explain why the SLLN justifies estimating $\int_0^1e^x\,dx$ by $\frac1n\sum e^{U_i}$ with $U_i$ i.i.d. uniform. What is the limit? (c) If $X_i$ are i.i.d. standard Cauchy, $\frac1n\sum X_i$ is again standard Cauchy for every $n$. Why doesn't this contradict the SLLN?
 
-**Solution.** (a) For i.i.d. $X_i$ with $E|X_1|<\infty$ and mean $\mu$: $P\big(\lim_{n\to\infty}\frac1n\sum_{i=1}^nX_i = \mu\big) = 1$.
+**Solution.** (a) If $X_1, X_2, \dots$ are i.i.d. with $E|X_1|<\infty$ and $E[X_1] = \mu$, then
+$$P\Big(\lim_{n\to\infty}\frac1n\sum_{i=1}^nX_i = \mu\Big) = 1 .$$
 
-(b) $Y_i = e^{U_i}$ are i.i.d. with $E|Y_1| = \int_0^1e^u\,du = e - 1<\infty$, so $\frac1n\sum Y_i\to e - 1\approx1.718$ almost surely. Every simulation run, apart from a probability-0 set of runs, converges to the right answer.
+(b) $Y_i = e^{U_i}$ are i.i.d. (functions of i.i.d. variables) with
+$$E|Y_1| = E[e^{U_1}] = \int_0^1e^u\,du = e - 1<\infty .$$
+So the SLLN gives $\frac1n\sum Y_i\xrightarrow{a.s.}e - 1\approx1.718$, which is exactly the integral. Apart from a probability-0 set of runs, every simulation converges to the right answer.
 
-(c) The Cauchy distribution has $E|X| = \int\frac{|x|}{\pi(1+x^2)}dx = \infty$, so the SLLN's assumption fails. Its sample mean never settles down, however large $n$ is. Always check $E|X|<\infty$ before using the law.
+(c) The SLLN needs $E|X_1|<\infty$, and for the Cauchy
+$$E|X| = \int_{-\infty}^\infty\frac{|x|}{\pi(1+x^2)}\,dx = \frac2\pi\int_0^\infty\frac{x}{1+x^2}\,dx = \frac1\pi\Big[\ln(1+x^2)\Big]_0^\infty = \infty .$$
+The hypothesis fails, so there is no contradiction. The sample mean never settles down, however large $n$ is. Check $E|X|<\infty$ before using the law.
 
 ### Problem 3 [SLLN: the renewal rate] (hard)
 
 Bulbs are replaced the moment they fail. Lifetimes $X_1, X_2,\dots$ are i.i.d. with mean $2$ months. Let $S_n = X_1 + \cdots + X_n$ and let $N(t)$ be the number of bulbs that have failed by time $t$. Show $\frac{N(t)}{t}\to\frac12$ almost surely as $t\to\infty$.
 
-**Solution.** By definition of $N(t)$,
-$$S_{N(t)}\le t<S_{N(t)+1}\quad\Longrightarrow\quad\frac{S_{N(t)}}{N(t)}\le\frac{t}{N(t)}<\frac{S_{N(t)+1}}{N(t)+1}\cdot\frac{N(t)+1}{N(t)}.$$
-Each $X_i$ is finite, so $N(t)\to\infty$ as $t\to\infty$. By the SLLN, $\frac{S_n}{n}\to2$ a.s., so both outer terms tend to $2$ (and $\frac{N(t)+1}{N(t)}\to1$). By squeezing, $\frac{t}{N(t)}\to2$, i.e. $\frac{N(t)}{t}\to\frac12$ a.s.: in the long run you use one bulb per mean lifetime.
+**Solution.** $N(t)$ is random, so trap $t$ between two partial sums whose behaviour the SLLN controls. By definition of $N(t)$, the $N(t)$-th failure is at or before $t$ and the next one is after $t$:
+$$S_{N(t)}\le t<S_{N(t)+1}.$$
+Divide by $N(t)$ (positive for large $t$):
+$$\frac{S_{N(t)}}{N(t)}\le\frac{t}{N(t)}<\frac{S_{N(t)+1}}{N(t)+1}\cdot\frac{N(t)+1}{N(t)}.$$
+- Each $X_i$ is finite, so every $S_n$ is finite and $N(t)\to\infty$ as $t\to\infty$.
+- By the SLLN, $\frac{S_n}{n}\to2$ a.s. Along $n = N(t)\to\infty$, both $\frac{S_{N(t)}}{N(t)}$ and $\frac{S_{N(t)+1}}{N(t)+1}$ tend to 2, and $\frac{N(t)+1}{N(t)}\to1$.
+
+By squeezing, $\frac{t}{N(t)}\to2$ a.s., so
+$$\frac{N(t)}{t}\xrightarrow{a.s.}\frac12 .$$
+In the long run you use one bulb per mean lifetime.
 
 # New problems: accept–reject
 

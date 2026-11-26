@@ -1360,22 +1360,21 @@ The bad set is $\{0\}$, probability 0, so $X_n\xrightarrow{a.s.}X$.
 
 **B9 (Bertsekas Problem 13; last year's Tutorial 8 Q7).** (a) If $X_n\to a$ and $Y_n\to b$ almost surely, show $X_n + Y_n\to a + b$ almost surely. (b) Find $\lim_{n\to\infty}\frac{\sum_{i=1}^nX_i^2}{\sum_{i=1}^nX_i}$ for i.i.d. $X_i\sim\mathcal U[0,1]$.
 
-*Solution.* (a) Idea: throw out the bad $\omega$'s of both sequences together. What's left still has probability 1, and on it everything is just normal real analysis.
+*Solution.* (a) Remove the bad outcomes of both sequences at once. What is left has probability 1, and on it this is ordinary real analysis.
 
-- Let $A = \{X_n\not\to a\}$ and $B = \{Y_n\not\to b\}$. Both have probability 0.
-- For $\omega\notin A\cup B$, $X_n(\omega)\to a$ and $Y_n(\omega)\to b$ are ordinary convergent sequences, so the sum goes to $a + b$.
-- So $X_n + Y_n$ can only fail on $A\cup B$, and $P(A\cup B)\le P(A) + P(B) = 0$.
+- Let $A = \{X_n\not\to a\}$ and $B = \{Y_n\not\to b\}$. Then $P(A) = P(B) = 0$.
+- For $\omega\notin A\cup B$, $X_n(\omega)\to a$ and $Y_n(\omega)\to b$ are convergent real sequences, so $X_n(\omega) + Y_n(\omega)\to a + b$.
+- So convergence can only fail on $A\cup B$, and $P(A\cup B)\le P(A) + P(B) = 0$.
 
-Same argument works for products, ratios (if $b\ne0$), and any continuous $g$: $g(X_n, Y_n)\to g(a, b)$ a.s.
+The same argument gives $g(X_n, Y_n)\to g(a, b)$ a.s. for any $g$ continuous at $(a,b)$: products, and ratios when $b\ne0$.
 
-(b) Trick: a ratio of sums is a ratio of averages, because the $\frac1n$'s cancel:
+(b) Divide top and bottom by $n$ to turn the sums into averages:
 $$\frac{\sum_{i=1}^nX_i^2}{\sum_{i=1}^nX_i} = \frac{\frac1n\sum_{i=1}^nX_i^2}{\frac1n\sum_{i=1}^nX_i}.$$
-Now SLLN on top and bottom:
-
-- top: the $X_i^2$ are i.i.d. with mean $E[X^2] = \int_0^1x^2\,dx = \frac13$, so $\frac1n\sum X_i^2\xrightarrow{a.s.}\frac13$;
+Apply the SLLN to each:
+- top: the $X_i^2$ are i.i.d. with $E[X^2] = \int_0^1x^2\,dx = \frac13$, so $\frac1n\sum X_i^2\xrightarrow{a.s.}\frac13$;
 - bottom: $\frac1n\sum X_i\xrightarrow{a.s.}E[X] = \frac12$.
 
-$g(x, y) = \frac xy$ is continuous at $(\frac13, \frac12)$ since $\frac12\ne0$, so by (a)
+$g(x, y) = \frac xy$ is continuous at $(\frac13, \frac12)$, so by (a)
 $$\frac{\sum X_i^2}{\sum X_i}\xrightarrow{a.s.}\frac{1/3}{1/2} = \frac23 .$$
 
 **B10 (Bertsekas Problem 14).** $X_i$ i.i.d. and $Y_i$ i.i.d., with finite means and $E[Y]\ne0$. Does $Z_n = \frac{X_1 + \dots + X_n}{Y_1 + \dots + Y_n}$ converge almost surely?
@@ -1988,8 +1987,11 @@ For all of these, follow the slide 30 recipe: identify $\mu$ and $\sigma^2$ per 
 
 **B22 (Bertsekas Ex. 5.9).** 100 packages with weights i.i.d. $\mathcal U[5,50]$ pounds. $P(\text{total}>3000)$?
 
-*Solution.* One package: $\mu = \frac{5 + 50}{2} = 27.5$, $\sigma^2 = \frac{(50 - 5)^2}{12} = 168.75$. Total of 100: mean $2750$, variance $16875$, SD $\approx129.9$.
-$$z = \frac{3000 - 2750}{129.9} = 1.92,\qquad P\approx1 - \Phi(1.92) = 0.027 .$$
+*Solution.* One package has
+$$\mu = \frac{5 + 50}{2} = 27.5,\qquad\sigma^2 = \frac{(50 - 5)^2}{12} = 168.75 .$$
+For the total $S$ of 100 packages: $E[S] = 2750$, $\operatorname{Var}(S) = 16875$, $\operatorname{SD}(S) = \sqrt{16875}\approx129.9$. By the CLT,
+$$P(S>3000)\approx1 - \Phi\Big(\frac{3000 - 2750}{129.9}\Big) = 1 - \Phi(1.92)\approx0.027 .$$
+(Weights are continuous, so no continuity correction.)
 
 **B23 (Bertsekas Ex. 5.10): turning a count into a sum.** Processing times are i.i.d. $\mathcal U[1,5]$. Find $P(\text{at least 100 parts processed within 320 time units})$.
 
@@ -2007,10 +2009,15 @@ $$P(|M_n - p|\ge\epsilon)\approx2\Big(1 - \Phi\Big(\frac{\epsilon}{\sigma_{M_n}}
 
 **B25 (last year's HW8 Q2).** Call durations have $\mu = 10$ and $\sigma = 10$ minutes. (a) For 50 calls, $P(\bar X>12)$. (b) Minimum $n$ with $P(\bar X>12)\le0.05$. (c) For 80 calls, $P(9<\bar X<11)$. (Given: $\Phi^{-1}(0.95) = 1.6449$, $\Phi(\sqrt2) = 0.9214$, $\Phi(0.8944) = 0.8147$.)
 
-*Solution.* Here everything is about the average, with $\operatorname{SD}(\bar X) = \frac{10}{\sqrt n}$.
-(a) $z = \frac{12 - 10}{10/\sqrt{50}} = \frac{2\sqrt{50}}{10} = \sqrt2$, so $P\approx1 - 0.9214 = 0.0786$.
-(b) Need $1 - \Phi\big(\frac{2\sqrt n}{10}\big)\le0.05$, i.e. $\frac{2\sqrt n}{10}\ge1.6449$. So $\sqrt n\ge8.22$, $n\ge67.6$, and the answer is $n = 68$.
-(c) $z = \frac{1}{10/\sqrt{80}} = 0.8944$ on each side, so $P\approx\Phi(0.8944) - \Phi(-0.8944) = 2(0.8147) - 1 = 0.6294$.
+*Solution.* By the CLT, $\bar X\approx\mathcal N\big(10, \frac{100}{n}\big)$, so $\operatorname{SD}(\bar X) = \frac{10}{\sqrt n}$.
+
+(a) $n = 50$:
+$$z = \frac{12 - 10}{10/\sqrt{50}} = \frac{\sqrt{50}}{5} = \sqrt2,\qquad P(\bar X>12)\approx1 - \Phi(\sqrt2) = 1 - 0.9214 = 0.0786 .$$
+
+(b) Need $1 - \Phi\big(\frac{2\sqrt n}{10}\big)\le0.05$, i.e. $\frac{\sqrt n}{5}\ge1.6449$, so $\sqrt n\ge8.2245$ and $n\ge67.6$. **Minimum $n = 68$.**
+
+(c) $n = 80$: each endpoint is $\frac{1}{10/\sqrt{80}} = 0.8944$ SDs from the mean, so
+$$P(9<\bar X<11)\approx\Phi(0.8944) - \Phi(-0.8944) = 2(0.8147) - 1 = 0.6294 .$$
 
 **B26 (last year's HW8 Q3).** Rods: $\mu = 100$ mm, $\sigma = 5$ mm, roughly normal. (a) $P(\text{one rod}>110)$. (b) $P(\text{mean of }36>103)$.
 
@@ -2020,17 +2027,18 @@ Being 3 above the mean is fairly common for one rod, but super rare for an avera
 
 **B27 (last year's HW8 Q8 = Bertsekas Problem 8; Tutorial 8 Q8).** (a) A fair roulette (odd with probability $\frac12$) is watched for 100 rounds; you call it unfair if more than 55 are odd. $P(\text{wrong decision})$? (b) $P(>220$ heads in 400 tosses$)$. Are (a) and (b) the same? (c) $P(40\le$ heads $\le60)$ in 100 tosses.
 
-*Solution.*
-(a) The wheel is fair, so a wrong decision means $S>55$ with $S\sim$ Binomial$(100,\frac12)$: mean 50, SD 5. "More than 55" is $S\ge56$, so the corrected boundary is $55.5$:
-$$P\approx1 - \Phi\Big(\frac{55.5 - 50}{5}\Big) = 1 - \Phi(1.1) = 0.1357 .$$
-(Exact $0.1356$. Without the correction you'd get $1 - \Phi(1) = 0.159$.)
+*Solution.* $S\sim$ Binomial$(n,\frac12)$ has mean $\frac n2$ and SD $\frac{\sqrt n}2$. $S$ is integer-valued, so use the continuity correction.
 
-(b) Mean 200, SD 10. "More than 220" is $\ge221$, boundary $220.5$:
-$$1 - \Phi\Big(\frac{220.5 - 200}{10}\Big) = 1 - \Phi(2.05) = 0.0202\quad(\text{exact } 0.0201).$$
+(a) The wheel is fair, so a wrong decision is $S>55$, i.e. $S\ge56$, with $n = 100$ (mean 50, SD 5). Boundary $55.5$:
+$$P\approx1 - \Phi\Big(\frac{55.5 - 50}{5}\Big) = 1 - \Phi(1.1) = 0.1357\quad(\text{exact }0.1356).$$
+Without the correction: $1 - \Phi(1) = 0.159$, noticeably off.
 
-Not the same, even though 55% of 100 and 55% of 400 look like the same thing. The SD of the *proportion* is $\frac{0.5}{\sqrt n}$, which halves when $n$ quadruples. So the same excess proportion is twice as many SDs away. More data makes the same deviation less likely. That's the LLN showing up.
+(b) $n = 400$: mean 200, SD 10. "More than 220" is $S\ge221$, boundary $220.5$:
+$$P\approx1 - \Phi\Big(\frac{220.5 - 200}{10}\Big) = 1 - \Phi(2.05) = 0.0202\quad(\text{exact }0.0201).$$
+**Not the same**, although both ask for more than 55% heads. The SD of the proportion $\frac Sn$ is $\frac{0.5}{\sqrt n}$, which halves when $n$ quadruples, so the same 5% excess is twice as many SDs away. This is the LLN at work.
 
-(c) $P(40\le S\le60)\approx P(39.5\le\text{normal}\le60.5) = 2\Phi(2.1) - 1 = 0.9643$ (exact $0.9648$).
+(c) $n = 100$:
+$$P(40\le S\le60)\approx P(39.5\le\text{normal}\le60.5) = \Phi(2.1) - \Phi(-2.1) = 2\Phi(2.1) - 1 = 0.9643\quad(\text{exact }0.9648).$$
 
 **B28 (last year's Tutorial 8 Q6).** Test scores: mean 75, SD 10, roughly normal. (a) $P(\text{score}\ge100)$. (b) Out of 100 people, how many expected below 60? (c) $P(\text{mean of 100}<70)$.
 
@@ -2040,8 +2048,8 @@ Not the same, even though 55% of 100 and 55% of 400 look like the same thing. Th
 
 **B29 (last year's Tutorial 8 Q9; probabilitycourse 7.1.2).** Service times: mean 2, variance 1, independent. $Y$ = total for 50 customers. $P(90<Y<110)$?
 
-*Solution.* $E[Y] = 100$, $\operatorname{SD}(Y) = \sqrt{50}$. Symmetric interval of half-width 10:
-$$P\approx\Phi\Big(\frac{10}{\sqrt{50}}\Big) - \Phi\Big(-\frac{10}{\sqrt{50}}\Big) = 2\Phi(\sqrt2) - 1 = 0.8427 .$$
+*Solution.* $E[Y] = 50\cdot2 = 100$ and $\operatorname{Var}(Y) = 50\cdot1 = 50$, so $\operatorname{SD}(Y) = \sqrt{50}$. The interval is $100\pm10$, i.e. $\pm\frac{10}{\sqrt{50}} = \pm\sqrt2$ SDs:
+$$P(90<Y<110)\approx\Phi(\sqrt2) - \Phi(-\sqrt2) = 2\Phi(1.414) - 1\approx2(0.9214) - 1 = 0.8427 .$$
 
 **B30 (probabilitycourse 7.1.3, Problems 1 to 4).**
 
@@ -2063,19 +2071,27 @@ The exact answer is $0.962$, so Poisson wins. That makes sense: $p$ is small and
 
 **B32 (Bertsekas Problem 10).** Daily gadget counts are i.i.d. with mean 5 and variance 9. (a) $P(\text{total in 100 days}<440)$. (b) Largest $n$ with $P(X_1 + \dots + X_n\ge200 + 5n)\le0.05$. (c) $N$ = first day the total exceeds 1000. Approximate $P(N\ge220)$.
 
-*Solution.*
-(a) Total over 100 days: mean 500, SD $3\cdot10 = 30$. $\Phi\big(\frac{440 - 500}{30}\big) = \Phi(-2) = 0.023$.
-(b) $S_n$ has mean $5n$ and SD $3\sqrt n$, so the event is "$S_n$ at least 200 above its mean":
+*Solution.* $S_n = X_1 + \dots + X_n$ has mean $5n$ and SD $3\sqrt n$.
+
+(a) $n = 100$: mean 500, SD 30.
+$$P(S_{100}<440)\approx\Phi\Big(\frac{440 - 500}{30}\Big) = \Phi(-2) = 0.023 .$$
+
+(b) The event says $S_n$ is at least 200 above its mean:
 $$P\approx1 - \Phi\Big(\frac{200}{3\sqrt n}\Big)\le0.05\iff\frac{200}{3\sqrt n}\ge1.645\iff\sqrt n\le40.5\iff n\le1642 .$$
-(c) Same trick as B23. $N\ge220$ means the total hadn't passed 1000 by day 219: $\{S_{219}\le1000\}$. Mean $1095$, SD $3\sqrt{219} = 44.4$:
-$$P\approx\Phi\Big(\frac{1000 - 1095}{44.4}\Big) = \Phi(-2.14) = 0.016 .$$
+**Largest $n = 1642$.**
+
+(c) Turn the question about $N$ into one about a fixed sum. $N\ge220$ means the total had not passed 1000 by day 219:
+$$\{N\ge220\} = \{S_{219}\le1000\}.$$
+$S_{219}$ has mean $1095$ and SD $3\sqrt{219}\approx44.4$, so
+$$P(N\ge220)\approx\Phi\Big(\frac{1000 - 1095}{44.4}\Big) = \Phi(-2.14)\approx0.016 .$$
 
 **B33 (Bertsekas Problem 11).** $X_i, Y_i$ i.i.d. $\mathcal U[0,1]$ and $W = \frac{(X_1 + \dots + X_{16}) - (Y_1 + \dots + Y_{16})}{16}$. Approximate $P(|W - E[W]|<0.001)$.
 
-*Solution.* $E[W] = 0$. $W$ is a combination of 32 independent uniforms, each with variance $\frac1{12}$ (the minus sign doesn't change the variance):
-$$\operatorname{Var}(W) = \frac{32\cdot\frac1{12}}{16^2} = \frac{1}{96},\qquad\operatorname{SD}(W) = 0.102 .$$
-$$P\approx2\Phi\Big(\frac{0.001}{0.102}\Big) - 1 = 2\Phi(0.0098) - 1\approx0.0078 .$$
-Tiny, because the window $\pm0.001$ is only about a hundredth of an SD wide.
+*Solution.* $E[W] = \frac{16\cdot\frac12 - 16\cdot\frac12}{16} = 0$. $W$ is a combination of 32 independent uniforms, each with variance $\frac1{12}$. The minus sign does not change the variance, since $\operatorname{Var}(-Y) = \operatorname{Var}(Y)$:
+$$\operatorname{Var}(W) = \frac{32\cdot\frac1{12}}{16^2} = \frac{1}{96},\qquad\operatorname{SD}(W)\approx0.102 .$$
+By the CLT,
+$$P(|W|<0.001)\approx2\Phi\Big(\frac{0.001}{0.102}\Big) - 1 = 2\Phi(0.0098) - 1\approx0.0078 .$$
+It is tiny because the window $\pm0.001$ is about a hundredth of an SD wide.
 
 **B34 (last year's HW8 Q12, bonus): binomial to normal without MGFs (sketch).** Write $P(k) = \binom Nkp^kq^{N-k}$, take logs, and use Stirling, $\ln N!\approx N\ln N - N$. Put $k = Np + x$ and expand $\ln P(k)$ to second order in $x$ around the peak $k = Np$.
 

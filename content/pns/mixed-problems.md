@@ -108,11 +108,17 @@ $$P(X = 6\mid Y = 5) = \frac{6/64}{2/64 + 6/64} = \boxed{\tfrac34}.$$
 
 $X_1, X_2,\dots$ are i.i.d. Exp(1) and $S_n = X_1 + \cdots + X_n$. (a) Use MGFs to identify the distribution of $S_n$. (b) Compute $P(S_2>3)$ exactly and by the CLT. (c) Approximate $P(S_{100}>110)$.
 
-**Solution.** (a) $M_{X}(t) = \frac1{1-t}$ for $t<1$, so $M_{S_n}(t) = (1-t)^{-n}$: the MGF of Gamma$(n,1)$, with pdf $\frac{s^{n-1}e^{-s}}{(n-1)!}$.
+**Solution.** (a) $M_X(t) = \frac1{1-t}$ for $t<1$. By independence,
+$$M_{S_n}(t) = \big(M_X(t)\big)^n = (1-t)^{-n},\qquad t<1,$$
+which is the MGF of Gamma$(n,1)$. By uniqueness of MGFs, $S_n\sim$ Gamma$(n,1)$, with pdf $\frac{s^{n-1}e^{-s}}{(n-1)!}$ for $s>0$.
 
-(b) Exact: $S_2$ has pdf $se^{-s}$, so $P(S_2>3) = \int_3^\infty se^{-s}\,ds = (3 + 1)e^{-3} = 4e^{-3}\approx0.199$. CLT: mean 2, variance 2, so $P(Z>\frac{1}{\sqrt2}) = P(Z>0.71)\approx0.24$. Off by 20%, because $S_2$ is still very skewed.
+(b) **Exact:** $S_2$ has pdf $se^{-s}$. Integrating by parts,
+$$P(S_2>3) = \int_3^\infty se^{-s}\,ds = \Big[-se^{-s} - e^{-s}\Big]_3^\infty = 4e^{-3}\approx0.199 .$$
+**CLT:** mean 2, variance 2, so $P(S_2>3)\approx P\big(Z>\frac{1}{\sqrt2}\big) = P(Z>0.71)\approx0.24$. That is 20% too high, because $S_2$ is still very skewed.
 
-(c) Mean 100, sd 10: $P(S_{100}>110)\approx P(Z>1)\approx0.159$. Here the CLT is good. (The exact Gamma answer is about 0.158, so the CLT is within 0.001.) The lesson: the CLT is a large-$n$ statement.
+(c) Mean 100, sd 10:
+$$P(S_{100}>110)\approx P(Z>1)\approx0.159 .$$
+The exact Gamma answer is about 0.158, so here the CLT is within 0.001. The CLT is a large-$n$ statement.
 
 ### Problem 9 [Mixed: MLE + convergence in probability and in distribution] (hard)
 
