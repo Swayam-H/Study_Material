@@ -169,15 +169,15 @@ $x_1,\dots,x_n$ are i.i.d. Exponential$(\lambda)$, and the prior on $\lambda$ is
 
 **Solution.** (a) Likelihood:
 $$f(x_1,\dots,x_n\mid\lambda) = \prod_{i=1}^n\lambda e^{-\lambda x_i} = \lambda^ne^{-\lambda\sum x_i}.$$
-By Bayes' rule,
-$$f(\lambda\mid x) = \frac{\lambda^ne^{-\lambda\sum x_i}\cdot\frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1}e^{-\beta\lambda}}{\int_0^\infty(\text{same})\,d\lambda} = \frac{\lambda^{\alpha+n-1}e^{-(\beta + \sum x_i)\lambda}}{\int_0^\infty\lambda^{\alpha+n-1}e^{-(\beta+\sum x_i)\lambda}\,d\lambda}.$$
-With $u = (\beta + \sum x_i)\lambda$, the denominator is $\frac{\Gamma(\alpha + n)}{(\beta + \sum x_i)^{\alpha+n}}$. So
-$$f(\lambda\mid x) = \frac{(\beta + \sum x_i)^{\alpha+n}}{\Gamma(\alpha + n)}\lambda^{\alpha+n-1}e^{-(\beta+\sum x_i)\lambda},$$
-i.e. $\lambda\mid x\sim\text{Gamma}\big(\alpha + n,\ \beta + \sum x_i\big)$.
+By Bayes' rule, the constant $\frac{\beta^\alpha}{\Gamma(\alpha)}$ cancels between numerator and denominator:
+$$f(\lambda\mid x) = \frac{\lambda^ne^{-\lambda\sum x_i}\cdot\lambda^{\alpha-1}e^{-\beta\lambda}}{\int_0^\infty\lambda^{\alpha+n-1}e^{-(\beta+\sum x_i)\lambda}\,d\lambda} = \frac{\lambda^{\alpha+n-1}e^{-(\beta + \sum x_i)\lambda}}{\int_0^\infty\lambda^{\alpha+n-1}e^{-(\beta+\sum x_i)\lambda}\,d\lambda}.$$
+Substituting $u = (\beta + \sum x_i)\lambda$, the denominator is $\frac{\Gamma(\alpha + n)}{(\beta + \sum x_i)^{\alpha+n}}$. So
+$$f(\lambda\mid x) = \frac{(\beta + \sum x_i)^{\alpha+n}}{\Gamma(\alpha + n)}\lambda^{\alpha+n-1}e^{-(\beta+\sum x_i)\lambda},\qquad\lambda>0,$$
+i.e. $\boxed{\lambda\mid x\sim\text{Gamma}\big(\alpha + n,\ \beta + \textstyle\sum x_i\big)}$.
 
 (b) Maximise $\ln f = (\alpha + n - 1)\ln\lambda - (\beta + \sum x_i)\lambda + C$:
-$$\frac{\alpha + n - 1}{\lambda} = \beta + \sum x_i\implies\hat\lambda_{MAP} = \frac{\alpha + n - 1}{\beta + \sum_ix_i}.$$
-(The CE is $\frac{\alpha + n}{\beta + \sum x_i}$. Both tend to $1/\bar x = \hat\lambda_{ML}$ as $n\to\infty$.)
+$$\frac{\alpha + n - 1}{\lambda} - \Big(\beta + \sum x_i\Big) = 0\implies\boxed{\hat\lambda_{MAP} = \frac{\alpha + n - 1}{\beta + \sum_ix_i}}.$$
+The second derivative $-\frac{\alpha + n - 1}{\lambda^2}<0$ confirms a maximum (for $\alpha + n>1$). The CE is $\frac{\alpha + n}{\beta + \sum x_i}$; both tend to $\frac1{\bar x} = \hat\lambda_{ML}$ as $n\to\infty$.
 
 ### Problem 10 [New (a) and Endsem Q10(b)] — least squares and MSE
 

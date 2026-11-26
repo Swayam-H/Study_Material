@@ -1205,57 +1205,46 @@ One observation $X \sim\mathcal N(0,\sigma^2)$. (a) Find an unbiased estimator o
 
 A coin is Type A ($P(H) = 0.25$) or Type B ($P(H) = 0.75$), each with prior $\frac12$. You see HHT. Find $P(\text{A}\mid\text{HHT})$ and the MAP estimate of $P(H)$.
 
-**Solution.**
-
-$$
-P(\text{HHT}\mid A) = 0.25^2\cdot0.75 = \frac{3}{64}, \qquad P(\text{HHT}\mid B) = 0.75^2\cdot 0.25 = \frac{9}{64}.
-$$
-
-The priors are equal, so they cancel:
-
-$$
-P(A\mid\text{HHT}) = \frac{3/64}{3/64 + 9/64} = \frac14.
-$$
-
-MAP picks Type B, so $\hat p_{MAP} = 0.75$.
+**Solution.** Likelihoods (tosses independent given the type):
+$$P(\text{HHT}\mid A) = 0.25^2\cdot0.75 = \frac{3}{64},\qquad P(\text{HHT}\mid B) = 0.75^2\cdot0.25 = \frac{9}{64}.$$
+Bayes' rule; the equal priors $\frac12$ cancel:
+$$P(A\mid\text{HHT}) = \frac{\frac12\cdot\frac3{64}}{\frac12\cdot\frac3{64} + \frac12\cdot\frac9{64}} = \frac{3}{3 + 9} = \frac14,\qquad P(B\mid\text{HHT}) = \frac34 .$$
+MAP picks the type with the larger posterior, Type B, so $\hat p_{MAP} = 0.75$.
 
 ### Problem 11 [Tutorial 12 Q2]
 
 Prior $p\sim\mathcal U[0,1]$. One observation $y = 3$ from Geometric$(p)$. Find the full posterior, then the MAP and CE.
 
-**Solution.** Posterior $\propto p(1-p)^2\cdot 1$, which is the Beta$(2,3)$ kernel. The normaliser is $B(2,3) = \frac{1!\,2!}{4!} = \frac{1}{12}$, so
+**Solution.** Likelihood: $P(Y = 3\mid p) = p(1-p)^2$ (two failures, then a success). The prior is $1$ on $[0,1]$, so
+$$f(p\mid y = 3)\propto p(1-p)^2\cdot1 = p^{2-1}(1-p)^{3-1},$$
+the Beta$(2,3)$ kernel. The normaliser is $B(2,3) = \frac{\Gamma(2)\Gamma(3)}{\Gamma(5)} = \frac{1!\,2!}{4!} = \frac{1}{12}$, so
+$$f(p\mid y=3) = 12\,p(1-p)^2,\qquad0\le p\le1 .$$
 
-$$
-f(p\mid y=3) = 12\,p(1-p)^2, \quad 0 \le p \le 1.
-$$
+**MAP:** set the derivative of $p(1-p)^2$ to zero: $(1-p)^2 - 2p(1-p) = (1-p)(1 - 3p) = 0\Rightarrow\hat p_{MAP} = \frac13$. (Beta mode $\frac{a-1}{a+b-2} = \frac13$.) With a flat prior this equals the MLE $\frac1y = \frac13$.
 
-MAP: the Beta mode is $\frac{2-1}{2+3-2} = \frac13$. (Or differentiate: $(1-p)^2 - 2p(1-p) = 0 \Rightarrow p = \frac13$.) This equals the MLE $1/y = \frac13$, as it should with a flat prior.
-
-CE: the Beta mean is $\frac{2}{5}$.
+**CE:** the Beta$(2,3)$ mean, $\hat p_{CE} = \frac{2}{2+3} = \frac25$.
 
 ### Problem 12 [Tutorial 12 Q3] — Gaussian, unequal variances
 
 Unknown mean $\mu$; one observation $x \sim\mathcal N(\mu, 1)$. Prior $\mu\sim\mathcal N(10, 1)$. You observe $x_1 = 12$. Posterior?
 
-**Solution.** Precisions add: $\frac{1}{\sigma^2_{\text{post}}} = \frac11 + \frac11 = 2$, so $\sigma^2_{\text{post}} = \frac12$. Mean: $\frac12\big(\frac{10}{1} + \frac{12}{1}\big) = 11$.
-
-$$
-\mu\mid x_1 = 12 \ \sim\ \mathcal N\Big(11,\ \frac12\Big).
-$$
-
-The prior and the single measurement are equally reliable, so the answer is halfway between them.
+**Solution.** Normal prior $\mathcal N(\mu_0,\sigma_0^2)$ and one observation $x\sim\mathcal N(\mu,\sigma^2)$ give a normal posterior. Precisions add, and the mean is the precision-weighted average:
+$$\frac{1}{\sigma^2_{\text{post}}} = \frac1{\sigma_0^2} + \frac1{\sigma^2},\qquad\mu_{\text{post}} = \sigma^2_{\text{post}}\Big(\frac{\mu_0}{\sigma_0^2} + \frac{x}{\sigma^2}\Big).$$
+Here $\sigma_0^2 = \sigma^2 = 1$: $\frac{1}{\sigma^2_{\text{post}}} = 2$, so $\sigma^2_{\text{post}} = \frac12$, and $\mu_{\text{post}} = \frac12(10 + 12) = 11$.
+$$\mu\mid x_1 = 12\ \sim\ \mathcal N\Big(11,\ \frac12\Big).$$
+The prior and the measurement are equally reliable, so the posterior mean is halfway between them, and the variance halves. MAP = CE = 11.
 
 ### Problem 13 [Tutorial 12 Q4] — Gamma–Poisson with data
 
 $X_i \sim$ Poisson$(\lambda)$ i.i.d., prior Gamma$(2, 1)$. Three observations: $2, 3, 4$. Find the posterior, MAP and CE.
 
-**Solution.** $\sum x_i = 9$, $n = 3$, so the posterior is Gamma$(2 + 9,\ 1 + 3) = \text{Gamma}(11, 4)$.
+**Solution.** Likelihood $\propto\prod_i\lambda^{x_i}e^{-\lambda} = \lambda^{\sum x_i}e^{-n\lambda} = \lambda^9e^{-3\lambda}$. Prior $\propto\lambda^{2-1}e^{-\lambda}$. Multiply:
+$$f(\lambda\mid x)\propto\lambda^{10}e^{-4\lambda},$$
+which is $\text{Gamma}(2 + 9,\ 1 + 3) = \text{Gamma}(11, 4)$. In general: Gamma$(\alpha + \sum x_i,\ \beta + n)$.
 
-$$
-\hat\lambda_{MAP} = \frac{11 - 1}{4} = 2.5, \qquad \hat\lambda_{CE} = \frac{11}{4} = 2.75.
-$$
-
-Compare with the MLE $\bar x = 3$: the prior (mean 2) pulls the estimate down a bit. Check via the weighted-average formula: $\frac{1}{4}\cdot 2 + \frac34\cdot 3 = 2.75$. ✓
+Gamma$(a,b)$ has mode $\frac{a-1}{b}$ and mean $\frac ab$:
+$$\hat\lambda_{MAP} = \frac{11 - 1}{4} = 2.5,\qquad\hat\lambda_{CE} = \frac{11}{4} = 2.75 .$$
+The MLE is $\bar x = 3$; the prior (mean 2) pulls the estimate down. Check: the CE is a weighted average, $\frac{\beta}{\beta + n}\cdot\frac\alpha\beta + \frac{n}{\beta + n}\cdot\bar x = \frac14\cdot2 + \frac34\cdot3 = 2.75$.
 
 ### Problem 14 [Tutorial 12 Q6]
 
@@ -1271,15 +1260,21 @@ $$
 
 $X_i$ are Exp$(\Theta)$. Prior: $f_\Theta(\theta) = 10\theta$ on $[0, 1/\sqrt5]$. (a) One observation, $x = 30$. Find the posterior, MAP and CE. (b) Five observations: 30, 25, 15, 40, 20. Same questions.
 
-**Solution.** (a) Posterior $\propto 10\theta\cdot\theta e^{-30\theta} \propto \theta^2 e^{-30\theta}$ on $[0, 1/\sqrt5]$, normalised by $c = \int_0^{1/\sqrt5}\theta^2 e^{-30\theta}\,d\theta$.
+**Solution.** (a) Likelihood $\theta e^{-30\theta}$, prior $10\theta$ on $[0, \frac1{\sqrt5}]\approx[0, 0.447]$:
+$$f(\theta\mid x)\propto\theta^2e^{-30\theta},\qquad0\le\theta\le\tfrac1{\sqrt5},$$
+with normaliser $\int_0^{1/\sqrt5}\theta^2e^{-30\theta}\,d\theta$.
 
-MAP: $\frac{d}{d\theta}(2\ln\theta - 30\theta) = \frac2\theta - 30 = 0 \Rightarrow \theta = \frac1{15}$. That's inside $[0, 0.447]$, so $\hat\theta_{MAP} = \frac{1}{15}\approx 0.067$.
+**MAP:** $\frac{d}{d\theta}(2\ln\theta - 30\theta) = \frac2\theta - 30 = 0\Rightarrow\theta = \frac1{15}\approx0.067$. This lies inside $[0, 0.447]$, so $\hat\theta_{MAP} = \frac{1}{15}$.
 
-CE: $\frac{\int_0^{1/\sqrt5}\theta^3e^{-30\theta}d\theta}{\int_0^{1/\sqrt5}\theta^2 e^{-30\theta}d\theta}$. Without the truncation, this would be the mean of a Gamma$(3, 30)$, i.e. $\frac{3}{30} = 0.1$. The cut at $0.447$ is far out in the tail ($30 \times 0.447 \approx 13$), so it barely matters: numerically $\hat\theta_{CE}\approx 0.0999$.
+**CE:**
+$$\hat\theta_{CE} = \frac{\int_0^{1/\sqrt5}\theta^3e^{-30\theta}\,d\theta}{\int_0^{1/\sqrt5}\theta^2e^{-30\theta}\,d\theta}.$$
+Without truncation, $\theta^2e^{-30\theta}$ is the Gamma$(3, 30)$ kernel with mean $\frac{3}{30} = 0.1$. The cut at $0.447$ is far in the tail ($30\times0.447\approx13$), so it removes almost no mass: $\hat\theta_{CE}\approx0.0999$.
 
-(b) $\sum x_i = 130$, $n = 5$. Posterior $\propto \theta\cdot\theta^5 e^{-130\theta} = \theta^6e^{-130\theta}$ on the same range. MAP $= \frac{6}{130} = \frac{3}{65}\approx 0.046$. CE $\approx \frac{7}{130}\approx 0.054$.
+(b) $n = 5$, $\sum x_i = 130$. Likelihood $\theta^5e^{-130\theta}$, so
+$$f(\theta\mid x)\propto\theta\cdot\theta^5e^{-130\theta} = \theta^6e^{-130\theta}\quad\text{on }[0, \tfrac1{\sqrt5}],$$
+nearly Gamma$(7, 130)$. $\hat\theta_{MAP} = \frac{6}{130} = \frac{3}{65}\approx0.046$ (inside the range), and $\hat\theta_{CE}\approx\frac{7}{130}\approx0.054$.
 
-The lesson: a truncated prior just restricts the support. Find the unrestricted peak, and check that it lands inside the allowed range.
+With a truncated prior, find the unrestricted peak and check that it lies inside the allowed range. If it doesn't, the MAP is the nearest endpoint.
 
 ### Problem 16 [HW 12 P3] (hard) — triangular prior
 
@@ -1308,31 +1303,29 @@ Intuition: compared with the MLE $\frac kn$, the prior nudges the estimate towar
 
 Box 1 has 1 black, 2 white balls; box 2 has 2 black, 1 white. You pick box 1 with probability $p$, then draw one ball. (a) MAP rule? (b) With $p = \frac12$, probability of error, vs not drawing at all?
 
-**Solution.** (a) Given *black*: compare $p\cdot\frac13$ (box 1) vs $(1-p)\cdot\frac23$ (box 2). Choose box 1 iff $p > \frac23$. Given *white*: compare $p\cdot\frac23$ vs $(1-p)\cdot\frac13$. Choose box 1 iff $p > \frac13$.
+**Solution.** MAP picks the box with the larger $P(\text{box})\,P(\text{ball}\mid\text{box})$ (the common denominator cancels).
 
-(b) With $p = \frac12$: black ⇒ box 2, white ⇒ box 1. Errors happen when you see black from box 1, or white from box 2:
+(a) **Black:** box 1 scores $p\cdot\frac13$, box 2 scores $(1-p)\cdot\frac23$. Choose box 1 iff $p>2(1-p)$, i.e. **$p>\frac23$**.
+**White:** box 1 scores $p\cdot\frac23$, box 2 scores $(1-p)\cdot\frac13$. Choose box 1 iff $2p>1-p$, i.e. **$p>\frac13$**.
 
-$$
-P(\text{error}) = \frac12\cdot\frac13 + \frac12\cdot\frac13 = \frac13.
-$$
-
-Without a draw, the best you can do is guess, with error $\frac12$. One ball cuts your error from $\frac12$ to $\frac13$.
+(b) $p = \frac12$: black $\Rightarrow$ box 2, white $\Rightarrow$ box 1. An error is black from box 1, or white from box 2:
+$$P(\text{error}) = P(\text{box 1})P(\text{black}\mid1) + P(\text{box 2})P(\text{white}\mid2) = \frac12\cdot\frac13 + \frac12\cdot\frac13 = \frac13 .$$
+Without a draw the best rule is a guess, with error $\frac12$. One ball cuts the error from $\frac12$ to $\frac13$.
 
 ### Problem 18 [HW 12 P7] — ML vs MAP for a signal
 
 $X\sim\mathcal N(0,\sigma_X^2)$ is sent, and you receive $Y = aX + bW$, with $W\sim\mathcal N(0,\sigma_W^2)$ independent of $X$. Find the ML and MAP estimates of $X$ given $Y = y$.
 
-**Solution.** Given $X = x$, the only randomness left in $Y$ is $bW$, so $Y\sim\mathcal N(ax, b^2\sigma_W^2)$.
+**Solution.** Given $X = x$, the only randomness left in $Y$ is $bW$, so $Y\mid X = x\sim\mathcal N(ax, b^2\sigma_W^2)$.
 
-ML: the log-likelihood is $-\frac{(y - ax)^2}{2b^2\sigma_W^2}$ plus a constant. That's largest (zero) when $y = ax$, so $\hat x_{ML} = \frac ya$.
+**ML:** the log-likelihood is $-\frac{(y - ax)^2}{2b^2\sigma_W^2} + \text{const}$, largest (zero penalty) at $y = ax$:
+$$\hat x_{ML} = \frac ya .$$
 
-MAP: maximise $-\frac{(y-ax)^2}{2b^2\sigma_W^2} - \frac{x^2}{2\sigma_X^2}$. Differentiate:
-
-$$
-\frac{a(y - ax)}{b^2\sigma_W^2} = \frac{x}{\sigma_X^2} \implies \hat x_{MAP} = \frac{a\sigma_X^2}{a^2\sigma_X^2 + b^2\sigma_W^2}\,y.
-$$
-
-Sanity checks: if the noise is tiny ($\sigma_W\to0$), MAP $\to y/a$ = ML. If the noise is huge, MAP $\to 0$, the prior mean: you stop trusting the measurement. This is the same shrinkage idea as ridge regression.
+**MAP:** add the log prior $-\frac{x^2}{2\sigma_X^2}$ and maximise
+$$h(x) = -\frac{(y-ax)^2}{2b^2\sigma_W^2} - \frac{x^2}{2\sigma_X^2}.$$
+Set $h'(x) = 0$:
+$$\frac{a(y - ax)}{b^2\sigma_W^2} = \frac{x}{\sigma_X^2}\iff a\sigma_X^2y = x\big(a^2\sigma_X^2 + b^2\sigma_W^2\big)\iff\hat x_{MAP} = \frac{a\sigma_X^2}{a^2\sigma_X^2 + b^2\sigma_W^2}\,y .$$
+Checks: if $\sigma_W\to0$, $\hat x_{MAP}\to\frac ya = \hat x_{ML}$. If the noise is huge, $\hat x_{MAP}\to0$, the prior mean. MAP shrinks the ML estimate towards the prior mean.
 
 ### Problem 19 [HW 12 P8] — CE with a uniform prior
 
@@ -1467,37 +1460,40 @@ The numerator is Poisson$\big((n + 2m)\lambda\big)$, so $E[\hat\lambda] = \lambd
 
 Each day a student keeps attempting a problem until they solve it, and the attempt count is Geometric$(p)$: $P(Y = y\mid p) = p(1-p)^{y-1}$ for $y = 1, 2, \dots$. The prior is $p\sim\text{Beta}(2,2)$. Over three days the counts are $3, 1, 4$. (a) Find the posterior. (b) Find the MAP, the CE and the MLE. (c) Find the probability that tomorrow's first attempt succeeds.
 
-**Solution.** (a)
-$$f(p\mid y)\propto\underbrace{p^{1}(1-p)^{1}}_{\text{prior}}\cdot\underbrace{p^3(1-p)^{(3+1+4)-3}}_{\text{likelihood}} = p^4(1-p)^6 ,$$
-the kernel of $\boxed{\text{Beta}(5,7)}$. In general, the posterior is Beta$(\alpha + n,\ \beta + \sum y_i - n)$.
+**Solution.** (a) Likelihood: $\prod_ip(1-p)^{y_i - 1} = p^n(1-p)^{\sum y_i - n} = p^3(1-p)^{8-3}$. Prior $\propto p^{2-1}(1-p)^{2-1}$. So
+$$f(p\mid y)\propto\underbrace{p(1-p)}_{\text{prior}}\cdot\underbrace{p^3(1-p)^5}_{\text{likelihood}} = p^4(1-p)^6 ,$$
+the kernel of $\boxed{\text{Beta}(5,7)}$. In general: Beta$(\alpha + n,\ \beta + \sum y_i - n)$.
 
-(b) For Beta$(a,b)$, the mode is $\frac{a-1}{a+b-2}$ and the mean is $\frac{a}{a+b}$. So
+(b) Beta$(a,b)$ has mode $\frac{a-1}{a+b-2}$ and mean $\frac{a}{a+b}$. The MLE maximises $p^3(1-p)^5$: $\frac3p = \frac5{1-p}\Rightarrow p = \frac38$.
 $$\hat p_{MAP} = \frac{4}{10} = 0.4,\qquad\hat p_{CE} = \frac5{12}\approx0.417,\qquad\hat p_{ML} = \frac{n}{\sum y_i} = \frac38 = 0.375 .$$
-The prior's mean is $\frac12$, so both Bayesian answers are pulled from the MLE towards $\frac12$.
+The prior mean is $\frac12$, so both Bayesian answers are pulled from the MLE towards $\frac12$.
 
-(c) $P(Y_4 = 1\mid\text{data}) = \int_0^1p\,f(p\mid y)\,dp = E[p\mid\text{data}] = \frac5{12}$. The predictive probability is the posterior mean.
+(c) Condition on $p$, then average over the posterior (total probability):
+$$P(Y_4 = 1\mid\text{data}) = \int_0^1P(Y_4 = 1\mid p)\,f(p\mid y)\,dp = \int_0^1p\,f(p\mid y)\,dp = E[p\mid\text{data}] = \frac5{12}.$$
 
 ### Problem 32 [Gamma–exponential with numbers]
 
 Waiting times are Exp$(\lambda)$, and the prior is $\lambda\sim\text{Gamma}(2,1)$ (shape 2, rate 1). You observe $0.5, 1.5, 1.0$. Find the posterior, the MAP, the CE and the MLE.
 
-**Solution.** Likelihood × prior:
-$$\lambda^3e^{-3\lambda}\cdot\lambda^{2-1}e^{-\lambda} = \lambda^{4}e^{-4\lambda},$$
-which is $\boxed{\text{Gamma}(5,4)}$, i.e. Gamma$(\alpha + n,\ \beta + \sum x_i)$. The Gamma$(a,b)$ mode is $\frac{a-1}b$ and its mean is $\frac ab$:
-$$\hat\lambda_{MAP} = \frac44 = 1,\qquad\hat\lambda_{CE} = \frac54 = 1.25,\qquad\hat\lambda_{ML} = \frac{1}{\bar x} = 1 .$$
-Here the MAP happens to equal the MLE. The CE is larger, because the Gamma is right-skewed and its mean sits above its mode.
+**Solution.** $n = 3$ and $\sum x_i = 3$. Likelihood $\prod_i\lambda e^{-\lambda x_i} = \lambda^3e^{-3\lambda}$; prior $\propto\lambda^{2-1}e^{-\lambda}$. So
+$$f(\lambda\mid x)\propto\lambda^3e^{-3\lambda}\cdot\lambda e^{-\lambda} = \lambda^{4}e^{-4\lambda},$$
+which is $\boxed{\text{Gamma}(5,4)}$, i.e. Gamma$(\alpha + n,\ \beta + \sum x_i)$. Gamma$(a,b)$ has mode $\frac{a-1}b$ and mean $\frac ab$:
+$$\hat\lambda_{MAP} = \frac44 = 1,\qquad\hat\lambda_{CE} = \frac54 = 1.25,\qquad\hat\lambda_{ML} = \frac{n}{\sum x_i} = \frac{1}{\bar x} = 1 .$$
+Here the MAP equals the MLE. The CE is larger because the Gamma is right-skewed, so its mean sits above its mode.
 
 ### Problem 33 [A Bayesian boundary case] (tricky)
 
 $X_1,\dots,X_n$ i.i.d. Uniform$[0,\theta]$, with prior $f(\theta) = \theta^{-2}$ for $\theta\ge1$. Let $m = \max_ix_i$ and $c = \max(1, m)$. Find the posterior, the MAP and the CE.
 
-**Solution.** The likelihood is $\theta^{-n}$ for $\theta\ge m$, and the prior lives on $\theta\ge1$. So
-$$f(\theta\mid x)\propto\theta^{-(n+2)}\quad\text{for }\theta\ge c .$$
+**Solution.** Likelihood: $\prod_i\frac1\theta\mathbf 1\{x_i\le\theta\} = \theta^{-n}\mathbf 1\{\theta\ge m\}$. The prior needs $\theta\ge1$. Both indicators hold iff $\theta\ge c = \max(1,m)$:
+$$f(\theta\mid x)\propto\theta^{-n}\cdot\theta^{-2} = \theta^{-(n+2)},\qquad\theta\ge c .$$
 Normalise: $\int_c^\infty\theta^{-(n+2)}\,d\theta = \frac{c^{-(n+1)}}{n+1}$, so
 $$f(\theta\mid x) = (n+1)\,c^{n+1}\,\theta^{-(n+2)},\qquad\theta\ge c .$$
-This decreases in $\theta$, so the MAP is at the boundary: $\hat\theta_{MAP} = c = \max(1, m)$. The CE is
+**MAP:** the posterior is decreasing on $[c,\infty)$, so the maximum is at the left endpoint (not where a derivative vanishes): $\hat\theta_{MAP} = c = \max(1, m)$.
+
+**CE:**
 $$E[\theta\mid x] = (n+1)c^{n+1}\int_c^\infty\theta^{-(n+1)}\,d\theta = (n+1)c^{n+1}\cdot\frac{c^{-n}}{n} = \boxed{\frac{n+1}{n}\,c}.$$
-Compare Problem 21: the CE carries the same $\frac{n+1}{n}$ factor as the unbiased frequentist fix.
+Compare Problem 21: the CE carries the same $\frac{n+1}{n}$ factor as the unbiased frequentist correction of the MLE.
 
 ### Problem 34 [A biased estimator can win]
 
@@ -1515,12 +1511,13 @@ One observation $X\mid\theta\sim\mathcal N(\theta,1)$, and the prior is $f(\thet
 
 **Solution.** Maximise the log posterior, up to constants:
 $$g(\theta) = -\frac{(x-\theta)^2}{2} - |\theta| .$$
-- On $\theta>0$: $g'(\theta) = x - \theta - 1$, which is zero at $\theta = x - 1$. That is valid only if $x>1$.
-- On $\theta<0$: $g'(\theta) = x - \theta + 1$, which is zero at $\theta = x + 1$. That is valid only if $x<-1$.
-- If $|x|\le1$: $g$ increases on $\theta<0$ and decreases on $\theta>0$, so the peak is at the kink, $\theta = 0$.
+$|\theta|$ has a kink at 0, so treat each side separately.
+- On $\theta>0$: $g'(\theta) = x - \theta - 1$, zero at $\theta = x - 1$. This is in $\theta>0$ only if $x>1$.
+- On $\theta<0$: $g'(\theta) = x - \theta + 1$, zero at $\theta = x + 1$. This is in $\theta<0$ only if $x<-1$.
+- If $|x|\le1$: $g'(\theta) = x + 1 - \theta>0$ on $\theta<0$ and $g'(\theta) = x - 1 - \theta<0$ on $\theta>0$. So $g$ rises up to 0 and falls after it: the peak is at the kink, $\theta = 0$.
 
 $$\boxed{\hat\theta_{MAP} = \begin{cases}x - 1 & x>1\\ 0 & |x|\le1\\ x + 1 & x<-1\end{cases}}$$
-This "soft threshold" shrinks the data towards 0, and sets it exactly to 0 when the data is weak. Compare a Gaussian prior, which shrinks by a constant factor but never gives exactly 0. Notice too that the maximum at a kink can't be found by setting $g' = 0$, just like the boundary MLEs above.
+This is a soft threshold: it shrinks $x$ towards 0 by 1, and sets it exactly to 0 when $|x|\le1$. A Gaussian prior would shrink by a constant factor and never give exactly 0. A maximum at a kink cannot be found by setting $g' = 0$.
 
 ---
 
