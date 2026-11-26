@@ -182,3 +182,117 @@ Bulbs are replaced the moment they fail. Lifetimes $X_1, X_2,\dots$ are i.i.d. w
 **Solution.** By definition of $N(t)$,
 $$S_{N(t)}\le t<S_{N(t)+1}\quad\Longrightarrow\quad\frac{S_{N(t)}}{N(t)}\le\frac{t}{N(t)}<\frac{S_{N(t)+1}}{N(t)+1}\cdot\frac{N(t)+1}{N(t)}.$$
 Each $X_i$ is finite, so $N(t)\to\infty$ as $t\to\infty$. By the SLLN, $\frac{S_n}{n}\to2$ a.s., so both outer terms tend to $2$ (and $\frac{N(t)+1}{N(t)}\to1$). By squeezing, $\frac{t}{N(t)}\to2$, i.e. $\frac{N(t)}{t}\to\frac12$ a.s.: in the long run you use one bulb per mean lifetime.
+
+# New problems: accept–reject
+
+**The method.** To sample from the target $f$ using a proposal $g$ you can sample from, find $c$ with $f(x)\le c\,g(x)$ for all $x$. Then repeat: draw $Y\sim g$ and $U\sim\mathcal U(0,1)$ independently, and **accept** $X = Y$ if $U\le\frac{f(Y)}{c\,g(Y)}$. Each round accepts with probability $\frac1c$, so the number of rounds is Geometric$(\frac1c)$ with mean $c$. The best $c$ is $\max_x\frac{f(x)}{g(x)}$.
+
+### Problem 1 [Accept–reject: the full 10-mark answer]
+
+Target: $f(x) = 6x(1-x)$ on $[0,1]$. Proposal: $\mathcal U[0,1]$. (a) Find the smallest valid $c$. (b) Write the algorithm. (c) Find the acceptance probability and the expected number of proposals needed for 100 samples. (d) Prove that an accepted value has pdf $f$.
+
+**Solution.** (a) $g = 1$, so $c = \max_{[0,1]}6x(1-x) = 6\cdot\frac14 = \frac32$, attained at $x = \frac12$.
+
+(b) Repeat: draw $Y, U\sim\mathcal U(0,1)$ independently. If $U\le\frac{f(Y)}{c\,g(Y)} = 4Y(1-Y)$, output $Y$ and stop; otherwise try again.
+
+(c) $P(\text{accept}) = \frac1c = \frac23$. Each sample takes a Geometric$(\frac23)$ number of rounds, with mean $\frac32$, so 100 samples need $150$ proposals on average.
+
+(d) For one round,
+$$P(Y\le x,\ \text{accept}) = \int_0^xg(y)\,P\Big(U\le\frac{f(y)}{c\,g(y)}\Big)dy = \int_0^xg(y)\frac{f(y)}{c\,g(y)}\,dy = \frac{F(x)}{c}.$$
+Letting $x\to\infty$ gives $P(\text{accept}) = \frac1c$. So $P(Y\le x\mid\text{accept}) = F(x)$. Rounds are independent, so the value finally output has CDF $F$, i.e. pdf $f$.
+
+### Problem 2 [Accept–reject: choosing a better proposal, and inverse transform as a check]
+
+Target: the exponential truncated to $[0,2]$, $f(x) = \frac{e^{-x}}{1 - e^{-2}}$ for $0\le x\le2$. (a) Use the proposal $\mathcal U[0,2]$: find $c$, the acceptance rule and the acceptance probability. (b) Now use the proposal Exp(1). Find $c$ and the acceptance probability, and describe the rule in words. (c) Give an inverse transform sampler instead.
+
+**Solution.** (a) $g = \frac12$ on $[0,2]$, so $\frac fg = \frac{2e^{-x}}{1 - e^{-2}}$, which is largest at $x = 0$: $c = \frac{2}{1 - e^{-2}}\approx2.31$. Accept if $U\le\frac{f(Y)}{c\,g(Y)} = e^{-Y}$. $P(\text{accept}) = \frac1c\approx0.43$.
+
+(b) $g(x) = e^{-x}$ on $[0,\infty)$. On $[0,2]$, $\frac fg = \frac{1}{1 - e^{-2}}$, and $f = 0$ beyond 2, so $c = \frac1{1 - e^{-2}}\approx1.16$. The ratio $\frac{f(Y)}{c\,g(Y)}$ is $1$ if $Y\le2$ and $0$ otherwise. So the rule is "draw $Y\sim$ Exp(1) and keep it if $Y\le2$", with $P(\text{accept}) = 1 - e^{-2}\approx0.86$. A proposal shaped like the target wastes far fewer draws.
+
+(c) $F(x) = \frac{1 - e^{-x}}{1 - e^{-2}}$ on $[0,2]$. Solve $F(x) = u$: $X = -\ln\big(1 - u(1 - e^{-2})\big)$ with $U\sim\mathcal U(0,1)$. That's one uniform per sample, with no rejections.
+
+# New problems: inverse transform
+
+**The method.** If $F$ is a continuous, strictly increasing CDF and $U\sim\mathcal U(0,1)$, then $X = F^{-1}(U)$ has CDF $F$. For a discrete $X$ with values $x_1<x_2<\cdots$, output $x_k$ when $F(x_{k-1})<U\le F(x_k)$.
+
+### Problem 1 [Inverse transform: why it works, both directions]
+
+(a) Prove that $X = F^{-1}(U)$ has CDF $F$ when $F$ is continuous and strictly increasing. (b) Conversely, if $X$ has continuous CDF $F$, show $F(X)\sim\mathcal U(0,1)$.
+
+**Solution.** (a) $F$ is increasing, so $F^{-1}(U)\le x\iff U\le F(x)$. Hence $P(X\le x) = P(U\le F(x)) = F(x)$, since $P(U\le u) = u$ on $[0,1]$.
+
+(b) For $0<u<1$, $P(F(X)\le u) = P(X\le F^{-1}(u)) = F(F^{-1}(u)) = u$. That is the uniform CDF. (This is the "probability integral transform". It is why a CDF value is always uniformly distributed.)
+
+### Problem 2 [Inverse transform: three continuous examples]
+
+Give a sampler using one $U\sim\mathcal U(0,1)$ for: (a) $f(x) = 3x^2$ on $[0,1]$; (b) the Weibull CDF $F(x) = 1 - e^{-x^2}$, $x\ge0$; (c) the Laplace pdf $f(x) = \frac12e^{-|x|}$.
+
+**Solution.** (a) $F(x) = x^3$, so $X = U^{1/3}$.
+
+(b) $1 - e^{-x^2} = u$ gives $x = \sqrt{-\ln(1-u)}$. Since $1 - U$ is also uniform, $X = \sqrt{-\ln U}$ works too.
+
+(c) $F(x) = \frac12e^x$ for $x<0$ and $1 - \frac12e^{-x}$ for $x\ge0$, with $F(0) = \frac12$. Invert each piece:
+$$X = \begin{cases}\ln(2U) & U<\frac12\\ -\ln\big(2(1-U)\big) & U\ge\frac12.\end{cases}$$
+Check: at $U = \frac12$ both pieces give 0, and the CDF is continuous there.
+
+### Problem 3 [Inverse transform: a geometric from one uniform]
+
+Let $0<p<1$ and $U\sim\mathcal U(0,1)$. Show that $X = \Big\lceil\frac{\ln U}{\ln(1-p)}\Big\rceil$ is Geometric$(p)$ on $\{1,2,\dots\}$.
+
+**Solution.** $X$ is a positive integer, since $\frac{\ln U}{\ln(1-p)}>0$ (both logs are negative). For $k = 0, 1, 2,\dots$:
+$$P(X>k) = P\Big(\frac{\ln U}{\ln(1-p)}>k\Big) = P\big(\ln U<k\ln(1-p)\big) = P\big(U<(1-p)^k\big) = (1-p)^k .$$
+(Multiplying by $\ln(1-p)<0$ flips the inequality.) $P(X>k) = (1-p)^k$ is exactly the geometric tail, so $X\sim$ Geometric$(p)$. This is the discrete inverse transform written in closed form, and it's also $\lceil E\rceil$ for an exponential $E$ with rate $-\ln(1-p)$.
+
+### Problem 4 [Inverse transform: a piecewise density]
+
+$f(x) = \frac12$ on $[0,1]$ and $f(x) = \frac14$ on $(1,3]$. (a) Check it's a pdf and find $F$. (b) Give the inverse transform sampler. (c) What does $U = 0.8$ produce?
+
+**Solution.** (a) $\frac12\cdot1 + \frac14\cdot2 = 1$. Integrating,
+$$F(x) = \begin{cases}\frac x2 & 0\le x\le1\\ \frac12 + \frac{x-1}{4} & 1<x\le3.\end{cases}$$
+(b) For $u\le\frac12$, $\frac x2 = u$ gives $x = 2u$. For $u>\frac12$, $\frac12 + \frac{x-1}4 = u$ gives $x = 4u - 1$.
+
+(c) $0.8>0.5$, so $X = 4(0.8) - 1 = 2.2$.
+
+# New problems: Monte Carlo
+
+**The method.** To estimate $I = E[h(X)]$, average $h(X_1),\dots,h(X_n)$ for i.i.d. samples. The estimate is unbiased, converges by the SLLN, and has standard error $\frac{\sigma_h}{\sqrt n}$ (by the CLT, roughly 95% of runs land within $1.96\frac{\sigma_h}{\sqrt n}$). An integral $\int_a^bg(x)\,dx$ is $(b-a)\,E[g(U)]$ for $U\sim\mathcal U[a,b]$.
+
+### Problem 1 [Monte Carlo: an integral with no closed form]
+
+Estimate $I = \int_0^2e^{-x^2}dx$. (a) Write a Monte Carlo estimator using uniforms, and show it's unbiased. (b) Find its variance in terms of $\sigma^2 = \text{Var}(2e^{-U^2})$. (c) Given $\sigma^2\approx0.475$, how many samples give an error under 0.01 with probability about 0.95?
+
+**Solution.** (a) With $U_i\sim\mathcal U[0,2]$, let $\hat I_n = \frac1n\sum_{i=1}^n2e^{-U_i^2}$. Then
+$$E[\hat I_n] = E[2e^{-U^2}] = 2\int_0^2e^{-u^2}\cdot\frac12\,du = I .$$
+(b) The terms are i.i.d., so $\text{Var}(\hat I_n) = \frac{\sigma^2}{n}$.
+
+(c) By the CLT we need $1.96\sqrt{\sigma^2/n}\le0.01$, so $n\ge\frac{1.96^2(0.475)}{0.0001}\approx18{,}300$. (The true value is $I\approx0.882$.)
+
+### Problem 2 [Monte Carlo: estimating a probability]
+
+$X, Y$ are i.i.d. $\mathcal U[0,1]$. (a) Give a Monte Carlo estimator of $p = P(X + Y>1.5)$. (b) Find $p$ exactly. (c) What $n$ makes the standard error at most $0.01$?
+
+**Solution.** (a) $\hat p_n = \frac1n\sum_{i=1}^n\mathbf 1\{X_i + Y_i>1.5\}$, with fresh pairs $(X_i, Y_i)$. It's an average of Bernoulli$(p)$ variables, so it is unbiased.
+
+(b) The region $x + y>1.5$ in the unit square is a triangle with legs $0.5$, so $p = \frac12(0.5)^2 = \frac18$.
+
+(c) $\text{se} = \sqrt{\frac{p(1-p)}{n}}\le0.01$ needs $n\ge\frac{(1/8)(7/8)}{10^{-4}}\approx1094$.
+
+### Problem 3 [Monte Carlo: two estimators of $\pi$, compared]
+
+(a) Hit-or-miss: $\hat\pi_1 = \frac4n\sum\mathbf 1\{U_i^2 + V_i^2\le1\}$. (b) Mean-value: $\hat\pi_2 = \frac4n\sum\sqrt{1 - U_i^2}$. Show both are unbiased and find their variances. Which is better?
+
+**Solution.** (a) $P(U^2 + V^2\le1) = \frac\pi4$, so $E[\hat\pi_1] = \pi$ and
+$$\text{Var}(\hat\pi_1) = \frac{16}{n}\cdot\frac\pi4\Big(1 - \frac\pi4\Big)\approx\frac{2.70}{n}.$$
+(b) $E[\sqrt{1 - U^2}] = \int_0^1\sqrt{1 - u^2}\,du = \frac\pi4$, so $E[\hat\pi_2] = \pi$. And $E[1 - U^2] = \frac23$, so
+$$\text{Var}(\hat\pi_2) = \frac{16}{n}\Big(\frac23 - \frac{\pi^2}{16}\Big)\approx\frac{0.80}{n}.$$
+The mean-value estimator has about $\frac13$ of the variance, so it needs about a third as many samples for the same accuracy. Averaging a smooth function beats averaging a 0/1 indicator.
+
+### Problem 4 [Monte Carlo: rare events and importance sampling] (hard)
+
+You want $p = P(Z>4)\approx3.2\times10^{-5}$ for $Z\sim\mathcal N(0,1)$. (a) With plain Monte Carlo, about how many samples are needed for a relative standard error of 10%? (b) Instead sample $Y_i\sim\mathcal N(4,1)$ and use $\hat p = \frac1n\sum\mathbf 1\{Y_i>4\}\,w(Y_i)$ with $w(y) = \frac{\phi(y)}{\phi(y-4)}$. Show $\hat p$ is unbiased and simplify $w$.
+
+**Solution.** (a) The standard error is $\sqrt{p(1-p)/n}\approx\sqrt{p/n}$. A relative error of $0.1$ needs $\sqrt{p/n}\le0.1p$, i.e. $n\ge\frac{100}{p}\approx3\times10^6$. Almost every sample is wasted, since a hit happens once in 30,000 draws.
+
+(b) Let $q$ be the $\mathcal N(4,1)$ density. Then
+$$E\big[\mathbf 1\{Y>4\}w(Y)\big] = \int\mathbf 1\{y>4\}\frac{\phi(y)}{q(y)}q(y)\,dy = \int_4^\infty\phi(y)\,dy = p .$$
+$w(y) = \exp\big(-\frac{y^2}2 + \frac{(y-4)^2}2\big) = e^{8 - 4y}$. Now half the samples land in the region, and each carries a small weight, so a few thousand samples already give a good estimate.

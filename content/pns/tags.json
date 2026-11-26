@@ -2759,6 +2759,89 @@
    "lec": "L17",
    "diff": "H",
    "pri": 2
+  },
+  "pns/last-day/new-problems-accept-reject#problem-1-accept-reject-the-full-10-mark-answer": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-accept-reject#problem-2-accept-reject-choosing-a-better-proposal-and-inver": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L16",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-inverse-transform#problem-1-inverse-transform-why-it-works-both-directions": {
+   "t": [
+    "Simulation and Monte Carlo",
+    "Functions of random variables"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-inverse-transform#problem-2-inverse-transform-three-continuous-examples": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-inverse-transform#problem-3-inverse-transform-a-geometric-from-one-uniform": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-inverse-transform#problem-4-inverse-transform-a-piecewise-density": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-monte-carlo#problem-1-monte-carlo-an-integral-with-no-closed-form": {
+   "t": [
+    "Simulation and Monte Carlo",
+    "CLT"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-monte-carlo#problem-2-monte-carlo-estimating-a-probability": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-monte-carlo#problem-3-monte-carlo-two-estimators-of-compared": {
+   "t": [
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L15",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-monte-carlo#problem-4-monte-carlo-rare-events-and-importance-sampling-ha": {
+   "t": [
+    "Simulation and Monte Carlo",
+    "Gaussian"
+   ],
+   "lec": "L15",
+   "diff": "H",
+   "pri": 2
   }
  },
  "lastDay": {
@@ -2813,7 +2896,41 @@
    "pns/last-day/new-problems-probabilistic-inequalities#problem-11-inequalities-the-mgf-bound-beats-chebyshev-hard": "Probabilistic inequalities",
    "pns/last-day/new-problems-slln#problem-1-slln-limits-you-can-read-off": "SLLN and CLT",
    "pns/last-day/new-problems-slln#problem-2-slln-when-it-applies-and-when-it-fails": "SLLN and CLT",
-   "pns/last-day/new-problems-slln#problem-3-slln-the-renewal-rate-hard": "SLLN and CLT"
+   "pns/last-day/new-problems-slln#problem-3-slln-the-renewal-rate-hard": "SLLN and CLT",
+   "pns/l14-l20/lecture-16#p-b1": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b2": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b3": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b4": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b5": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b6": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b7": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b8": "Accept–reject",
+   "pns/l14-l20/lecture-16#p-b9": "Accept–reject",
+   "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t4": "Accept–reject",
+   "pns/l1-l8/lecture-4#p-b8": "Inverse transform",
+   "pns/l1-l8/lecture-8#p-b2": "Inverse transform",
+   "pns/l14-l20/lectures-14-and-15#p-b1": "Inverse transform",
+   "pns/l14-l20/lectures-14-and-15#p-b2": "Inverse transform",
+   "pns/l14-l20/lectures-14-and-15#p-b7": "Inverse transform",
+   "pns/l14-l20/lectures-14-and-15#p-b12a": "Inverse transform",
+   "pns/l14-l20/lectures-14-and-15#p-b12b": "Inverse transform",
+   "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t3": "Inverse transform",
+   "pns/l14-l20/lectures-14-and-15#p-b14": "Monte Carlo",
+   "pns/l14-l20/lectures-14-and-15#p-b15": "Monte Carlo",
+   "pns/l14-l20/lectures-14-and-15#p-b16": "Monte Carlo",
+   "pns/l14-l20/practice-map-formula-sheet-and-self-test#p-t5": "Monte Carlo",
+   "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-15-mixed-monte-carlo-clt-sample-size": "Monte Carlo",
+   "pns/mock-endsem/mock-endsem-solutions#problem-2-endsem-q2-monte-carlo-for": "Monte Carlo",
+   "pns/last-day/new-problems-accept-reject#problem-1-accept-reject-the-full-10-mark-answer": "Accept–reject",
+   "pns/last-day/new-problems-accept-reject#problem-2-accept-reject-choosing-a-better-proposal-and-inver": "Accept–reject",
+   "pns/last-day/new-problems-inverse-transform#problem-1-inverse-transform-why-it-works-both-directions": "Inverse transform",
+   "pns/last-day/new-problems-inverse-transform#problem-2-inverse-transform-three-continuous-examples": "Inverse transform",
+   "pns/last-day/new-problems-inverse-transform#problem-3-inverse-transform-a-geometric-from-one-uniform": "Inverse transform",
+   "pns/last-day/new-problems-inverse-transform#problem-4-inverse-transform-a-piecewise-density": "Inverse transform",
+   "pns/last-day/new-problems-monte-carlo#problem-1-monte-carlo-an-integral-with-no-closed-form": "Monte Carlo",
+   "pns/last-day/new-problems-monte-carlo#problem-2-monte-carlo-estimating-a-probability": "Monte Carlo",
+   "pns/last-day/new-problems-monte-carlo#problem-3-monte-carlo-two-estimators-of-compared": "Monte Carlo",
+   "pns/last-day/new-problems-monte-carlo#problem-4-monte-carlo-rare-events-and-importance-sampling-ha": "Monte Carlo"
   }
  }
 }
