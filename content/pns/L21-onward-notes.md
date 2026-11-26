@@ -1067,67 +1067,48 @@ These are from last year's HW 11, HW 12, Tutorial 11, Tutorial 12 and Endsem (th
 
 $X_1,\dots,X_n$ i.i.d. with pdf $f_X(x) = \theta\big(x - \tfrac12\big) + 1$ on $[0,1]$, $\theta\in[-2,2]$. Estimator: $\hat\Theta_n = 12\bar X - 6$. Is it unbiased? Consistent? What's the MSE?
 
-**Solution.** First, the moments of one $X$:
+**Solution.** Moments of one $X$, using $\int_0^1x\,dx = \frac12$, $\int_0^1x^2\,dx = \frac13$, $\int_0^1x^3\,dx = \frac14$:
+$$E[X] = \int_0^1x\Big(\theta\big(x - \tfrac12\big) + 1\Big)dx = \theta\Big(\frac13 - \frac14\Big) + \frac12 = \frac{\theta}{12} + \frac12 .$$
 
-$$
-E[X] = \int_0^1 x\Big(\theta\big(x - \tfrac12\big) + 1\Big)dx = \theta\Big(\frac13 - \frac14\Big) + \frac12 = \frac{\theta}{12} + \frac12.
-$$
+**Bias.** $E[\hat\Theta_n] = 12E[\bar X] - 6 = 12\big(\frac{\theta}{12} + \frac12\big) - 6 = \theta$. **Unbiased.**
 
-So $E[\hat\Theta_n] = 12\big(\frac{\theta}{12} + \frac12\big) - 6 = \theta$. **Unbiased.**
+**Variance.**
+$$E[X^2] = \theta\Big(\frac14 - \frac16\Big) + \frac13 = \frac{\theta}{12} + \frac13,\qquad\text{Var}(X) = \frac{\theta}{12} + \frac13 - \Big(\frac{\theta}{12} + \frac12\Big)^2 = \frac{1}{12} - \frac{\theta^2}{144}.$$
 
-For the variance:
-
-$$
-E[X^2] = \theta\Big(\frac14 - \frac16\Big) + \frac13 = \frac{\theta}{12} + \frac13, \qquad \text{Var}(X) = \frac{\theta}{12} + \frac13 - \Big(\frac{\theta}{12} + \frac12\Big)^2 = \frac{1}{12} - \frac{\theta^2}{144}.
-$$
-
-Then
-
-$$
-\text{MSE}(\hat\Theta_n) = \text{Var}(12\bar X) = \frac{144\,\text{Var}(X)}{n} = \frac{12 - \theta^2}{n}.
-$$
-
-This $\to 0$, so **consistent** (by the MSE theorem from slide 14).
+**MSE.** Unbiased, so MSE = variance:
+$$\text{MSE}(\hat\Theta_n) = \text{Var}(12\bar X) = \frac{144\,\text{Var}(X)}{n} = \boxed{\frac{12 - \theta^2}{n}}.$$
+This tends to 0, so the estimator is **consistent** (MSE $\to0$ implies convergence in probability, by Chebyshev).
 
 ### Problem 2 [HW 11 Q3]
 
 $X_i$ i.i.d. with mean $\mu$ and variance $\sigma^2$. Is $\hat\mu_{B,n} = \frac1n\sum_{i=1}^n\big(1 + \frac1i\big)X_i$ consistent?
 
-**Solution.** Use the MSE recipe: bias $\to0$ and variance $\to0$.
+**Solution.** Show bias $\to0$ and variance $\to0$; then MSE $\to0$, which gives consistency.
 
-*Bias.* By linearity,
-$$
-E[\hat\mu_{B,n}] = \frac{1}{n}\sum_{i=1}^n\Big(1 + \frac1i\Big)\mu = \frac{\mu}{n}\Big(n + H_n\Big) = \mu\Big(1 + \frac{H_n}{n}\Big),
-$$
-where $H_n = 1 + \frac12 + \dots + \frac1n \approx \ln n$. So $B = \mu H_n/n \to 0$, since $\ln n$ grows much slower than $n$.
+**Bias.** By linearity,
+$$E[\hat\mu_{B,n}] = \frac{1}{n}\sum_{i=1}^n\Big(1 + \frac1i\Big)\mu = \frac{\mu}{n}\big(n + H_n\big) = \mu\Big(1 + \frac{H_n}{n}\Big),$$
+where $H_n = 1 + \frac12 + \dots + \frac1n\le1 + \ln n$. So the bias $\frac{\mu H_n}{n}\to0$.
 
-*Variance.* The $X_i$ are independent, so the variances add, with each weight squared:
-$$
-\text{Var}(\hat\mu_{B,n}) = \frac{\sigma^2}{n^2}\sum_{i=1}^n\Big(1 + \frac1i\Big)^2 \le \frac{\sigma^2}{n^2}\cdot 4n = \frac{4\sigma^2}{n} \to 0,
-$$
-using $1 + \frac1i\le2$, so each squared weight is at most 4.
+**Variance.** The $X_i$ are independent, so variances add with squared weights. Each weight satisfies $1 + \frac1i\le2$:
+$$\text{Var}(\hat\mu_{B,n}) = \frac{\sigma^2}{n^2}\sum_{i=1}^n\Big(1 + \frac1i\Big)^2\le\frac{\sigma^2}{n^2}\cdot4n = \frac{4\sigma^2}{n}\to0 .$$
 
-So $\text{MSE}\to 0$, and it's **consistent** (just biased for every finite $n$). The plain sample mean is consistent too, of course.
+So $\text{MSE} = \text{Var} + \text{bias}^2\to0$: **consistent**, although biased for every finite $n$.
 
 ### Problem 3 [Tutorial 11 Q5] (hard)
 
 $X_i \sim \mathcal N(\mu,\sigma^2)$, both unknown, $n \ge 2$. (a) Show $\hat\sigma^2_{ML}$ is biased. (b) Fix it. (c) Among estimators $c\,\hat\sigma^2_{ML}$, which $c$ minimises the MSE? (You may use: $W = \sum(X_i - \bar X)^2$ satisfies $E[W] = (n-1)\sigma^2$ and $\text{Var}(W) = 2(n-1)\sigma^4$ for normal data.)
 
-**Solution.** (a) $\hat\sigma^2_{ML} = W/n$, so $E = \frac{n-1}{n}\sigma^2 \ne \sigma^2$. (b) $\frac{n}{n-1}\hat\sigma^2_{ML} = W/(n-1)$ is unbiased.
+**Solution.** (a) $\hat\sigma^2_{ML} = \frac Wn$, so $E[\hat\sigma^2_{ML}] = \frac{n-1}{n}\sigma^2\ne\sigma^2$. Bias $-\frac{\sigma^2}{n}$.
 
-(c) Write the estimator as $aW$ (with $a = c/n$). Then
+(b) Scale by $\frac{n}{n-1}$: $\frac{W}{n-1} = S^2$ has $E[S^2] = \sigma^2$, so it is unbiased.
 
-$$
-\text{MSE}(aW) = a^2\,\text{Var}(W) + \big(aE[W] - \sigma^2\big)^2 = \sigma^4\Big[2(n-1)a^2 + \big((n-1)a - 1\big)^2\Big].
-$$
-
+(c) Write the estimator as $aW$ with $a = \frac cn$. Using MSE = Var + bias²:
+$$\text{MSE}(aW) = a^2\,\text{Var}(W) + \big(aE[W] - \sigma^2\big)^2 = \sigma^4\Big[2(n-1)a^2 + \big((n-1)a - 1\big)^2\Big].$$
 Differentiate in $a$ and set to zero:
+$$4(n-1)a + 2(n-1)\big((n-1)a - 1\big) = 0\implies2a + (n-1)a = 1\implies a = \frac{1}{n+1}.$$
+The bracket is a convex quadratic in $a$, so this is the minimum. The best estimator is $\frac{W}{n+1}$, i.e. $\boxed{c = \frac{n}{n+1}}$.
 
-$$
-4(n-1)a + 2(n-1)\big((n-1)a - 1\big) = 0 \implies 2a + (n-1)a = 1 \implies a = \frac{1}{n+1}.
-$$
-
-So the best estimator divides by $n+1$, i.e. $c = \frac{n}{n+1}$. Neither the MLE ($n$) nor the unbiased one ($n-1$) wins on MSE! Same lesson as the Uniform table: a bit of bias can buy a lot of variance reduction.
+Neither the MLE (divide by $n$) nor the unbiased estimator (divide by $n-1$) minimises the MSE. A little bias buys a larger reduction in variance.
 
 ## B. Maximum likelihood
 
@@ -1135,13 +1116,11 @@ So the best estimator divides by $n+1$, i.e. $c = \frac{n}{n+1}$. Neither the ML
 
 $X_1,\dots,X_4$ i.i.d. Geometric$(p)$ with $P(X = x) = p(1-p)^{x-1}$. Observed $(2, 3, 3, 5)$. Find the likelihood and the MLE.
 
-**Solution.**
-
-$$
-L(p) = \prod p(1-p)^{x_i - 1} = p^4(1-p)^{\sum x_i - 4} = p^4(1-p)^9.
-$$
-
-$\ln L = 4\ln p + 9\ln(1-p)$, so $\frac4p = \frac{9}{1-p}$, giving $\hat p = \frac{4}{13}$. In general, $\hat p = \frac{n}{\sum x_i} = \frac{1}{\bar x}$. (Mean of a geometric is $1/p$, so this is the "invert the sample mean" pattern again.)
+**Solution.** $n = 4$ and $\sum x_i = 13$:
+$$L(p) = \prod_{i=1}^4p(1-p)^{x_i - 1} = p^4(1-p)^{\sum x_i - 4} = p^4(1-p)^9 .$$
+Log-likelihood $\ln L = 4\ln p + 9\ln(1-p)$. Set the derivative to zero:
+$$\frac4p - \frac{9}{1-p} = 0\iff4(1-p) = 9p\iff\hat p = \frac{4}{13}.$$
+The second derivative $-\frac4{p^2} - \frac9{(1-p)^2}<0$, so this is a maximum. In general $\hat p = \frac{n}{\sum x_i} = \frac{1}{\bar x}$: the geometric mean is $\frac1p$, so the MLE inverts the sample mean.
 
 ### Problem 5 [Endsem Q5]
 
@@ -1165,15 +1144,17 @@ $$
 
 $X_i$ i.i.d. Uniform$[\theta, \theta+1]$. Find an MLE of $\theta$. Is it unique? Unbiased? Consistent?
 
-**Solution.** $L(\theta) = 1$ if every $x_i \in[\theta,\theta+1]$, i.e. if
+**Solution.** Each density is 1 on $[\theta,\theta+1]$, so $L(\theta) = 1$ if every $x_i\in[\theta,\theta+1]$, i.e. if
+$$\max_ix_i - 1\le\theta\le\min_ix_i,$$
+and $0$ otherwise. $L$ is **flat** on this interval, so every $\theta$ in $[\max x_i - 1, \min x_i]$ is an MLE. **The MLE is not unique.**
 
-$$
-\max_i x_i - 1 \le \theta \le \min_i x_i,
-$$
+Take $\hat\theta = \min_iX_i$. Write $X_i = \theta + U_i$ with $U_i\sim\mathcal U[0,1]$, so $\hat\theta = \theta + \min_iU_i$, and $P(\min_iU_i>t) = (1-t)^n$ for $t\in[0,1]$.
 
-and $0$ otherwise. So $L$ is **flat** on a whole interval: *every* $\theta$ in $[\max x_i - 1, \min x_i]$ is an MLE. **The MLE is not unique.**
+**Bias:** $E[\min_iU_i] = \int_0^1P(\min U_i>t)\,dt = \int_0^1(1-t)^n\,dt = \frac{1}{n+1}$, so $E[\hat\theta] = \theta + \frac{1}{n+1}$. Biased, but the bias $\to0$.
 
-Take $\hat\theta = \min_i X_i$. Each $X_i = \theta + U_i$ with $U_i\sim\mathcal U[0,1]$, so $\min X_i = \theta + \min U_i$. For the min of $n$ uniforms, $P(\min U_i>t) = (1-t)^n$, so $E[\min U_i] = \int_0^1(1-t)^n\,dt = \frac{1}{n+1}$. So $E[\hat\theta] = \theta + \frac{1}{n+1}$: **biased, but asymptotically unbiased**. And $P(\hat\theta - \theta \ge \epsilon) = (1 - \epsilon)^n \to 0$, so it's **consistent**. (Picking $\max X_i - 1$ gives bias $-\frac{1}{n+1}$; the midpoint $\frac{\min X_i + \max X_i - 1}{2}$ is unbiased by symmetry.)
+**Consistency:** $P(|\hat\theta - \theta|\ge\epsilon) = P(\min U_i\ge\epsilon) = (1 - \epsilon)^n\to0$. Consistent.
+
+(The choice $\max X_i - 1$ has bias $-\frac{1}{n+1}$; the midpoint $\frac{\min X_i + \max X_i - 1}{2}$ is unbiased by symmetry.)
 
 ### Problem 7 [Tutorial 11 Q8] (subtle)
 
@@ -1187,17 +1168,25 @@ $X_i$ i.i.d. Binomial$(m, \theta)$, $m$ known, $\theta\in(0,1)$. (a) Find the ML
 
 $X_i$ i.i.d. Poisson$(\gamma)$. Find the MLE, its bias and MSE.
 
-**Solution.** From slide 30, $\hat\gamma = \bar X$. Check the second derivative: $-\sum x_i/\gamma^2 < 0$ (if $\sum x_i > 0$), so it's a max. $E[\bar X] = \gamma$, so the bias is $0$, and $\text{MSE} = \text{Var}(\bar X) = \gamma/n$.
+**Solution.** Likelihood and log-likelihood:
+$$L(\gamma) = \prod_{i=1}^n\frac{e^{-\gamma}\gamma^{x_i}}{x_i!},\qquad\ln L(\gamma) = -n\gamma + \Big(\sum x_i\Big)\ln\gamma - \sum\ln x_i!\,.$$
+Set the derivative to zero:
+$$-n + \frac{\sum x_i}{\gamma} = 0\implies\hat\gamma = \frac{1}{n}\sum x_i = \bar X .$$
+The second derivative $-\frac{\sum x_i}{\gamma^2}<0$ (when $\sum x_i>0$), so it is a maximum. (If all $x_i = 0$, $\ln L = -n\gamma$ is decreasing and the MLE is $0 = \bar x$ again.)
+
+**Bias:** $E[\bar X] = \gamma$, so the bias is $0$.
+**MSE:** $\text{MSE} = \text{Var}(\bar X) = \frac{\text{Var}(X)}{n} = \boxed{\frac{\gamma}{n}}$.
 
 ### Problem 9 [HW 11 Q5]
 
 One observation $X \sim\mathcal N(0,\sigma^2)$. (a) Find an unbiased estimator of $\sigma^2$. (b) Write the log-likelihood. (c) Find the MLE of $\sigma$.
 
-**Solution.** (a) $E[X^2] = \text{Var}(X) = \sigma^2$, so $X^2$ is unbiased.
+**Solution.** (a) $E[X^2] = \text{Var}(X) + (E[X])^2 = \sigma^2 + 0$, so $X^2$ is unbiased for $\sigma^2$.
 
-(b) $\ln L(\sigma) = -\frac12\ln(2\pi) - \ln\sigma - \frac{x^2}{2\sigma^2}$.
+(b) $f(x;\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-x^2/(2\sigma^2)}$, so
+$$\ln L(\sigma) = -\frac12\ln(2\pi) - \ln\sigma - \frac{x^2}{2\sigma^2}.$$
 
-(c) $\frac{d}{d\sigma}\ln L = -\frac1\sigma + \frac{x^2}{\sigma^3} = 0 \implies \hat\sigma = |x|$. (Not $x$: $\sigma > 0$.)
+(c) $\frac{d}{d\sigma}\ln L = -\frac1\sigma + \frac{x^2}{\sigma^3} = 0\implies\sigma^2 = x^2\implies\hat\sigma = |x|$, since $\sigma>0$. The derivative is positive for $\sigma<|x|$ and negative after, so this is the maximum.
 
 ## C. Bayesian, MAP and CE
 
@@ -1361,27 +1350,37 @@ These are new problems in the style of this year's quiz: MLEs where the maximum 
 
 $X_1,\dots,X_n$ i.i.d. Uniform$[0,\theta]$. (a) Find the MLE. (b) Find its bias and MSE. (c) Make it unbiased and compare the MSE with that of the moment estimator $2\bar X$.
 
-**Solution.** (a) $L(\theta) = \theta^{-n}$ if $\theta\ge\max_i x_i$, and $0$ otherwise. $\theta^{-n}$ decreases in $\theta$, so take the smallest allowed value:
+**Solution.** (a) Each density is $\frac1\theta$ on $[0,\theta]$, so
+$$L(\theta) = \begin{cases}\theta^{-n} & \theta\ge\max_ix_i\\ 0 & \text{otherwise.}\end{cases}$$
+$\theta^{-n}$ decreases in $\theta$, so take the smallest allowed value:
 $$\hat\theta_{ML} = M := \max_iX_i .$$
-Setting $\frac{d}{d\theta}\ln L = -\frac n\theta = 0$ has no solution. The maximum is at the boundary, which is the whole point of this kind of question.
+Setting $\frac{d}{d\theta}\ln L = -\frac n\theta = 0$ has no solution: the maximum is at the boundary.
 
-(b) $P(M\le m) = (m/\theta)^n$ on $[0,\theta]$, so $f_M(m) = nm^{n-1}/\theta^n$. Then
-$$E[M] = \frac{n}{n+1}\theta,\qquad E[M^2] = \frac{n}{n+2}\theta^2,\qquad \text{Var}(M) = \frac{n\theta^2}{(n+1)^2(n+2)} .$$
-The bias is $-\frac{\theta}{n+1}$ (it always underestimates, since $M\le\theta$), and
+(b) $P(M\le m) = (m/\theta)^n$ on $[0,\theta]$, so $f_M(m) = \frac{nm^{n-1}}{\theta^n}$. Then
+$$E[M] = \int_0^\theta m\cdot\frac{nm^{n-1}}{\theta^n}dm = \frac{n}{n+1}\theta,\qquad E[M^2] = \frac{n}{n+2}\theta^2,\qquad\text{Var}(M) = \frac{n\theta^2}{(n+1)^2(n+2)} .$$
+The bias is $E[M] - \theta = -\frac{\theta}{n+1}$ (it always underestimates, since $M\le\theta$), and
 $$\text{MSE}(M) = \text{Var}(M) + \text{bias}^2 = \frac{n\theta^2 + (n+2)\theta^2}{(n+1)^2(n+2)} = \boxed{\frac{2\theta^2}{(n+1)(n+2)}}.$$
-(c) $\tilde\theta = \frac{n+1}nM$ is unbiased, with $\text{MSE} = \text{Var}(\tilde\theta) = \frac{(n+1)^2}{n^2}\text{Var}(M) = \frac{\theta^2}{n(n+2)}$.
 
-$2\bar X$ is also unbiased, with $\text{MSE} = 4\cdot\frac{\theta^2}{12n} = \frac{\theta^2}{3n}$.
+(c) $\tilde\theta = \frac{n+1}nM$ is unbiased, with
+$$\text{MSE}(\tilde\theta) = \text{Var}(\tilde\theta) = \frac{(n+1)^2}{n^2}\text{Var}(M) = \frac{\theta^2}{n(n+2)}.$$
+$2\bar X$ is unbiased too ($E[X] = \frac\theta2$), with $\text{MSE} = 4\cdot\frac{\text{Var}(X)}{n} = 4\cdot\frac{\theta^2}{12n} = \frac{\theta^2}{3n}$.
 
-Both MSEs of $M$ and $\tilde\theta$ shrink like $1/n^2$, far faster than the $1/n$ of $2\bar X$. And for $n\ge2$, $\tilde\theta$ beats $M$, since $\frac{1}{n(n+2)}<\frac{2}{(n+1)(n+2)}$ exactly when $n+1<2n$.
+The MSEs of $M$ and $\tilde\theta$ shrink like $\frac1{n^2}$, much faster than the $\frac1n$ of $2\bar X$. For $n\ge2$, $\tilde\theta$ also beats $M$: $\frac{1}{n(n+2)}<\frac{2}{(n+1)(n+2)}\iff n+1<2n$.
 
 ### Problem 22 [Shifted exponential]
 
 $X_i$ i.i.d. with pdf $f(x;\theta) = e^{-(x-\theta)}$ for $x\ge\theta$. Find the MLE of $\theta$, its bias, and an unbiased version.
 
-**Solution.** $L(\theta) = \exp\big(-\sum_i(x_i - \theta)\big) = e^{n\theta - \sum x_i}$, as long as $\theta\le\min_ix_i$, and $0$ otherwise. This **increases** in $\theta$, so push $\theta$ up to the boundary:
+**Solution.** **MLE.** Every density needs $x_i\ge\theta$, so
+$$L(\theta) = \begin{cases}\exp\big(-\sum_i(x_i - \theta)\big) = e^{n\theta - \sum x_i} & \theta\le\min_ix_i\\ 0 & \text{otherwise.}\end{cases}$$
+This **increases** in $\theta$, so push $\theta$ up to the boundary:
 $$\hat\theta_{ML} = \min_iX_i .$$
-Write $X_i = \theta + E_i$ with $E_i\sim\text{Exp}(1)$. The minimum of $n$ independent Exp(1) variables is Exp$(n)$, so $E[\min_iX_i] = \theta + \frac1n$. The bias is $+\frac1n$, and $\min_iX_i - \frac1n$ is unbiased. The MLE is still consistent: $P(\min X_i - \theta>\epsilon) = e^{-n\epsilon}\to0$.
+
+**Bias.** Write $X_i = \theta + E_i$ with $E_i$ i.i.d. Exp$(1)$. Then $P(\min_iE_i>t) = \prod_iP(E_i>t) = e^{-nt}$, so $\min_iE_i\sim$ Exp$(n)$ with mean $\frac1n$:
+$$E[\min_iX_i] = \theta + \frac1n,\qquad\text{bias} = +\frac1n .$$
+**Unbiased version:** $\min_iX_i - \frac1n$.
+
+It is still consistent: $P(\min_iX_i - \theta>\epsilon) = e^{-n\epsilon}\to0$.
 
 ### Problem 23 [Uniform(−θ, θ)]
 
@@ -1395,13 +1394,13 @@ Each $|X_i|$ is Uniform$[0,\theta]$, so by Problem 21, $E[\max_i|X_i|] = \frac{n
 
 $X_i$ i.i.d. with pdf $f(x;\theta) = \frac12e^{-|x-\theta|}$. (a) Show the MLE of $\theta$ is a sample median. (b) Compute it for the data $2, 5, 1, 9, 4$. (c) What happens if the 9 is mistyped as 90?
 
-**Solution.** (a) $\ln L(\theta) = -n\ln2 - \sum_i|x_i - \theta|$, so the MLE minimises $g(\theta) = \sum_i|x_i - \theta|$. Away from the data points,
+**Solution.** (a) $\ln L(\theta) = -n\ln2 - \sum_i|x_i - \theta|$, so the MLE minimises $g(\theta) = \sum_i|x_i - \theta|$. Each term $|x_i - \theta|$ has slope $-1$ for $\theta<x_i$ and $+1$ for $\theta>x_i$. So away from the data points,
 $$g'(\theta) = \#\{i : x_i<\theta\} - \#\{i : x_i>\theta\}.$$
-This is negative while fewer than half the points lie below $\theta$ and positive once more than half do. So $g$ is smallest at a median. For odd $n$ it's the middle value. For even $n$ every $\theta$ between the two middle values is an MLE, so the MLE is not unique.
+This is negative while fewer than half the points lie below $\theta$, and positive once more than half do. So $g$ decreases, then increases, and is smallest at a median. For odd $n$ that is the middle value. For even $n$, every $\theta$ between the two middle values is an MLE, so the MLE is not unique.
 
 (b) Sorted: $1, 2, 4, 5, 9$, so $\hat\theta = \boxed{4}$. (The mean is $4.2$.)
 
-(c) The median stays $4$, while the mean jumps to $20.4$. This is the same robustness story as least absolute deviations in Part 6.
+(c) The median stays $4$, while the mean jumps to $\frac{102}{5} = 20.4$. The median is robust to outliers.
 
 ### Problem 25 [Laplace scale]
 
@@ -1415,21 +1414,28 @@ The derivative is positive below $\hat b$ and negative above it, so this is a ma
 
 $X_i$ i.i.d. Bernoulli$(p)$. The MLE of $p$ is $\hat p = \bar X$, so by invariance the MLE of the variance $v = p(1-p)$ is $\hat v = \hat p(1-\hat p)$. Find its bias and an unbiased fix.
 
-**Solution.** $E[\hat p] = p$ and $E[\hat p^2] = \text{Var}(\hat p) + p^2 = \frac{p(1-p)}n + p^2$, so
+**Solution.** $\hat v = \hat p - \hat p^2$. We have $E[\hat p] = p$ and
+$$E[\hat p^2] = \text{Var}(\hat p) + (E\hat p)^2 = \frac{p(1-p)}n + p^2 .$$
+So
 $$E[\hat v] = p - \frac{p(1-p)}n - p^2 = p(1-p)\Big(1 - \frac1n\Big).$$
 The bias is $-\frac{p(1-p)}n$, and
 $$\frac{n}{n-1}\hat p(1-\hat p)\quad\text{is unbiased.}$$
-This is the same $\frac{n}{n-1}$ correction as for the sample variance. Indeed, with 0/1 data, $\frac1n\sum(X_i - \bar X)^2 = \hat p(1-\hat p)$ exactly. **Invariance gives you the MLE of $g(\theta)$, but not an unbiased one.**
+This is the same $\frac{n}{n-1}$ correction as for the sample variance: with 0/1 data, $\frac1n\sum(X_i - \bar X)^2 = \hat p(1-\hat p)$ exactly. **Invariance gives the MLE of $g(\theta)$, but not necessarily an unbiased one.**
 
 ### Problem 27 [Exponential: unbiased for the mean, biased for the rate]
 
 $X_i$ i.i.d. Exp$(\lambda)$. (a) Find the MLEs of $\lambda$, of the mean $\mu = 1/\lambda$, and of $P(X>1)$. (b) Which of the first two is unbiased? Fix the other.
 
-**Solution.** (a) $\ln L = n\ln\lambda - \lambda\sum x_i$ gives $\hat\lambda = 1/\bar X$. By invariance, $\hat\mu = \bar X$ and $\widehat{P(X>1)} = e^{-\hat\lambda} = e^{-1/\bar X}$.
+**Solution.** (a) $\ln L = n\ln\lambda - \lambda\sum x_i$. Setting $\frac n\lambda - \sum x_i = 0$ gives $\hat\lambda = \frac{1}{\bar X}$. By invariance (plug the MLE into the function):
+$$\hat\mu = \frac1{\hat\lambda} = \bar X,\qquad\widehat{P(X>1)} = e^{-\hat\lambda} = e^{-1/\bar X}.$$
 
-(b) $E[\bar X] = 1/\lambda$, so $\hat\mu$ is unbiased. For $\hat\lambda$, let $S = \sum X_i\sim\text{Gamma}(n,\lambda)$. Then
-$$E\Big[\frac1S\Big] = \int_0^\infty\frac1s\cdot\frac{\lambda^ns^{n-1}e^{-\lambda s}}{(n-1)!}\,ds = \frac{\lambda^n(n-2)!}{(n-1)!\,\lambda^{n-1}} = \frac{\lambda}{n-1}\qquad(n\ge2).$$
-So $E[\hat\lambda] = E[n/S] = \frac{n}{n-1}\lambda$: biased upwards. The fix is $\frac{n-1}{S} = \frac{n-1}{n\bar X}$. (By Jensen, $E[1/\bar X]>1/E[\bar X]$, so an upward bias was to be expected.)
+(b) $E[\bar X] = E[X] = \frac1\lambda$, so **$\hat\mu$ is unbiased**.
+
+For $\hat\lambda$, let $S = \sum X_i\sim\text{Gamma}(n,\lambda)$. For $n\ge2$,
+$$E\Big[\frac1S\Big] = \int_0^\infty\frac1s\cdot\frac{\lambda^ns^{n-1}e^{-\lambda s}}{(n-1)!}\,ds = \frac{\lambda^n}{(n-1)!}\cdot\frac{(n-2)!}{\lambda^{n-1}} = \frac{\lambda}{n-1},$$
+using $\int_0^\infty s^{k}e^{-\lambda s}ds = \frac{k!}{\lambda^{k+1}}$ with $k = n-2$. So
+$$E[\hat\lambda] = E\Big[\frac nS\Big] = \frac{n}{n-1}\lambda,$$
+**biased upwards**. The fix is $\frac{n-1}{S} = \frac{n-1}{n\bar X}$. (Jensen predicts the direction: $\frac1x$ is convex, so $E[\frac1{\bar X}]>\frac1{E[\bar X]}$.)
 
 ### Problem 28 [A power-family MLE]
 
