@@ -2371,28 +2371,34 @@ $$\boxed{f_{\mathbf Y}(\mathbf y) = \frac{1}{|\det A|}\,f_{\mathbf X}\big(A^{-1}
 
 **B1 (last year's HW9 Q3).** $Y_1 = X_1 + X_2$, $Y_2 = X_1 - X_2$. (a) Find $H$. (b) Find $|J|$. (c) Write $f_{\mathbf Y}$ in terms of $f_{\mathbf X}$.
 
-*Solution.* (a) Add the two equations: $y_1 + y_2 = 2x_1$. Subtract: $y_1 - y_2 = 2x_2$. So
-$$X_1 = \frac{Y_1 + Y_2}{2},\qquad X_2 = \frac{Y_1 - Y_2}{2}.$$
-(b) $J = \det\begin{bmatrix}\frac12 & \frac12\\ \frac12 & -\frac12\end{bmatrix} = -\frac14 - \frac14 = -\frac12$, so $|J| = \frac12$.
-(c) $f_{\mathbf Y}(y_1, y_2) = \frac12f_{\mathbf X}\big(\frac{y_1 + y_2}{2}, \frac{y_1 - y_2}{2}\big)$.
+*Solution.* (a) Solve for $\mathbf x$ in terms of $\mathbf y$. Adding the equations gives $y_1 + y_2 = 2x_1$; subtracting gives $y_1 - y_2 = 2x_2$. So $H$ is
+$$x_1 = \frac{y_1 + y_2}{2},\qquad x_2 = \frac{y_1 - y_2}{2}.$$
 
-*Example.* Take $X_1, X_2$ i.i.d. $\mathcal N(0,1)$. The exponent needs $x_1^2 + x_2^2$, and
-$$\Big(\frac{y_1 + y_2}{2}\Big)^2 + \Big(\frac{y_1 - y_2}{2}\Big)^2 = \frac{y_1^2 + y_2^2}{2}$$
-(the cross terms cancel). So
+(b) The Jacobian of $H$ (derivatives of $x$ with respect to $y$):
+$$J = \det\begin{bmatrix}\frac{\partial x_1}{\partial y_1} & \frac{\partial x_1}{\partial y_2}\\[2pt] \frac{\partial x_2}{\partial y_1} & \frac{\partial x_2}{\partial y_2}\end{bmatrix} = \det\begin{bmatrix}\frac12 & \frac12\\ \frac12 & -\frac12\end{bmatrix} = -\frac14 - \frac14 = -\frac12,\qquad|J| = \frac12 .$$
+
+(c) $f_{\mathbf Y}(\mathbf y) = f_{\mathbf X}(H(\mathbf y))\,|J|$:
+$$f_{\mathbf Y}(y_1, y_2) = \frac12f_{\mathbf X}\Big(\frac{y_1 + y_2}{2}, \frac{y_1 - y_2}{2}\Big).$$
+
+*Example.* $X_1, X_2$ i.i.d. $\mathcal N(0,1)$, so $f_{\mathbf X} = \frac1{2\pi}e^{-(x_1^2 + x_2^2)/2}$. The cross terms cancel:
+$$\Big(\frac{y_1 + y_2}{2}\Big)^2 + \Big(\frac{y_1 - y_2}{2}\Big)^2 = \frac{y_1^2 + y_2^2}{2},$$
+so
 $$f_{\mathbf Y}(\mathbf y) = \frac12\cdot\frac{1}{2\pi}e^{-(y_1^2 + y_2^2)/4} = \frac{1}{\sqrt{4\pi}}e^{-y_1^2/4}\cdot\frac{1}{\sqrt{4\pi}}e^{-y_2^2/4}.$$
-It factorises, so the sum and difference are **independent** $\mathcal N(0,2)$ variables. That's special to normals; L20 explains why.
+It factorises, so the sum and difference are **independent** $\mathcal N(0,2)$ variables. This is special to normals: $(Y_1, Y_2)$ is Gaussian and $\operatorname{Cov}(Y_1, Y_2) = \operatorname{Var}X_1 - \operatorname{Var}X_2 = 0$.
 
 **B2 (last year's Quiz 2 Q4).** $(X_1, X_2)$ uniform on the unit square, $Y_1 = X_1 - X_2$, $Y_2 = X_1 + X_2$. Find $f_{\mathbf Y}$.
 
-*Solution.* Same kind of map as B1: $X_1 = \frac{Y_1 + Y_2}{2}$, $X_2 = \frac{Y_2 - Y_1}{2}$, $|J| = \frac12$. Since $f_{\mathbf X} = 1$ on the square, $f_{\mathbf Y} = \frac12$ on the support, and 0 off it.
+*Solution.* **Inverse and Jacobian.** $x_1 = \frac{y_1 + y_2}{2}$, $x_2 = \frac{y_2 - y_1}{2}$, so
+$$J = \det\begin{bmatrix}\frac12 & \frac12\\ -\frac12 & \frac12\end{bmatrix} = \frac12,\qquad|J| = \frac12 .$$
+$f_{\mathbf X} = 1$ on the square, so $f_{\mathbf Y} = 1\cdot\frac12 = \frac12$ on the image of the square, and 0 elsewhere.
 
-Now the important part, the support. We need $0<x_1<1$ and $0<x_2<1$:
+**Support** (the part that carries the marks). We need $0<x_1<1$ and $0<x_2<1$:
 $$0<\frac{y_1 + y_2}{2}<1,\qquad0<\frac{y_2 - y_1}{2}<1 .$$
-The two left inequalities say $y_2>-y_1$ and $y_2>y_1$, i.e. $|y_1|<y_2$. The two right ones say $y_2<2 - y_1$ and $y_2<2 + y_1$, i.e. $|y_1|<2 - y_2$. Together:
-$$|y_1|<y_2\ \ (0<y_2\le1),\qquad|y_1|<2 - y_2\ \ (1<y_2<2).$$
-That's a square with corners $(0,0), (1,1), (0,2), (-1,1)$: the unit square rotated by $45°$ and scaled by $\sqrt2$. Its area is 2, so the density $\frac12$ integrates to 1. ✓
+The left inequalities give $y_2>-y_1$ and $y_2>y_1$, i.e. $|y_1|<y_2$. The right ones give $y_2<2 - y_1$ and $y_2<2 + y_1$, i.e. $|y_1|<2 - y_2$. So
+$$f_{\mathbf Y}(y_1,y_2) = \begin{cases}\frac12 & |y_1|<\min(y_2,\ 2 - y_2)\\ 0 & \text{otherwise.}\end{cases}$$
+This is the square with corners $(0,0), (1,1), (0,2), (-1,1)$: the unit square rotated by $45°$ and scaled by $\sqrt2$. Its area is 2, so $\frac12$ integrates to 1.
 
-*Cross-check.* Integrate out $y_1$: at height $y_2\le1$ the width is $2y_2$, so $f_{Y_2}(y_2) = \frac12\cdot2y_2 = y_2$; for $1<y_2<2$ it's $2 - y_2$. That's the triangle density of a sum of two uniforms, same as the L13 convolution.
+*Cross-check.* Integrate out $y_1$: at height $y_2\le1$ the width is $2y_2$, so $f_{Y_2}(y_2) = \frac12\cdot2y_2 = y_2$; for $1<y_2<2$ it is $2 - y_2$. That is the triangular density of a sum of two independent uniforms.
 
 **B3 (last year's Tutorial 9 Q2): a non-linear map.** $X_1\sim\mathcal U[1,2]$ and, independently, $X_2$ has density $\frac38x_2^2$ on $[0,2]$. Find the joint pdf of $Y_1 = X_1^2$, $Y_2 = X_1 + X_2$.
 
@@ -2412,34 +2418,43 @@ $$AC_{\mathbf X} = \begin{bmatrix}4 & 2\\12 & -1\end{bmatrix},\qquad C_{\mathbf 
 
 **B5 (last year's Tutorial 9 Q7).** Show $\operatorname{Var}(a^T\mathbf X) = a^T\Sigma a$ and $\operatorname{Cov}(a^T\mathbf X, b^T\mathbf X) = a^T\Sigma b$; evaluate for $\Sigma = \begin{bmatrix}4 & 1\\1 & 2\end{bmatrix}$, $a = (2,-1)^T$, $b = (1,3)^T$.
 
-*Solution.* Stack the two rows into a $2\times n$ matrix $B = \begin{bmatrix}a^T\\b^T\end{bmatrix}$ and set $\mathbf Y = B\mathbf X = (a^T\mathbf X, b^T\mathbf X)^T$. By slide 4's HW, $C_{\mathbf Y} = B\Sigma B^T$. Its $(1,1)$ entry is $a^T\Sigma a$ and its $(1,2)$ entry is $a^T\Sigma b$. Done.
+*Solution.* Let $\boldsymbol\mu = E[\mathbf X]$. Then $a^T\mathbf X - E[a^T\mathbf X] = a^T(\mathbf X - \boldsymbol\mu)$, a scalar, which equals its own transpose $(\mathbf X - \boldsymbol\mu)^Tb$ when written for $b$. So
+$$\operatorname{Cov}(a^T\mathbf X, b^T\mathbf X) = E\big[a^T(\mathbf X - \boldsymbol\mu)\,(\mathbf X - \boldsymbol\mu)^Tb\big] = a^T\,E\big[(\mathbf X - \boldsymbol\mu)(\mathbf X - \boldsymbol\mu)^T\big]\,b = a^T\Sigma b .$$
+Taking $b = a$ gives $\operatorname{Var}(a^T\mathbf X) = a^T\Sigma a$.
 
-Numbers: $\Sigma a = (8 - 1, 2 - 2)^T = (7, 0)^T$, so $a^T\Sigma a = 14$. $\Sigma b = (4 + 3, 1 + 6)^T = (7, 7)^T$, so $a^T\Sigma b = 2\cdot7 - 1\cdot7 = 7$.
+**Numbers.** $\Sigma a = (4\cdot2 + 1\cdot(-1),\ 1\cdot2 + 2\cdot(-1))^T = (7, 0)^T$ and $\Sigma b = (4 + 3,\ 1 + 6)^T = (7, 7)^T$.
+$$\operatorname{Var}(a^T\mathbf X) = a^T\Sigma a = 2\cdot7 + (-1)\cdot0 = 14,\qquad\operatorname{Cov}(a^T\mathbf X, b^T\mathbf X) = a^T\Sigma b = 2\cdot7 - 1\cdot7 = 7 .$$
 
 **B6 (last year's HW9 Q7 and Q8).** $E[\mathbf X] = (1,2)^T$, $C_{\mathbf X} = \begin{bmatrix}4 & 1\\1 & 2\end{bmatrix}$.
 (a) $Y_1 = 2X_1 - X_2 + 3$, $Y_2 = X_1 + 4X_2$. (b) $Y_1 = X_1 + 2X_2$, $Y_2 = 3X_1 - X_2$. Find the means and covariance matrices.
 
-*Solution.* Use the single-entry formulas from B5, one row at a time.
+*Solution.* With rows $a_1^T, a_2^T$ of $A$: $E[\mathbf Y] = AE[\mathbf X] + \mathbf b$, and $C_{\mathbf Y} = AC_{\mathbf X}A^T$ has entries $(C_{\mathbf Y})_{ij} = a_i^TC_{\mathbf X}a_j$ (B5).
 
-(a) Mean: $(2 - 2 + 3,\ 1 + 8) = (3, 9)$. Rows $a_1 = (2,-1)$ and $a_2 = (1, 4)$, so $\Sigma a_1 = (7,0)$ and $\Sigma a_2 = (8, 9)$. Then
-$$\operatorname{Var}(Y_1) = a_1^T\Sigma a_1 = 14,\quad\operatorname{Var}(Y_2) = a_2^T\Sigma a_2 = 8 + 36 = 44,\quad\operatorname{Cov} = a_1^T\Sigma a_2 = 16 - 9 = 7,$$
+(a) $a_1 = (2,-1)$, $a_2 = (1,4)$, $\mathbf b = (3, 0)$.
+Mean: $(2 - 2 + 3,\ 1 + 8) = (3, 9)$.
+$C_{\mathbf X}a_1 = (7,0)$ and $C_{\mathbf X}a_2 = (4 + 4,\ 1 + 8) = (8, 9)$. So
+$$\operatorname{Var}(Y_1) = a_1^TC_{\mathbf X}a_1 = 14,\quad\operatorname{Var}(Y_2) = a_2^TC_{\mathbf X}a_2 = 8 + 36 = 44,\quad\operatorname{Cov}(Y_1,Y_2) = a_1^TC_{\mathbf X}a_2 = 16 - 9 = 7,$$
 $$C_{\mathbf Y} = \begin{bmatrix}14 & 7\\7 & 44\end{bmatrix}.$$
-The $+3$ only shifts the mean, it doesn't touch the covariance.
+The $+3$ shifts the mean only; it does not affect the covariance.
 
-(b) Mean: $(1 + 4,\ 3 - 2) = (5, 1)$. Rows $(1,2)$ and $(3,-1)$: $\Sigma(1,2)^T = (6,5)$ and $\Sigma(3,-1)^T = (11, 1)$. So $\operatorname{Var}(Y_1) = 6 + 10 = 16$, $\operatorname{Var}(Y_2) = 33 - 1 = 32$, $\operatorname{Cov} = 1\cdot11 + 2\cdot1 = 13$:
+(b) $a_1 = (1,2)$, $a_2 = (3,-1)$.
+Mean: $(1 + 4,\ 3 - 2) = (5, 1)$.
+$C_{\mathbf X}a_1 = (4 + 2,\ 1 + 4) = (6,5)$ and $C_{\mathbf X}a_2 = (12 - 1,\ 3 - 2) = (11, 1)$. So
+$$\operatorname{Var}(Y_1) = 6 + 10 = 16,\quad\operatorname{Var}(Y_2) = 33 - 1 = 32,\quad\operatorname{Cov}(Y_1,Y_2) = 1\cdot11 + 2\cdot1 = 13,$$
 $$C_{\mathbf Y} = \begin{bmatrix}16 & 13\\13 & 32\end{bmatrix}.$$
 
 **B7 (last year's HW9 Q1).** $\mathbf Y = (Y_1, \dots, Y_4)$ with mean $(5, -1, 4, -3)$ and covariance $\operatorname{diag}(4, 5, 4, 5)$. $B = \begin{bmatrix}2 & -1 & 0 & 1\\ -1 & 2 & -1 & 0\\ 0 & 1 & 1 & -2\end{bmatrix}$. (a) $E[B\mathbf Y]$. (b) $\operatorname{Cov}(B\mathbf Y)$. (c) Which pairs have zero covariance?
 
-*Solution.* (a) $B\mu = (10 + 1 + 0 - 3,\ -5 - 2 - 4 + 0,\ 0 - 1 + 4 + 6) = (8, -11, 9)$.
+*Solution.* (a) $E[B\mathbf Y] = B\boldsymbol\mu$:
+$$B\boldsymbol\mu = \begin{bmatrix}10 + 1 + 0 - 3\\ -5 - 2 - 4 + 0\\ 0 - 1 + 4 + 6\end{bmatrix} = \begin{bmatrix}8\\-11\\9\end{bmatrix}.$$
 
-(b) With a diagonal $\Sigma$ there's a nice shortcut: entry $(i,j)$ of $B\Sigma B^T$ is
-$$\sum_kB_{ik}B_{jk}\sigma_k^2,$$
-i.e. multiply row $i$ and row $j$ entry by entry, weight by the variances, and add. For example
-$$(1,1) = 2^2\cdot4 + 1^2\cdot5 + 0 + 1^2\cdot5 = 26,\qquad(1,2) = (2)(-1)\cdot4 + (-1)(2)\cdot5 + 0 + 0 = -18 .$$
-Doing all of them:
+(b) $\operatorname{Cov}(B\mathbf Y) = B\Sigma B^T$. With $\Sigma = \operatorname{diag}(\sigma_1^2, \dots, \sigma_4^2)$, entry $(i,j)$ is
+$$\sum_kB_{ik}B_{jk}\sigma_k^2:$$
+multiply rows $i$ and $j$ entry by entry, weight by the variances $(4,5,4,5)$, and add.
+$$\begin{aligned}(1,1)&= 4\cdot4 + 1\cdot5 + 0 + 1\cdot5 = 26, & (1,2)&= (2)(-1)4 + (-1)(2)5 + 0 + 0 = -18,\\ (1,3)&= 0 + (-1)(1)5 + 0 + (1)(-2)5 = -15, & (2,2)&= 1\cdot4 + 4\cdot5 + 1\cdot4 + 0 = 28,\\ (2,3)&= 0 + (2)(1)5 + (-1)(1)4 + 0 = 6, & (3,3)&= 0 + 1\cdot5 + 1\cdot4 + 4\cdot5 = 29.\end{aligned}$$
 $$B\Sigma B^T = \begin{bmatrix}26 & -18 & -15\\ -18 & 28 & 6\\ -15 & 6 & 29\end{bmatrix}.$$
-(c) None. Every off-diagonal entry is nonzero.
+
+(c) **None.** Every off-diagonal entry is nonzero.
 
 **B8 (last year's HW9 Q9).** $\mu = (1,-1)^T$ and $\Sigma = \begin{bmatrix}3 & -1\\-1 & 2\end{bmatrix}$. Find $E[(X_1 + X_2)^2]$.
 
@@ -2483,13 +2498,13 @@ It factorises into two standard normal densities, so $Z_1, Z_2$ are independent 
 
 **B12: the density of a sum, via the "extra variable" trick.** $X_1, X_2$ i.i.d. Exp$(\lambda)$. Find the density of $S = X_1 + X_2$ with the Jacobian method.
 
-*Solution.* One output isn't enough for the theorem, so add a dummy: $T = X_1$. Inverting, $X_1 = T$ and $X_2 = S - T$. In terms of $(s, t)$:
-$$J = \det\begin{bmatrix}\frac{\partial x_1}{\partial s} & \frac{\partial x_1}{\partial t}\\ \frac{\partial x_2}{\partial s} & \frac{\partial x_2}{\partial t}\end{bmatrix} = \det\begin{bmatrix}0 & 1\\1 & -1\end{bmatrix} = -1,\qquad|J| = 1 .$$
-So
-$$f_{S,T}(s,t) = \lambda e^{-\lambda t}\,\lambda e^{-\lambda(s - t)} = \lambda^2e^{-\lambda s},\qquad0<t<s$$
-(the support is $x_1>0$, $x_2>0$, i.e. $t>0$ and $s - t>0$). Integrate the dummy out:
-$$f_S(s) = \int_0^s\lambda^2e^{-\lambda s}\,dt = \lambda^2se^{-\lambda s},$$
-the Gamma$(2,\lambda)$ density. Same as L14 got with MGFs and L13 with convolution. In fact this trick reproduces the convolution formula in general.
+*Solution.* The Jacobian method needs as many outputs as inputs, so add a dummy output $T = X_1$. Inverting: $x_1 = t$, $x_2 = s - t$.
+$$J = \det\begin{bmatrix}\frac{\partial x_1}{\partial s} & \frac{\partial x_1}{\partial t}\\[2pt] \frac{\partial x_2}{\partial s} & \frac{\partial x_2}{\partial t}\end{bmatrix} = \det\begin{bmatrix}0 & 1\\1 & -1\end{bmatrix} = -1,\qquad|J| = 1 .$$
+The support $x_1>0$, $x_2>0$ becomes $t>0$, $s - t>0$, i.e. $0<t<s$. So
+$$f_{S,T}(s,t) = f_{X_1}(t)\,f_{X_2}(s - t)\cdot1 = \lambda e^{-\lambda t}\,\lambda e^{-\lambda(s - t)} = \lambda^2e^{-\lambda s},\qquad0<t<s .$$
+Integrate out the dummy:
+$$f_S(s) = \int_0^s\lambda^2e^{-\lambda s}\,dt = \lambda^2se^{-\lambda s},\qquad s>0,$$
+the Gamma$(2,\lambda)$ density, matching the MGF and convolution methods. In general this trick reproduces the convolution formula $f_S(s) = \int f_{X_1}(t)f_{X_2}(s - t)\,dt$.
 
 
 
@@ -2733,22 +2748,29 @@ This is the usual way to answer Tutorial 9 Q3: the pair has the right means, var
 **B1 (last year's HW9 Q4).** $\mathbf X\sim\mathcal N(\mathbf m, C)$ with $\mathbf m = \begin{bmatrix}1\\2\end{bmatrix}$, $C = \begin{bmatrix}4 & 1\\1 & 1\end{bmatrix}$. Let $\mathbf Y = A\mathbf X + \mathbf b$ with $A = \begin{bmatrix}2 & 1\\-1 & 1\\1 & 3\end{bmatrix}$ and $\mathbf b = \begin{bmatrix}-1\\0\\1\end{bmatrix}$. Find (a) $P(X_2>0)$, (b) $\mathbf m_{\mathbf Y}$, (c) $C_{\mathbf Y}$, (d) $P(Y_2\le2)$.
 
 *Solution.*
-(a) Marginal: $X_2\sim\mathcal N(2, 1)$ (second entry of $\mathbf m$, bottom-right of $C$). So
+(a) Marginals of a Gaussian vector are Gaussian: $X_2\sim\mathcal N(2, 1)$ (second entry of $\mathbf m$, $(2,2)$ entry of $C$). So
 $$P(X_2>0) = P\Big(Z>\frac{0 - 2}{1}\Big) = P(Z>-2) = \Phi(2)\approx0.9772 .$$
-(b) $\mathbf m_{\mathbf Y} = A\mathbf m + \mathbf b = (2 + 2,\ -1 + 2,\ 1 + 6) + (-1, 0, 1) = (3, 1, 8)^T$.
-(c) Two steps:
-$$AC = \begin{bmatrix}9 & 3\\-3 & 0\\7 & 4\end{bmatrix},\qquad C_{\mathbf Y} = ACA^T = \begin{bmatrix}21 & -6 & 18\\-6 & 3 & -3\\18 & -3 & 19\end{bmatrix}.$$
-(d) $Y_2 = -X_1 + X_2$ (plus $b_2 = 0$). From (b) and (c), $Y_2\sim\mathcal N(1, 3)$. So
-$$P(Y_2\le2) = \Phi\Big(\frac{2 - 1}{\sqrt3}\Big) = \Phi(0.577)\approx0.7181 .$$
-*Side remark.* $\mathbf Y$ has 3 components but is built from the 2-dimensional $\mathbf X$, so $C_{\mathbf Y}$ is singular ($\det C_{\mathbf Y} = 0$). It's a degenerate Gaussian with no pdf in $\mathbb R^3$, even though every single component is a perfectly normal variable (slide 11).
+
+(b) $\mathbf m_{\mathbf Y} = A\mathbf m + \mathbf b = (2 + 2,\ -1 + 2,\ 1 + 6)^T + (-1, 0, 1)^T = (3, 1, 8)^T$.
+
+(c) $C_{\mathbf Y} = ACA^T$, in two steps:
+$$AC = \begin{bmatrix}9 & 3\\-3 & 0\\7 & 4\end{bmatrix},\qquad C_{\mathbf Y} = (AC)A^T = \begin{bmatrix}21 & -6 & 18\\-6 & 3 & -3\\18 & -3 & 19\end{bmatrix}.$$
+
+(d) $Y_2 = -X_1 + X_2$ is a linear function of a Gaussian vector, so it is normal, with mean and variance read from (b) and (c): $Y_2\sim\mathcal N(1, 3)$. So
+$$P(Y_2\le2) = \Phi\Big(\frac{2 - 1}{\sqrt3}\Big) = \Phi(0.577)\approx0.718 .$$
+
+*Remark.* $\mathbf Y$ has 3 components but is built from the 2-dimensional $\mathbf X$, so $C_{\mathbf Y}$ is singular ($\det C_{\mathbf Y} = 0$). $\mathbf Y$ is a degenerate Gaussian with no pdf on $\mathbb R^3$, although each component is normal.
 
 **B2 (last year's HW9 Q5).** $\mathbf X = (X_1, X_2, X_3)\sim\mathcal N(\boldsymbol\mu, \Sigma)$ with $\boldsymbol\mu = (1,2,3)^T$ and $\Sigma = \begin{bmatrix}4 & 1 & 0\\1 & 2 & 1\\0 & 1 & 3\end{bmatrix}$. Find the distribution of $(X_1, X_3)$ given $X_2 = x_2$.
 
-*Solution.* Chunk 1 = $(X_1, X_3)$ (what we want), chunk 2 = $X_2$ (what we observe). Read off the right entries:
-$$\Sigma_{11} = \begin{bmatrix}\sigma_{11} & \sigma_{13}\\ \sigma_{31} & \sigma_{33}\end{bmatrix} = \begin{bmatrix}4 & 0\\0 & 3\end{bmatrix},\qquad\Sigma_{12} = \begin{bmatrix}\operatorname{Cov}(X_1, X_2)\\ \operatorname{Cov}(X_3, X_2)\end{bmatrix} = \begin{bmatrix}1\\1\end{bmatrix},\qquad\Sigma_{22} = 2 .$$
-So $\Sigma_{12}\Sigma_{22}^{-1} = \begin{bmatrix}1/2\\1/2\end{bmatrix}$, and plugging into slide 15:
+*Solution.* Conditioning formula: $\mathbf X_1\mid\mathbf X_2 = \mathbf x_2\sim\mathcal N\big(\boldsymbol\mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(\mathbf x_2 - \boldsymbol\mu_2),\ \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}\big)$.
+
+Chunk 1 = $(X_1, X_3)$ (wanted), chunk 2 = $X_2$ (observed). Read off the entries:
+$$\boldsymbol\mu_1 = \begin{bmatrix}1\\3\end{bmatrix},\quad\mu_2 = 2,\quad\Sigma_{11} = \begin{bmatrix}\sigma_{11} & \sigma_{13}\\ \sigma_{31} & \sigma_{33}\end{bmatrix} = \begin{bmatrix}4 & 0\\0 & 3\end{bmatrix},\quad\Sigma_{12} = \begin{bmatrix}\operatorname{Cov}(X_1, X_2)\\ \operatorname{Cov}(X_3, X_2)\end{bmatrix} = \begin{bmatrix}1\\1\end{bmatrix},\quad\Sigma_{22} = 2 .$$
+So $\Sigma_{12}\Sigma_{22}^{-1} = \begin{bmatrix}1/2\\1/2\end{bmatrix}$ and $\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21} = \frac12\begin{bmatrix}1 & 1\\1 & 1\end{bmatrix}$:
 $$\boldsymbol\mu_{1|2} = \begin{bmatrix}1\\3\end{bmatrix} + \frac{x_2 - 2}{2}\begin{bmatrix}1\\1\end{bmatrix},\qquad\Sigma_{1|2} = \begin{bmatrix}4 & 0\\0 & 3\end{bmatrix} - \frac12\begin{bmatrix}1 & 1\\1 & 1\end{bmatrix} = \begin{bmatrix}3.5 & -0.5\\-0.5 & 2.5\end{bmatrix}.$$
-*Notice.* $X_1$ and $X_3$ start out uncorrelated (so independent), but **given** $X_2$ they're negatively correlated. Both are positively linked to $X_2$. Once $X_2$ is fixed, a high $X_1$ already "accounts for" some of $X_2$'s value, which suggests a lower $X_3$.
+$$(X_1, X_3)\mid X_2 = x_2\ \sim\ \mathcal N\left(\begin{bmatrix}1 + \frac{x_2 - 2}{2}\\[2pt] 3 + \frac{x_2 - 2}{2}\end{bmatrix},\ \begin{bmatrix}3.5 & -0.5\\-0.5 & 2.5\end{bmatrix}\right).$$
+*Notice.* $X_1$ and $X_3$ are uncorrelated (so independent), but **given** $X_2$ they are negatively correlated. Both are positively linked to $X_2$, so once $X_2$ is fixed, a high $X_1$ "explains" part of $X_2$ and suggests a lower $X_3$.
 
 **B3 (last year's HW9 Q6): a degenerate Gaussian.** $\mathbf Z = (Z_1, Z_2)\sim\mathcal N(\mathbf m, C)$ with $\mathbf m = (1, 2)^T$ and $C = \begin{bmatrix}2 & -1\\-1 & 3\end{bmatrix}$. Let $\mathbf W = A\mathbf Z + \mathbf b$ with $A = \begin{bmatrix}1 & 1\\1 & -1\\2 & 0\end{bmatrix}$, $\mathbf b = (0, 0, -2)^T$. (a) Find the mean and covariance of $\mathbf W$. (b) Find $P(W_2>1)$.
 
@@ -2773,18 +2795,20 @@ Plug into the pdf and you get the same answer. More algebra, same result, so use
 
 **B5 (last year's HW9 Q11).** $\mathbf X$ is a standard normal vector in $\mathbb R^n$ and $\mathbf Y = A\mathbf X + \mathbf b$, with $A$ square, symmetric and invertible. (a) Find $f_{\mathbf Y}$. (b) Evaluate it for $A = \begin{bmatrix}2 & 0\\0 & 3\end{bmatrix}$, $\mathbf b = (1, -1)^T$, $\mathbf y = (3, 2)^T$.
 
-*Solution.* (a) Slide 12 with $\Sigma = AA^T = A^2$ ($A$ symmetric), so $\Sigma^{-1} = A^{-2}$ and $\sqrt{\det\Sigma} = |\det A|$:
-$$f_{\mathbf Y}(\mathbf y) = \frac{1}{(2\pi)^{n/2}|\det A|}\exp\Big(-\frac12(\mathbf y - \mathbf b)^TA^{-2}(\mathbf y - \mathbf b)\Big) = \frac{1}{(2\pi)^{n/2}|\det A|}\exp\Big(-\frac12\big\|A^{-1}(\mathbf y - \mathbf b)\big\|^2\Big).$$
-(b) $\mathbf y - \mathbf b = (2, 3)$, so $A^{-1}(\mathbf y - \mathbf b) = \big(\frac22, \frac33\big) = (1, 1)$, with squared length 2. $\det A = 6$. So
-$$f_{\mathbf Y}(\mathbf y) = \frac{1}{2\pi\cdot6}e^{-1} = \frac{e^{-1}}{12\pi}\approx0.00976 .$$
+*Solution.* (a) $\mathbf Y\sim\mathcal N(\mathbf b, \Sigma)$ with $\Sigma = AA^T = A^2$ ($A$ symmetric). So $\Sigma^{-1} = A^{-2}$ and $\sqrt{\det\Sigma} = \sqrt{(\det A)^2} = |\det A|$. Plug into the Gaussian density:
+$$f_{\mathbf Y}(\mathbf y) = \frac{1}{(2\pi)^{n/2}|\det A|}\exp\Big(-\frac12(\mathbf y - \mathbf b)^TA^{-2}(\mathbf y - \mathbf b)\Big) = \frac{1}{(2\pi)^{n/2}|\det A|}\exp\Big(-\frac12\big\|A^{-1}(\mathbf y - \mathbf b)\big\|^2\Big),$$
+using $(\mathbf y - \mathbf b)^TA^{-1}A^{-1}(\mathbf y - \mathbf b) = \|A^{-1}(\mathbf y - \mathbf b)\|^2$ (since $A^{-1}$ is symmetric). (Same result from the Jacobian method: $\mathbf x = A^{-1}(\mathbf y - \mathbf b)$, $|J| = \frac1{|\det A|}$.)
+
+(b) $n = 2$, $\mathbf y - \mathbf b = (2, 3)$, $A^{-1}(\mathbf y - \mathbf b) = \big(\frac22, \frac33\big) = (1, 1)$, with squared length 2, and $\det A = 6$:
+$$f_{\mathbf Y}(\mathbf y) = \frac{1}{2\pi\cdot6}e^{-1} = \frac{1}{12\pi e}\approx0.00976 .$$
 
 **B6 (last year's Tutorial 9 Q5).** $\mathbf X\sim\mathcal N\Big(\mathbf 0, \begin{bmatrix}5 & 2\\2 & 1\end{bmatrix}\Big)$. Find $a$ such that $Y_1 = X_1 + aX_2$ and $Y_2 = X_2$ are independent.
 
-*Solution.* $(Y_1, Y_2)$ is a linear image of $\mathbf X$, so it's Gaussian, and independence is the same as zero covariance:
+*Solution.* $(Y_1, Y_2)$ is a linear image of a Gaussian vector, so it is Gaussian, and for Gaussian vectors independence is equivalent to zero covariance:
 $$\operatorname{Cov}(X_1 + aX_2, X_2) = \operatorname{Cov}(X_1, X_2) + a\operatorname{Var}(X_2) = 2 + a = 0\quad\Longrightarrow\quad a = -2 .$$
-In general $a = -\frac{\sigma_{12}}{\sigma_{22}}$, and $Y_1$ is exactly the residual $\mathbf W$ from the slide-15 proof.
+In general $a = -\frac{\sigma_{12}}{\sigma_{22}}$.
 
-Bonus: $\operatorname{Var}(Y_1) = 5 + 4\cdot1 - 2\cdot2\cdot2 = 1$, and $X_1 = Y_1 + 2X_2$. So $X_1\mid X_2 = x_2\sim\mathcal N(2x_2, 1)$, just like the conditioning formula says.
+Bonus: $\operatorname{Var}(Y_1) = \operatorname{Var}(X_1) + a^2\operatorname{Var}(X_2) + 2a\operatorname{Cov}(X_1,X_2) = 5 + 4 - 8 = 1$. Since $X_1 = Y_1 + 2X_2$ with $Y_1\sim\mathcal N(0,1)$ independent of $X_2$, we get $X_1\mid X_2 = x_2\sim\mathcal N(2x_2, 1)$, as the conditioning formula predicts.
 
 **B7 (probabilitycourse 5.3.2, numerical example).** $X, Y$ are bivariate normal with $\mu_X = 1$, $\sigma_X^2 = 1$, $\mu_Y = 0$, $\sigma_Y^2 = 4$, $\rho = \frac12$. Find (a) $P(2X + Y\le3)$, (b) $\operatorname{Cov}(X + Y, 2X - Y)$, (c) $P(Y>1\mid X = 2)$.
 
@@ -2820,13 +2844,13 @@ Both means are 0, so this is the covariance, and the correlation coefficient is 
 
 **B9 (conditioning with numbers).** $(X_1, X_2)$ is bivariate normal with $\mu_1 = 170$, $\sigma_1 = 7$, $\mu_2 = 175$, $\sigma_2 = 8$, $\rho = 0.5$. Find $P(X_1>180\mid X_2 = 183)$, and compare it with $P(X_1>180)$.
 
-*Solution.* By slide 17, $X_1\mid X_2 = 183$ is normal with
-$$\text{mean } 170 + 0.5\cdot\frac78(183 - 175) = 170 + 3.5 = 173.5,\qquad\text{SD } 7\sqrt{1 - 0.25}\approx6.062 .$$
+*Solution.* Bivariate normal conditioning: $X_1\mid X_2 = x_2\sim\mathcal N\big(\mu_1 + \rho\sigma_1\frac{x_2 - \mu_2}{\sigma_2},\ (1 - \rho^2)\sigma_1^2\big)$. Here
+$$\text{mean} = 170 + 0.5\cdot7\cdot\frac{183 - 175}{8} = 170 + 3.5 = 173.5,\qquad\text{SD} = 7\sqrt{1 - 0.25}\approx6.062 .$$
 So
 $$P(X_1>180\mid X_2 = 183) = 1 - \Phi\Big(\frac{180 - 173.5}{6.062}\Big) = 1 - \Phi(1.072)\approx0.142 .$$
-Without conditioning, $P(X_1>180) = 1 - \Phi(10/7)\approx0.077$. So the information almost doubles the chance.
+Unconditionally, $P(X_1>180) = 1 - \Phi\big(\frac{10}{7}\big) = 1 - \Phi(1.43)\approx0.077$. The information almost doubles the chance.
 
-Notice: $X_2 = 183$ is exactly 1 SD above its mean, and the prediction for $X_1$ moves only $\rho\times1 = 0.5$ SD above its mean (that's the $+3.5$). Regression to the mean in action.
+$X_2 = 183$ is 1 SD above its mean, but the prediction for $X_1$ moves only $\rho\times1 = 0.5$ SD above its mean (the $+3.5$): regression to the mean.
 
 **B10: simulating any bivariate normal** (probabilitycourse 5.3.2, Eq. 5.23, plus Box–Muller from L19 B11).
 
@@ -3120,9 +3144,10 @@ So $S\sim$ Exponential$(\frac12)$, with mean $2 = E[N]E[X] = 4\cdot\frac12$. ✓
 
 **T8.** One roll has mean $3.5$ and variance $\frac{35}{12}$. So $S$ has mean 350 and SD $\sqrt{100\cdot\frac{35}{12}}\approx17.08$. With the continuity correction, $P(S\ge380) = P(S\ge379.5)\approx1 - \Phi\big(\frac{29.5}{17.08}\big) = 1 - \Phi(1.73)\approx0.042$. (The exact value is $0.0420$.)
 
-**T9.** $A = \begin{bmatrix}1 & 1\\1 & -2\end{bmatrix}$, $E[\mathbf Y] = A(1, -1)^T = (0, 3)^T$, and
-$$C_{\mathbf Y} = A\begin{bmatrix}2 & 1\\1 & 3\end{bmatrix}A^T = \begin{bmatrix}7 & -5\\-5 & 10\end{bmatrix},\qquad\rho_{Y_1Y_2} = \frac{-5}{\sqrt{70}}\approx-0.60 .$$
-(Check: $\operatorname{Var}(Y_2) = 2 + 4\cdot3 - 4\cdot1 = 10$.)
+**T9.** Write $\mathbf Y = A\mathbf X$ with $A = \begin{bmatrix}1 & 1\\1 & -2\end{bmatrix}$. Then $E[\mathbf Y] = A(1, -1)^T = (1 - 1,\ 1 + 2)^T = (0, 3)^T$, and $C_{\mathbf Y} = AC_{\mathbf X}A^T$. Entry by entry:
+$$\operatorname{Var}(Y_1) = 2 + 3 + 2(1) = 7,\qquad\operatorname{Var}(Y_2) = 2 + 4(3) - 4(1) = 10,\qquad\operatorname{Cov}(Y_1, Y_2) = 2 - 2(3) + (1 - 2)(1) = -5,$$
+$$C_{\mathbf Y} = \begin{bmatrix}7 & -5\\-5 & 10\end{bmatrix},\qquad\rho_{Y_1Y_2} = \frac{-5}{\sqrt{7\cdot10}} = \frac{-5}{\sqrt{70}}\approx-0.60 .$$
+(For the covariance: $\operatorname{Cov}(X_1 + X_2, X_1 - 2X_2) = \operatorname{Var}X_1 - 2\operatorname{Cov}(X_1,X_2) + \operatorname{Cov}(X_2,X_1) - 2\operatorname{Var}X_2$.)
 
 **T10.** $Y\mid X = 1$ is normal with mean $2 + (-0.6)(3)\frac{1 - 0}{1} = 0.2$ and SD $3\sqrt{1 - 0.36} = 2.4$, so $P(Y>2\mid X = 1) = 1 - \Phi\big(\frac{1.8}{2.4}\big) = 1 - \Phi(0.75)\approx0.227$. Next, $X + Y$ is normal with mean 2 and variance $1 + 9 + 2(-0.6)(1)(3) = 6.4$, so $P(X + Y>0) = \Phi\big(\frac{2}{\sqrt{6.4}}\big) = \Phi(0.79)\approx0.785$.
 
