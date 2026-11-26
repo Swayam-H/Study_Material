@@ -616,13 +616,15 @@ About half of the $Y_i$ exceed 5, and each contributes a tiny weight. A run with
 
 **B1 (last year's Tutorial 6 Q5).** $p_X(1) = 0.4$, $p_X(5) = 0.3$, $p_X(10) = 0.3$. Describe the inverse transform method and give the ranges of $u$.
 
-*Solution.* The CDF values are $F(1) = 0.4$, $F(5) = 0.7$, $F(10) = 1$. Draw $u\sim\mathcal U[0,1]$ and set
-$$X = \begin{cases}1 & 0\le u<0.4\\ 5 & 0.4\le u < 0.7\\ 10 & 0.7\le u\le 1\end{cases}$$
-Each interval's length equals the probability of its value. For example, $u = 0.55$ gives $X = 5$.
+*Solution.* Cut $[0,1]$ into consecutive intervals whose lengths are the probabilities. The cut points are the CDF values $F(1) = 0.4$, $F(5) = 0.7$, $F(10) = 1$. Draw $u\sim\mathcal U[0,1]$ and return the smallest $x$ with $F(x)\ge u$:
+$$X = \begin{cases}1 & 0\le u<0.4\\ 5 & 0.4\le u<0.7\\ 10 & 0.7\le u\le1.\end{cases}$$
+Then $P(X = 5) = P(0.4\le U<0.7) = 0.3$, and similarly for the others. For example, $u = 0.55$ gives $X = 5$.
 
 **B2 (probabilitycourse Ch. 14, Example 4).** $P(X=1) = 0.35$, $P(X=2) = 0.15$, $P(X=3) = 0.4$, $P(X=4) = 0.1$.
 
-*Solution.* The intervals are $[0, 0.35)\to1$, $[0.35, 0.5)\to2$, $[0.5, 0.9)\to3$, $[0.9, 1)\to4$. (Ordering for speed: checking $3$ first, then $1$, then $2$, then $4$ cuts the expected number of comparisons from $0.35 + 2(0.15) + 3(0.4) + 4(0.1) = 2.25$ to $0.4 + 2(0.35) + 3(0.15) + 4(0.1) = 1.95$.)
+*Solution.* The CDF values are $0.35, 0.5, 0.9, 1$, so
+$$X = \begin{cases}1 & 0\le U<0.35\\ 2 & 0.35\le U<0.5\\ 3 & 0.5\le U<0.9\\ 4 & 0.9\le U<1.\end{cases}$$
+*Speed-up (optional).* Checking the intervals in the order $1, 2, 3, 4$ costs on average $1(0.35) + 2(0.15) + 3(0.4) + 4(0.1) = 2.25$ comparisons. Checking the most likely values first ($3, 1, 2, 4$) costs $1(0.4) + 2(0.35) + 3(0.15) + 4(0.1) = 1.95$. The distribution produced is the same.
 
 **B3 (probabilitycourse Ch. 14, Examples 1 and 3): Bernoulli and binomial.** Bernoulli$(p)$: $X = \mathbf 1\{U < p\}$, so $P(X = 1) = P(U<p) = p$. Binomial$(n,p)$: add $n$ independent Bernoullis, $X = \sum_{i=1}^n\mathbf 1\{U_i<p\}$. This uses L14's fact that a binomial is a sum of i.i.d. Bernoullis.
 
@@ -645,10 +647,14 @@ $$X = \sqrt{-\ln(1 - U)}\qquad(\text{or } \sqrt{-\ln U}).$$
 
 **B7 (last year's Tutorial 6 Q6).** $F(x) = \frac12\Big(1 + \frac{x}{\sqrt{1+x^2}}\Big)$ on $\mathbb R$. (a) Find $F^{-1}(u)$. (b) Find the sample for $U = 0.75$.
 
-*Solution.* (a) Set $\frac{x}{\sqrt{1+x^2}} = 2u - 1 =: v$. Note that $x$ and $v$ have the same sign. Squaring: $x^2 = v^2(1 + x^2)$, so $x^2 = \frac{v^2}{1 - v^2}$, and
-$$x = \frac{v}{\sqrt{1 - v^2}} = \frac{2u - 1}{\sqrt{1 - (2u-1)^2}} = \frac{2u-1}{2\sqrt{u(1-u)}},\qquad 0<u<1,$$
-using $1 - (2u-1)^2 = 4u(1-u)$.
-(b) $u = 0.75$: $x = \frac{0.5}{2\sqrt{0.1875}} = \frac{0.5}{0.866} = \frac{1}{\sqrt3}\approx0.577$. *Check:* $F(1/\sqrt3) = \frac12\big(1 + \frac{1/\sqrt3}{\sqrt{4/3}}\big) = \frac12(1 + \frac12) = 0.75$. ✓
+*Solution.* (a) Solve $F(x) = u$. Let $v = 2u - 1\in(-1,1)$, so $\frac{x}{\sqrt{1+x^2}} = v$. Note $x$ and $v$ have the same sign. Squaring:
+$$x^2 = v^2(1 + x^2)\ \Rightarrow\ x^2(1 - v^2) = v^2\ \Rightarrow\ x = \frac{v}{\sqrt{1 - v^2}},$$
+taking the root with the sign of $v$. Since $1 - (2u-1)^2 = 4u(1-u)$,
+$$F^{-1}(u) = \frac{2u-1}{2\sqrt{u(1-u)}},\qquad0<u<1 .$$
+
+(b) $u = 0.75$: $x = \frac{0.5}{2\sqrt{0.1875}} = \frac{0.5}{0.866} = \frac{1}{\sqrt3}\approx0.577$.
+
+*Check:* $F\big(\frac1{\sqrt3}\big) = \frac12\Big(1 + \frac{1/\sqrt3}{\sqrt{4/3}}\Big) = \frac12\Big(1 + \frac12\Big) = 0.75$.
 
 **B8 (probabilitycourse Ch. 14, Exercise 3).** $f(x) = \frac52x^{3/2}$ on $(0,1)$. The CDF is $F(x) = x^{5/2}$, so $X = U^{2/5}$.
 
@@ -669,13 +675,22 @@ The product form needs only one logarithm. (Non-integer shapes such as $\frac52$
 
 **B12a (last year's Quiz 2 Q3).** You can only sample $X\sim$ Exp$(\lambda)$. Give a procedure that produces $\mathcal U(0,1)$ samples, and justify it.
 
-*Solution.* Draw $x$ from Exp$(\lambda)$ and return $u = F_X(x) = 1 - e^{-\lambda x}$. By slide 16, $F_X(X)\sim\mathcal U(0,1)$ because $F_X$ is continuous. Directly, for $0\le u<1$:
-$$P(1 - e^{-\lambda X}\le u) = P\Big(X\le-\tfrac1\lambda\ln(1-u)\Big) = 1 - e^{-\lambda\cdot\frac{-\ln(1-u)}{\lambda}} = 1 - (1 - u) = u .$$
-(The marking scheme gave 0 marks to answers that used uniform samples, such as accept–reject, since uniforms were not available.)
+*Solution.* Draw $x$ from Exp$(\lambda)$ and return $u = F_X(x) = 1 - e^{-\lambda x}$.
+
+*Justification.* For $0\le u<1$, solve $1 - e^{-\lambda X}\le u$ for $X$:
+$$P\big(1 - e^{-\lambda X}\le u\big) = P\Big(X\le-\tfrac1\lambda\ln(1-u)\Big) = 1 - e^{-\lambda\cdot\frac{-\ln(1-u)}{\lambda}} = 1 - (1 - u) = u .$$
+That is the $\mathcal U(0,1)$ CDF. (In general $F_X(X)\sim\mathcal U(0,1)$ whenever $F_X$ is continuous.) Returning $e^{-\lambda x}$ also works, since $1 - U$ is uniform.
+
+The marking scheme gave 0 marks to answers that used uniform samples (for example accept–reject), since uniforms were not available.
 
 **B12b: chaining the two directions.** With only Exp$(1)$ samples, how do you produce samples of a Cauchy variable?
 
-*Solution.* First make a uniform, $U = 1 - e^{-X}$ (slide 16), then apply the Cauchy inverse CDF (slide 14): $\tan\big(\pi(U - \frac12)\big)$. In general, $F_Y^{-1}(F_X(X))$ turns a continuous $X$ into any target $Y$. This is the composition of slides 16 and 14.
+*Solution.* Two steps:
+1. **Exponential → uniform:** $U = F_X(X) = 1 - e^{-X}\sim\mathcal U(0,1)$ (B12a).
+2. **Uniform → Cauchy:** the Cauchy CDF is $F(y) = \frac12 + \frac1\pi\arctan y$, so $F^{-1}(u) = \tan\big(\pi(u - \frac12)\big)$.
+
+$$Y = \tan\Big(\pi\big(\tfrac12 - e^{-X}\big)\Big)\sim\text{Cauchy}.$$
+In general $F_Y^{-1}(F_X(X))$ turns any continuous $X$ into any target $Y$.
 
 ### Monte Carlo integration
 
@@ -884,54 +899,86 @@ In general, nothing ties the $X_n$ together except that they all live on the sam
 
 **B1 (last year's Tutorial 6 Q9).** Target $p(x) = 2x$ on $[0,1]$, proposal $q = \mathcal U(0,1)$. (a) Smallest $c$ with $p\le c\,q$. (b) The algorithm.
 
-*Solution.* (a) $\frac{p(x)}{q(x)} = 2x\le2$, with equality at $x = 1$, so $c = 2$. (b) Generate $Y\sim\mathcal U(0,1)$ and $U\sim\mathcal U(0,1)$. Accept $X = Y$ if $U\le\frac{2Y}{2\cdot1} = Y$; otherwise repeat. Half the rounds are accepted on average ($\frac1c = \frac12$).
-*Sanity check.* $P(X\le x) = P(Y\le x\mid U\le Y) = \frac{\int_0^xy\,dy}{\int_0^1y\,dy} = \frac{x^2/2}{1/2} = x^2$, the CDF of $2x$. ✓ (The inverse transform would give $X = \sqrt U$ directly, with no rejections. Use accept–reject when there is no easy inverse.)
+*Solution.* (a) $q = 1$ on $[0,1]$, so $\frac{p(x)}{q(x)} = 2x\le2$, with equality at $x = 1$. **$c = 2$.**
+
+(b)
+1. Draw $Y\sim\mathcal U(0,1)$ and $U\sim\mathcal U(0,1)$ independently.
+2. If $U\le\frac{p(Y)}{c\,q(Y)} = \frac{2Y}{2} = Y$, output $X = Y$. Otherwise go back to step 1.
+
+Each round accepts with probability $\frac1c = \frac12$, so on average 2 rounds per sample.
+
+*Check.* $P(X\le x) = P(Y\le x\mid U\le Y) = \dfrac{\int_0^xy\,dy}{\int_0^1y\,dy} = \dfrac{x^2/2}{1/2} = x^2$, the CDF of $2x$. (Here the inverse transform $X = \sqrt U$ is simpler and never rejects. Accept–reject is for targets without an easy inverse.)
 
 **B2 (last year's HW6 Q16).** Target $\mathcal N(0.5, 0.04)$, proposal $\mathcal U(0,1)$. (a) Smallest $c$ with $p(x)\le c\,q(x)$ on $[0,1]$. (b) The algorithm.
 
-*Solution.* (a) $\sigma = 0.2$. The ratio is $p(x)$ itself, largest at the mean: $c = p(0.5) = \frac{1}{0.2\sqrt{2\pi}}\approx1.995$.
-(b) Generate $Y, U\sim\mathcal U(0,1)$. Accept $X = Y$ if $U\le\frac{p(Y)}{c} = \exp\Big(-\frac{(Y - 0.5)^2}{0.08}\Big)$.
-*Caveat worth writing in an exam.* The normal lives on all of $\mathbb R$ but the proposal only on $[0,1]$, so the support condition fails outside $[0,1]$. The output is the normal **truncated to $[0,1]$**. The lost mass is $P(|Z|>2.5)\approx1.2\%$, so it is a close approximation, not exact.
+*Solution.* (a) $\sigma = \sqrt{0.04} = 0.2$. With $q = 1$, the ratio is $p(x)$ itself, largest at the mean:
+$$c = p(0.5) = \frac{1}{0.2\sqrt{2\pi}}\approx1.995 .$$
+
+(b) Draw $Y, U\sim\mathcal U(0,1)$ independently. Accept $X = Y$ if
+$$U\le\frac{p(Y)}{c} = \exp\Big(-\frac{(Y - 0.5)^2}{2(0.04)}\Big) = \exp\Big(-\frac{(Y - 0.5)^2}{0.08}\Big);$$
+otherwise repeat.
+
+**Write this caveat in the exam.** The normal lives on all of $\mathbb R$ but the proposal only on $[0,1]$, so $p\le cq$ fails outside $[0,1]$. The output is the normal **truncated to $[0,1]$**. The lost mass is $P(|Z|>\frac{0.5}{0.2}) = P(|Z|>2.5)\approx1.2\%$, so it is a close approximation, not exact.
 
 **B3 (probabilitycourse Ch. 14, Exercise 7): Beta$(2,4)$.** $f(x) = 20x(1-x)^3$ on $(0,1)$, proposal $\mathcal U(0,1)$.
 
-*Solution.* Maximise $f$: $f'(x) = 20(1-x)^2(1 - 4x) = 0$ gives $x = \frac14$, so $c = f(\frac14) = 20\cdot\frac14\cdot\frac{27}{64} = \frac{135}{64}\approx2.11$. Accept $Y$ if
-$$U\le\frac{f(Y)}{c} = \frac{256}{27}Y(1-Y)^3 .$$
-About $2.11$ rounds per sample. (A simulation of $10^5$ samples gave a mean of $0.333$, the Beta$(2,4)$ mean $\frac{2}{6}$, and $2.11$ rounds per sample.)
+*Solution.* With $g = 1$, $c = \max f$. Differentiate:
+$$f'(x) = 20\big[(1-x)^3 - 3x(1-x)^2\big] = 20(1-x)^2(1 - 4x) = 0\ \Rightarrow\ x = \tfrac14 .$$
+$$c = f\big(\tfrac14\big) = 20\cdot\frac14\cdot\Big(\frac34\Big)^3 = 5\cdot\frac{27}{64} = \frac{135}{64}\approx2.11 .$$
+Draw $Y, U\sim\mathcal U(0,1)$ and accept $Y$ if
+$$U\le\frac{f(Y)}{c} = \frac{20\cdot64}{135}Y(1-Y)^3 = \frac{256}{27}Y(1-Y)^3 .$$
+On average $c\approx2.11$ rounds per sample. (A simulation of $10^5$ samples gave mean $0.333$, matching the Beta$(2,4)$ mean $\frac{2}{2+4} = \frac13$.)
 
 **B4 (Ross, *Simulation*): a discrete example.** $X$ takes values $1, \dots, 10$ with probabilities $0.11, 0.12, 0.09, 0.08, 0.12, 0.10, 0.09, 0.09, 0.10, 0.10$. Use the discrete uniform proposal $q_j = \frac1{10}$.
 
-*Solution.* $c = \max_j\frac{p_j}{q_j} = \frac{0.12}{0.1} = 1.2$. Generate $Y = \lfloor10U_1\rfloor + 1$, then accept if $U_2\le\frac{p_Y}{1.2\times0.1} = \frac{p_Y}{0.12}$. On average $1.2$ rounds per sample.
+*Solution.* $c = \max_j\frac{p_j}{q_j} = \frac{\max_jp_j}{0.1} = \frac{0.12}{0.1} = 1.2$.
+1. Draw $U_1$ and set $Y = \lfloor10U_1\rfloor + 1$, uniform on $\{1,\dots,10\}$.
+2. Draw $U_2$. Accept $X = Y$ if $U_2\le\frac{p_Y}{c\,q_Y} = \frac{p_Y}{0.12}$; otherwise repeat.
+
+For example, $Y = 4$ is accepted with probability $\frac{0.08}{0.12} = \frac23$, and $Y = 2$ or $5$ always. On average $c = 1.2$ rounds per sample.
 
 **B5 (probabilitycourse Ch. 14, Exercise 9): the normal from exponentials.** Sample $|Z|$, the half-normal $f(x) = \frac{2}{\sqrt{2\pi}}e^{-x^2/2}$ on $x>0$, with proposal Exp$(1)$, $g(x) = e^{-x}$. Then attach a random sign.
 
-*Solution.* The ratio is $\frac fg = \sqrt{\frac2\pi}\,e^{x - x^2/2}$. The exponent $x - \frac{x^2}2$ is largest at $x = 1$, so
-$$c = \sqrt{\tfrac2\pi}\,e^{1/2} = \sqrt{\tfrac{2e}{\pi}}\approx1.32,\qquad \frac{f(Y)}{cg(Y)} = e^{Y - Y^2/2 - 1/2} = e^{-(Y-1)^2/2}.$$
-Accept $Y$ if $U\le e^{-(Y-1)^2/2}$. Then output $Z = Y$ or $-Y$ with probability $\frac12$ each (one more uniform). This gives exact $\mathcal N(0,1)$ samples, which the inverse transform cannot do in closed form.
-*Tails matter.* The proposal's tails must be at least as heavy as the target's. Here $e^{-x}$ dominates $e^{-x^2/2}$ for large $x$, so the ratio is bounded. The reverse (an exponential target with a half-normal proposal) has $\frac fg\propto e^{-x + x^2/2}\to\infty$, so no $c$ exists.
+*Solution.* The ratio is
+$$\frac{f(x)}{g(x)} = \sqrt{\frac2\pi}\,e^{x - x^2/2}.$$
+The exponent $x - \frac{x^2}2$ has derivative $1 - x$, so it is largest at $x = 1$, where it equals $\frac12$:
+$$c = \sqrt{\frac2\pi}\,e^{1/2} = \sqrt{\frac{2e}{\pi}}\approx1.32,\qquad\frac{f(Y)}{c\,g(Y)} = e^{Y - Y^2/2 - 1/2} = e^{-(Y-1)^2/2}.$$
+Algorithm: draw $Y = -\ln U_1\sim$ Exp$(1)$ and $U_2$. Accept $Y$ if $U_2\le e^{-(Y-1)^2/2}$. Then output $Z = Y$ or $-Y$ with probability $\frac12$ each (using one more uniform). This gives exact $\mathcal N(0,1)$ samples, which the inverse transform cannot do in closed form.
+
+**Tails matter.** The proposal's tails must be at least as heavy as the target's. Here $e^{-x}$ dominates $e^{-x^2/2}$ for large $x$, so the ratio is bounded. The reverse (exponential target, half-normal proposal) has $\frac fg\propto e^{-x + x^2/2}\to\infty$, so no $c$ exists.
 
 **B6 (last year's Tutorial 7 Q7; probabilitycourse Ch. 14, Exercise 8): Gamma$(\frac52, 1)$.** $f(x) = \frac{x^{3/2}e^{-x}}{\Gamma(5/2)}$ with $\Gamma(\frac52) = \frac34\sqrt\pi$.
 
-*Solution.* The inverse transform has no closed form, and summing exponentials needs an integer shape. Use an exponential proposal with the **same mean** $\frac52$, that is rate $\frac25$: $g(x) = \frac25e^{-2x/5}$.
+*Solution.* There is no closed-form inverse CDF, and summing exponentials needs an integer shape. Use an exponential proposal with the **same mean** $\frac52$, i.e. rate $\frac25$: $g(x) = \frac25e^{-2x/5}$.
 $$\frac{f(x)}{g(x)} = \frac{x^{3/2}e^{-x}}{\frac34\sqrt\pi\cdot\frac25e^{-2x/5}} = \frac{10}{3\sqrt\pi}\,x^{3/2}e^{-3x/5}.$$
-Maximise $\frac32\ln x - \frac35x$: the derivative $\frac{3}{2x} - \frac35 = 0$ gives $x = \frac52$. So
+Maximise its log, $\frac32\ln x - \frac35x$: the derivative $\frac{3}{2x} - \frac35 = 0$ gives $x = \frac52$. So
 $$c = \frac{10}{3\sqrt\pi}\Big(\frac52\Big)^{3/2}e^{-3/2}\approx1.66 .$$
-Algorithm: $Y = -\frac52\ln U_1$; accept if $U_2\le\dfrac{Y^{3/2}e^{-3Y/5}}{(5/2)^{3/2}e^{-3/2}}$. (A simulation gave mean $2.49$ and variance $2.49$, matching $\alpha = \frac52$, with $1.66$ rounds per sample.)
-*Why the rate $\frac25$?* For a Gamma$(\alpha, 1)$ target and an Exp$(\lambda)$ proposal, the ratio is $\propto x^{\alpha-1}e^{-(1-\lambda)x}$, which is bounded only if $\lambda<1$. Minimising the resulting $c$ over $\lambda$ gives $\lambda = \frac1\alpha$, the proposal with the target's mean.
+Algorithm: $Y = -\frac52\ln U_1$ (so $Y\sim$ Exp$(\frac25)$). Accept if
+$$U_2\le\frac{f(Y)}{c\,g(Y)} = \frac{Y^{3/2}e^{-3Y/5}}{(5/2)^{3/2}e^{-3/2}}.$$
+About $1.66$ rounds per sample. (A simulation gave mean $2.49$ and variance $2.49$, matching $\alpha = \frac52$.)
+
+*Why rate $\frac25$?* For a Gamma$(\alpha, 1)$ target and Exp$(\lambda)$ proposal, the ratio is $\propto x^{\alpha-1}e^{-(1-\lambda)x}$, which is bounded only if $\lambda<1$. Minimising the resulting $c$ over $\lambda$ gives $\lambda = \frac1\alpha$, the proposal with the target's mean.
 
 **B7 (probabilitycourse Ch. 14, Exercise 10): a conditional distribution.** Sample $X\sim$ Gamma$(2,1)$ *conditioned on* $X\ge5$. The density is $f(x) = \frac{xe^{-x}}{6e^{-5}}$ for $x\ge5$ (since $P(X\ge5) = 6e^{-5}$).
 
-*Solution.* Naive approach: sample Gamma$(2,1)$ until a value $\ge5$ appears. That succeeds with probability $6e^{-5}\approx0.04$, so about 25 tries each. Better: a shifted exponential proposal with mean 2 above 5, $g(x) = \frac12e^{-(x-5)/2}$ for $x\ge5$, generated as $Y = 5 - 2\ln V$. Then
-$$\frac fg = \frac x3e^{-(x-5)/2},$$
-which is decreasing for $x\ge5$, so $c = \frac{f(5)}{g(5)} = \frac53$. Accept if $U\le\frac{Y}{5}e^{-(Y-5)/2}$. That is $1.67$ rounds instead of 25. (Simulated mean $6.17$, matching the exact $\frac{37}6$.)
+*Solution.* **Naive:** sample Gamma$(2,1)$ until a value $\ge5$ appears. Each try succeeds with probability $6e^{-5}\approx0.04$, so about 25 tries per sample.
+
+**Better:** a shifted exponential proposal, $g(x) = \frac12e^{-(x-5)/2}$ for $x\ge5$, generated as $Y = 5 - 2\ln V$. Then
+$$\frac{f(x)}{g(x)} = \frac{xe^{-x}}{6e^{-5}}\cdot2e^{(x-5)/2} = \frac x3e^{-(x-5)/2}.$$
+Its log-derivative is $\frac1x - \frac12<0$ for $x\ge5$, so the ratio is decreasing and its maximum is at $x = 5$:
+$$c = \frac{f(5)}{g(5)} = \frac53 .$$
+Accept if $U\le\frac{f(Y)}{c\,g(Y)} = \frac{Y}{5}e^{-(Y-5)/2}$. That is $1.67$ rounds per sample instead of 25. (Simulated mean $6.17$, matching the exact $E[X\mid X\ge5] = \frac{37}6$.)
 
 **B8: uniform points in a disc.** Sample a point uniformly in the unit disc using uniforms.
 
-*Solution.* Propose $(Y_1, Y_2)$ uniform on $[-1,1]^2$ (density $\frac14$); target density $\frac1\pi$ on the disc. Then $\frac fg = \frac4\pi$ inside the disc and 0 outside, so $c = \frac4\pi$ and the test $U\le\frac{f}{cg}$ is "accept if $Y_1^2 + Y_2^2\le1$" (probability 1 inside, 0 outside). The acceptance rate is $\frac\pi4\approx0.785$. This is the Monte Carlo $\pi$ estimator of L15 in disguise: the fraction of accepted proposals estimates $\frac\pi4$.
+*Solution.* Propose $(Y_1, Y_2) = (2U_1 - 1, 2U_2 - 1)$, uniform on $[-1,1]^2$ with density $g = \frac14$. The target density is $f = \frac1\pi$ on the disc. So
+$$\frac fg = \begin{cases}\frac4\pi & Y_1^2 + Y_2^2\le1\\ 0 & \text{otherwise,}\end{cases}\qquad c = \frac4\pi,\qquad\frac{f}{cg} = \begin{cases}1 & \text{inside}\\ 0 & \text{outside.}\end{cases}$$
+No extra uniform is needed: **accept iff $Y_1^2 + Y_2^2\le1$**. The acceptance rate is $\frac1c = \frac\pi4\approx0.785$. This is the Monte Carlo estimator of $\pi$ in disguise: the fraction of accepted proposals estimates $\frac\pi4$.
 
 **B9 (last year's HW7 Q8).** Expected number of iterations to generate $k$ samples by rejection?
 
-*Solution.* Each sample needs $N_j\sim$ Geometric$(\frac1c)$ rounds, independently, so $E[N_1 + \dots + N_k] = kc$.
+*Solution.* Each round accepts with probability $\frac1c$, independently. So the rounds needed for the $j$-th sample, $N_j$, are Geometric$(\frac1c)$ with $E[N_j] = c$, and
+$$E[N_1 + \dots + N_k] = kc .$$
 
 **B10 (concept check, exam style).** Is the following "proof" correct? "Accepted samples have pmf $p$ because $P(\text{accept}\mid y) = \frac{p(y)}{cq(y)}$, which is proportional to $p(y)$."
 
@@ -3042,11 +3089,11 @@ Try each one before looking at the answers that follow.
 $$M_S(t) = \frac{p\cdot\frac{2}{2 - t}}{1 - (1 - p)\frac{2}{2 - t}} = \frac{2p}{2p - t} = \frac{1/2}{1/2 - t}.$$
 So $S\sim$ Exponential$(\frac12)$, with mean $2 = E[N]E[X] = 4\cdot\frac12$. ✓ (A geometric sum of exponentials is exponential.)
 
-**T3.** (a) $F(x) = x^3$, so $X = U^{1/3}$. (b) Return 1 if $U\le0.2$, return 2 if $0.2<U\le0.7$, and return 3 otherwise.
+**T3.** (a) Inverse transform: $F(x) = \int_0^x3t^2\,dt = x^3$, and $x^3 = u$ gives $X = U^{1/3}$. (b) Cut $[0,1]$ at the CDF values $0.2$ and $0.7$: return 1 if $U\le0.2$, return 2 if $0.2<U\le0.7$, and return 3 otherwise. Each interval's length is the probability of its value.
 
-**T4.** $c = \max f = f(\frac12) = 1.5$. The acceptance probability is $\frac1c = \frac23$, and 100 samples need $100c = 150$ proposals on average.
+**T4.** With $g = 1$, $c = \max f$. Setting $f'(x) = 6 - 12x = 0$ gives $x = \frac12$, so $c = f(\frac12) = \frac32$. Accept $Y$ if $U\le\frac{f(Y)}{c} = 4Y(1-Y)$. The acceptance probability is $\frac1c = \frac23$. Proposals per sample are Geometric$(\frac23)$ with mean $\frac32$, so 100 samples need $100c = 150$ proposals on average.
 
-**T5.** The standard error is $\sqrt{\frac{p(1 - p)}{N}}\le\frac{1}{2\sqrt N}$, since $p(1 - p)\le\frac14$. So $\frac{1}{2\sqrt N}\le0.005$ gives $N\ge10{,}000$.
+**T5.** The estimator $\hat p$ is an average of $N$ i.i.d. Bernoulli$(p)$ indicators, so $\operatorname{Var}(\hat p) = \frac{p(1-p)}{N}$ and the standard error is $\sqrt{\frac{p(1 - p)}{N}}$. Since $p(1 - p)\le\frac14$ (maximised at $p = \frac12$), the standard error is at most $\frac{1}{2\sqrt N}$ for every $p$. So $\frac{1}{2\sqrt N}\le0.005\iff\sqrt N\ge100\iff N\ge10{,}000$.
 
 **T6.** (a) Yes: $\sum P(X_n\ne0) = \sum\frac{1}{n^2}<\infty$, so by Borel–Cantelli only finitely many $X_n$ are non-zero. (b) Yes, since a.s. implies p. (c) Yes: $E|X_n| = n\cdot\frac{1}{n^2} = \frac1n\to0$. (d) No: $E[X_n^2] = n^2\cdot\frac{1}{n^2} = 1$ for every $n$.
 

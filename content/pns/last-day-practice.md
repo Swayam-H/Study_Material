@@ -207,25 +207,39 @@ In the long run you use one bulb per mean lifetime.
 
 Target: $f(x) = 6x(1-x)$ on $[0,1]$. Proposal: $\mathcal U[0,1]$. (a) Find the smallest valid $c$. (b) Write the algorithm. (c) Find the acceptance probability and the expected number of proposals needed for 100 samples. (d) Prove that an accepted value has pdf $f$.
 
-**Solution.** (a) $g = 1$, so $c = \max_{[0,1]}6x(1-x) = 6\cdot\frac14 = \frac32$, attained at $x = \frac12$.
+**Solution.** (a) $g = 1$, so $c = \max_{[0,1]}6x(1-x)$. The derivative $6 - 12x = 0$ gives $x = \frac12$:
+$$c = 6\cdot\frac12\cdot\frac12 = \frac32 .$$
 
-(b) Repeat: draw $Y, U\sim\mathcal U(0,1)$ independently. If $U\le\frac{f(Y)}{c\,g(Y)} = 4Y(1-Y)$, output $Y$ and stop; otherwise try again.
+(b)
+1. Draw $Y\sim\mathcal U(0,1)$ and $U\sim\mathcal U(0,1)$ independently.
+2. If $U\le\frac{f(Y)}{c\,g(Y)} = \frac{6Y(1-Y)}{3/2} = 4Y(1-Y)$, output $Y$ and stop. Otherwise return to step 1.
 
-(c) $P(\text{accept}) = \frac1c = \frac23$. Each sample takes a Geometric$(\frac23)$ number of rounds, with mean $\frac32$, so 100 samples need $150$ proposals on average.
+(c) $P(\text{accept}) = \frac1c = \frac23$ (proved in (d)). The rounds per sample are Geometric$(\frac23)$ with mean $\frac32$, so 100 samples need on average
+$$100\cdot\frac32 = 150\ \text{proposals}.$$
 
-(d) For one round,
+(d) In one round, condition on $Y = y$ and use $P(U\le t) = t$ for $t\in[0,1]$ (valid since $f\le cg$):
 $$P(Y\le x,\ \text{accept}) = \int_0^xg(y)\,P\Big(U\le\frac{f(y)}{c\,g(y)}\Big)dy = \int_0^xg(y)\frac{f(y)}{c\,g(y)}\,dy = \frac{F(x)}{c}.$$
-Letting $x\to\infty$ gives $P(\text{accept}) = \frac1c$. So $P(Y\le x\mid\text{accept}) = F(x)$. Rounds are independent, so the value finally output has CDF $F$, i.e. pdf $f$.
+Let $x\to1$: $P(\text{accept}) = \frac{F(1)}{c} = \frac1c$. Dividing,
+$$P(Y\le x\mid\text{accept}) = \frac{F(x)/c}{1/c} = F(x).$$
+Rounds are independent and identical, so the value finally output is distributed as $Y$ given acceptance: CDF $F$, i.e. pdf $f$.
 
 ### Problem 2 [Accept–reject: choosing a better proposal, and inverse transform as a check]
 
 Target: the exponential truncated to $[0,2]$, $f(x) = \frac{e^{-x}}{1 - e^{-2}}$ for $0\le x\le2$. (a) Use the proposal $\mathcal U[0,2]$: find $c$, the acceptance rule and the acceptance probability. (b) Now use the proposal Exp(1). Find $c$ and the acceptance probability, and describe the rule in words. (c) Give an inverse transform sampler instead.
 
-**Solution.** (a) $g = \frac12$ on $[0,2]$, so $\frac fg = \frac{2e^{-x}}{1 - e^{-2}}$, which is largest at $x = 0$: $c = \frac{2}{1 - e^{-2}}\approx2.31$. Accept if $U\le\frac{f(Y)}{c\,g(Y)} = e^{-Y}$. $P(\text{accept}) = \frac1c\approx0.43$.
+**Solution.** (a) $g = \frac12$ on $[0,2]$, so
+$$\frac fg = \frac{2e^{-x}}{1 - e^{-2}},$$
+which is decreasing, so it is largest at $x = 0$: $c = \frac{2}{1 - e^{-2}}\approx2.31$. Draw $Y = 2U_1$ and accept if
+$$U_2\le\frac{f(Y)}{c\,g(Y)} = e^{-Y}.$$
+$P(\text{accept}) = \frac1c = \frac{1 - e^{-2}}{2}\approx0.43$.
 
-(b) $g(x) = e^{-x}$ on $[0,\infty)$. On $[0,2]$, $\frac fg = \frac{1}{1 - e^{-2}}$, and $f = 0$ beyond 2, so $c = \frac1{1 - e^{-2}}\approx1.16$. The ratio $\frac{f(Y)}{c\,g(Y)}$ is $1$ if $Y\le2$ and $0$ otherwise. So the rule is "draw $Y\sim$ Exp(1) and keep it if $Y\le2$", with $P(\text{accept}) = 1 - e^{-2}\approx0.86$. A proposal shaped like the target wastes far fewer draws.
+(b) $g(x) = e^{-x}$ on $[0,\infty)$. On $[0,2]$, $\frac fg = \frac{1}{1 - e^{-2}}$ (constant), and $f = 0$ beyond 2. So $c = \frac1{1 - e^{-2}}\approx1.16$, and
+$$\frac{f(Y)}{c\,g(Y)} = \begin{cases}1 & Y\le2\\ 0 & Y>2.\end{cases}$$
+The rule is: **draw $Y\sim$ Exp(1) and keep it if $Y\le2$.** $P(\text{accept}) = 1 - e^{-2}\approx0.86$. A proposal shaped like the target wastes far fewer draws.
 
-(c) $F(x) = \frac{1 - e^{-x}}{1 - e^{-2}}$ on $[0,2]$. Solve $F(x) = u$: $X = -\ln\big(1 - u(1 - e^{-2})\big)$ with $U\sim\mathcal U(0,1)$. That's one uniform per sample, with no rejections.
+(c) For $0\le x\le2$, $F(x) = \int_0^x\frac{e^{-t}}{1 - e^{-2}}\,dt = \frac{1 - e^{-x}}{1 - e^{-2}}$. Solve $F(x) = u$:
+$$1 - e^{-x} = u(1 - e^{-2})\ \Rightarrow\ X = -\ln\big(1 - U(1 - e^{-2})\big).$$
+One uniform per sample, no rejections.
 
 # New problems: inverse transform
 
@@ -235,37 +249,51 @@ Target: the exponential truncated to $[0,2]$, $f(x) = \frac{e^{-x}}{1 - e^{-2}}$
 
 (a) Prove that $X = F^{-1}(U)$ has CDF $F$ when $F$ is continuous and strictly increasing. (b) Conversely, if $X$ has continuous CDF $F$, show $F(X)\sim\mathcal U(0,1)$.
 
-**Solution.** (a) $F$ is increasing, so $F^{-1}(U)\le x\iff U\le F(x)$. Hence $P(X\le x) = P(U\le F(x)) = F(x)$, since $P(U\le u) = u$ on $[0,1]$.
+**Solution.** (a) $F$ is strictly increasing, so applying $F$ preserves inequalities:
+$$F^{-1}(U)\le x\iff U\le F(x).$$
+Hence, since $P(U\le u) = u$ for $u\in[0,1]$,
+$$P(X\le x) = P\big(U\le F(x)\big) = F(x).$$
 
-(b) For $0<u<1$, $P(F(X)\le u) = P(X\le F^{-1}(u)) = F(F^{-1}(u)) = u$. That is the uniform CDF. (This is the "probability integral transform". It is why a CDF value is always uniformly distributed.)
+(b) For $0<u<1$, using the same equivalence and continuity of $F$ (so $F(F^{-1}(u)) = u$):
+$$P\big(F(X)\le u\big) = P\big(X\le F^{-1}(u)\big) = F\big(F^{-1}(u)\big) = u,$$
+the $\mathcal U(0,1)$ CDF. This is the probability integral transform. Continuity is needed: for a discrete $X$, $F(X)$ takes only finitely many values and cannot be uniform.
 
 ### Problem 2 [Inverse transform: three continuous examples]
 
 Give a sampler using one $U\sim\mathcal U(0,1)$ for: (a) $f(x) = 3x^2$ on $[0,1]$; (b) the Weibull CDF $F(x) = 1 - e^{-x^2}$, $x\ge0$; (c) the Laplace pdf $f(x) = \frac12e^{-|x|}$.
 
-**Solution.** (a) $F(x) = x^3$, so $X = U^{1/3}$.
+**Solution.** In each case find $F$, then solve $F(x) = u$.
 
-(b) $1 - e^{-x^2} = u$ gives $x = \sqrt{-\ln(1-u)}$. Since $1 - U$ is also uniform, $X = \sqrt{-\ln U}$ works too.
+(a) $F(x) = \int_0^x3t^2\,dt = x^3$, so $x^3 = u$ and $X = U^{1/3}$.
 
-(c) $F(x) = \frac12e^x$ for $x<0$ and $1 - \frac12e^{-x}$ for $x\ge0$, with $F(0) = \frac12$. Invert each piece:
+(b) $1 - e^{-x^2} = u\Rightarrow x^2 = -\ln(1-u)\Rightarrow X = \sqrt{-\ln(1-U)}$. Since $1 - U$ is also uniform, $X = \sqrt{-\ln U}$ works too.
+
+(c) Integrate each side of 0:
+$$F(x) = \begin{cases}\frac12e^x & x<0\\ 1 - \frac12e^{-x} & x\ge0,\end{cases}\qquad F(0) = \tfrac12 .$$
+For $u<\frac12$: $\frac12e^x = u\Rightarrow x = \ln(2u)$. For $u\ge\frac12$: $1 - \frac12e^{-x} = u\Rightarrow x = -\ln\big(2(1-u)\big)$.
 $$X = \begin{cases}\ln(2U) & U<\frac12\\ -\ln\big(2(1-U)\big) & U\ge\frac12.\end{cases}$$
-Check: at $U = \frac12$ both pieces give 0, and the CDF is continuous there.
+Check: at $U = \frac12$ both pieces give 0.
 
 ### Problem 3 [Inverse transform: a geometric from one uniform]
 
 Let $0<p<1$ and $U\sim\mathcal U(0,1)$. Show that $X = \Big\lceil\frac{\ln U}{\ln(1-p)}\Big\rceil$ is Geometric$(p)$ on $\{1,2,\dots\}$.
 
-**Solution.** $X$ is a positive integer, since $\frac{\ln U}{\ln(1-p)}>0$ (both logs are negative). For $k = 0, 1, 2,\dots$:
+**Solution.** Both logs are negative, so $R = \frac{\ln U}{\ln(1-p)}>0$ and $X = \lceil R\rceil\in\{1, 2, \dots\}$. For an integer $k\ge0$, $\lceil R\rceil>k\iff R>k$. So
 $$P(X>k) = P\Big(\frac{\ln U}{\ln(1-p)}>k\Big) = P\big(\ln U<k\ln(1-p)\big) = P\big(U<(1-p)^k\big) = (1-p)^k .$$
-(Multiplying by $\ln(1-p)<0$ flips the inequality.) $P(X>k) = (1-p)^k$ is exactly the geometric tail, so $X\sim$ Geometric$(p)$. This is the discrete inverse transform written in closed form, and it's also $\lceil E\rceil$ for an exponential $E$ with rate $-\ln(1-p)$.
+(Multiplying by $\ln(1-p)<0$ flips the inequality.) $P(X>k) = (1-p)^k$ for all $k\ge0$ is the Geometric$(p)$ tail, and the tail determines the pmf: $P(X = k) = (1-p)^{k-1} - (1-p)^k = (1-p)^{k-1}p$.
 
 ### Problem 4 [Inverse transform: a piecewise density]
 
 $f(x) = \frac12$ on $[0,1]$ and $f(x) = \frac14$ on $(1,3]$. (a) Check it's a pdf and find $F$. (b) Give the inverse transform sampler. (c) What does $U = 0.8$ produce?
 
-**Solution.** (a) $\frac12\cdot1 + \frac14\cdot2 = 1$. Integrating,
-$$F(x) = \begin{cases}\frac x2 & 0\le x\le1\\ \frac12 + \frac{x-1}{4} & 1<x\le3.\end{cases}$$
-(b) For $u\le\frac12$, $\frac x2 = u$ gives $x = 2u$. For $u>\frac12$, $\frac12 + \frac{x-1}4 = u$ gives $x = 4u - 1$.
+**Solution.** (a) $f\ge0$ and $\int f = \frac12\cdot1 + \frac14\cdot2 = 1$. Integrating piece by piece,
+$$F(x) = \begin{cases}0 & x<0\\ \frac x2 & 0\le x\le1\\ \frac12 + \frac{x-1}{4} & 1<x\le3\\ 1 & x>3.\end{cases}$$
+
+(b) The break is at $F(1) = \frac12$.
+- $u\le\frac12$: $\frac x2 = u\Rightarrow x = 2u$.
+- $u>\frac12$: $\frac12 + \frac{x-1}4 = u\Rightarrow x = 4u - 1$.
+
+$$X = \begin{cases}2U & U\le\frac12\\ 4U - 1 & U>\frac12.\end{cases}$$
 
 (c) $0.8>0.5$, so $X = 4(0.8) - 1 = 2.2$.
 

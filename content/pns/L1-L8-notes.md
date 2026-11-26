@@ -1152,9 +1152,11 @@ $X^{-1}(\{\frac12\}) = \{\frac1{\sqrt2}\}$, a single point, so $P_X(\{\frac12\})
 
 **B8 (building an exponential from a uniform).** Pick $\omega$ uniformly from $(0,1]$ and let $X(\omega) = -\ln\omega$. Find $P(X>t)$ for $t\ge0$.
 
-*Solution.*
+*Solution.* Translate the event into a set of $\omega$'s. $-\ln$ is decreasing, so
 $$\{X>t\} = \{\omega : -\ln\omega>t\} = \{\omega : \omega<e^{-t}\} = (0, e^{-t}),$$
-which has length $e^{-t}$. So $P(X>t) = e^{-t}$ for $t\ge0$, and $X$ is Exponential(1). This is the inverse-CDF method from the simulation lecture: a deterministic function of one uniform $\omega$ can produce any distribution you like.
+an interval of length $e^{-t}$. So
+$$P(X>t) = e^{-t},\quad t\ge0,$$
+and $X\sim$ Exponential(1). This is the inverse transform method: a deterministic function of one uniform can produce any distribution.
 
 **B9 (same information, different values).** Toss a fair coin three times. Let $X$ = number of heads and $Y$ = (number of heads) − (number of tails). Find the distribution $P_Y$, and decide whether $\sigma(X) = \sigma(Y)$.
 
@@ -1823,7 +1825,13 @@ The official solution writes out the support for both; do the same.
 
 **B2 (inverse transform for the exponential).** $U\sim\mathcal U(0,1)$ and $Y = -\frac1\lambda\ln U$. Find the distribution of $Y$.
 
-*Solution.* $g(u) = -\frac1\lambda\ln u$ is decreasing on $(0,1)$ with range $(0,\infty)$. Inverse $h(y) = e^{-\lambda y}$, $|h'(y)| = \lambda e^{-\lambda y}$. So $f_Y(y) = 1\cdot\lambda e^{-\lambda y}$ for $y>0$: $Y\sim\text{Exp}(\lambda)$. In general, $F^{-1}(U)$ has CDF $F$. This is how computers generate exponential samples (this year's L14 and L15).
+*Solution.* **CDF method.** For $y\ge0$, since $-\frac1\lambda\ln u$ is decreasing,
+$$P(Y\le y) = P\Big(-\tfrac1\lambda\ln U\le y\Big) = P\big(\ln U\ge-\lambda y\big) = P\big(U\ge e^{-\lambda y}\big) = 1 - e^{-\lambda y}.$$
+So $Y\sim\text{Exp}(\lambda)$.
+
+(Equivalently, by the change of variables formula: $g(u) = -\frac1\lambda\ln u$ is decreasing from $(0,1)$ onto $(0,\infty)$, with inverse $h(y) = e^{-\lambda y}$ and $|h'(y)| = \lambda e^{-\lambda y}$, so $f_Y(y) = f_U(h(y))\,|h'(y)| = \lambda e^{-\lambda y}$.)
+
+This is how computers generate exponential samples. Since $1 - U$ is also uniform, it is the inverse CDF $F^{-1}(u) = -\frac1\lambda\ln(1-u)$ in disguise.
 
 **B3 (last year's HW 4 Q3; a projectile).** $d = \frac{v^2}g\sin2\varphi$ with $\varphi\sim\mathcal U[0,\frac\pi2]$. Find the pdf of $d$ and $P(d\le d_0)$.
 
