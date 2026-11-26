@@ -254,23 +254,54 @@ The tutorial did the Max-Cut branch. The others were left for the practice sheet
 
 > **In short:** XOR equations can be added to cancel variables, so elimination works; OR clauses cannot be cancelled.
 
-**Definitions (Lecture 22).** We have Boolean variables $x_1..x_n$. A **literal** is $x_i$ or $\neg x_i$. A **clause** is an OR of literals; it is satisfied if at least one literal is 1. A **CNF** formula $\Phi = C_1 \wedge \cdots \wedge C_m$ is satisfied when every clause is. **3-SAT** asks: given a CNF formula with 3 literals per clause, is there an assignment that satisfies it?
+The two problems look almost the same: both ask for an assignment to $x_1..x_n$ that satisfies $m$ clauses of 3 literals each. The only difference is the connective inside a clause, and that one change moves the problem from "polynomial" to "believed exponential".
 
-**Brute force** tries all $2^n$ assignments at $O(m)$ each: $O(m2^n)$. For $n = 100$ that is about $1.26\times10^{30}$ steps, around $4\times10^{10}$ years at $10^{12}$ assignments per second. Fifty years of research has only lowered the base (to about $1.334^n$, then $1.307^n$). It is still $2^{cn}$.
+| | **3-SAT** | **3-XOR-SAT** |
+|---|---|---|
+| Clause | $x_1 \vee \neg x_2 \vee x_3$ | $x_1 \oplus \neg x_2 \oplus x_3 = b$ |
+| Satisfied when | **at least one** literal is 1 | the literals add up to $b$ mod 2 (odd or even number of 1s) |
+| What it is | a logical condition | a **linear equation** mod 2 |
+| Combining two clauses | nothing cancels: $x \vee x = x$ | add them and shared variables cancel: $x \oplus x = 0$ |
+| Best known algorithm | about $1.307^n$ (exponential) | Gaussian elimination, $O(n^3)$ |
+| Status | NP-complete | in P |
 
-**ETH** (Impagliazzo and Paturi, 1999): there is a constant $c > 0$ such that 3-SAT cannot be solved in $O(2^{cn})$ time. In other words, there is no **subexponential** $2^{o(n)}$ algorithm, such as $2^{\sqrt n}$ or $2^{n/\log n}$. Lecture 22 states Karp's theorem (1972) that 3-SAT $\le_P$ Max-Cut, so under ETH Max-Cut has no subexponential exact algorithm either.
+**Definitions (Lecture 22).** A **literal** is $x_i$ or $\neg x_i$. A **clause** is an OR of literals, satisfied if at least one literal is 1. A **CNF** formula $\Phi = C_1 \wedge \cdots \wedge C_m$ is satisfied when every clause is. **3-SAT** asks whether a CNF formula with 3 literals per clause has a satisfying assignment.
 
-**3-XOR-SAT** (every clause is an XOR) is in P. The trick (Lecture 22): $a \oplus b$ is addition mod 2, and $\neg x_i = x_i + 1$. So every XOR clause is a linear equation mod 2. For example, $\neg x_1 \oplus x_2 \oplus x_3 = 1$ becomes $x_1 + x_2 + x_3 \equiv 0 \pmod 2$ (the $+1$ moves to the right side). Gaussian elimination then either reaches a contradiction $0 \equiv 1$ (unsatisfiable) or finds a solution, in $O(n^3)$ time for $m = O(n)$. The tutorial's worked example:
+### Why XOR-SAT is easy: it is linear algebra
+
+Two rules turn every XOR clause into a linear equation over $\{0, 1\}$ with arithmetic mod 2:
+
+1. $a \oplus b$ is just $a + b \pmod 2$.
+2. $\neg x_i = x_i + 1$, so a negation becomes a $+1$ that moves to the right-hand side.
+
+For example, $\neg x_1 \oplus x_2 \oplus x_3 = 1$ becomes $x_1 + 1 + x_2 + x_3 \equiv 1$, that is, $x_1 + x_2 + x_3 \equiv 0 \pmod 2$.
+
+Now the formula is a system of linear equations, and **Gaussian elimination** solves it like any linear system. It either ends in a contradiction $0 \equiv 1$ (unsatisfiable) or leaves a solution, in $O(n^3)$ time when $m = O(n)$.
+
+**The tutorial's worked example.**
 
 $$x_1 \oplus x_2 \oplus x_3 = 1 \ (E_1), \qquad x_1 \oplus x_2 \oplus x_4 = 0 \ (E_2), \qquad x_2 \oplus x_3 \oplus x_4 = 1 \ (E_3)$$
 
-1. Add $E_1$ and $E_2$: $x_3 \oplus x_4 = 1$. ($x_1$ and $x_2$ cancel because $x \oplus x = 0$.)
-2. Put this into $E_3$: $x_2 \oplus 1 = 1$, so $x_2 = 0$.
-3. $x_4$ is free. Choose $x_4 = 0$, so $x_3 = 1$. Then $E_1$ gives $x_1 = 1 \oplus 0 \oplus 1 = 0$.
+1. **Eliminate** $x_1$ and $x_2$: add $E_1$ and $E_2$. Since $x \oplus x = 0$, they cancel, leaving $x_3 \oplus x_4 = 1$.
+2. **Substitute** into $E_3$: $x_2 \oplus (x_3 \oplus x_4) = x_2 \oplus 1 = 1$, so $x_2 = 0$.
+3. **Back-substitute:** $x_4$ is free, so choose $x_4 = 0$. Then $x_3 = 1$, and $E_1$ gives $x_1 = 1 \oplus 0 \oplus 1 = 0$.
 
-Solution $(x_1, x_2, x_3, x_4) = (0, 0, 1, 0)$. Check: $E_1 = 1$, $E_2 = 0$, $E_3 = 1$. ✓
+Solution $(x_1, x_2, x_3, x_4) = (0, 0, 1, 0)$. Check: $E_1 = 0 \oplus 0 \oplus 1 = 1$ ✓, $E_2 = 0 \oplus 0 \oplus 0 = 0$ ✓, $E_3 = 0 \oplus 1 \oplus 0 = 1$ ✓.
 
-**What makes it work is cancellation:** $x \oplus x = 0$, so adding equations removes variables. With OR, $x \vee x = x$: nothing cancels, so elimination has nothing to work with.
+### Why 3-SAT is hard: nothing cancels
+
+**What makes elimination work is cancellation:** $x \oplus x = 0$, so adding two equations removes a variable and the system shrinks. With OR, $x \vee x = x$, so combining clauses never removes anything.
+
+The closest thing to elimination for OR clauses makes things worse. To get rid of $x$ you must combine every clause containing $x$ with every clause containing $\neg x$: $(x \vee A)$ and $(\neg x \vee B)$ give $(A \vee B)$. With $k$ clauses of one kind and $l$ of the other, that is $k \cdot l$ new clauses, each **longer** than before. Repeating this blows up instead of shrinking.
+
+So no shortcut is known, and the best algorithms are still essentially a search:
+
+- **Brute force** tries all $2^n$ assignments at $O(m)$ each: $O(m2^n)$. For $n = 100$ that is about $1.26\times10^{30}$ steps, around $4\times10^{10}$ years at $10^{12}$ assignments per second.
+- **Fifty years of research** has only lowered the base (to about $1.334^n$, then $1.307^n$). It is still $2^{cn}$.
+- **ETH** (Impagliazzo and Paturi, 1999) says this is the truth: there is a constant $c > 0$ such that 3-SAT cannot be solved in $O(2^{cn})$ time. So there is no **subexponential** $2^{o(n)}$ algorithm, such as $2^{\sqrt n}$ or $2^{n/\log n}$.
+- Lecture 22 states Karp's theorem (1972) that 3-SAT $\le_P$ Max-Cut. So under ETH, Max-Cut has no subexponential exact algorithm either.
+
+**Exam one-liner.** "XOR-SAT is a linear system over $\mathbb{Z}_2$, because $\oplus$ is addition mod 2 and $\neg x = x + 1$, so Gaussian elimination solves it in $O(n^3)$. Elimination relies on $x \oplus x = 0$. OR has no such cancellation ($x \vee x = x$), and 3-SAT is NP-complete."
 
 ## The fragile boundary between easy and hard
 
