@@ -2189,4 +2189,5 @@ body.pz .p-card > footer:hover { opacity: 1; }
 .pz-btns { display: flex; gap: 6px; }
 .pz-btns button { padding: 4px 10px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); color: var(--ink-2); font: 500 12px var(--font-mono); cursor: pointer; }
 .pz-btns button:hover { border-color: var(--accent); color: var(--accent); }
+.pz-btns button.on { border-color: var(--accent); background: var(--accent); color: var(--surface); }
 @media (max-width: 560px) { .pz-keys { display: none; } body.pz .main { padding-top: 12px; } }

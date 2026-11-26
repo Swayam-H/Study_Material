@@ -850,6 +850,7 @@
       var list = all.filter(function (p) { return match(p); });
       if (state.ld) { var rk = { E: 0, M: 1, H: 2 }; list = list.map(function (p, i) { return [p, i]; }).sort(function (a, b) { return (rk[a[0].df] || 1) - (rk[b[0].df] || 1) || a[1] - b[1]; }).map(function (x) { return x[0]; }); }
       if (state.status === 'due') list.sort(function (a, b) { return (statusOf(b) === 'review') - (statusOf(a) === 'review') || (due[a.id] || 0) - (due[b.id] || 0); });
+      if (state.pz && state.shuf) list.sort(function (a, b) { return (state.shuf[a.id] || 0) - (state.shuf[b.id] || 0); });
       return list;
     };
 
@@ -902,13 +903,14 @@
         if (state.deckIdx < 0) state.deckIdx = list.length - 1;
         plist.innerHTML =
           '<div class="pz-bar"><span>' + (state.deckIdx + 1) + ' / ' + list.length + '</span>' +
-            '<span class="pz-keys"><kbd>Space</kbd> solution · <kbd>←</kbd><kbd>→</kbd> move · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> rate · <kbd>Esc</kbd> exit</span>' +
-            '<span class="pz-btns"><button type="button" id="deck-prev" aria-label="Previous">←</button><button type="button" id="deck-next" aria-label="Next">→</button><button type="button" id="pz-exit">✕ Exit</button></span></div>' +
+            '<span class="pz-keys"><kbd>Space</kbd> solution · <kbd>←</kbd><kbd>→</kbd> move · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> rate · <kbd>R</kbd> random · <kbd>Esc</kbd> exit</span>' +
+            '<span class="pz-btns"><button type="button" id="pz-shuf" class="' + (state.shuf ? 'on' : '') + '" aria-pressed="' + !!state.shuf + '" title="Random order (R)">⤮ Random</button><button type="button" id="deck-prev" aria-label="Previous">←</button><button type="button" id="deck-next" aria-label="Next">→</button><button type="button" id="pz-exit">✕ Exit</button></span></div>' +
           card(list[state.deckIdx]);
         $('p-more').hidden = true;
         $('deck-prev').addEventListener('click', function () { state.deckIdx--; render(); scrollTo({ top: 0 }); });
         $('deck-next').addEventListener('click', function () { state.deckIdx++; render(); scrollTo({ top: 0 }); });
         $('pz-exit').addEventListener('click', function () { setPz(false); });
+        $('pz-shuf').addEventListener('click', toggleShuf);
       } else if (state.mode === 'deck') {
         if (state.deckIdx >= list.length) state.deckIdx = 0;
         if (state.deckIdx < 0) state.deckIdx = list.length - 1;
@@ -994,6 +996,11 @@
     $('f-random').addEventListener('click', random);
 
     var modeBox = $('mode-switch');
+    var toggleShuf = function () {
+      if (state.shuf) state.shuf = null;
+      else { state.shuf = {}; (window.NOTES_PROBLEMS || []).forEach(function (p) { state.shuf[p.id] = Math.random(); }); }
+      state.deckIdx = 0; render(); scrollTo({ top: 0 });
+    };
     var setPz = function (on) {
       state.pz = on;
       if (on) { state.prevMode = state.mode; state.mode = 'deck'; state.only = null; }
@@ -1031,6 +1038,7 @@
       if (state.mode !== 'deck') return;
       if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
       if (state.pz && ev.key === 'Escape') { ev.preventDefault(); setPz(false); return; }
+      if (state.pz && (ev.key === 'r' || ev.key === 'R') && !ev.ctrlKey && !ev.metaKey) { ev.preventDefault(); toggleShuf(); return; }
       var cardEl = plist.querySelector('.p-card'); if (!cardEl) return;
       if (ev.key === ' ') {
         ev.preventDefault();
