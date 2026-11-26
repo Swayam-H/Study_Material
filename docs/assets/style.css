@@ -2172,3 +2172,21 @@ html.sm-locked body > *:not(#sm-gate) { display: none !important; }
 
 .ld-field select { border-color: var(--accent); }
 .p-tags i.src.ld { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+
+/* ---------- Zen practice: one problem, question + solution only ---------- */
+body.pz .top, body.pz .side, body.pz .crumbs, body.pz .practice-head-bar, body.pz .filters, body.pz .chips,
+body.pz .retry-bar, body.pz .topic-dash, body.pz .result-count, body.pz .more-row, body.pz #to-top,
+body.pz .read-bar, body.pz .scratch-drawer, body.pz .p-card > header { display: none !important; }
+body.pz .shell, body.pz .shell.has-outline { grid-template-columns: minmax(0, 1fr); }
+body.pz .main { padding-top: 24px; padding-bottom: 30vh; }
+body.pz .practice { max-width: 46rem; margin: 0 auto; }
+body.pz .p-card { border: 0; background: transparent; padding: 8px 0 0; }
+body.pz .p-card .prose { font-size: calc(var(--read-size) + 1px); }
+body.pz .p-card > footer { border-top: 1px dashed var(--line); opacity: .75; }
+body.pz .p-card > footer:hover { opacity: 1; }
+.pz-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; font: 500 12px var(--font-mono); color: var(--ink-3); }
+.pz-keys kbd { font: 500 10.5px var(--font-mono); padding: 0 4px; border: 1px solid var(--line); border-radius: 3px; margin: 0 1px; }
+.pz-btns { display: flex; gap: 6px; }
+.pz-btns button { padding: 4px 10px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); color: var(--ink-2); font: 500 12px var(--font-mono); cursor: pointer; }
+.pz-btns button:hover { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 560px) { .pz-keys { display: none; } body.pz .main { padding-top: 12px; } }

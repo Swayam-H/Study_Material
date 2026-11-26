@@ -677,6 +677,7 @@ for (const c of courses) {
           <button type="button" data-mode="list" class="on">List View</button>
           <button type="button" data-mode="deck">Flashcard Deck</button>
         </div>
+        <button class="btn small primary" id="pz-btn" type="button" title="Zen practice: one question at a time, nothing else on screen (Esc to exit)">Zen practice</button>
         <button class="btn small" id="export-anki-probs" type="button" title="Download filtered problems as an Anki-importable TSV file">Export Anki TSV</button>
       </div>
     </div>

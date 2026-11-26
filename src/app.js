@@ -897,7 +897,19 @@
         $('p-more').hidden = true;
         return list;
       }
-      if (state.mode === 'deck') {
+      if (state.mode === 'deck' && state.pz) {
+        if (state.deckIdx >= list.length) state.deckIdx = 0;
+        if (state.deckIdx < 0) state.deckIdx = list.length - 1;
+        plist.innerHTML =
+          '<div class="pz-bar"><span>' + (state.deckIdx + 1) + ' / ' + list.length + '</span>' +
+            '<span class="pz-keys"><kbd>Space</kbd> solution · <kbd>←</kbd><kbd>→</kbd> move · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> rate · <kbd>Esc</kbd> exit</span>' +
+            '<span class="pz-btns"><button type="button" id="deck-prev" aria-label="Previous">←</button><button type="button" id="deck-next" aria-label="Next">→</button><button type="button" id="pz-exit">✕ Exit</button></span></div>' +
+          card(list[state.deckIdx]);
+        $('p-more').hidden = true;
+        $('deck-prev').addEventListener('click', function () { state.deckIdx--; render(); scrollTo({ top: 0 }); });
+        $('deck-next').addEventListener('click', function () { state.deckIdx++; render(); scrollTo({ top: 0 }); });
+        $('pz-exit').addEventListener('click', function () { setPz(false); });
+      } else if (state.mode === 'deck') {
         if (state.deckIdx >= list.length) state.deckIdx = 0;
         if (state.deckIdx < 0) state.deckIdx = list.length - 1;
         plist.innerHTML =
@@ -951,6 +963,7 @@
       store.set('notes:probs', probs); store.set('notes:due', due);
       refreshCard(c);
       if (v === 'done' && state.status === 'due') showToast('Nice. Off the retry list.');
+      if (state.pz && probs[id] && state.status !== 'due') setTimeout(function () { state.deckIdx++; render(); scrollTo({ top: 0 }); }, 350);
     };
     plist.addEventListener('click', function (e) {
       var c = e.target.closest('.p-card'); if (!c) return;
@@ -981,6 +994,15 @@
     $('f-random').addEventListener('click', random);
 
     var modeBox = $('mode-switch');
+    var setPz = function (on) {
+      state.pz = on;
+      if (on) { state.prevMode = state.mode; state.mode = 'deck'; state.only = null; }
+      else state.mode = state.prevMode || 'list';
+      document.body.classList.toggle('pz', on);
+      if (modeBox) $$('button', modeBox).forEach(function (x) { x.classList.toggle('on', x.dataset.mode === state.mode); });
+      render(); scrollTo({ top: 0 });
+    };
+    if ($('pz-btn')) $('pz-btn').addEventListener('click', function () { setPz(true); });
     if (modeBox) modeBox.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-mode]'); if (!b) return;
       state.mode = b.dataset.mode;
@@ -1008,13 +1030,14 @@
     document.addEventListener('keydown', function (ev) {
       if (state.mode !== 'deck') return;
       if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+      if (state.pz && ev.key === 'Escape') { ev.preventDefault(); setPz(false); return; }
       var cardEl = plist.querySelector('.p-card'); if (!cardEl) return;
       if (ev.key === ' ') {
         ev.preventDefault();
         var det = cardEl.querySelector('details.sol');
         if (det) det.open = !det.open;
-      } else if (ev.key === 'ArrowRight') { state.deckIdx++; render(); }
-      else if (ev.key === 'ArrowLeft') { state.deckIdx--; render(); }
+      } else if (ev.key === 'ArrowRight') { state.deckIdx++; render(); if (state.pz) scrollTo({ top: 0 }); }
+      else if (ev.key === 'ArrowLeft') { state.deckIdx--; render(); if (state.pz) scrollTo({ top: 0 }); }
       else if (ev.key === '1' || ev.key === '2' || ev.key === '3') {
         if (!cardEl.classList.contains('revealed')) { showToast('Reveal the solution first (Space)'); return; }
         rate(cardEl, ['done', 'shaky', 'review'][+ev.key - 1]);
