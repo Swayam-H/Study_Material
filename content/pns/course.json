@@ -5,6 +5,13 @@
   "blurb": "From sample spaces and the axioms to Gaussian vectors, estimation and Bayesian inference.",
   "docs": [
     {
+      "slug": "endsem-sheet",
+      "file": "endsem-formula-sheet.md",
+      "title": "Endsem formula and cheat sheet",
+      "about": "Full syllabus by the 15 exam topics: formulas, the standard move, traps, z-values",
+      "pdf": "endsem-formula-sheet.pdf"
+    },
+    {
       "slug": "last-day",
       "file": "last-day-practice.md",
       "title": "Last day practice (endsem)",
