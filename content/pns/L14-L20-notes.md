@@ -701,21 +701,40 @@ $$\hat\pi = \frac4n\sum_{i=1}^n I_i .$$
 
 **B14 (last year's Tutorial 7 Q5).** $I = \int_0^{2\pi}f(x)\,dx$. (a) Monte Carlo with uniform samples. (b) With samples from a pdf $g$. (c) Show both are right on average.
 
-*Solution.* (a) $X_i\sim\mathcal U[0,2\pi]$: $\hat I = \frac{2\pi}{N}\sum_{i=1}^N f(X_i)$. (b) $X_i\sim g$: $\hat I = \frac1N\sum_{i=1}^N\frac{f(X_i)}{g(X_i)}$, which needs $g>0$ wherever $f\ne0$ on $[0, 2\pi]$. (c) By linearity, $E[\hat I]$ equals the expectation of one term. In (a), $E[2\pi f(X)] = 2\pi\int_0^{2\pi}f(x)\frac{1}{2\pi}dx = I$. In (b), $E\big[\frac{f(X)}{g(X)}\big] = \int\frac{f(x)}{g(x)}g(x)\,dx = I$. Both estimators are unbiased.
+*Solution.* Write $I$ as an expectation, then average i.i.d. copies.
+
+(a) For $X\sim\mathcal U[0,2\pi]$ (density $\frac1{2\pi}$), $I = 2\pi\,E[f(X)]$. So with $X_i$ i.i.d. $\mathcal U[0,2\pi]$,
+$$\hat I = \frac{2\pi}{N}\sum_{i=1}^Nf(X_i).$$
+
+(b) For $X\sim g$, $I = \int_0^{2\pi}\frac{f(x)}{g(x)}g(x)\,dx = E\Big[\frac{f(X)}{g(X)}\Big]$. So with $X_i$ i.i.d. from $g$,
+$$\hat I = \frac1N\sum_{i=1}^N\frac{f(X_i)}{g(X_i)}.$$
+This needs $g>0$ wherever $f\ne0$ on $[0,2\pi]$.
+
+(c) By linearity, $E[\hat I]$ is the expectation of one term:
+$$\text{(a)}\ \ E[2\pi f(X)] = 2\pi\int_0^{2\pi}f(x)\frac{1}{2\pi}\,dx = I,\qquad\text{(b)}\ \ E\Big[\frac{f(X)}{g(X)}\Big] = \int_0^{2\pi}\frac{f(x)}{g(x)}g(x)\,dx = I .$$
+Both estimators are unbiased.
 
 **B15 (last year's HW6 Q17).** $I_1 = \int_0^a\sqrt x\,dx$ with $N$ samples of $U[0,1]$, and with samples from a pdf $g$ on $[0,a]$.
 
-*Solution.* Substituting $x = au$: $\hat I_1 = \frac aN\sum_{i=1}^N\sqrt{aU_i}$. With $X_i\sim g$: $\hat I_1 = \frac1N\sum_{i=1}^N\frac{\sqrt{X_i}}{g(X_i)}$. The exact value is $\frac23a^{3/2}$; for $a = 4$ a run gave $5.331$ against $5.333$.
+*Solution.* **Uniform samples.** Substitute $x = au$, $dx = a\,du$:
+$$I_1 = \int_0^1\sqrt{au}\;a\,du = a\,E\big[\sqrt{aU}\big],\qquad\hat I_1 = \frac aN\sum_{i=1}^N\sqrt{aU_i}.$$
+
+**Samples from $g$.** $I_1 = E\Big[\frac{\sqrt X}{g(X)}\Big]$ for $X\sim g$, so
+$$\hat I_1 = \frac1N\sum_{i=1}^N\frac{\sqrt{X_i}}{g(X_i)},$$
+valid if $g>0$ on $(0,a]$.
+
+Both are unbiased. The exact value is $\frac23a^{3/2}$; for $a = 4$ that is $5.333$, and a run gave $5.331$.
 
 ### Importance sampling
 
 **B16 (last year's Tutorial 6 Q7): the support trap.** Estimate $\theta = E[X^2]$ for $X\sim$ Exp$(1)$ by importance sampling with $N$ samples $Y_i\sim\mathcal U[0,5]$.
 
-*Solution.* $f(y) = e^{-y}$ and $g(y) = \frac15$ on $[0,5]$, so $w(y) = 5e^{-y}$ and
-$$\hat\theta = \frac1N\sum_{i=1}^N 5\,Y_i^2e^{-Y_i}.$$
-*The catch.* $g = 0$ on $(5,\infty)$, where $x^2e^{-x}$ is still positive, so the support condition fails. The estimator converges to
-$$\int_0^5x^2e^{-x}\,dx = 2 - 37e^{-5}\approx1.7507,\qquad\text{not}\quad\theta = E[X^2] = 2 .$$
-About 12% of the answer lives beyond 5 and is never sampled. The fix is a proposal with support $[0,\infty)$, for example $g = $ Exp$(\frac12)$, whose heavier tail covers the region where $x^2e^{-x}$ is large.
+*Solution.* $\theta = \int_0^\infty x^2f(x)\,dx$ with $f(x) = e^{-x}$. The proposal is $g(y) = \frac15$ on $[0,5]$, so the weight is $w(y) = \frac{f(y)}{g(y)} = 5e^{-y}$ and
+$$\hat\theta = \frac1N\sum_{i=1}^N Y_i^2\,w(Y_i) = \frac1N\sum_{i=1}^N 5\,Y_i^2e^{-Y_i}.$$
+
+**The catch.** $g = 0$ on $(5,\infty)$, where $x^2e^{-x}$ is still positive, so the support condition fails. The estimator is unbiased for the wrong quantity:
+$$E[\hat\theta] = \int_0^5x^2e^{-x}\,dx = 2 - 37e^{-5}\approx1.7507,\qquad\text{not}\quad\theta = E[X^2] = 2 .$$
+About 12% of $\theta$ comes from $x>5$, which is never sampled. Fix: use a proposal on all of $[0,\infty)$, for example Exp$(\frac12)$, whose heavier tail covers the region where $x^2e^{-x}$ is large.
 
 **B17: importance sampling to compute an expectation you cannot sample.** Suppose $f(x) = \frac{2}{\pi(1 + x^2)}$ on $[0,\infty)$ (a half-Cauchy) and you want $E[e^{-X}]$, but can only sample Exp$(1)$. With $Y\sim$ Exp$(1)$, $g(y) = e^{-y}$:
 $$E[e^{-X}] = E_Y\Big[e^{-Y}\cdot\frac{2/(\pi(1+Y^2))}{e^{-Y}}\Big] = E_Y\Big[\frac{2}{\pi(1 + Y^2)}\Big],$$

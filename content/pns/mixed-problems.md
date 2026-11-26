@@ -192,8 +192,9 @@ so $a = 1$. The best line is $1 + x$, the same as (a).
 
 You estimate $p = P(Z>2)$ for $Z\sim\mathcal N(0,1)$ by simulating $n$ normals and taking the fraction above 2. (a) What are the mean and standard error of the estimate? (b) How large must $n$ be for the estimate to be within $0.001$ of $p\approx0.0228$ with probability about 0.95?
 
-**Solution.** (a) The estimate is $\hat p = \frac1n\sum\mathbf 1\{Z_i>2\}$, an average of Bernoulli$(p)$ variables, so $E[\hat p] = p$ (unbiased) and $\text{sd}(\hat p) = \sqrt{p(1-p)/n}$.
+**Solution.** (a) The estimate is $\hat p = \frac1n\sum_{i=1}^n\mathbf 1\{Z_i>2\}$, an average of i.i.d. Bernoulli$(p)$ variables. So
+$$E[\hat p] = p\ \ (\text{unbiased}),\qquad\text{se}(\hat p) = \sqrt{\frac{p(1-p)}{n}}.$$
 
-(b) By the CLT, we need $1.96\sqrt{\frac{p(1-p)}{n}}\le0.001$:
-$$n\ge\frac{1.96^2\,p(1-p)}{0.001^2} = \frac{3.8416\times0.0223}{10^{-6}}\approx\boxed{85{,}600}.$$
-Rare events need a lot of samples, because the error must be small compared with $p$ itself.
+(b) By the CLT, $\hat p\approx\mathcal N\big(p, \frac{p(1-p)}{n}\big)$, so $P(|\hat p - p|\le0.001)\approx0.95$ when $1.96\sqrt{\frac{p(1-p)}{n}}\le0.001$:
+$$n\ge\frac{1.96^2\,p(1-p)}{0.001^2} = \frac{3.8416\times0.0228\times0.9772}{10^{-6}}\approx\boxed{85{,}600}.$$
+Rare events need many samples, because the error must be small compared with $p$ itself.

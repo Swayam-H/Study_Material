@@ -74,11 +74,13 @@ For $t\ge\lambda$ the integral diverges. Marks are lost for leaving out the rang
 
 Using two independent Uniform$[0,1]$ samples to make a point in the unit square, count how often it lands inside the quarter circle $x^2 + y^2\le1$. Repeat $n$ times. Write down an estimator of $\pi$ based on this, and show that it is unbiased.
 
-**Solution.** Let $(X_i, Y_i)$ be i.i.d. uniform on $[0,1]^2$, and $I_i = \mathbf 1\{X_i^2 + Y_i^2\le1\}$. Then $I_i$ is Bernoulli with
-$$P(I_i = 1) = \text{area of the quarter disc} = \int_0^1\sqrt{1 - x^2}\,dx = \frac\pi4 .$$
-So the estimator is
-$$\hat\pi_n = \frac4n\sum_{i=1}^nI_i,\qquad E[\hat\pi_n] = 4\cdot\frac\pi4 = \pi ,$$
-which is unbiased. (Bonus: $\text{Var}(\hat\pi_n) = \frac{16}{n}\cdot\frac\pi4\big(1 - \frac\pi4\big)\approx\frac{2.70}{n}$, and by the WLLN $\hat\pi_n\to\pi$ in probability.)
+**Solution.** Let $(X_i, Y_i)$, $i = 1,\dots,n$, be i.i.d. uniform on $[0,1]^2$, and $I_i = \mathbf 1\{X_i^2 + Y_i^2\le1\}$. The joint density is 1 on the square, so a probability is an area:
+$$P(I_i = 1) = \text{area of the quarter disc} = \frac14\pi\cdot1^2 = \frac\pi4 .$$
+So $I_i\sim$ Bernoulli$(\frac\pi4)$ and $E[I_i] = \frac\pi4$. The estimator is
+$$\hat\pi_n = \frac4n\sum_{i=1}^nI_i,\qquad E[\hat\pi_n] = \frac4n\cdot n\cdot\frac\pi4 = \pi,$$
+so it is unbiased.
+
+Also: $\text{Var}(\hat\pi_n) = \frac{16}{n}\cdot\frac\pi4\big(1 - \frac\pi4\big)\approx\frac{2.70}{n}\to0$, so $\hat\pi_n\to\pi$ in probability (WLLN), and almost surely by the SLLN.
 
 ### Problem 3 [Endsem Q3] — sum of two exponentials
 

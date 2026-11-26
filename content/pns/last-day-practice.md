@@ -305,38 +305,55 @@ $$X = \begin{cases}2U & U\le\frac12\\ 4U - 1 & U>\frac12.\end{cases}$$
 
 Estimate $I = \int_0^2e^{-x^2}dx$. (a) Write a Monte Carlo estimator using uniforms, and show it's unbiased. (b) Find its variance in terms of $\sigma^2 = \text{Var}(2e^{-U^2})$. (c) Given $\sigma^2\approx0.475$, how many samples give an error under 0.01 with probability about 0.95?
 
-**Solution.** (a) With $U_i\sim\mathcal U[0,2]$, let $\hat I_n = \frac1n\sum_{i=1}^n2e^{-U_i^2}$. Then
-$$E[\hat I_n] = E[2e^{-U^2}] = 2\int_0^2e^{-u^2}\cdot\frac12\,du = I .$$
-(b) The terms are i.i.d., so $\text{Var}(\hat I_n) = \frac{\sigma^2}{n}$.
+**Solution.** (a) For $U\sim\mathcal U[0,2]$ (density $\frac12$), $E[e^{-U^2}] = \frac I2$, so $I = E[2e^{-U^2}]$. With $U_i$ i.i.d. $\mathcal U[0,2]$,
+$$\hat I_n = \frac1n\sum_{i=1}^n2e^{-U_i^2},\qquad E[\hat I_n] = E[2e^{-U^2}] = 2\int_0^2e^{-u^2}\cdot\frac12\,du = I .$$
 
-(c) By the CLT we need $1.96\sqrt{\sigma^2/n}\le0.01$, so $n\ge\frac{1.96^2(0.475)}{0.0001}\approx18{,}300$. (The true value is $I\approx0.882$.)
+(b) The terms are i.i.d. with variance $\sigma^2$, so
+$$\text{Var}(\hat I_n) = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n}.$$
+
+(c) By the CLT we need $1.96\sqrt{\frac{\sigma^2}{n}}\le0.01$:
+$$n\ge\frac{1.96^2(0.475)}{0.01^2}\approx18{,}300 .$$
+(The true value is $I\approx0.882$.)
 
 ### Problem 2 [Monte Carlo: estimating a probability]
 
 $X, Y$ are i.i.d. $\mathcal U[0,1]$. (a) Give a Monte Carlo estimator of $p = P(X + Y>1.5)$. (b) Find $p$ exactly. (c) What $n$ makes the standard error at most $0.01$?
 
-**Solution.** (a) $\hat p_n = \frac1n\sum_{i=1}^n\mathbf 1\{X_i + Y_i>1.5\}$, with fresh pairs $(X_i, Y_i)$. It's an average of Bernoulli$(p)$ variables, so it is unbiased.
+**Solution.** (a) Draw fresh pairs $(X_i, Y_i)$ and take the fraction of hits:
+$$\hat p_n = \frac1n\sum_{i=1}^n\mathbf 1\{X_i + Y_i>1.5\}.$$
+It is an average of i.i.d. Bernoulli$(p)$ variables, so $E[\hat p_n] = p$.
 
-(b) The region $x + y>1.5$ in the unit square is a triangle with legs $0.5$, so $p = \frac12(0.5)^2 = \frac18$.
+(b) The joint density is 1 on the unit square, so $p$ is the area of $\{x + y>1.5\}$ inside it: the triangle with corners $(0.5,1)$, $(1,1)$, $(1,0.5)$, with legs $0.5$.
+$$p = \frac12(0.5)^2 = \frac18 .$$
 
-(c) $\text{se} = \sqrt{\frac{p(1-p)}{n}}\le0.01$ needs $n\ge\frac{(1/8)(7/8)}{10^{-4}}\approx1094$.
+(c) $\text{se} = \sqrt{\frac{p(1-p)}{n}}\le0.01$ needs
+$$n\ge\frac{p(1-p)}{0.01^2} = \frac{(1/8)(7/8)}{10^{-4}} = 1093.75,$$
+so $n = 1094$.
 
 ### Problem 3 [Monte Carlo: two estimators of $\pi$, compared]
 
 (a) Hit-or-miss: $\hat\pi_1 = \frac4n\sum\mathbf 1\{U_i^2 + V_i^2\le1\}$. (b) Mean-value: $\hat\pi_2 = \frac4n\sum\sqrt{1 - U_i^2}$. Show both are unbiased and find their variances. Which is better?
 
-**Solution.** (a) $P(U^2 + V^2\le1) = \frac\pi4$, so $E[\hat\pi_1] = \pi$ and
+**Solution.** Both are $\frac4n\times$ a sum of $n$ i.i.d. terms, so $\text{Var} = \frac{16}{n}\operatorname{Var}(\text{one term})$.
+
+(a) The indicator is Bernoulli$(\frac\pi4)$ (area of the quarter disc), so $E[\hat\pi_1] = 4\cdot\frac\pi4 = \pi$ and
 $$\text{Var}(\hat\pi_1) = \frac{16}{n}\cdot\frac\pi4\Big(1 - \frac\pi4\Big)\approx\frac{2.70}{n}.$$
-(b) $E[\sqrt{1 - U^2}] = \int_0^1\sqrt{1 - u^2}\,du = \frac\pi4$, so $E[\hat\pi_2] = \pi$. And $E[1 - U^2] = \frac23$, so
-$$\text{Var}(\hat\pi_2) = \frac{16}{n}\Big(\frac23 - \frac{\pi^2}{16}\Big)\approx\frac{0.80}{n}.$$
-The mean-value estimator has about $\frac13$ of the variance, so it needs about a third as many samples for the same accuracy. Averaging a smooth function beats averaging a 0/1 indicator.
+
+(b) $E[\sqrt{1 - U^2}] = \int_0^1\sqrt{1 - u^2}\,du = \frac\pi4$ (the quarter-disc area again), so $E[\hat\pi_2] = \pi$. For the variance, $E[(\sqrt{1 - U^2})^2] = E[1 - U^2] = 1 - \frac13 = \frac23$, so
+$$\operatorname{Var}\big(\sqrt{1 - U^2}\big) = \frac23 - \frac{\pi^2}{16}\approx0.0498,\qquad\text{Var}(\hat\pi_2) = \frac{16}{n}\Big(\frac23 - \frac{\pi^2}{16}\Big)\approx\frac{0.80}{n}.$$
+
+**$\hat\pi_2$ is better:** about $\frac13$ of the variance, so about a third as many samples for the same accuracy. Averaging a smooth function beats averaging a 0/1 indicator.
 
 ### Problem 4 [Monte Carlo: rare events and importance sampling] (hard)
 
 You want $p = P(Z>4)\approx3.2\times10^{-5}$ for $Z\sim\mathcal N(0,1)$. (a) With plain Monte Carlo, about how many samples are needed for a relative standard error of 10%? (b) Instead sample $Y_i\sim\mathcal N(4,1)$ and use $\hat p = \frac1n\sum\mathbf 1\{Y_i>4\}\,w(Y_i)$ with $w(y) = \frac{\phi(y)}{\phi(y-4)}$. Show $\hat p$ is unbiased and simplify $w$.
 
-**Solution.** (a) The standard error is $\sqrt{p(1-p)/n}\approx\sqrt{p/n}$. A relative error of $0.1$ needs $\sqrt{p/n}\le0.1p$, i.e. $n\ge\frac{100}{p}\approx3\times10^6$. Almost every sample is wasted, since a hit happens once in 30,000 draws.
+**Solution.** (a) For the fraction of hits, $\text{se} = \sqrt{\frac{p(1-p)}{n}}\approx\sqrt{\frac pn}$ since $p$ is tiny. A relative error of 10% needs
+$$\sqrt{\frac pn}\le0.1p\iff n\ge\frac{100}{p}\approx3\times10^6 .$$
+Almost every sample is wasted: a hit happens about once in 30,000 draws.
 
-(b) Let $q$ be the $\mathcal N(4,1)$ density. Then
-$$E\big[\mathbf 1\{Y>4\}w(Y)\big] = \int\mathbf 1\{y>4\}\frac{\phi(y)}{q(y)}q(y)\,dy = \int_4^\infty\phi(y)\,dy = p .$$
-$w(y) = \exp\big(-\frac{y^2}2 + \frac{(y-4)^2}2\big) = e^{8 - 4y}$. Now half the samples land in the region, and each carries a small weight, so a few thousand samples already give a good estimate.
+(b) The $\mathcal N(4,1)$ density is $q(y) = \phi(y-4)$, so $w = \frac\phi q$. For one term,
+$$E\big[\mathbf 1\{Y>4\}w(Y)\big] = \int_{-\infty}^\infty\mathbf 1\{y>4\}\frac{\phi(y)}{q(y)}q(y)\,dy = \int_4^\infty\phi(y)\,dy = p,$$
+so $\hat p$ is unbiased. Simplifying (the $\frac1{\sqrt{2\pi}}$ factors cancel):
+$$w(y) = \exp\Big(-\frac{y^2}2 + \frac{(y-4)^2}2\Big) = \exp\Big(\frac{-8y + 16}{2}\Big) = e^{8 - 4y}.$$
+Now half the samples land in $\{y>4\}$, each with a small weight ($w(4) = e^{-8}$), so a few thousand samples already give a good estimate.
