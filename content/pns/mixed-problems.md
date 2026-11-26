@@ -118,11 +118,17 @@ $X_1, X_2,\dots$ are i.i.d. Exp(1) and $S_n = X_1 + \cdots + X_n$. (a) Use MGFs 
 
 $X_1,\dots,X_n$ i.i.d. Uniform$[0,\theta]$ and $M_n = \max_iX_i$ (the MLE). (a) Show $M_n\to\theta$ in probability. (b) Show $n(\theta - M_n)$ converges in distribution, and identify the limit.
 
-**Solution.** (a) For $0<\epsilon<\theta$, $P(|M_n - \theta|>\epsilon) = P(M_n<\theta - \epsilon) = \big(1 - \frac\epsilon\theta\big)^n\to0$. So the MLE is consistent.
+**Solution.** Everything follows from $P(M_n\le m) = \big(\frac m\theta\big)^n$ for $0\le m\le\theta$ (all $n$ samples must be $\le m$).
 
-(b) For $x\ge0$ (and $n$ large enough that $x<n\theta$),
-$$P\big(n(\theta - M_n)>x\big) = P\Big(M_n<\theta - \frac xn\Big) = \Big(1 - \frac{x}{n\theta}\Big)^n\to e^{-x/\theta}.$$
-So $n(\theta - M_n)\xrightarrow{d}\text{Exp}(1/\theta)$, the exponential with mean $\theta$. The error of $M_n$ is of size $1/n$, not the usual $1/\sqrt n$. That is why its MSE in Part 7, Problem 21 shrinks like $1/n^2$.
+(a) $M_n\le\theta$ always, so for $0<\epsilon<\theta$,
+$$P(|M_n - \theta|>\epsilon) = P(M_n<\theta - \epsilon) = \Big(1 - \frac\epsilon\theta\Big)^n\to0 .$$
+So $M_n\xrightarrow{p}\theta$: the MLE is consistent.
+
+(b) Let $W_n = n(\theta - M_n)\ge0$. For $x\ge0$ and $n$ large enough that $x<n\theta$,
+$$P(W_n>x) = P\Big(M_n<\theta - \frac xn\Big) = \Big(1 - \frac{x}{n\theta}\Big)^n\to e^{-x/\theta}.$$
+So
+$$n(\theta - M_n)\xrightarrow{d}\text{Exp}\big(\tfrac1\theta\big)\quad(\text{rate }\tfrac1\theta,\ \text{mean }\theta).$$
+The error of $M_n$ is of size $\frac1n$, not the usual $\frac1{\sqrt n}$, which is why its MSE (Part 7, Problem 21) shrinks like $\frac1{n^2}$.
 
 ### Problem 10 [Mixed: Gaussian vectors + conditional expectation + MAP]
 

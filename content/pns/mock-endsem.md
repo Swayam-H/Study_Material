@@ -127,13 +127,19 @@ $X_n\sim\text{Uniform}\big(5 - \frac1n,\ 5 + \frac1n\big)$.
 (a) Show that $X_n\xrightarrow{d}5$.
 (b) For $\epsilon>0$, find $P(|X_n - 5|>\epsilon)$ exactly, and deduce that $X_n\to5$ in probability.
 
-**Solution.** (a) The limit is the constant 5, with CDF $F(x) = 0$ for $x<5$ and $1$ for $x\ge5$. It is continuous everywhere except $x = 5$. The CDF of $X_n$ is
-$$F_n(x) = \begin{cases}0 & x<5 - \frac1n\\ \frac n2\big(x - 5 + \frac1n\big) & 5 - \frac1n\le x\le5 + \frac1n\\ 1 & x>5 + \frac1n.\end{cases}$$
-Fix $x<5$. Once $n>\frac1{5-x}$, $x<5 - \frac1n$, so $F_n(x) = 0\to F(x)$. Fix $x>5$. Once $n>\frac1{x-5}$, $F_n(x) = 1\to F(x)$. So $F_n\to F$ at every continuity point, and $X_n\xrightarrow{d}5$. (At $x = 5$, $F_n(5) = \frac12$ for every $n$, but that point doesn't need to converge.)
+**Solution.** (a) The limit is the constant 5, with CDF $F(x) = 0$ for $x<5$ and $F(x) = 1$ for $x\ge5$. Its only discontinuity is $x = 5$. The CDF of $X_n$ is
+$$F_n(x) = \begin{cases}0 & x<5 - \frac1n\\[2pt] \frac n2\big(x - 5 + \frac1n\big) & 5 - \frac1n\le x\le5 + \frac1n\\[2pt] 1 & x>5 + \frac1n.\end{cases}$$
+- $x<5$: once $n>\frac1{5-x}$, $x<5 - \frac1n$, so $F_n(x) = 0 = F(x)$.
+- $x>5$: once $n>\frac1{x-5}$, $x>5 + \frac1n$, so $F_n(x) = 1 = F(x)$.
 
-(b) The density is $\frac n2$ on an interval of length $\frac2n$. If $n<\frac1\epsilon$, then $[5-\epsilon, 5+\epsilon]$ lies inside the support and has probability $\frac n2\cdot2\epsilon = n\epsilon$. If $n\ge\frac1\epsilon$, the whole support lies inside $[5-\epsilon, 5+\epsilon]$. So
+So $F_n\to F$ at every continuity point of $F$, and $X_n\xrightarrow{d}5$. At $x = 5$, $F_n(5) = \frac12\not\to1$, but that point is excluded from the definition.
+
+(b) The density is $\frac n2$ on an interval of length $\frac2n$.
+- If $\frac1n>\epsilon$: $[5-\epsilon, 5+\epsilon]$ lies inside the support, with probability $\frac n2\cdot2\epsilon = n\epsilon$.
+- If $\frac1n\le\epsilon$: the whole support lies inside $[5-\epsilon, 5+\epsilon]$.
+
 $$P(|X_n - 5|>\epsilon) = \begin{cases}1 - n\epsilon & n<\frac1\epsilon\\ 0 & n\ge\frac1\epsilon.\end{cases}$$
-This is 0 for all large $n$, so $X_n\to5$ in probability. (Convergence in distribution to a **constant** always implies convergence in probability, and this shows it directly.)
+This is 0 for all $n\ge\frac1\epsilon$, so $X_n\xrightarrow{p}5$. (In general, convergence in distribution to a **constant** implies convergence in probability; here we see it directly.)
 
 ### Problem 8 [New, replaces the Markov chain question] — CLT for dice
 

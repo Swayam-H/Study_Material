@@ -1757,32 +1757,39 @@ The picture: think of each integer $j$ as a histogram bar covering $[j - \frac12
 
 **B1 (Bertsekas Ex. 5.7).** $Y\sim$ Exp$(1)$ and $Y_n = \frac Yn$. (The $Y_n$ are dependent.) Does $Y_n\to0$ in probability?
 
-*Solution.* $|Y_n|\ge\epsilon$ means $Y\ge n\epsilon$, so
-$$P(|Y_n|\ge\epsilon) = P(Y\ge n\epsilon) = e^{-n\epsilon}\to0 .$$
-Yes. Actually it's even sure convergence: $Y_n(\omega) = \frac{Y(\omega)}{n}\to0$ for every single outcome.
+*Solution.* Fix $\epsilon>0$. The event $|Y_n|\ge\epsilon$ is the event $Y\ge n\epsilon$, so
+$$P(|Y_n|\ge\epsilon) = P(Y\ge n\epsilon) = e^{-n\epsilon}\xrightarrow[n\to\infty]{}0 .$$
+**Answer: yes, $Y_n\xrightarrow{p}0$.** It is even sure convergence: $Y_n(\omega) = \frac{Y(\omega)}{n}\to0$ for every outcome, because $Y(\omega)$ is a fixed finite number.
 
 **B2 (Bertsekas Ex. 5.8; probabilitycourse 7.2.6).** $Y_n = n^2$ with probability $\frac1n$, else 0. Show $Y_n\xrightarrow{p}0$ but $E[Y_n]\to\infty$, and no $L^r$ convergence.
 
-*Solution.* Once $n^2\ge\epsilon$, the only way to have $|Y_n|\ge\epsilon$ is $Y_n = n^2$, so $P(|Y_n|\ge\epsilon) = \frac1n\to0$. In probability: yes.
+*Solution.* **In probability.** Fix $\epsilon>0$. $Y_n$ only takes the values $0$ and $n^2$, so once $n^2\ge\epsilon$,
+$$P(|Y_n|\ge\epsilon) = P(Y_n = n^2) = \frac1n\to0 .$$
+So $Y_n\xrightarrow{p}0$.
 
-The means: $E[Y_n] = n^2\cdot\frac1n = n\to\infty$, and more generally $E[Y_n^r] = n^{2r}\cdot\frac1n = n^{2r-1}\to\infty$ for every $r\ge1$. So no $L^r$ convergence for any $r$. (This is Bertsekas's answer to his Problem 7(b).) Same story as slide 21, just with an even bigger rare value.
+**Moments.** For $r\ge1$,
+$$E[|Y_n|^r] = (n^2)^r\cdot\frac1n = n^{2r-1}\to\infty .$$
+With $r = 1$ this is $E[Y_n] = n\to\infty$. Since $E|Y_n - 0|^r\not\to0$, there is no $L^r$ convergence to 0 for any $r\ge1$.
+
+The rare value $n^2$ becomes less likely ($\frac1n$) but grows faster than that, so it dominates the mean. Convergence in probability says nothing about moments.
 
 **B3 (last year's HW7 Q1; Bertsekas Problem 5).** $X_1, X_2, \dots$ independent $\mathcal U[-1,1]$. Show convergence in probability, and find the limit, for: (a) $Y_n = \frac{X_n}{n}$; (b) $Y_n = X_n^n$; (c) $Y_n = X_1X_2\cdots X_n$; (d) $Y_n = \max\{X_1, \dots, X_n\}$.
 
-*Solution.*
-(a) $|Y_n|\le\frac1n$ always, so $P(|Y_n|\ge\epsilon) = 0$ once $n>\frac1\epsilon$. Limit 0.
+*Solution.* Fix $\epsilon>0$ in each part.
 
-(b) $|X_n|$ is uniform on $[0,1]$ (fold $[-1,1]$ in half). For $0<\epsilon<1$,
-$$P(|X_n|^n\ge\epsilon) = P(|X_n|\ge\epsilon^{1/n}) = 1 - \epsilon^{1/n}\to1 - 1 = 0,$$
-since $\epsilon^{1/n}\to1$. Limit 0. (A number in $[0,1)$ raised to a huge power is tiny unless it's really close to 1, and that's increasingly unlikely.)
+(a) $|Y_n| = \frac{|X_n|}{n}\le\frac1n$ always. Once $n>\frac1\epsilon$, $P(|Y_n|\ge\epsilon) = 0$. **Limit 0.**
 
-(c) A direct CDF is messy, so use Markov. By independence,
-$$E|Y_n| = \prod_{i=1}^nE|X_i| = \Big(\frac12\Big)^n,$$
-since $E|X_i| = \frac12$. Then $P(|Y_n|\ge\epsilon)\le\frac{2^{-n}}{\epsilon}\to0$. Limit 0.
+(b) $|X_n|\sim\mathcal U[0,1]$ (fold $[-1,1]$ in half), so $P(|X_n|\ge t) = 1 - t$ for $t\in[0,1]$. For $0<\epsilon<1$,
+$$P(|X_n|^n\ge\epsilon) = P\big(|X_n|\ge\epsilon^{1/n}\big) = 1 - \epsilon^{1/n}\to1 - 1 = 0,$$
+because $\epsilon^{1/n} = e^{(\ln\epsilon)/n}\to e^0 = 1$. **Limit 0.**
 
-(d) The max should creep up to 1. For $0<\epsilon<2$, $|Y_n - 1|\ge\epsilon$ means $Y_n\le1-\epsilon$ (it can't exceed 1), i.e. *all* $X_i\le1-\epsilon$:
-$$P(|Y_n - 1|\ge\epsilon) = \Big(\frac{(1-\epsilon) - (-1)}{2}\Big)^n = \Big(\frac{2 - \epsilon}{2}\Big)^n\to0 .$$
-Limit 1.
+(c) The CDF of a product is messy, so bound it with Markov. By independence and $E|X_i| = \int_{-1}^1\frac{|x|}2\,dx = \frac12$,
+$$E|Y_n| = \prod_{i=1}^nE|X_i| = 2^{-n},\qquad P(|Y_n|\ge\epsilon)\le\frac{E|Y_n|}{\epsilon} = \frac{2^{-n}}{\epsilon}\to0 .$$
+**Limit 0.**
+
+(d) Guess the limit 1. Since $Y_n\le1$, for $0<\epsilon<2$ the event $|Y_n - 1|\ge\epsilon$ is $Y_n\le1 - \epsilon$, which means every $X_i\le1-\epsilon$:
+$$P(|Y_n - 1|\ge\epsilon) = P(X_1\le1-\epsilon)^n = \Big(\frac{(1-\epsilon) + 1}{2}\Big)^n = \Big(1 - \frac\epsilon2\Big)^n\to0 .$$
+**Limit 1.**
 
 **B4 (last year's HW7 Q2).** $X_i$ i.i.d. with mean $\mu$ and variance $\sigma^2>0$. Let $Y_i = \frac13X_i + \frac23X_{i+1}$ and $M_n = \frac1n\sum_{i=1}^nY_i$. (a) Are the $Y_i$ independent? (b) Identically distributed? (c) Show $M_n\xrightarrow{p}\mu$.
 
@@ -1804,8 +1811,12 @@ The lesson: the WLLN argument doesn't really need independence. It needs the var
 
 **B5 (last year's HW7 Q3 and HW8 Q5).** (a) $X_n\sim\mathcal N(0,\frac1n)$: show $X_n\xrightarrow{p}0$. (b) $X_n = X + Y_n$ with $Y_n\sim\mathcal N(0,\frac1n)$ independent of $X$: show $X_n\xrightarrow{m.s.}X$.
 
-*Solution.* (a) Mean 0, variance $\frac1n$, so Chebyshev: $P(|X_n|\ge\epsilon)\le\frac{1}{n\epsilon^2}\to0$.
-(b) The difference is just $Y_n$: $E[(X_n - X)^2] = E[Y_n^2] = \frac1n\to0$. We never needed to know anything about $X$.
+*Solution.* (a) $E[X_n] = 0$ and $\operatorname{Var}(X_n) = \frac1n$. By Chebyshev,
+$$P(|X_n - 0|\ge\epsilon)\le\frac{\operatorname{Var}(X_n)}{\epsilon^2} = \frac{1}{n\epsilon^2}\to0 .$$
+
+(b) $X_n - X = Y_n$, so
+$$E\big[(X_n - X)^2\big] = E[Y_n^2] = \operatorname{Var}(Y_n) + (E[Y_n])^2 = \frac1n\to0 .$$
+So $X_n\xrightarrow{m.s.}X$. Nothing about $X$ was needed, not even independence.
 
 **B6 (last year's HW7 Q7).** $X_n = X + Y_n$ with $E[Y_n] = \frac1n$ and $\operatorname{Var}(Y_n) = \frac{\sigma^2}{n}$. Show $X_n\xrightarrow{p}X$.
 
@@ -1844,38 +1855,52 @@ $$P(|X_n - 5|>\epsilon) = \begin{cases}1 - n\epsilon & n<\frac1\epsilon\\ 0 & n\
 **B9 (last year's HW8 Q1).** Independent $X_n\sim$ Bernoulli$(\frac1n)$. Does $X_n\to0$ (a) in mean square, (b) almost surely, (c) in distribution?
 
 *Solution.*
-(a) Yes. $X_n^2 = X_n$ (it's 0 or 1), so $E[X_n^2] = \frac1n\to0$.
-(b) No. That's L17 Part B, B4 (Theorem 7.6, or second Borel–Cantelli).
-(c) Yes, because m.s. $\Rightarrow$ p $\Rightarrow$ d. Or directly: $F_{X_n}(x) = 0$ for $x<0$, $= 1 - \frac1n\to1$ for $0\le x<1$, and $= 1$ for $x\ge1$. That's the CDF of the constant 0 in the limit.
-This is the standard "m.s. does not imply a.s." example.
+(a) **Yes.** $X_n\in\{0,1\}$, so $X_n^2 = X_n$ and $E[X_n^2] = \frac1n\to0$.
+
+(b) **No.** Let $A_n = \{X_n = 1\}$. The $A_n$ are independent and $\sum_nP(A_n) = \sum_n\frac1n = \infty$, so by the second Borel–Cantelli lemma $A_n$ happens infinitely often with probability 1. On that event $X_n = 1$ for infinitely many $n$, so $X_n\not\to0$. Hence $P(X_n\to0) = 0$.
+
+(c) **Yes**, since m.s. $\Rightarrow$ p $\Rightarrow$ d. Directly:
+$$F_{X_n}(x) = \begin{cases}0 & x<0\\ 1 - \frac1n & 0\le x<1\\ 1 & x\ge1\end{cases}\ \longrightarrow\ \begin{cases}0 & x<0\\ 1 & x\ge0,\end{cases}$$
+the CDF of the constant 0.
+
+This is the standard example that **m.s. (and p) do not imply a.s.** Independence is what makes (b) fail; compare B10, where one shared $U$ gives a.s. convergence.
 
 **B10 (last year's Tutorial 7 Q1).** One uniform $U$ and $X_n = n\mathbf 1\{U\le\frac1n\}$ (L17 slide 19). Does $X_n\to0$ in (a) distribution, (b) probability, (c) almost surely (can Borel–Cantelli be applied?), (d) mean?
 
-*Solution.* Start with the strongest one.
-(c) Yes, almost surely (L17 slide 19). But Borel–Cantelli (Theorem 7.5) **can't** be used to show it, because $\sum_nP(X_n>\epsilon) = \sum\frac1n = \infty$. The conclusion holds anyway, by Theorem 7.6.
-(b), (a) Yes, both follow from (c).
-(d) No: $E|X_n| = n\cdot\frac1n = 1$ for every $n$.
+*Solution.* Start with the strongest mode.
+
+(c) **Yes, almost surely.** Fix an outcome with $U>0$ (probability 1). Once $n>\frac1U$, $U>\frac1n$, so $X_n = 0$ for all later $n$. Hence $X_n\to0$ on $\{U>0\}$.
+
+Borel–Cantelli **cannot** be used: for $\epsilon\in(0,1)$, $\sum_nP(X_n>\epsilon) = \sum_n\frac1n = \infty$. The second lemma does not apply either, because the events $\{U\le\frac1n\}$ are nested, not independent. A diverging sum does not rule out a.s. convergence.
+
+(b), (a) **Yes**, both follow from (c).
+
+(d) **No.** $E|X_n - 0| = n\cdot P(U\le\frac1n) = n\cdot\frac1n = 1$ for every $n$.
 
 **B11 (last year's Quiz 2, second set, Q1b): convergence in distribution only.** $X_n\sim$ Exp$(n)$ and $Y_n = nX_n$. Let $Y\sim$ Exp$(1)$, independent of all $Y_n$ (and the $Y_n$ independent). Does $Y_n\to Y$ in (a) distribution, (b) probability, (c) almost surely, (d) $L^1$?
 
 *Solution.*
-(a) Yes, and in the most boring way possible:
+(a) **Yes.** For $y\ge0$,
 $$F_{Y_n}(y) = P\Big(X_n\le\frac yn\Big) = 1 - e^{-n\cdot y/n} = 1 - e^{-y}.$$
-Every $Y_n$ is *exactly* Exp$(1)$, the same as $Y$.
+Every $Y_n$ is exactly Exp$(1)$, the same law as $Y$, so the CDFs trivially converge.
 
-(b) No. $Y_n$ and $Y$ are independent Exp$(1)$s, so their difference doesn't shrink. Condition on $Y = y$:
-$$P(Y_n>Y + \epsilon) = \int_0^\infty P(Y_n>y + \epsilon)\,e^{-y}\,dy = \int_0^\infty e^{-(y+\epsilon)}e^{-y}\,dy = \frac12e^{-\epsilon},$$
-and by symmetry the same for $Y>Y_n + \epsilon$. So $P(|Y_n - Y|>\epsilon) = e^{-\epsilon}$ for every $n$, which doesn't go to 0.
+(b) **No.** $Y_n$ and $Y$ are independent Exp$(1)$. Condition on $Y = y$:
+$$P(Y_n>Y + \epsilon) = \int_0^\infty P(Y_n>y + \epsilon)\,e^{-y}\,dy = \int_0^\infty e^{-(y+\epsilon)}e^{-y}\,dy = \frac12e^{-\epsilon}.$$
+By symmetry $P(Y>Y_n + \epsilon) = \frac12e^{-\epsilon}$ too, so
+$$P(|Y_n - Y|>\epsilon) = e^{-\epsilon}\quad\text{for every }n,$$
+which does not tend to 0.
 
-(c) No, since a.s. would imply (b). (Or by Theorem 7.6: $P(A_m) = \prod_{n\ge m}(1 - e^{-\epsilon}) = 0$.)
+(c) **No.** a.s. would imply p, which fails.
 
-(d) No. From (b), $Y_n - Y$ has the Laplace density $\frac12e^{-|z|}$, so $E|Y_n - Y| = 1$ for every $n$.
+(d) **No.** $L^1$ would also imply p. Directly: $Y_n - Y$ has the Laplace density $\frac12e^{-|z|}$, so $E|Y_n - Y| = 1$ for every $n$.
 
-This is the cleanest exam-style example that **d does not imply p**: same distribution every time, but independent values that never get close.
+This is the cleanest example that **d does not imply p**: same distribution every time, but independent values that never get close to $Y$.
 
 **B12 (last year's Tutorial 7 Q3).** $X\sim$ Bernoulli$(\frac13)$ and $X_n = (1 + \frac1n)X$. Show $X_n\xrightarrow{p}X$.
 
-*Solution.* $|X_n - X| = \frac Xn\le\frac1n$, so $P(|X_n - X|>\epsilon) = 0$ once $n>\frac1\epsilon$. (Even sure convergence.)
+*Solution.* $X_n - X = \frac Xn$ and $X\in\{0,1\}$, so $|X_n - X|\le\frac1n$ always. For $\epsilon>0$ and $n>\frac1\epsilon$,
+$$P(|X_n - X|>\epsilon) = 0 .$$
+So $X_n\xrightarrow{p}X$. The bound holds for every outcome, so this is even sure convergence.
 
 **B13 (last year's Tutorial 7 Q10).** $X_i$ i.i.d. with $E[X] = 2$ and $\operatorname{Var}(X) = 9$. Let $Y_i = \frac{X_i}{2^i}$, $T_n = \sum_{i=1}^nY_i$ and $A_n = \frac{T_n}{n}$. (a) Means and variances. (b) to (d) Do $Y_n$, $T_n$, $A_n$ converge in probability, and to what?
 
@@ -1924,9 +1949,10 @@ Another "m.s. does not imply a.s." example, and this one has no independence at 
 
 **B17 (last year's Tutorial 7 Q2).** $X_i$ i.i.d. $\mathcal U[0,1]$ and $Y_n = n\big(1 - \max_{i\le n}X_i\big)$. Show $Y_n\xrightarrow{d}$ Exp$(1)$.
 
-*Solution.* The gap between the max and 1 is about $\frac1n$, so scaling by $n$ should give something nontrivial. Use the max trick:
-$$P(Y_n>y) = P\Big(\max X_i<1 - \frac yn\Big) = \Big(1 - \frac yn\Big)^n\to e^{-y}\qquad(0\le y<n).$$
-So $F_{Y_n}(y)\to1 - e^{-y}$ for $y\ge0$, and both CDFs are 0 for $y<0$. That's Exp$(1)$.
+*Solution.* The max sits about $\frac1n$ below 1, so the scaled gap $n(1 - \max)$ has a nontrivial limit. Work with the tail. For $0\le y<n$,
+$$P(Y_n>y) = P\Big(\max_iX_i<1 - \frac yn\Big) = \prod_{i=1}^nP\Big(X_i<1-\frac yn\Big) = \Big(1 - \frac yn\Big)^n\to e^{-y}.$$
+So $F_{Y_n}(y)\to1 - e^{-y}$ for $y\ge0$, and $F_{Y_n}(y) = 0$ for $y<0$ (since $Y_n\ge0$). This is the Exp$(1)$ CDF at every $y$, so
+$$Y_n\xrightarrow{d}\text{Exp}(1).$$
 
 **B18 (last year's Tutorial 7 Q4(a) and Tutorial 8 Q5): discrete to continuous.** $Y_n$ uniform on $\{1, \dots, n\}$ and $X_n = \frac{Y_n}{n}$. Show $X_n\xrightarrow{d}\mathcal U(0,1)$.
 
@@ -1936,11 +1962,13 @@ Since $nx - 1<\lfloor nx\rfloor\le nx$, we get $x - \frac1n<F_{X_n}(x)\le x$, so
 
 **B19 (probabilitycourse 7.2.8, Problem 1).** $X_n\sim$ Geometric$(\frac\lambda n)$ and $Y_n = \frac{X_n}{n}$. Show $Y_n\xrightarrow{d}$ Exp$(\lambda)$.
 
-*Solution.* For a geometric, $P(X>m) = (1-p)^m$ (the first $m$ trials all fail). So
-$$P(Y_n>y) = P(X_n>ny) = \Big(1 - \frac\lambda n\Big)^{\lfloor ny\rfloor}.$$
-Write $\lfloor ny\rfloor = ny - \theta$ with $0\le\theta<1$. Then $(1 - \frac\lambda n)^{ny}\to e^{-\lambda y}$, and $(1 - \frac\lambda n)^{-\theta}\to1$. So $P(Y_n>y)\to e^{-\lambda y}$, the Exp$(\lambda)$ tail.
+*Solution.* For $X\sim$ Geometric$(p)$ on $\{1,2,\dots\}$, $P(X>m) = (1-p)^m$ (the first $m$ trials all fail). For $y>0$ and $n>\lambda$,
+$$P(Y_n>y) = P(X_n>ny) = P\big(X_n>\lfloor ny\rfloor\big) = \Big(1 - \frac\lambda n\Big)^{\lfloor ny\rfloor}.$$
+Write $\lfloor ny\rfloor = ny - \theta_n$ with $0\le\theta_n<1$:
+$$\Big(1 - \frac\lambda n\Big)^{\lfloor ny\rfloor} = \underbrace{\Big[\Big(1 - \frac\lambda n\Big)^{n}\Big]^{y}}_{\to\ e^{-\lambda y}}\cdot\underbrace{\Big(1 - \frac\lambda n\Big)^{-\theta_n}}_{\to\ 1}\to e^{-\lambda y}.$$
+So $F_{Y_n}(y)\to1 - e^{-\lambda y}$ for $y>0$, and both CDFs are 0 for $y\le0$. Hence $Y_n\xrightarrow{d}$ Exp$(\lambda)$.
 
-This is the continuous cousin of Binomial $\to$ Poisson: the waiting time over lots of tiny trials becomes exponential.
+This is the continuous version of Binomial $\to$ Poisson: the waiting time over many tiny trials becomes exponential.
 
 **B20 (last year's HW8 Q9): hypergeometric to binomial.** A bag has $n$ blue and $n$ red balls; draw 10 without replacement; $X_n$ is the number of blue balls. Show $X_n\xrightarrow{d}$ Binomial$(10,\frac12)$.
 
