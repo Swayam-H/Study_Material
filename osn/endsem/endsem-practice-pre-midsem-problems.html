@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Endsem practice: pre-midsem problems · Operating Systems and Networks</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwy042pa">
+</head>
+<body data-root="../../" data-page="osn/endsem/endsem-practice-pre-midsem-problems" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">AAD · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../aad/index.html">Algorithm Analysis and Design</a>
+      </div><div class="nav-tools"><a class="" href="../../aad/practice.html">Practice <b>129</b></a><a class="" href="../../aad/formulas.html">Formulas <b>30</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="aad/start-here/start-here" href="../../aad/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Lectures 1 to 3: numbers, divide and conquer, lower bounds</span><i data-count-for="aad/numbers-dc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/numbers-dc/learn" href="../../aad/numbers-dc/learn.html"><small>Learn</small><span>Numbers and algorithms</span></a><a class="nav-link" data-id="aad/numbers-dc/learn-2" href="../../aad/numbers-dc/learn-2.html"><small>Learn</small><span>Divide and conquer</span></a><a class="nav-link" data-id="aad/numbers-dc/learn-3" href="../../aad/numbers-dc/learn-3.html"><small>Learn</small><span>Lower bounds</span></a></div></details><a class="nav-link nav-single" data-id="aad/fft/learn" href="../../aad/fft/learn.html"><span>Lectures 3, 4 and 8: polynomials and the FFT</span></a><details class="nav-doc"><summary><span>Lectures 4 and 5: graphs, shortest paths, MSTs</span><i data-count-for="aad/graphs/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/graphs/learn" href="../../aad/graphs/learn.html"><small>Learn</small><span>Exploring graphs</span></a><a class="nav-link" data-id="aad/graphs/learn-2" href="../../aad/graphs/learn-2.html"><small>Learn</small><span>Shortest paths</span></a><a class="nav-link" data-id="aad/graphs/learn-3" href="../../aad/graphs/learn-3.html"><small>Learn</small><span>Minimum spanning trees</span></a><a class="nav-link" data-id="aad/graphs/learn-4" href="../../aad/graphs/learn-4.html"><small>Learn</small><span>Tutorial 2 problems and the assigned DPV graph exercises</span></a></div></details><details class="nav-doc"><summary><span>Lectures 6 to 9: stable matchings, Hall, maximum matchings</span><i data-count-for="aad/matchings/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/matchings/learn" href="../../aad/matchings/learn.html"><small>Learn</small><span>Stable matchings</span></a><a class="nav-link" data-id="aad/matchings/learn-2" href="../../aad/matchings/learn-2.html"><small>Learn</small><span>Hall's theorem</span></a><a class="nav-link" data-id="aad/matchings/learn-3" href="../../aad/matchings/learn-3.html"><small>Learn</small><span>Maximum matchings</span></a></div></details><details class="nav-doc"><summary><span>Lecture 10: greedy algorithms and Huffman codes</span><i data-count-for="aad/greedy/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/greedy/learn" href="../../aad/greedy/learn.html"><small>Learn</small><span>Greedy algorithms</span></a><a class="nav-link" data-id="aad/greedy/learn-2" href="../../aad/greedy/learn-2.html"><small>Learn</small><span>Huffman coding</span></a><a class="nav-link" data-id="aad/greedy/learn-3" href="../../aad/greedy/learn-3.html"><small>Learn</small><span>Interval scheduling and partitioning</span></a></div></details><a class="nav-link nav-single" data-id="aad/dp/learn" href="../../aad/dp/learn.html"><span>Lectures 11 to 13: dynamic programming</span></a><details class="nav-doc"><summary><span>Lectures 14 to 18: max flow and min cut</span><i data-count-for="aad/maxflow/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/maxflow/learn" href="../../aad/maxflow/learn.html"><small>Learn</small><span>Flows, cuts and duality</span></a><a class="nav-link" data-id="aad/maxflow/learn-2" href="../../aad/maxflow/learn-2.html"><small>Learn</small><span>Ford–Fulkerson</span></a><a class="nav-link" data-id="aad/maxflow/learn-3" href="../../aad/maxflow/learn-3.html"><small>Learn</small><span>Reductions to max flow</span></a><a class="nav-link" data-id="aad/maxflow/learn-4" href="../../aad/maxflow/learn-4.html"><small>Learn</small><span>The Lecture 15 exercise set, solved</span></a></div></details><details class="nav-doc"><summary><span>Lectures 19 to 21: randomized algorithms and fingerprinting</span><i data-count-for="aad/randomized/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/randomized/learn" href="../../aad/randomized/learn.html"><small>Learn</small><span>Randomized algorithms and MaxCut</span></a><a class="nav-link" data-id="aad/randomized/learn-2" href="../../aad/randomized/learn-2.html"><small>Learn</small><span>Fingerprinting and Rabin–Karp</span></a></div></details><details class="nav-doc"><summary><span>Lecture 22 and the NP tutorial: reductions and NP-hardness</span><i data-count-for="aad/np/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/np/learn" href="../../aad/np/learn.html"><small>Learn</small><span>Balanced brackets and lower bounds by reduction</span></a><a class="nav-link" data-id="aad/np/learn-2" href="../../aad/np/learn-2.html"><small>Learn</small><span>P, NP and reductions</span></a><a class="nav-link" data-id="aad/np/learn-3" href="../../aad/np/learn-3.html"><small>Learn</small><span>3-SAT, XOR-SAT and Max-Cut is NP-hard</span></a><a class="nav-link" data-id="aad/np/learn-4" href="../../aad/np/learn-4.html"><small>Learn</small><span>The other classic reductions (practice sheet)</span></a></div></details><details class="nav-doc"><summary><span>Midsem, fully solved</span><i data-count-for="aad/midsem/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/midsem/midsem" href="../../aad/midsem/midsem.html"><small>Midsem</small><span>Numeric algorithms</span></a><a class="nav-link" data-id="aad/midsem/midsem-2" href="../../aad/midsem/midsem-2.html"><small>Midsem</small><span>Stable matchings</span></a><a class="nav-link" data-id="aad/midsem/midsem-3" href="../../aad/midsem/midsem-3.html"><small>Midsem</small><span>Greedy algorithms</span></a><a class="nav-link" data-id="aad/midsem/midsem-4" href="../../aad/midsem/midsem-4.html"><small>Midsem</small><span>SDRs and Latin squares</span></a><a class="nav-link" data-id="aad/midsem/midsem-5" href="../../aad/midsem/midsem-5.html"><small>Midsem</small><span>Dynamic programming</span></a></div></details><details class="nav-doc"><summary><span>Quizzes I and II and Class Tests I and II, fully solved</span><i data-count-for="aad/quizzes/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/quizzes/quiz-i-tiling-multiplication-hadamard" href="../../aad/quizzes/quiz-i-tiling-multiplication-hadamard.html"><span>Quiz I: tiling, multiplication, Hadamard</span></a><a class="nav-link" data-id="aad/quizzes/quiz-ii-random-dags-and-matching-via-flow" href="../../aad/quizzes/quiz-ii-random-dags-and-matching-via-flow.html"><span>Quiz II: random DAGs and matching via flow</span></a><a class="nav-link" data-id="aad/quizzes/class-test-i-max-flow" href="../../aad/quizzes/class-test-i-max-flow.html"><span>Class Test I: max flow</span></a><a class="nav-link" data-id="aad/quizzes/class-test-ii-streaming-palindromes-and-2d-pattern-matching" href="../../aad/quizzes/class-test-ii-streaming-palindromes-and-2d-pattern-matching.html"><span>Class Test II: streaming palindromes and 2D pattern matching</span></a></div></details><details class="nav-doc"><summary><span>Practice problems and assignments, solved</span><i data-count-for="aad/practice/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/practice/moodle-practice-set-solved" href="../../aad/practice/moodle-practice-set-solved.html"><span>Moodle practice set, solved</span></a><a class="nav-link" data-id="aad/practice/assignments-1-and-2-solved" href="../../aad/practice/assignments-1-and-2-solved.html"><span>Assignments 1 and 2, solved</span></a><a class="nav-link" data-id="aad/practice/new-endsem-style-problems" href="../../aad/practice/new-endsem-style-problems.html"><span>New endsem-style problems</span></a></div></details><a class="nav-link nav-single" data-id="aad/cheatsheet/last-hour-cheat-sheet" href="../../aad/cheatsheet/last-hour-cheat-sheet.html"><span>Last-hour cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS4.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../dna/index.html">Data and Applications</a>
+      </div><div class="nav-tools"><a class="" href="../../dna/practice.html">Practice <b>172</b></a><a class="" href="../../dna/formulas.html">Formulas <b>5</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="dna/start-here/start-here" href="../../dna/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Videos and quick checks</span><i data-count-for="dna/videos/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/videos/reference" href="../../dna/videos/reference.html"><small>Reference</small><span>Videos for the endsem, topic by topic</span></a><a class="nav-link" data-id="dna/videos/practice" href="../../dna/videos/practice.html"><small>Practice</small><span>Quick checks for each topic</span></a></div></details><details class="nav-doc"><summary><span>Chapter 0: Database concepts and architecture</span><i data-count-for="dna/ch0-database-concepts/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch0-database-concepts/learn" href="../../dna/ch0-database-concepts/learn.html"><small>Learn</small><span>Database concepts and architecture</span></a><a class="nav-link" data-id="dna/ch0-database-concepts/reference" href="../../dna/ch0-database-concepts/reference.html"><small>Reference</small><span>Database concepts and architecture</span></a><a class="nav-link" data-id="dna/ch0-database-concepts/practice" href="../../dna/ch0-database-concepts/practice.html"><small>Practice</small><span>Database concepts and architecture</span></a></div></details><details class="nav-doc"><summary><span>Chapter 1: The relational model, keys and constraints</span><i data-count-for="dna/ch1-relational-model/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch1-relational-model/learn" href="../../dna/ch1-relational-model/learn.html"><small>Learn</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/reference" href="../../dna/ch1-relational-model/reference.html"><small>Reference</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/practice" href="../../dna/ch1-relational-model/practice.html"><small>Practice</small><span>The relational model, keys and constraints</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: ER and EER modelling</span><i data-count-for="dna/ch2-er-eer/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch2-er-eer/learn" href="../../dna/ch2-er-eer/learn.html"><small>Learn</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/reference" href="../../dna/ch2-er-eer/reference.html"><small>Reference</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/practice" href="../../dna/ch2-er-eer/practice.html"><small>Practice</small><span>ER and EER modelling</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Mapping EER to relations</span><i data-count-for="dna/ch3-mapping/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch3-mapping/learn" href="../../dna/ch3-mapping/learn.html"><small>Learn</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/reference" href="../../dna/ch3-mapping/reference.html"><small>Reference</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/practice" href="../../dna/ch3-mapping/practice.html"><small>Practice</small><span>Mapping EER to relations</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Functional dependencies and normalisation</span><i data-count-for="dna/ch4-normalisation/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch4-normalisation/learn" href="../../dna/ch4-normalisation/learn.html"><small>Learn</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/reference" href="../../dna/ch4-normalisation/reference.html"><small>Reference</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/practice" href="../../dna/ch4-normalisation/practice.html"><small>Practice</small><span>Functional dependencies and normalisation</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Relational algebra</span><i data-count-for="dna/ch5-relational-algebra/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch5-relational-algebra/learn" href="../../dna/ch5-relational-algebra/learn.html"><small>Learn</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/reference" href="../../dna/ch5-relational-algebra/reference.html"><small>Reference</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/practice" href="../../dna/ch5-relational-algebra/practice.html"><small>Practice</small><span>Relational algebra</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Tuple relational calculus</span><i data-count-for="dna/ch6-trc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch6-trc/learn" href="../../dna/ch6-trc/learn.html"><small>Learn</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/reference" href="../../dna/ch6-trc/reference.html"><small>Reference</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/practice" href="../../dna/ch6-trc/practice.html"><small>Practice</small><span>Tuple relational calculus</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: SQL</span><i data-count-for="dna/ch7-sql/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch7-sql/learn" href="../../dna/ch7-sql/learn.html"><small>Learn</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/reference" href="../../dna/ch7-sql/reference.html"><small>Reference</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/practice" href="../../dna/ch7-sql/practice.html"><small>Practice</small><span>SQL</span></a></div></details><a class="nav-link nav-single" data-id="dna/mock-endsem/mock-endsem" href="../../dna/mock-endsem/mock-endsem.html"><span>Mock endsem with solutions</span></a><a class="nav-link nav-single" data-id="dna/cheat-sheet/cheat-sheet" href="../../dna/cheat-sheet/cheat-sheet.html"><span>Two-page cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>123</b></a><a class="" href="../../osn/formulas.html">Formulas <b>25</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="7"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/concurrency-theory-from-the-textbooks" href="../../osn/concurrency/concurrency-theory-from-the-textbooks.html"><span>Concurrency theory from the textbooks</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><details class="nav-doc"><summary><span>Lectures 18 and 19: file systems</span><i data-count-for="osn/filesystems/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/filesystems/lecture-18" href="../../osn/filesystems/lecture-18.html"><small>Lecture 18</small><span>Files and directories</span></a><a class="nav-link" data-id="osn/filesystems/lecture-19" href="../../osn/filesystems/lecture-19.html"><small>Lecture 19</small><span>File system implementation</span></a><a class="nav-link" data-id="osn/filesystems/the-xv6-file-system-tutorial-7" href="../../osn/filesystems/the-xv6-file-system-tutorial-7.html"><span>The xv6 file system (Tutorial 7)</span></a><a class="nav-link" data-id="osn/filesystems/file-system-theory-from-the-textbooks" href="../../osn/filesystems/file-system-theory-from-the-textbooks.html"><span>File-system theory from the textbooks</span></a><a class="nav-link" data-id="osn/filesystems/practice-problems-lectures-18-and-19" href="../../osn/filesystems/practice-problems-lectures-18-and-19.html"><span>Practice problems, Lectures 18 and 19</span></a></div></details><details class="nav-doc"><summary><span>Rapid revision, Lectures 1 to 19 (5 pages)</span><i data-count-for="osn/revision/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/revision/rapid-revision-1-cpu-virtualization-l01-to-l07" href="../../osn/revision/rapid-revision-1-cpu-virtualization-l01-to-l07.html"><span>Rapid revision 1: CPU virtualization (L01 to L07)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-2-networking-l08-and-l09" href="../../osn/revision/rapid-revision-2-networking-l08-and-l09.html"><span>Rapid revision 2: networking (L08 and L09)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-3-memory-l10-to-l13" href="../../osn/revision/rapid-revision-3-memory-l10-to-l13.html"><span>Rapid revision 3: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-4-concurrency-l14-to-l17" href="../../osn/revision/rapid-revision-4-concurrency-l14-to-l17.html"><span>Rapid revision 4: concurrency (L14 to L17)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-5-file-systems-l18-and-l19-tutorial-7" href="../../osn/revision/rapid-revision-5-file-systems-l18-and-l19-tutorial-7.html"><span>Rapid revision 5: file systems (L18 and L19, Tutorial 7)</span></a></div></details><details class="nav-doc"><summary><span>Theory cheat sheet (3 pages)</span><i data-count-for="osn/theory-cheatsheet/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-1-memory-l10-to-l13" href="../../osn/theory-cheatsheet/theory-cheat-sheet-1-memory-l10-to-l13.html"><span>Theory cheat sheet 1: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-2-concurrency-l14-to-l17" href="../../osn/theory-cheatsheet/theory-cheat-sheet-2-concurrency-l14-to-l17.html"><span>Theory cheat sheet 2: concurrency (L14 to L17)</span></a><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems" href="../../osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems.html"><span>Theory cheat sheet 3: CPU, networking and file systems</span></a></div></details><details class="nav-doc" open><summary><span>Endsem practice (9 × 10 marks)</span><i data-count-for="osn/endsem/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/endsem/endsem-practice-the-professor-s-sheet" href="../../osn/endsem/endsem-practice-the-professor-s-sheet.html"><span>Endsem practice: the professor's sheet</span></a><a class="nav-link" data-id="osn/endsem/endsem-practice-post-midsem-extras" href="../../osn/endsem/endsem-practice-post-midsem-extras.html"><span>Endsem practice: post-midsem extras</span></a><a class="nav-link current" data-id="osn/endsem/endsem-practice-pre-midsem-problems" href="../../osn/endsem/endsem-practice-pre-midsem-problems.html"><span>Endsem practice: pre-midsem problems</span></a></div></details><details class="nav-doc"><summary><span>Formula sheets (3 pages)</span><i data-count-for="osn/formula-sheet/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09" href="../../osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09.html"><span>Formula sheet 1: CPU and networking (L01 to L09)</span></a><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-2-memory-l10-to-l13" href="../../osn/formula-sheet/formula-sheet-2-memory-l10-to-l13.html"><span>Formula sheet 2: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-3-concurrency-and-file-systems-l14-to-l19" href="../../osn/formula-sheet/formula-sheet-3-concurrency-and-file-systems-l14-to-l19.html"><span>Formula sheet 3: concurrency and file systems (L14 to L19)</span></a></div></details><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 19</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>337</b></a><a class="" href="../../pns/formulas.html">Formulas <b>141</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="pns/endsem-sheet/endsem-formula-and-cheat-sheet" href="../../pns/endsem-sheet/endsem-formula-and-cheat-sheet.html"><span>Endsem formula and cheat sheet</span></a><details class="nav-doc"><summary><span>Last day practice (endsem)</span><i data-count-for="pns/last-day/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/last-day/last-day-practice-how-to-use-it" href="../../pns/last-day/last-day-practice-how-to-use-it.html"><span>Last day practice: how to use it</span></a><a class="nav-link" data-id="pns/last-day/new-problems-probabilistic-inequalities" href="../../pns/last-day/new-problems-probabilistic-inequalities.html"><span>New problems: probabilistic inequalities</span></a><a class="nav-link" data-id="pns/last-day/new-problems-slln" href="../../pns/last-day/new-problems-slln.html"><span>New problems: SLLN</span></a><a class="nav-link" data-id="pns/last-day/new-problems-accept-reject" href="../../pns/last-day/new-problems-accept-reject.html"><span>New problems: accept–reject</span></a><a class="nav-link" data-id="pns/last-day/new-problems-inverse-transform" href="../../pns/last-day/new-problems-inverse-transform.html"><span>New problems: inverse transform</span></a><a class="nav-link" data-id="pns/last-day/new-problems-monte-carlo" href="../../pns/last-day/new-problems-monte-carlo.html"><span>New problems: Monte Carlo</span></a></div></details><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-slides-1-36" href="../../pns/l21-onward/part-6-linear-regression-slides-1-36.html"><span>Part 6 — Linear regression (slides 1–36)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a><details class="nav-doc"><summary><span>Quiz 2, worked solutions</span><i data-count-for="pns/quiz2-solutions/" data-total="7"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/quiz2-solutions/how-this-is-laid-out" href="../../pns/quiz2-solutions/how-this-is-laid-out.html"><span>How this is laid out</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-1-exponential-samples-to-uniform-a-b" href="../../pns/quiz2-solutions/question-1-exponential-samples-to-uniform-a-b.html"><span>Question 1: Exponential samples to Uniform<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mclose">]</span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-2-mgf-of-a-sum-of-two-binomials" href="../../pns/quiz2-solutions/question-2-mgf-of-a-sum-of-two-binomials.html"><span>Question 2: MGF of a sum of two Binomials</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-3-binomial-n-n-d-poisson" href="../../pns/quiz2-solutions/question-3-binomial-n-n-d-poisson.html"><span>Question 3: Binomial<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.4531em;vertical-align:-0.345em;"></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">λ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1081em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span></span></span></span> Poisson<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">λ</span><span class="mclose">)</span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-4-xn-n1-un-1n-does-not-converge-to-0-a-s" href="../../pns/quiz2-solutions/question-4-xn-n1-un-1n-does-not-converge-to-0-a-s.html"><span>Question 4: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord mathbf">1</span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">}</span></span></span></span> does not converge to 0 a.s.</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-5-10-marks-pdf-of-x-az" href="../../pns/quiz2-solutions/question-5-10-marks-pdf-of-x-az.html"><span>Question 5 (10 marks): pdf of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6861em;"></span><span class="mord mathbf">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7694em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mord mathbf">Z</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">μ</span></span></span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/one-page-summary" href="../../pns/quiz2-solutions/one-page-summary.html"><span>One-page summary</span></a></div></details><details class="nav-doc"><summary><span>Statistics practice quiz, L21 to L24</span><i data-count-for="pns/stats-practice-quiz/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/stats-practice-quiz/part-1" href="../../pns/stats-practice-quiz/part-1.html"><small>Part 1</small><span>What past papers tell us</span></a><a class="nav-link" data-id="pns/stats-practice-quiz/part-2" href="../../pns/stats-practice-quiz/part-2.html"><small>Part 2</small><span>The quiz</span></a><a class="nav-link" data-id="pns/stats-practice-quiz/part-3" href="../../pns/stats-practice-quiz/part-3.html"><small>Part 3</small><span>Answer key</span></a></div></details><a class="nav-link nav-single" data-id="pns/mixed-problems/mixed-problems-several-topics-at-once" href="../../pns/mixed-problems/mixed-problems-several-topics-at-once.html"><span>Mixed problems, several topics at once</span></a><details class="nav-doc"><summary><span>Mock endsem, timed (3 hours)</span><i data-count-for="pns/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/mock-endsem/mock-endsem-the-paper" href="../../pns/mock-endsem/mock-endsem-the-paper.html"><span>Mock endsem: the paper</span></a><a class="nav-link" data-id="pns/mock-endsem/mock-endsem-solutions" href="../../pns/mock-endsem/mock-endsem-solutions.html"><span>Mock endsem: solutions</span></a></div></details></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>490</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>61</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/start-here/start-here" href="../../science-1/start-here/start-here.html"><span>Start here: the endsem map</span></a><a class="nav-link nav-single" data-id="science-1/videos-ftlop/reference" href="../../science-1/videos-ftlop/reference.html"><span>Reference: For the Love of Physics videos</span></a><details class="nav-doc"><summary><span>Chapter 1: Scales, modelling and nonlinear dynamics</span><i data-count-for="science-1/ch1-intro/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch1-intro/learn" href="../../science-1/ch1-intro/learn.html"><small>Learn</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/reference" href="../../science-1/ch1-intro/reference.html"><small>Reference</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/formulas" href="../../science-1/ch1-intro/formulas.html"><small>Formulas</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/practice" href="../../science-1/ch1-intro/practice.html"><small>Practice</small><span>Scales, modelling and nonlinear dynamics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: Newtonian mechanics of one particle and many</span><i data-count-for="science-1/ch2-newton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch2-newton/learn" href="../../science-1/ch2-newton/learn.html"><small>Learn</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/reference" href="../../science-1/ch2-newton/reference.html"><small>Reference</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/formulas" href="../../science-1/ch2-newton/formulas.html"><small>Formulas</small><span>Newtonian mechanics</span></a><a class="nav-link" data-id="science-1/ch2-newton/practice" href="../../science-1/ch2-newton/practice.html"><small>Practice</small><span>Newtonian mechanics of one particle and many</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Calculus of variations and Lagrangian mechanics</span><i data-count-for="science-1/ch3-lagrange/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch3-lagrange/learn" href="../../science-1/ch3-lagrange/learn.html"><small>Learn</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/reference" href="../../science-1/ch3-lagrange/reference.html"><small>Reference</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/formulas" href="../../science-1/ch3-lagrange/formulas.html"><small>Formulas</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/practice" href="../../science-1/ch3-lagrange/practice.html"><small>Practice</small><span>Calculus of variations and Lagrangian mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Hamiltonian dynamics and the two-body problem</span><i data-count-for="science-1/ch4-hamilton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch4-hamilton/learn" href="../../science-1/ch4-hamilton/learn.html"><small>Learn</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/reference" href="../../science-1/ch4-hamilton/reference.html"><small>Reference</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/formulas" href="../../science-1/ch4-hamilton/formulas.html"><small>Formulas</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/practice" href="../../science-1/ch4-hamilton/practice.html"><small>Practice</small><span>Hamiltonian dynamics and the two-body problem</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Special relativity</span><i data-count-for="science-1/ch5-relativity/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch5-relativity/learn" href="../../science-1/ch5-relativity/learn.html"><small>Learn</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference" href="../../science-1/ch5-relativity/reference.html"><small>Reference</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/formulas" href="../../science-1/ch5-relativity/formulas.html"><small>Formulas</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/practice" href="../../science-1/ch5-relativity/practice.html"><small>Practice</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference-2" href="../../science-1/ch5-relativity/reference-2.html"><small>Reference</small><span>Special relativity quick sheet (Beiser ch. 1)</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Thermodynamics I: gases and the first law</span><i data-count-for="science-1/ch6-thermo1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch6-thermo1/learn" href="../../science-1/ch6-thermo1/learn.html"><small>Learn</small><span>Thermodynamics in one pass (Atkins 1A to 3B)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-2" href="../../science-1/ch6-thermo1/learn-2.html"><small>Learn</small><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-3" href="../../science-1/ch6-thermo1/learn-3.html"><small>Learn</small><span>The first law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-4" href="../../science-1/ch6-thermo1/learn-4.html"><small>Learn</small><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/practice" href="../../science-1/ch6-thermo1/practice.html"><small>Practice</small><span>Thermodynamics I: gases and the first law</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: Thermodynamics II: second law, entropy and free energy</span><i data-count-for="science-1/ch7-thermo2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch7-thermo2/learn" href="../../science-1/ch7-thermo2/learn.html"><small>Learn</small><span>The second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/learn-2" href="../../science-1/ch7-thermo2/learn-2.html"><small>Learn</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/reference" href="../../science-1/ch7-thermo2/reference.html"><small>Reference</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/formulas" href="../../science-1/ch7-thermo2/formulas.html"><small>Formulas</small><span>Second law, entropy and free energy</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/practice" href="../../science-1/ch7-thermo2/practice.html"><small>Practice</small><span>Free energy and phases</span></a></div></details><details class="nav-doc"><summary><span>Chapter 8: Particle properties of waves</span><i data-count-for="science-1/ch8-qm1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch8-qm1/learn" href="../../science-1/ch8-qm1/learn.html"><small>Learn</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/reference" href="../../science-1/ch8-qm1/reference.html"><small>Reference</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/coverage" href="../../science-1/ch8-qm1/coverage.html"><small>Coverage</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/formulas" href="../../science-1/ch8-qm1/formulas.html"><small>Formulas</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/practice" href="../../science-1/ch8-qm1/practice.html"><small>Practice</small><span>Particle properties of waves</span></a></div></details><details class="nav-doc"><summary><span>Chapter 9: Wave properties of particles</span><i data-count-for="science-1/ch9-qm2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch9-qm2/learn" href="../../science-1/ch9-qm2/learn.html"><small>Learn</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/reference" href="../../science-1/ch9-qm2/reference.html"><small>Reference</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/coverage" href="../../science-1/ch9-qm2/coverage.html"><small>Coverage</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/formulas" href="../../science-1/ch9-qm2/formulas.html"><small>Formulas</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/practice" href="../../science-1/ch9-qm2/practice.html"><small>Practice</small><span>Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>Chapter 10: Atomic structure</span><i data-count-for="science-1/ch10-qm3/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch10-qm3/learn" href="../../science-1/ch10-qm3/learn.html"><small>Learn</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/reference" href="../../science-1/ch10-qm3/reference.html"><small>Reference</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/coverage" href="../../science-1/ch10-qm3/coverage.html"><small>Coverage</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/formulas" href="../../science-1/ch10-qm3/formulas.html"><small>Formulas</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/practice" href="../../science-1/ch10-qm3/practice.html"><small>Practice</small><span>Atomic structure</span></a></div></details><details class="nav-doc"><summary><span>Chapter 11: Quantum mechanics</span><i data-count-for="science-1/ch11-qm4/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch11-qm4/learn" href="../../science-1/ch11-qm4/learn.html"><small>Learn</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/reference" href="../../science-1/ch11-qm4/reference.html"><small>Reference</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/coverage" href="../../science-1/ch11-qm4/coverage.html"><small>Coverage</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/formulas" href="../../science-1/ch11-qm4/formulas.html"><small>Formulas</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/practice" href="../../science-1/ch11-qm4/practice.html"><small>Practice</small><span>Quantum mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 12: Quantum theory of the hydrogen atom</span><i data-count-for="science-1/ch12-qm5/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch12-qm5/learn" href="../../science-1/ch12-qm5/learn.html"><small>Learn</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/reference" href="../../science-1/ch12-qm5/reference.html"><small>Reference</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/coverage" href="../../science-1/ch12-qm5/coverage.html"><small>Coverage</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/formulas" href="../../science-1/ch12-qm5/formulas.html"><small>Formulas</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/practice" href="../../science-1/ch12-qm5/practice.html"><small>Practice</small><span>Quantum theory of the hydrogen atom</span></a></div></details><details class="nav-doc"><summary><span>Practice: Mock endsem</span><i data-count-for="science-1/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/mock-endsem/practice" href="../../science-1/mock-endsem/practice.html"><small>Practice</small><span>Mock endsem</span></a><a class="nav-link" data-id="science-1/mock-endsem/practice-2" href="../../science-1/mock-endsem/practice-2.html"><small>Practice</small><span>Mock endsem, marking scheme and solutions</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Mechanics (lectures 1-8, Marion &amp; Thornton)</span><i data-count-for="science-1/hw-mechanics/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics" href="../../science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics.html"><span>HW practice: Lectures 1 to 4, nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2" href="../../science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2.html"><span>HW practice: Lecture 5, Newton for one particle (MT Chapter 2)</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange" href="../../science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange.html"><span>HW practice: Lectures 6 and 7, calculus of variations, Lagrange and Hamilton</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc" href="../../science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc.html"><span>HW practice: Lecture 8, multiparticle systems and central forces</span></a></div></details><a class="nav-link nav-single" data-id="science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e" href="../../science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e.html"><span>HW practice: Thermodynamics (Atkins 11e)</span></a><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 2 and 3</span><i data-count-for="science-1/hw-qm/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves" href="../../science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves.html"><span>HW practice: Beiser Chapter 2, Particle properties of waves</span></a><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles" href="../../science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles.html"><span>HW practice: Beiser Chapter 3, Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 4 to 6</span><i data-count-for="science-1/hw-qm-b/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure.html"><span>HW practice: Beiser Chapter 4, Atomic structure</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics.html"><span>HW practice: Beiser Chapter 5, Quantum mechanics</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-.html"><span>HW practice: Beiser Chapter 6, Quantum theory of the hydrogen atom</span></a></div></details><a class="nav-link nav-single" data-id="science-1/toolkit-practice/practice" href="../../science-1/toolkit-practice/practice.html"><span>Practice set: thermodynamics</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cheatsheet/sheet" href="../../science-1/toolkit-cheatsheet/sheet.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-formulas/sheet" href="../../science-1/toolkit-formulas/sheet.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-definitions/sheet" href="../../science-1/toolkit-definitions/sheet.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cards/cards" href="../../science-1/toolkit-cards/cards.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../osn/index.html">Operating Systems and Networks</a><span>›</span><span>Endsem practice (9 × 10 marks)</span></nav>
+      <header class="note-head">
+        
+        <h1>Endsem practice: pre-midsem problems</h1>
+        <p class="note-meta">23 min read · 11 practice problems</p>
+        <div class="note-tools">
+          <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          <span class="hint">Solutions stay collapsed until you click them.</span>
+        </div>
+      </header>
+      <div class="prose"><p><em>Lectures 1 to 9 in 10-mark exam style: new problems, because the professor's sheet had none for this half. Also redo the banks already in the chapter pages: C1 to C8 (Lectures 1 to 7) and N1 to N11 (networking, including the transport-layer sheet problems N6 to N9).</em></p>
+<p id="p-p1"><strong>P1.</strong> (a) What does this print, and in what order? [4] (b) Define zombie and orphan. What does xv6's exit() do with a dying process's children? [3] (c) Why are fork and exec separate calls? [3]</p>
+<pre><code class="language-c">int main() {
+    int x = 1;
+    if (fork() == 0) {
+        x++;
+        if (fork() == 0) { x++; printf(&quot;%d\n&quot;, x); exit(0); }
+        wait(NULL); printf(&quot;%d\n&quot;, x);
+    } else { wait(NULL); printf(&quot;%d\n&quot;, x); }
+}
+</code></pre>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Trace.</strong> After the first fork there are the <strong>parent</strong> (x = 1) and the <strong>child</strong> (x = 1). The parent goes to the <code>else</code> branch and waits. The child increments x to 2, then forks a <strong>grandchild</strong> (x = 2). The grandchild increments x to 3, <strong>prints 3</strong> and exits. The child's <code>wait</code> returns and it <strong>prints 2</strong>. The parent's <code>wait</code> returns and it <strong>prints 1</strong>.</p>
+<p>Output: <strong>3, 2, 1</strong>, always in this order, because each <code>wait</code> forces the parent to print after its child. Each process has its <strong>own copy</strong> of x (fork copies the address space), so a change in a child never affects the parent.</p>
+<p><strong>(b)</strong> A <strong>zombie</strong> is a process that has <strong>exited</strong> but whose <strong>parent has not yet called wait()</strong>: its process-table entry and exit status remain until the parent collects them. An <strong>orphan</strong> is a process whose <strong>parent has exited first</strong>; the OS reparents it to <strong>init</strong>. In xv6, <code>exit()</code> closes the files, sets the process state to <strong>ZOMBIE</strong>, gives the dying process's <strong>children to init</strong> (which waits for them), and <strong>wakes up the parent</strong>. A zombie that is never waited for stays in the table forever (a leak).</p>
+<p><strong>(c)</strong> Keeping them separate lets the shell run code <strong>between fork and exec</strong>, in the child, to <strong>change the environment</strong> without the program knowing: for <code>ls &gt; out.txt</code>, the child does <code>close(1); open(&quot;out.txt&quot;, ...)</code> (the new file gets fd 1), then <code>exec(&quot;ls&quot;)</code>. The same pattern sets up <strong>pipes</strong> and changes the working directory. The program that is then exec'd inherits those fds, so <strong>I/O redirection</strong> needs no support inside the program.</p>
+</details>
+<hr>
+<p id="p-p2"><strong>P2.</strong> Limited direct execution (L04). (a) List the hardware and OS steps when a timer interrupt switches from process A to process B. [6] (b) Which registers are saved twice, by whom, and where? [2] (c) Why does the trap table have to be set up at boot, and why is a system-call <em>number</em> used instead of an address? [2]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Steps:</strong></p>
+<ol>
+<li><strong>Hardware:</strong> the timer interrupt fires. The hardware saves A's <strong>user registers</strong> (including the PC) onto A's <strong>kernel stack</strong>, switches to <strong>kernel mode</strong>, and jumps to the <strong>trap handler</strong> found in the trap table.</li>
+<li><strong>OS:</strong> the handler decides to switch to B and calls <code>switch()</code> (the scheduler).</li>
+<li><strong>OS:</strong> <code>switch()</code> saves A's <strong>kernel registers</strong> into A's process structure (its <code>struct context</code>).</li>
+<li><strong>OS:</strong> it restores B's kernel registers from B's process structure, which also <strong>switches to B's kernel stack</strong>.</li>
+<li><strong>OS:</strong> the OS executes <strong>return-from-trap</strong>.</li>
+<li><strong>Hardware:</strong> it restores B's user registers from B's kernel stack, switches to <strong>user mode</strong> and jumps to B's PC. B runs as if it had never stopped.</li>
+</ol>
+<p><strong>(b)</strong> The <strong>user registers</strong> are saved <strong>by the hardware</strong> onto the <strong>kernel stack</strong> (in xv6, the trapframe). The <strong>kernel registers</strong> are saved <strong>by the OS</strong> (in <code>swtch()</code>) into the <strong>process structure</strong> (xv6: ra, sp, s0 to s11 in <code>struct context</code>).</p>
+<p><strong>(c)</strong> The trap table is installed <strong>at boot, in kernel mode, with a privileged instruction</strong>, so the hardware knows where the kernel's handlers are and user code cannot redirect traps to its own code. User code gives a <strong>number</strong> (not an address) so that it can only reach <strong>kernel code the OS has chosen</strong>: the kernel validates the number and looks up the handler itself. An address would let a program jump into the middle of arbitrary kernel code. This is a <strong>protection</strong> mechanism.</p>
+</details>
+<hr>
+<p id="p-p3"><strong>P3.</strong> Scheduling. Jobs: A arrives at 0 and needs 6; B arrives at 2 and needs 3; C at 4 needs 8; D at 6 needs 2. Find the average turnaround and response times for FIFO, SJF (non-preemptive), STCF and RR (q = 2; a new arrival joins the queue before the job that was just preempted). [10]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Formulas.</strong> Turnaround = completion − arrival. Response = first run − arrival.</p>
+<p><strong>FIFO:</strong> A 0–6, B 6–9, C 9–17, D 17–19. Turnaround: A 6, B 7, C 13, D 13, average = 39 / 4 = <strong>9.75</strong>. Response: A 0, B 4, C 5, D 11, average = 20 / 4 = <strong>5</strong>.</p>
+<p><strong>SJF (non-preemptive):</strong> at 0 only A is there, so A 0–6. At 6, B (3), C (8) and D (2) are waiting, so the shortest is D: D 6–8, then B 8–11, then C 11–19. Turnaround: A 6, B 9, C 15, D 2, average = 32 / 4 = <strong>8</strong>. Response: A 0, B 6, C 7, D 0, average = 13 / 4 = <strong>3.25</strong>.</p>
+<p><strong>STCF (preemptive SJF):</strong> A runs 0–2. At 2, B (3) is shorter than A's remaining 4, so B runs 2–5 (C arrives at 4 with 8, not shorter than B's remaining 1). At 5, A (4) runs; at 6, D (2) is shorter than A's remaining 3, so D 6–8. Then A 8–11, then C 11–19. Completion: A 11, B 5, C 19, D 8. Turnaround: A 11, B 3, C 15, D 2, average = 31 / 4 = <strong>7.75</strong>. Response: A 0, B 0, C 7, D 0, average = 7 / 4 = <strong>1.75</strong>.</p>
+<p><strong>RR (q = 2):</strong> the queue changes as follows (arrivals join ahead of the preempted job).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Runs</th>
+<th>Queue after (front first)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–2</td>
+<td>A</td>
+<td>B arrives at 2, goes before A: [B, A]</td>
+</tr>
+<tr>
+<td>2–4</td>
+<td>B</td>
+<td>C arrives at 4, goes before B: [A, C, B]</td>
+</tr>
+<tr>
+<td>4–6</td>
+<td>A</td>
+<td>D arrives at 6, goes before A: [C, B, D, A]</td>
+</tr>
+<tr>
+<td>6–8</td>
+<td>C</td>
+<td>[B, D, A, C]</td>
+</tr>
+<tr>
+<td>8–9</td>
+<td>B (finishes)</td>
+<td>[D, A, C]</td>
+</tr>
+<tr>
+<td>9–11</td>
+<td>D (finishes)</td>
+<td>[A, C]</td>
+</tr>
+<tr>
+<td>11–13</td>
+<td>A (finishes)</td>
+<td>[C]</td>
+</tr>
+<tr>
+<td>13–19</td>
+<td>C (finishes)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Completion: A 13, B 9, C 19, D 11. Turnaround: A 13, B 7, C 15, D 5, average = 40 / 4 = <strong>10</strong>. Response: A 0, B 0, C 2, D 3, average = 5 / 4 = <strong>1.25</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Avg turnaround</th>
+<th>Avg response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FIFO</td>
+<td>9.75</td>
+<td>5</td>
+</tr>
+<tr>
+<td>SJF</td>
+<td>8</td>
+<td>3.25</td>
+</tr>
+<tr>
+<td>STCF</td>
+<td><strong>7.75</strong></td>
+<td>1.75</td>
+</tr>
+<tr>
+<td>RR</td>
+<td>10</td>
+<td><strong>1.25</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Conclusion:</strong> STCF is best for turnaround, RR is best for response, and the two goals trade off.</p>
+</details>
+<hr>
+<p id="p-p4"><strong>P4.</strong> MLFQ with three queues: Q2 (top, quantum 10 ms), Q1 (20 ms) and Q0 (round robin), with no boost. A is CPU-bound and needs 100 ms, arriving at 0. B needs 20 ms and arrives at 30. (a) Trace the schedule and give both turnaround times. [4] (b) Show how a job can game Rules 4a/4b, and give the fix. [3] (c) Why is a priority boost needed, and what goes wrong if it is too frequent? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Rules used:</strong> a new job starts at the top queue; a job that uses its whole allotment at a level moves down; the highest-priority non-empty queue runs.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–10</td>
+<td>A runs in Q2, uses its 10 ms, moves to Q1</td>
+</tr>
+<tr>
+<td>10–30</td>
+<td>A runs in Q1, uses its 20 ms, moves to Q0</td>
+</tr>
+<tr>
+<td>30</td>
+<td>B arrives (needs 20 ms) and enters Q2, which has higher priority than A's Q0</td>
+</tr>
+<tr>
+<td>30–40</td>
+<td>B runs in Q2, uses 10 ms, moves to Q1</td>
+</tr>
+<tr>
+<td>40–50</td>
+<td>B runs in Q1, the remaining 10 ms: <strong>B finishes at 50</strong></td>
+</tr>
+<tr>
+<td>50–120</td>
+<td>A runs in Q0 with 100 − 10 − 20 = 70 ms left: <strong>A finishes at 120</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Turnaround: B = 50 − 30 = 20 ms; A = 120 ms.</strong> The short job B overtakes the long job A, so MLFQ approximates SJF without knowing job lengths.</p>
+<p><strong>(b) Gaming (old Rule 4b):</strong> the old rules let a job that <strong>gave up the CPU before its slice ended stay at the same priority</strong>. A job can issue a pointless I/O just before the end of each time slice (for example, at 9.9 ms of a 10 ms slice), so it is never demoted and monopolises the top queue. <strong>Fix (new Rule 4):</strong> account for the <strong>total CPU time used at a level</strong>, regardless of how many times the job gave up the CPU, and demote it once its allotment is used up.</p>
+<p><strong>(c)</strong> Without a boost: <strong>(1) starvation:</strong> if there are many interactive jobs, long jobs sink to the bottom and never run; <strong>(2) behaviour change:</strong> a CPU-bound job that later becomes interactive stays stuck at the bottom. <strong>Rule 5:</strong> after some period S, <strong>move all jobs to the top queue</strong> (this guarantees progress and re-evaluates behaviour). <strong>If S is too small,</strong> CPU-bound jobs keep returning to the top and take CPU time from interactive jobs, so MLFQ degrades towards plain round robin. If S is too large, long jobs still starve between boosts. S is a &quot;voo-doo constant&quot; that must be tuned.</p>
+</details>
+<hr>
+<p id="p-p5"><strong>P5.</strong> CFS with sched_latency = 48 ms and min_granularity = 6 ms. A and B have nice 0 (weight 1024), and C has nice −5 (weight 3121). (a) Give each process's time slice. [4] (b) Show how much each one's vruntime grows over one period. [3] (c) With 12 processes at nice 0, what slice does each get? [2] (d) Where does CFS put a process waking from a long sleep? [1]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Formula:</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord">slice</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0436em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">sched_latency</span></span></span></span></span>. Total weight = 1024 + 1024 + 3121 = 5169. A and B: 48 × 1024 / 5169 = <strong>9.51 ms</strong> each. C: 48 × 3121 / 5169 = <strong>28.98 ms</strong>. (They add up to 48 ms.)</p>
+<p><strong>(b) Formula:</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal">im</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.1574em;vertical-align:-0.836em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1024</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6679em;"></span><span class="mord text"><span class="mord">runtime</span></span></span></span></span>. A and B: 9.51 × 1024 / 1024 = <strong>9.51</strong>. C: 28.98 × 1024 / 3121 = <strong>9.51</strong>. <strong>They are equal.</strong> A higher-weight process gets a longer slice but its vruntime grows more slowly per ms, so when CFS keeps all vruntimes level (always running the one with the <strong>lowest vruntime</strong>), the heavier process receives proportionally more CPU.</p>
+<p><strong>(c)</strong> 48 / 12 = 4 ms, which is below min_granularity, so each process gets <strong>6 ms</strong> (the round then takes 12 × 6 = 72 ms).</p>
+<p><strong>(d)</strong> Its vruntime is set to the <strong>minimum vruntime in the red-black tree</strong>, so it neither monopolises the CPU (with a tiny vruntime) nor is penalised for sleeping.</p>
+</details>
+<hr>
+<p id="p-p6"><strong>P6.</strong> Multiprocessor scheduling (L07). (a) What is cache affinity, and how does single-queue scheduling (SQMS) hurt it? [3] (b) Give two scalability problems with SQMS. [2] (c) Under MQMS, A is alone on CPU 0, while B and D share CPU 1. What is the problem, and how is it fixed? [3] (d) Why is cache coherence needed, and how does bus snooping provide it? [2]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> <strong>Cache affinity:</strong> a process run again on the <strong>same CPU</strong> finds some of its data still in that CPU's cache (and TLB), so it runs faster. SQMS puts all jobs in one queue and each CPU takes whatever job is next, so a job <strong>bounces between CPUs</strong> and finds a cold cache each time.</p>
+<p><strong>(b)</strong> (1) The single queue needs a <strong>lock</strong>, and as the number of CPUs grows the lock becomes <strong>heavily contended</strong> (CPUs spend more time waiting for it), limiting scalability. (2) Poor affinity, as in (a); fixing it needs extra mechanisms that make it more complex.</p>
+<p><strong>(c)</strong> <strong>Load imbalance:</strong> A gets a whole CPU, while B and D get only 50% each. <strong>Fix: migration.</strong> The OS moves jobs between queues, for example by <strong>work stealing</strong>: a CPU with a short queue occasionally <strong>looks at another queue</strong> and steals a job. Looking too often costs overhead; too rarely leaves the imbalance.</p>
+<p><strong>(d)</strong> Each CPU caches memory, so a write on one CPU can leave <strong>stale copies</strong> in the other caches. With <strong>bus snooping</strong>, each cache <strong>watches the shared bus</strong>, and when it sees a write to an address it holds, it <strong>invalidates</strong> (or updates) its own copy.</p>
+</details>
+<hr>
+<p id="p-p7"><strong>P7.</strong> Network layers and devices (L08). (a) Name the TCP/IP layers, the data unit at each, and the address each uses. [4] (b) Which header does a hub, a switch and a router each look at? [3] (c) A host sends a 1000-byte HTTP message over TCP/IP and Ethernet. Show the encapsulation, assuming 20-byte TCP and IP headers and an 18-byte Ethernet header and trailer. [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Data unit</th>
+<th>Address used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application</td>
+<td>message</td>
+<td>(hostname, port in the app)</td>
+</tr>
+<tr>
+<td>Transport</td>
+<td>segment (TCP) / datagram (UDP)</td>
+<td><strong>port number</strong></td>
+</tr>
+<tr>
+<td>Network</td>
+<td>packet (datagram)</td>
+<td><strong>IP address</strong></td>
+</tr>
+<tr>
+<td>Link</td>
+<td>frame</td>
+<td><strong>MAC address</strong></td>
+</tr>
+<tr>
+<td>Physical</td>
+<td>bits</td>
+<td>–</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>(b)</strong> A <strong>hub</strong> works at layer 1 and reads <strong>no header</strong>: it repeats the bits to every port. A <strong>switch</strong> works at layer 2: it reads the <strong>MAC address</strong>, learns which port leads to which MAC, and forwards the frame only to the right port. A <strong>router</strong> works at layer 3: it reads the <strong>IP address</strong> and forwards the packet towards the destination network using its routing table.</p>
+<p><strong>(c)</strong> Each layer wraps what it receives from above: 1000 B of data + 20 B TCP header = <strong>1020 B segment</strong>; + 20 B IP header = <strong>1040 B packet</strong>; + 18 B Ethernet header and trailer = <strong>1058 B frame</strong>. The receiver strips the headers in reverse order (<strong>decapsulation</strong>).</p>
+</details>
+<hr>
+<p id="p-p8"><strong>P8.</strong> TCP (L09). The client ISN is 1000 and the server ISN is 5000. (a) Give the seq and ack numbers of the three-way handshake. [3] (b) The client then sends 3 segments of 100 bytes. Give their seq numbers. The second segment is lost. What ACKs does the server send, and when does fast retransmit fire? [4] (c) Describe the 4-way close, and explain why TIME_WAIT exists. [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> SYN uses one sequence number.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Segment</th>
+<th>seq</th>
+<th>ack</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Client → server: SYN</td>
+<td>1000</td>
+<td>–</td>
+</tr>
+<tr>
+<td>2. Server → client: SYN-ACK</td>
+<td>5000</td>
+<td>1001</td>
+</tr>
+<tr>
+<td>3. Client → server: ACK</td>
+<td>1001</td>
+<td>5001</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>(b)</strong> Data segments: seq = <strong>1001, 1101, 1201</strong> (each 100 bytes). ACK numbers are <strong>cumulative</strong> and name the <strong>next byte expected</strong>. The server ACKs <strong>1101</strong> after segment 1. Segment 2 (seq 1101) is lost. When segment 3 arrives out of order, the server can only ACK what it has in order, so it sends <strong>ACK 1101 again</strong> (a <strong>duplicate ACK</strong>). <strong>Fast retransmit</strong> fires when the sender receives <strong>three duplicate ACKs</strong> for 1101 (that is, the original plus 3 duplicates, which needs more segments arriving after the gap): the sender then retransmits segment 2 <strong>without waiting for the timeout</strong>.</p>
+<p><strong>(c)</strong> <strong>Close:</strong> the side that closes first sends <strong>FIN</strong>; the other side replies <strong>ACK</strong>; later the other side sends its own <strong>FIN</strong>; the first side replies <strong>ACK</strong>. The side that sent the last ACK then enters <strong>TIME_WAIT</strong> for 2 × MSL (maximum segment lifetime). <strong>Why:</strong> (1) if the final ACK is lost, the other side will retransmit its FIN, and the waiting side can still answer; (2) it lets <strong>old delayed segments</strong> from this connection expire, so they cannot be mistaken for part of a <strong>new connection</strong> reusing the same ports.</p>
+</details>
+<hr>
+<p id="p-p9"><strong>P9.</strong> TCP timers and congestion control. (a) EstimatedRTT = 80 ms and DevRTT = 8 ms. A SampleRTT of 120 ms arrives. Find the new EstimatedRTT, DevRTT and TimeoutInterval, with α = 0.125 and β = 0.25. [4] (b) ssthresh = 8 and cwnd starts at 1. List cwnd for rounds 1 to 8. Three duplicate ACKs arrive at the end of round 8. Give rounds 9 to 11. Then there is a timeout at the end of round 11. Give rounds 12 to 15. [6]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> (K&amp;R order: update EstimatedRTT first, then DevRTT using the new estimate.)</p>
+<ul>
+<li>EstimatedRTT = 0.875 × 80 + 0.125 × 120 = 70 + 15 = <strong>85 ms</strong>.</li>
+<li>DevRTT = 0.75 × 8 + 0.25 × |120 − 85| = 6 + 8.75 = <strong>14.75 ms</strong>.</li>
+<li>TimeoutInterval = EstimatedRTT + 4 × DevRTT = 85 + 59 = <strong>144 ms</strong>.</li>
+</ul>
+<p><strong>(b)</strong> <strong>Slow start</strong> doubles cwnd each round until it reaches ssthresh; then <strong>congestion avoidance</strong> adds 1 MSS per round. A loss by <strong>3 duplicate ACKs</strong> sets ssthresh = cwnd / 2 and cwnd = ssthresh (fast recovery). A <strong>timeout</strong> sets ssthresh = cwnd / 2 and cwnd = 1 (back to slow start).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Round</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cwnd</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>11</td>
+<td>12</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>5</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Rounds 1–4: slow start (1, 2, 4, 8); cwnd reaches ssthresh = 8 at round 4.</li>
+<li>Rounds 5–8: congestion avoidance (+1 per round): 9, 10, 11, 12.</li>
+<li>End of round 8, <strong>3 duplicate ACKs</strong>: ssthresh = 12 / 2 = <strong>6</strong>, cwnd = <strong>6</strong> (round 9), then 7, 8 (rounds 10, 11).</li>
+<li>End of round 11, <strong>timeout</strong>: ssthresh = 8 / 2 = <strong>4</strong>, cwnd = <strong>1</strong> (round 12). Slow start: 1, 2, 4 (reaches ssthresh = 4), then congestion avoidance: 5.</li>
+</ul>
+</details>
+<hr>
+<p id="p-p10"><strong>P10.</strong> Checksums and sockets (L09). (a) Compute the UDP checksum of the 16-bit words 0x1234, 0xF00F and 0x0F0F. [4] (b) List the socket calls for a TCP server and a TCP client, and say which ones block. [4] (c) Why does accept() return a new socket? [2]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Method:</strong> add the words with <strong>end-around carry</strong> (any carry out of bit 16 is added back into the low bits), then take the <strong>ones' complement</strong>.</p>
+<ul>
+<li>0x1234 + 0xF00F = 0x10243. The carry (1) wraps around: 0x0243 + 1 = <strong>0x0244</strong>.</li>
+<li>0x0244 + 0x0F0F = <strong>0x1153</strong> (no carry).</li>
+<li>Ones' complement: 0xFFFF − 0x1153 = <strong>0xEEAC</strong>. This is the checksum.</li>
+</ul>
+<p><em>Check at the receiver:</em> 0x1153 + 0xEEAC = 0xFFFF, so no error is detected.</p>
+<p><strong>(b)</strong> <strong>Server:</strong> <code>socket()</code>, <code>bind()</code>, <code>listen()</code>, <code>accept()</code> (<strong>blocks</strong> until a client connects), <code>recv()</code> (<strong>blocks</strong> until data arrives), <code>send()</code>, <code>close()</code>. <strong>Client:</strong> <code>socket()</code>, <code>connect()</code> (<strong>blocks</strong> during the handshake), <code>send()</code>, <code>recv()</code> (<strong>blocks</strong>), <code>close()</code>. UDP has no listen, accept or connect: it uses <code>sendto()</code> and <code>recvfrom()</code> (which blocks). A blocking call puts the process to <strong>sleep</strong>, so it is a <strong>context-switch point</strong>.</p>
+<p><strong>(c)</strong> The <strong>listening socket</strong> stays open to accept further connections. Each accepted connection gets its <strong>own new socket</strong>, identified by the <strong>4-tuple</strong> (source IP, source port, destination IP, destination port). That is how one server on port 80 can serve many clients at the same time: every connection has its own socket and state.</p>
+</details>
+<hr>
+<p id="p-p11"><strong>P11.</strong> Process states (L02 s12-15). P0 needs 2 units of CPU, then issues an I/O that takes 3 units, then needs 1 more unit of CPU. P1 needs 4 units of CPU. P0 starts first. The OS switches to another process when the running one blocks, and a process that finishes its I/O becomes ready but does not preempt. (a) Give each process's state at times 1 to 7. [5] (b) How long would it take if the OS ran P1 only after P0 finished? [2] (c) Draw the state diagram, and say which transitions the OS triggers and which come from events. [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Time unit</th>
+<th>P0</th>
+<th>P1</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Running</td>
+<td>Ready</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Running</td>
+<td>Ready</td>
+<td>P0 issues its I/O at the end of this unit</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Blocked</td>
+<td>Running</td>
+<td>OS switches to P1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Blocked</td>
+<td>Running</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Blocked</td>
+<td>Running</td>
+<td>P0's I/O completes at the end of this unit</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Ready</td>
+<td>Running</td>
+<td>P1 finishes (its 4th unit); P0 is ready but does not preempt</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Running</td>
+<td>Done</td>
+<td>P0 runs its last unit and finishes</td>
+</tr>
+</tbody>
+</table></div>
+<p>The CPU is busy for all 7 units, because P1's computation <strong>overlaps</strong> P0's I/O.</p>
+<p><strong>(b)</strong> If P1 ran only after P0 finished: P0 takes 2 + 3 (CPU idle during I/O) + 1 = 6 units, then P1 takes 4: <strong>10 units</strong>. Overlapping I/O with another process's computation saves 3 units.</p>
+<p><strong>(c) Transitions:</strong></p>
+<ul>
+<li><strong>Ready → Running:</strong> the OS <strong>schedules</strong> the process.</li>
+<li><strong>Running → Ready:</strong> the OS <strong>deschedules</strong> it (for example, timer interrupt, or yield).</li>
+<li><strong>Running → Blocked:</strong> the process starts <strong>I/O</strong> (its own system call).</li>
+<li><strong>Blocked → Ready:</strong> the <strong>I/O completes</strong> (an interrupt).</li>
+</ul>
+<p>There is <strong>never a direct Blocked → Running</strong> edge: after the I/O completes the process must wait in the ready queue until the scheduler picks it.</p>
+</details>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Endsem practice: pre-midsem problems</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../osn/endsem/endsem-practice-post-midsem-extras.html"><small>← Previous</small><span>Endsem practice: post-midsem extras</span></a><a class="pn pn-next" id="next-link" href="../../osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09.html"><small>Next →</small><span>Formula sheet 1: CPU and networking (L01 to L09)</span></a></nav>
+    </article></main>
+  
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwy042pa" defer></script>
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Endsem practice: the professor's sheet · Operating Systems and Networks</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwy042pa">
+</head>
+<body data-root="../../" data-page="osn/endsem/endsem-practice-the-professor-s-sheet" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">AAD · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../aad/index.html">Algorithm Analysis and Design</a>
+      </div><div class="nav-tools"><a class="" href="../../aad/practice.html">Practice <b>129</b></a><a class="" href="../../aad/formulas.html">Formulas <b>30</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="aad/start-here/start-here" href="../../aad/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Lectures 1 to 3: numbers, divide and conquer, lower bounds</span><i data-count-for="aad/numbers-dc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/numbers-dc/learn" href="../../aad/numbers-dc/learn.html"><small>Learn</small><span>Numbers and algorithms</span></a><a class="nav-link" data-id="aad/numbers-dc/learn-2" href="../../aad/numbers-dc/learn-2.html"><small>Learn</small><span>Divide and conquer</span></a><a class="nav-link" data-id="aad/numbers-dc/learn-3" href="../../aad/numbers-dc/learn-3.html"><small>Learn</small><span>Lower bounds</span></a></div></details><a class="nav-link nav-single" data-id="aad/fft/learn" href="../../aad/fft/learn.html"><span>Lectures 3, 4 and 8: polynomials and the FFT</span></a><details class="nav-doc"><summary><span>Lectures 4 and 5: graphs, shortest paths, MSTs</span><i data-count-for="aad/graphs/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/graphs/learn" href="../../aad/graphs/learn.html"><small>Learn</small><span>Exploring graphs</span></a><a class="nav-link" data-id="aad/graphs/learn-2" href="../../aad/graphs/learn-2.html"><small>Learn</small><span>Shortest paths</span></a><a class="nav-link" data-id="aad/graphs/learn-3" href="../../aad/graphs/learn-3.html"><small>Learn</small><span>Minimum spanning trees</span></a><a class="nav-link" data-id="aad/graphs/learn-4" href="../../aad/graphs/learn-4.html"><small>Learn</small><span>Tutorial 2 problems and the assigned DPV graph exercises</span></a></div></details><details class="nav-doc"><summary><span>Lectures 6 to 9: stable matchings, Hall, maximum matchings</span><i data-count-for="aad/matchings/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/matchings/learn" href="../../aad/matchings/learn.html"><small>Learn</small><span>Stable matchings</span></a><a class="nav-link" data-id="aad/matchings/learn-2" href="../../aad/matchings/learn-2.html"><small>Learn</small><span>Hall's theorem</span></a><a class="nav-link" data-id="aad/matchings/learn-3" href="../../aad/matchings/learn-3.html"><small>Learn</small><span>Maximum matchings</span></a></div></details><details class="nav-doc"><summary><span>Lecture 10: greedy algorithms and Huffman codes</span><i data-count-for="aad/greedy/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/greedy/learn" href="../../aad/greedy/learn.html"><small>Learn</small><span>Greedy algorithms</span></a><a class="nav-link" data-id="aad/greedy/learn-2" href="../../aad/greedy/learn-2.html"><small>Learn</small><span>Huffman coding</span></a><a class="nav-link" data-id="aad/greedy/learn-3" href="../../aad/greedy/learn-3.html"><small>Learn</small><span>Interval scheduling and partitioning</span></a></div></details><a class="nav-link nav-single" data-id="aad/dp/learn" href="../../aad/dp/learn.html"><span>Lectures 11 to 13: dynamic programming</span></a><details class="nav-doc"><summary><span>Lectures 14 to 18: max flow and min cut</span><i data-count-for="aad/maxflow/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/maxflow/learn" href="../../aad/maxflow/learn.html"><small>Learn</small><span>Flows, cuts and duality</span></a><a class="nav-link" data-id="aad/maxflow/learn-2" href="../../aad/maxflow/learn-2.html"><small>Learn</small><span>Ford–Fulkerson</span></a><a class="nav-link" data-id="aad/maxflow/learn-3" href="../../aad/maxflow/learn-3.html"><small>Learn</small><span>Reductions to max flow</span></a><a class="nav-link" data-id="aad/maxflow/learn-4" href="../../aad/maxflow/learn-4.html"><small>Learn</small><span>The Lecture 15 exercise set, solved</span></a></div></details><details class="nav-doc"><summary><span>Lectures 19 to 21: randomized algorithms and fingerprinting</span><i data-count-for="aad/randomized/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/randomized/learn" href="../../aad/randomized/learn.html"><small>Learn</small><span>Randomized algorithms and MaxCut</span></a><a class="nav-link" data-id="aad/randomized/learn-2" href="../../aad/randomized/learn-2.html"><small>Learn</small><span>Fingerprinting and Rabin–Karp</span></a></div></details><details class="nav-doc"><summary><span>Lecture 22 and the NP tutorial: reductions and NP-hardness</span><i data-count-for="aad/np/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/np/learn" href="../../aad/np/learn.html"><small>Learn</small><span>Balanced brackets and lower bounds by reduction</span></a><a class="nav-link" data-id="aad/np/learn-2" href="../../aad/np/learn-2.html"><small>Learn</small><span>P, NP and reductions</span></a><a class="nav-link" data-id="aad/np/learn-3" href="../../aad/np/learn-3.html"><small>Learn</small><span>3-SAT, XOR-SAT and Max-Cut is NP-hard</span></a><a class="nav-link" data-id="aad/np/learn-4" href="../../aad/np/learn-4.html"><small>Learn</small><span>The other classic reductions (practice sheet)</span></a></div></details><details class="nav-doc"><summary><span>Midsem, fully solved</span><i data-count-for="aad/midsem/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/midsem/midsem" href="../../aad/midsem/midsem.html"><small>Midsem</small><span>Numeric algorithms</span></a><a class="nav-link" data-id="aad/midsem/midsem-2" href="../../aad/midsem/midsem-2.html"><small>Midsem</small><span>Stable matchings</span></a><a class="nav-link" data-id="aad/midsem/midsem-3" href="../../aad/midsem/midsem-3.html"><small>Midsem</small><span>Greedy algorithms</span></a><a class="nav-link" data-id="aad/midsem/midsem-4" href="../../aad/midsem/midsem-4.html"><small>Midsem</small><span>SDRs and Latin squares</span></a><a class="nav-link" data-id="aad/midsem/midsem-5" href="../../aad/midsem/midsem-5.html"><small>Midsem</small><span>Dynamic programming</span></a></div></details><details class="nav-doc"><summary><span>Quizzes I and II and Class Tests I and II, fully solved</span><i data-count-for="aad/quizzes/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/quizzes/quiz-i-tiling-multiplication-hadamard" href="../../aad/quizzes/quiz-i-tiling-multiplication-hadamard.html"><span>Quiz I: tiling, multiplication, Hadamard</span></a><a class="nav-link" data-id="aad/quizzes/quiz-ii-random-dags-and-matching-via-flow" href="../../aad/quizzes/quiz-ii-random-dags-and-matching-via-flow.html"><span>Quiz II: random DAGs and matching via flow</span></a><a class="nav-link" data-id="aad/quizzes/class-test-i-max-flow" href="../../aad/quizzes/class-test-i-max-flow.html"><span>Class Test I: max flow</span></a><a class="nav-link" data-id="aad/quizzes/class-test-ii-streaming-palindromes-and-2d-pattern-matching" href="../../aad/quizzes/class-test-ii-streaming-palindromes-and-2d-pattern-matching.html"><span>Class Test II: streaming palindromes and 2D pattern matching</span></a></div></details><details class="nav-doc"><summary><span>Practice problems and assignments, solved</span><i data-count-for="aad/practice/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/practice/moodle-practice-set-solved" href="../../aad/practice/moodle-practice-set-solved.html"><span>Moodle practice set, solved</span></a><a class="nav-link" data-id="aad/practice/assignments-1-and-2-solved" href="../../aad/practice/assignments-1-and-2-solved.html"><span>Assignments 1 and 2, solved</span></a><a class="nav-link" data-id="aad/practice/new-endsem-style-problems" href="../../aad/practice/new-endsem-style-problems.html"><span>New endsem-style problems</span></a></div></details><a class="nav-link nav-single" data-id="aad/cheatsheet/last-hour-cheat-sheet" href="../../aad/cheatsheet/last-hour-cheat-sheet.html"><span>Last-hour cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS4.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../dna/index.html">Data and Applications</a>
+      </div><div class="nav-tools"><a class="" href="../../dna/practice.html">Practice <b>172</b></a><a class="" href="../../dna/formulas.html">Formulas <b>5</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="dna/start-here/start-here" href="../../dna/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Videos and quick checks</span><i data-count-for="dna/videos/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/videos/reference" href="../../dna/videos/reference.html"><small>Reference</small><span>Videos for the endsem, topic by topic</span></a><a class="nav-link" data-id="dna/videos/practice" href="../../dna/videos/practice.html"><small>Practice</small><span>Quick checks for each topic</span></a></div></details><details class="nav-doc"><summary><span>Chapter 0: Database concepts and architecture</span><i data-count-for="dna/ch0-database-concepts/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch0-database-concepts/learn" href="../../dna/ch0-database-concepts/learn.html"><small>Learn</small><span>Database concepts and architecture</span></a><a class="nav-link" data-id="dna/ch0-database-concepts/reference" href="../../dna/ch0-database-concepts/reference.html"><small>Reference</small><span>Database concepts and architecture</span></a><a class="nav-link" data-id="dna/ch0-database-concepts/practice" href="../../dna/ch0-database-concepts/practice.html"><small>Practice</small><span>Database concepts and architecture</span></a></div></details><details class="nav-doc"><summary><span>Chapter 1: The relational model, keys and constraints</span><i data-count-for="dna/ch1-relational-model/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch1-relational-model/learn" href="../../dna/ch1-relational-model/learn.html"><small>Learn</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/reference" href="../../dna/ch1-relational-model/reference.html"><small>Reference</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/practice" href="../../dna/ch1-relational-model/practice.html"><small>Practice</small><span>The relational model, keys and constraints</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: ER and EER modelling</span><i data-count-for="dna/ch2-er-eer/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch2-er-eer/learn" href="../../dna/ch2-er-eer/learn.html"><small>Learn</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/reference" href="../../dna/ch2-er-eer/reference.html"><small>Reference</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/practice" href="../../dna/ch2-er-eer/practice.html"><small>Practice</small><span>ER and EER modelling</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Mapping EER to relations</span><i data-count-for="dna/ch3-mapping/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch3-mapping/learn" href="../../dna/ch3-mapping/learn.html"><small>Learn</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/reference" href="../../dna/ch3-mapping/reference.html"><small>Reference</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/practice" href="../../dna/ch3-mapping/practice.html"><small>Practice</small><span>Mapping EER to relations</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Functional dependencies and normalisation</span><i data-count-for="dna/ch4-normalisation/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch4-normalisation/learn" href="../../dna/ch4-normalisation/learn.html"><small>Learn</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/reference" href="../../dna/ch4-normalisation/reference.html"><small>Reference</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/practice" href="../../dna/ch4-normalisation/practice.html"><small>Practice</small><span>Functional dependencies and normalisation</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Relational algebra</span><i data-count-for="dna/ch5-relational-algebra/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch5-relational-algebra/learn" href="../../dna/ch5-relational-algebra/learn.html"><small>Learn</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/reference" href="../../dna/ch5-relational-algebra/reference.html"><small>Reference</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/practice" href="../../dna/ch5-relational-algebra/practice.html"><small>Practice</small><span>Relational algebra</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Tuple relational calculus</span><i data-count-for="dna/ch6-trc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch6-trc/learn" href="../../dna/ch6-trc/learn.html"><small>Learn</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/reference" href="../../dna/ch6-trc/reference.html"><small>Reference</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/practice" href="../../dna/ch6-trc/practice.html"><small>Practice</small><span>Tuple relational calculus</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: SQL</span><i data-count-for="dna/ch7-sql/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch7-sql/learn" href="../../dna/ch7-sql/learn.html"><small>Learn</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/reference" href="../../dna/ch7-sql/reference.html"><small>Reference</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/practice" href="../../dna/ch7-sql/practice.html"><small>Practice</small><span>SQL</span></a></div></details><a class="nav-link nav-single" data-id="dna/mock-endsem/mock-endsem" href="../../dna/mock-endsem/mock-endsem.html"><span>Mock endsem with solutions</span></a><a class="nav-link nav-single" data-id="dna/cheat-sheet/cheat-sheet" href="../../dna/cheat-sheet/cheat-sheet.html"><span>Two-page cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>123</b></a><a class="" href="../../osn/formulas.html">Formulas <b>25</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="7"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/concurrency-theory-from-the-textbooks" href="../../osn/concurrency/concurrency-theory-from-the-textbooks.html"><span>Concurrency theory from the textbooks</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><details class="nav-doc"><summary><span>Lectures 18 and 19: file systems</span><i data-count-for="osn/filesystems/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/filesystems/lecture-18" href="../../osn/filesystems/lecture-18.html"><small>Lecture 18</small><span>Files and directories</span></a><a class="nav-link" data-id="osn/filesystems/lecture-19" href="../../osn/filesystems/lecture-19.html"><small>Lecture 19</small><span>File system implementation</span></a><a class="nav-link" data-id="osn/filesystems/the-xv6-file-system-tutorial-7" href="../../osn/filesystems/the-xv6-file-system-tutorial-7.html"><span>The xv6 file system (Tutorial 7)</span></a><a class="nav-link" data-id="osn/filesystems/file-system-theory-from-the-textbooks" href="../../osn/filesystems/file-system-theory-from-the-textbooks.html"><span>File-system theory from the textbooks</span></a><a class="nav-link" data-id="osn/filesystems/practice-problems-lectures-18-and-19" href="../../osn/filesystems/practice-problems-lectures-18-and-19.html"><span>Practice problems, Lectures 18 and 19</span></a></div></details><details class="nav-doc"><summary><span>Rapid revision, Lectures 1 to 19 (5 pages)</span><i data-count-for="osn/revision/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/revision/rapid-revision-1-cpu-virtualization-l01-to-l07" href="../../osn/revision/rapid-revision-1-cpu-virtualization-l01-to-l07.html"><span>Rapid revision 1: CPU virtualization (L01 to L07)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-2-networking-l08-and-l09" href="../../osn/revision/rapid-revision-2-networking-l08-and-l09.html"><span>Rapid revision 2: networking (L08 and L09)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-3-memory-l10-to-l13" href="../../osn/revision/rapid-revision-3-memory-l10-to-l13.html"><span>Rapid revision 3: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-4-concurrency-l14-to-l17" href="../../osn/revision/rapid-revision-4-concurrency-l14-to-l17.html"><span>Rapid revision 4: concurrency (L14 to L17)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-5-file-systems-l18-and-l19-tutorial-7" href="../../osn/revision/rapid-revision-5-file-systems-l18-and-l19-tutorial-7.html"><span>Rapid revision 5: file systems (L18 and L19, Tutorial 7)</span></a></div></details><details class="nav-doc"><summary><span>Theory cheat sheet (3 pages)</span><i data-count-for="osn/theory-cheatsheet/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-1-memory-l10-to-l13" href="../../osn/theory-cheatsheet/theory-cheat-sheet-1-memory-l10-to-l13.html"><span>Theory cheat sheet 1: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-2-concurrency-l14-to-l17" href="../../osn/theory-cheatsheet/theory-cheat-sheet-2-concurrency-l14-to-l17.html"><span>Theory cheat sheet 2: concurrency (L14 to L17)</span></a><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems" href="../../osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems.html"><span>Theory cheat sheet 3: CPU, networking and file systems</span></a></div></details><details class="nav-doc" open><summary><span>Endsem practice (9 × 10 marks)</span><i data-count-for="osn/endsem/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link current" data-id="osn/endsem/endsem-practice-the-professor-s-sheet" href="../../osn/endsem/endsem-practice-the-professor-s-sheet.html"><span>Endsem practice: the professor's sheet</span></a><a class="nav-link" data-id="osn/endsem/endsem-practice-post-midsem-extras" href="../../osn/endsem/endsem-practice-post-midsem-extras.html"><span>Endsem practice: post-midsem extras</span></a><a class="nav-link" data-id="osn/endsem/endsem-practice-pre-midsem-problems" href="../../osn/endsem/endsem-practice-pre-midsem-problems.html"><span>Endsem practice: pre-midsem problems</span></a></div></details><details class="nav-doc"><summary><span>Formula sheets (3 pages)</span><i data-count-for="osn/formula-sheet/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09" href="../../osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09.html"><span>Formula sheet 1: CPU and networking (L01 to L09)</span></a><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-2-memory-l10-to-l13" href="../../osn/formula-sheet/formula-sheet-2-memory-l10-to-l13.html"><span>Formula sheet 2: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-3-concurrency-and-file-systems-l14-to-l19" href="../../osn/formula-sheet/formula-sheet-3-concurrency-and-file-systems-l14-to-l19.html"><span>Formula sheet 3: concurrency and file systems (L14 to L19)</span></a></div></details><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 19</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>337</b></a><a class="" href="../../pns/formulas.html">Formulas <b>141</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="pns/endsem-sheet/endsem-formula-and-cheat-sheet" href="../../pns/endsem-sheet/endsem-formula-and-cheat-sheet.html"><span>Endsem formula and cheat sheet</span></a><details class="nav-doc"><summary><span>Last day practice (endsem)</span><i data-count-for="pns/last-day/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/last-day/last-day-practice-how-to-use-it" href="../../pns/last-day/last-day-practice-how-to-use-it.html"><span>Last day practice: how to use it</span></a><a class="nav-link" data-id="pns/last-day/new-problems-probabilistic-inequalities" href="../../pns/last-day/new-problems-probabilistic-inequalities.html"><span>New problems: probabilistic inequalities</span></a><a class="nav-link" data-id="pns/last-day/new-problems-slln" href="../../pns/last-day/new-problems-slln.html"><span>New problems: SLLN</span></a><a class="nav-link" data-id="pns/last-day/new-problems-accept-reject" href="../../pns/last-day/new-problems-accept-reject.html"><span>New problems: accept–reject</span></a><a class="nav-link" data-id="pns/last-day/new-problems-inverse-transform" href="../../pns/last-day/new-problems-inverse-transform.html"><span>New problems: inverse transform</span></a><a class="nav-link" data-id="pns/last-day/new-problems-monte-carlo" href="../../pns/last-day/new-problems-monte-carlo.html"><span>New problems: Monte Carlo</span></a></div></details><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-slides-1-36" href="../../pns/l21-onward/part-6-linear-regression-slides-1-36.html"><span>Part 6 — Linear regression (slides 1–36)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a><details class="nav-doc"><summary><span>Quiz 2, worked solutions</span><i data-count-for="pns/quiz2-solutions/" data-total="7"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/quiz2-solutions/how-this-is-laid-out" href="../../pns/quiz2-solutions/how-this-is-laid-out.html"><span>How this is laid out</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-1-exponential-samples-to-uniform-a-b" href="../../pns/quiz2-solutions/question-1-exponential-samples-to-uniform-a-b.html"><span>Question 1: Exponential samples to Uniform<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mclose">]</span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-2-mgf-of-a-sum-of-two-binomials" href="../../pns/quiz2-solutions/question-2-mgf-of-a-sum-of-two-binomials.html"><span>Question 2: MGF of a sum of two Binomials</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-3-binomial-n-n-d-poisson" href="../../pns/quiz2-solutions/question-3-binomial-n-n-d-poisson.html"><span>Question 3: Binomial<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.4531em;vertical-align:-0.345em;"></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">λ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1081em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span></span></span></span> Poisson<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">λ</span><span class="mclose">)</span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-4-xn-n1-un-1n-does-not-converge-to-0-a-s" href="../../pns/quiz2-solutions/question-4-xn-n1-un-1n-does-not-converge-to-0-a-s.html"><span>Question 4: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord mathbf">1</span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">}</span></span></span></span> does not converge to 0 a.s.</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-5-10-marks-pdf-of-x-az" href="../../pns/quiz2-solutions/question-5-10-marks-pdf-of-x-az.html"><span>Question 5 (10 marks): pdf of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6861em;"></span><span class="mord mathbf">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7694em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mord mathbf">Z</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">μ</span></span></span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/one-page-summary" href="../../pns/quiz2-solutions/one-page-summary.html"><span>One-page summary</span></a></div></details><details class="nav-doc"><summary><span>Statistics practice quiz, L21 to L24</span><i data-count-for="pns/stats-practice-quiz/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/stats-practice-quiz/part-1" href="../../pns/stats-practice-quiz/part-1.html"><small>Part 1</small><span>What past papers tell us</span></a><a class="nav-link" data-id="pns/stats-practice-quiz/part-2" href="../../pns/stats-practice-quiz/part-2.html"><small>Part 2</small><span>The quiz</span></a><a class="nav-link" data-id="pns/stats-practice-quiz/part-3" href="../../pns/stats-practice-quiz/part-3.html"><small>Part 3</small><span>Answer key</span></a></div></details><a class="nav-link nav-single" data-id="pns/mixed-problems/mixed-problems-several-topics-at-once" href="../../pns/mixed-problems/mixed-problems-several-topics-at-once.html"><span>Mixed problems, several topics at once</span></a><details class="nav-doc"><summary><span>Mock endsem, timed (3 hours)</span><i data-count-for="pns/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/mock-endsem/mock-endsem-the-paper" href="../../pns/mock-endsem/mock-endsem-the-paper.html"><span>Mock endsem: the paper</span></a><a class="nav-link" data-id="pns/mock-endsem/mock-endsem-solutions" href="../../pns/mock-endsem/mock-endsem-solutions.html"><span>Mock endsem: solutions</span></a></div></details></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>490</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>61</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/start-here/start-here" href="../../science-1/start-here/start-here.html"><span>Start here: the endsem map</span></a><a class="nav-link nav-single" data-id="science-1/videos-ftlop/reference" href="../../science-1/videos-ftlop/reference.html"><span>Reference: For the Love of Physics videos</span></a><details class="nav-doc"><summary><span>Chapter 1: Scales, modelling and nonlinear dynamics</span><i data-count-for="science-1/ch1-intro/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch1-intro/learn" href="../../science-1/ch1-intro/learn.html"><small>Learn</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/reference" href="../../science-1/ch1-intro/reference.html"><small>Reference</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/formulas" href="../../science-1/ch1-intro/formulas.html"><small>Formulas</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/practice" href="../../science-1/ch1-intro/practice.html"><small>Practice</small><span>Scales, modelling and nonlinear dynamics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: Newtonian mechanics of one particle and many</span><i data-count-for="science-1/ch2-newton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch2-newton/learn" href="../../science-1/ch2-newton/learn.html"><small>Learn</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/reference" href="../../science-1/ch2-newton/reference.html"><small>Reference</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/formulas" href="../../science-1/ch2-newton/formulas.html"><small>Formulas</small><span>Newtonian mechanics</span></a><a class="nav-link" data-id="science-1/ch2-newton/practice" href="../../science-1/ch2-newton/practice.html"><small>Practice</small><span>Newtonian mechanics of one particle and many</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Calculus of variations and Lagrangian mechanics</span><i data-count-for="science-1/ch3-lagrange/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch3-lagrange/learn" href="../../science-1/ch3-lagrange/learn.html"><small>Learn</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/reference" href="../../science-1/ch3-lagrange/reference.html"><small>Reference</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/formulas" href="../../science-1/ch3-lagrange/formulas.html"><small>Formulas</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/practice" href="../../science-1/ch3-lagrange/practice.html"><small>Practice</small><span>Calculus of variations and Lagrangian mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Hamiltonian dynamics and the two-body problem</span><i data-count-for="science-1/ch4-hamilton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch4-hamilton/learn" href="../../science-1/ch4-hamilton/learn.html"><small>Learn</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/reference" href="../../science-1/ch4-hamilton/reference.html"><small>Reference</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/formulas" href="../../science-1/ch4-hamilton/formulas.html"><small>Formulas</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/practice" href="../../science-1/ch4-hamilton/practice.html"><small>Practice</small><span>Hamiltonian dynamics and the two-body problem</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Special relativity</span><i data-count-for="science-1/ch5-relativity/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch5-relativity/learn" href="../../science-1/ch5-relativity/learn.html"><small>Learn</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference" href="../../science-1/ch5-relativity/reference.html"><small>Reference</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/formulas" href="../../science-1/ch5-relativity/formulas.html"><small>Formulas</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/practice" href="../../science-1/ch5-relativity/practice.html"><small>Practice</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference-2" href="../../science-1/ch5-relativity/reference-2.html"><small>Reference</small><span>Special relativity quick sheet (Beiser ch. 1)</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Thermodynamics I: gases and the first law</span><i data-count-for="science-1/ch6-thermo1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch6-thermo1/learn" href="../../science-1/ch6-thermo1/learn.html"><small>Learn</small><span>Thermodynamics in one pass (Atkins 1A to 3B)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-2" href="../../science-1/ch6-thermo1/learn-2.html"><small>Learn</small><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-3" href="../../science-1/ch6-thermo1/learn-3.html"><small>Learn</small><span>The first law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-4" href="../../science-1/ch6-thermo1/learn-4.html"><small>Learn</small><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/practice" href="../../science-1/ch6-thermo1/practice.html"><small>Practice</small><span>Thermodynamics I: gases and the first law</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: Thermodynamics II: second law, entropy and free energy</span><i data-count-for="science-1/ch7-thermo2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch7-thermo2/learn" href="../../science-1/ch7-thermo2/learn.html"><small>Learn</small><span>The second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/learn-2" href="../../science-1/ch7-thermo2/learn-2.html"><small>Learn</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/reference" href="../../science-1/ch7-thermo2/reference.html"><small>Reference</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/formulas" href="../../science-1/ch7-thermo2/formulas.html"><small>Formulas</small><span>Second law, entropy and free energy</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/practice" href="../../science-1/ch7-thermo2/practice.html"><small>Practice</small><span>Free energy and phases</span></a></div></details><details class="nav-doc"><summary><span>Chapter 8: Particle properties of waves</span><i data-count-for="science-1/ch8-qm1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch8-qm1/learn" href="../../science-1/ch8-qm1/learn.html"><small>Learn</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/reference" href="../../science-1/ch8-qm1/reference.html"><small>Reference</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/coverage" href="../../science-1/ch8-qm1/coverage.html"><small>Coverage</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/formulas" href="../../science-1/ch8-qm1/formulas.html"><small>Formulas</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/practice" href="../../science-1/ch8-qm1/practice.html"><small>Practice</small><span>Particle properties of waves</span></a></div></details><details class="nav-doc"><summary><span>Chapter 9: Wave properties of particles</span><i data-count-for="science-1/ch9-qm2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch9-qm2/learn" href="../../science-1/ch9-qm2/learn.html"><small>Learn</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/reference" href="../../science-1/ch9-qm2/reference.html"><small>Reference</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/coverage" href="../../science-1/ch9-qm2/coverage.html"><small>Coverage</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/formulas" href="../../science-1/ch9-qm2/formulas.html"><small>Formulas</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/practice" href="../../science-1/ch9-qm2/practice.html"><small>Practice</small><span>Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>Chapter 10: Atomic structure</span><i data-count-for="science-1/ch10-qm3/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch10-qm3/learn" href="../../science-1/ch10-qm3/learn.html"><small>Learn</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/reference" href="../../science-1/ch10-qm3/reference.html"><small>Reference</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/coverage" href="../../science-1/ch10-qm3/coverage.html"><small>Coverage</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/formulas" href="../../science-1/ch10-qm3/formulas.html"><small>Formulas</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/practice" href="../../science-1/ch10-qm3/practice.html"><small>Practice</small><span>Atomic structure</span></a></div></details><details class="nav-doc"><summary><span>Chapter 11: Quantum mechanics</span><i data-count-for="science-1/ch11-qm4/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch11-qm4/learn" href="../../science-1/ch11-qm4/learn.html"><small>Learn</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/reference" href="../../science-1/ch11-qm4/reference.html"><small>Reference</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/coverage" href="../../science-1/ch11-qm4/coverage.html"><small>Coverage</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/formulas" href="../../science-1/ch11-qm4/formulas.html"><small>Formulas</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/practice" href="../../science-1/ch11-qm4/practice.html"><small>Practice</small><span>Quantum mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 12: Quantum theory of the hydrogen atom</span><i data-count-for="science-1/ch12-qm5/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch12-qm5/learn" href="../../science-1/ch12-qm5/learn.html"><small>Learn</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/reference" href="../../science-1/ch12-qm5/reference.html"><small>Reference</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/coverage" href="../../science-1/ch12-qm5/coverage.html"><small>Coverage</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/formulas" href="../../science-1/ch12-qm5/formulas.html"><small>Formulas</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/practice" href="../../science-1/ch12-qm5/practice.html"><small>Practice</small><span>Quantum theory of the hydrogen atom</span></a></div></details><details class="nav-doc"><summary><span>Practice: Mock endsem</span><i data-count-for="science-1/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/mock-endsem/practice" href="../../science-1/mock-endsem/practice.html"><small>Practice</small><span>Mock endsem</span></a><a class="nav-link" data-id="science-1/mock-endsem/practice-2" href="../../science-1/mock-endsem/practice-2.html"><small>Practice</small><span>Mock endsem, marking scheme and solutions</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Mechanics (lectures 1-8, Marion &amp; Thornton)</span><i data-count-for="science-1/hw-mechanics/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics" href="../../science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics.html"><span>HW practice: Lectures 1 to 4, nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2" href="../../science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2.html"><span>HW practice: Lecture 5, Newton for one particle (MT Chapter 2)</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange" href="../../science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange.html"><span>HW practice: Lectures 6 and 7, calculus of variations, Lagrange and Hamilton</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc" href="../../science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc.html"><span>HW practice: Lecture 8, multiparticle systems and central forces</span></a></div></details><a class="nav-link nav-single" data-id="science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e" href="../../science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e.html"><span>HW practice: Thermodynamics (Atkins 11e)</span></a><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 2 and 3</span><i data-count-for="science-1/hw-qm/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves" href="../../science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves.html"><span>HW practice: Beiser Chapter 2, Particle properties of waves</span></a><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles" href="../../science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles.html"><span>HW practice: Beiser Chapter 3, Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 4 to 6</span><i data-count-for="science-1/hw-qm-b/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure.html"><span>HW practice: Beiser Chapter 4, Atomic structure</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics.html"><span>HW practice: Beiser Chapter 5, Quantum mechanics</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-.html"><span>HW practice: Beiser Chapter 6, Quantum theory of the hydrogen atom</span></a></div></details><a class="nav-link nav-single" data-id="science-1/toolkit-practice/practice" href="../../science-1/toolkit-practice/practice.html"><span>Practice set: thermodynamics</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cheatsheet/sheet" href="../../science-1/toolkit-cheatsheet/sheet.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-formulas/sheet" href="../../science-1/toolkit-formulas/sheet.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-definitions/sheet" href="../../science-1/toolkit-definitions/sheet.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cards/cards" href="../../science-1/toolkit-cards/cards.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../osn/index.html">Operating Systems and Networks</a><span>›</span><span>Endsem practice (9 × 10 marks)</span></nav>
+      <header class="note-head">
+        
+        <h1>Endsem practice: the professor's sheet</h1>
+        <p class="note-meta">45 min read · 20 practice problems</p>
+        <div class="note-tools">
+          <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          <span class="hint">Solutions stay collapsed until you click them.</span>
+        </div>
+      </header>
+      <div class="prose"><p><em>Endsem: 24 Nov 2026, 9 AM. 9 questions × 10 marks. These are the 20 problems from the professor's post-midsem practice sheet (CS3.301_Questions.pdf), rewritten as 10-mark questions. Every solution below is written the way you should write it in the exam: state the rule, show the working, box the answer, then add the one-line reason. Marks in brackets are a guess at how 10 marks split.</em></p>
+<p><strong>How the sheet was made.</strong> It has two questions per OSTEP chapter: 15, 16, 17, 18, 19, 20, 28, 30, 31 and 40. Most numbers come from the worked examples on the L11 to L19 slides, sometimes with small changes. Each question asks you to (a) calculate or trace, (b) say who does it and why, and (c) give the trade-off or the fix. The midsem reused sheet problems, so learn each <strong>method</strong>; if the numbers change, the method still works.</p>
+<p><strong>How to write a 10-mark answer.</strong> (1) Write the rule or formula first, one line. (2) Show each step, in a table if there are several addresses. (3) End each part with a clear answer. (4) For &quot;why&quot; parts, give the <strong>mechanism</strong> in one sentence and the <strong>consequence</strong> in another. Examiners give most marks for the method, so never write only a final number.</p>
+<h2 id="address-translation-and-segmentation">Address translation and segmentation</h2>
+<p id="p-e1"><strong>E1 (sheet Q1).</strong> A process has a 16 KB address space, loaded with base = 32 KB and bounds = 16 KB (bounds holds the size). (a) Translate 0, 1024, 3000, 4400, 16384 and 18000, or say which fault. [5] (b) Who sets base and bounds, when, and why must those instructions be privileged? [3] (c) Why does base and bounds waste memory? [2]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Rule.</strong> The hardware (MMU) first checks the <strong>bounds</strong>, then adds the <strong>base</strong>:</p>
+<div class="math-d" data-tex="0 \le VA &lt; \text{bounds} \;\Rightarrow\; PA = VA + \text{base}; \quad \text{otherwise raise an exception (fault)}"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">bounds</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⇒</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">base</span></span><span class="mpunct">;</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">otherwise raise an exception (fault)</span></span></span></span></span></span></div>
+<p>Here base = 32 KB = 32768 and bounds = 16 KB = 16384. Legal virtual addresses are 0 to 16383.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>VA</th>
+<th>Bounds check (VA &lt; 16384?)</th>
+<th>Working</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>yes</td>
+<td>0 + 32768</td>
+<td><strong>32768</strong></td>
+</tr>
+<tr>
+<td>1024</td>
+<td>yes</td>
+<td>1024 + 32768</td>
+<td><strong>33792</strong></td>
+</tr>
+<tr>
+<td>3000</td>
+<td>yes</td>
+<td>3000 + 32768</td>
+<td><strong>35768</strong></td>
+</tr>
+<tr>
+<td>4400</td>
+<td>yes</td>
+<td>4400 + 32768</td>
+<td><strong>37168</strong></td>
+</tr>
+<tr>
+<td>16384</td>
+<td><strong>no</strong> (VA = bounds)</td>
+<td>the last legal address is 16383</td>
+<td><strong>Fault</strong></td>
+</tr>
+<tr>
+<td>18000</td>
+<td><strong>no</strong> (18000 &gt; 16383)</td>
+<td></td>
+<td><strong>Fault</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><em>Watch out:</em> with the textbook's 4 KB address space, 4400 would fault. Here the space is 16 KB, so it is valid. Always compare with <em>this</em> question's bounds. Also, the check is <code>VA &lt; bounds</code>, <strong>not</strong> <code>VA &lt;= bounds</code>.</p>
+<p><strong>(b)</strong> The <strong>OS</strong>, running in <strong>kernel mode</strong>, sets the registers. It does so <strong>when it creates the process</strong> (loads the base chosen from the free list and the bounds from the address-space size) and <strong>on every context switch</strong>, where it saves the old process's values in its PCB and restores the new process's. The instructions must be <strong>privileged</strong> because, if a user program could write base or bounds, it could set them to cover another process's memory or the kernel, which destroys <strong>protection and isolation</strong>. A user attempt to execute them traps to the OS.</p>
+<p><strong>(c)</strong> The whole address space (16 KB) is placed in one contiguous slot, including the large <strong>unused gap between the heap and the stack</strong>. That reserved but unused space inside the process's slot is <strong>internal fragmentation</strong>. A process with a small heap and a small stack still occupies its full slot. This motivates segmentation (a base and bounds pair per segment) and later paging.</p>
+</details>
+<hr>
+<p id="p-e2"><strong>E2 (sheet Q2).</strong> The OS moves a descheduled process's address space to another region of physical memory. List the steps, and explain why the process never notices. [10]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Steps</strong> (the process is not running, so its memory is quiet):</p>
+<ol>
+<li><strong>Deschedule</strong> the process (it is already in the ready or blocked state).</li>
+<li><strong>Choose a new region</strong> from the <strong>free list</strong> that is big enough for the whole address space.</li>
+<li><strong>Copy</strong> the address space (code, heap, stack) from the old region to the new one.</li>
+<li><strong>Update the saved base</strong> in the process's <strong>PCB</strong> to the new region's start address. The bounds are unchanged because the size is unchanged.</li>
+<li><strong>Return the old region</strong> to the free list.</li>
+<li>When the process is next scheduled, the OS <strong>loads the new base</strong> into the MMU's base register as part of the context switch.</li>
+</ol>
+<p><strong>Why the process never notices.</strong> The process only ever generates <strong>virtual addresses</strong> that start at 0. The hardware adds the base <strong>on every access</strong>, so the process's addresses, pointers and bounds are unchanged; only the hidden VA-to-PA mapping moved. This is exactly why <strong>dynamic relocation</strong> (base and bounds) can move a process after it has started, whereas <strong>static (software) relocation</strong>, where a loader rewrites addresses once, cannot: the program would then hold stale physical addresses. The cost is that the copy takes time proportional to the size of the address space.</p>
+</details>
+<hr>
+<p id="p-e3"><strong>E3 (sheet Q3).</strong> 16-bit VAs: the top 2 bits pick the segment and the low 14 bits are the offset (max segment size 16 KB). The stack grows downward.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Segment</th>
+<th>Bits</th>
+<th>Base</th>
+<th>Size</th>
+<th>Grows positive?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code</td>
+<td>00</td>
+<td>32 KB</td>
+<td>2 KB</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Heap</td>
+<td>01</td>
+<td>34 KB</td>
+<td>3 KB</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Stack</td>
+<td>11</td>
+<td>28 KB</td>
+<td>2 KB</td>
+<td>No</td>
+</tr>
+<tr>
+<td>unused</td>
+<td>10</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+</tbody>
+</table></div>
+<p>(a) Translate 0x0100, 0x4200, 0x4C00, 0xFC00, 0xF000 and 0x8000. [7] (b) How does the hardware compute a stack address? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Method.</strong> Write the VA in binary: the top 2 bits give the segment, the low 14 bits give the offset. Then, for a forward-growing segment, check offset &lt; size and compute PA = base + offset. For the stack (grows backwards): <strong>negative offset = offset − 16384</strong> (the maximum segment size), check that its magnitude is at most the size, then PA = base + negative offset.</p>
+<p>Base values in bytes: code 32768, heap 34816, stack 28672. Sizes: code 2048, heap 3072, stack 2048.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>VA</th>
+<th>Segment (top 2 bits)</th>
+<th>Offset (low 14 bits)</th>
+<th>Check</th>
+<th>PA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x0100</td>
+<td>00 = code</td>
+<td>0x0100 = 256</td>
+<td>256 &lt; 2048, ok</td>
+<td>32768 + 256 = <strong>33024</strong></td>
+</tr>
+<tr>
+<td>0x4200</td>
+<td>01 = heap</td>
+<td>0x0200 = 512</td>
+<td>512 &lt; 3072, ok</td>
+<td>34816 + 512 = <strong>35328</strong></td>
+</tr>
+<tr>
+<td>0x4C00</td>
+<td>01 = heap</td>
+<td>0x0C00 = 3072</td>
+<td>3072 &lt; 3072? <strong>no</strong></td>
+<td><strong>Fault</strong></td>
+</tr>
+<tr>
+<td>0xFC00</td>
+<td>11 = stack</td>
+<td>0x3C00 = 15360</td>
+<td>15360 − 16384 = −1024, and 1024 ≤ 2048, ok</td>
+<td>28672 − 1024 = <strong>27648</strong></td>
+</tr>
+<tr>
+<td>0xF000</td>
+<td>11 = stack</td>
+<td>0x3000 = 12288</td>
+<td>12288 − 16384 = −4096, and 4096 &gt; 2048</td>
+<td><strong>Fault</strong></td>
+</tr>
+<tr>
+<td>0x8000</td>
+<td>10 = unused</td>
+<td>0</td>
+<td>segment 10 is not mapped</td>
+<td><strong>Fault</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><em>Watch out:</em> 0x4C00 is exactly one byte past the end of the heap (size 3072 means valid offsets 0 to 3071). 0xFC00 is the standard stack example: the offset must be converted to a <strong>negative</strong> one before adding to the base.</p>
+<p><strong>(b)</strong> A stack segment grows toward lower addresses, so offsets are measured <strong>backwards from the top</strong> of the virtual segment. The hardware knows the direction from a <strong>&quot;grows positive&quot; bit</strong> in the segment register. Steps: (1) extract the segment bits and the offset; (2) subtract the maximum segment size (16 KB) from the offset to get a <strong>negative offset</strong>; (3) check that the magnitude of the negative offset does not exceed the segment size; (4) add the (negative) offset to the base: <strong>PA = base + (offset − 16 KB)</strong>. Example: offset 15360 gives −1024, and 28 KB − 1 KB = 27 KB = 27648.</p>
+</details>
+<hr>
+<p id="p-e4"><strong>E4 (sheet Q4).</strong> (a) Explain external fragmentation with a small example, and why compaction is expensive. [6] (b) How can several processes share a code segment safely? [4]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) External fragmentation</strong> is free memory that is split into <strong>small holes between allocated segments</strong>, so that a request fails even though the <em>total</em> free space is large enough. Segments have different sizes, so allocating and freeing them leaves holes of different sizes.</p>
+<p><em>Example:</em> three 4 KB segments A, B and C sit one after another (12 KB). A and C exit, leaving two 4 KB holes with B between them. Total free memory = 8 KB, but a new <strong>6 KB</strong> segment <strong>cannot be placed</strong>, because neither hole is big enough.</p>
+<p><strong>Compaction</strong> rearranges segments to make one large hole. It is <strong>expensive</strong> because the OS must: (1) <strong>stop</strong> the affected processes; (2) <strong>copy</strong> every moved segment (memory-intensive, so cost proportional to the amount of memory moved); (3) <strong>update</strong> the base registers in each PCB. All of that is done while the processes are paused. A growing segment can also make the work wasted soon after.</p>
+<p><strong>(b) Sharing</strong> works through <strong>protection bits</strong> kept for each segment. The code segment is marked <strong>read-execute only</strong>. Several processes then <strong>map the same physical code segment</strong> (each process's segment table points to the same physical base), and each keeps its own private data, heap and stack segments. Because the segment is read-only, no process can corrupt it, and the hardware checks the protection bits on every access (a write attempt traps). This saves physical memory: one copy of the code serves all processes.</p>
+</details>
+<h2 id="free-space-management">Free-space management</h2>
+<p id="p-e5"><strong>E5 (sheet Q5).</strong> The free list holds chunks of 10, 30, 20 and 15 bytes, in that order. Requests arrive for 12, 18 and 9 bytes. Ignore headers; a chunk is split and the remainder stays in place. (a) Show the list after each request under first fit, best fit and worst fit. [7] (b) A request for 25 then arrives. Which policies succeed, and what does that suggest? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Rules.</strong> <strong>First fit</strong>: the first chunk that is big enough. <strong>Best fit</strong>: the <em>smallest</em> chunk that is big enough. <strong>Worst fit</strong>: the <em>largest</em> chunk. After the choice, the chunk shrinks by the request size and stays where it is.</p>
+<p><em>First fit</em> (list 10, 30, 20, 15):</p>
+<ul>
+<li>12 → first chunk ≥ 12 is 30 → list <strong>10, 18, 20, 15</strong></li>
+<li>18 → first chunk ≥ 18 is 18 (the second one) → list <strong>10, 20, 15</strong> (that chunk is used up)</li>
+<li>9 → first chunk ≥ 9 is 10 → list <strong>1, 20, 15</strong></li>
+</ul>
+<p><em>Best fit</em> (list 10, 30, 20, 15):</p>
+<ul>
+<li>12 → chunks ≥ 12 are 30, 20, 15; the smallest is 15 → list <strong>10, 30, 20, 3</strong></li>
+<li>18 → chunks ≥ 18 are 30, 20; the smallest is 20 → list <strong>10, 30, 2, 3</strong></li>
+<li>9 → chunks ≥ 9 are 10, 30; the smallest is 10 → list <strong>1, 30, 2, 3</strong></li>
+</ul>
+<p><em>Worst fit</em> (list 10, 30, 20, 15):</p>
+<ul>
+<li>12 → largest is 30 → list <strong>10, 18, 20, 15</strong></li>
+<li>18 → largest is 20 → list <strong>10, 18, 2, 15</strong></li>
+<li>9 → largest is 18 (list is 10, 18, 2, 15) → list <strong>10, 9, 2, 15</strong></li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>After 12</th>
+<th>After 18</th>
+<th>After 9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First fit</td>
+<td>10, 18, 20, 15</td>
+<td>10, 20, 15</td>
+<td>1, 20, 15</td>
+</tr>
+<tr>
+<td>Best fit</td>
+<td>10, 30, 20, 3</td>
+<td>10, 30, 2, 3</td>
+<td>1, 30, 2, 3</td>
+</tr>
+<tr>
+<td>Worst fit</td>
+<td>10, 18, 20, 15</td>
+<td>10, 18, 2, 15</td>
+<td>10, 9, 2, 15</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>(b)</strong> A request for 25 bytes: the largest chunk in each final list is 20 (first fit), <strong>30 (best fit)</strong>, 15 (worst fit). So only <strong>best fit succeeds</strong>. <em>What it suggests:</em> <strong>no policy is best for every request sequence</strong>. Best fit preserved a large chunk here by using small chunks for small requests, but it leaves tiny <strong>splinters</strong> (1, 2 and 3 bytes) that are useless, and each request needs a full list search. Worst fit tries to leave big remainders but here chopped up the largest chunks. First fit is fast but fragments the front of the list.</p>
+</details>
+<hr>
+<p id="p-e6"><strong>E6 (sheet Q6).</strong> A binary buddy allocator manages a 64 KB heap starting at 0. Requests arrive in order: A = 7 KB, B = 3 KB, C = 20 KB. (a) Which block does each get, and which splits are needed? [5] (b) What is the total internal fragmentation? [2] (c) A is freed, then B. Describe the coalescing. [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Method.</strong> Round each request up to the next power of two. To satisfy it, split a free block in half repeatedly until a block of that size exists. The two halves of a split are <strong>buddies</strong>.</p>
+<ul>
+<li><strong>A = 7 KB → 8 KB block.</strong> Split 64 → 32 + 32; split the first 32 → 16 + 16; split the first 16 → 8 + 8. <strong>A = [0, 8 KB).</strong></li>
+<li><strong>B = 3 KB → 4 KB block.</strong> Take the free 8 KB at [8, 16) and split it → 4 + 4. <strong>B = [8, 12 KB).</strong></li>
+<li><strong>C = 20 KB → 32 KB block.</strong> The free 32 KB block at [32, 64) fits exactly, no split needed. <strong>C = [32, 64 KB).</strong></li>
+</ul>
+<p>The free blocks now are [12, 16) (4 KB) and [16, 32) (16 KB).</p>
+<p><strong>(b) Internal fragmentation</strong> = block size − request size: A: 8 − 7 = 1 KB; B: 4 − 3 = 1 KB; C: 32 − 20 = 12 KB. Total = <strong>14 KB</strong>.</p>
+<p><strong>(c) Coalescing rule:</strong> when a block is freed, check its <strong>buddy</strong> (the other half of the block it was split from). If the buddy is <strong>completely free</strong>, merge the two into the next size up, and repeat upward.</p>
+<ul>
+<li><strong>Free A [0, 8):</strong> its buddy is [8, 16), which is <strong>not free as a whole</strong> (it was split, and B holds [8, 12)). So <strong>no merge</strong>; [0, 8) just becomes a free 8 KB block.</li>
+<li><strong>Free B [8, 12):</strong> its buddy is [12, 16), which is free → merge into [8, 16) (8 KB). Now [8, 16)'s buddy is [0, 8), which is free → merge into [0, 16) (16 KB). Now [0, 16)'s buddy is [16, 32), which is free → merge into [0, 32) (32 KB). Now [0, 32)'s buddy is [32, 64), which holds C → <strong>stop</strong>.</li>
+</ul>
+<p>Final free list: one 32 KB block at [0, 32). Address check: a block's buddy address = block address XOR block size.</p>
+</details>
+<h2 id="paging-and-tlbs">Paging and TLBs</h2>
+<p id="p-e7"><strong>E7 (sheet Q7).</strong> 32-bit VAs, 4 KB pages, 4-byte PTEs and a linear page table. (a) VPN and offset bits? [2] (b) Table size per process, and for 100 processes? [3] (c) VA 0x00403A2C maps to a page whose PTE holds PFN 0x01F2. What is the PA? [3] (d) Without a TLB, how many memory references does one load need? [2]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> Page size 4 KB = 2^12, so the <strong>offset = 12 bits</strong>. <strong>VPN = 32 − 12 = 20 bits</strong>.</p>
+<p><strong>(b)</strong> A linear table has one entry per virtual page: 2^20 entries × 4 bytes = 2^22 bytes = <strong>4 MB per process</strong>. For 100 processes: 100 × 4 MB = <strong>400 MB</strong>, just for page tables. This is why linear page tables are too big (next topic: multi-level tables).</p>
+<p><strong>(c)</strong> Split the address 0x00403A2C: the low 12 bits (3 hex digits) are the offset: <strong>offset = 0xA2C</strong>. The rest is the VPN: 0x00403 (VPN = 0x403). The PTE for this VPN gives PFN = 0x01F2. The offset is not translated:</p>
+<div class="math-d" data-tex="PA = (\text{PFN} \ll 12) \mid \text{offset} = 0x01F2 \cdot 0x1000 + 0xA2C = \textbf{0x01F2A2C}"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">PFN</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≪</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">12</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">offset</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">0</span><span class="mord mathnormal">x</span><span class="mord">01</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0</span><span class="mord mathnormal">x</span><span class="mord">1000</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">0</span><span class="mord mathnormal">x</span><span class="mord mathnormal">A</span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6861em;"></span><span class="mord text"><span class="mord textbf">0x01F2A2C</span></span></span></span></span></span></div>
+<p>(PFN digits followed by the 3 offset digits.)</p>
+<p><strong>(d)</strong> <strong>2 memory references</strong>: one to read the <strong>PTE</strong> from the page table in memory, and one to access the <strong>data</strong> itself. (With a TLB hit, only 1.)</p>
+</details>
+<hr>
+<p id="p-e8"><strong>E8 (sheet Q8).</strong> What happens, and who handles it? (a) A load to a page with valid = 0. (b) valid = 1, present = 0. (c) A store to a read-only page. (d) How are the dirty and reference bits used in eviction? [10]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) valid = 0.</strong> The page is <strong>not part of the process's address space</strong> (never allocated). The <strong>hardware</strong> (MMU) raises an exception and traps to the <strong>OS</strong>, which treats it as an <strong>illegal memory access</strong> and normally <strong>kills the process</strong> (segmentation fault).</p>
+<p><strong>(b) valid = 1, present = 0.</strong> The page is in the address space but is <strong>swapped out to disk</strong>, so the access causes a <strong>page fault</strong>, handled by the <strong>OS page-fault handler</strong> (not the hardware). Steps: (1) the PTE holds the page's <strong>disk address</strong>; (2) the OS finds a free frame (if memory is full, it picks a victim page by the replacement policy and writes it back if dirty); (3) it issues a <strong>disk read</strong> and <strong>blocks</strong> the process (another process runs meanwhile); (4) on completion it updates the PTE (<strong>present = 1</strong>, new PFN); (5) it <strong>retries the faulting instruction</strong>, which now succeeds (after a TLB refill).</p>
+<p><strong>(c) Store to a read-only page</strong> (protection bit does not allow writes). The hardware detects the violation and raises a <strong>protection fault</strong> that traps to the <strong>OS</strong>. Normally the OS <strong>terminates the process</strong>. (If the page was deliberately marked read-only for <strong>copy-on-write</strong>, as in your MP2 xv6 fork, the OS handler instead allocates a new frame, copies the page, maps it writable and retries.)</p>
+<p><strong>(d) Dirty bit.</strong> Set by the hardware when the page is <strong>written</strong>. When choosing a victim, a <strong>clean</strong> page can simply be discarded (its copy on disk is up to date), but a <strong>dirty</strong> page must first be <strong>written back</strong> to disk, which costs an extra I/O. So the OS <strong>prefers to evict clean pages</strong>. <strong>Reference (use) bit.</strong> Set by the hardware whenever the page is <strong>accessed</strong>. The OS uses it to <strong>approximate LRU</strong>: in the <strong>clock algorithm</strong> the hand sweeps over the pages; a page with use = 1 is given a second chance (the bit is cleared), and the first page found with use = 0 is evicted.</p>
+</details>
+<hr>
+<p id="p-e9"><strong>E9 (sheet Q9).</strong> An array of ten 4-byte ints a[0..9] starts at VA 100. Pages are 16 bytes, and the TLB starts empty. (a) Which pages hold the array? Mark each access as a hit or miss, and give the hit rate. [5] (b) The loop runs again right away. What is the hit rate, and which locality explains it? [2] (c) What would the first-loop hit rate be with 4 KB pages? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> Page size 16 bytes, so VPN = VA / 16. The array occupies bytes 100 to 139 (a[i] is at 100 + 4i).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>VA</th>
+<th>VPN (VA ÷ 16)</th>
+<th>TLB result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a[0]</td>
+<td>100</td>
+<td>6 (bytes 96–111)</td>
+<td><strong>Miss</strong> (first touch of page 6)</td>
+</tr>
+<tr>
+<td>a[1]</td>
+<td>104</td>
+<td>6</td>
+<td>Hit</td>
+</tr>
+<tr>
+<td>a[2]</td>
+<td>108</td>
+<td>6</td>
+<td>Hit</td>
+</tr>
+<tr>
+<td>a[3]</td>
+<td>112</td>
+<td>7 (bytes 112–127)</td>
+<td><strong>Miss</strong></td>
+</tr>
+<tr>
+<td>a[4]</td>
+<td>116</td>
+<td>7</td>
+<td>Hit</td>
+</tr>
+<tr>
+<td>a[5]</td>
+<td>120</td>
+<td>7</td>
+<td>Hit</td>
+</tr>
+<tr>
+<td>a[6]</td>
+<td>124</td>
+<td>7</td>
+<td>Hit</td>
+</tr>
+<tr>
+<td>a[7]</td>
+<td>128</td>
+<td>8 (bytes 128–143)</td>
+<td><strong>Miss</strong></td>
+</tr>
+<tr>
+<td>a[8]</td>
+<td>132</td>
+<td>8</td>
+<td>Hit</td>
+</tr>
+<tr>
+<td>a[9]</td>
+<td>136</td>
+<td>8</td>
+<td>Hit</td>
+</tr>
+</tbody>
+</table></div>
+<p>The array spans <strong>virtual pages 6, 7 and 8</strong>. Pattern: M H H M H H H M H H. <strong>3 misses, 7 hits</strong>, so the hit rate = 7 / 10 = <strong>70%</strong>. The misses are compulsory (cold) misses, one per new page.</p>
+<p><strong>(b)</strong> On the second run all three translations (VPN 6, 7 and 8) are already in the TLB, so every access hits: <strong>hit rate = 100%</strong>. This is <strong>temporal locality</strong>: the same pages are re-referenced soon after.</p>
+<p><strong>(c)</strong> With 4 KB pages, bytes 100 to 139 all lie in <strong>page 0</strong>, so the first access misses and the other nine hit: hit rate = <strong>90%</strong>. The page size exploits <strong>spatial locality</strong>: neighbouring addresses lie on the same page, so a larger page means more neighbours per TLB entry and fewer misses.</p>
+</details>
+<hr>
+<p id="p-e10"><strong>E10 (sheet Q10).</strong> A TLB lookup takes 1 ns and a memory access 100 ns. On a miss, the hardware reads one PTE from memory. (a) Find the effective access time for hit rates of 98% and 90%. [5] (b) P1 and P2 both use VPN 10, mapped to different frames. What problem does this cause on a context switch? Give two fixes and their trade-offs. [5]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Cases.</strong> A <strong>hit</strong> costs one TLB lookup plus one memory access (the data): 1 + 100 = <strong>101 ns</strong>. A <strong>miss</strong> costs the lookup, one memory access for the PTE, then the data access: 1 + 100 + 100 = <strong>201 ns</strong>.</p>
+<div class="math-d" data-tex="EAT = h(t + m) + (1-h)(t + 2m)"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mord mathnormal">m</span><span class="mclose">)</span></span></span></span></span></div>
+<ul>
+<li>h = 0.98: EAT = 0.98 × 101 + 0.02 × 201 = 98.98 + 4.02 = <strong>103 ns</strong>.</li>
+<li>h = 0.90: EAT = 0.90 × 101 + 0.10 × 201 = 90.9 + 20.1 = <strong>111 ns</strong>.</li>
+</ul>
+<p>A drop of 8 points in hit rate costs about 8 ns (8%) per access.</p>
+<p><strong>(b) The problem.</strong> The TLB holds <strong>VPN → PFN</strong> translations but does not know which process they belong to. After a context switch from P1 to P2, the entry &quot;VPN 10 → P1's frame&quot; is still in the TLB. If P2 accesses VPN 10, it <strong>hits the stale entry and reads P1's memory</strong>: wrong data and a protection violation.</p>
+<p><strong>Fix 1: flush the TLB</strong> (invalidate all entries) on every context switch. <em>Trade-off:</em> simple and needs no extra hardware, but the next process starts with an <strong>empty (cold) TLB</strong>, so every switch is followed by a burst of misses, which hurts performance if switches are frequent.</p>
+<p><strong>Fix 2: ASIDs (address-space identifiers).</strong> Add an ASID field (like a PID) to each TLB entry, and the hardware matches both the VPN <strong>and</strong> the current process's ASID. <em>Trade-off:</em> entries from several processes can coexist, so <strong>no flush</strong> and warm TLBs after a switch. But it needs <strong>extra hardware bits</strong> in every TLB entry, and the OS must manage ASID allocation (and recycle them). It also lets two processes share a physical page through two entries with different ASIDs.</p>
+</details>
+<h2 id="multi-level-page-tables">Multi-level page tables</h2>
+<p id="p-e11"><strong>E11 (sheet Q11).</strong> A 16 KB address space (14-bit VAs), 64-byte pages and 4-byte PTEs. The process uses only VPNs 0, 1 (code), 4, 5 (heap), 254 and 255 (stack). (a) VPN and offset bits? How large would a linear table be? [2] (b) With one page of PTEs per directory entry, how many bits index the directory and how many index a page of the table? [2] (c) How many pages does the two-level table need? [2] (d) Split 0x3F80 into directory index, table index and offset. Its PTE holds PFN 55. What is the PA? [4]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> 64-byte pages = 2^6, so <strong>offset = 6 bits</strong>; <strong>VPN = 14 − 6 = 8 bits</strong> (256 virtual pages). A linear table: 256 entries × 4 B = <strong>1024 B = 1 KB = 16 pages</strong> (1024 / 64).</p>
+<p><strong>(b)</strong> One page holds 64 / 4 = <strong>16 PTEs</strong>, so a page of the table is indexed by <strong>4 bits</strong> (2^4 = 16). The directory needs one entry per page of the table: 256 PTEs / 16 = 16 pages, so <strong>4 bits</strong> (8 − 4) index the directory. The VA splits as <strong>| 4-bit PD index | 4-bit PT index | 6-bit offset |</strong>.</p>
+<p><strong>(c)</strong> Needed pages: <strong>1 page for the page directory</strong>, plus only the table pages that contain a used VPN. VPNs 0, 1, 4 and 5 all lie in table page 0 (VPNs 0–15); VPNs 254 and 255 lie in table page 15 (VPNs 240–255). That is 2 table pages. <strong>Total = 1 + 2 = 3 pages</strong> (192 bytes) instead of 16 pages. The other 14 directory entries are marked invalid and cost nothing more.</p>
+<p><strong>(d)</strong> 0x3F80 in binary (14 bits): 11 1111 1000 0000 → split <strong>1111 | 1110 | 000000</strong>.</p>
+<ul>
+<li>PD index = 1111 = <strong>15</strong> → the directory entry points to table page 15.</li>
+<li>PT index = 1110 = <strong>14</strong> → entry 14 of that page, which is VPN 15 × 16 + 14 = 254.</li>
+<li>Offset = 000000 = <strong>0</strong>.</li>
+</ul>
+<p>The PTE holds PFN = 55, so PA = 55 × 64 + 0 = <strong>3520</strong> (= <strong>0xDC0</strong>).</p>
+</details>
+<hr>
+<p id="p-e12"><strong>E12 (sheet Q12).</strong> 48-bit VAs, 4 KB pages, 8-byte PTEs, and every level must fit in one page. (a) How many levels are needed? [5] (b) How many memory references does a load need on a TLB miss, and what is the trade-off? [5]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> Offset = 12 bits (4 KB), so VPN = 48 − 12 = <strong>36 bits</strong>. One page holds 4096 / 8 = <strong>512 PTEs = 2^9</strong>, so each level can index <strong>9 bits</strong>. Levels needed = ⌈36 / 9⌉ = <strong>4 levels</strong> (9 + 9 + 9 + 9 = 36).</p>
+<div class="math-d" data-tex="\text{levels} = \left\lceil \frac{\text{VPN bits}}{\log_2(\text{page size} / \text{PTE size})} \right\rceil = \left\lceil \frac{36}{9} \right\rceil = 4"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">levels</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">⌈</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop">lo<span style="margin-right:0.0139em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord text"><span class="mord">page size</span></span><span class="mord">/</span><span class="mord text"><span class="mord">PTE size</span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">VPN bits</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">⌉</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">⌈</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">9</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">36</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">⌉</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span></div>
+<p><strong>(b)</strong> On a TLB miss the hardware reads <strong>one entry per level</strong> (4 memory references to walk the table) and then the data itself: <strong>4 + 1 = 5 memory references</strong>. (On a TLB hit: 1.)</p>
+<p><strong>Trade-off:</strong> multi-level tables trade <strong>time for space</strong>. <em>Space saved:</em> page-table pages are allocated only for the parts of the address space actually in use, so a sparse address space needs very little memory (unlike a linear table of 2^36 × 8 B = 512 GB). <em>Time and complexity cost:</em> a TLB miss costs several memory references instead of one extra, and the lookup logic is more complex. This is acceptable because the TLB makes misses rare.</p>
+<p><em>Variant to expect:</em> RISC-V <strong>Sv39</strong> (the xv6 system you used): 39-bit VA, 4 KB pages, 8-byte PTEs → 27-bit VPN = 3 levels × 9 bits.</p>
+</details>
+<h2 id="locks">Locks</h2>
+<p id="p-e13"><strong>E13 (sheet Q13).</strong> <code>lock: while (m-&gt;flag == 1) ; m-&gt;flag = 1;</code> and <code>unlock: m-&gt;flag = 0;</code> (a) Give an interleaving with two threads in the critical section. [3] (b) Rewrite lock() with TestAndSet. [3] (c) Evaluate the spin lock for correctness, fairness and single-CPU performance. [4]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> The bug is that <strong>testing the flag and setting it are two separate steps</strong>. Interleaving (flag = 0 initially):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>T1</th>
+<th>T2</th>
+<th>flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>while (flag == 1)</code>: sees 0, exits the loop</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>timer interrupt: switch to T2</em></td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td><code>while (flag == 1)</code>: sees 0, exits</td>
+<td>0</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td><code>flag = 1</code>; <strong>enters the critical section</strong></td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td><em>switch back to T1</em></td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>flag = 1</code>; <strong>enters the critical section</strong></td>
+<td></td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Both threads are now in the critical section</strong>: mutual exclusion is violated.</p>
+<p><strong>(b)</strong> <code>TestAndSet(ptr, new)</code> atomically returns the <strong>old</strong> value and stores the <strong>new</strong> one, so the test and the set cannot be separated:</p>
+<pre><code class="language-c">void lock(lock_t *m) {
+    while (TestAndSet(&amp;m-&gt;flag, 1) == 1)
+        ;   // spin: old value 1 means someone else holds the lock
+}
+void unlock(lock_t *m) { m-&gt;flag = 0; }
+</code></pre>
+<p>If the old value was 0, the lock was free and this thread has just taken it (it left flag = 1); only one thread can ever see the old value 0.</p>
+<p><strong>(c)</strong> <strong>Correctness: yes.</strong> The atomic test-and-set guarantees mutual exclusion. <strong>Fairness: no.</strong> There is no queue and no ordering, so a thread can spin forever while others keep winning (starvation). <strong>Performance on a single CPU: very poor.</strong> If the lock holder is preempted inside the critical section, every other thread runs and <strong>spins for its whole time slice</strong> without being able to get the lock (the holder cannot release it until it runs again). With N threads, up to N − 1 slices are wasted. (On several CPUs, spinning is reasonable when critical sections are short, because the holder runs on another CPU.)</p>
+</details>
+<hr>
+<p id="p-e14"><strong>E14 (sheet Q14).</strong> A ticket lock: <code>myturn = FetchAndAdd(&amp;ticket); while (turn != myturn) ;</code> and <code>unlock: turn++</code>, with ticket = turn = 0. (a) T1, T2 and T3 call lock in that order. Give each myturn and the order they enter. [3] (b) T1 calls unlock twice by mistake. What happens? [4] (c) Why is this fair when test-and-set is not? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> <code>FetchAndAdd</code> returns the old value of ticket and increments it atomically: <strong>T1: myturn = 0</strong> (ticket becomes 1), <strong>T2: myturn = 1</strong> (ticket becomes 2), <strong>T3: myturn = 2</strong> (ticket becomes 3). turn = 0, so only T1 passes the <code>while</code>. <strong>Entry order: T1, T2, T3.</strong> (T1's unlock makes turn = 1, letting T2 in; T2's unlock lets T3 in.)</p>
+<p><strong>(b)</strong> Double unlock by T1:</p>
+<ul>
+<li>First <code>unlock</code>: turn = 1, so <strong>T2</strong> enters (correct).</li>
+<li>Second <code>unlock</code> (by T1, mistaken): turn = 2, so <strong>T3</strong> now sees turn == myturn and <strong>enters while T2 is still inside</strong>. Two threads are in the critical section: <strong>mutual exclusion is broken</strong>.</li>
+<li>Worse, turn is now permanently one ahead of the &quot;correct&quot; count, so later threads keep overlapping. The ticket lock relies on <strong>exactly one unlock per lock</strong>; an extra unlock destroys its invariant.</li>
+</ul>
+<p><strong>(c)</strong> In a ticket lock each thread takes a <strong>ticket number</strong> and is served in <strong>ticket order (FIFO)</strong>: a thread that asked earlier always goes before one that asked later, so every thread gets in after a bounded number of others (<strong>bounded waiting, no starvation</strong>). With a test-and-set spin lock, when the lock is released <strong>whichever thread happens to be running and executes its TestAndSet first wins</strong>, so an unlucky thread can lose every time (starvation).</p>
+</details>
+<h2 id="condition-variables">Condition variables</h2>
+<p id="p-e15"><strong>E15 (sheet Q15).</strong> Two broken joins. Version 1 (no state variable): exit = lock, signal, unlock; join = lock, wait, unlock. Version 2 (no lock): exit = <code>done = 1; signal</code>; join = <code>if (done == 0) wait</code>. (a) and (b) Give an interleaving in which each version makes the parent wait forever. [3 + 3] (c) Write the correct version. [4]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Version 1 (no state variable).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Parent</th>
+<th>Child</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>creates the child</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>runs first: <code>thr_exit()</code>: lock, <code>signal(&amp;c)</code>, unlock</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>thr_join()</code>: lock, <code>wait(&amp;c)</code></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The child's <strong>signal found nobody waiting and was lost</strong> (a condition variable has no memory). The parent then waits <strong>forever</strong> for a signal that will never come. A state variable (<code>done</code>) is needed so the parent can see that the child has already finished.</p>
+<p><strong>(b) Version 2 (no lock).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Parent</th>
+<th>Child</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>thr_join()</code>: checks <code>done == 0</code>, true</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>interrupt before it calls wait</em></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td><code>thr_exit()</code>: <code>done = 1; signal(&amp;c)</code> (nobody is waiting yet: lost)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>calls <code>wait(&amp;c)</code></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The parent checked the condition, was interrupted <strong>before it went to sleep</strong>, and so missed the signal: it sleeps <strong>forever</strong>. The check and the wait must be one atomic step, which is what holding the <strong>lock</strong> (released atomically by <code>wait</code>) provides.</p>
+<p><strong>(c) Correct version:</strong></p>
+<pre><code class="language-c">int done = 0;
+
+void thr_exit() {
+    lock(&amp;m);
+    done = 1;          // record the state
+    signal(&amp;c);        // wake the parent if it is waiting
+    unlock(&amp;m);
+}
+
+void thr_join() {
+    lock(&amp;m);
+    while (done == 0)  // while, not if
+        wait(&amp;c, &amp;m);  // atomically releases m and sleeps; re-acquires m on wake-up
+    unlock(&amp;m);
+}
+</code></pre>
+<p><em>Rules to state:</em> (1) always keep a <strong>state variable</strong> that records the condition; (2) <strong>hold the lock</strong> when calling wait and signal; (3) always test the condition in a <strong>while</strong> loop.</p>
+</details>
+<hr>
+<p id="p-e16"><strong>E16 (sheet Q16).</strong> allocate(n) waits on one CV while bytesLeft &lt; n. free(n) adds n and calls signal. bytesLeft starts at 0. (a) Ta calls allocate(100) and Tb calls allocate(10), and both wait. Tc calls free(50). Show how a thread can stay asleep even though memory is available. [4] (b) Give the fix and its cost. [3] (c) Why must allocate use a while loop? [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> Trace (one CV, one <code>signal</code>):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+<th>bytesLeft</th>
+<th>Waiting on the CV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Ta: allocate(100): 0 &lt; 100, waits</td>
+<td>0</td>
+<td>Ta</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Tb: allocate(10): 0 &lt; 10, waits</td>
+<td>0</td>
+<td>Ta, Tb</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Tc: free(50): bytesLeft = 50, <strong>signal wakes one waiter</strong>, suppose Ta</td>
+<td>50</td>
+<td>Tb</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Ta rechecks: 50 &lt; 100, <strong>waits again</strong></td>
+<td>50</td>
+<td>Tb, Ta</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Tb needs only 10 bytes and 50 are free, but Tb is never woken</strong>, because the single signal woke the wrong thread (Ta) and was &quot;used up&quot;. Tb stays asleep although memory is available.</p>
+<p><strong>(b) Fix: <code>broadcast</code></strong> (wake <strong>all</strong> waiters) in free(). Each woken thread rechecks its own condition (Tb sees 50 ≥ 10 and proceeds; Ta sees 50 &lt; 100 and sleeps again). This is a <strong>covering condition</strong>: it covers all cases where a thread might be able to proceed. <strong>Cost:</strong> threads that cannot proceed are also woken, recheck and go back to sleep, which wastes <strong>context switches</strong>, a bigger cost as the number of waiters grows.</p>
+<p><strong>(c)</strong> With <strong>Mesa semantics</strong> (used by pthreads and almost every real system), <code>signal</code> only makes the waiter <strong>ready</strong>, it does not run it immediately. Between the signal and the moment the woken thread re-acquires the lock, <strong>another thread can run and change the state</strong> (for example, take the memory), so the condition may no longer hold. Also, <strong>spurious wake-ups</strong> can happen. A <code>while</code> loop makes the thread <strong>recheck the condition after every wake-up</strong> and sleep again if it is false, so it only proceeds when the condition really is true. <code>if</code> would proceed on a stale assumption.</p>
+</details>
+<h2 id="semaphores">Semaphores</h2>
+<p id="p-e17"><strong>E17 (sheet Q17).</strong> Thread A prints A1 then A2. Thread B prints B1 then B2. (a) Using semaphores, ensure A1 comes before B2 and B1 comes before A2. Give initial values. [6] (b) What goes wrong if both threads call sem_wait before sem_post? [4]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> This is the <strong>rendezvous</strong> problem: each thread must finish its first step before the <em>other</em> thread starts its second step. Use <strong>two semaphores, both initialised to 0</strong> (an ordering semaphore starts at 0 because the event has not happened yet):</p>
+<pre><code class="language-c">sem_t aDone, bDone;
+sem_init(&amp;aDone, 0, 0);
+sem_init(&amp;bDone, 0, 0);
+
+// Thread A                    // Thread B
+print(&quot;A1&quot;);                   print(&quot;B1&quot;);
+sem_post(&amp;aDone);              sem_post(&amp;bDone);   // signal: my first step is done
+sem_wait(&amp;bDone);              sem_wait(&amp;aDone);   // wait for the other's first step
+print(&quot;A2&quot;);                   print(&quot;B2&quot;);
+</code></pre>
+<p><em>Why it works:</em> A2 cannot print until B has posted <code>bDone</code>, which happens after B1, so B1 &lt; A2. Symmetrically, A1 &lt; B2. Each thread posts <strong>before</strong> it waits, so neither can block forever.</p>
+<p><strong>(b) Deadlock.</strong> If both call <code>sem_wait</code> first, A waits for <code>bDone</code> (which only B's post can supply) and B waits for <code>aDone</code> (which only A's post can supply). Both are blocked in <code>sem_wait</code> and neither reaches its <code>sem_post</code>: a <strong>circular wait</strong>, so both sleep <strong>forever</strong>. The order post-then-wait is what makes the rendezvous safe.</p>
+</details>
+<hr>
+<p id="p-e18"><strong>E18 (sheet Q18).</strong> The semaphore reader-writer lock, where the first reader waits on writelock and the last reader posts it. (a) What are the initial values of lock and writelock? Why do only the first and last readers touch writelock? [4] (b) Give a scenario in which a writer waits forever. [3] (c) Suggest a fix. [3]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a)</strong> Both are <strong>1</strong>: <code>lock</code> is a binary semaphore (a mutex) that protects the shared <code>readers</code> counter, and <code>writelock</code> is a binary semaphore that gives a writer exclusive access (and that readers collectively hold). <strong>Why only the first and last readers touch <code>writelock</code>:</strong> many readers may read at the same time, so they need to block writers only once, as a group. The <strong>first reader</strong> (readers goes 0 → 1) acquires <code>writelock</code> on behalf of all readers, so any writer blocks. Readers that arrive later only increment the counter. The <strong>last reader</strong> to leave (readers goes 1 → 0) releases <code>writelock</code>, allowing a writer in. All the counter changes are protected by <code>lock</code>.</p>
+<p><strong>(b) Writer starvation.</strong> R1 holds the read lock (and so <code>writelock</code>). Writer W calls <code>acquire_write</code> and blocks on <code>writelock</code>. R2 arrives before R1 finishes, takes <code>lock</code>, sees readers = 2 (not the first reader), and reads. Then R3 arrives before R1 or R2 finishes, and so on. As long as there is always at least one reader inside, <code>readers</code> never reaches 0, so the last-reader release never happens and <strong>W waits forever</strong>.</p>
+<p><strong>(c) Fix: give waiting writers priority.</strong> Add a semaphore <code>turnstile</code> (initial value 1). A <strong>writer</strong> does <code>sem_wait(&amp;turnstile)</code> before waiting on <code>writelock</code> (holding the turnstile while it waits) and <code>sem_post(&amp;turnstile)</code> after it releases. Every <strong>reader</strong> does <code>sem_wait(&amp;turnstile); sem_post(&amp;turnstile);</code> at the start of <code>acquire_read</code>, so once a writer is waiting, <strong>new readers queue behind it</strong> at the turnstile. Existing readers finish, <code>readers</code> reaches 0, the writer gets <code>writelock</code>. (Trade-off: this can now starve readers if writers keep arriving; fairness needs a more careful design. Your Homework 04 is this problem.)</p>
+</details>
+<h2 id="file-system-implementation">File system implementation</h2>
+<p id="p-e19"><strong>E19 (sheet Q19).</strong> VSFS: 4 KB blocks and 256-byte inodes. Block 0 is the superblock, block 1 the inode bitmap, block 2 the data bitmap, and the inode table starts at block 3. (a) In which block, and at what byte address, is inode 37? [4] (b) An inode has 12 direct pointers, 1 single-indirect and 1 double-indirect pointer, and pointers are 4 bytes. What is the maximum file size? [4] (c) Why is this design a good fit for real files? [2]</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) Formula.</strong></p>
+<div class="math-d" data-tex="\text{offset in table} = i \times \text{sizeof(inode)} \qquad \text{address} = \text{inodeStartAddr} + \text{offset}"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">offset in table</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7429em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">sizeof(inode)</span></span><span class="mspace" style="margin-right:2em;"></span><span class="mord text"><span class="mord">address</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">inodeStartAddr</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">offset</span></span></span></span></span></span></div>
+<p>The inode table starts at block 3, so inodeStartAddr = 3 × 4096 = <strong>12288</strong> (12 KB).</p>
+<ul>
+<li>Offset in the table = 37 × 256 = <strong>9472</strong> bytes.</li>
+<li>Block within the table = 9472 / 4096 = 2 (remainder 1280), so it is the <strong>third block of the table: disk block 3 + 2 = block 5</strong>.</li>
+<li><strong>Byte address = 12288 + 9472 = 21760.</strong> Check: block 5 starts at 5 × 4096 = 20480, and 21760 − 20480 = <strong>1280</strong> bytes into the block (= (37 mod 16) × 256, since 16 inodes fit per block).</li>
+<li><strong>Sector:</strong> the slide formula gives the sector of the inode's <em>block</em>: 5 × 4096 = 20480 = 20 KB, so sector 20480 / 512 = <strong>40</strong>, with the inode at offset 1280 within the block. (The inode's own first byte, 21760, lies in sector 42, so a disk read fetches sectors 40 to 47 and the inode starts 1280 bytes in.)</li>
+</ul>
+<p><strong>(b)</strong> A 4 KB block holds 4096 / 4 = <strong>1024 pointers</strong>. Reachable data blocks:</p>
+<ul>
+<li>12 direct pointers → 12 blocks = 48 KB</li>
+<li>1 single-indirect → 1024 blocks = 4 MB</li>
+<li>1 double-indirect → 1024 × 1024 = 1,048,576 blocks = 4 GB</li>
+</ul>
+<div class="math-d" data-tex="\text{max size} = (12 + 1024 + 1024^2) \times 4\text{ KB} = 1{,}048{,}612 \times 4096 = \textbf{4{,}299{,}210{,}752 bytes} \approx 4\text{ GB}"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6679em;"></span><span class="mord text"><span class="mord">max size</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">12</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord">102</span><span class="mord"><span class="mord">4</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord text"><span class="mord"> KB</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">1</span><span class="mord"><span class="mpunct">,</span></span><span class="mord">048</span><span class="mord"><span class="mpunct">,</span></span><span class="mord">612</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4096</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord textbf">4</span><span class="mord"><span class="mord textbf">,</span></span><span class="mord textbf">299</span><span class="mord"><span class="mord textbf">,</span></span><span class="mord textbf">210</span><span class="mord"><span class="mord textbf">,</span></span><span class="mord textbf">752 bytes</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord text"><span class="mord"> GB</span></span></span></span></span></span></div>
+<p><strong>(c)</strong> <strong>Most files are small</strong> (the file-size distribution is heavily skewed to small files), so the 12 direct pointers cover them with <strong>no extra disk reads</strong> and small inodes. The <strong>few very large files</strong> are reachable through indirect blocks, paying one or two extra reads. So the design is <strong>space-efficient and fast for the common case</strong> while still supporting huge files. This unbalanced tree is intentional.</p>
+</details>
+<hr>
+<p id="p-e20"><strong>E20 (sheet Q20).</strong> Nothing is cached, and each directory fits in one block. List the disk I/Os for (a) <code>open(&quot;/foo/bar&quot;, O_RDONLY)</code> [3], (b) the first 4 KB <code>read()</code> [3], and (c) creating <code>/foo/bar</code> [4].</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>(a) open(&quot;/foo/bar&quot;): 5 reads.</strong> Path traversal starts at the <strong>root inode</strong>, whose location is known (inode 2 in vsfs). For each directory in the path, read its inode, then its data block (to find the next name). Finally read the target's inode.</p>
+<ol>
+<li>Read the <strong>root inode</strong>.</li>
+<li>Read the <strong>root directory's data block</strong> (find &quot;foo&quot; → its inode number).</li>
+<li>Read <strong>foo's inode</strong>.</li>
+<li>Read <strong>foo's data block</strong> (find &quot;bar&quot; → its inode number).</li>
+<li>Read <strong>bar's inode</strong> (check permissions, allocate the file-table entry).</li>
+</ol>
+<p>General rule: <strong>2 × (depth) + 1 reads</strong> for a path of depth (number of directories) 2 → 5. No writes. The cost grows with the length of the pathname.</p>
+<p><strong>(b) First read() of 4 KB: 2 reads + 1 write = 3 I/Os.</strong></p>
+<ol>
+<li><strong>Read bar's inode</strong> (find the first data block's pointer).</li>
+<li><strong>Read the data block.</strong></li>
+<li><strong>Write bar's inode</strong> (to update the last-accessed time, atime).</li>
+</ol>
+<p>No bitmap is read or written: a read does not allocate anything.</p>
+<p><strong>(c) Create /foo/bar: 10 I/Os (6 reads + 4 writes).</strong></p>
+<ol>
+<li>Read the root inode.</li>
+<li>Read the root data (find &quot;foo&quot;).</li>
+<li>Read foo's inode.</li>
+<li>Read foo's data (check that &quot;bar&quot; does not already exist).</li>
+<li>Read the <strong>inode bitmap</strong> (find a free inode).</li>
+<li>Write the <strong>inode bitmap</strong> (mark it allocated).</li>
+<li>Write <strong>foo's data block</strong> (add the entry (bar, new inode number)).</li>
+<li>Read the <strong>new inode</strong> (it shares a 4 KB block with other inodes, so the block must be read before part of it is modified).</li>
+<li>Write the <strong>new inode</strong> (initialise it).</li>
+<li>Write <strong>foo's inode</strong> (its modification time changes, and its size if the directory grew).</li>
+</ol>
+<p><em>Likely follow-up from the slides:</em> each <strong>allocating write</strong> takes <strong>5 I/Os</strong> (read the inode, read the data bitmap, write the data bitmap, write the data block, write the inode). Creating a 12 KB file therefore takes 10 + 3 × 5 = <strong>25 I/Os</strong>.</p>
+</details>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Endsem practice: the professor's sheet</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems.html"><small>← Previous</small><span>Theory cheat sheet 3: CPU, networking and file systems</span></a><a class="pn pn-next" id="next-link" href="../../osn/endsem/endsem-practice-post-midsem-extras.html"><small>Next →</small><span>Endsem practice: post-midsem extras</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#address-translation-and-segmentation">Address translation and segmentation</a><a class="l2" href="#free-space-management">Free-space management</a><a class="l2" href="#paging-and-tlbs">Paging and TLBs</a><a class="l2" href="#multi-level-page-tables">Multi-level page tables</a><a class="l2" href="#locks">Locks</a><a class="l2" href="#condition-variables">Condition variables</a><a class="l2" href="#semaphores">Semaphores</a><a class="l2" href="#file-system-implementation">File system implementation</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwy042pa" defer></script>
+</body>
+</html>

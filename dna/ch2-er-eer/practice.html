@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#9a3412">
+<title>Practice: ER and EER modelling · Data and Applications</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-192.png">
+<script>try{var d=document.documentElement,t=localStorage.getItem('notes:theme'),z=localStorage.getItem('notes:size'),w=localStorage.getItem('notes:width');if(t)d.dataset.theme=t;if(z)d.style.setProperty('--read-size',z+'px');if(w)d.style.setProperty('--read-width',w);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/style.css?v=mwy042pa">
+</head>
+<body data-root="../../" data-page="dna/ch2-er-eer/practice" class="">
+<div class="read-bar" id="read-bar"></div>
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">∑</span>
+    <span class="brand-title">Course Notes</span>
+    <span class="brand-sep">·</span>
+    <span class="brand-sub">Monsoon 2026</span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4" stroke-linecap="round"/></svg>
+    <input id="search-input" type="search" placeholder="Search notes, theorems, problems, formulas…" autocomplete="off" aria-label="Search">
+    <kbd>/</kbd>
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+  <div class="top-actions">
+    <div class="pomo" id="pomo" title="25-minute Pomodoro study session timer">
+      <button class="pomo-toggle" id="pomo-toggle" type="button"><span class="pomo-dot"></span><span id="pomo-time">25:00</span></button>
+      <button class="pomo-reset" id="pomo-reset" type="button" aria-label="Reset timer" title="Reset 25m timer">↺</button>
+    </div>
+    <button class="icon-btn" id="scratch-btn" type="button" title="Open Margin Scratchpad &amp; External Connectors (Shortcut: m)" aria-label="Open scratchpad">✎<span class="scratch-label"> Notes</span></button>
+    <div class="settings">
+      <button class="icon-btn" id="settings-btn" aria-label="Reading settings" aria-expanded="false" title="Typography &amp; Paper Theme">Aa</button>
+      <div class="settings-pop" id="settings-pop" hidden>
+        <div class="settings-head">Reading &amp; Paper Settings</div>
+        <p>Paper surface</p>
+        <div class="seg" id="theme-seg">
+          <button data-theme-set="paper">Cream</button>
+          <button data-theme-set="light">White</button>
+          <button data-theme-set="sepia">Sepia</button>
+          <button data-theme-set="dark">Night</button>
+        </div>
+        <p>Type size</p>
+        <div class="seg" id="size-seg"><button data-size="16.5">S</button><button data-size="18.5">M</button><button data-size="20">L</button><button data-size="22">XL</button></div>
+        <p>Measure (column width)</p>
+        <div class="seg" id="width-seg"><button data-width="38rem">Narrow</button><button data-width="43rem">Book</button><button data-width="52rem">Wide</button></div>
+        <p>Default solutions</p>
+        <div class="seg" id="sol-seg"><button data-sol="hide">Collapsed</button><button data-sol="show">Expanded</button></div>
+        <p>Study data &amp; offline</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <button class="btn small" id="export-json-btn" type="button">Export JSON</button>
+          <button class="btn small" id="import-json-btn" type="button">Import JSON</button>
+          <input type="file" id="import-json-input" accept=".json" hidden>
+        </div>
+        <button class="btn small wide" id="offline-btn" type="button">Save all pages for offline</button>
+        <p class="hint" id="offline-hint">Shortcuts: <kbd>/</kbd> search · <kbd>z</kbd> zen mode · <kbd>m</kbd> scratchpad · <kbd>n</kbd>/<kbd>p</kbd> next/prev</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="shell has-outline">
+  <nav class="side" id="side" aria-label="Notes"><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">AAD · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../aad/index.html">Algorithm Analysis and Design</a>
+      </div><div class="nav-tools"><a class="" href="../../aad/practice.html">Practice <b>129</b></a><a class="" href="../../aad/formulas.html">Formulas <b>30</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="aad/start-here/start-here" href="../../aad/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Lectures 1 to 3: numbers, divide and conquer, lower bounds</span><i data-count-for="aad/numbers-dc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/numbers-dc/learn" href="../../aad/numbers-dc/learn.html"><small>Learn</small><span>Numbers and algorithms</span></a><a class="nav-link" data-id="aad/numbers-dc/learn-2" href="../../aad/numbers-dc/learn-2.html"><small>Learn</small><span>Divide and conquer</span></a><a class="nav-link" data-id="aad/numbers-dc/learn-3" href="../../aad/numbers-dc/learn-3.html"><small>Learn</small><span>Lower bounds</span></a></div></details><a class="nav-link nav-single" data-id="aad/fft/learn" href="../../aad/fft/learn.html"><span>Lectures 3, 4 and 8: polynomials and the FFT</span></a><details class="nav-doc"><summary><span>Lectures 4 and 5: graphs, shortest paths, MSTs</span><i data-count-for="aad/graphs/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/graphs/learn" href="../../aad/graphs/learn.html"><small>Learn</small><span>Exploring graphs</span></a><a class="nav-link" data-id="aad/graphs/learn-2" href="../../aad/graphs/learn-2.html"><small>Learn</small><span>Shortest paths</span></a><a class="nav-link" data-id="aad/graphs/learn-3" href="../../aad/graphs/learn-3.html"><small>Learn</small><span>Minimum spanning trees</span></a><a class="nav-link" data-id="aad/graphs/learn-4" href="../../aad/graphs/learn-4.html"><small>Learn</small><span>Tutorial 2 problems and the assigned DPV graph exercises</span></a></div></details><details class="nav-doc"><summary><span>Lectures 6 to 9: stable matchings, Hall, maximum matchings</span><i data-count-for="aad/matchings/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/matchings/learn" href="../../aad/matchings/learn.html"><small>Learn</small><span>Stable matchings</span></a><a class="nav-link" data-id="aad/matchings/learn-2" href="../../aad/matchings/learn-2.html"><small>Learn</small><span>Hall's theorem</span></a><a class="nav-link" data-id="aad/matchings/learn-3" href="../../aad/matchings/learn-3.html"><small>Learn</small><span>Maximum matchings</span></a></div></details><details class="nav-doc"><summary><span>Lecture 10: greedy algorithms and Huffman codes</span><i data-count-for="aad/greedy/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/greedy/learn" href="../../aad/greedy/learn.html"><small>Learn</small><span>Greedy algorithms</span></a><a class="nav-link" data-id="aad/greedy/learn-2" href="../../aad/greedy/learn-2.html"><small>Learn</small><span>Huffman coding</span></a><a class="nav-link" data-id="aad/greedy/learn-3" href="../../aad/greedy/learn-3.html"><small>Learn</small><span>Interval scheduling and partitioning</span></a></div></details><a class="nav-link nav-single" data-id="aad/dp/learn" href="../../aad/dp/learn.html"><span>Lectures 11 to 13: dynamic programming</span></a><details class="nav-doc"><summary><span>Lectures 14 to 18: max flow and min cut</span><i data-count-for="aad/maxflow/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/maxflow/learn" href="../../aad/maxflow/learn.html"><small>Learn</small><span>Flows, cuts and duality</span></a><a class="nav-link" data-id="aad/maxflow/learn-2" href="../../aad/maxflow/learn-2.html"><small>Learn</small><span>Ford–Fulkerson</span></a><a class="nav-link" data-id="aad/maxflow/learn-3" href="../../aad/maxflow/learn-3.html"><small>Learn</small><span>Reductions to max flow</span></a><a class="nav-link" data-id="aad/maxflow/learn-4" href="../../aad/maxflow/learn-4.html"><small>Learn</small><span>The Lecture 15 exercise set, solved</span></a></div></details><details class="nav-doc"><summary><span>Lectures 19 to 21: randomized algorithms and fingerprinting</span><i data-count-for="aad/randomized/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/randomized/learn" href="../../aad/randomized/learn.html"><small>Learn</small><span>Randomized algorithms and MaxCut</span></a><a class="nav-link" data-id="aad/randomized/learn-2" href="../../aad/randomized/learn-2.html"><small>Learn</small><span>Fingerprinting and Rabin–Karp</span></a></div></details><details class="nav-doc"><summary><span>Lecture 22 and the NP tutorial: reductions and NP-hardness</span><i data-count-for="aad/np/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/np/learn" href="../../aad/np/learn.html"><small>Learn</small><span>Balanced brackets and lower bounds by reduction</span></a><a class="nav-link" data-id="aad/np/learn-2" href="../../aad/np/learn-2.html"><small>Learn</small><span>P, NP and reductions</span></a><a class="nav-link" data-id="aad/np/learn-3" href="../../aad/np/learn-3.html"><small>Learn</small><span>3-SAT, XOR-SAT and Max-Cut is NP-hard</span></a><a class="nav-link" data-id="aad/np/learn-4" href="../../aad/np/learn-4.html"><small>Learn</small><span>The other classic reductions (practice sheet)</span></a></div></details><details class="nav-doc"><summary><span>Midsem, fully solved</span><i data-count-for="aad/midsem/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/midsem/midsem" href="../../aad/midsem/midsem.html"><small>Midsem</small><span>Numeric algorithms</span></a><a class="nav-link" data-id="aad/midsem/midsem-2" href="../../aad/midsem/midsem-2.html"><small>Midsem</small><span>Stable matchings</span></a><a class="nav-link" data-id="aad/midsem/midsem-3" href="../../aad/midsem/midsem-3.html"><small>Midsem</small><span>Greedy algorithms</span></a><a class="nav-link" data-id="aad/midsem/midsem-4" href="../../aad/midsem/midsem-4.html"><small>Midsem</small><span>SDRs and Latin squares</span></a><a class="nav-link" data-id="aad/midsem/midsem-5" href="../../aad/midsem/midsem-5.html"><small>Midsem</small><span>Dynamic programming</span></a></div></details><details class="nav-doc"><summary><span>Quizzes I and II and Class Tests I and II, fully solved</span><i data-count-for="aad/quizzes/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/quizzes/quiz-i-tiling-multiplication-hadamard" href="../../aad/quizzes/quiz-i-tiling-multiplication-hadamard.html"><span>Quiz I: tiling, multiplication, Hadamard</span></a><a class="nav-link" data-id="aad/quizzes/quiz-ii-random-dags-and-matching-via-flow" href="../../aad/quizzes/quiz-ii-random-dags-and-matching-via-flow.html"><span>Quiz II: random DAGs and matching via flow</span></a><a class="nav-link" data-id="aad/quizzes/class-test-i-max-flow" href="../../aad/quizzes/class-test-i-max-flow.html"><span>Class Test I: max flow</span></a><a class="nav-link" data-id="aad/quizzes/class-test-ii-streaming-palindromes-and-2d-pattern-matching" href="../../aad/quizzes/class-test-ii-streaming-palindromes-and-2d-pattern-matching.html"><span>Class Test II: streaming palindromes and 2D pattern matching</span></a></div></details><details class="nav-doc"><summary><span>Practice problems and assignments, solved</span><i data-count-for="aad/practice/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="aad/practice/moodle-practice-set-solved" href="../../aad/practice/moodle-practice-set-solved.html"><span>Moodle practice set, solved</span></a><a class="nav-link" data-id="aad/practice/assignments-1-and-2-solved" href="../../aad/practice/assignments-1-and-2-solved.html"><span>Assignments 1 and 2, solved</span></a><a class="nav-link" data-id="aad/practice/new-endsem-style-problems" href="../../aad/practice/new-endsem-style-problems.html"><span>New endsem-style problems</span></a></div></details><a class="nav-link nav-single" data-id="aad/cheatsheet/last-hour-cheat-sheet" href="../../aad/cheatsheet/last-hour-cheat-sheet.html"><span>Last-hour cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS4.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../dna/index.html">Data and Applications</a>
+      </div><div class="nav-tools"><a class="" href="../../dna/practice.html">Practice <b>172</b></a><a class="" href="../../dna/formulas.html">Formulas <b>5</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="dna/start-here/start-here" href="../../dna/start-here/start-here.html"><span>Start here: the endsem map</span></a><details class="nav-doc"><summary><span>Videos and quick checks</span><i data-count-for="dna/videos/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/videos/reference" href="../../dna/videos/reference.html"><small>Reference</small><span>Videos for the endsem, topic by topic</span></a><a class="nav-link" data-id="dna/videos/practice" href="../../dna/videos/practice.html"><small>Practice</small><span>Quick checks for each topic</span></a></div></details><details class="nav-doc"><summary><span>Chapter 0: Database concepts and architecture</span><i data-count-for="dna/ch0-database-concepts/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch0-database-concepts/learn" href="../../dna/ch0-database-concepts/learn.html"><small>Learn</small><span>Database concepts and architecture</span></a><a class="nav-link" data-id="dna/ch0-database-concepts/reference" href="../../dna/ch0-database-concepts/reference.html"><small>Reference</small><span>Database concepts and architecture</span></a><a class="nav-link" data-id="dna/ch0-database-concepts/practice" href="../../dna/ch0-database-concepts/practice.html"><small>Practice</small><span>Database concepts and architecture</span></a></div></details><details class="nav-doc"><summary><span>Chapter 1: The relational model, keys and constraints</span><i data-count-for="dna/ch1-relational-model/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch1-relational-model/learn" href="../../dna/ch1-relational-model/learn.html"><small>Learn</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/reference" href="../../dna/ch1-relational-model/reference.html"><small>Reference</small><span>The relational model, keys and constraints</span></a><a class="nav-link" data-id="dna/ch1-relational-model/practice" href="../../dna/ch1-relational-model/practice.html"><small>Practice</small><span>The relational model, keys and constraints</span></a></div></details><details class="nav-doc" open><summary><span>Chapter 2: ER and EER modelling</span><i data-count-for="dna/ch2-er-eer/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch2-er-eer/learn" href="../../dna/ch2-er-eer/learn.html"><small>Learn</small><span>ER and EER modelling</span></a><a class="nav-link" data-id="dna/ch2-er-eer/reference" href="../../dna/ch2-er-eer/reference.html"><small>Reference</small><span>ER and EER modelling</span></a><a class="nav-link current" data-id="dna/ch2-er-eer/practice" href="../../dna/ch2-er-eer/practice.html"><small>Practice</small><span>ER and EER modelling</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Mapping EER to relations</span><i data-count-for="dna/ch3-mapping/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch3-mapping/learn" href="../../dna/ch3-mapping/learn.html"><small>Learn</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/reference" href="../../dna/ch3-mapping/reference.html"><small>Reference</small><span>Mapping EER to relations</span></a><a class="nav-link" data-id="dna/ch3-mapping/practice" href="../../dna/ch3-mapping/practice.html"><small>Practice</small><span>Mapping EER to relations</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Functional dependencies and normalisation</span><i data-count-for="dna/ch4-normalisation/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch4-normalisation/learn" href="../../dna/ch4-normalisation/learn.html"><small>Learn</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/reference" href="../../dna/ch4-normalisation/reference.html"><small>Reference</small><span>Functional dependencies and normalisation</span></a><a class="nav-link" data-id="dna/ch4-normalisation/practice" href="../../dna/ch4-normalisation/practice.html"><small>Practice</small><span>Functional dependencies and normalisation</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Relational algebra</span><i data-count-for="dna/ch5-relational-algebra/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch5-relational-algebra/learn" href="../../dna/ch5-relational-algebra/learn.html"><small>Learn</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/reference" href="../../dna/ch5-relational-algebra/reference.html"><small>Reference</small><span>Relational algebra</span></a><a class="nav-link" data-id="dna/ch5-relational-algebra/practice" href="../../dna/ch5-relational-algebra/practice.html"><small>Practice</small><span>Relational algebra</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Tuple relational calculus</span><i data-count-for="dna/ch6-trc/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch6-trc/learn" href="../../dna/ch6-trc/learn.html"><small>Learn</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/reference" href="../../dna/ch6-trc/reference.html"><small>Reference</small><span>Tuple relational calculus</span></a><a class="nav-link" data-id="dna/ch6-trc/practice" href="../../dna/ch6-trc/practice.html"><small>Practice</small><span>Tuple relational calculus</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: SQL</span><i data-count-for="dna/ch7-sql/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="dna/ch7-sql/learn" href="../../dna/ch7-sql/learn.html"><small>Learn</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/reference" href="../../dna/ch7-sql/reference.html"><small>Reference</small><span>SQL</span></a><a class="nav-link" data-id="dna/ch7-sql/practice" href="../../dna/ch7-sql/practice.html"><small>Practice</small><span>SQL</span></a></div></details><a class="nav-link nav-single" data-id="dna/mock-endsem/mock-endsem" href="../../dna/mock-endsem/mock-endsem.html"><span>Mock endsem with solutions</span></a><a class="nav-link nav-single" data-id="dna/cheat-sheet/cheat-sheet" href="../../dna/cheat-sheet/cheat-sheet.html"><span>Two-page cheat sheet</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">CS3.301 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../osn/index.html">Operating Systems and Networks</a>
+      </div><div class="nav-tools"><a class="" href="../../osn/practice.html">Practice <b>123</b></a><a class="" href="../../osn/formulas.html">Formulas <b>25</b></a></div><div class="nav-groups"><details class="nav-doc"><summary><span>Lectures 1 to 7: processes and scheduling</span><i data-count-for="osn/cpu/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/cpu/lecture-01" href="../../osn/cpu/lecture-01.html"><small>Lecture 01</small><span>What an operating system is</span></a><a class="nav-link" data-id="osn/cpu/lecture-02" href="../../osn/cpu/lecture-02.html"><small>Lecture 02</small><span>The process</span></a><a class="nav-link" data-id="osn/cpu/lecture-03" href="../../osn/cpu/lecture-03.html"><small>Lecture 03</small><span>The process API (fork, exec, wait)</span></a><a class="nav-link" data-id="osn/cpu/lecture-04" href="../../osn/cpu/lecture-04.html"><small>Lecture 04</small><span>Limited direct execution</span></a><a class="nav-link" data-id="osn/cpu/lecture-05" href="../../osn/cpu/lecture-05.html"><small>Lecture 05</small><span>Scheduling basics</span></a><a class="nav-link" data-id="osn/cpu/lecture-06" href="../../osn/cpu/lecture-06.html"><small>Lecture 06</small><span>MLFQ scheduling</span></a><a class="nav-link" data-id="osn/cpu/lecture-07" href="../../osn/cpu/lecture-07.html"><small>Lecture 07</small><span>CFS and multiprocessor scheduling</span></a><a class="nav-link" data-id="osn/cpu/practice-problems-lectures-01-to-07" href="../../osn/cpu/practice-problems-lectures-01-to-07.html"><span>Practice problems, Lectures 01 to 07</span></a></div></details><details class="nav-doc"><summary><span>Lectures 8 and 9: networking</span><i data-count-for="osn/networking/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/networking/lecture-08-part-1" href="../../osn/networking/lecture-08-part-1.html"><small>Lecture 08, part 1</small><span>The parts of a network</span></a><a class="nav-link" data-id="osn/networking/lecture-08-part-2" href="../../osn/networking/lecture-08-part-2.html"><small>Lecture 08, part 2</small><span>Layering</span></a><a class="nav-link" data-id="osn/networking/lectures-08-and-09" href="../../osn/networking/lectures-08-and-09.html"><small>Lectures 08 and 09</small><span>What the OS does for networking</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-1" href="../../osn/networking/lecture-09-part-1.html"><small>Lecture 09, part 1</small><span>Multiplexing and UDP</span></a><a class="nav-link" data-id="osn/networking/lecture-09-part-2" href="../../osn/networking/lecture-09-part-2.html"><small>Lecture 09, part 2</small><span>TCP</span></a><a class="nav-link" data-id="osn/networking/practice-problems-lectures-08-and-09" href="../../osn/networking/practice-problems-lectures-08-and-09.html"><span>Practice problems, Lectures 08 and 09</span></a></div></details><details class="nav-doc"><summary><span>Lectures 10 to 13: memory</span><i data-count-for="osn/memory/" data-total="10"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/memory/lecture-10-part-1" href="../../osn/memory/lecture-10-part-1.html"><small>Lecture 10, part 1</small><span>The address space</span></a><a class="nav-link" data-id="osn/memory/lecture-10-part-2" href="../../osn/memory/lecture-10-part-2.html"><small>Lecture 10, part 2</small><span>The memory API</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-1" href="../../osn/memory/lecture-11-part-1.html"><small>Lecture 11, part 1</small><span>Base and bounds</span></a><a class="nav-link" data-id="osn/memory/lecture-11-part-2" href="../../osn/memory/lecture-11-part-2.html"><small>Lecture 11, part 2</small><span>Segmentation</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-1" href="../../osn/memory/lecture-12-part-1.html"><small>Lecture 12, part 1</small><span>Paging</span></a><a class="nav-link" data-id="osn/memory/lecture-12-part-2" href="../../osn/memory/lecture-12-part-2.html"><small>Lecture 12, part 2</small><span>The TLB</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-1" href="../../osn/memory/lecture-13-part-1.html"><small>Lecture 13, part 1</small><span>Smaller page tables</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-2" href="../../osn/memory/lecture-13-part-2.html"><small>Lecture 13, part 2</small><span>Swapping mechanisms</span></a><a class="nav-link" data-id="osn/memory/lecture-13-part-3" href="../../osn/memory/lecture-13-part-3.html"><small>Lecture 13, part 3</small><span>Page replacement policies</span></a><a class="nav-link" data-id="osn/memory/practice-problems-lectures-10-to-13" href="../../osn/memory/practice-problems-lectures-10-to-13.html"><span>Practice problems, Lectures 10 to 13</span></a></div></details><details class="nav-doc"><summary><span>Lectures 14 to 17: concurrency</span><i data-count-for="osn/concurrency/" data-total="7"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/concurrency/lecture-14" href="../../osn/concurrency/lecture-14.html"><small>Lecture 14</small><span>Threads and race conditions</span></a><a class="nav-link" data-id="osn/concurrency/lecture-15" href="../../osn/concurrency/lecture-15.html"><small>Lecture 15</small><span>Locks</span></a><a class="nav-link" data-id="osn/concurrency/lecture-16" href="../../osn/concurrency/lecture-16.html"><small>Lecture 16</small><span>Condition variables</span></a><a class="nav-link" data-id="osn/concurrency/lecture-17" href="../../osn/concurrency/lecture-17.html"><small>Lecture 17</small><span>Semaphores</span></a><a class="nav-link" data-id="osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6" href="../../osn/concurrency/deadlock-and-other-concurrency-bugs-tutorial-6.html"><span>Deadlock and other concurrency bugs (Tutorial 6)</span></a><a class="nav-link" data-id="osn/concurrency/concurrency-theory-from-the-textbooks" href="../../osn/concurrency/concurrency-theory-from-the-textbooks.html"><span>Concurrency theory from the textbooks</span></a><a class="nav-link" data-id="osn/concurrency/practice-problems-lectures-14-to-17" href="../../osn/concurrency/practice-problems-lectures-14-to-17.html"><span>Practice problems, Lectures 14 to 17</span></a></div></details><details class="nav-doc"><summary><span>Lectures 18 and 19: file systems</span><i data-count-for="osn/filesystems/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/filesystems/lecture-18" href="../../osn/filesystems/lecture-18.html"><small>Lecture 18</small><span>Files and directories</span></a><a class="nav-link" data-id="osn/filesystems/lecture-19" href="../../osn/filesystems/lecture-19.html"><small>Lecture 19</small><span>File system implementation</span></a><a class="nav-link" data-id="osn/filesystems/the-xv6-file-system-tutorial-7" href="../../osn/filesystems/the-xv6-file-system-tutorial-7.html"><span>The xv6 file system (Tutorial 7)</span></a><a class="nav-link" data-id="osn/filesystems/file-system-theory-from-the-textbooks" href="../../osn/filesystems/file-system-theory-from-the-textbooks.html"><span>File-system theory from the textbooks</span></a><a class="nav-link" data-id="osn/filesystems/practice-problems-lectures-18-and-19" href="../../osn/filesystems/practice-problems-lectures-18-and-19.html"><span>Practice problems, Lectures 18 and 19</span></a></div></details><details class="nav-doc"><summary><span>Rapid revision, Lectures 1 to 19 (5 pages)</span><i data-count-for="osn/revision/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/revision/rapid-revision-1-cpu-virtualization-l01-to-l07" href="../../osn/revision/rapid-revision-1-cpu-virtualization-l01-to-l07.html"><span>Rapid revision 1: CPU virtualization (L01 to L07)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-2-networking-l08-and-l09" href="../../osn/revision/rapid-revision-2-networking-l08-and-l09.html"><span>Rapid revision 2: networking (L08 and L09)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-3-memory-l10-to-l13" href="../../osn/revision/rapid-revision-3-memory-l10-to-l13.html"><span>Rapid revision 3: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-4-concurrency-l14-to-l17" href="../../osn/revision/rapid-revision-4-concurrency-l14-to-l17.html"><span>Rapid revision 4: concurrency (L14 to L17)</span></a><a class="nav-link" data-id="osn/revision/rapid-revision-5-file-systems-l18-and-l19-tutorial-7" href="../../osn/revision/rapid-revision-5-file-systems-l18-and-l19-tutorial-7.html"><span>Rapid revision 5: file systems (L18 and L19, Tutorial 7)</span></a></div></details><details class="nav-doc"><summary><span>Theory cheat sheet (3 pages)</span><i data-count-for="osn/theory-cheatsheet/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-1-memory-l10-to-l13" href="../../osn/theory-cheatsheet/theory-cheat-sheet-1-memory-l10-to-l13.html"><span>Theory cheat sheet 1: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-2-concurrency-l14-to-l17" href="../../osn/theory-cheatsheet/theory-cheat-sheet-2-concurrency-l14-to-l17.html"><span>Theory cheat sheet 2: concurrency (L14 to L17)</span></a><a class="nav-link" data-id="osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems" href="../../osn/theory-cheatsheet/theory-cheat-sheet-3-cpu-networking-and-file-systems.html"><span>Theory cheat sheet 3: CPU, networking and file systems</span></a></div></details><details class="nav-doc"><summary><span>Endsem practice (9 × 10 marks)</span><i data-count-for="osn/endsem/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/endsem/endsem-practice-the-professor-s-sheet" href="../../osn/endsem/endsem-practice-the-professor-s-sheet.html"><span>Endsem practice: the professor's sheet</span></a><a class="nav-link" data-id="osn/endsem/endsem-practice-post-midsem-extras" href="../../osn/endsem/endsem-practice-post-midsem-extras.html"><span>Endsem practice: post-midsem extras</span></a><a class="nav-link" data-id="osn/endsem/endsem-practice-pre-midsem-problems" href="../../osn/endsem/endsem-practice-pre-midsem-problems.html"><span>Endsem practice: pre-midsem problems</span></a></div></details><details class="nav-doc"><summary><span>Formula sheets (3 pages)</span><i data-count-for="osn/formula-sheet/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09" href="../../osn/formula-sheet/formula-sheet-1-cpu-and-networking-l01-to-l09.html"><span>Formula sheet 1: CPU and networking (L01 to L09)</span></a><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-2-memory-l10-to-l13" href="../../osn/formula-sheet/formula-sheet-2-memory-l10-to-l13.html"><span>Formula sheet 2: memory (L10 to L13)</span></a><a class="nav-link" data-id="osn/formula-sheet/formula-sheet-3-concurrency-and-file-systems-l14-to-l19" href="../../osn/formula-sheet/formula-sheet-3-concurrency-and-file-systems-l14-to-l19.html"><span>Formula sheet 3: concurrency and file systems (L14 to L19)</span></a></div></details><details class="nav-doc"><summary><span>Mini Project 2 theory</span><i data-count-for="osn/mp2-theory/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="osn/mp2-theory/mini-project-2-how-the-three-parts-fit" href="../../osn/mp2-theory/mini-project-2-how-the-three-parts-fit.html"><span>Mini Project 2: how the three parts fit</span></a><a class="nav-link" data-id="osn/mp2-theory/part-1-tempest" href="../../osn/mp2-theory/part-1-tempest.html"><small>Part 1 — tempest</small><span>An HTTP client from raw sockets</span></a><a class="nav-link" data-id="osn/mp2-theory/part-2-mastermind" href="../../osn/mp2-theory/part-2-mastermind.html"><small>Part 2 — mastermind</small><span>A peer-to-peer game on a LAN</span></a><a class="nav-link" data-id="osn/mp2-theory/part-3-xv6" href="../../osn/mp2-theory/part-3-xv6.html"><small>Part 3 — xv6</small><span>Copy-on-write fork and alarms</span></a><a class="nav-link" data-id="osn/mp2-theory/viva-questions" href="../../osn/mp2-theory/viva-questions.html"><span>Viva questions</span></a></div></details><a class="nav-link nav-single" data-id="osn/topics/cs3-301-osn-topics-and-subtopics" href="../../osn/topics/cs3-301-osn-topics-and-subtopics.html"><span>Topic map, Lectures 1 to 19</span></a></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">MA6.101 · Monsoon 2026</span>
+        <a class="nav-course-title" href="../../pns/index.html">Probability and Statistics</a>
+      </div><div class="nav-tools"><a class="" href="../../pns/practice.html">Practice <b>337</b></a><a class="" href="../../pns/formulas.html">Formulas <b>141</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="pns/endsem-sheet/endsem-formula-and-cheat-sheet" href="../../pns/endsem-sheet/endsem-formula-and-cheat-sheet.html"><span>Endsem formula and cheat sheet</span></a><details class="nav-doc"><summary><span>Last day practice (endsem)</span><i data-count-for="pns/last-day/" data-total="6"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/last-day/last-day-practice-how-to-use-it" href="../../pns/last-day/last-day-practice-how-to-use-it.html"><span>Last day practice: how to use it</span></a><a class="nav-link" data-id="pns/last-day/new-problems-probabilistic-inequalities" href="../../pns/last-day/new-problems-probabilistic-inequalities.html"><span>New problems: probabilistic inequalities</span></a><a class="nav-link" data-id="pns/last-day/new-problems-slln" href="../../pns/last-day/new-problems-slln.html"><span>New problems: SLLN</span></a><a class="nav-link" data-id="pns/last-day/new-problems-accept-reject" href="../../pns/last-day/new-problems-accept-reject.html"><span>New problems: accept–reject</span></a><a class="nav-link" data-id="pns/last-day/new-problems-inverse-transform" href="../../pns/last-day/new-problems-inverse-transform.html"><span>New problems: inverse transform</span></a><a class="nav-link" data-id="pns/last-day/new-problems-monte-carlo" href="../../pns/last-day/new-problems-monte-carlo.html"><span>New problems: Monte Carlo</span></a></div></details><details class="nav-doc"><summary><span>Lectures 1 to 8</span><i data-count-for="pns/l1-l8/" data-total="12"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l1-l8/how-to-use-this-document" href="../../pns/l1-l8/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-1" href="../../pns/l1-l8/lecture-1.html"><small>Lecture 1</small><span>Sample spaces, events, set theory and the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-2" href="../../pns/l1-l8/lecture-2.html"><small>Lecture 2</small><span>Σ-algebras, Borel sets and consequences of the axioms</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-1" href="../../pns/l1-l8/lecture-3-part-1.html"><small>Lecture 3, part 1</small><span>Continuity of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span>, conditional probability and Bayes' rule</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-2" href="../../pns/l1-l8/lecture-3-part-2.html"><small>Lecture 3, part 2</small><span>Independence</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-3-part-3" href="../../pns/l1-l8/lecture-3-part-3.html"><small>Lecture 3, part 3</small><span>Counting</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-4" href="../../pns/l1-l8/lecture-4.html"><small>Lecture 4</small><span>Random variables as measurable functions</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-5" href="../../pns/l1-l8/lecture-5.html"><small>Lecture 5</small><span>Discrete random variables, PMF, CDF and expectation</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-6" href="../../pns/l1-l8/lecture-6.html"><small>Lecture 6</small><span>Functions of a random variable, variance, and the standard discrete families</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-7" href="../../pns/l1-l8/lecture-7.html"><small>Lecture 7</small><span>The CDF, continuous random variables, uniform and exponential</span></a><a class="nav-link" data-id="pns/l1-l8/lecture-8" href="../../pns/l1-l8/lecture-8.html"><small>Lecture 8</small><span>The Gaussian, and functions of a continuous random variable</span></a><a class="nav-link" data-id="pns/l1-l8/practice-map-formula-sheet-and-self-test" href="../../pns/l1-l8/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><details class="nav-doc"><summary><span>Lectures 9 to 14</span><i data-count-for="pns/l9-l14/" data-total="8"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l9-l14/how-to-use-this-document" href="../../pns/l9-l14/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-9" href="../../pns/l9-l14/lecture-9.html"><small>Lecture 9</small><span>Right-continuity of the CDF, mixed random variables, joint PMFs</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-10" href="../../pns/l9-l14/lecture-10.html"><small>Lecture 10</small><span>Independence, joint PDFs, functions of two variables, covariance</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-11" href="../../pns/l9-l14/lecture-11.html"><small>Lecture 11</small><span>Conditioning a random variable on an event</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-12" href="../../pns/l9-l14/lecture-12.html"><small>Lecture 12</small><span>Conditioning on a random variable, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">]</span></span></span></span> and iterated expectations</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-13" href="../../pns/l9-l14/lecture-13.html"><small>Lecture 13</small><span>Sums of random variables, Bayes' rule revisited, variance of sums</span></a><a class="nav-link" data-id="pns/l9-l14/lecture-14" href="../../pns/l9-l14/lecture-14.html"><small>Lecture 14</small><span>Moment generating functions and sampling a discrete random variable</span></a><a class="nav-link" data-id="pns/l9-l14/practice-map-formula-sheet-and-self-test" href="../../pns/l9-l14/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l13-short/lecture-13" href="../../pns/l13-short/lecture-13.html"><span>Lecture 13, short notes</span></a><details class="nav-doc"><summary><span>Lectures 14 to 20</span><i data-count-for="pns/l14-l20/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l14-l20/how-to-use-this-document" href="../../pns/l14-l20/how-to-use-this-document.html"><span>How to use this document</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-14-part-1" href="../../pns/l14-l20/lecture-14-part-1.html"><small>Lecture 14, part 1</small><span>Moment generating functions</span></a><a class="nav-link" data-id="pns/l14-l20/lectures-14-and-15" href="../../pns/l14-l20/lectures-14-and-15.html"><small>Lectures 14 and 15</small><span>Generating samples from a uniform</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-16" href="../../pns/l14-l20/lecture-16.html"><small>Lecture 16</small><span>Accept–reject, and what &quot;<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span>&quot; means</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-17" href="../../pns/l14-l20/lecture-17.html"><small>Lecture 17</small><span>Sure and almost sure convergence, the SLLN and the sample mean</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-18" href="../../pns/l14-l20/lecture-18.html"><small>Lecture 18</small><span>Convergence in probability, in mean and in distribution; the central limit theorem</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-19" href="../../pns/l14-l20/lecture-19.html"><small>Lecture 19</small><span>Random vectors, the covariance matrix and the Jacobian</span></a><a class="nav-link" data-id="pns/l14-l20/lecture-20" href="../../pns/l14-l20/lecture-20.html"><small>Lecture 20</small><span>Gaussian random vectors</span></a><a class="nav-link" data-id="pns/l14-l20/practice-map-formula-sheet-and-self-test" href="../../pns/l14-l20/practice-map-formula-sheet-and-self-test.html"><span>Practice map, formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20" href="../../pns/l14-l20-cheatsheet/cheat-sheet-lectures-14-to-20.html"><span>Cheat sheet, Lectures 14 to 20</span></a><details class="nav-doc"><summary><span>Lectures 21 to 24 and linear regression</span><i data-count-for="pns/l21-onward/" data-total="9"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/l21-onward/before-we-start" href="../../pns/l21-onward/before-we-start.html"><span>Before we start</span></a><a class="nav-link" data-id="pns/l21-onward/part-1-l21" href="../../pns/l21-onward/part-1-l21.html"><small>Part 1 — L21</small><span>What does &quot;estimating&quot; even mean?</span></a><a class="nav-link" data-id="pns/l21-onward/part-2-l22-first-half" href="../../pns/l21-onward/part-2-l22-first-half.html"><small>Part 2 — L22 (first half)</small><span>Markov, consistency, and the famous <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></a><a class="nav-link" data-id="pns/l21-onward/part-3-l22-second-half" href="../../pns/l21-onward/part-3-l22-second-half.html"><small>Part 3 — L22 (second half)</small><span>Maximum likelihood</span></a><a class="nav-link" data-id="pns/l21-onward/part-4-l23" href="../../pns/l21-onward/part-4-l23.html"><small>Part 4 — L23</small><span>Bayesian inference</span></a><a class="nav-link" data-id="pns/l21-onward/part-5-l24" href="../../pns/l21-onward/part-5-l24.html"><small>Part 5 — L24</small><span>Conjugate priors, MAP and the CE estimator</span></a><a class="nav-link" data-id="pns/l21-onward/part-6-linear-regression-slides-1-36" href="../../pns/l21-onward/part-6-linear-regression-slides-1-36.html"><span>Part 6 — Linear regression (slides 1–36)</span></a><a class="nav-link" data-id="pns/l21-onward/part-7-worked-practice-problems" href="../../pns/l21-onward/part-7-worked-practice-problems.html"><span>Part 7 — Worked practice problems</span></a><a class="nav-link" data-id="pns/l21-onward/part-8-formula-sheet-and-self-test" href="../../pns/l21-onward/part-8-formula-sheet-and-self-test.html"><span>Part 8 — Formula sheet and self-test</span></a></div></details><a class="nav-link nav-single" data-id="pns/midsem-revision/midsem-revision" href="../../pns/midsem-revision/midsem-revision.html"><span>Midsem revision, Lectures 1 to 12</span></a><details class="nav-doc"><summary><span>Quiz 2, worked solutions</span><i data-count-for="pns/quiz2-solutions/" data-total="7"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/quiz2-solutions/how-this-is-laid-out" href="../../pns/quiz2-solutions/how-this-is-laid-out.html"><span>How this is laid out</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-1-exponential-samples-to-uniform-a-b" href="../../pns/quiz2-solutions/question-1-exponential-samples-to-uniform-a-b.html"><span>Question 1: Exponential samples to Uniform<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mclose">]</span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-2-mgf-of-a-sum-of-two-binomials" href="../../pns/quiz2-solutions/question-2-mgf-of-a-sum-of-two-binomials.html"><span>Question 2: MGF of a sum of two Binomials</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-3-binomial-n-n-d-poisson" href="../../pns/quiz2-solutions/question-3-binomial-n-n-d-poisson.html"><span>Question 3: Binomial<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.4531em;vertical-align:-0.345em;"></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">λ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1081em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span></span></span></span> Poisson<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">λ</span><span class="mclose">)</span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-4-xn-n1-un-1n-does-not-converge-to-0-a-s" href="../../pns/quiz2-solutions/question-4-xn-n1-un-1n-does-not-converge-to-0-a-s.html"><span>Question 4: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord mathbf">1</span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">}</span></span></span></span> does not converge to 0 a.s.</span></a><a class="nav-link" data-id="pns/quiz2-solutions/question-5-10-marks-pdf-of-x-az" href="../../pns/quiz2-solutions/question-5-10-marks-pdf-of-x-az.html"><span>Question 5 (10 marks): pdf of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6861em;"></span><span class="mord mathbf">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7694em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mord mathbf">Z</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">μ</span></span></span></span></span></span></span></a><a class="nav-link" data-id="pns/quiz2-solutions/one-page-summary" href="../../pns/quiz2-solutions/one-page-summary.html"><span>One-page summary</span></a></div></details><details class="nav-doc"><summary><span>Statistics practice quiz, L21 to L24</span><i data-count-for="pns/stats-practice-quiz/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/stats-practice-quiz/part-1" href="../../pns/stats-practice-quiz/part-1.html"><small>Part 1</small><span>What past papers tell us</span></a><a class="nav-link" data-id="pns/stats-practice-quiz/part-2" href="../../pns/stats-practice-quiz/part-2.html"><small>Part 2</small><span>The quiz</span></a><a class="nav-link" data-id="pns/stats-practice-quiz/part-3" href="../../pns/stats-practice-quiz/part-3.html"><small>Part 3</small><span>Answer key</span></a></div></details><a class="nav-link nav-single" data-id="pns/mixed-problems/mixed-problems-several-topics-at-once" href="../../pns/mixed-problems/mixed-problems-several-topics-at-once.html"><span>Mixed problems, several topics at once</span></a><details class="nav-doc"><summary><span>Mock endsem, timed (3 hours)</span><i data-count-for="pns/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="pns/mock-endsem/mock-endsem-the-paper" href="../../pns/mock-endsem/mock-endsem-the-paper.html"><span>Mock endsem: the paper</span></a><a class="nav-link" data-id="pns/mock-endsem/mock-endsem-solutions" href="../../pns/mock-endsem/mock-endsem-solutions.html"><span>Mock endsem: solutions</span></a></div></details></div></div><div class="nav-course">
+      <div class="nav-course-head">
+        <span class="nav-course-kicker">Monsoon 2026</span>
+        <a class="nav-course-title" href="../../science-1/index.html">Science-1</a>
+      </div><div class="nav-tools"><a class="" href="../../science-1/practice.html">Practice <b>490</b></a><a class="" href="../../science-1/formulas.html">Formulas <b>61</b></a></div><div class="nav-groups"><a class="nav-link nav-single" data-id="science-1/start-here/start-here" href="../../science-1/start-here/start-here.html"><span>Start here: the endsem map</span></a><a class="nav-link nav-single" data-id="science-1/videos-ftlop/reference" href="../../science-1/videos-ftlop/reference.html"><span>Reference: For the Love of Physics videos</span></a><details class="nav-doc"><summary><span>Chapter 1: Scales, modelling and nonlinear dynamics</span><i data-count-for="science-1/ch1-intro/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch1-intro/learn" href="../../science-1/ch1-intro/learn.html"><small>Learn</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/reference" href="../../science-1/ch1-intro/reference.html"><small>Reference</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/formulas" href="../../science-1/ch1-intro/formulas.html"><small>Formulas</small><span>Scales, modelling and nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/ch1-intro/practice" href="../../science-1/ch1-intro/practice.html"><small>Practice</small><span>Scales, modelling and nonlinear dynamics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 2: Newtonian mechanics of one particle and many</span><i data-count-for="science-1/ch2-newton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch2-newton/learn" href="../../science-1/ch2-newton/learn.html"><small>Learn</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/reference" href="../../science-1/ch2-newton/reference.html"><small>Reference</small><span>Newtonian mechanics of one particle and many</span></a><a class="nav-link" data-id="science-1/ch2-newton/formulas" href="../../science-1/ch2-newton/formulas.html"><small>Formulas</small><span>Newtonian mechanics</span></a><a class="nav-link" data-id="science-1/ch2-newton/practice" href="../../science-1/ch2-newton/practice.html"><small>Practice</small><span>Newtonian mechanics of one particle and many</span></a></div></details><details class="nav-doc"><summary><span>Chapter 3: Calculus of variations and Lagrangian mechanics</span><i data-count-for="science-1/ch3-lagrange/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch3-lagrange/learn" href="../../science-1/ch3-lagrange/learn.html"><small>Learn</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/reference" href="../../science-1/ch3-lagrange/reference.html"><small>Reference</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/formulas" href="../../science-1/ch3-lagrange/formulas.html"><small>Formulas</small><span>Calculus of variations and Lagrangian mechanics</span></a><a class="nav-link" data-id="science-1/ch3-lagrange/practice" href="../../science-1/ch3-lagrange/practice.html"><small>Practice</small><span>Calculus of variations and Lagrangian mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 4: Hamiltonian dynamics and the two-body problem</span><i data-count-for="science-1/ch4-hamilton/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch4-hamilton/learn" href="../../science-1/ch4-hamilton/learn.html"><small>Learn</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/reference" href="../../science-1/ch4-hamilton/reference.html"><small>Reference</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/formulas" href="../../science-1/ch4-hamilton/formulas.html"><small>Formulas</small><span>Hamiltonian dynamics and the two-body problem</span></a><a class="nav-link" data-id="science-1/ch4-hamilton/practice" href="../../science-1/ch4-hamilton/practice.html"><small>Practice</small><span>Hamiltonian dynamics and the two-body problem</span></a></div></details><details class="nav-doc"><summary><span>Chapter 5: Special relativity</span><i data-count-for="science-1/ch5-relativity/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch5-relativity/learn" href="../../science-1/ch5-relativity/learn.html"><small>Learn</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference" href="../../science-1/ch5-relativity/reference.html"><small>Reference</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/formulas" href="../../science-1/ch5-relativity/formulas.html"><small>Formulas</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/practice" href="../../science-1/ch5-relativity/practice.html"><small>Practice</small><span>Special relativity</span></a><a class="nav-link" data-id="science-1/ch5-relativity/reference-2" href="../../science-1/ch5-relativity/reference-2.html"><small>Reference</small><span>Special relativity quick sheet (Beiser ch. 1)</span></a></div></details><details class="nav-doc"><summary><span>Chapter 6: Thermodynamics I: gases and the first law</span><i data-count-for="science-1/ch6-thermo1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch6-thermo1/learn" href="../../science-1/ch6-thermo1/learn.html"><small>Learn</small><span>Thermodynamics in one pass (Atkins 1A to 3B)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-2" href="../../science-1/ch6-thermo1/learn-2.html"><small>Learn</small><span>Gases (Atkins 1A to 1C)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-3" href="../../science-1/ch6-thermo1/learn-3.html"><small>Learn</small><span>The first law (Atkins 2A, 2B, 2E)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/learn-4" href="../../science-1/ch6-thermo1/learn-4.html"><small>Learn</small><span>Thermochemistry and state functions (Atkins 2C, 2D)</span></a><a class="nav-link" data-id="science-1/ch6-thermo1/practice" href="../../science-1/ch6-thermo1/practice.html"><small>Practice</small><span>Thermodynamics I: gases and the first law</span></a></div></details><details class="nav-doc"><summary><span>Chapter 7: Thermodynamics II: second law, entropy and free energy</span><i data-count-for="science-1/ch7-thermo2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch7-thermo2/learn" href="../../science-1/ch7-thermo2/learn.html"><small>Learn</small><span>The second law and entropy (Atkins 3A, 3B)</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/learn-2" href="../../science-1/ch7-thermo2/learn-2.html"><small>Learn</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/reference" href="../../science-1/ch7-thermo2/reference.html"><small>Reference</small><span>Free energy and phases</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/formulas" href="../../science-1/ch7-thermo2/formulas.html"><small>Formulas</small><span>Second law, entropy and free energy</span></a><a class="nav-link" data-id="science-1/ch7-thermo2/practice" href="../../science-1/ch7-thermo2/practice.html"><small>Practice</small><span>Free energy and phases</span></a></div></details><details class="nav-doc"><summary><span>Chapter 8: Particle properties of waves</span><i data-count-for="science-1/ch8-qm1/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch8-qm1/learn" href="../../science-1/ch8-qm1/learn.html"><small>Learn</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/reference" href="../../science-1/ch8-qm1/reference.html"><small>Reference</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/coverage" href="../../science-1/ch8-qm1/coverage.html"><small>Coverage</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/formulas" href="../../science-1/ch8-qm1/formulas.html"><small>Formulas</small><span>Particle properties of waves</span></a><a class="nav-link" data-id="science-1/ch8-qm1/practice" href="../../science-1/ch8-qm1/practice.html"><small>Practice</small><span>Particle properties of waves</span></a></div></details><details class="nav-doc"><summary><span>Chapter 9: Wave properties of particles</span><i data-count-for="science-1/ch9-qm2/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch9-qm2/learn" href="../../science-1/ch9-qm2/learn.html"><small>Learn</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/reference" href="../../science-1/ch9-qm2/reference.html"><small>Reference</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/coverage" href="../../science-1/ch9-qm2/coverage.html"><small>Coverage</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/formulas" href="../../science-1/ch9-qm2/formulas.html"><small>Formulas</small><span>Wave properties of particles</span></a><a class="nav-link" data-id="science-1/ch9-qm2/practice" href="../../science-1/ch9-qm2/practice.html"><small>Practice</small><span>Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>Chapter 10: Atomic structure</span><i data-count-for="science-1/ch10-qm3/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch10-qm3/learn" href="../../science-1/ch10-qm3/learn.html"><small>Learn</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/reference" href="../../science-1/ch10-qm3/reference.html"><small>Reference</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/coverage" href="../../science-1/ch10-qm3/coverage.html"><small>Coverage</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/formulas" href="../../science-1/ch10-qm3/formulas.html"><small>Formulas</small><span>Atomic structure</span></a><a class="nav-link" data-id="science-1/ch10-qm3/practice" href="../../science-1/ch10-qm3/practice.html"><small>Practice</small><span>Atomic structure</span></a></div></details><details class="nav-doc"><summary><span>Chapter 11: Quantum mechanics</span><i data-count-for="science-1/ch11-qm4/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch11-qm4/learn" href="../../science-1/ch11-qm4/learn.html"><small>Learn</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/reference" href="../../science-1/ch11-qm4/reference.html"><small>Reference</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/coverage" href="../../science-1/ch11-qm4/coverage.html"><small>Coverage</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/formulas" href="../../science-1/ch11-qm4/formulas.html"><small>Formulas</small><span>Quantum mechanics</span></a><a class="nav-link" data-id="science-1/ch11-qm4/practice" href="../../science-1/ch11-qm4/practice.html"><small>Practice</small><span>Quantum mechanics</span></a></div></details><details class="nav-doc"><summary><span>Chapter 12: Quantum theory of the hydrogen atom</span><i data-count-for="science-1/ch12-qm5/" data-total="5"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/ch12-qm5/learn" href="../../science-1/ch12-qm5/learn.html"><small>Learn</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/reference" href="../../science-1/ch12-qm5/reference.html"><small>Reference</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/coverage" href="../../science-1/ch12-qm5/coverage.html"><small>Coverage</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/formulas" href="../../science-1/ch12-qm5/formulas.html"><small>Formulas</small><span>Quantum theory of the hydrogen atom</span></a><a class="nav-link" data-id="science-1/ch12-qm5/practice" href="../../science-1/ch12-qm5/practice.html"><small>Practice</small><span>Quantum theory of the hydrogen atom</span></a></div></details><details class="nav-doc"><summary><span>Practice: Mock endsem</span><i data-count-for="science-1/mock-endsem/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/mock-endsem/practice" href="../../science-1/mock-endsem/practice.html"><small>Practice</small><span>Mock endsem</span></a><a class="nav-link" data-id="science-1/mock-endsem/practice-2" href="../../science-1/mock-endsem/practice-2.html"><small>Practice</small><span>Mock endsem, marking scheme and solutions</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Mechanics (lectures 1-8, Marion &amp; Thornton)</span><i data-count-for="science-1/hw-mechanics/" data-total="4"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics" href="../../science-1/hw-mechanics/hw-practice-lectures-1-to-4-nonlinear-dynamics.html"><span>HW practice: Lectures 1 to 4, nonlinear dynamics</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2" href="../../science-1/hw-mechanics/hw-practice-lecture-5-newton-for-one-particle-mt-chapter-2.html"><span>HW practice: Lecture 5, Newton for one particle (MT Chapter 2)</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange" href="../../science-1/hw-mechanics/hw-practice-lectures-6-and-7-calculus-of-variations-lagrange.html"><span>HW practice: Lectures 6 and 7, calculus of variations, Lagrange and Hamilton</span></a><a class="nav-link" data-id="science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc" href="../../science-1/hw-mechanics/hw-practice-lecture-8-multiparticle-systems-and-central-forc.html"><span>HW practice: Lecture 8, multiparticle systems and central forces</span></a></div></details><a class="nav-link nav-single" data-id="science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e" href="../../science-1/hw-thermo/hw-practice-thermodynamics-atkins-11e.html"><span>HW practice: Thermodynamics (Atkins 11e)</span></a><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 2 and 3</span><i data-count-for="science-1/hw-qm/" data-total="2"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves" href="../../science-1/hw-qm/hw-practice-beiser-chapter-2-particle-properties-of-waves.html"><span>HW practice: Beiser Chapter 2, Particle properties of waves</span></a><a class="nav-link" data-id="science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles" href="../../science-1/hw-qm/hw-practice-beiser-chapter-3-wave-properties-of-particles.html"><span>HW practice: Beiser Chapter 3, Wave properties of particles</span></a></div></details><details class="nav-doc"><summary><span>HW practice: Quantum mechanics, Beiser chapters 4 to 6</span><i data-count-for="science-1/hw-qm-b/" data-total="3"></i></summary><div class="nav-doc-items"><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-4-atomic-structure.html"><span>HW practice: Beiser Chapter 4, Atomic structure</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-5-quantum-mechanics.html"><span>HW practice: Beiser Chapter 5, Quantum mechanics</span></a><a class="nav-link" data-id="science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-" href="../../science-1/hw-qm-b/hw-practice-beiser-chapter-6-quantum-theory-of-the-hydrogen-.html"><span>HW practice: Beiser Chapter 6, Quantum theory of the hydrogen atom</span></a></div></details><a class="nav-link nav-single" data-id="science-1/toolkit-practice/practice" href="../../science-1/toolkit-practice/practice.html"><span>Practice set: thermodynamics</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cheatsheet/sheet" href="../../science-1/toolkit-cheatsheet/sheet.html"><span>Thermodynamics cheat sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-formulas/sheet" href="../../science-1/toolkit-formulas/sheet.html"><span>Thermodynamics formula sheet</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-definitions/sheet" href="../../science-1/toolkit-definitions/sheet.html"><span>Thermodynamics definitions</span></a><a class="nav-link nav-single" data-id="science-1/toolkit-cards/cards" href="../../science-1/toolkit-cards/cards.html"><span>Thermodynamics flashcards</span></a></div></div></nav>
+  <main class="main"><article class="note">
+      <nav class="crumbs"><a href="../../dna/index.html">Data and Applications</a><span>›</span><span>Chapter 2: ER and EER modelling</span></nav>
+      <header class="note-head">
+        <p class="eyebrow">Practice</p>
+        <h1>ER and EER modelling</h1>
+        <p class="note-meta">46 min read · 19 practice problems</p>
+        <div class="note-tools">
+          <button class="btn small" id="sol-toggle" type="button">Show all solutions</button>
+          <button class="btn small" id="focus-btn" type="button" title="Toggle distraction-free Zen reading mode (Shortcut: z)">Zen mode (z)</button>
+          <span class="hint">Solutions stay collapsed until you click them.</span>
+        </div>
+      </header>
+      <div class="prose"><p>Every solution below is written the way an answer should look on the exam script: <strong>assumptions</strong> first (each with its reason), then the <strong>working</strong> in full sentences, then a clearly marked <strong>final answer</strong>. The quoted <em>Examiner's notes</em> are for you, not for the script: they list accepted alternatives and the mistakes that cost marks.</p>
+<h2 id="a-assignment-2-this-year">A. Assignment 2 (this year)</h2>
+<h3 id="problem-1-eer-application-10-pts-assignment-2-individual-ia2"><span class="asg-tag">A2 · Individual</span> Problem 1 [EER · Application · 10 pts · Assignment 2 individual (IA2)]</h3>
+<p>Television show database. (a) A show is identified by title and year of release, has one or more seasons, each with episodes of a given duration in minutes. Each show is associated with a production company and classified under one or more genres. Each episode is directed by one or more directors and features one or more actors; a plot outline is recorded for every episode. (b) Each actor is identified by name and date of birth and appears in one or more shows; for every episode in which an actor appears, the role is recorded. (c) Each director is identified by name and date of birth and directs one or more episodes; a director may also act, even in an episode they direct. (d) Each production company is identified by name, has an address, and produces one or more shows. Draw the EER model with (min, max) everywhere.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Season_No is unique within a show and Episode_No is unique within a season. <em>(Reason: seasons and episodes are numbered per show and per season, so they cannot be identified on their own.)</em></li>
+<li>An actor plays one role in a given episode. <em>(Reason: the requirements record &quot;the role&quot;, singular.)</em></li>
+<li>Every person stored is an actor or a director. <em>(Reason: persons enter the database only through these two roles.)</em></li>
+<li>Genre values are plain names. <em>(Reason: no other genre information is required.)</em></li>
+</ol>
+<p><strong>Entity types and attributes.</strong></p>
+<ol>
+<li>PRODUCTION_COMPANY: key Name; composite attribute Address(Street, City, Country).</li>
+<li>TV_SHOW: composite key (Title, Year); multivalued attribute Genre; derived attribute No_of_Seasons.</li>
+<li>SEASON: <strong>weak</strong> entity type, owner TV_SHOW, partial key Season_No; derived No_of_Episodes.</li>
+<li>EPISODE: <strong>weak</strong> entity type, owner SEASON, partial key Episode_No; attributes Duration_Min and Plot_Outline.</li>
+<li>PERSON: composite key (Name, DOB), with subclasses ACTOR (derived No_of_Shows) and DIRECTOR (derived No_Episodes_Directed).</li>
+</ol>
+<p><strong>Relationship types with (min, max).</strong> Each pair is written beside the entity type it constrains.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participant 1</th>
+<th>Participant 2</th>
+<th>Attribute</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PRODUCES</td>
+<td>PRODUCTION_COMPANY (1,N)</td>
+<td>TV_SHOW (1,1)</td>
+<td>—</td>
+<td>Requirement (a) and (d)</td>
+</tr>
+<tr>
+<td>HAS_SEASON (identifying)</td>
+<td>TV_SHOW (1,N)</td>
+<td>SEASON (1,1)</td>
+<td>—</td>
+<td>A show has one or more seasons</td>
+</tr>
+<tr>
+<td>HAS_EPISODE (identifying)</td>
+<td>SEASON (1,N)</td>
+<td>EPISODE (1,1)</td>
+<td>—</td>
+<td>A season has episodes</td>
+</tr>
+<tr>
+<td>DIRECTS</td>
+<td>DIRECTOR (1,N)</td>
+<td>EPISODE (1,N)</td>
+<td>—</td>
+<td>Requirement (a) and (c)</td>
+</tr>
+<tr>
+<td>APPEARS_IN</td>
+<td>ACTOR (1,N)</td>
+<td>EPISODE (1,N)</td>
+<td>Role</td>
+<td>Requirement (a) and (b)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Specialization.</strong> PERSON → {ACTOR, DIRECTOR} is <strong>overlapping (o)</strong>, because requirement (c) states that a director may also act. It is <strong>total</strong> by Assumption 3.</p>
+<p><strong>Justification of the main design choices.</strong></p>
+<ul>
+<li>SEASON and EPISODE are weak because &quot;Season 2&quot; or &quot;Episode 5&quot; has no meaning without its show or season, and they should be deleted with their owner.</li>
+<li>Role is an attribute of APPEARS_IN, because it describes an actor <em>in a particular episode</em>, not the actor alone or the episode alone.</li>
+<li>Actors are related to episodes rather than shows, because roles are recorded per episode; &quot;appears in one or more shows&quot; then follows from (1,N) on episodes.</li>
+</ul>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-ia2-tvshow.svg"><img class="fig" src="../../assets/fig/dna-ia2-tvshow.svg" alt="EER diagram of the TV show database" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> The EER diagram contains the five entity types above (two of them weak, with double rectangles, double diamonds and dashed partial keys), the five relationship types with the (min, max) pairs in the table, and an overlapping, total specialization of PERSON.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Grade A needed: every line carrying a (min, max) pair, both weak entities correctly drawn with partial keys, a sensible d/o choice with a reason, and at least one multivalued and one composite attribute. Major mistakes: a strong entity with no key, a weak entity with no partial key, (1:N) written instead of (min, max), min greater than max.</p>
+</blockquote>
+</details>
+<h3 id="problem-2-eer-application-10-pts-assignment-2-group-ga2"><span class="asg-tag">A2 · Group</span> Problem 2 [EER · Application · 10 pts · Assignment 2 group (GA2)]</h3>
+<p>Draw an EER model of the EER model itself: entities have attributes (simple or composite, single- or multivalued, stored or derived, may accept NULL); entity types are strong (with a key attribute) or weak (with a partial key, depending on a strong type through an identifying relationship type); relationship types associate entity types and may have attributes; participation and cardinality constraints in (min, max); entity types may have subclasses (specialization), and strong types may be generalized into a superclass.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Each entity type has a unique name and each attribute has a unique name. <em>(Reason: names are how the EER model refers to its constructs.)</em></li>
+<li>A strong entity type has exactly one key attribute and a weak entity type exactly one partial key. <em>(Reason: the requirements speak of &quot;a key attribute&quot; and &quot;a partial key&quot;.)</em></li>
+<li>The three attribute classifications are independent of each other. <em>(Reason: an attribute is simple or composite, and separately single- or multivalued, and separately stored or derived.)</em></li>
+</ol>
+<p><strong>Entity types and attributes.</strong></p>
+<ol>
+<li>ENTITY (key Entity_id) and ENTITY_TYPE (key Name), related by HAS_INSTANCES: ENTITY_TYPE (0,N), ENTITY (1,1).</li>
+<li>ATTRIBUTE (key Attribute_name; attribute Accepts_NULL), with three <strong>disjoint, total</strong> specializations: {SIMPLE, COMPOSITE}, {SINGLE_VALUED, MULTIVALUED}, {STORED, DERIVED}. MULTIVALUED has the multivalued attribute Value_set; COMPOSITE has the derived attribute Component_count.</li>
+<li>ENTITY_TYPE is specialized (<strong>disjoint, total</strong>) into STRONG_ENTITY_TYPE and WEAK_ENTITY_TYPE.</li>
+<li>KEY_ATTRIBUTE and PARTIAL_KEY_ATTRIBUTE are subclasses of ATTRIBUTE.</li>
+<li>RELATIONSHIP_TYPE, with BINARY_RELATIONSHIP_TYPE as a subclass; participation and cardinality constraints are modelled with the composite attribute (Min, Max).</li>
+</ol>
+<p><strong>Relationship types with (min, max).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DESCRIBED_BY</td>
+<td>ENTITY (1,N), ATTRIBUTE (1,N)</td>
+</tr>
+<tr>
+<td>HAS_ATTRIBUTES</td>
+<td>ENTITY_TYPE (1,N), ATTRIBUTE (0,N)</td>
+</tr>
+<tr>
+<td>CONSISTS_OF (recursive)</td>
+<td>COMPOSITE (2,N) as whole, ATTRIBUTE (0,N) as component</td>
+</tr>
+<tr>
+<td>HAS_KEY</td>
+<td>STRONG_ENTITY_TYPE (1,1), KEY_ATTRIBUTE (0,1)</td>
+</tr>
+<tr>
+<td>HAS_PARTIAL_KEY</td>
+<td>WEAK_ENTITY_TYPE (1,1), PARTIAL_KEY_ATTRIBUTE (1,1)</td>
+</tr>
+<tr>
+<td>IDENTIFYING_RELATIONSHIP</td>
+<td>WEAK_ENTITY_TYPE (1,1), STRONG_ENTITY_TYPE (0,N)</td>
+</tr>
+<tr>
+<td>RELATIONSHIP_TYPE (ternary)</td>
+<td>ENTITY_TYPE in two roles (1,N), ATTRIBUTE (0,N)</td>
+</tr>
+<tr>
+<td>HAS_SUBCLASS (recursive)</td>
+<td>ENTITY_TYPE as superclass (0,N), as subclass (0,1)</td>
+</tr>
+<tr>
+<td>GENERALIZATION</td>
+<td>STRONG_ENTITY_TYPE (2,N), ENTITY_TYPE as superclass (0,1)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Justification.</strong> A composite attribute has at least two components, hence (2,N). A weak entity type depends on exactly one owner, hence (1,1) on its side of the identifying relationship. Generalization combines at least two strong entity types, hence (2,N).</p>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-ga2-eer-of-eer.svg"><img class="fig" src="../../assets/fig/dna-ga2-eer-of-eer.svg" alt="EER diagram of the EER model itself" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> The EER diagram consists of the entity types, specializations and relationship types listed above.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> The key accepted any equivalent model with stated assumptions. What is being tested is that you know every definition of chapters 3 and 4 precisely enough to model it.</p>
+</blockquote>
+</details>
+<h2 id="b-textbook-exercises-set-by-kamal">B. Textbook exercises set by Kamal</h2>
+<p>In the exam, draw these as diagrams. Here each design is written as lists and tables that you can turn straight into a diagram: entity types with keys (bold), attributes, relationship types with (min, max), and specializations with their constraints.</p>
+<h3 id="problem-3-er-application-5-pts-elmasri-3-16">Problem 3 [ER · Application · 5 pts · Elmasri 3.16]</h3>
+<p>In the UNIVERSITY schema of Figure 3.20, which attribute combinations must be unique for each SECTION to enforce: (a) in a given semester and year, only one section can use a classroom at a given DaysTime; (b) in a given semester and year, an instructor teaches only one section at a given DaysTime; (c) in a given semester and year, the section numbers of the same course are all different? Can you think of similar constraints?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>SECTION has SecId (the key), SecNo, Sem, Year, CRoom (Bldg, RoomNo) and DaysTime. Its course comes through SECS and its instructor through TEACHES. <em>(Reason: Figure 3.20.)</em></li>
+<li>DaysTime values are exact slots, so two sections clash only if their DaysTime values are equal. <em>(Reason: DaysTime is restricted to allowed values such as 'MWF 9am-9.50am'.)</em></li>
+</ol>
+<p><strong>Answer.</strong></p>
+<ol>
+<li>(a) <strong>{Sem, Year, Bldg, RoomNo, DaysTime}</strong> must be unique.</li>
+<li>(b) <strong>{Sem, Year, DaysTime, Id of the INSTRUCTOR}</strong> must be unique. The instructor is reached through TEACHES.</li>
+<li>(c) <strong>{Sem, Year, SecNo, CCode of the COURSE}</strong> must be unique. The course is reached through SECS.</li>
+</ol>
+<p><strong>Why the ER diagram cannot show (b) and (c) as keys.</strong> They include an attribute of a <em>related</em> entity, reached through a relationship. ER keys are made of the entity's own attributes. These constraints become ordinary UNIQUE constraints after mapping, when the instructor Id and CCode are foreign-key columns of SECTION.</p>
+<p><strong>Similar constraints.</strong></p>
+<ol>
+<li>A student cannot take two sections with the same {Sem, Year, DaysTime}. This is a constraint on TAKES.</li>
+<li>A section's enrolment cannot exceed the room's capacity.</li>
+<li>An instructor teaches at most a fixed number of sections per semester.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> (b) has an exception: Elmasri notes it fails if an instructor may teach two combined sections together. Mentioning it shows you read the constraint as a miniworld rule, not a fact.</p>
+</blockquote>
+</details>
+<h3 id="problem-4-er-application-4-pts-elmasri-3-17">Problem 4 [ER · Application · 4 pts · Elmasri 3.17]</h3>
+<p>Design one attribute of STUDENT for previous college education: one entry per college attended, each with college name, start and end dates, degree entries (degree name, month and year awarded) and transcript entries (course name, semester, year, grade). Use the notation of Figure 3.5.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> A student may have attended no previous college, and may have no degree or no completed course at a college. <em>(Reason: &quot;if any&quot; in the question.)</em> So all three levels are multivalued and may be empty.</p>
+<p><strong>Notation.</strong> In Figure 3.5, { } marks a multivalued attribute and ( ) a composite attribute.</p>
+<p><strong>Answer.</strong></p>
+<pre><code>{ PreviousCollege ( CollegeName,
+                    StartDate,
+                    EndDate,
+                    { Degree ( DegreeName, Month, Year ) },
+                    { Transcript ( CourseName, Semester, Year, Grade ) } ) }
+</code></pre>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-317-nested-attr.svg"><img class="fig" src="../../assets/fig/dna-317-nested-attr.svg" alt="STUDENT with nested composite and multivalued attributes" loading="lazy"></a></p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>PreviousCollege is <strong>multivalued</strong>, because a student has one entry per college.</li>
+<li>Each entry is <strong>composite</strong>: name, two dates and two nested multivalued attributes.</li>
+<li>Degree and Transcript are themselves multivalued composite attributes, because a college can award several degrees and record many courses.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> Exercise 3.18 asks for the same design with entities. That version, with weak entities PREVIOUS_COLLEGE (owner STUDENT), DEGREE and TRANSCRIPT_ENTRY (owner PREVIOUS_COLLEGE), is the one to prefer when the data is queried. Nesting this deep maps to three extra relations in any case.</p>
+</blockquote>
+</details>
+<h3 id="problem-5-er-application-8-pts-elmasri-3-22">Problem 5 [ER · Application · 8 pts · Elmasri 3.22]</h3>
+<p>Design an ER schema for a sports league: teams have players, not all of whom play in each game. Track the players who take part in each game for each team, the positions they played, and the game's result. State your assumptions. (Choose a sport.)</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Sport: football (soccer). Each game is between exactly two teams, a home team and an away team. <em>(Reason: this is how league fixtures work.)</em></li>
+<li>A player belongs to one team for the whole season. <em>(Reason: the requirement does not mention transfers.)</em> The examiner's note covers the other case.</li>
+<li>A player may play several positions in one game (moved during the match). <em>(Reason: &quot;the positions they played&quot;.)</em></li>
+<li>The result is the two scores, and the winner is derived from them. <em>(Reason: storing the winner as well would be redundant.)</em></li>
+</ol>
+<p><strong>Entity types.</strong></p>
+<ol>
+<li>TEAM: <strong>Team_name</strong>, City, Coach.</li>
+<li>PLAYER: <strong>Player_id</strong>, Name, Bdate, Shirt_no.</li>
+<li>GAME: <strong>Game_id</strong>, Date, Venue, Home_score, Away_score, and derived Winner.</li>
+</ol>
+<p><strong>Relationship types.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+<th>Attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PLAYS_FOR</td>
+<td>PLAYER (1,1), TEAM (11,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>HOME</td>
+<td>GAME (1,1), TEAM (0,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AWAY</td>
+<td>GAME (1,1), TEAM (0,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PLAYED_IN</td>
+<td>PLAYER (0,N), GAME (22,N)</td>
+<td>{Position} (multivalued), Minutes</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-322-sports.svg"><img class="fig" src="../../assets/fig/dna-322-sports.svg" alt="ER diagram of the sports database" loading="lazy"></a></p>
+<p><strong>Explanation.</strong></p>
+<ol>
+<li>The team of each player in a game is found through PLAYS_FOR, so PLAYED_IN does not need TEAM as a third participant.</li>
+<li>GAME takes part in PLAYED_IN at least 22 times, which is 11 players per side.</li>
+<li>&quot;Not all players participate in each game&quot; is why PLAYED_IN is separate from PLAYS_FOR.</li>
+<li>HOME and AWAY are two relationships between the same entity types, and the role names tell them apart. A constraint (not shown in ER) says a team cannot play itself.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> If players can change teams during the season, PLAYED_IN must record the team too. Make it ternary (PLAYER, GAME, TEAM), or add a Team role. Either design is right when the assumption is stated.</p>
+</blockquote>
+</details>
+<h3 id="problem-6-er-application-5-pts-elmasri-3-26">Problem 6 [ER · Application · 5 pts · Elmasri 3.26]</h3>
+<p>SECTION has Section_number, Semester, Year, Course_number, Instructor, Room_no, Building, Weekdays and Hours. Section_number is unique for each course within a semester and year. Identify three composite keys, and show how they can be represented in an ER diagram.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>In a semester, a room holds one section in each (Weekdays, Hours) slot. <em>(Reason: a room cannot host two classes at once.)</em></li>
+<li>In a semester, an instructor teaches one section in each (Weekdays, Hours) slot. <em>(Reason: an instructor cannot be in two rooms at once.)</em></li>
+<li>Slots do not partly overlap ('MWF' and 'MW' at the same hour are treated as different slots). <em>(Reason: the domains are lists of fixed values.)</em></li>
+</ol>
+<p><strong>Keys.</strong></p>
+<ol>
+<li>K1 = <strong>{Course_number, Semester, Year, Section_number}</strong>, from the stated numbering rule.</li>
+<li>K2 = <strong>{Semester, Year, Building, Room_no, Weekdays, Hours}</strong>, from assumption 1.</li>
+<li>K3 = <strong>{Semester, Year, Instructor, Weekdays, Hours}</strong>, from assumption 2.</li>
+</ol>
+<p>Semester and Year are in all three keys, and Weekdays and Hours in two. Each key is minimal: dropping any attribute allows two sections to share the remaining values.</p>
+<p><strong>ER representation.</strong></p>
+<ol>
+<li>Show each key as a <strong>composite attribute</strong> with its own name and underline each one: Sec_key1(Course_number, Semester, Year, Section_number), Sec_key2(Semester, Year, Building, Room_no, Weekdays, Hours), Sec_key3(Semester, Year, Instructor, Weekdays, Hours).</li>
+<li>ER allows several keys, each underlined, but a simple attribute should belong to one composite attribute. So shared components either appear in several composites, which repeats them, or the extra keys are written as a note beside the diagram.</li>
+<li>Alternatively, add a surrogate SecId as the single underlined key and list K1–K3 as uniqueness constraints. Elmasri does this in Figure 3.20.</li>
+</ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-326-section-keys.svg"><img class="fig" src="../../assets/fig/dna-326-section-keys.svg" alt="SECTION with its keys" loading="lazy"></a></p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Assumption 3 matters: if 'MWF 9:00' and 'MW 9:00' count as a clash, no key can express it, and it becomes a semantic constraint (a trigger after mapping).</p>
+</blockquote>
+</details>
+<h3 id="problem-7-eer-application-10-pts-elmasri-4-16">Problem 7 [EER · Application · 10 pts · Elmasri 4.16]</h3>
+<p>Design an EER schema for an application you choose, with at least five entity types, four relationship types, a weak entity type, a superclass/subclass relationship, a category, and an n-ary (n &gt; 2) relationship type. Specify all constraints.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Application: a hospital.</strong></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>People are identified by a hospital ID, and a person can be both staff and a patient. <em>(Reason: staff are sometimes treated in their own hospital.)</em></li>
+<li>A bill is paid either by an insurance company or by a person. <em>(Reason: this gives a natural category.)</em></li>
+<li>Beds are numbered within each ward. <em>(Reason: bed 4 exists in many wards.)</em></li>
+</ol>
+<p><strong>Entity types.</strong></p>
+<ol>
+<li>PERSON: <strong>Pid</strong>, Name (First, Last), Bdate, {Phone}.</li>
+<li>DOCTOR, a subclass of PERSON: Speciality, Licence_no.</li>
+<li>PATIENT, a subclass of PERSON: Blood_group.</li>
+<li>WARD: <strong>Ward_no</strong>, Name, Floor.</li>
+<li>BED, weak with owner WARD: partial key <strong>Bed_no</strong>, Type.</li>
+<li>MEDICINE: <strong>Med_code</strong>, Name, Unit_price.</li>
+<li>INSURER: <strong>Ins_id</strong>, Name.</li>
+<li>BILL: <strong>Bill_no</strong>, Amount, Date.</li>
+<li>PAYER, a category: INSURER ∪ PERSON.</li>
+</ol>
+<p><strong>Specialization.</strong> PERSON → {DOCTOR, PATIENT} is <strong>overlapping</strong> (o) and <strong>partial</strong>, because a person can be both, and a visitor or contact can be neither.</p>
+<p><strong>Category.</strong> PAYER = INSURER ∪ PERSON is <strong>partial</strong>: not every insurer or person pays a bill.</p>
+<p><strong>Relationship types.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+<th>Attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IN_WARD (identifying)</td>
+<td>WARD (1,N), BED (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OCCUPIES</td>
+<td>PATIENT (0,1), BED (0,1)</td>
+<td>Since</td>
+</tr>
+<tr>
+<td>WORKS_IN</td>
+<td>DOCTOR (1,1), WARD (1,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>BILLED</td>
+<td>PATIENT (0,N), BILL (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PAYS</td>
+<td>PAYER (0,N), BILL (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PRESCRIBES (ternary)</td>
+<td>DOCTOR (0,N), PATIENT (0,N), MEDICINE (0,N)</td>
+<td>Date, Dose</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-416-hospital.svg"><img class="fig" src="../../assets/fig/dna-416-hospital.svg" alt="EER diagram of the hospital" loading="lazy"></a></p>
+<p><strong>Why PRESCRIBES is ternary.</strong> A prescription is one fact about a doctor, a patient and a medicine together. Three binary relationships could not say which doctor prescribed which medicine to which patient.</p>
+<p><strong>Other constraints.</strong></p>
+<ol>
+<li>A patient cannot be their own doctor in PRESCRIBES.</li>
+<li>A bed holds at most one patient (the (0,1) on BED).</li>
+<li>Bill amounts are positive.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> Any domain works. Marks go to meeting every listed requirement and giving the constraints (d/o, total/partial, (min, max)) with a reason for each.</p>
+</blockquote>
+</details>
+<h3 id="problem-8-eer-application-8-pts-elmasri-4-17">Problem 8 [EER · Application · 8 pts · Elmasri 4.17]</h3>
+<p>Modify the BANK ER schema (Elmasri Figure 3.22, called 3.21 in the exercise) to track types of ACCOUNT (savings, checking, …) and LOAN (car, home, …), and each account's TRANSACTIONS (deposits, withdrawals, checks, …) and each loan's PAYMENTS, both with amount, date and time. Use specialization and generalization, and state assumptions.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>The original schema.</strong></p>
+<ol>
+<li>Entity types:
+<ol>
+<li>BANK (<strong>Code</strong>, Name, Addr).</li>
+<li>BANK_BRANCH, weak with owner BANK through BRANCHES: partial key Branch_no, and Addr.</li>
+<li>ACCOUNT (<strong>Acct_no</strong>, Balance, Type).</li>
+<li>LOAN (<strong>Loan_no</strong>, Amount, Type).</li>
+<li>CUSTOMER (<strong>Ssn</strong>, Name, Phone, Addr).</li>
+</ol>
+</li>
+<li>Relationships: ACCTS (BRANCH 1:N ACCOUNT), LOANS (BRANCH 1:N LOAN), A_C (ACCOUNT M:N CUSTOMER), L_C (LOAN M:N CUSTOMER).</li>
+</ol>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Every account is exactly one type, and every loan is exactly one type. <em>(Reason: the existing Type attribute holds one value.)</em></li>
+<li>Transactions are numbered within an account, and payments within a loan. <em>(Reason: they have no global identifier in the requirements.)</em></li>
+<li>The types have their own attributes: savings has an interest rate, checking has an overdraft limit, a car loan has a vehicle number, a home loan has a property address. <em>(Reason: a subclass is only worth having if it has its own attributes or relationships.)</em></li>
+</ol>
+<p><strong>Modifications.</strong></p>
+<ol>
+<li><strong>ACCOUNT specialization</strong>, defined by the attribute Type: subclasses SAVINGS_ACCT (Interest_rate) and CHECKING_ACCT (Overdraft_limit). It is <strong>disjoint (d) and total</strong>.</li>
+<li><strong>LOAN specialization</strong>, defined by the attribute Type: subclasses CAR_LOAN (Vehicle_no) and HOME_LOAN (Property_addr). It is <strong>disjoint and total</strong>.</li>
+<li><strong>TRANSACTION</strong>, a weak entity with owner ACCOUNT through identifying relationship ACC_TRANS (ACCOUNT (0,N), TRANSACTION (1,1)). Partial key Trans_no; attributes Amount, Date, Time.
+<ol>
+<li>It is specialized (disjoint, total) into DEPOSIT, WITHDRAWAL and CHECK.</li>
+<li>CHECK has its own attributes Check_no and Payee.</li>
+</ol>
+</li>
+<li><strong>PAYMENT</strong>, a weak entity with owner LOAN through identifying relationship LOAN_PAY (LOAN (0,N), PAYMENT (1,1)). Partial key Payment_no; attributes Amount, Date, Time.</li>
+</ol>
+<p><strong>Generalization (optional).</strong> TRANSACTION and PAYMENT share Amount, Date and Time. They could be generalized into a superclass MONEY_MOVEMENT(Amount, Date, Time). I keep them separate, because they have different owners (account or loan) and different identifying relationships, so the superclass would have no common key.</p>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-417-bank.svg"><img class="fig" src="../../assets/fig/dna-417-bank.svg" alt="EER diagram of the modified BANK" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> The BANK schema above with two attribute-defined, disjoint, total specializations (ACCOUNT and LOAN), and two new weak entity types (TRANSACTION, itself specialized, and PAYMENT).</p>
+</details>
+<h3 id="problem-9-eer-application-8-pts-elmasri-4-18">Problem 9 [EER · Application · 8 pts · Elmasri 4.18]</h3>
+<p>Olympic facilities: draw an EER diagram for the narrative in Elmasri 4.18. (Sports complexes are one-sport or multisport. Multisport complexes have an area for each sport with a location indicator. A complex has a location, a chief organiser, a total area. Complexes hold events, each with a planned date, duration, number of participants and number of officials. Officials are listed with their events. Equipment is needed for events and for maintenance. For each facility type, the number of facilities needed and an approximate budget are kept.)</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>A complex is identified by Complex_id. <em>(Reason: no key is given, and names may repeat.)</em></li>
+<li>Every complex is exactly one of one-sport or multisport. <em>(Reason: &quot;divided into one-sport and multisport types&quot;.)</em></li>
+<li>An event takes place in one complex. <em>(Reason: &quot;each complex holds a series of events&quot;.)</em></li>
+<li>The number of facilities needed and the budget belong to each <strong>type</strong>, not to each complex. <em>(Reason: &quot;for each type, the number of facilities needed is kept&quot;.)</em></li>
+</ol>
+<p><strong>Entity types and specialization.</strong></p>
+<ol>
+<li>SPORTS_COMPLEX: <strong>Complex_id</strong>, Location, Chief_organizer, Total_area, Ctype.
+<ol>
+<li>It is specialized by the attribute Ctype into ONE_SPORT (Sport) and MULTISPORT. The specialization is <strong>disjoint and total</strong>.</li>
+<li>MULTISPORT has a multivalued composite attribute {Sport_area(Sport, Location_indicator)}.</li>
+</ol>
+</li>
+<li>FACILITY_TYPE: <strong>Type_name</strong> ('one-sport' or 'multisport'), No_needed, Approx_budget. It holds the per-type information from assumption 4 and has exactly two instances.</li>
+<li>EVENT: <strong>Event_id</strong>, Name, Planned_date, Duration, No_participants, No_officials.</li>
+<li>OFFICIAL: <strong>Official_id</strong>, Name, Role.</li>
+<li>EQUIPMENT: <strong>Equip_id</strong>, Name, Quantity.</li>
+</ol>
+<p><strong>Relationship types.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+<th>Attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OF_TYPE</td>
+<td>SPORTS_COMPLEX (1,1), FACILITY_TYPE (0,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>HOLDS</td>
+<td>SPORTS_COMPLEX (0,N), EVENT (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OFFICIATES</td>
+<td>OFFICIAL (0,N), EVENT (0,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>NEEDS</td>
+<td>EVENT (0,N), EQUIPMENT (0,N)</td>
+<td>Quantity</td>
+</tr>
+<tr>
+<td>MAINTAINED_WITH</td>
+<td>SPORTS_COMPLEX (0,N), EQUIPMENT (0,N)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-418-olympics.svg"><img class="fig" src="../../assets/fig/dna-418-olympics.svg" alt="EER diagram of the Olympic facilities" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> The schema above. Its key design choices: a disjoint, total, attribute-defined specialization of SPORTS_COMPLEX; sport areas as a multivalued composite attribute of MULTISPORT; and a separate FACILITY_TYPE entity for the per-type counts and budgets.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Putting No_needed and Budget on SPORTS_COMPLEX is the usual mistake: it repeats one per-type value in every complex. Sport areas may also be a weak entity AREA (owner MULTISPORT) if events are held in a specific area.</p>
+</blockquote>
+</details>
+<h3 id="problem-10-eer-application-12-pts-elmasri-4-19">Problem 10 [EER · Application · 12 pts · Elmasri 4.19]</h3>
+<p>Library case study (Georgia Tech Library, Elmasri 4.19): identify the classification, aggregation, identification and specialization abstractions, give (min, max) constraints, list the details that affect design but not the conceptual schema, list semantic constraints separately, and draw an EER diagram.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>A &quot;title&quot; is a book identified by ISBN, and a &quot;volume&quot; is one physical copy. <em>(Reason: &quot;250,000 volumes, an average of 2.5 copies per book&quot;.)</em></li>
+<li>Wanted books (to acquire) are books the library does not hold. <em>(Reason: &quot;books they are interested in acquiring but cannot obtain&quot;.)</em></li>
+<li>Professors are members whose details come from employee records. <em>(Reason: &quot;professors are considered automatic members&quot;.)</em></li>
+</ol>
+<p><strong>Classification (entity and relationship types).</strong></p>
+<ol>
+<li>Entity types:
+<ol>
+<li>BOOK (<strong>ISBN</strong>, Title, {Author}, Subject_area, Language, Binding, Edition, Description).</li>
+<li>COPY, weak with owner BOOK (partial key Copy_no).</li>
+<li>MEMBER (<strong>Card_no</strong>, Ssn, Name, Campus_addr, Home_addr, {Phone}, Photo, Issue_date, Expiry_date).</li>
+<li>STAFF (<strong>Staff_id</strong>, Name).</li>
+<li>NOTICE, weak with owner MEMBER (partial key Notice_date).</li>
+</ol>
+</li>
+<li>Relationship types:
+<ol>
+<li>HAS_COPY (BOOK–COPY, identifying).</li>
+<li>BORROWS (MEMBER–COPY; Date_out, Due_date, Return_date).</li>
+<li>NOTIFIED (identifying, MEMBER–NOTICE). NOTICE is a weak entity type with partial key Notice_date and attribute Kind (overdue or renewal).</li>
+</ol>
+</li>
+</ol>
+<p><strong>Specialization and generalization.</strong></p>
+<ol>
+<li>MEMBER → {PROFESSOR, OTHER_MEMBER}, disjoint and total. Professors have a different loan period and grace period, and their notices go to the campus address.</li>
+<li>BOOK → {HELD_BOOK, WANTED_BOOK}, disjoint and total. Only held books have copies. A wanted book has a Reason attribute (rare, out of print, lost).</li>
+<li>HELD_BOOK → {LENDABLE, NON_LENDABLE}, disjoint and total. NON_LENDABLE has a Kind attribute (reference, rare, map). Only copies of lendable books may take part in BORROWS.</li>
+<li>STAFF → {CHIEF_LIBRARIAN, ASSOCIATE_LIBRARIAN, REFERENCE_LIBRARIAN, CHECKOUT_STAFF, ASSISTANT}, disjoint and total.</li>
+</ol>
+<p><strong>Aggregation.</strong></p>
+<ol>
+<li>A book's catalogue entry aggregates its title, authors, subject and description.</li>
+<li>A loan aggregates a member, a copy and dates.</li>
+</ol>
+<p><strong>Identification.</strong></p>
+<ol>
+<li>ISBN identifies a book. Title cannot, because two books can share a title.</li>
+<li>Card_no identifies a member. Ssn is an alternative key.</li>
+<li>(ISBN, Copy_no) identifies a copy.</li>
+</ol>
+<p><strong>(min, max) constraints.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>(min, max)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HAS_COPY</td>
+<td>HELD_BOOK (1,N), COPY (1,1)</td>
+</tr>
+<tr>
+<td>BORROWS (current loans)</td>
+<td>MEMBER (0,5), COPY (0,1)</td>
+</tr>
+<tr>
+<td>NOTIFIED</td>
+<td>MEMBER (0,N), NOTICE (1,1)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-419-library.svg"><img class="fig" src="../../assets/fig/dna-419-library.svg" alt="EER diagram of the library" loading="lazy"></a></p>
+<p><strong>Details that do not affect the conceptual design.</strong> The counts (16,000 members, 100,000 titles, 250,000 volumes), the 10% of volumes on loan, the 5% of members sent reminders, the 5% of overdue books lost, the borrowing distribution (top 1% and top 10%) and the 20% inactive members. These affect physical design (sizes, indexes, statistics), not the entity types.</p>
+<p><strong>Semantic constraints</strong> (not expressible in the EER diagram).</p>
+<ol>
+<li>Loan period: 21 days, or three months for professors.</li>
+<li>Grace period: one week, or two weeks for professors.</li>
+<li>At most five books out per member.</li>
+<li>A card is valid for four years, and a renewal notice is sent one month before expiry.</li>
+<li>Non-lendable books are never loaned.</li>
+<li>A professor's notices go to their campus address.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> The exercise is graded on the separation it asks for: what goes in the diagram, what is a semantic constraint, and what is only a statistic. Keep the three lists apart.</p>
+</blockquote>
+</details>
+<h3 id="problem-11-eer-application-10-pts-elmasri-4-20">Problem 11 [EER · Application · 10 pts · Elmasri 4.20]</h3>
+<p>Art museum: draw an EER schema for the requirements of Elmasri 4.20. (ART_OBJECT with Id_no, Artist, Year, Title, Description; types PAINTING, SCULPTURE, STATUE and OTHER, each with its attributes; PERMANENT_COLLECTION or BORROWED, each with its attributes; Origin and Epoch; ARTIST details; EXHIBITIONS; other COLLECTIONS.) Discuss assumptions and justify your choices.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Every art object is exactly one of the four types. <em>(Reason: OTHER exists &quot;to accommodate objects that do not fall into&quot; the main three.)</em></li>
+<li>Every art object is either owned or borrowed, never both. <em>(Reason: &quot;either PERMANENT_COLLECTION ... and BORROWED&quot;.)</em></li>
+<li>An exhibition is identified by its name. <em>(Reason: the requirements give a name and dates, and no ID.)</em></li>
+<li>Style is common to all four types, so it is moved up to ART_OBJECT. <em>(Reason: every type lists Style.)</em></li>
+<li>An object has at most one known artist. <em>(Reason: &quot;an Artist (if known)&quot;.)</em></li>
+</ol>
+<p><strong>Entity types.</strong></p>
+<ol>
+<li>ART_OBJECT: <strong>Id_no</strong>, Title, Description, Year, Origin, Epoch, Style.</li>
+<li>ARTIST: <strong>Name</strong>, Date_born, Date_died, Country_of_origin, Epoch, Main_style, Description.</li>
+<li>EXHIBITION: <strong>Name</strong>, Start_date, End_date.</li>
+<li>COLLECTION: <strong>Name</strong>, Type, Description, Address, Phone, Contact_person.</li>
+</ol>
+<p><strong>Specializations of ART_OBJECT.</strong></p>
+<ol>
+<li>By type, <strong>disjoint and total</strong>:
+<ol>
+<li>PAINTING: Paint_type, Drawn_on.</li>
+<li>SCULPTURE: Material, Height, Weight.</li>
+<li>STATUE: Material, Height, Weight.</li>
+<li>OTHER: Type.</li>
+</ol>
+</li>
+<li>By ownership, <strong>disjoint and total</strong>:
+<ol>
+<li>PERMANENT_COLLECTION: Date_acquired, Status, Cost.</li>
+<li>BORROWED: Date_borrowed, Date_returned.</li>
+</ol>
+</li>
+</ol>
+<p><strong>Relationship types.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CREATED_BY</td>
+<td>ART_OBJECT (0,1), ARTIST (1,N)</td>
+<td>Artist may be unknown; an artist in the database made at least one object</td>
+</tr>
+<tr>
+<td>BORROWED_FROM</td>
+<td>BORROWED (1,1), COLLECTION (0,N)</td>
+<td>Replaces the attribute &quot;Collection&quot; with a relationship to the COLLECTION entity</td>
+</tr>
+<tr>
+<td>DISPLAYED_IN</td>
+<td>ART_OBJECT (0,N), EXHIBITION (1,N)</td>
+<td>An exhibition shows several objects; an object may be in none or many</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-420-museum.svg"><img class="fig" src="../../assets/fig/dna-420-museum.svg" alt="EER diagram of the art museum" loading="lazy"></a></p>
+<p><strong>Justification of the choices.</strong></p>
+<ol>
+<li>Two <strong>independent specializations</strong> of the same superclass, one by type and one by ownership. A painting can be borrowed and a statue owned, so these are two separate specializations, not one with eight subclasses.</li>
+<li>The <strong>Artist attribute becomes a relationship</strong> to ARTIST, because artists have their own attributes.</li>
+<li>The <strong>Collection attribute of BORROWED becomes a relationship</strong> to COLLECTION for the same reason.</li>
+<li>SCULPTURE and STATUE have the same attributes but stay as separate subclasses, because the requirements name them as different categories.</li>
+</ol>
+<blockquote>
+<p><strong>Examiner's note.</strong> Merging SCULPTURE and STATUE into one subclass with a flag is also accepted if justified. Making the two specializations a single one loses marks, because it cannot express &quot;a borrowed painting&quot;.</p>
+</blockquote>
+</details>
+<h2 id="c-review-questions-short-answers">C. Review questions (short answers)</h2>
+<h3 id="problem-12-er-concept-10-pts-elmasri-3-3-3-13">Problem 12 [ER · Concept · 10 pts · Elmasri 3.3–3.13]</h3>
+<p>(3.3) Define entity, attribute, attribute value, relationship instance, composite, multivalued, derived and complex attribute, key attribute, value set. (3.4) Entity versus entity type versus entity set. (3.5) Attribute versus value set. (3.6) Relationship instance versus type versus set. (3.7) What is a participation role, and when are role names needed? (3.8) The two ways of specifying structural constraints, with pros and cons. (3.9) When can a relationship attribute migrate to an entity? (3.10) Relationships as attributes: what are their value sets, and which models use the idea? (3.11) Recursive relationships, with examples. (3.12) When are weak entities used? Define owner, weak entity type, identifying relationship, partial key. (3.13) Can an identifying relationship have degree more than two?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>3.3.</strong></p>
+<ol>
+<li>An <strong>entity</strong> is a thing in the miniworld with an independent existence. Example: the employee John Smith.</li>
+<li>An <strong>attribute</strong> is a property that describes an entity. Its <strong>value</strong> for a given entity is the attribute value. Example: Salary = 30000.</li>
+<li>A <strong>relationship instance</strong> associates one entity from each participating type. Example: (Smith, ProductX) in WORKS_ON.</li>
+<li>Kinds of attribute:
+<ol>
+<li><strong>Composite</strong>: made of parts, such as Name(First, Last).</li>
+<li><strong>Multivalued</strong>: has a set of values, such as {Phone}.</li>
+<li><strong>Derived</strong>: computed from other data, such as Age from Bdate.</li>
+<li><strong>Complex</strong>: composite and multivalued nested to any depth, such as {Address(Street, City)}.</li>
+</ol>
+</li>
+<li>A <strong>key attribute</strong> has a value that is distinct for every entity of the type.</li>
+<li>A <strong>value set</strong> (domain) is the set of values an attribute may take.</li>
+</ol>
+<p><strong>3.4.</strong></p>
+<ol>
+<li>An <strong>entity type</strong> is a collection of entities with the same attributes. It is the schema (intension), such as EMPLOYEE(Name, Ssn, …).</li>
+<li>The <strong>entity set</strong> is the collection of all entities of that type in the database at one moment. It is the extension.</li>
+<li>An <strong>entity</strong> is one member of the set.</li>
+</ol>
+<p><strong>3.5.</strong> An <strong>attribute</strong> is a named property of an entity type (Age). Its <strong>value set</strong> is the set of values it may take (integers from 16 to 70). Several attributes can share a value set.</p>
+<p><strong>3.6.</strong></p>
+<ol>
+<li>A <strong>relationship type</strong> R among entity types E1, …, En defines a set of associations. It is the schema, such as WORKS_FOR(EMPLOYEE, DEPARTMENT).</li>
+<li>The <strong>relationship set</strong> is the current set of its instances.</li>
+<li>A <strong>relationship instance</strong> is one association, such as (Smith, Research).</li>
+</ol>
+<p><strong>3.7.</strong></p>
+<ol>
+<li>A <strong>role</strong> is the part an entity plays in a relationship. Example: supervisor or supervisee in SUPERVISION.</li>
+<li>Role names are <strong>necessary in recursive relationships</strong>, where the same entity type takes part twice. They are also necessary when two relationship types link the same pair of entity types, such as home and away teams.</li>
+</ol>
+<p><strong>3.8.</strong></p>
+<ol>
+<li><strong>Cardinality ratio plus participation</strong>: 1:1, 1:N or M:N, plus total or partial participation. It is simple and easy to read, but it cannot state exact limits such as &quot;at least 5&quot;.</li>
+<li><strong>(min, max) on each participation</strong>: it is precise (the exact minimum and maximum) and extends to n-ary relationships. It is harder to read, and the reading direction is the opposite of cardinality ratios: (min, max) sits next to the entity it describes.</li>
+</ol>
+<p><strong>3.9.</strong> An attribute of a 1:1 relationship can migrate to either participant. An attribute of a 1:N relationship can migrate to the <strong>N side</strong> only, because each N-side entity takes part at most once. An attribute of an M:N relationship cannot migrate, because it depends on the combination. Example: Hours in WORKS_ON.</p>
+<p><strong>3.10.</strong></p>
+<ol>
+<li>A binary relationship can be seen as an attribute of each participant whose value set is the <strong>entity set of the other participant</strong>. The value is a single entity, or a set of entities if the attribute is multivalued. Example: EMPLOYEE.Department, with value set the DEPARTMENT entity set.</li>
+<li><strong>Functional data models</strong> and object models (including ODMG) use this idea. In them, relationships are references between objects.</li>
+</ol>
+<p><strong>3.11.</strong> A <strong>recursive</strong> relationship has the same entity type in two roles. Examples:</p>
+<ol>
+<li>SUPERVISION (EMPLOYEE supervises EMPLOYEE).</li>
+<li>PREREQUISITE (COURSE requires COURSE).</li>
+<li>MARRIED_TO (PERSON–PERSON).</li>
+<li>FRIEND_OF in a social network.</li>
+</ol>
+<p><strong>3.12.</strong></p>
+<ol>
+<li>A <strong>weak entity type</strong> has no key of its own and is identified by being related to another entity. It is used when entities exist only through another entity, such as a DEPENDENT of an EMPLOYEE, or a SECTION numbered within a COURSE.</li>
+<li>The <strong>owner</strong> (identifying) entity type is the one it depends on.</li>
+<li>The <strong>identifying relationship</strong> links the weak entity to its owner. The weak entity always has total participation in it.</li>
+<li>The <strong>partial key</strong> is the set of attributes that identifies a weak entity among those with the same owner. Example: Dependent_name.</li>
+</ol>
+<p><strong>3.13.</strong> <strong>Yes.</strong> Example: LANGUAGE_PROFICIENCY for a person, identified by both the PERSON and the LANGUAGE. Another example: a weak entity INTERVIEW identified through a ternary identifying relationship with CANDIDATE and COMPANY, with partial key Date. The weak entity's key is then the combination of all owners' keys plus the partial key.</p>
+</details>
+<h3 id="problem-13-eer-concept-6-pts-elmasri-4-2-4-6-4-7">Problem 13 [EER · Concept · 6 pts · Elmasri 4.2, 4.6, 4.7]</h3>
+<p>(4.2) Define superclass of a subclass, superclass/subclass relationship, IS-A relationship, specialization, generalization, category, specific (local) attributes, specific relationships. (4.6) Discuss the two main types of constraints on specializations and generalizations. (4.7) Specialization hierarchy versus lattice.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>4.2.</strong></p>
+<ol>
+<li>A <strong>subclass</strong> is a subset of the entities of another entity type, its <strong>superclass</strong>, that needs to be shown separately. Example: ENGINEER is a subclass of EMPLOYEE.</li>
+<li>The <strong>superclass/subclass relationship</strong> is the link between them. Every subclass member is the same real-world entity as a superclass member, playing a more specific role.</li>
+<li>It is also called an <strong>IS-A relationship</strong>: an ENGINEER IS-A EMPLOYEE.</li>
+<li><strong>Specialization</strong> is the process of defining subclasses of a superclass, top-down, based on some distinguishing characteristic.</li>
+<li><strong>Generalization</strong> is the reverse, bottom-up: common features of several entity types are combined into a superclass. Example: CAR and TRUCK generalize to VEHICLE.</li>
+<li>A <strong>category</strong> (union type) is a subclass of the <strong>union</strong> of several superclasses that may have different keys. Example: OWNER = PERSON ∪ BANK ∪ COMPANY. A member belongs to <strong>one</strong> of the superclasses.</li>
+<li><strong>Specific (local) attributes</strong> belong only to a subclass. Example: Typing_speed of SECRETARY.</li>
+<li><strong>Specific relationships</strong> have only the subclass as a participant. Example: only HOURLY_EMPLOYEE takes part in BELONGS_TO a trade union.</li>
+</ol>
+<p><strong>4.6.</strong></p>
+<ol>
+<li><strong>Disjointness</strong>:
+<ol>
+<li><strong>Disjoint (d)</strong>: an entity is in at most one subclass.</li>
+<li><strong>Overlapping (o)</strong>: an entity may be in several.</li>
+</ol>
+</li>
+<li><strong>Completeness</strong>:
+<ol>
+<li><strong>Total</strong> (double line): every superclass entity is in at least one subclass.</li>
+<li><strong>Partial</strong> (single line): some superclass entities may be in none.</li>
+</ol>
+</li>
+<li>The two constraints are independent, giving four combinations: disjoint total, disjoint partial, overlapping total, overlapping partial.</li>
+<li>Membership may also be <strong>predicate-defined</strong> (by a condition, or by a defining attribute) or <strong>user-defined</strong>.</li>
+</ol>
+<p><strong>4.7.</strong></p>
+<ol>
+<li>In a <strong>hierarchy</strong>, every subclass has <strong>exactly one</strong> superclass, so the classes form a tree.</li>
+<li>In a <strong>lattice</strong>, a subclass may have <strong>more than one</strong> superclass. Such a subclass is a <strong>shared subclass</strong>. Example: ENGINEERING_MANAGER is both a MANAGER and an ENGINEER.</li>
+<li>A shared subclass inherits from <strong>all</strong> its superclasses (multiple inheritance), and its members are in the <strong>intersection</strong>. A category's members are in the <strong>union</strong>.</li>
+</ol>
+</details>
+<h2 id="d-last-year-s-papers-and-extra-drills">D. Last year's papers and extra drills</h2>
+<h3 id="problem-14-eer-application-5-pts-m23-endsem-q7">Problem 14 [EER · Application · 5 pts · M23 endsem Q7]</h3>
+<p>TEACHES is a ternary relationship among PROFESSOR, COURSE and STUDENT (which professor teaches which course to which student). A course is taught by at least 1 and at most 2 professors and attended by at least 1 and at most 100 students; a professor teaches no course or at most 3 courses; a student attends no course or at most 6 courses. Give (min, max) for each participant.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumption.</strong> Every professor of a course teaches it to every student of that course. <em>(Reason: TEACHES records triples; without this assumption the maxima below are upper bounds that may not be reached.)</em></p>
+<p><strong>Working.</strong> For a ternary relationship, the (min, max) pair beside an entity type counts the <strong>triples</strong> (professor, course, student) in which one entity of that type appears.</p>
+<ol>
+<li><strong>COURSE.</strong> A course has at least one professor and at least one student, so it is in at least <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> triple. It has at most 2 professors and at most 100 students, so it is in at most <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">200</span></span></span></span> triples.</li>
+<li><strong>PROFESSOR.</strong> A professor may teach no course, so the minimum is 0. A professor teaches at most 3 courses, each with at most 100 students, so the maximum is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">300</span></span></span></span>.</li>
+<li><strong>STUDENT.</strong> A student may attend no course, so the minimum is 0. A student attends at most 6 courses, each with at most 2 professors, so the maximum is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">12</span></span></span></span>.</li>
+</ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p14-ternary.svg"><img class="fig" src="../../assets/fig/dna-p14-ternary.svg" alt="Ternary TEACHES with its (min, max)" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> COURSE <strong>(1, 200)</strong>, PROFESSOR <strong>(0, 300)</strong>, STUDENT <strong>(0, 12)</strong>.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> Writing (1, 2) for COURSE confuses the per-pair limit with the triple count. Add that the per-pair limits (&quot;at most 2 professors per course&quot;) cannot be expressed by (min, max) on the ternary alone.</p>
+</blockquote>
+</details>
+<h3 id="problem-15-eer-concept-4-pts">Problem 15 [EER · Concept · 4 pts]</h3>
+<p>Explain, with an example, why a ternary relationship is not equivalent to three binary relationships.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Answer.</strong> A ternary relationship records which combinations of <em>three</em> entities occur together. Three binary relationships record only which <em>pairs</em> occur, and the triples cannot in general be recovered from the pairs.</p>
+<p><strong>Example.</strong> Let SUPPLY(SUPPLIER, PART, PROJECT) mean &quot;supplier s supplies part p to project j&quot;, with the instance {(s1, p1, j2), (s1, p2, j1), (s2, p1, j1)}. Replace it by three binary relationships:</p>
+<ul>
+<li>CAN_SUPPLY(s, p) = {(s1, p1), (s1, p2), (s2, p1)}</li>
+<li>USES(j, p) = {(j2, p1), (j1, p2), (j1, p1)}</li>
+<li>SUPPLIES(s, j) = {(s1, j2), (s1, j1), (s2, j1)}</li>
+</ul>
+<p>From these pairs, (s1, p1, j1) looks possible: s1 can supply p1, j1 uses p1, and s1 supplies j1. Yet s1 never supplied p1 to j1. The binaries therefore lose information.</p>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p15-ternary-vs-binary.svg"><img class="fig" src="../../assets/fig/dna-p15-ternary-vs-binary.svg" alt="Ternary SUPPLY next to three binaries" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> They are not equivalent: the ternary stores exactly which triples occurred, which the binaries cannot reproduce. Binaries may be kept <em>in addition</em> to a ternary to express extra constraints, such as &quot;a supplier may supply only parts it can supply&quot;.</p>
+</details>
+<h3 id="problem-16-eer-concept-3-pts">Problem 16 [EER · Concept · 3 pts]</h3>
+<p>Distinguish total from partial and disjoint from overlapping specialization, with one example of each combination.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Definitions.</strong></p>
+<ol>
+<li><strong>Disjoint (d)</strong>: an entity of the superclass belongs to at most one subclass. <strong>Overlapping (o)</strong>: it may belong to several.</li>
+<li><strong>Total</strong>: every entity of the superclass belongs to at least one subclass (double line from the superclass to the circle). <strong>Partial</strong>: some entities belong to none (single line).</li>
+</ol>
+<p><strong>Examples of the four combinations.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Combination</th>
+<th>Example</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Disjoint, total</td>
+<td>EMPLOYEE → {HOURLY, SALARIED}</td>
+<td>every employee is paid in exactly one way</td>
+</tr>
+<tr>
+<td>Disjoint, partial</td>
+<td>EMPLOYEE → {SECRETARY, ENGINEER, TECHNICIAN}</td>
+<td>some employees have none of these jobs</td>
+</tr>
+<tr>
+<td>Overlapping, total</td>
+<td>PART → {MANUFACTURED, PURCHASED}</td>
+<td>a part can be both, and is at least one</td>
+</tr>
+<tr>
+<td>Overlapping, partial</td>
+<td>PERSON → {ACTOR, DIRECTOR}</td>
+<td>a person may be both, and the database also holds people who are neither</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p16-spec-kinds.svg"><img class="fig" src="../../assets/fig/dna-p16-spec-kinds.svg" alt="The four kinds of specialization" loading="lazy"></a></p>
+</details>
+<h3 id="problem-17-eer-concept-3-pts">Problem 17 [EER · Concept · 3 pts]</h3>
+<p>What is the difference between a shared subclass and a category?</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Answer.</strong></p>
+<ol>
+<li>A <strong>shared subclass</strong> has several superclasses and appears in a specialization lattice. Each of its entities belongs to <strong>all</strong> of its superclasses and inherits from all of them. Example: ENGINEERING_MANAGER is a subclass of both ENGINEER and MANAGER.</li>
+<li>A <strong>category</strong> (union type) is a subclass of the <strong>union</strong> of several superclasses, which usually have different keys. Each of its entities belongs to <strong>exactly one</strong> of the superclasses and inherits only from that one. Example: OWNER = PERSON ∪ BANK ∪ COMPANY. It is drawn with ∪ in the circle.</li>
+</ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p17-shared-vs-category.svg"><img class="fig" src="../../assets/fig/dna-p17-shared-vs-category.svg" alt="Shared subclass and category" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> A shared subclass is an intersection (member of all superclasses); a category is a union (member of one superclass).</p>
+</details>
+<h3 id="problem-18-eer-application-6-pts-m24-quiz-2-q3">Problem 18 [EER · Application · 6 pts · M24 Quiz 2 Q3]</h3>
+<p>Reverse-engineer an ER diagram from: EMPLOYEE(<strong>Ssn</strong>, Name, Dno), DEPARTMENT(<strong>Dnumber</strong>, Dname, Mgr_ssn), PROJECT(<strong>Pnumber</strong>, Pname, Dnum), WORKS_ON(<strong>Essn, Pno</strong>, Hours), DEPENDENT(<strong>Essn, Dependent_name</strong>, Relationship).</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Every project has at least one employee working on it. <em>(Reason: not stated; (0,N) would also be acceptable with the opposite assumption.)</em></li>
+<li>Mgr_ssn is never NULL, so every department has a manager. <em>(Reason: a department is managed by an employee.)</em></li>
+</ol>
+<p><strong>Working.</strong> Each relation is classified by the structure of its key.</p>
+<ol>
+<li>EMPLOYEE, DEPARTMENT and PROJECT each have a single-attribute key of their own, so they are <strong>strong entity types</strong>.</li>
+<li>DEPENDENT's key is (Essn, Dependent_name): a foreign key to EMPLOYEE plus a name that is unique only per employee. So DEPENDENT is a <strong>weak entity type</strong> with owner EMPLOYEE, partial key Dependent_name and identifying relationship DEPENDENTS_OF: EMPLOYEE (0,N), DEPENDENT (1,1).</li>
+<li>WORKS_ON's key consists of two foreign keys, so it is an <strong>M:N relationship</strong> between EMPLOYEE and PROJECT with attribute Hours: EMPLOYEE (1,N), PROJECT (1,N).</li>
+<li>EMPLOYEE.Dno is a single foreign key, so it is a <strong>1:N relationship</strong> WORKS_FOR: EMPLOYEE (1,1), DEPARTMENT (1,N).</li>
+<li>DEPARTMENT.Mgr_ssn is a single foreign key, and an employee manages at most one department, so it is a <strong>1:1 relationship</strong> MANAGES: DEPARTMENT (1,1), EMPLOYEE (0,1).</li>
+<li>PROJECT.Dnum is a single foreign key, giving the <strong>1:N relationship</strong> CONTROLS: PROJECT (1,1), DEPARTMENT (0,N).</li>
+</ol>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p18-company.svg"><img class="fig" src="../../assets/fig/dna-p18-company.svg" alt="ER diagram reverse-engineered from the relations" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> Strong entities EMPLOYEE, DEPARTMENT, PROJECT; weak entity DEPENDENT; relationships DEPENDENTS_OF (identifying), WORKS_ON (M:N, Hours), WORKS_FOR (1:N), MANAGES (1:1), CONTROLS (1:N), with the (min, max) pairs above.</p>
+<blockquote>
+<p><strong>Examiner's note.</strong> The rule of thumb: a key made only of foreign keys means a relationship; a foreign key plus a partial key means a weak entity; a lone foreign key means a 1:N or 1:1 relationship.</p>
+</blockquote>
+</details>
+<h3 id="problem-19-eer-application-6-pts-university-design-drill">Problem 19 [EER · Application · 6 pts · UNIVERSITY design drill]</h3>
+<p>A UNIVERSITY database: colleges have departments; departments offer courses with sections; instructors belong to departments, one of whom chairs it; students major in a department and register for sections with a grade. Name the entity types, keys, relationships and (min, max) you would use.</p>
+<details class="sol"><summary><span>Solution</span></summary>
+<p><em>Solution.</em></p>
+<p><strong>Assumptions.</strong></p>
+<ol>
+<li>Section numbers repeat across courses, so SECTION is weak with owner COURSE. <em>(Reason: universities number sections 1, 2, … per course.)</em></li>
+<li>A newly created department may have no courses yet. <em>(Reason: departments are created before their courses.)</em></li>
+<li>Every instructor belongs to exactly one department. <em>(Reason: given.)</em></li>
+</ol>
+<p><strong>Entity types.</strong> COLLEGE (key CName), DEPT (key DCode), COURSE (key CoCode), SECTION (weak, partial key SecNo, owner COURSE), INSTRUCTOR (key Id), STUDENT (key Sid).</p>
+<p><strong>Relationship types with (min, max).</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Participants and (min, max)</th>
+<th>Attribute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HAS</td>
+<td>COLLEGE (1,N), DEPT (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OFFERS</td>
+<td>DEPT (0,N), COURSE (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SECS (identifying)</td>
+<td>COURSE (0,N), SECTION (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>EMPLOYS</td>
+<td>DEPT (1,N), INSTRUCTOR (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CHAIRS</td>
+<td>DEPT (1,1), INSTRUCTOR (0,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TEACHES</td>
+<td>INSTRUCTOR (0,N), SECTION (1,1)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>MAJORS</td>
+<td>STUDENT (1,1), DEPT (0,N)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TAKES</td>
+<td>STUDENT (0,N), SECTION (0,N)</td>
+<td>Grade</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Diagram</strong> (tap to enlarge).</p>
+<p><a href="../../assets/fig/dna-p19-university.svg"><img class="fig" src="../../assets/fig/dna-p19-university.svg" alt="ER diagram of the UNIVERSITY drill" loading="lazy"></a></p>
+<p><strong>Final answer.</strong> The schema has the six entity types and eight relationship types above. Grade is an attribute of TAKES, because it describes a student in a particular section.</p>
+</details>
+</div>
+      <div class="done-row">
+        <span class="done-label">End of Practice</span>
+        <button class="done-btn" id="done-btn" type="button" aria-pressed="false">Mark chapter as read</button>
+      </div>
+      <nav class="prevnext"><a class="pn pn-prev" id="prev-link" href="../../dna/ch2-er-eer/reference.html"><small>← Previous</small><span>Reference: ER and EER modelling</span></a><a class="pn pn-next" id="next-link" href="../../dna/ch3-mapping/learn.html"><small>Next →</small><span>Learn: Mapping EER to relations</span></a></nav>
+    </article></main>
+  <aside class="outline" aria-label="On this page"><p>Contents</p><a class="l2" href="#a-assignment-2-this-year">A. Assignment 2 (this year)</a><a class="l3" href="#problem-1-eer-application-10-pts-assignment-2-individual-ia2">Problem 1 [EER · Application · 10 pts · Assignment 2 individual (IA2)]</a><a class="l3" href="#problem-2-eer-application-10-pts-assignment-2-group-ga2">Problem 2 [EER · Application · 10 pts · Assignment 2 group (GA2)]</a><a class="l2" href="#b-textbook-exercises-set-by-kamal">B. Textbook exercises set by Kamal</a><a class="l3" href="#problem-3-er-application-5-pts-elmasri-3-16">Problem 3 [ER · Application · 5 pts · Elmasri 3.16]</a><a class="l3" href="#problem-4-er-application-4-pts-elmasri-3-17">Problem 4 [ER · Application · 4 pts · Elmasri 3.17]</a><a class="l3" href="#problem-5-er-application-8-pts-elmasri-3-22">Problem 5 [ER · Application · 8 pts · Elmasri 3.22]</a><a class="l3" href="#problem-6-er-application-5-pts-elmasri-3-26">Problem 6 [ER · Application · 5 pts · Elmasri 3.26]</a><a class="l3" href="#problem-7-eer-application-10-pts-elmasri-4-16">Problem 7 [EER · Application · 10 pts · Elmasri 4.16]</a><a class="l3" href="#problem-8-eer-application-8-pts-elmasri-4-17">Problem 8 [EER · Application · 8 pts · Elmasri 4.17]</a><a class="l3" href="#problem-9-eer-application-8-pts-elmasri-4-18">Problem 9 [EER · Application · 8 pts · Elmasri 4.18]</a><a class="l3" href="#problem-10-eer-application-12-pts-elmasri-4-19">Problem 10 [EER · Application · 12 pts · Elmasri 4.19]</a><a class="l3" href="#problem-11-eer-application-10-pts-elmasri-4-20">Problem 11 [EER · Application · 10 pts · Elmasri 4.20]</a><a class="l2" href="#c-review-questions-short-answers">C. Review questions (short answers)</a><a class="l3" href="#problem-12-er-concept-10-pts-elmasri-3-3-3-13">Problem 12 [ER · Concept · 10 pts · Elmasri 3.3–3.13]</a><a class="l3" href="#problem-13-eer-concept-6-pts-elmasri-4-2-4-6-4-7">Problem 13 [EER · Concept · 6 pts · Elmasri 4.2, 4.6, 4.7]</a><a class="l2" href="#d-last-year-s-papers-and-extra-drills">D. Last year's papers and extra drills</a><a class="l3" href="#problem-14-eer-application-5-pts-m23-endsem-q7">Problem 14 [EER · Application · 5 pts · M23 endsem Q7]</a><a class="l3" href="#problem-15-eer-concept-4-pts">Problem 15 [EER · Concept · 4 pts]</a><a class="l3" href="#problem-16-eer-concept-3-pts">Problem 16 [EER · Concept · 3 pts]</a><a class="l3" href="#problem-17-eer-concept-3-pts">Problem 17 [EER · Concept · 3 pts]</a><a class="l3" href="#problem-18-eer-application-6-pts-m24-quiz-2-q3">Problem 18 [EER · Application · 6 pts · M24 Quiz 2 Q3]</a><a class="l3" href="#problem-19-eer-application-6-pts-university-design-drill">Problem 19 [EER · Application · 6 pts · UNIVERSITY design drill]</a></aside>
+</div>
+<aside class="scratch-drawer" id="scratch-drawer" aria-label="Margin scratchpad and external connectors">
+  <div class="scratch-head">
+    <b>Margin Scratchpad &amp; Connectors</b>
+    <button class="btn small" id="scratch-close" type="button">Close</button>
+  </div>
+  <div class="scratch-body">
+    <span class="hint">Jot derivations, exam reminders, or proof sketches for this page (saved automatically in browser storage):</span>
+    <textarea class="scratch-area" id="scratch-area" placeholder="Write personal notes, theorem reminders, or scratch calculations…"></textarea>
+    <div class="connectors-box">
+      <p>External Math &amp; Study Connectors</p>
+      <div class="conn-grid">
+        <a class="conn-link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><span>Desmos Graphing</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span>WolframAlpha</span><span>↗</span></a>
+        <a class="conn-link" href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener"><span>Seeing Theory</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.probabilitycourse.com/" target="_blank" rel="noopener"><span>Pishro-Nik Text</span><span>↗</span></a>
+        <a class="conn-link" href="https://statlect.com/" target="_blank" rel="noopener"><span>StatLect Proofs</span><span>↗</span></a>
+        <a class="conn-link" href="https://www.randomservices.org/random/" target="_blank" rel="noopener"><span>Virtual Labs</span><span>↗</span></a>
+      </div>
+    </div>
+  </div>
+</aside>
+<button class="to-top" id="to-top" aria-label="Back to top" hidden title="Back to top">↑</button>
+<div class="scrim" id="scrim" hidden></div>
+<script src="../../assets/app.js?v=mwy042pa" defer></script>
+</body>
+</html>
