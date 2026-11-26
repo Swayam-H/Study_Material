@@ -5,6 +5,12 @@
   "blurb": "From sample spaces and the axioms to Gaussian vectors, estimation and Bayesian inference.",
   "docs": [
     {
+      "slug": "last-day",
+      "file": "last-day-practice.md",
+      "title": "Last day practice (endsem)",
+      "about": "10 to 12 problems for each of the 15 endsem questions, basics to hard, plus new problems where the notes were thin"
+    },
+    {
       "slug": "l1-l8",
       "file": "L1-L8-notes.md",
       "title": "Lectures 1 to 8",

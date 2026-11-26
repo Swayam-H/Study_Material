@@ -2169,3 +2169,6 @@ html.sm-locked body > *:not(#sm-gate) { display: none !important; }
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="paper"]):not([data-theme="light"]):not([data-theme="sepia"]) { --bad: #f87171; --bad-soft: #3a1d1d; } }
 :root[data-theme="dark"] { --bad: #f87171; --bad-soft: #3a1d1d; }
+
+.ld-field select { border-color: var(--accent); }
+.p-tags i.src.ld { color: var(--accent); border-color: var(--accent); font-weight: 600; }

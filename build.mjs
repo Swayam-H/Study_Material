@@ -317,6 +317,8 @@ for (const dir of fs.readdirSync(CONTENT, { withFileTypes: true }).filter(d => d
         const ti = course.tagInfo && course.tagInfo.problems[rec.id];
         if (ti) { rec.tp = ti.t; rec.lec = ti.lec; rec.df = ti.diff; rec.pr = ti.pri; if (ti.diff === 'H') rec.hard = true; }
         else if (course.tagInfo) console.warn(`  untagged problem: ${rec.id}`);
+        const ld = course.tagInfo && course.tagInfo.lastDay && course.tagInfo.lastDay.problems[rec.id];
+        if (ld) { rec.ld = ld; rec.tags = ['Last day practice', ...rec.tags.filter(t => t !== 'Other')]; }
         const tx = searchText(pr.stmt.map(([a, b]) => tokens.slice(a, b + 1).filter(x => x.type === 'inline').map(x => x.content).join(' ')).join(' '));
         searchIndex.push({ u: rec.u, c: `Problem · ${chTitle}`, t: `${pr.label}${pr.src ? ' (' + pr.src + ')' : ''}`, x: tx, k: 1 });
         return rec;
@@ -687,6 +689,7 @@ for (const c of courses) {
       <label class="field"><span>Lecture</span><select id="f-lec"><option value="">All lectures</option>${lecs.map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('')}</select></label>
       <label class="field"><span>Difficulty</span><select id="f-diff"><option value="">Any</option><option value="E">Easy</option><option value="M">Medium</option><option value="H">Hard</option></select></label>
       <label class="field"><span>Exam priority</span><select id="f-pri"><option value="">Any</option><option value="3">★★★ seen in past exams</option><option value="2">★★ and up</option></select></label>` : ''}
+      ${ti && ti.lastDay ? `<label class="field ld-field"><span>Last day practice</span><select id="f-ld"><option value="">Off</option><option value="*">All endsem topics</option>${ti.lastDay.topics.map(t => `<option value="${esc(t)}">${esc(t)} (${c.problems.filter(p => p.ld === t).length})</option>`).join('')}</select></label>` : ''}
       <label class="field"><span>Status</span><select id="f-status"><option value="">Any status</option><option value="todo">Not attempted</option><option value="due">Due for retry</option><option value="retry">Shaky or wrong (all)</option><option value="done">Got it</option><option value="shaky">Shaky</option><option value="review">Wrong</option></select></label>
       <button class="btn primary" id="f-random" type="button">Random pick</button>
     </div>

@@ -15,6 +15,7 @@
   "Sums and convolution",
   "MGFs",
   "Simulation and Monte Carlo",
+  "Probabilistic inequalities",
   "Convergence and LLN",
   "CLT",
   "Random and Gaussian vectors",
@@ -2640,6 +2641,179 @@
    "lec": "L15",
    "diff": "M",
    "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-1-inequalities-markov-then-chebyshev-then-exact": {
+   "t": [
+    "Probabilistic inequalities"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-2-inequalities-proving-chebyshev-from-markov": {
+   "t": [
+    "Probabilistic inequalities"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-3-inequalities-how-tight-are-they": {
+   "t": [
+    "Probabilistic inequalities"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-4-inequalities-at-least-how-much-is-near-the-mean": {
+   "t": [
+    "Probabilistic inequalities"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-5-inequalities-the-union-bound": {
+   "t": [
+    "Probabilistic inequalities"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-6-inequalities-chebyshev-for-an-average": {
+   "t": [
+    "Probabilistic inequalities",
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-7-inequalities-markov-proves-convergence-in-probabil": {
+   "t": [
+    "Probabilistic inequalities",
+    "Convergence and LLN"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-8-inequalities-when-chebyshev-says-nothing": {
+   "t": [
+    "Probabilistic inequalities"
+   ],
+   "lec": "L18",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-9-inequalities-markov-chebyshev-and-the-clt-on-one-q": {
+   "t": [
+    "Probabilistic inequalities",
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-10-inequalities-sample-size-from-chebyshev-and-from-": {
+   "t": [
+    "Probabilistic inequalities",
+    "CLT"
+   ],
+   "lec": "L18",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-probabilistic-inequalities#problem-11-inequalities-the-mgf-bound-beats-chebyshev-hard": {
+   "t": [
+    "Probabilistic inequalities",
+    "MGFs"
+   ],
+   "lec": "L18",
+   "diff": "H",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-slln#problem-1-slln-limits-you-can-read-off": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "E",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-slln#problem-2-slln-when-it-applies-and-when-it-fails": {
+   "t": [
+    "Convergence and LLN",
+    "Simulation and Monte Carlo"
+   ],
+   "lec": "L17",
+   "diff": "M",
+   "pri": 2
+  },
+  "pns/last-day/new-problems-slln#problem-3-slln-the-renewal-rate-hard": {
+   "t": [
+    "Convergence and LLN"
+   ],
+   "lec": "L17",
+   "diff": "H",
+   "pri": 2
+  }
+ },
+ "lastDay": {
+  "topics": [
+   "Accept–reject",
+   "Bayesian inference",
+   "Limit theorems",
+   "Random vectors",
+   "MGF",
+   "Tower rule",
+   "Conditioning",
+   "Marginalization",
+   "Inverse transform",
+   "Monte Carlo",
+   "Probabilistic inequalities",
+   "SLLN and CLT",
+   "MSE and MLE"
+  ],
+  "problems": {
+   "pns/l14-l20/lecture-18#p-b1": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b2": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b3": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b5": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b9": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b10": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b11": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b12": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b17": "Limit theorems",
+   "pns/l14-l20/lecture-18#p-b19": "Limit theorems",
+   "pns/mock-endsem/mock-endsem-solutions#problem-7-endsem-q7-convergence-of-u-5-1n-5-1n": "Limit theorems",
+   "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-9-mixed-mle-convergence-in-probability-and-in-distri": "Limit theorems",
+   "pns/l14-l20/lecture-17#p-b9": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b22": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b25": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b27": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b29": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b32": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b33": "SLLN and CLT",
+   "pns/mock-endsem/mock-endsem-solutions#problem-8-new-replaces-the-markov-chain-question-clt-for-dic": "SLLN and CLT",
+   "pns/mixed-problems/mixed-problems-several-topics-at-once#problem-8-mixed-mgfs-the-gamma-sum-exact-vs-clt": "SLLN and CLT",
+   "pns/l14-l20/lecture-18#p-b4": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-1-inequalities-markov-then-chebyshev-then-exact": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-2-inequalities-proving-chebyshev-from-markov": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-3-inequalities-how-tight-are-they": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-4-inequalities-at-least-how-much-is-near-the-mean": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-5-inequalities-the-union-bound": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-6-inequalities-chebyshev-for-an-average": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-7-inequalities-markov-proves-convergence-in-probabil": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-8-inequalities-when-chebyshev-says-nothing": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-9-inequalities-markov-chebyshev-and-the-clt-on-one-q": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-10-inequalities-sample-size-from-chebyshev-and-from-": "Probabilistic inequalities",
+   "pns/last-day/new-problems-probabilistic-inequalities#problem-11-inequalities-the-mgf-bound-beats-chebyshev-hard": "Probabilistic inequalities",
+   "pns/last-day/new-problems-slln#problem-1-slln-limits-you-can-read-off": "SLLN and CLT",
+   "pns/last-day/new-problems-slln#problem-2-slln-when-it-applies-and-when-it-fails": "SLLN and CLT",
+   "pns/last-day/new-problems-slln#problem-3-slln-the-renewal-rate-hard": "SLLN and CLT"
   }
  }
 }

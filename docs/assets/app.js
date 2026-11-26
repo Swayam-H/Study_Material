@@ -785,7 +785,7 @@
     var pBox = document.querySelector('.practice');
     var topics = pBox && pBox.dataset.topics ? JSON.parse(pBox.dataset.topics) : [];
     var focus = pBox && pBox.dataset.focus ? JSON.parse(pBox.dataset.focus) : [];
-    var state = { q: '', doc: '', status: '', topic: '', lec: '', diff: '', pri: '', tags: {}, shown: 15, only: null, mode: 'list', deckIdx: 0 };
+    var state = { q: '', doc: '', status: '', topic: '', lec: '', diff: '', pri: '', ld: '', tags: {}, shown: 15, only: null, mode: 'list', deckIdx: 0 };
     var statusOf = function (p) { return probs[p.id] || 'todo'; };
     var isDue = function (p) { return isRetry(probs[p.id]) && (due[p.id] || 0) <= Date.now(); };
     var RATE = { done: '✓ Got it', shaky: '~ Shaky', review: '✗ Wrong' };
@@ -817,7 +817,7 @@
         (p.lec ? '<i>' + esc(p.lec) + '</i>' : '') +
         (p.df ? '<i class="diff d-' + p.df + '">' + DIFF[p.df] + '</i>' : (p.hard ? '<i class="hard">Hard</i>' : '')) +
         (p.pr ? '<i class="pri" title="Exam priority">' + stars(p.pr) + '</i>' : '') +
-        p.tags.filter(function (t) { return t !== 'Other'; }).map(function (t) { return '<i class="src">' + esc(t) + '</i>'; }).join('');
+        p.tags.filter(function (t) { return t !== 'Other'; }).map(function (t) { return '<i class="src' + (t === 'Last day practice' ? ' ld' : '') + '">' + esc(t === 'Last day practice' && p.ld ? 'Last day: ' + p.ld : t) + '</i>'; }).join('');
       return '<article class="p-card st-' + st + (rated ? ' revealed' : '') + '" data-pid="' + esc(p.id) + '">' +
         '<header><span class="p-tags">' + meta + '</span><a href="' + root + esc(p.u) + '">' + esc(p.c) + ' →</a></header>' +
         '<div class="prose p-q">' + p.q + '</div>' +
@@ -829,6 +829,7 @@
       if (state.doc && p.d !== state.doc) return false;
       if (skip !== 'topic' && state.topic && (p.tp || []).indexOf(state.topic) < 0) return false;
       if (state.lec && p.lec !== state.lec) return false;
+      if (state.ld && (state.ld === '*' ? !p.ld : p.ld !== state.ld)) return false;
       if (state.diff && p.df !== state.diff) return false;
       if (state.pri && (p.pr || 0) < +state.pri) return false;
       if (skip !== 'status' && state.status) {
@@ -847,6 +848,7 @@
       var all = window.NOTES_PROBLEMS || [];
       if (state.only) return all.filter(function (p) { return p.id === state.only; });
       var list = all.filter(function (p) { return match(p); });
+      if (state.ld) { var rk = { E: 0, M: 1, H: 2 }; list = list.map(function (p, i) { return [p, i]; }).sort(function (a, b) { return (rk[a[0].df] || 1) - (rk[b[0].df] || 1) || a[1] - b[1]; }).map(function (x) { return x[0]; }); }
       if (state.status === 'due') list.sort(function (a, b) { return (statusOf(b) === 'review') - (statusOf(a) === 'review') || (due[a.id] || 0) - (due[b.id] || 0); });
       return list;
     };
@@ -917,7 +919,7 @@
     var reset = function () { state.shown = 15; state.only = null; state.deckIdx = 0; };
     var setFilter = function (k, v) {
       state[k] = v; reset();
-      var el = $({ status: 'f-status', topic: 'f-topic', lec: 'f-lec', diff: 'f-diff', pri: 'f-pri', doc: 'f-doc' }[k]);
+      var el = $({ status: 'f-status', topic: 'f-topic', lec: 'f-lec', diff: 'f-diff', pri: 'f-pri', doc: 'f-doc', ld: 'f-ld' }[k]);
       if (el) el.value = v;
       render();
     };
@@ -962,7 +964,7 @@
     }, true);
 
     var bindSel = function (id, k) { var el = $(id); if (el) el.addEventListener('change', function (e) { setFilter(k, e.target.value); }); };
-    bindSel('f-doc', 'doc'); bindSel('f-status', 'status'); bindSel('f-topic', 'topic'); bindSel('f-lec', 'lec'); bindSel('f-diff', 'diff'); bindSel('f-pri', 'pri');
+    bindSel('f-doc', 'doc'); bindSel('f-status', 'status'); bindSel('f-topic', 'topic'); bindSel('f-lec', 'lec'); bindSel('f-diff', 'diff'); bindSel('f-pri', 'pri'); bindSel('f-ld', 'ld');
     if ($('f-q')) $('f-q').addEventListener('input', function (e) { state.q = e.target.value; reset(); render(); });
     $('f-tags').addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b) return;
@@ -1024,10 +1026,12 @@
       h.forEach(function (x) {
         if (x === 'review' || x === 'retry') { state.status = 'retry'; got = true; }
         else if (x === 'due') { state.status = 'due'; got = true; }
+        else if (x === 'lastday') { state.ld = '*'; got = true; }
+        else if (x.indexOf('ld=') === 0) { state.ld = decodeURIComponent(x.slice(3)); got = true; }
         else if (x.indexOf('doc=') === 0) { state.doc = x.slice(4); got = true; }
         else if (x.indexOf('topic=') === 0) { state.topic = decodeURIComponent(x.slice(6)); got = true; }
       });
-      ['f-status', 'f-doc', 'f-topic'].forEach(function (id, i) { var el = $(id); if (el) el.value = state[['status', 'doc', 'topic'][i]]; });
+      ['f-status', 'f-doc', 'f-topic', 'f-ld'].forEach(function (id, i) { var el = $(id); if (el) el.value = state[['status', 'doc', 'topic', 'ld'][i]]; });
       if (got) reset();
       return got;
     };
