@@ -33,123 +33,148 @@ The two tools are **Markov's inequality**, $P(X\ge a)\le\frac{E[X]}{a}$ for $X\g
 
 $X\ge0$ has $E[X] = 2$. (a) Bound $P(X\ge10)$. (b) If also $\text{Var}(X) = 1$, give a better bound. (c) Find $P(X\ge10)$ exactly when $X$ is exponential with mean 2.
 
-**Solution.** (a) Markov: $P(X\ge10)\le\frac{2}{10} = 0.2$.
+**Solution.** (a) Markov ($X\ge0$): $P(X\ge10)\le\frac{E[X]}{10} = \frac{2}{10} = 0.2$.
 
 (b) $X\ge10$ means $X - 2\ge8$, which implies $|X - 2|\ge8$. So by Chebyshev,
-$$P(X\ge10)\le P(|X - 2|\ge8)\le\frac{1}{64}\approx0.016 .$$
-(c) Rate $\frac12$: $P(X\ge10) = e^{-10/2} = e^{-5}\approx0.0067$.
+$$P(X\ge10)\le P(|X - 2|\ge8)\le\frac{\operatorname{Var}(X)}{8^2} = \frac{1}{64}\approx0.016 .$$
+(Chebyshev bounds both tails; the event is only the upper one, so this is loose by up to a factor of 2.)
 
-Each extra piece of information (mean, then variance, then the whole distribution) gives a sharper answer. (An exponential with mean 2 has variance 4, so for it Chebyshev gives $\frac{4}{64}\approx0.063$, still above the exact $0.0067$.)
+(c) Mean 2 means rate $\frac12$: $P(X\ge10) = e^{-10/2} = e^{-5}\approx0.0067$.
+
+More information (mean, then variance, then the full distribution) gives a sharper answer. Note that an exponential with mean 2 has variance 4, not 1, so for it Chebyshev gives $\frac{4}{64}\approx0.063$.
 
 ### Problem 2 [Inequalities: proving Chebyshev from Markov]
 
 (a) Prove Chebyshev's inequality from Markov's. (b) Show that for any $t>0$, $P(X\ge a)\le e^{-ta}M_X(t)$.
 
-**Solution.** (a) $(X - \mu)^2\ge0$, and $|X - \mu|\ge c$ exactly when $(X - \mu)^2\ge c^2$. Markov applied to $(X-\mu)^2$ with $a = c^2$:
+**Solution.** Both parts apply Markov, $P(Y\ge b)\le\frac{E[Y]}{b}$ for $Y\ge0$, to a nonnegative function of $X$.
+
+(a) Take $Y = (X - \mu)^2\ge0$. Since $|X - \mu|\ge c\iff(X - \mu)^2\ge c^2$,
 $$P(|X - \mu|\ge c) = P\big((X - \mu)^2\ge c^2\big)\le\frac{E[(X - \mu)^2]}{c^2} = \frac{\sigma^2}{c^2}.$$
-(b) For $t>0$, $x\mapsto e^{tx}$ is increasing and positive, so $\{X\ge a\} = \{e^{tX}\ge e^{ta}\}$. Then Markov gives
+
+(b) Take $Y = e^{tX}>0$. For $t>0$, $x\mapsto e^{tx}$ is increasing, so $\{X\ge a\} = \{e^{tX}\ge e^{ta}\}$ and
 $$P(X\ge a) = P(e^{tX}\ge e^{ta})\le\frac{E[e^{tX}]}{e^{ta}} = e^{-ta}M_X(t).$$
-The trick in both parts is the same: apply Markov to a nonnegative, increasing function of $X$.
 
 ### Problem 3 [Inequalities: how tight are they?]
 
 (a) Find a nonnegative $X$ with $E[X] = \mu$ for which Markov's bound $P(X\ge a)\le\frac\mu a$ holds with equality ($a\ge\mu$). (b) For $k\ge1$, find an $X$ with mean $\mu$ and variance $\sigma^2$ for which $P(|X-\mu|\ge k\sigma) = \frac{1}{k^2}$.
 
-**Solution.** (a) Put all the mass that is at least $a$ exactly at $a$, and the rest at 0. Let $X = a$ with probability $\frac\mu a$, otherwise $0$. Then $E[X] = \mu$ and $P(X\ge a) = \frac\mu a$.
+**Solution.** (a) Markov's proof uses $X\ge a\mathbf 1\{X\ge a\}$, which is an equality only if $X$ takes just the values 0 and $a$. So let
+$$X = \begin{cases}a & \text{with probability }\frac\mu a\\ 0 & \text{otherwise.}\end{cases}$$
+Then $E[X] = a\cdot\frac\mu a = \mu$ and $P(X\ge a) = \frac\mu a$.
 
-(b) Let $X = \mu\pm k\sigma$ with probability $\frac{1}{2k^2}$ each, and $X = \mu$ otherwise. By symmetry the mean is $\mu$, and
-$$\text{Var}(X) = 2\cdot\frac{1}{2k^2}(k\sigma)^2 = \sigma^2,\qquad P(|X - \mu|\ge k\sigma) = \frac1{k^2}.$$
-So neither inequality can be improved without more information. In practice they're loose because real distributions don't pile their mass right at the edge.
+(b) Same idea for $(X - \mu)^2$: put mass only at $\mu$ and at $\mu\pm k\sigma$. Let $X = \mu\pm k\sigma$ with probability $\frac{1}{2k^2}$ each, and $X = \mu$ otherwise ($k\ge1$ keeps the probabilities valid). By symmetry the mean is $\mu$, and
+$$\text{Var}(X) = 2\cdot\frac{1}{2k^2}(k\sigma)^2 = \sigma^2,\qquad P(|X - \mu|\ge k\sigma) = 2\cdot\frac{1}{2k^2} = \frac1{k^2}.$$
+So neither inequality can be improved without more information about the distribution.
 
 ### Problem 4 [Inequalities: at least how much is near the mean?]
 
 $X$ has mean 10 and standard deviation 2. (a) Give a lower bound for $P(6<X<14)$. (b) What fraction of the probability lies within 3 standard deviations of the mean, at the very least? (c) Compare (a) with the answer when $X$ is normal.
 
-**Solution.** (a) $P(6<X<14) = 1 - P(|X - 10|\ge4)\ge1 - \frac{4}{16} = 0.75$.
+**Solution.** (a) $6<X<14$ is $|X - 10|<4$. By the complement and Chebyshev,
+$$P(6<X<14) = 1 - P(|X - 10|\ge4)\ge1 - \frac{\sigma^2}{4^2} = 1 - \frac{4}{16} = 0.75 .$$
 
-(b) $1 - \frac1{3^2} = \frac89\approx0.889$.
+(b) With $c = 3\sigma$: $P(|X - \mu|<3\sigma)\ge1 - \frac{\sigma^2}{9\sigma^2} = \frac89\approx0.889$.
 
-(c) For a normal, $P(|Z|<2) = 0.954$. Chebyshev's 0.75 holds for **every** distribution with this mean and variance, which is why it's so much lower.
+(c) $\pm4$ is $\pm2$ SDs. For a normal, $P(|Z|<2) = 0.954$. Chebyshev's 0.75 must hold for **every** distribution with this mean and variance, which is why it is lower.
 
 ### Problem 5 [Inequalities: the union bound]
 
 A machine has 10 parts. Each part fails during a day with probability 0.01, but the failures may be dependent. (a) Bound $P(\text{some part fails})$. (b) Find it exactly if the failures are independent. (c) What is the smallest possible value of $P(\text{some part fails})$?
 
-**Solution.** (a) By the union bound, $P\big(\bigcup_iF_i\big)\le\sum_iP(F_i) = 10(0.01) = 0.1$.
+**Solution.** Let $F_i$ = part $i$ fails.
 
-(b) $1 - 0.99^{10}\approx0.0956$, just under the bound.
+(a) Union bound (no independence needed):
+$$P\Big(\bigcup_{i=1}^{10}F_i\Big)\le\sum_{i=1}^{10}P(F_i) = 10(0.01) = 0.1 .$$
 
-(c) $\bigcup F_i\supseteq F_1$, so the probability is at least $0.01$. This is attained when all ten parts fail together (the same event). So the true answer lies in $[0.01, 0.1]$ whatever the dependence. The union bound needs no independence at all, which is why it's so useful.
+(b) Independent: $P(\text{some fails}) = 1 - P(\text{none fails}) = 1 - 0.99^{10}\approx0.0956$, just under the bound.
+
+(c) $\bigcup F_i\supseteq F_1$, so the probability is at least $P(F_1) = 0.01$. This is attained when all ten parts fail together ($F_1 = \dots = F_{10}$). So whatever the dependence, the answer lies in $[0.01, 0.1]$.
 
 ### Problem 6 [Inequalities: Chebyshev for an average]
 
 $X_1,\dots,X_n$ are independent with the same mean $\mu$, and $\text{Var}(X_i)\le C$ for all $i$ (they need not have the same distribution). Let $M_n = \frac1n\sum_{i=1}^nX_i$. (a) Bound $\text{Var}(M_n)$. (b) Show $M_n\to\mu$ in probability.
 
-**Solution.** (a) By independence, $\text{Var}(M_n) = \frac{1}{n^2}\sum\text{Var}(X_i)\le\frac{nC}{n^2} = \frac Cn$.
+**Solution.** (a) By independence, the variance of the sum is the sum of the variances:
+$$\text{Var}(M_n) = \frac{1}{n^2}\sum_{i=1}^n\text{Var}(X_i)\le\frac{nC}{n^2} = \frac Cn .$$
 
-(b) $E[M_n] = \mu$, so by Chebyshev, for every $\epsilon>0$,
-$$P(|M_n - \mu|\ge\epsilon)\le\frac{C}{n\epsilon^2}\to0 .$$
-This is the weak law of large numbers, and it didn't need identical distributions. Bounded variances are enough. (Independence can even be weakened to "uncorrelated", since only the variance of the sum was used.)
+(b) $E[M_n] = \frac1n\sum E[X_i] = \mu$, so by Chebyshev, for every $\epsilon>0$,
+$$P(|M_n - \mu|\ge\epsilon)\le\frac{\text{Var}(M_n)}{\epsilon^2}\le\frac{C}{n\epsilon^2}\to0 .$$
+This is the weak law of large numbers without identical distributions: bounded variances suffice. Only the variance of the sum was used, so "uncorrelated" is enough in place of independent.
 
 ### Problem 7 [Inequalities: Markov proves convergence in probability]
 
 (a) $X_n\ge0$ and $E[X_n] = \frac1n$. Show $X_n\xrightarrow{p}0$. (b) Give an example where $X_n\xrightarrow{p}0$ but $E[X_n]\not\to0$, so Markov can't be used.
 
-**Solution.** (a) For $\epsilon>0$, Markov gives $P(X_n\ge\epsilon)\le\frac{1}{n\epsilon}\to0$.
+**Solution.** (a) $X_n\ge0$, so for $\epsilon>0$ Markov gives
+$$P(|X_n - 0|\ge\epsilon) = P(X_n\ge\epsilon)\le\frac{E[X_n]}{\epsilon} = \frac{1}{n\epsilon}\to0 .$$
 
-(b) Let $X_n = n^2$ with probability $\frac1n$, and $0$ otherwise. Then $P(X_n>\epsilon) = \frac1n\to0$, but $E[X_n] = n\to\infty$. Markov is a sufficient tool, not a necessary one. When the mean blows up, compute $P(|X_n|>\epsilon)$ directly.
+(b) Let $X_n = n^2$ with probability $\frac1n$, and $0$ otherwise. For any $\epsilon>0$, $P(X_n>\epsilon)\le\frac1n\to0$, so $X_n\xrightarrow{p}0$. But $E[X_n] = n^2\cdot\frac1n = n\to\infty$, so Markov's bound $\frac{n}{\epsilon}$ is useless. Markov is sufficient, not necessary: when the mean blows up, compute $P(|X_n|>\epsilon)$ directly.
 
 ### Problem 8 [Inequalities: when Chebyshev says nothing]
 
 $X\sim\mathcal U[0,1]$. Compare the Chebyshev bound with the exact value of $P\big(|X - \frac12|\ge c\big)$ for (a) $c = 0.4$ and (b) $c = 0.25$.
 
-**Solution.** $\text{Var}(X) = \frac1{12}$, and exactly $P(|X - \frac12|\ge c) = 1 - 2c$ for $0\le c\le\frac12$.
+**Solution.** $\text{Var}(X) = \frac1{12}$. Exactly, $|X - \frac12|\ge c$ means $X\le\frac12 - c$ or $X\ge\frac12 + c$, two intervals of length $\frac12 - c$:
+$$P\big(|X - \tfrac12|\ge c\big) = 1 - 2c,\qquad0\le c\le\tfrac12 .$$
 
-(a) Chebyshev: $\frac{1/12}{0.16}\approx0.52$. Exact: $0.2$.
+(a) Chebyshev: $\frac{1/12}{0.4^2} = \frac{1/12}{0.16}\approx0.52$. Exact: $1 - 0.8 = 0.2$.
 
-(b) Chebyshev: $\frac{1/12}{0.0625}\approx1.33$. That's bigger than 1, so it tells you nothing. Exact: $0.5$.
+(b) Chebyshev: $\frac{1/12}{0.25^2} = \frac{1/12}{0.0625}\approx1.33$. That exceeds 1, so it says nothing. Exact: $0.5$.
 
-The bound only becomes informative when $c$ is a few standard deviations ($\sigma\approx0.29$ here).
+Chebyshev only becomes informative when $c$ is more than one standard deviation ($\sigma = \frac1{\sqrt{12}}\approx0.29$ here), since the bound is $\frac{\sigma^2}{c^2}$.
 
 ### Problem 9 [Inequalities: Markov, Chebyshev and the CLT on one question]
 
 $X\sim\text{Binomial}(100, 0.5)$. Bound or approximate $P(X\ge75)$ with (a) Markov, (b) Chebyshev, (c) the CLT.
 
-**Solution.** $E[X] = 50$ and $\text{Var}(X) = 25$.
+**Solution.** $E[X] = np = 50$ and $\text{Var}(X) = np(1-p) = 25$, SD 5.
 
-(a) $P(X\ge75)\le\frac{50}{75}\approx0.67$.
+(a) Markov ($X\ge0$): $P(X\ge75)\le\frac{50}{75}\approx0.67$.
 
-(b) $P(X\ge75)\le P(|X - 50|\ge25)\le\frac{25}{625} = 0.04$.
+(b) $X\ge75\Rightarrow|X - 50|\ge25$, so Chebyshev gives $P(X\ge75)\le\frac{25}{25^2} = 0.04$.
 
-(c) With the continuity correction, $P(X\ge74.5)\approx P\big(Z\ge\frac{24.5}{5}\big) = P(Z\ge4.9)\approx5\times10^{-7}$.
+(c) With the continuity correction,
+$$P(X\ge75) = P(X\ge74.5)\approx P\Big(Z\ge\frac{74.5 - 50}{5}\Big) = P(Z\ge4.9)\approx5\times10^{-7}.$$
 
-The three answers differ by six orders of magnitude. Markov uses only the mean, Chebyshev the variance, and the CLT the (approximate) shape.
+The answers span six orders of magnitude: Markov uses only the mean, Chebyshev adds the variance, and the CLT uses the approximate shape.
 
 ### Problem 10 [Inequalities: sample size from Chebyshev and from the CLT]
 
 A poll estimates an unknown fraction $p$ by the sample fraction $M_n$ of $n$ people. (a) Use Chebyshev to find $n$ so that $P(|M_n - p|\ge0.05)\le0.1$ whatever $p$ is. (b) Redo it with the CLT.
 
-**Solution.** $\text{Var}(M_n) = \frac{p(1-p)}{n}\le\frac{1}{4n}$, because $p(1-p)\le\frac14$.
+**Solution.** $M_n$ is an average of $n$ i.i.d. Bernoulli$(p)$ variables, so $E[M_n] = p$ and
+$$\text{Var}(M_n) = \frac{p(1-p)}{n}\le\frac{1}{4n},$$
+because $p(1-p)\le\frac14$ for all $p$ (maximised at $p = \frac12$). This worst case makes the answer valid whatever $p$ is.
 
-(a) We need $\frac{1}{4n(0.05)^2}\le0.1$, so $n\ge\frac{1}{4(0.0025)(0.1)} = 1000$.
+(a) Chebyshev: $P(|M_n - p|\ge0.05)\le\frac{1}{4n(0.05)^2}$. Requiring this to be $\le0.1$:
+$$n\ge\frac{1}{4(0.0025)(0.1)} = 1000 .$$
 
-(b) $M_n\approx\mathcal N\big(p, \frac{p(1-p)}{n}\big)$, with worst-case sd $\frac{1}{2\sqrt n}$. We need $1.645\cdot\frac{1}{2\sqrt n}\le0.05$ (since $P(|Z|\ge1.645) = 0.1$), so $\sqrt n\ge16.45$ and $n\ge271$.
+(b) CLT: $M_n\approx\mathcal N\big(p, \frac{p(1-p)}{n}\big)$ with worst-case SD $\frac{1}{2\sqrt n}$. Since $P(|Z|\ge1.645) = 0.1$, we need
+$$1.645\cdot\frac{1}{2\sqrt n}\le0.05\iff\sqrt n\ge16.45\iff n\ge270.6,$$
+so $n = 271$.
 
-Chebyshev is a guarantee and the CLT is an approximation, which is why Chebyshev asks for almost four times as many people.
+Chebyshev gives a guarantee and the CLT an approximation, so Chebyshev asks for almost four times as many people.
 
 ### Problem 11 [Inequalities: the MGF bound beats Chebyshev] (hard)
 
 $X\sim\text{Poisson}(1)$. Bound $P(X\ge4)$ using (a) Markov, (b) Chebyshev, (c) $P(X\ge a)\le\min_{t>0}e^{-ta}M_X(t)$ (Problem 2(b)). (d) Compute it exactly.
 
-**Solution.** (a) $\frac14 = 0.25$.
+**Solution.** $E[X] = \operatorname{Var}(X) = 1$.
 
-(b) $P(X\ge4)\le P(|X - 1|\ge3)\le\frac19\approx0.111$.
+(a) Markov: $P(X\ge4)\le\frac{1}{4} = 0.25$.
 
-(c) $M_X(t) = e^{e^t - 1}$, so the bound is $g(t) = \exp(e^t - 1 - 4t)$. Minimise the exponent: $e^t - 4 = 0$ gives $t = \ln4$, and
-$$P(X\ge4)\le\exp(4 - 1 - 4\ln4) = \frac{e^3}{256}\approx0.078 .$$
-(d) $1 - e^{-1}\big(1 + 1 + \frac12 + \frac16\big) = 1 - \frac{8}{3e}\approx0.019$.
+(b) $X\ge4\Rightarrow|X - 1|\ge3$, so Chebyshev gives $P(X\ge4)\le\frac19\approx0.111$.
 
-Each bound improves on the last, and none reaches the truth. This is the usual exam pattern.
+(c) $M_X(t) = e^{e^t - 1}$, so for each $t>0$
+$$P(X\ge4)\le e^{-4t}e^{e^t - 1} = \exp\big(e^t - 1 - 4t\big).$$
+Minimise the exponent: $\frac{d}{dt}(e^t - 1 - 4t) = e^t - 4 = 0$ gives $t = \ln4$. Then $e^t = 4$ and
+$$P(X\ge4)\le\exp(4 - 1 - 4\ln4) = \frac{e^3}{4^4} = \frac{e^3}{256}\approx0.078 .$$
+
+(d) Exactly:
+$$P(X\ge4) = 1 - P(X\le3) = 1 - e^{-1}\Big(1 + 1 + \frac12 + \frac16\Big) = 1 - \frac{8}{3e}\approx0.019 .$$
+
+Each bound improves on the last ($0.25\to0.111\to0.078$), and all are above the true $0.019$.
 
 # New problems: SLLN
 

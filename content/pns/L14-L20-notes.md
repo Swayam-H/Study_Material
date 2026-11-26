@@ -1859,20 +1859,23 @@ $$P(|Y_n - 1|\ge\epsilon) = P(X_1\le1-\epsilon)^n = \Big(\frac{(1-\epsilon) + 1}
 **B4 (last year's HW7 Q2).** $X_i$ i.i.d. with mean $\mu$ and variance $\sigma^2>0$. Let $Y_i = \frac13X_i + \frac23X_{i+1}$ and $M_n = \frac1n\sum_{i=1}^nY_i$. (a) Are the $Y_i$ independent? (b) Identically distributed? (c) Show $M_n\xrightarrow{p}\mu$.
 
 *Solution.*
-(a) No. $Y_i$ and $Y_{i+1}$ both contain $X_{i+1}$. Concretely, only the shared $X_{i+1}$ contributes to the covariance:
-$$\operatorname{Cov}(Y_i, Y_{i+1}) = \operatorname{Cov}\Big(\frac23X_{i+1}, \frac13X_{i+1}\Big) = \frac29\sigma^2\ne0 .$$
-(b) Yes. Each $Y_i$ is the same function of an i.i.d. pair $(X_i, X_{i+1})$.
+(a) **No.** $Y_i$ and $Y_{i+1}$ both contain $X_{i+1}$. Only that shared term contributes to the covariance:
+$$\operatorname{Cov}(Y_i, Y_{i+1}) = \operatorname{Cov}\Big(\frac13X_i + \frac23X_{i+1},\ \frac13X_{i+1} + \frac23X_{i+2}\Big) = \frac23\cdot\frac13\operatorname{Var}(X_{i+1}) = \frac29\sigma^2\ne0 .$$
+(b) **Yes.** Each $Y_i$ is the same function of an i.i.d. pair $(X_i, X_{i+1})$.
 
-(c) We can't use the usual WLLN (not independent), but Chebyshev only needs the variance of $M_n$ to go to 0. Mean: $E[Y_i] = \frac13\mu + \frac23\mu = \mu$, so $E[M_n] = \mu$. Variance pieces:
+(c) The usual WLLN assumes independence, but Chebyshev only needs $E[M_n] = \mu$ and $\operatorname{Var}(M_n)\to0$.
 
-- $\operatorname{Var}(Y_i) = \frac19\sigma^2 + \frac49\sigma^2 = \frac59\sigma^2$,
-- neighbours: covariance $\frac29\sigma^2$, and there are $n-1$ neighbouring pairs, each counted twice,
-- non-neighbours share nothing, covariance 0.
+**Mean:** $E[Y_i] = \frac13\mu + \frac23\mu = \mu$, so $E[M_n] = \mu$.
+
+**Variance of the sum:**
+- each $\operatorname{Var}(Y_i) = \frac19\sigma^2 + \frac49\sigma^2 = \frac59\sigma^2$ ($n$ terms);
+- each neighbouring pair has covariance $\frac29\sigma^2$; there are $n-1$ such pairs, each counted twice;
+- pairs further apart share no $X$, so their covariance is 0.
 
 $$\operatorname{Var}\Big(\sum_{i=1}^nY_i\Big) = n\cdot\frac59\sigma^2 + 2(n-1)\cdot\frac29\sigma^2 = \frac{9n - 4}{9}\sigma^2,\qquad\operatorname{Var}(M_n) = \frac{(9n-4)\sigma^2}{9n^2}\le\frac{\sigma^2}{n}.$$
-So Chebyshev gives $P(|M_n - \mu|\ge\epsilon)\le\frac{\sigma^2}{n\epsilon^2}\to0$.
+By Chebyshev, $P(|M_n - \mu|\ge\epsilon)\le\frac{\sigma^2}{n\epsilon^2}\to0$, so $M_n\xrightarrow{p}\mu$.
 
-The lesson: the WLLN argument doesn't really need independence. It needs the variance of the average to go to 0, and weak dependence (only neighbours correlated) is fine.
+The WLLN argument needs the variance of the average to go to 0, not independence. Correlation between neighbours only is fine.
 
 **B5 (last year's HW7 Q3 and HW8 Q5).** (a) $X_n\sim\mathcal N(0,\frac1n)$: show $X_n\xrightarrow{p}0$. (b) $X_n = X + Y_n$ with $Y_n\sim\mathcal N(0,\frac1n)$ independent of $X$: show $X_n\xrightarrow{m.s.}X$.
 
