@@ -279,52 +279,92 @@ so the number of buyers is Poisson$(\lambda p)$.
 
 **B1 (Bertsekas Ex. 4.22, 4.27).** $P(X=2) = \frac12$, $P(X=3) = \frac16$, $P(X=5) = \frac13$. Find $M_X$, $E[X]$, $E[X^2]$, $\operatorname{Var}(X)$.
 
-*Solution.* $M(t) = \frac12e^{2t} + \frac16e^{3t} + \frac13e^{5t}$. Then $M'(t) = e^{2t} + \frac12e^{3t} + \frac53e^{5t}$ and $M''(t) = 2e^{2t} + \frac32e^{3t} + \frac{25}{3}e^{5t}$. So
-$$E[X] = 1 + \tfrac12 + \tfrac53 = \tfrac{19}{6},\qquad E[X^2] = 2 + \tfrac32 + \tfrac{25}3 = \tfrac{71}{6},\qquad \operatorname{Var}(X) = \tfrac{71}{6} - \tfrac{361}{36} = \tfrac{65}{36}.$$
+*Solution.* $M_X(t) = E[e^{tX}] = \sum_xP(X = x)e^{tx}$:
+$$M(t) = \tfrac12e^{2t} + \tfrac16e^{3t} + \tfrac13e^{5t}.$$
+Differentiate and set $t = 0$ (moments are $E[X^r] = M^{(r)}(0)$):
+$$M'(t) = e^{2t} + \tfrac12e^{3t} + \tfrac53e^{5t},\qquad M''(t) = 2e^{2t} + \tfrac32e^{3t} + \tfrac{25}{3}e^{5t}.$$
+$$E[X] = M'(0) = 1 + \tfrac12 + \tfrac53 = \tfrac{19}{6},\qquad E[X^2] = M''(0) = 2 + \tfrac32 + \tfrac{25}3 = \tfrac{71}{6},$$
+$$\operatorname{Var}(X) = E[X^2] - (E[X])^2 = \tfrac{71}{6} - \tfrac{361}{36} = \tfrac{426 - 361}{36} = \tfrac{65}{36}.$$
 
 **B2 (Bertsekas Problem 29).** $P(X=1) = \frac12$, $P(X=2) = P(X=3) = \frac14$. Use the MGF to get $E[X], E[X^2], E[X^3]$.
 
-*Solution.* $M(t) = \frac12e^t + \frac14e^{2t} + \frac14e^{3t}$, and $M^{(r)}(0) = \frac12\cdot1^r + \frac14\cdot2^r + \frac14\cdot3^r$:
+*Solution.* $M(t) = \frac12e^t + \frac14e^{2t} + \frac14e^{3t}$. Differentiating $r$ times brings down a factor $k^r$ from each $e^{kt}$, so
+$$M^{(r)}(0) = \tfrac12\cdot1^r + \tfrac14\cdot2^r + \tfrac14\cdot3^r .$$
 $$E[X] = \tfrac12 + \tfrac24 + \tfrac34 = \tfrac74,\qquad E[X^2] = \tfrac12 + 1 + \tfrac94 = \tfrac{15}4,\qquad E[X^3] = \tfrac12 + 2 + \tfrac{27}4 = \tfrac{37}4 .$$
 
 **B3 (Bertsekas Problem 32: spot the fake MGF).** A non-negative integer-valued $X$ has one of these as its MGF: (1) $M(s) = e^{2(e^{e^s - 1} - 1)}$; (2) $M(s) = e^{2(e^{e^s} - 1)}$. (a) Which is impossible? (b) Find $P(X = 0)$.
 
-*Solution.* (a) Every MGF has $M(0) = 1$. For (1): $M(0) = e^{2(e^{0} - 1)} = e^0 = 1$. ✓ For (2): $M(0) = e^{2(e - 1)} \ne 1$, so (2) is impossible.
-(b) For a non-negative integer variable, $M(s) = \sum_{k\ge0}P(X=k)e^{sk}$. As $s\to-\infty$, every term with $k \ge 1$ vanishes, so $P(X=0) = \lim_{s\to-\infty}M(s)$ (Bertsekas Problem 38). Here $e^s\to0$, so
-$$P(X=0) = e^{2(e^{-1} - 1)} \approx 0.2825 .$$
+*Solution.* (a) Every MGF has $M(0) = E[e^0] = 1$.
+- (1): $M(0) = e^{2(e^{e^0 - 1} - 1)} = e^{2(e^0 - 1)} = e^0 = 1$. Possible.
+- (2): $M(0) = e^{2(e^{1} - 1)} = e^{2(e - 1)}\ne1$. **Impossible.**
+
+(b) For a non-negative integer variable,
+$$M(s) = \sum_{k\ge0}P(X=k)e^{sk} = P(X = 0) + \sum_{k\ge1}P(X=k)e^{sk}.$$
+As $s\to-\infty$, every $e^{sk}$ with $k\ge1$ tends to 0, so $P(X=0) = \lim_{s\to-\infty}M(s)$. In (1), $e^s\to0$, so $e^{e^s - 1}\to e^{-1}$ and
+$$P(X=0) = e^{2(e^{-1} - 1)}\approx0.2825 .$$
 
 **B4 (Bertsekas Problem 36).** $X\sim$ Bernoulli$(\frac13)$, $Y\sim$ Exp$(2)$, $Z\sim$ Poisson$(3)$, all independent. Find the MGFs of (a) $U = XY + (1 - X)Z$, (b) $2Z + 3$, (c) $Y + Z$.
 
-*Solution.* (a) $U = Y$ if $X = 1$ (probability $\frac13$) and $U = Z$ if $X = 0$. Condition on $X$ (and use independence): $M_U(t) = \frac13M_Y(t) + \frac23M_Z(t) = \frac13\cdot\frac{2}{2 - t} + \frac23e^{3(e^t - 1)}$, for $t < 2$. This is a mixture.
-(b) Linear rule: $M_{2Z + 3}(t) = e^{3t}M_Z(2t) = e^{3t}e^{3(e^{2t} - 1)}$.
-(c) Independent sum: $M_{Y+Z}(t) = \frac{2}{2 - t}e^{3(e^t - 1)}$, for $t < 2$.
+*Solution.* Known MGFs: $M_Y(t) = \frac{2}{2 - t}$ for $t<2$, and $M_Z(t) = e^{3(e^t - 1)}$ for all $t$.
+
+(a) $U = Y$ if $X = 1$ (probability $\frac13$) and $U = Z$ if $X = 0$. Condition on $X$ (total expectation), using independence of $X$ from $Y, Z$:
+$$M_U(t) = \tfrac13E[e^{tY}] + \tfrac23E[e^{tZ}] = \frac13\cdot\frac{2}{2 - t} + \frac23e^{3(e^t - 1)},\qquad t<2 .$$
+A mixture's MGF is the mixture of the MGFs.
+
+(b) For $aZ + b$: $M_{aZ+b}(t) = E[e^{t(aZ + b)}] = e^{bt}M_Z(at)$. So
+$$M_{2Z + 3}(t) = e^{3t}M_Z(2t) = e^{3t}e^{3(e^{2t} - 1)}.$$
+
+(c) Independent sum, so the MGFs multiply:
+$$M_{Y+Z}(t) = M_Y(t)M_Z(t) = \frac{2}{2 - t}e^{3(e^t - 1)},\qquad t<2 .$$
 
 **B5 (last year's HW6 Q5).** $X\sim$ Exp$(2)$ and $Y\sim$ Bernoulli$(0.5)$ independent, $Z = X + Y$. Find $M_Z$, then $E[Z]$ and $\operatorname{Var}(Z)$ from it.
 
-*Solution.* $M_Z(t) = \frac{2}{2 - t}\cdot\frac{1 + e^t}{2} = \frac{1 + e^t}{2 - t}$ for $t < 2$. Use the log shortcut: $K(t) = \ln(1 + e^t) - \ln(2 - t)$.
-$$K'(t) = \frac{e^t}{1 + e^t} + \frac{1}{2 - t}\Rightarrow E[Z] = \tfrac12 + \tfrac12 = 1,\qquad K''(t) = \frac{e^t}{(1 + e^t)^2} + \frac{1}{(2 - t)^2}\Rightarrow \operatorname{Var}(Z) = \tfrac14 + \tfrac14 = \tfrac12 .$$
-(Check: $\operatorname{Var}(X) + \operatorname{Var}(Y) = \frac14 + \frac14$. ✓)
+*Solution.* $M_X(t) = \frac{2}{2 - t}$ ($t<2$) and $M_Y(t) = \frac{1 + e^t}{2}$. Independent, so
+$$M_Z(t) = \frac{2}{2 - t}\cdot\frac{1 + e^t}{2} = \frac{1 + e^t}{2 - t},\qquad t<2 .$$
+Use the cumulant shortcut $K(t) = \ln M_Z(t)$, for which $K'(0) = E[Z]$ and $K''(0) = \operatorname{Var}(Z)$:
+$$K(t) = \ln(1 + e^t) - \ln(2 - t),$$
+$$K'(t) = \frac{e^t}{1 + e^t} + \frac{1}{2 - t}\ \Rightarrow\ E[Z] = \tfrac12 + \tfrac12 = 1,$$
+$$K''(t) = \frac{e^t}{(1 + e^t)^2} + \frac{1}{(2 - t)^2}\ \Rightarrow\ \operatorname{Var}(Z) = \tfrac14 + \tfrac14 = \tfrac12 .$$
+Check: $\operatorname{Var}(X) + \operatorname{Var}(Y) = \frac1{2^2} + \frac14 = \frac12$.
 
 **B6 (last year's Quiz 2 Q1, an exam question).** $Z = X + U$ with $X\sim$ Exp$(\lambda)$ and $U\sim\mathcal U(0,1)$ independent. Derive $E[Z]$ and $E[Z^2]$ using MGFs (state the domain of $t$).
 
-*Solution.* $M_X(t) = \frac{\lambda}{\lambda - t}$ for $t<\lambda$; $M_U(t) = \frac{e^t - 1}{t}$ for $t\ne0$, with $M_U(0) = 1$. So $M_Z(t) = \frac{\lambda}{\lambda - t}\cdot\frac{e^t - 1}{t}$ for $t < \lambda$. For $U$, expand $\frac{e^t - 1}{t} = 1 + \frac t2 + \frac{t^2}6 + \cdots$, so $M_U'(0) = \frac12$ and $M_U''(0) = \frac13$. For $X$: $M_X'(0) = \frac1\lambda$ and $M_X''(0) = \frac{2}{\lambda^2}$. By the product rule,
-$$E[Z] = M_X'(0) + M_U'(0) = \frac1\lambda + \frac12,\qquad E[Z^2] = M_X''(0) + 2M_X'(0)M_U'(0) + M_U''(0) = \frac{2}{\lambda^2} + \frac1\lambda + \frac13 .$$
+*Solution.* **MGFs.**
+$$M_X(t) = \frac{\lambda}{\lambda - t}\ \ (t<\lambda),\qquad M_U(t) = \int_0^1e^{tu}\,du = \frac{e^t - 1}{t}\ \ (t\ne0),\ M_U(0) = 1 .$$
+By independence,
+$$M_Z(t) = \frac{\lambda}{\lambda - t}\cdot\frac{e^t - 1}{t},\qquad t<\lambda .$$
+
+**Derivatives at 0.** For $U$, expand: $\frac{e^t - 1}{t} = 1 + \frac t2 + \frac{t^2}6 + \cdots$, so $M_U'(0) = \frac12$ and $M_U''(0) = 2\cdot\frac16 = \frac13$. For $X$, $M_X'(t) = \frac{\lambda}{(\lambda - t)^2}$ and $M_X''(t) = \frac{2\lambda}{(\lambda - t)^3}$, so $M_X'(0) = \frac1\lambda$ and $M_X''(0) = \frac{2}{\lambda^2}$.
+
+**Product rule** (with $M_X(0) = M_U(0) = 1$):
+$$E[Z] = M_Z'(0) = M_X'(0) + M_U'(0) = \frac1\lambda + \frac12,$$
+$$E[Z^2] = M_Z''(0) = M_X''(0) + 2M_X'(0)M_U'(0) + M_U''(0) = \frac{2}{\lambda^2} + \frac1\lambda + \frac13 .$$
 
 **B7 (last year's Tutorial 6 Q8).** $M_X(t) = \frac{1}{1 - 3t}$, $M_Y(t) = \frac{1}{(1 - 3t)^2}$ for $t < \frac13$, with $X, Y$ independent. Find $E[(X+Y)^2]$.
 
-*Solution.* $M_{X+Y}(t) = (1 - 3t)^{-3}$. Then $M'(t) = 9(1 - 3t)^{-4}$ and $M''(t) = 108(1 - 3t)^{-5}$, so $E[(X+Y)^2] = M''(0) = 108$. (Check: $X$ is exponential with mean 3 and variance 9; $Y$ is Gamma with mean 6 and variance 18; so $X + Y$ has mean 9 and variance 27, and $27 + 81 = 108$. ✓)
+*Solution.* Independent, so $M_{X+Y}(t) = M_X(t)M_Y(t) = (1 - 3t)^{-3}$ for $t<\frac13$. Differentiate (chain rule brings down $-3$ each time):
+$$M'(t) = 9(1 - 3t)^{-4},\qquad M''(t) = 108(1 - 3t)^{-5}.$$
+$$E[(X+Y)^2] = M''(0) = 108 .$$
+Check: $X\sim$ Exp with mean 3 (variance 9) and $Y\sim$ Gamma$(2, \frac13)$ (mean 6, variance 18). So $X + Y$ has mean 9 and variance 27, and $E[(X+Y)^2] = 27 + 9^2 = 108$.
 
 **B8 (Bertsekas Problem 34: inverting a product).** Three penalty takers succeed independently with probabilities $p_1, p_2, p_3$. Find the pmf of the number of goals $X$ from its MGF.
 
-*Solution.* $X$ is a sum of independent Bernoullis, so $M_X(t) = \prod_{i=1}^3(1 - p_i + p_ie^t)$. Expand and read off the coefficient of $e^{kt}$:
+*Solution.* $X = X_1 + X_2 + X_3$ with independent $X_i\sim$ Bernoulli$(p_i)$, whose MGF is $1 - p_i + p_ie^t$. So
+$$M_X(t) = \prod_{i=1}^3(1 - p_i + p_ie^t).$$
+For an integer-valued $X$, $M_X(t) = \sum_kP(X = k)e^{kt}$, so $P(X = k)$ is the coefficient of $e^{kt}$. Expanding the product, $e^{kt}$ arises by choosing the $p_ie^t$ term from $k$ factors and $1 - p_i$ from the rest:
 $$P(X=0) = (1-p_1)(1-p_2)(1-p_3),\qquad P(X=3) = p_1p_2p_3,$$
 $$P(X=1) = p_1(1-p_2)(1-p_3) + (1-p_1)p_2(1-p_3) + (1-p_1)(1-p_2)p_3,$$
 $$P(X=2) = p_1p_2(1-p_3) + p_1(1-p_2)p_3 + (1-p_1)p_2p_3 .$$
 
 **B9 (Bertsekas Ex. 4.34: random sum).** A village has 3 gas stations, each open with probability $\frac12$ independently. An open station has $X\sim\mathcal U[0, 1000]$ gallons. Find the MGF and the mean of the total available gas $Y$.
 
-*Solution.* $N\sim$ Binomial$(3,\frac12)$, so $M_N(s) = \big(\frac{1 + e^s}{2}\big)^3$. $M_X(t) = \frac{e^{1000t} - 1}{1000t}$. Replace $e^s$ by $M_X(t)$:
-$$M_Y(t) = \frac18\Big(1 + \frac{e^{1000t} - 1}{1000t}\Big)^3,\qquad E[Y] = E[N]E[X] = 1.5\times500 = 750 \text{ gallons}.$$
+*Solution.* $Y = X_1 + \dots + X_N$, where $N\sim$ Binomial$(3,\frac12)$ is the number of open stations, independent of the i.i.d. $X_i$.
+
+**Random sum rule:** condition on $N = n$: $E[e^{tY}\mid N = n] = M_X(t)^n$, so $M_Y(t) = E[M_X(t)^N]$, which is $M_N(s)$ with $e^s$ replaced by $M_X(t)$.
+
+$M_N(s) = \big(\frac{1 + e^s}{2}\big)^3$ and $M_X(t) = \frac{e^{1000t} - 1}{1000t}$, so
+$$M_Y(t) = \frac18\Big(1 + \frac{e^{1000t} - 1}{1000t}\Big)^3 .$$
+Mean (Wald): $E[Y] = E[N]E[X] = 1.5\times500 = 750$ gallons.
 
 **B10 (Bertsekas Problem 42).** Show that a random sum of independent normals need not be normal.
 
@@ -332,9 +372,11 @@ $$M_Y(t) = \frac18\Big(1 + \frac{e^{1000t} - 1}{1000t}\Big)^3,\qquad E[Y] = E[N]
 
 **B11 (Bertsekas Ex. 4.36).** $N\sim$ Geometric$(p)$ and $X_i\sim$ Geometric$(q)$, all independent. Show $Y = X_1 + \dots + X_N\sim$ Geometric$(pq)$.
 
-*Solution.* Replace $e^s$ in $M_N(s) = \frac{pe^s}{1 - (1-p)e^s}$ by $M_X(t) = \frac{qe^t}{1 - (1-q)e^t}$ and clear the inner denominator:
-$$M_Y(t) = \frac{pqe^t}{1 - (1-q)e^t - (1-p)qe^t} = \frac{pqe^t}{1 - (1 - pq)e^t},$$
-which is the Geometric$(pq)$ MGF.
+*Solution.* For a random sum, $M_Y(t) = E[M_X(t)^N]$: take $M_N(s) = \frac{pe^s}{1 - (1-p)e^s}$ and replace $e^s$ by $M_X(t) = \frac{qe^t}{1 - (1-q)e^t}$:
+$$M_Y(t) = \frac{p\cdot\frac{qe^t}{1 - (1-q)e^t}}{1 - (1-p)\frac{qe^t}{1 - (1-q)e^t}}.$$
+Multiply top and bottom by $1 - (1-q)e^t$:
+$$M_Y(t) = \frac{pqe^t}{1 - (1-q)e^t - (1-p)qe^t} = \frac{pqe^t}{1 - (1 - q + q - pq)e^t} = \frac{pqe^t}{1 - (1 - pq)e^t},$$
+which is the Geometric$(pq)$ MGF. By uniqueness of MGFs, $Y\sim$ Geometric$(pq)$.
 
 **B12 (Bertsekas Problem 43, exam style).** A motorist meets 4 lights, each red with probability $\frac12$ independently. Each red light costs an $\mathcal N(1, \frac14)$ wait (minutes), independently. Let $X$ be the total wait. Find $M_X$ and $P(X > 4)$. Is $X$ normal?
 
@@ -2476,16 +2518,19 @@ $$C_{\mathbf U} = \begin{bmatrix}\frac{7}{15} - \frac{25}{64} & \frac{17}{48} - 
 
 **B10 (last year's Tutorial 9 Q8): the law of total covariance.** (a) $E[\mathbf Y] = E\big[E[\mathbf Y\mid\mathbf X]\big]$. (b) $\operatorname{Cov}(\mathbf Y) = E[\Sigma_{\mathbf Y\mid\mathbf X}] + \operatorname{Cov}(\mu_{\mathbf Y\mid\mathbf X})$. (c) For $\mathbf Y = A\mathbf X + \mathbf Z$ with $\mathbf X, \mathbf Z$ independent, zero mean, covariances $\Sigma_X, \Sigma_Z$: find $E[\mathbf Y]$ and $\operatorname{Cov}(\mathbf Y)$; evaluate for $A = \begin{bmatrix}1 & 2\\0 & 1\end{bmatrix}$, $\Sigma_X = \begin{bmatrix}4 & 1\\1 & 3\end{bmatrix}$, $\Sigma_Z = \operatorname{diag}(1, 2)$.
 
-*Solution.* (a) Iterated expectation (L12), one component at a time.
+*Solution.* (a) Apply the scalar tower rule $E[Y_i] = E\big[E[Y_i\mid\mathbf X]\big]$ to each component.
 
-(b) This is L12's law of total variance in vector form. Split the deviation into "within" and "between" parts:
-$$\mathbf Y - E\mathbf Y = (\mathbf Y - \mu_{\mathbf Y|\mathbf X}) + (\mu_{\mathbf Y|\mathbf X} - E\mathbf Y).$$
-Take the outer product and the expectation. The first part squared gives $E[\Sigma_{\mathbf Y|\mathbf X}]$, the second gives $\operatorname{Cov}(\mu_{\mathbf Y|\mathbf X})$. The cross terms vanish, because given $\mathbf X$, the second part is a constant and the first part has conditional mean $\mathbf 0$.
+(b) Write $\mu = \mu_{\mathbf Y|\mathbf X}$ and split the deviation into a "within" part and a "between" part:
+$$\mathbf Y - E\mathbf Y = (\mathbf Y - \mu) + (\mu - E\mathbf Y).$$
+Take the outer product and the expectation:
+- $E\big[(\mathbf Y - \mu)(\mathbf Y - \mu)^T\big] = E\big[E[(\mathbf Y - \mu)(\mathbf Y - \mu)^T\mid\mathbf X]\big] = E[\Sigma_{\mathbf Y|\mathbf X}]$;
+- $E\big[(\mu - E\mathbf Y)(\mu - E\mathbf Y)^T\big] = \operatorname{Cov}(\mu)$, since $E[\mu] = E\mathbf Y$ by (a);
+- the cross terms vanish: given $\mathbf X$, $\mu - E\mathbf Y$ is a constant and $E[\mathbf Y - \mu\mid\mathbf X] = \mathbf 0$.
 
-(c) Given $\mathbf X$, the only randomness left is $\mathbf Z$. So $\mu_{\mathbf Y|\mathbf X} = A\mathbf X$ and $\Sigma_{\mathbf Y|\mathbf X} = \Sigma_Z$. Then $E[\mathbf Y] = AE[\mathbf X] = \mathbf 0$ and
-$$\operatorname{Cov}(\mathbf Y) = \Sigma_Z + A\Sigma_XA^T .$$
-Numbers: $A\Sigma_X = \begin{bmatrix}6 & 7\\1 & 3\end{bmatrix}$, $A\Sigma_XA^T = \begin{bmatrix}20 & 7\\7 & 3\end{bmatrix}$, so
-$$\operatorname{Cov}(\mathbf Y) = \begin{bmatrix}21 & 7\\7 & 5\end{bmatrix}.$$
+(c) Given $\mathbf X$, the only randomness left is $\mathbf Z$ (independent of $\mathbf X$). So $\mu_{\mathbf Y|\mathbf X} = A\mathbf X$ and $\Sigma_{\mathbf Y|\mathbf X} = \Sigma_Z$. Then $E[\mathbf Y] = AE[\mathbf X] = \mathbf 0$ and
+$$\operatorname{Cov}(\mathbf Y) = E[\Sigma_Z] + \operatorname{Cov}(A\mathbf X) = \Sigma_Z + A\Sigma_XA^T .$$
+Numbers:
+$$A\Sigma_X = \begin{bmatrix}6 & 7\\1 & 3\end{bmatrix},\qquad A\Sigma_XA^T = \begin{bmatrix}6 & 7\\1 & 3\end{bmatrix}\begin{bmatrix}1 & 0\\2 & 1\end{bmatrix} = \begin{bmatrix}20 & 7\\7 & 3\end{bmatrix},\qquad\operatorname{Cov}(\mathbf Y) = \begin{bmatrix}21 & 7\\7 & 5\end{bmatrix}.$$
 
 **B11 (probabilitycourse Ch. 14, Example 8): the Box–Muller method, proved with the Jacobian.** Let $U_1, U_2$ be independent $\mathcal U(0,1)$ and
 $$Z_1 = \sqrt{-2\ln U_1}\,\cos(2\pi U_2),\qquad Z_2 = \sqrt{-2\ln U_1}\,\sin(2\pi U_2).$$

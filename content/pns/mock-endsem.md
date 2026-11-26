@@ -63,12 +63,12 @@ Find the MGF $M_X(t) = E[e^{tX}]$, and the values of $t$ for which it exists, wh
 (b) $X\sim\text{Exponential}(\lambda)$.
 
 **Solution.** (a) With $q = 1 - p$,
-$$M_X(t) = \sum_{k=1}^\infty e^{tk}q^{k-1}p = pe^t\sum_{k=1}^\infty\big(qe^t\big)^{k-1} = \frac{pe^t}{1 - (1-p)e^t}.$$
-The geometric series converges only if $(1-p)e^t<1$, i.e. for $t<-\ln(1-p)$.
+$$M_X(t) = \sum_{k=1}^\infty e^{tk}q^{k-1}p = pe^t\sum_{k=1}^\infty\big(qe^t\big)^{k-1} = pe^t\cdot\frac{1}{1 - qe^t} = \frac{pe^t}{1 - (1-p)e^t}.$$
+The geometric series converges only if $qe^t<1$, i.e. for $\boxed{t<-\ln(1-p)}$.
 
 (b)
-$$M_X(t) = \int_0^\infty e^{tx}\lambda e^{-\lambda x}\,dx = \lambda\int_0^\infty e^{-(\lambda - t)x}\,dx = \frac{\lambda}{\lambda - t},\qquad t<\lambda .$$
-For $t\ge\lambda$ the integral diverges. Marks are lost for leaving out the range of $t$.
+$$M_X(t) = \int_0^\infty e^{tx}\lambda e^{-\lambda x}\,dx = \lambda\int_0^\infty e^{-(\lambda - t)x}\,dx = \lambda\cdot\frac{1}{\lambda - t} = \frac{\lambda}{\lambda - t},\qquad\boxed{t<\lambda}.$$
+For $t\ge\lambda$ the integrand does not decay and the integral diverges. Marks are lost for leaving out the range of $t$.
 
 ### Problem 2 [Endsem Q2] — Monte Carlo for $\pi$
 
@@ -99,10 +99,12 @@ $Z$ takes values in $\{1,\dots,n\}$ with $P(Z = i) = p_i$. Conditioned on $Z = i
 (b) Prove that $f_X(x) = \sum_{i=1}^np_if_{Y_i}(x)$.
 
 **Solution.** (a) By the law of iterated expectation, and since $E[X\mid Z = i] = E[Y_i]$,
-$$E[X] = E\big[E[X\mid Z]\big] = \sum_{i=1}^nP(Z = i)E[X\mid Z = i] = \sum_{i=1}^np_iE[Y_i].$$
-(b) By total probability over $Z$,
-$$F_X(x) = P(X\le x) = \sum_{i=1}^nP(Z = i)P(X\le x\mid Z = i) = \sum_{i=1}^np_iF_{Y_i}(x).$$
-Differentiate (a finite sum, so term by term) to get $f_X(x) = \sum_ip_if_{Y_i}(x)$.
+$$E[X] = E\big[E[X\mid Z]\big] = \sum_{i=1}^nP(Z = i)\,E[X\mid Z = i] = \boxed{\sum_{i=1}^np_iE[Y_i]}.$$
+
+(b) Work with the CDF, then differentiate. The events $\{Z = i\}$ partition the sample space, so by total probability
+$$F_X(x) = P(X\le x) = \sum_{i=1}^nP(Z = i)\,P(X\le x\mid Z = i) = \sum_{i=1}^np_iF_{Y_i}(x).$$
+The sum is finite, so differentiate term by term:
+$$f_X(x) = F_X'(x) = \sum_{i=1}^np_iF_{Y_i}'(x) = \sum_{i=1}^np_if_{Y_i}(x).$$
 
 ### Problem 5 [Endsem Q5] — MLE for $U[a,b]$
 

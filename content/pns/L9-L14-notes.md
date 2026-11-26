@@ -251,19 +251,40 @@ $$F_S(s) = P(S = 0) + P\big(\tfrac1s\le X\le t\big) = 1 - \frac{t^2}{r^2} + \fra
 
 **B7 (Bertsekas Problem 2.24, the stock trader).** $(X, Y)$ is uniform over the integer pairs with $-2\le x\le4$ and $-1\le y - x\le1$. (a) Find the marginal PMFs and the means. (b) The trader holds 100 shares of A and 200 of B; find the mean profit $100X + 200Y$.
 
-*Solution.* For each of the 7 values of $x$ there are 3 values of $y$ ($x-1, x, x+1$): 21 equally likely points, each $\frac1{21}$. (a) $p_X(x) = \frac3{21} = \frac17$ for $x = -2,\dots,4$, so $E[X] = 1$. $Y$ ranges over $-3,\dots,5$; count the points in each column: $y = -3$ and $5$: 1 point each; $y = -2$ and $4$: 2 each; $y = -1,\dots,3$: 3 each. So $p_Y = \frac1{21}(1,2,3,3,3,3,3,2,1)$, symmetric about 1, and $E[Y] = 1$. (b) By linearity (L10 slide 21), $E[100X + 200Y] = 100 + 200 = 300$.
+*Solution.* For each of the 7 values of $x$ there are 3 values of $y$ ($x-1, x, x+1$): 21 equally likely points, each with probability $\frac1{21}$.
+
+(a) $p_X(x) = \frac3{21} = \frac17$ for $x = -2,\dots,4$, uniform, so $E[X] = \frac{-2 + 4}{2} = 1$.
+
+$Y$ ranges over $-3,\dots,5$. Count the points with each $y$ (the $x$ values within 1 of $y$, inside $[-2,4]$):
+
+| $y$ | $-3$ | $-2$ | $-1$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ |
+|---|---|---|---|---|---|---|---|---|---|
+| $21\,p_Y(y)$ | 1 | 2 | 3 | 3 | 3 | 3 | 3 | 2 | 1 |
+
+This is symmetric about 1, so $E[Y] = 1$. (Or: $E[Y - X] = 0$ by symmetry of $y - x\in\{-1,0,1\}$, so $E[Y] = E[X]$.)
+
+(b) By linearity, $E[100X + 200Y] = 100(1) + 200(1) = 300$.
 
 **B8 (last year's Tutorial 5 Q1).** $p_{XY}(x,y) = \frac{1}{2^{x+y}}$ for $x,y = 1,2,3,\dots$ Find the marginals. Are $X$, $Y$ independent? Find $P(X^2 + Y\le10)$.
 
-*Solution.* $p_X(x) = \sum_{y\ge1}2^{-x}2^{-y} = 2^{-x}\cdot1 = (\frac12)^x$: Geometric$(\frac12)$. Same for $Y$. Since $p_{XY} = p_Xp_Y$ for every pair, they are independent (L10). For the event, list $x$ (only $x\le3$ works, since $x = 4$ needs $Y\le-6$):
-$$P = \tfrac12P(Y\le9) + \tfrac14P(Y\le6) + \tfrac18P(Y\le1) = \tfrac12(1 - 2^{-9}) + \tfrac14(1 - 2^{-6}) + \tfrac1{16} = \tfrac{827}{1024}\approx0.808 .$$
+*Solution.* **Marginals.** Sum out $y$:
+$$p_X(x) = \sum_{y\ge1}2^{-x}2^{-y} = 2^{-x}\sum_{y\ge1}2^{-y} = 2^{-x}\cdot1 = \Big(\frac12\Big)^x,\qquad x\ge1,$$
+which is Geometric$(\frac12)$. By symmetry $p_Y(y) = (\frac12)^y$.
+
+**Independence.** $p_{XY}(x,y) = 2^{-x}2^{-y} = p_X(x)p_Y(y)$ for every pair, so **independent**.
+
+**The event.** $Y\ge1$, so $X^2\le9$, i.e. $x\le3$. Condition on $X$, using $P(Y\le k) = 1 - 2^{-k}$:
+$$P(X^2 + Y\le10) = \tfrac12P(Y\le9) + \tfrac14P(Y\le6) + \tfrac18P(Y\le1) = \tfrac12(1 - 2^{-9}) + \tfrac14(1 - 2^{-6}) + \tfrac18\cdot\tfrac12 = \tfrac{511 + 252 + 64}{1024} = \tfrac{827}{1024}\approx0.808 .$$
 
 **B9 (last year's HW5 Q4, two coins).** A box has a fair coin and a coin with $P(H) = \frac23$. Pick one at random and toss it ($X$), then toss the other one ($Y$). Find $p_{XY}$. Are $X$ and $Y$ independent?
 
-*Solution.* Condition on which coin goes first (each with probability $\frac12$):
-$$p_{XY}(1,1) = \tfrac12\big(\tfrac12\cdot\tfrac23\big) + \tfrac12\big(\tfrac23\cdot\tfrac12\big) = \tfrac13,\quad p_{XY}(1,0) = \tfrac12\cdot\tfrac12\cdot\tfrac13 + \tfrac12\cdot\tfrac23\cdot\tfrac12 = \tfrac14,$$
-$$p_{XY}(0,1) = \tfrac14\ \text{(by symmetry)},\qquad p_{XY}(0,0) = \tfrac12\cdot\tfrac12\cdot\tfrac13 + \tfrac12\cdot\tfrac13\cdot\tfrac12 = \tfrac16 .$$
-Marginals: $p_X(1) = \frac13 + \frac14 = \frac7{12} = p_Y(1)$. Then $p_X(1)p_Y(1) = \frac{49}{144}\ne\frac{48}{144} = p_{XY}(1,1)$: **not independent** (only slightly). Intuition: a head on the first toss makes it a bit more likely that the biased coin went first, so the second coin is more likely to be the fair one.
+*Solution.* Condition on which coin goes first (probability $\frac12$ each). Given the order, the tosses are independent.
+$$p_{XY}(1,1) = \tfrac12\big(\tfrac12\cdot\tfrac23\big) + \tfrac12\big(\tfrac23\cdot\tfrac12\big) = \tfrac13,$$
+$$p_{XY}(1,0) = \tfrac12\big(\tfrac12\cdot\tfrac13\big) + \tfrac12\big(\tfrac23\cdot\tfrac12\big) = \tfrac1{12} + \tfrac16 = \tfrac14,$$
+$$p_{XY}(0,1) = \tfrac14\ \text{(by symmetry)},\qquad p_{XY}(0,0) = \tfrac12\big(\tfrac12\cdot\tfrac13\big) + \tfrac12\big(\tfrac13\cdot\tfrac12\big) = \tfrac16 .$$
+(These sum to 1.) Marginals: $p_X(1) = \frac13 + \frac14 = \frac7{12}$, and likewise $p_Y(1) = \frac7{12}$.
+
+$p_X(1)p_Y(1) = \frac{49}{144}\ne\frac{48}{144} = p_{XY}(1,1)$: **not independent** (only slightly). A head on the first toss makes it a little more likely that the biased coin went first, so the second coin is more likely to be the fair one.
 
 
 # Lecture 10: Independence, joint PDFs, functions of two variables, covariance (Deck 1, slides 12 to 26)
@@ -454,27 +475,60 @@ with $\rho = \pm1$ exactly when $Y - E[Y]$ is a positive (negative) multiple of 
 
 Find (a) $P(X\le2, Y\le4)$, (b) the marginals, (c) $P(Y = 2\mid X = 1)$, (d) whether they are independent.
 
-*Solution.* Use 24ths: rows are $(2,1,1)$, $(4,2,3)$, $(6,3,2)$. (a) $\frac{2+1+4+2}{24} = \frac9{24} = \frac38$. (b) Row sums $p_X = (\frac4{24}, \frac9{24}, \frac{11}{24}) = (\frac16,\frac38,\frac{11}{24})$; column sums $p_Y = (\frac{12}{24},\frac6{24},\frac6{24}) = (\frac12,\frac14,\frac14)$. (c) $\frac{p_{XY}(1,2)}{p_X(1)} = \frac{2/24}{4/24} = \frac12$. (d) Row 1 is $(2,1,1)$ and row 2 is $(4,2,3)$, not proportional. Concretely $p_X(2)p_Y(2) = \frac38\cdot\frac12 = \frac3{16}\ne\frac16$. Dependent.
+*Solution.* Work in 24ths. The rows become $(2,1,1)$, $(4,2,3)$, $(6,3,2)$; the total is 24.
+
+(a) Add the cells with $X\le2$ and $Y\le4$: $\frac{2+1+4+2}{24} = \frac9{24} = \frac38$.
+
+(b) Row sums give $p_X$, column sums give $p_Y$:
+$$p_X = \Big(\frac4{24}, \frac9{24}, \frac{11}{24}\Big) = \Big(\frac16,\frac38,\frac{11}{24}\Big),\qquad p_Y = \Big(\frac{12}{24},\frac6{24},\frac6{24}\Big) = \Big(\frac12,\frac14,\frac14\Big).$$
+
+(c) $P(Y = 2\mid X = 1) = \frac{p_{XY}(1,2)}{p_X(1)} = \frac{2/24}{4/24} = \frac12$.
+
+(d) Independence needs $p_{XY}(x,y) = p_X(x)p_Y(y)$ for **every** cell. One failure suffices: $p_X(2)p_Y(2) = \frac38\cdot\frac12 = \frac3{16}$, but $p_{XY}(2,2) = \frac16$. **Dependent.**
 
 **B2 (last year's HW5 Q2).** $f_{XY}(x,y) = \frac12e^{-2x} + \frac{cy^2}{(1+x)^2}$ for $x\ge0$, $0\le y\le1$. Find (a) $c$, (b) $P(0\le X\le1, 0\le Y\le\frac12)$, (c) $P(0\le X\le1)$.
 
-*Solution.* (a) $\int_0^1\!\int_0^\infty\frac12e^{-2x}dx\,dy = \frac14$ and $\int_0^1\!\int_0^\infty\frac{cy^2}{(1+x)^2}dx\,dy = c\cdot1\cdot\frac13$. So $\frac14 + \frac c3 = 1$, giving $c = \frac94$.
-(b) $\int_0^1\frac12e^{-2x}dx\cdot\frac12 + \frac94\int_0^1\frac{dx}{(1+x)^2}\int_0^{1/2}y^2dy = \frac{1 - e^{-2}}{8} + \frac94\cdot\frac12\cdot\frac1{24} = \frac{1 - e^{-2}}8 + \frac3{64}\approx0.155$.
-(c) Integrate $y$ over $[0,1]$: $\frac{1 - e^{-2}}{4} + \frac94\cdot\frac12\cdot\frac13 = \frac{1 - e^{-2}}{4} + \frac38\approx0.591$.
+*Solution.* Each term is a product of a function of $x$ and a function of $y$, so each double integral splits. Useful pieces:
+$$\int_0^\infty\tfrac12e^{-2x}dx = \tfrac14,\quad\int_0^1\tfrac12e^{-2x}dx = \tfrac{1 - e^{-2}}{4},\quad\int_0^\infty\tfrac{dx}{(1+x)^2} = 1,\quad\int_0^1\tfrac{dx}{(1+x)^2} = \tfrac12 .$$
+
+(a) Total mass 1:
+$$\int_0^1\!\!\int_0^\infty f_{XY}\,dx\,dy = \frac14\cdot1 + c\cdot1\cdot\int_0^1y^2\,dy = \frac14 + \frac c3 = 1\ \Rightarrow\ c = \frac94 .$$
+
+(b) $x\in[0,1]$, $y\in[0,\frac12]$, with $\int_0^{1/2}dy = \frac12$ and $\int_0^{1/2}y^2\,dy = \frac1{24}$:
+$$P = \frac{1 - e^{-2}}{4}\cdot\frac12 + \frac94\cdot\frac12\cdot\frac1{24} = \frac{1 - e^{-2}}8 + \frac3{64}\approx0.108 + 0.047 = 0.155 .$$
+
+(c) $x\in[0,1]$, $y\in[0,1]$:
+$$P(0\le X\le1) = \frac{1 - e^{-2}}{4}\cdot1 + \frac94\cdot\frac12\cdot\frac13 = \frac{1 - e^{-2}}{4} + \frac38\approx0.216 + 0.375 = 0.591 .$$
 
 **B3 (last year's HW5 Q5).** $f_{XY}(x,y) = x + \frac32y^2$ on $[0,1]^2$. Find the marginal and joint CDFs.
 
-*Solution.* For $0\le x,y\le1$: $F_{XY}(x,y) = \int_0^x\!\int_0^y(s + \frac32t^2)\,dt\,ds = \frac{x^2y}{2} + \frac{xy^3}{2}$. Marginal CDFs by plugging in 1 (slide 16): $F_X(x) = F_{XY}(x,1) = \frac{x^2 + x}{2}$ and $F_Y(y) = F_{XY}(1,y) = \frac{y + y^3}{2}$. (Marginal PDFs: $f_X = x + \frac12$, $f_Y = \frac12 + \frac32y^2$.) Outside the square, clip: $F_{XY}(x,y) = F_{XY}(\min(x,1),\min(y,1))$ for $x,y\ge0$, and $0$ if $x<0$ or $y<0$.
+*Solution.* **Joint CDF** for $0\le x,y\le1$:
+$$F_{XY}(x,y) = \int_0^x\!\!\int_0^y\Big(s + \frac32t^2\Big)dt\,ds = \int_0^x\Big(sy + \frac{y^3}{2}\Big)ds = \frac{x^2y}{2} + \frac{xy^3}{2}.$$
+Outside the square: $F_{XY} = 0$ if $x<0$ or $y<0$; otherwise replace $x$ by $\min(x,1)$ and $y$ by $\min(y,1)$.
+
+**Marginal CDFs:** let the other variable go to its maximum, $F_X(x) = F_{XY}(x,1)$:
+$$F_X(x) = \frac{x^2 + x}{2},\qquad F_Y(y) = F_{XY}(1,y) = \frac{y + y^3}{2},\qquad0\le x,y\le1 .$$
+(Marginal PDFs: $f_X = x + \frac12$ and $f_Y = \frac12 + \frac32y^2$; each integrates to 1.)
 
 **B4 (Bertsekas Problem 3.23, uniform on a triangle).** $(X,Y)$ is uniform on the triangle with vertices $(0,0)$, $(1,0)$, $(0,1)$. Find $f_{XY}$, $f_Y$, and decide independence.
 
-*Solution.* Area $\frac12$, so $f_{XY} = 2$ on $\{x,y\ge0, x+y\le1\}$. $f_Y(y) = \int_0^{1-y}2\,dx = 2(1-y)$ for $0\le y\le1$, and by symmetry $f_X(x) = 2(1-x)$. $f_Xf_Y = 4(1-x)(1-y)\ne2$: dependent (the support is not a rectangle). $E[X] = \int_0^12x(1-x)dx = \frac13$. (The conditional parts of this problem are in L12 B5.)
+*Solution.* The area is $\frac12$, so
+$$f_{XY}(x,y) = 2\quad\text{on }\{x\ge0,\ y\ge0,\ x+y\le1\}.$$
+**Marginal:** at height $y$, $x$ runs over $[0, 1-y]$:
+$$f_Y(y) = \int_0^{1-y}2\,dx = 2(1-y),\qquad0\le y\le1,$$
+and by symmetry $f_X(x) = 2(1-x)$.
+
+**Independence:** $f_X(x)f_Y(y) = 4(1-x)(1-y)\ne2$; for instance at $(0.9, 0.9)$ the product is $0.04$ but $f_{XY} = 0$. **Dependent.** A support that is not a rectangle always rules out independence.
+
+$E[X] = \int_0^12x(1-x)\,dx = 1 - \frac23 = \frac13$.
 
 **B5 (Bertsekas Problem 3.15, semicircle).** A point is uniform in the half disc $\{x^2 + y^2\le r^2, y\ge0\}$. Find $f_Y$ and $E[Y]$.
 
-*Solution.* Area $\frac{\pi r^2}{2}$, so $f_{XY} = \frac{2}{\pi r^2}$ on the half disc. For $0\le y\le r$, $x$ runs over $[-\sqrt{r^2-y^2}, \sqrt{r^2-y^2}]$:
-$$f_Y(y) = \frac{4\sqrt{r^2 - y^2}}{\pi r^2},\qquad E[Y] = \int_0^r y\,\frac{4\sqrt{r^2-y^2}}{\pi r^2}\,dy = \frac{4}{\pi r^2}\cdot\frac{r^3}{3} = \frac{4r}{3\pi}.$$
-(Substitute $u = r^2 - y^2$.) Direct check with 2D LOTUS in polar coordinates: $E[Y] = \frac{2}{\pi r^2}\int_0^\pi\!\int_0^r\rho\sin\theta\cdot\rho\,d\rho\,d\theta = \frac{2}{\pi r^2}\cdot\frac{r^3}{3}\cdot2$. ✓
+*Solution.* The area is $\frac{\pi r^2}{2}$, so $f_{XY} = \frac{2}{\pi r^2}$ on the half disc. At height $y\in[0,r]$, $x$ runs over $[-\sqrt{r^2-y^2},\ \sqrt{r^2-y^2}]$, an interval of length $2\sqrt{r^2 - y^2}$:
+$$f_Y(y) = \frac{2}{\pi r^2}\cdot2\sqrt{r^2 - y^2} = \frac{4\sqrt{r^2 - y^2}}{\pi r^2},\qquad0\le y\le r .$$
+For the mean, substitute $u = r^2 - y^2$, $du = -2y\,dy$:
+$$\int_0^ry\sqrt{r^2 - y^2}\,dy = \frac12\int_0^{r^2}\sqrt u\,du = \frac{r^3}{3},\qquad E[Y] = \frac{4}{\pi r^2}\cdot\frac{r^3}{3} = \frac{4r}{3\pi}.$$
+Check in polar coordinates: $E[Y] = \frac{2}{\pi r^2}\int_0^\pi\!\int_0^r(\rho\sin\theta)\,\rho\,d\rho\,d\theta = \frac{2}{\pi r^2}\cdot\frac{r^3}{3}\cdot2 = \frac{4r}{3\pi}$.
 
 ### Functions of two variables: max, min, ratios and products
 
@@ -639,44 +693,64 @@ The same trick with $E[N^2\mid A_2] = E[(1 + N)^2] = 1 + 2E[N] + E[N^2]$ gives $
 
 **B1 (last year's HW5 Q10).** Two fair dice, $S = X + Y$. $A_1 = \{S\le7\}$, $A_2 = \{S\ge8\}$. (a) Find $p_{S\mid A_1}$ and $p_{S\mid A_2}$. (b) Find $P(S = 6)$ from them.
 
-*Solution.* $p_S(s) = \frac{6 - |s - 7|}{36}$. $P(A_1) = \frac{1+2+3+4+5+6}{36} = \frac{21}{36}$ and $P(A_2) = \frac{15}{36}$. Conditioning on an event about $S$ (slide 10):
-$$p_{S\mid A_1}(s) = \frac{(s-1)/36}{21/36} = \frac{s-1}{21},\ s = 2,\dots,7;\qquad p_{S\mid A_2}(s) = \frac{13 - s}{15},\ s = 8,\dots,12 .$$
-(b) Slide 8: $P(S = 6) = P(A_1)p_{S\mid A_1}(6) + P(A_2)p_{S\mid A_2}(6) = \frac{21}{36}\cdot\frac5{21} + 0 = \frac5{36}$. ✓
+*Solution.* The sum of two dice has $p_S(s) = \frac{6 - |s - 7|}{36}$ for $s = 2,\dots,12$. So
+$$P(A_1) = \frac{1+2+3+4+5+6}{36} = \frac{21}{36},\qquad P(A_2) = \frac{5+4+3+2+1}{36} = \frac{15}{36}.$$
+(a) Conditioning on an event about $S$: $p_{S\mid A}(s) = \frac{p_S(s)}{P(A)}$ for $s\in A$, and 0 otherwise.
+$$p_{S\mid A_1}(s) = \frac{(s-1)/36}{21/36} = \frac{s-1}{21},\ s = 2,\dots,7;\qquad p_{S\mid A_2}(s) = \frac{(13 - s)/36}{15/36} = \frac{13 - s}{15},\ s = 8,\dots,12 .$$
+(b) Total probability over the partition $\{A_1, A_2\}$:
+$$P(S = 6) = P(A_1)\,p_{S\mid A_1}(6) + P(A_2)\,p_{S\mid A_2}(6) = \frac{21}{36}\cdot\frac5{21} + \frac{15}{36}\cdot0 = \frac5{36}.$$
 
 **B2 (Bertsekas Problem 3.18).** $f_X(x) = \frac x4$ for $1<x\le3$. Let $A = \{X\ge2\}$. Find $E[X]$, $P(A)$, $f_{X\mid A}$ and $E[X\mid A]$.
 
-*Solution.* $E[X] = \int_1^3\frac{x^2}4dx = \frac{27 - 1}{12} = \frac{13}{6}$. $P(A) = \int_2^3\frac x4dx = \frac{9 - 4}{8} = \frac58$. So $f_{X\mid A}(x) = \frac{x/4}{5/8} = \frac{2x}{5}$ for $2\le x\le3$, and
-$$E[X\mid A] = \int_2^3\frac{2x^2}{5}dx = \frac{2(27 - 8)}{15} = \frac{38}{15}\approx2.53 .$$
-(Check with slide 8: $P(A^c) = \frac38$, $f_{X\mid A^c} = \frac{2x}{3}$ on $(1,2)$, $E[X\mid A^c] = \frac{2(8-1)}{9} = \frac{14}9$, and $\frac58\cdot\frac{38}{15} + \frac38\cdot\frac{14}{9} = \frac{19}{12} + \frac{7}{12} = \frac{13}6$. ✓)
+*Solution.*
+$$E[X] = \int_1^3x\cdot\frac x4\,dx = \frac{27 - 1}{12} = \frac{13}{6},\qquad P(A) = \int_2^3\frac x4\,dx = \frac{9 - 4}{8} = \frac58 .$$
+Conditional density: $f_{X\mid A}(x) = \frac{f_X(x)}{P(A)}$ on $A$:
+$$f_{X\mid A}(x) = \frac{x/4}{5/8} = \frac{2x}{5},\qquad2\le x\le3,$$
+$$E[X\mid A] = \int_2^3x\cdot\frac{2x}{5}\,dx = \frac{2(27 - 8)}{15} = \frac{38}{15}\approx2.53 .$$
+*Check by total expectation.* $P(A^c) = \frac38$ and $f_{X\mid A^c} = \frac{x/4}{3/8} = \frac{2x}{3}$ on $(1,2)$, so $E[X\mid A^c] = \frac{2(8-1)}{9} = \frac{14}9$. Then $\frac58\cdot\frac{38}{15} + \frac38\cdot\frac{14}{9} = \frac{19}{12} + \frac{7}{12} = \frac{13}6$.
 
 **B3 (memorylessness used twice; Bertsekas Problem 3.20, the absent-minded professor).** Two appointments are scheduled for the same time. Durations are independent Exp with mean 30 minutes. Student 1 arrives on time; student 2 arrives 5 minutes late. Find the expected time from student 1's arrival until student 2 leaves.
 
-*Solution.* Let $T_1$ be student 1's duration. Partition on $A = \{T_1\le5\}$ (student 1 is done before student 2 arrives) and $A^c$.
+*Solution.* Let $T_1, T_2$ be the durations (Exp, mean 30) and $L$ the time until student 2 leaves. Partition on $A = \{T_1\le5\}$ (student 1 is done before student 2 arrives).
 
-- On $A$ (probability $1 - e^{-5/30}$): student 2 starts at minute 5, so the total is $5 + T_2$, mean $5 + 30 = 35$.
-- On $A^c$ (probability $e^{-1/6}$): student 2 waits until $T_1$ ends. By memorylessness, $E[T_1\mid T_1>5] = 5 + 30$. Then student 2 takes another $T_2$, so the mean total is $35 + 30 = 65$.
-$$E = 35(1 - e^{-1/6}) + 65e^{-1/6} = 35 + 30e^{-1/6}\approx35 + 25.4 = 60.4\text{ minutes}.$$
+- **On $A$**, probability $1 - e^{-5/30}$: student 2 starts at minute 5, so $L = 5 + T_2$, with mean $5 + 30 = 35$.
+- **On $A^c$**, probability $e^{-1/6}$: student 2 waits until student 1 finishes, so $L = T_1 + T_2$. By memorylessness, $E[T_1\mid T_1>5] = 5 + 30 = 35$, so $E[L\mid A^c] = 35 + 30 = 65$.
+
+Total expectation:
+$$E[L] = 35(1 - e^{-1/6}) + 65e^{-1/6} = 35 + 30e^{-1/6}\approx35 + 25.4 = 60.4\text{ minutes}.$$
 
 **B4 (expected number of tosses to see two heads in a row).** A fair coin is tossed until HH appears. Find the expected number of tosses $N$.
 
-*Solution.* Partition on the first toss, and then on the second (each time the problem restarts, the mean is $E[N]$ again):
+*Solution.* Condition on how the sequence starts. Whenever a T appears, the process starts afresh, so the expected number of further tosses is $E[N]$ again.
 
-- First toss T (probability $\frac12$): wasted 1 toss, restart: mean $1 + E[N]$.
-- First H, second T (probability $\frac14$): wasted 2 tosses, restart: mean $2 + E[N]$.
-- First H, second H (probability $\frac14$): done in 2.
-$$E[N] = \tfrac12(1 + E[N]) + \tfrac14(2 + E[N]) + \tfrac14\cdot2\ \Rightarrow\ \tfrac14E[N] = \tfrac32\ \Rightarrow\ E[N] = 6 .$$
+| Start | Probability | Expected total |
+|---|---|---|
+| T | $\frac12$ | $1 + E[N]$ |
+| HT | $\frac14$ | $2 + E[N]$ |
+| HH | $\frac14$ | $2$ |
+
+By total expectation,
+$$E[N] = \tfrac12(1 + E[N]) + \tfrac14(2 + E[N]) + \tfrac14\cdot2 = \tfrac32 + \tfrac34E[N]\ \Rightarrow\ \tfrac14E[N] = \tfrac32\ \Rightarrow\ E[N] = 6 .$$
 
 **B5 (last year's Tutorial 4 Q2, rounding up an exponential).** $X\sim$ Exp(1) and $N = \lceil X\rceil$. Find the PMF of $N$ and $E[N]$. Then find $E[X\mid N = n]$.
 
-*Solution.* $P(N = n) = P(n - 1<X\le n) = e^{-(n-1)} - e^{-n} = (e^{-1})^{n-1}(1 - e^{-1})$: Geometric with $p = 1 - e^{-1}$, so $E[N] = \frac{1}{1 - e^{-1}}\approx1.582$. Given $N = n$, $X$ is the exponential restricted to $(n-1, n]$; by memorylessness it is $n - 1$ plus an Exp(1) conditioned to be $\le1$, so
-$$E[X\mid N = n] = n - 1 + \frac{\int_0^1xe^{-x}dx}{1 - e^{-1}} = n - 1 + \frac{1 - 2e^{-1}}{1 - e^{-1}}\approx n - 1 + 0.418 = n - 0.582 .$$
-(Total expectation check: $E[X] = E[N] - 0.582 = 1.582 - 0.582 = 1$. ✓)
+*Solution.* **PMF.** $N = n$ exactly when $n - 1<X\le n$:
+$$P(N = n) = e^{-(n-1)} - e^{-n} = (e^{-1})^{n-1}(1 - e^{-1}),\qquad n = 1, 2, \dots$$
+This is Geometric with $p = 1 - e^{-1}$, so $E[N] = \frac1p = \frac{1}{1 - e^{-1}}\approx1.582$.
+
+**$E[X\mid N = n]$.** Given $N = n$, $X$ lies in $(n-1, n]$. By memorylessness, $X - (n-1)$ given $X>n-1$ is Exp(1), so here $X = n - 1 + W$ with $W\sim$ Exp(1) conditioned on $W\le1$:
+$$E[W\mid W\le1] = \frac{\int_0^1we^{-w}\,dw}{1 - e^{-1}} = \frac{1 - 2e^{-1}}{1 - e^{-1}}\approx0.418,$$
+$$E[X\mid N = n] = n - 1 + 0.418 = n - 0.582 .$$
+*Check by total expectation:* $E[X] = E[N] - 0.582 = 1.582 - 0.582 = 1$.
 
 **B6 (truncated normal; a conditional expectation used in Black–Scholes, last year's HW4 Q12).** $Z\sim\mathcal N(0,1)$ and $c\ge0$. Find $E[Z\mid Z>c]$ and $E[\max(Z - c, 0)]$.
 
-*Solution.* $\int_c^\infty z\varphi(z)\,dz = [-\varphi(z)]_c^\infty = \varphi(c)$, since $\varphi'(z) = -z\varphi(z)$. So
-$$\begin{gathered}E[Z\mid Z>c] = \frac{\varphi(c)}{1 - \Phi(c)} \\[3pt] E[\max(Z - c,0)] = P(Z>c)\big(E[Z\mid Z>c] - c\big) = \varphi(c) - c(1 - \Phi(c)).\end{gathered}$$
-(The second is total expectation over $\{Z>c\}$ and $\{Z\le c\}$; on the second piece the payoff is 0.)
+*Solution.* The key integral uses $\varphi'(z) = -z\varphi(z)$:
+$$\int_c^\infty z\varphi(z)\,dz = \big[-\varphi(z)\big]_c^\infty = \varphi(c).$$
+**Conditional mean:** divide by $P(Z>c) = 1 - \Phi(c)$:
+$$E[Z\mid Z>c] = \frac{\varphi(c)}{1 - \Phi(c)}.$$
+**Call payoff:** total expectation over $\{Z>c\}$ and $\{Z\le c\}$; the payoff is 0 on the second event:
+$$E[\max(Z - c,0)] = P(Z>c)\,E[Z - c\mid Z>c] = \varphi(c) - c\big(1 - \Phi(c)\big).$$
 
 
 # Lecture 12: Conditioning on a random variable, $E[X\mid Y]$ and iterated expectations (Deck 2, slides 12 to 29)
@@ -838,52 +912,96 @@ $$E[Y] = 3.5\cdot\tfrac12 = 1.75,\qquad\operatorname{Var}(Y) = 3.5\cdot\tfrac14 
 
 **B1 (last year's midsem Q1).** A fair die is rolled until a 6 appears. Each roll pays its face value, except the final 6, which pays 0. Find the expected total reward.
 
-*Solution.* Let $N$ = number of rolls, Geometric$(\frac16)$, $E[N] = 6$. Given $N = n$, the first $n - 1$ rolls are non-6 rolls, each uniform on $\{1,\dots,5\}$ with mean 3 (conditioning on "not a 6", L11 slide 10), and the last pays 0. So $E[Y\mid N] = 3(N - 1)$ and
-$$E[Y] = E[3(N-1)] = 3(6 - 1) = 15 .$$
-(Last year's solution also does it by summing the series $\sum_n3(n-1)(\frac56)^{n-1}\frac16$; the iterated-expectation route is the one to learn.)
+*Solution.* Let $N$ be the number of rolls. $N\sim$ Geometric$(\frac16)$, so $E[N] = 6$.
+
+**Condition on $N$.** Given $N = n$, the first $n - 1$ rolls are known not to be 6, so each is uniform on $\{1,\dots,5\}$ with mean 3, and the last roll pays 0. So
+$$E[Y\mid N] = 3(N - 1).$$
+**Tower rule:**
+$$E[Y] = E\big[E[Y\mid N]\big] = 3\big(E[N] - 1\big) = 3(6 - 1) = 15 .$$
+(Summing the series $\sum_n3(n-1)(\frac56)^{n-1}\frac16$ gives the same answer, with more work.)
 
 **B2 (last year's midsem Q2).** $X, Y$ i.i.d. $\mathcal U[0,1]$. Prove $P(X<Y) = \frac12$ by conditioning.
 
-*Solution.* Condition on $Y$ (the continuous total probability theorem):
-$$P(X<Y) = \int_0^1P(X<Y\mid Y = y)f_Y(y)\,dy = \int_0^1P(X<y)\,dy = \int_0^1y\,dy = \frac12 .$$
-The step $P(X<Y\mid Y = y) = P(X<y)$ uses independence. (For i.i.d. continuous variables, symmetry gives $\frac12$ without any integral: $P(X<Y) = P(Y<X)$ and $P(X = Y) = 0$.)
+*Solution.* Condition on $Y$ (continuous total probability theorem):
+$$P(X<Y) = \int_0^1P(X<Y\mid Y = y)f_Y(y)\,dy = \int_0^1P(X<y)\cdot1\,dy = \int_0^1y\,dy = \frac12 .$$
+The step $P(X<Y\mid Y = y) = P(X<y)$ uses independence of $X$ and $Y$. (Symmetry also works: $P(X<Y) = P(Y<X)$ for i.i.d. variables and $P(X = Y) = 0$ for continuous ones, so each is $\frac12$.)
 
 **B3 (last year's HW5 Q9).** $f_{XY} = \frac{x^2}{4} + \frac{y^2}{4} + \frac{xy}{6}$ on $0\le x\le1$, $0\le y\le2$. For $0\le y\le2$ find $f_{X\mid Y}(x\mid y)$ and $P(X<\frac12\mid Y = y)$.
 
-*Solution.* $f_Y(y) = \int_0^1\big(\frac{x^2}{4} + \frac{y^2}{4} + \frac{xy}{6}\big)dx = \frac1{12} + \frac{y^2}{4} + \frac{y}{12}$. Multiply top and bottom by 12:
-$$\begin{gathered}f_{X\mid Y}(x\mid y) = \frac{3x^2 + 3y^2 + 2xy}{1 + y + 3y^2},\quad 0\le x\le1; \\[3pt] P(X<\tfrac12\mid Y = y) = \frac{\frac18 + \frac32y^2 + \frac y4}{1 + y + 3y^2} = \frac{1 + 2y + 12y^2}{8(1 + y + 3y^2)} .\end{gathered}$$
-(Check at $y = 0$: $f_{X\mid Y}(x\mid0) = 3x^2$, and $P(X<\frac12\mid Y = 0) = \frac18$. ✓)
+*Solution.* **Marginal of $Y$:**
+$$f_Y(y) = \int_0^1\Big(\frac{x^2}{4} + \frac{y^2}{4} + \frac{xy}{6}\Big)dx = \frac1{12} + \frac{y^2}{4} + \frac{y}{12} = \frac{1 + y + 3y^2}{12}.$$
+**Conditional density** $f_{X\mid Y} = \frac{f_{XY}}{f_Y}$; multiply top and bottom by 12:
+$$f_{X\mid Y}(x\mid y) = \frac{3x^2 + 3y^2 + 2xy}{1 + y + 3y^2},\qquad0\le x\le1 .$$
+**Conditional probability:** integrate over $x\in[0,\frac12]$, where $\int_0^{1/2}(3x^2 + 3y^2 + 2xy)\,dx = \frac18 + \frac32y^2 + \frac y4$:
+$$P\big(X<\tfrac12\mid Y = y\big) = \frac{\frac18 + \frac32y^2 + \frac y4}{1 + y + 3y^2} = \frac{1 + 2y + 12y^2}{8(1 + y + 3y^2)} .$$
+Check at $y = 0$: $f_{X\mid Y}(x\mid0) = 3x^2$, and $P(X<\frac12\mid Y = 0) = \frac18 = (\frac12)^3$.
 
 **B4 (Bertsekas Problem 3.21, breaking a stick twice).** Break a stick of length $\ell$ at a uniform point and keep the left piece $Y$; break that at a uniform point and keep the left piece $X$. Find $f_{XY}$, $f_X$ and $E[X]$ two ways.
 
-*Solution.* $f_Y(y) = \frac1\ell$ on $[0,\ell]$ and $f_{X\mid Y}(x\mid y) = \frac1y$ on $[0,y]$. Multiplication rule: $f_{XY}(x,y) = \frac{1}{\ell y}$ for $0\le x\le y\le\ell$. Marginal:
-$$f_X(x) = \int_x^\ell\frac{dy}{\ell y} = \frac1\ell\ln\frac\ell x,\quad0<x\le\ell;\qquad E[X] = \int_0^\ell\frac x\ell\ln\frac\ell x\,dx = \frac\ell4 .$$
-Iterated expectations is much faster: $E[X\mid Y] = \frac Y2$, so $E[X] = \frac{E[Y]}{2} = \frac\ell4$.
+*Solution.* $Y\sim\mathcal U[0,\ell]$, so $f_Y(y) = \frac1\ell$; given $Y = y$, $X\sim\mathcal U[0,y]$, so $f_{X\mid Y}(x\mid y) = \frac1y$.
+
+**Joint** (multiplication rule):
+$$f_{XY}(x,y) = f_Y(y)f_{X\mid Y}(x\mid y) = \frac{1}{\ell y},\qquad0\le x\le y\le\ell .$$
+**Marginal:** integrate out $y$ over $x\le y\le\ell$:
+$$f_X(x) = \int_x^\ell\frac{dy}{\ell y} = \frac1\ell\ln\frac\ell x,\qquad0<x\le\ell .$$
+**$E[X]$, way 1:** substitute $x = \ell u$:
+$$E[X] = \int_0^\ell\frac x\ell\ln\frac\ell x\,dx = \ell\int_0^1u(-\ln u)\,du = \ell\cdot\frac14 = \frac\ell4 .$$
+**$E[X]$, way 2 (tower rule):** $E[X\mid Y] = \frac Y2$, so $E[X] = \frac{E[Y]}{2} = \frac{\ell/2}{2} = \frac\ell4$.
 
 **B5 (Bertsekas Problem 3.23(c) to (e), the triangle again).** $(X,Y)$ uniform on the triangle $(0,0)$, $(1,0)$, $(0,1)$ (L10 B4). Find $f_{X\mid Y}$, $E[X\mid Y = y]$, and $E[X]$ by total expectation and symmetry.
 
-*Solution.* The slice at height $y$ is $[0, 1-y]$ and the joint is flat, so $X\mid Y = y\sim\mathcal U[0, 1-y]$: $f_{X\mid Y}(x\mid y) = \frac1{1-y}$ and $E[X\mid Y = y] = \frac{1 - y}{2}$. Total expectation: $E[X] = \frac{1 - E[Y]}{2}$. By symmetry $E[X] = E[Y]$, so $E[X] = \frac{1 - E[X]}{2}$, i.e. $E[X] = \frac13$.
+*Solution.* $f_{XY} = 2$ on the triangle and $f_Y(y) = 2(1-y)$. So
+$$f_{X\mid Y}(x\mid y) = \frac{2}{2(1-y)} = \frac1{1-y},\qquad0\le x\le1 - y,$$
+i.e. $X\mid Y = y\sim\mathcal U[0, 1-y]$ (the joint is flat, so each horizontal slice is uniform). Hence
+$$E[X\mid Y = y] = \frac{1 - y}{2}.$$
+Total expectation: $E[X] = E\big[\frac{1 - Y}{2}\big] = \frac{1 - E[Y]}{2}$. By symmetry of the triangle, $E[X] = E[Y]$, so
+$$E[X] = \frac{1 - E[X]}{2}\ \Rightarrow\ E[X] = \frac13 .$$
 
 **B6 (Bertsekas Problem 2.32, joint lives).** $m$ couples ($2m$ people); each person is alive later with probability $p$, independently. $A$ = number alive, $S$ = number of couples with both alive. Find $E[S\mid A = a]$.
 
-*Solution.* Given $A = a$, by symmetry the set of survivors is a uniformly random $a$-subset of the $2m$ people. Write $S = \sum_{j=1}^m\mathbf 1_j$, where $\mathbf 1_j$ indicates that couple $j$ survives. $P(\text{both in couple } j\text{ survive}\mid A = a) = \frac{\binom{2m-2}{a-2}}{\binom{2m}{a}} = \frac{a(a-1)}{2m(2m-1)}$. Linearity of conditional expectation:
+*Solution.* Given $A = a$, every set of $a$ survivors is equally likely (each has probability $p^a(1-p)^{2m-a}$), so the survivors are a uniformly random $a$-subset of the $2m$ people.
+
+Write $S = \sum_{j=1}^m\mathbf 1_j$, where $\mathbf 1_j$ indicates that both members of couple $j$ survive. Counting subsets that contain both:
+$$P(\mathbf 1_j = 1\mid A = a) = \frac{\binom{2m-2}{a-2}}{\binom{2m}{a}} = \frac{a(a-1)}{2m(2m-1)}.$$
+By linearity of conditional expectation,
 $$E[S\mid A = a] = m\cdot\frac{a(a-1)}{2m(2m-1)} = \frac{a(a-1)}{2(2m-1)} .$$
-(Check: $a = 2m$ gives $m$.)
+Check: $a = 2m$ gives $m$, and $a\le1$ gives 0. The answer does not depend on $p$.
 
 **B7 (Bertsekas Problem 4.41, the elevator; a compound Poisson sum).** $N\sim$ Poisson$(\lambda)$ people enter; person $i$'s excess weight fraction $X_i\sim\mathcal U[0,1]$, independent. $Y = \sum_{i=1}^NX_i$. Find $E[Y]$ and $\operatorname{Var}(Y)$.
 
-*Solution.* $E[Y] = E[N]E[X] = \frac\lambda2$. $\operatorname{Var}(Y) = E[N]\operatorname{Var}(X) + (E[X])^2\operatorname{Var}(N) = \frac\lambda{12} + \frac\lambda4 = \frac\lambda3$. (For a Poisson number of terms this always simplifies to $\lambda E[X^2]$, here $\lambda\cdot\frac13$. ✓ The MGF part of this problem is in the L14 to L20 notes.)
+*Solution.* Random sum, with $E[N] = \operatorname{Var}(N) = \lambda$, $E[X] = \frac12$, $\operatorname{Var}(X) = \frac1{12}$.
+
+Given $N$: $E[Y\mid N] = \frac N2$ and $\operatorname{Var}(Y\mid N) = \frac{N}{12}$.
+
+$$E[Y] = E\Big[\frac N2\Big] = \frac\lambda2 .$$
+Law of total variance:
+$$\operatorname{Var}(Y) = E\big[\operatorname{Var}(Y\mid N)\big] + \operatorname{Var}\big(E[Y\mid N]\big) = \frac{\lambda}{12} + \frac14\lambda = \frac\lambda3 .$$
+Check: for a Poisson number of terms, $\operatorname{Var}(Y) = \lambda E[X^2] = \lambda\cdot\frac13$.
 
 **B8 (Bertsekas Problem 2.41(c), traffic tickets).** You drive 250 days a year and get a ticket on each day with probability $0.02$, independently. Each ticket costs \$10, \$20 or \$50 with probabilities $0.5$, $0.3$, $0.2$. Find the mean and variance of the yearly amount.
 
-*Solution.* $N\sim$ Binomial$(250, 0.02)$: $E[N] = 5$, $\operatorname{Var}(N) = 4.9$. One ticket: $E[X] = 5 + 6 + 10 = 21$, $E[X^2] = 50 + 120 + 500 = 670$, $\operatorname{Var}(X) = 670 - 441 = 229$. So $E[Y] = 5\cdot21 = 105$ and
-$$\operatorname{Var}(Y) = 5\cdot229 + 21^2\cdot4.9 = 1145 + 2160.9 = 3305.9 .$$
+*Solution.* $Y = X_1 + \dots + X_N$ with $N$ the number of tickets, independent of the costs $X_i$.
+
+$N\sim$ Binomial$(250, 0.02)$: $E[N] = 5$, $\operatorname{Var}(N) = 250(0.02)(0.98) = 4.9$.
+
+One ticket: $E[X] = 0.5(10) + 0.3(20) + 0.2(50) = 21$, $E[X^2] = 0.5(100) + 0.3(400) + 0.2(2500) = 670$, so $\operatorname{Var}(X) = 670 - 441 = 229$.
+
+$$E[Y] = E[N]E[X] = 5\cdot21 = \$105,$$
+$$\operatorname{Var}(Y) = E[N]\operatorname{Var}(X) + (E[X])^2\operatorname{Var}(N) = 5\cdot229 + 21^2\cdot4.9 = 1145 + 2160.9 = 3305.9 .$$
+(SD $\approx\$57.5$.)
 
 **B9 (a two-stage experiment with a continuous first stage).** $P\sim\mathcal U[0,1]$ is the (random) bias of a coin; given $P = p$, toss it $n$ times and let $K$ be the number of heads. Find $E[K]$, $\operatorname{Var}(K)$ and $P(K = k)$.
 
-*Solution.* $K\mid P\sim$ Binomial$(n,P)$, so $E[K\mid P] = nP$ and $\operatorname{Var}(K\mid P) = nP(1-P)$.
-$$\begin{gathered}E[K] = nE[P] = \frac n2 \\[3pt] \operatorname{Var}(K) = nE[P - P^2] + n^2\operatorname{Var}(P) = n\Big(\frac12 - \frac13\Big) + \frac{n^2}{12} = \frac{n(n+2)}{12}.\end{gathered}$$
-And $P(K = k) = \int_0^1\binom nkp^k(1-p)^{n-k}dp = \binom nk\frac{k!\,(n-k)!}{(n+1)!} = \frac1{n+1}$ for $k = 0,\dots,n$: **uniform**! (The integral is the Beta integral $\int_0^1p^a(1-p)^bdp = \frac{a!\,b!}{(a+b+1)!}$.) Compare: a fair coin gives $\operatorname{Var}(K) = \frac n4$, much smaller than $\frac{n(n+2)}{12}$ for large $n$; uncertainty about the bias adds the $\operatorname{Var}(E[K\mid P])$ term.
+*Solution.* $K\mid P\sim$ Binomial$(n,P)$, so $E[K\mid P] = nP$ and $\operatorname{Var}(K\mid P) = nP(1-P)$. For $P\sim\mathcal U[0,1]$: $E[P] = \frac12$, $E[P^2] = \frac13$, $\operatorname{Var}(P) = \frac1{12}$.
+
+**Mean** (tower rule): $E[K] = E[nP] = \frac n2$.
+
+**Variance** (total variance):
+$$\operatorname{Var}(K) = E\big[nP(1-P)\big] + \operatorname{Var}(nP) = n\Big(\frac12 - \frac13\Big) + \frac{n^2}{12} = \frac{n}{6} + \frac{n^2}{12} = \frac{n(n+2)}{12}.$$
+
+**PMF** (total probability), using the Beta integral $\int_0^1p^a(1-p)^b\,dp = \frac{a!\,b!}{(a+b+1)!}$:
+$$P(K = k) = \int_0^1\binom nkp^k(1-p)^{n-k}\,dp = \frac{n!}{k!\,(n-k)!}\cdot\frac{k!\,(n-k)!}{(n+1)!} = \frac1{n+1},\qquad k = 0,\dots,n .$$
+$K$ is **uniform** on $\{0,\dots,n\}$. For comparison, a fair coin gives $\operatorname{Var}(K) = \frac n4$; uncertainty about the bias adds the $\operatorname{Var}(E[K\mid P]) = \frac{n^2}{12}$ term.
 
 **B10 (Bertsekas Problem 4.26, variance of a product).** $X$, $Y$ independent. Show $\operatorname{Var}(XY) = (E[X])^2\operatorname{Var}(Y) + (E[Y])^2\operatorname{Var}(X) + \operatorname{Var}(X)\operatorname{Var}(Y)$.
 
@@ -1085,29 +1203,38 @@ So $Z\sim\mathcal U[0,1]$, a surprisingly clean answer. (A simulation with $2\ti
 
 **B6 (Bertsekas Problem 3.35(b), conditioning on a sum).** $X, Y$ i.i.d. Exp$(\lambda)$, $Z = X + Y$. Find $f_{X\mid Z}(x\mid z)$.
 
-*Solution.* Bayes with $f_{Z\mid X}(z\mid x) = f_Y(z - x)$ (given $X = x$, $Z$ is $Y$ shifted by $x$):
-$$f_{X\mid Z}(x\mid z) = \frac{f_X(x)f_Y(z - x)}{f_Z(z)} = \frac{\lambda e^{-\lambda x}\lambda e^{-\lambda(z-x)}}{\lambda^2ze^{-\lambda z}} = \frac1z,\qquad 0\le x\le z .$$
-Given the total, the split point is **uniform**: knowing $X + Y = z$ tells you nothing about where in $[0, z]$ the first part ends. (The joint density $\lambda^2e^{-\lambda(x+y)}$ is constant along each line $x + y = z$, so every split is equally likely.)
+*Solution.* Bayes' rule for densities: $f_{X\mid Z}(x\mid z) = \frac{f_X(x)f_{Z\mid X}(z\mid x)}{f_Z(z)}$.
+- Given $X = x$, $Z = x + Y$, so $f_{Z\mid X}(z\mid x) = f_Y(z - x)$ for $z\ge x$.
+- $Z\sim$ Gamma$(2,\lambda)$: $f_Z(z) = \lambda^2ze^{-\lambda z}$.
+
+$$f_{X\mid Z}(x\mid z) = \frac{\lambda e^{-\lambda x}\cdot\lambda e^{-\lambda(z-x)}}{\lambda^2ze^{-\lambda z}} = \frac1z,\qquad0\le x\le z .$$
+Given the total, the split point is **uniform** on $[0,z]$. The joint density $\lambda^2e^{-\lambda(x+y)}$ is constant along each line $x + y = z$, so every split is equally likely.
 
 ### Bayes' rule
 
 **B7 (last year's HW6 Q6, the Geiger counter).** The rate is $\lambda_1 = 0.1$ (prior 0.8) or $\lambda_2 = 0.5$ (prior 0.2). The count in one second is $K\mid\lambda\sim$ Poisson$(\lambda)$. You observe $K = 2$. Find $P(\lambda = 0.1\mid K = 2)$.
 
-*Solution.* Discrete Bayes (slide 6). The likelihoods are $e^{-0.1}\frac{0.1^2}{2}$ and $e^{-0.5}\frac{0.5^2}{2}$; the $\frac12$ cancels:
+*Solution.* Discrete Bayes. Likelihoods: $P(K = 2\mid\lambda) = e^{-\lambda}\frac{\lambda^2}{2}$, so $e^{-0.1}\frac{0.01}{2}$ and $e^{-0.5}\frac{0.25}{2}$. The $\frac12$ cancels:
 $$P(\lambda_1\mid K = 2) = \frac{0.8\cdot0.01\,e^{-0.1}}{0.8\cdot0.01\,e^{-0.1} + 0.2\cdot0.25\,e^{-0.5}} = \frac{0.007239}{0.007239 + 0.030327}\approx0.193 .$$
-Two counts in a second is far more typical of the high rate, so the belief flips from 80% "low" to about 19% "low".
+Two counts in a second is much more typical of the high rate, so the belief in the low rate drops from 80% to about 19%.
 
 **B8 (Bertsekas Problem 3.34, the defective coin minting machine).** The bias $P$ of a coin has PDF $f_P(p) = pe^p$ on $[0,1]$. (a) Find $P(H)$ for one toss. (b) Given heads, find the posterior of $P$. (c) Given heads on the first toss, find $P(\text{heads on the second})$.
 
-*Solution.* (a) Total probability: $P(H) = \int_0^1p\cdot pe^p\,dp = \big[e^p(p^2 - 2p + 2)\big]_0^1 = e - 2\approx0.718$.
-(b) Mixed Bayes (slide 8): $f_{P\mid H}(p) = \frac{p\cdot pe^p}{e - 2} = \frac{p^2e^p}{e - 2}$ on $[0,1]$.
-(c) Given $P$, tosses are independent, so $P(H_2\mid H_1) = E[P\mid H_1] = \frac{\int_0^1p^3e^p\,dp}{e - 2} = \frac{6 - 2e}{e - 2}\approx0.784$. Seeing a head raised the probability of the next head from $0.718$ to $0.784$: the tosses are *not* independent unconditionally, only given $P$.
+*Solution.* Integrals used (by parts): $\int_0^1p^2e^p\,dp = \big[e^p(p^2 - 2p + 2)\big]_0^1 = e - 2$ and $\int_0^1p^3e^p\,dp = \big[e^p(p^3 - 3p^2 + 6p - 6)\big]_0^1 = 6 - 2e$.
+
+(a) Total probability, conditioning on $P = p$:
+$$P(H) = \int_0^1P(H\mid p)f_P(p)\,dp = \int_0^1p\cdot pe^p\,dp = e - 2\approx0.718 .$$
+(b) Bayes:
+$$f_{P\mid H}(p) = \frac{P(H\mid p)f_P(p)}{P(H)} = \frac{p^2e^p}{e - 2},\qquad0\le p\le1 .$$
+(c) Given $P$, the tosses are independent, so condition on $P$ under the posterior:
+$$P(H_2\mid H_1) = \int_0^1p\,f_{P\mid H}(p)\,dp = \frac{\int_0^1p^3e^p\,dp}{e - 2} = \frac{6 - 2e}{e - 2}\approx0.784 .$$
+A head raised the probability of the next head from $0.718$ to $0.784$: the tosses are independent given $P$, but not unconditionally.
 
 **B9 (a medical test with a continuous reading).** A patient is ill with probability $0.01$. A blood marker $Y$ is $\mathcal N(5, 1)$ for ill patients and $\mathcal N(2, 1)$ for healthy ones. The reading is $y = 4$. Find $P(\text{ill}\mid Y = 4)$.
 
-*Solution.* Mixed Bayes; the normal constants cancel:
-$$\begin{aligned}P(\text{ill}\mid Y &= 4) \\  &= \frac{0.01e^{-(4-5)^2/2}}{0.01e^{-1/2} + 0.99e^{-(4-2)^2/2}} \\  &= \frac{0.01\cdot0.6065}{0.006065 + 0.99\cdot0.1353} \\  &= \frac{0.006065}{0.006065 + 0.1340}\approx0.043 .\end{aligned}$$
-Even though $y = 4$ is closer to the ill mean, the tiny prior keeps the posterior at about 4%. (Base-rate effect, the continuous version of the L3 disease-test example.)
+*Solution.* Mixed Bayes: discrete prior, continuous observation. The likelihoods are normal densities at $y = 4$; the factor $\frac1{\sqrt{2\pi}}$ cancels:
+$$P(\text{ill}\mid Y = 4) = \frac{0.01\,e^{-(4-5)^2/2}}{0.01\,e^{-(4-5)^2/2} + 0.99\,e^{-(4-2)^2/2}} = \frac{0.01(0.6065)}{0.01(0.6065) + 0.99(0.1353)} = \frac{0.006065}{0.006065 + 0.1340}\approx0.043 .$$
+Although $y = 4$ is closer to the ill mean (likelihood ratio $e^{-1/2}/e^{-2} = e^{1.5}\approx4.5$), the 1% prior keeps the posterior at about 4%.
 
 ### Variance of sums and covariance
 
@@ -1334,17 +1461,17 @@ Try these without notes (about 40 minutes), then check the answers below.
 
 ### Answers
 
-**T1.** $p_X = (0.4, 0.6)$, $p_Y = (0.3, 0.3, 0.4)$. $E[X\mid Y = 2] = \frac{0.3}{0.4} = 0.75$. $E[X] = 0.6$, $E[Y] = 0.3 + 0.8 = 1.1$, $E[XY] = 1\cdot0.1 + 2\cdot0.3 = 0.7$, so $\operatorname{Cov} = 0.7 - 0.66 = 0.04$. Dependent: $p(0,0) = 0.1\ne0.4\cdot0.3$.
+**T1.** Marginals (row and column sums): $p_X(0) = 0.1 + 0.2 + 0.1 = 0.4$, $p_X(1) = 0.6$; $p_Y = (0.1 + 0.2,\ 0.2 + 0.1,\ 0.1 + 0.3) = (0.3, 0.3, 0.4)$. Given $Y = 2$, $X$ is 1 with probability $\frac{p(1,2)}{p_Y(2)} = \frac{0.3}{0.4}$, so $E[X\mid Y = 2] = 0.75$. For the covariance: $E[X] = 0.6$, $E[Y] = 0(0.3) + 1(0.3) + 2(0.4) = 1.1$, and only $x = 1$ contributes to $E[XY] = 1\cdot1\cdot0.1 + 1\cdot2\cdot0.3 = 0.7$. So $\operatorname{Cov}(X,Y) = 0.7 - 0.6\cdot1.1 = 0.04$. **Dependent**: $p(0,0) = 0.1\ne p_X(0)p_Y(0) = 0.12$ (a nonzero covariance already proves it).
 
 **T2.** Mixed: a point mass $P(Y = 2) = P(X\ge2) = e^{-2}\approx0.135$ plus density $e^{-y}$ on $(0,2)$. $E[Y] = \int_0^2P(X>t)\,dt = 1 - e^{-2}\approx0.865$.
 
-**T3.** $\int_0^1\!\int_0^y(x + y)\,dx\,dy = \int_0^1\frac32y^2\,dy = \frac12$, so $c = 2$. $f_X(x) = \int_x^12(x + y)\,dy = 1 + 2x - 3x^2$ on $[0,1]$. For $P(X + Y\le1)$, $x$ runs over $[0,\frac12]$ and $y$ over $[x, 1 - x]$; the inner integral is $1 - 4x^2$, and $\int_0^{1/2}(1 - 4x^2)\,dx = \frac13$.
+**T3.** Normalise: $\int_0^1\!\int_0^y(x + y)\,dx\,dy = \int_0^1\big(\frac{y^2}{2} + y^2\big)dy = \int_0^1\frac32y^2\,dy = \frac12$, so $c = 2$. Marginal: for fixed $x$, $y$ runs over $[x,1]$, so $f_X(x) = \int_x^12(x + y)\,dy = 2x(1 - x) + (1 - x^2) = 1 + 2x - 3x^2$ on $[0,1]$. For $P(X + Y\le1)$: the region $x\le y\le1 - x$ is non-empty only for $x\le\frac12$. The inner integral is $\int_x^{1-x}2(x + y)\,dy = 2x(1 - 2x) + (1-x)^2 - x^2 = 1 - 4x^2$, and $\int_0^{1/2}(1 - 4x^2)\,dx = \frac12 - \frac16 = \frac13$.
 
 **T4.** Condition on $Y$: $\int_0^\infty e^{-2\lambda y}\lambda e^{-\lambda y}\,dy = \frac13$.
 
-**T5.** Random sum: mean $4\cdot50 = 200$; variance $E[N]\operatorname{Var}(X) + (E[X])^2\operatorname{Var}(N) = 4\cdot\frac{10^4}{12} + 2500\cdot4 = \frac{40000}{3}$, so the SD is about $115.5$.
+**T5.** Random sum $T = X_1 + \dots + X_N$ with $N\sim$ Poisson(4) ($E[N] = \operatorname{Var}(N) = 4$) and $X_i\sim\mathcal U[0,100]$ ($E[X] = 50$, $\operatorname{Var}(X) = \frac{100^2}{12}$). Mean: $E[T] = E[N]E[X] = 200$. Total variance: $\operatorname{Var}(T) = E[N]\operatorname{Var}(X) + (E[X])^2\operatorname{Var}(N) = 4\cdot\frac{10^4}{12} + 2500\cdot4 = \frac{10^4}{3} + 10^4 = \frac{40000}{3}$. (Check: $\lambda E[X^2] = 4\cdot\frac{10^4}{3}$.) So the SD is $\sqrt{40000/3}\approx115.5$.
 
-**T6.** Posterior $\propto x\cdot1$, so $f_{X\mid H}(x) = 2x$ on $[0,1]$. $P(H_2\mid H_1) = E[X\mid H_1] = \int_0^12x^2\,dx = \frac23$ (Laplace's rule of succession with one observation).
+**T6.** Posterior $\propto$ likelihood $\times$ prior $= P(H\mid x)\cdot1 = x$ on $[0,1]$. Since $\int_0^1x\,dx = \frac12$, $f_{X\mid H}(x) = 2x$. Given $X$, the tosses are independent, so $P(H_2\mid H_1) = \int_0^1x\cdot f_{X\mid H}(x)\,dx = E[X\mid H_1] = \int_0^12x^2\,dx = \frac23$ (Laplace's rule of succession with one observation).
 
 **T7.** For $0\le z\le1$: $\int_0^ze^{-(z-x)}dx = 1 - e^{-z}$. For $z>1$: $\int_0^1e^{-(z-x)}dx = (e - 1)e^{-z}$. Zero for $z<0$.
 

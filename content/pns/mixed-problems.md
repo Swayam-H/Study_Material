@@ -24,13 +24,13 @@ Endsem questions rarely stay inside one lecture. These 15 problems each chain tw
 
 The number of emails you get in an hour is Poisson$(\lambda)$. On a normal day $\lambda = 2$; on a busy day $\lambda = 5$. Prior: $P(\text{busy}) = 0.3$. In the first hour you get 4 emails. (a) Find $P(\text{busy}\mid X = 4)$. (b) Given this, find the probability that the next hour brings no emails (hours are independent given $\lambda$).
 
-**Solution.** (a) The $\frac{1}{4!}$ cancels, so
-$$P(\text{busy}\mid X = 4) = \frac{0.3\,e^{-5}5^4}{0.7\,e^{-2}2^4 + 0.3\,e^{-5}5^4} = \frac{0.3(0.006738)(625)}{0.7(0.13534)(16) + 1.2634} = \frac{1.2634}{1.5157 + 1.2634}\approx\boxed{0.455}.$$
+**Solution.** (a) Bayes, with Poisson likelihoods $e^{-\lambda}\frac{\lambda^4}{4!}$; the $\frac{1}{4!}$ cancels:
+$$P(\text{busy}\mid X = 4) = \frac{0.3\,e^{-5}5^4}{0.7\,e^{-2}2^4 + 0.3\,e^{-5}5^4} = \frac{0.3(0.006738)(625)}{0.7(0.13534)(16) + 0.3(0.006738)(625)} = \frac{1.2634}{1.5157 + 1.2634}\approx\boxed{0.455}.$$
 Four emails is evidence for a busy day: the probability rose from 0.3 to 0.455.
 
 (b) Condition on the type of day, using the **posterior** weights (total probability):
-$$P(X_2 = 0\mid X_1 = 4) = 0.545\,e^{-2} + 0.455\,e^{-5} = 0.0738 + 0.0031\approx\boxed{0.077}.$$
-Note $X_1$ and $X_2$ are independent **given** $\lambda$, but not independent: $X_1$ tells you about $\lambda$, which tells you about $X_2$.
+$$P(X_2 = 0\mid X_1 = 4) = P(\text{normal}\mid X_1 = 4)\,e^{-2} + P(\text{busy}\mid X_1 = 4)\,e^{-5} = 0.545(0.1353) + 0.455(0.00674)\approx\boxed{0.077}.$$
+$X_1$ and $X_2$ are independent **given** $\lambda$, but not unconditionally: $X_1$ carries information about $\lambda$, which affects $X_2$.
 
 ### Problem 2 [Mixed: joint pdf + covariance + CLT]
 
@@ -95,13 +95,15 @@ So B is about 4.5 times as likely. The single bolts overlap a lot, but averaging
 
 Roll a fair die to get $X$, then toss $X$ fair coins and let $Y$ be the number of heads. (a) Find $E[Y]$ and $\text{Var}(Y)$. (b) Find $\text{Cov}(X, Y)$. (c) Find $P(X = 6\mid Y = 5)$.
 
-**Solution.** Given $X$, $Y\sim\text{Binomial}(X,\frac12)$, so $E[Y\mid X] = \frac X2$ and $\text{Var}(Y\mid X) = \frac X4$.
+**Solution.** Given $X$, $Y\sim\text{Binomial}(X,\frac12)$, so $E[Y\mid X] = \frac X2$ and $\text{Var}(Y\mid X) = \frac X4$. For the die, $E[X] = 3.5$ and $\text{Var}(X) = \frac{35}{12}$.
 
-(a) $E[Y] = \frac{3.5}2 = 1.75$, and by the law of total variance
+(a) Tower rule: $E[Y] = E\big[\frac X2\big] = \frac{3.5}2 = 1.75$. Law of total variance:
 $$\text{Var}(Y) = E\Big[\frac X4\Big] + \text{Var}\Big(\frac X2\Big) = \frac{3.5}4 + \frac14\cdot\frac{35}{12} = \frac78 + \frac{35}{48} = \boxed{\frac{77}{48}}\approx1.60 .$$
-(b) $E[XY] = E\big[X\,E[Y\mid X]\big] = \frac12E[X^2]$, so $\text{Cov}(X,Y) = \frac12E[X^2] - E[X]\cdot\frac{E[X]}2 = \frac12\text{Var}(X) = \frac{35}{24}$.
 
-(c) Only $X = 5$ or $6$ can give 5 heads. $P(Y = 5\mid X = 5) = \frac1{32}$ and $P(Y = 5\mid X = 6) = \frac{6}{64}$. The prior $\frac16$ cancels:
+(b) Take out what is known: $E[XY] = E\big[X\,E[Y\mid X]\big] = E\big[\frac{X^2}2\big]$. So
+$$\text{Cov}(X,Y) = \frac12E[X^2] - E[X]\cdot\frac{E[X]}2 = \frac12\text{Var}(X) = \frac{35}{24}.$$
+
+(c) Only $X = 5$ or $6$ can give 5 heads. $P(Y = 5\mid X = 5) = \frac1{32} = \frac2{64}$ and $P(Y = 5\mid X = 6) = \binom65\frac1{64} = \frac{6}{64}$. Bayes' rule; the prior $\frac16$ cancels:
 $$P(X = 6\mid Y = 5) = \frac{6/64}{2/64 + 6/64} = \boxed{\tfrac34}.$$
 
 ### Problem 8 [Mixed: MGFs + the Gamma sum + exact vs CLT]
@@ -170,11 +172,14 @@ A device has two parts in series, each with an Exp$(\lambda)$ lifetime, independ
 
 $X$ comes from $\mathcal N(0,1)$ or $\mathcal N(2,1)$, each with probability $\frac12$. (a) Find $E[X]$ and $\text{Var}(X)$. (b) You observe $x = 1.5$. Which component most likely produced it?
 
-**Solution.** (a) Let $C$ be the component. $E[X] = \frac12(0) + \frac12(2) = 1$. By total variance,
-$$\text{Var}(X) = E[\text{Var}(X\mid C)] + \text{Var}(E[X\mid C]) = 1 + \text{Var}(\text{0 or 2, fifty-fifty}) = 1 + 1 = \boxed2 .$$
-(b) With equal priors the $\frac1{\sqrt{2\pi}}$ cancels:
-$$P(C = 2\mid x = 1.5) = \frac{e^{-(0.5)^2/2}}{e^{-(1.5)^2/2} + e^{-(0.5)^2/2}} = \frac1{1 + e^{-1}}\approx\boxed{0.73}.$$
-The second component is about 2.7 times as likely. ($e^{-1.125}/e^{-0.125} = e^{-1}$.)
+**Solution.** (a) Let $C\in\{0, 2\}$ be the component mean, each with probability $\frac12$. Then $E[X\mid C] = C$ and $\text{Var}(X\mid C) = 1$.
+$$E[X] = E[C] = \tfrac12(0) + \tfrac12(2) = 1 .$$
+By total variance, with $\text{Var}(C) = E[C^2] - 1 = 2 - 1 = 1$:
+$$\text{Var}(X) = E[\text{Var}(X\mid C)] + \text{Var}(E[X\mid C]) = 1 + 1 = \boxed2 .$$
+
+(b) Bayes; with equal priors the $\frac12$ and $\frac1{\sqrt{2\pi}}$ cancel:
+$$P(C = 2\mid x = 1.5) = \frac{e^{-(1.5-2)^2/2}}{e^{-(1.5-0)^2/2} + e^{-(1.5-2)^2/2}} = \frac{e^{-0.125}}{e^{-1.125} + e^{-0.125}} = \frac1{1 + e^{-1}}\approx\boxed{0.73}.$$
+The $\mathcal N(2,1)$ component is $e\approx2.7$ times as likely.
 
 ### Problem 14 [Mixed: bivariate normal + best linear predictor + least squares]
 
