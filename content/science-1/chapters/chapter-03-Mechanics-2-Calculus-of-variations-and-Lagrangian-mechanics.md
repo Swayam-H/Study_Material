@@ -1,20 +1,68 @@
 # Learn: Calculus of variations and Lagrangian mechanics
 
-Lagrangian mechanics replaces forces by a single scalar function L = T − U and a single principle, that the true motion makes the action stationary. The mathematics behind it is the calculus of variations. Sources: slides `Lagrangian.tex:1` to `:334`, MT ch 6–7, HW lectures 6–7 (MT E6.1–E6.5, E7.3–E7.17). Questions follow the 2025 midsem Q6 and Q12, the 2026 midsem Q2 and Q4–Q7, and Section C of the practice set.
+Lagrangian mechanics replaces forces by a single scalar function $L = T - U$ and a single principle, that the true motion makes the action stationary. The mathematics behind it is the calculus of variations. Sources: slides `Lagrangian.tex:1` to `:334`, MT ch 6–7, HW lectures 6–7 (MT E6.1–E6.5, E7.3–E7.17). Questions follow the 2025 midsem Q6 and Q12, the 2026 midsem Q2 and Q4–Q7, and Section C of the practice set.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## Describing a whole path at once
 
-Newton's laws are local in time. They tell us how the state of a system changes from one instant to the next, and the path is found by adding up these small steps. There is another way of looking at motion, in which the whole path is described at once by some property it has. Light gives the oldest example. Fermat proposed that light travelling from one point to another follows the path that takes the least time. Applied to light crossing from one medium into another, where its speed changes, this principle gives Snell's law of refraction directly. A mechanical example is the brachistochrone problem: along which curve does a bead slide, from rest under gravity, from one point to a lower one in the shortest time? The answer is not the straight line but a cycloid, which drops steeply at first to gain speed early.
+Newton's laws are local in time. They tell us how the state of a system changes from one instant to the next, $\frac{d}{dt}(x, v) = (v, F/m)$, and the path is found by adding up these small steps. There is another way of looking at motion, in which the whole path is described at once by some property it has. Examples from the slides:
+
+- The oscillator's whole path is the ellipse $(x/A)^2 + (p/B)^2 = 1$ in the $(x, p)$ plane.
+- Energy $E = T + U$ is the same at every point of the path.
+- A free particle moves in a straight line, which is also the path of minimum **average kinetic energy** $T_\text{avg} = \frac{1}{t_2 - t_1}\int_{t_1}^{t_2} T\,dt$ between fixed end points.
+- **Fermat's principle:** light travelling between two points follows the path of least time. Applied to light crossing into a medium where its speed changes, it gives Snell's law directly.
+
+A mechanical example is the **brachistochrone**: along which curve does a bead slide, from rest under gravity, from one point to a lower one in the shortest time? With $x$ measured downwards, $v = \sqrt{2gx}$ and $ds = \sqrt{dx^2 + dy^2}$, so the time is
+
+$$T = \int \frac{ds}{v} = \int_{x_1}^{x_2} \frac{\sqrt{1 + y'^2}}{\sqrt{2gx}}\,dx$$
+
+The answer is not the straight line but a cycloid, which drops steeply at first to gain speed early. Other problems of the same kind: the shortest path between two points, the shape of a hanging chain (minimum potential energy), and the isoperimetric problem (the largest area for a fixed perimeter).
 
 ## The calculus of variations
 
-Such problems ask for the function y(x) that makes an integral J = ∫f(y, y′, x) dx stationary, with the end points held fixed. This is a different kind of optimisation from finding the minimum of a function, because the unknown is an entire curve. The method is to compare the true curve with nearby ones, y(x) + αη(x), where η is any smooth function that vanishes at the end points. For the true curve J must be stationary as α passes through zero. Differentiating under the integral and integrating the η′ term by parts, the boundary terms vanish and we are left with ∫\[∂f/∂y − d/dx(∂f/∂y′)\]η dx = 0. Since this must hold for every η, the bracket itself must vanish, giving the Euler equation ∂f/∂y − d/dx(∂f/∂y′) = 0. When f does not depend explicitly on x, a first integral follows at once: f − y′∂f/∂y′ is constant. This second form is often the quicker route, and it is the one used for the brachistochrone.
+Such problems ask for the function $y(x)$ that makes an integral
+
+$$J = \int_{x_1}^{x_2} f\big(y(x), y'(x); x\big)\,dx$$
+
+stationary, with the end points held fixed. This is a different kind of optimisation from finding the minimum of a function, because the unknown is an entire curve. The method is to compare the true curve with nearby ones, $y(\alpha, x) = y(0, x) + \alpha\,\eta(x)$, where $\eta$ is any smooth function with $\eta(x_1) = \eta(x_2) = 0$. For the true curve $\partial J/\partial\alpha = 0$ at $\alpha = 0$. Differentiating under the integral and integrating the $\eta'$ term by parts (the boundary terms vanish):
+
+$$\frac{\partial J}{\partial\alpha} = \int_{x_1}^{x_2}\left(\frac{\partial f}{\partial y} - \frac{d}{dx}\frac{\partial f}{\partial y'}\right)\eta(x)\,dx = 0$$
+
+Since this must hold for every $\eta$, the bracket itself must vanish:
+
+$$\boxed{\frac{\partial f}{\partial y} - \frac{d}{dx}\left(\frac{\partial f}{\partial y'}\right) = 0}\qquad(\text{Euler equation})$$
+
+When $f$ does not depend explicitly on $x$, a first integral follows at once:
+
+$$\boxed{f - y'\frac{\partial f}{\partial y'} = \text{constant}}\qquad\left(\text{second form, valid when } \frac{\partial f}{\partial x} = 0\right)$$
+
+This second form is often the quicker route. For the brachistochrone it is even simpler to swap the roles: $f$ has no $y$, so $\partial f/\partial y' = \text{const}$, which gives $\dfrac{y'^2}{x(1 + y'^2)} = \dfrac{1}{2a}$, i.e. $y = \int \dfrac{x\,dx}{\sqrt{2ax - x^2}}$, a cycloid.
 
 ## Hamilton's principle
 
-Mechanics can be put in the same form. Hamilton's principle states that of all the paths a system could take between two configurations in a given time, the actual path is the one for which the action S = ∫L dt is stationary, where the Lagrangian L = T − U is the kinetic energy minus the potential energy. Applying the Euler equation with t in place of x gives the Euler–Lagrange equations, d/dt(∂L/∂q̇) = ∂L/∂q. For a single particle in Cartesian coordinates these are exactly Newton's equations mẍ = −∂U/∂x, so nothing new has been added to the physics. What has been gained is a far more convenient formulation.
+Mechanics can be put in the same form. Hamilton's principle states that of all the paths a system could take between two configurations in a given time, the actual path makes the action stationary:
+
+$$\boxed{S = \int_{t_1}^{t_2} L(q, \dot q, t)\,dt,\qquad \delta S = 0,\qquad L = T - U}$$
+
+Applying the Euler equation with $t$ in place of $x$ gives the Euler–Lagrange equations:
+
+$$\boxed{\frac{d}{dt}\left(\frac{\partial L}{\partial\dot q_k}\right) = \frac{\partial L}{\partial q_k},\qquad k = 1, \dots, n}$$
+
+For a single particle in Cartesian coordinates these are exactly Newton's equations $m\ddot x = -\partial U/\partial x$, so nothing new has been added to the physics. What has been gained is a far more convenient formulation.
+
+### The slides' derivation from Newton (`Lagrangian.tex`, "Hand-wavy derivation")
+
+This is worth knowing as a 4–5 mark derivation.
+
+1. On the true path $\mathbf F - \dot{\mathbf p} = 0$, so for any variation $\boldsymbol\eta(t)$: $J = \int_{t_1}^{t_2}(\mathbf F - \dot{\mathbf p})\cdot\boldsymbol\eta\,dt = 0$.
+2. For a conservative force, $J = \int(-\nabla U\cdot\boldsymbol\eta - m\dot{\mathbf v}\cdot\boldsymbol\eta)\,dt$.
+3. Use $\frac{d}{dt}(\mathbf v\cdot\boldsymbol\eta) = \dot{\mathbf v}\cdot\boldsymbol\eta + \mathbf v\cdot\dot{\boldsymbol\eta}$. The total-derivative term integrates to zero when $\boldsymbol\eta(t_1) = \boldsymbol\eta(t_2) = 0$, leaving $J = \int(-\nabla U\cdot\boldsymbol\eta + m\mathbf v\cdot\dot{\boldsymbol\eta})\,dt$.
+4. Let $\boldsymbol\eta = \delta\mathbf x$, a small change from the true path, so $\dot{\boldsymbol\eta} = \delta\mathbf v$. Then $-\nabla U\cdot\delta\mathbf x = \delta(-U)$ and $m\mathbf v\cdot\delta\mathbf v = \delta(\tfrac12 mv^2)$:
+
+$$J = \int_{t_1}^{t_2}\delta\left(\tfrac12 mv^2 - U\right)dt = \delta\int_{t_1}^{t_2} L\,dt = \delta S = 0$$
+
+**Caveats on the slides.** (i) A constraint force $\mathbf F_c$ was left out; that is fine because it does no work along the true path, $\mathbf F_c\cdot d\mathbf x = 0$. (ii) Awkward constraints such as the pendulum need generalised coordinates; MT 7.6 gives the rigorous derivation from $F = ma$ in generalised coordinates. The principle survives any change of coordinates, which is its power.
 
 ![Brachistochrone: cycloid, straight line and parabola](fig/brachistochrone.svg)
 
@@ -22,19 +70,63 @@ Mechanics can be put in the same form. Hamilton's principle states that of all t
 
 ## Generalised coordinates and constraints
 
-The great advantage of the Lagrangian method is that the action is a scalar, and its stationary value does not depend on which coordinates are used to describe the path. Any set of independent quantities that fixes the configuration, called generalised coordinates, will do, and the Euler–Lagrange equations take the same form in all of them. The number of such coordinates is the number of degrees of freedom. A simple pendulum, for example, needs only the angle θ. Writing T = ½ml²θ̇² and U = −mgl cosθ gives the equation ml²θ̈ = −mgl sinθ at once, without ever mentioning the tension in the string. This is typical. Constraints that are built into the choice of coordinates never appear in the equations, and the forces that maintain them, which do no work, need not be found.
+The great advantage of the Lagrangian method is that the action is a scalar, and its stationary value does not depend on which coordinates describe the path. Any set of independent quantities that fixes the configuration, the **generalised coordinates**, will do, and the Euler–Lagrange equations take the same form in all of them. The number of such coordinates is the number of degrees of freedom.
 
-The same method handles more complicated systems with little extra effort. For a particle moving on the inside of a cone, the "wall of death", two coordinates r and θ suffice, and since θ does not appear in the Lagrangian the angular momentum about the axis is conserved. For a block on an incline whose angle increases at a steady rate, the Lagrangian depends explicitly on time, and the energy is then not conserved. For a double pendulum, two angles describe the system, and the Lagrangian leads directly to two coupled equations of motion, which would be laborious to obtain from free-body diagrams.
+**Simple pendulum (MT E7.2).** One coordinate, $\theta$:
 
-Sometimes we want the constraint forces, or the constraint cannot conveniently be built into the coordinates. Then the constraint, written as an equation g(q) = 0, is added with a Lagrange multiplier λ, and the equations become ∂L/∂qⱼ − d/dt(∂L/∂q̇ⱼ) + λ∂g/∂qⱼ = 0. For a disk rolling without slipping down an incline, with the constraint y = Rθ, this gives the acceleration g sinα/(1 + I/MR²), and the size of λ is the friction force that enforces rolling.
+$$L = \tfrac12 ml^2\dot\theta^2 + mgl\cos\theta\quad\Longrightarrow\quad \boxed{ml^2\ddot\theta = -mgl\sin\theta}\quad\xrightarrow{\text{small }\theta}\quad \ddot\theta = -\frac gl\,\theta$$
+
+The tension in the string never appears. This is typical: constraints built into the choice of coordinates never appear in the equations, and the forces that maintain them, which do no work, need not be found.
+
+**Wall of death (MT E7.4).** A particle on a cone of half-angle $\alpha$, with $z = r\cot\alpha$. Two coordinates $r, \theta$:
+
+$$L = \tfrac12 m\left(\dot r^2\csc^2\alpha + r^2\dot\theta^2\right) - mgr\cot\alpha$$
+
+$\theta$ is cyclic, so $mr^2\dot\theta$ (angular momentum about the axis) is conserved, and the $r$-equation is $\ddot r - r\dot\theta^2\sin^2\alpha + g\sin\alpha\cos\alpha = 0$.
+
+**Block on a rising incline (MT P7.12).** The angle grows as $\theta = \alpha t$; with $q$ the distance along the incline,
+
+$$L = \tfrac12 m\dot q^2 + \tfrac12 mq^2\alpha^2 - mgq\sin\alpha t\quad\Longrightarrow\quad \ddot q = \alpha^2 q - g\sin\alpha t$$
+
+$L$ depends explicitly on time, and the energy is then not conserved. For a double pendulum, two angles describe the system, and the Lagrangian leads directly to two coupled equations of motion that would be laborious to get from free-body diagrams.
+
+**Constraints with multipliers.** Sometimes we want the constraint forces, or the constraint cannot conveniently be built into the coordinates. Then each constraint $g(q) = 0$ is added with a Lagrange multiplier $\lambda$:
+
+$$\boxed{\frac{\partial L}{\partial q_j} - \frac{d}{dt}\frac{\partial L}{\partial\dot q_j} + \sum_k\lambda_k\frac{\partial g_k}{\partial q_j} = 0}$$
+
+For a disk rolling without slipping down an incline (MT E7.9), with the constraint $y - R\theta = 0$, this gives
+
+$$\ddot y = \frac{g\sin\alpha}{1 + I/MR^2}$$
+
+and $\lambda$ is the friction force that enforces rolling.
 
 ## Symmetries and conservation laws
 
-The Lagrangian method shows clearly where conservation laws come from. If L does not contain a coordinate qₖ, that coordinate is called cyclic, and the Euler–Lagrange equation gives d/dt(∂L/∂q̇ₖ) = 0, so the conjugate momentum pₖ = ∂L/∂q̇ₖ is constant. Each such conservation law reflects a symmetry. If the Lagrangian is unchanged when the whole system is displaced in space, the total linear momentum is conserved. If it is unchanged when the system is rotated, the angular momentum is conserved. And if L does not depend explicitly on time, so that the laws are the same today as tomorrow, the quantity Σq̇ₖpₖ − L is conserved, which for ordinary systems is the total energy. Homogeneity of space, isotropy of space and homogeneity of time thus underlie the three great conservation laws of mechanics.
+The Lagrangian method shows clearly where conservation laws come from. If $L$ does not contain a coordinate $q_k$, that coordinate is called **cyclic**, and
+
+$$\boxed{\frac{\partial L}{\partial q_k} = 0\quad\Longrightarrow\quad p_k = \frac{\partial L}{\partial\dot q_k} = \text{constant}}$$
+
+Each such conservation law reflects a symmetry:
+
+| Symmetry of $L$ | Conserved quantity |
+|---|---|
+| translation in space ($\delta\mathbf r$ uniform, $\delta\dot{\mathbf r} = 0$) | linear momentum |
+| rotation ($\delta\mathbf r = \delta\boldsymbol\theta\times\mathbf r$) | angular momentum $\mathbf r\times\mathbf p$ |
+| translation in time ($\partial L/\partial t = 0$) | $H = \sum_k \dot q_k p_k - L$, the energy for ordinary systems |
+
+The time case follows from $\dfrac{d}{dt}\left(L - \sum_k\dot q_k\dfrac{\partial L}{\partial\dot q_k}\right) = \dfrac{\partial L}{\partial t}$. Homogeneity of space, isotropy of space and homogeneity of time thus underlie the three great conservation laws of mechanics.
 
 ## Newton and Lagrange compared
 
-Both formulations lead to second-order differential equations and describe exactly the same physics. Newton's method works with vector forces in Cartesian coordinates and handles constraints by finding and balancing the constraint forces. Lagrange's method works with two scalar energies in any convenient coordinates and handles constraints either by choosing coordinates that satisfy them automatically or by multipliers. The Lagrangian approach is usually simpler for constrained systems and is the natural starting point for the Hamiltonian formulation, for quantum mechanics and for field theory, while Newton's method remains the natural one for dissipative forces such as friction, which have no potential. The variational idea also reaches beyond physics: training a machine-learning model is itself the problem of choosing a function to minimise an integral of the error.
+| | Newtonian | Lagrangian |
+|---|---|---|
+| Equation of motion | $m_k\ddot x_k = F_k$ | $\frac{d}{dt}\frac{\partial L}{\partial\dot q_k} = \frac{\partial L}{\partial q_k}$ |
+| Order | second | second |
+| Coordinates | Cartesian | any generalised coordinates |
+| Interactions via | forces (vectors) | energies (scalars) |
+| Constraints | balancing forces | built into coordinates, or multipliers |
+
+Both describe exactly the same physics. The Lagrangian approach is usually simpler for constrained systems and is the natural starting point for the Hamiltonian formulation, for quantum mechanics and for field theory, while Newton's method remains the natural one for dissipative forces such as friction, which have no potential. The variational idea also reaches beyond physics: training a machine-learning model is the problem of choosing a function to minimise an integral of the error, $J = \int[y - f_\theta(x)]^2dx$.
 
 # Reference: Calculus of variations and Lagrangian mechanics
 

@@ -1,42 +1,111 @@
 # Learn: Newtonian mechanics of one particle and many
 
-Newton's three laws, the work–energy theorem, conservative forces and the conservation of momentum, angular momentum and energy, first for one particle and then for systems of particles, including variable mass. Sources: slides `CM-1particle.tex` and `CM-SystemOfParticles.tex`, MT ch 1–2 and 9, HW lectures 5 and 8 (MT E2.2, E2.4, E2.10, P2.27–P2.53, E9.1, E9.3, E9.10, 9.15, 9.11 rocket). Questions follow the 2025 midsem Q1, Q5 and Q8–Q10, the 2026 midsem Q1, and Quiz-1 Q2.
+Newton's three laws, the work–energy theorem, conservative forces and the conservation of momentum, angular momentum and energy, first for one particle and then for systems of particles, including variable mass. Sources: slides `CM-1particle.tex` and `CM-SystemOfParticles.tex`, MT ch 2 and 9, HW lectures 5 and 8 (MT E2.2, E2.4, E2.10, P2.27–P2.53, E9.1, E9.3, E9.10, 9.15, 9.11 rocket). Questions follow the 2025 midsem Q1, Q5 and Q8–Q10, the 2026 midsem Q1, and Quiz-1 Q2.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Endsem scope.** MT ch 2 and ch 9 except 9.6–9.10 (collisions, cross sections and the Rutherford formula are out; rocket motion, 9.11, is in). The harmonic-oscillator section is MT ch 3, which is not listed: keep only the small-oscillation idea.
+
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## Newton's laws
 
-The state of a particle at any instant is given by its position and its velocity, both vectors in a three-dimensional Cartesian frame. Newton's first law says that in the absence of forces a body continues at rest or in uniform motion in a straight line. This serves to define an inertial frame, one in which the law holds. The second law says that the rate of change of a body's momentum p = mv equals the net force acting on it, F = dp/dt. The third law says that when two bodies interact the forces they exert on each other are equal in magnitude and opposite in direction; in its strong form, which holds for central forces such as gravity, the forces also act along the line joining the bodies. Together the laws turn the problem of motion into the solution of a second-order differential equation: given the forces and the initial position and velocity, the whole future motion is determined.
+The state of a particle at any instant is given by its position $\mathbf r$ and its velocity $\mathbf v$, both vectors in a three-dimensional Cartesian frame.
+
+> **Newton's laws**
+> 1. In the absence of forces a body continues at rest or in uniform motion in a straight line. This defines an **inertial frame**.
+> 2. The rate of change of momentum equals the net force: $\mathbf F = \dfrac{d\mathbf p}{dt}$, with $\mathbf p = m\mathbf v$.
+> 3. Interacting bodies exert equal and opposite forces on each other; in the strong form (central forces such as gravity) the forces act along the line joining them.
+
+Together the laws turn the problem of motion into the solution of a second-order differential equation: given the forces and the initial position and velocity, the whole future motion is determined.
 
 ## Work, energy and conservative forces
 
-The work done by a force on a particle moving from one point to another is W = ∫F·dr. Using the second law, F·dr = m(dv/dt)·v dt = d(½mv²), so the work done equals the change in kinetic energy, W = K₂ − K₁. In general the work depends on the path taken. For some forces it does not, and these are called conservative. A conservative force can always be written as the negative gradient of a potential energy function, F = −∇U, and the work is then −(U₂ − U₁). Combining this with the work–energy theorem gives K₁ + U₁ = K₂ + U₂: the total mechanical energy is conserved. A practical test of whether a force is conservative is that its curl vanishes, ∇ × F = 0, which is equivalent to the work around every closed loop being zero. Gravity and the force of a spring pass this test; friction does not.
+The work done by a force on a particle moving from point 1 to point 2 is $W = \int_1^2 \mathbf F\cdot d\mathbf r$. Using the second law, $\mathbf F\cdot d\mathbf r = m\dfrac{d\mathbf v}{dt}\cdot\mathbf v\,dt = d\left(\tfrac12 mv^2\right)$, so
+
+$$\boxed{W = \int_1^2 \mathbf F\cdot d\mathbf r = K_2 - K_1,\qquad K = \tfrac12 mv^2}$$
+
+In general the work depends on the path taken. For some forces it does not, and these are called **conservative**. A conservative force can always be written as the negative gradient of a potential energy:
+
+$$\boxed{\mathbf F = -\nabla U\quad\Longrightarrow\quad W = -(U_2 - U_1)\quad\Longrightarrow\quad K_1 + U_1 = K_2 + U_2}$$
+
+The total mechanical energy is conserved. A practical test is that the curl vanishes, $\nabla\times\mathbf F = 0$, which is equivalent to the work around every closed loop being zero. Gravity and the force of a spring pass this test; friction does not.
 
 ## Conservation of momentum and angular momentum
 
-The second law also contains conservation laws for momentum. If the force has no component along some fixed direction s, then d(p·s)/dt = F·s = 0, so the momentum in that direction is constant. For a projectile, for example, gravity acts vertically, so the horizontal momentum is conserved. Rotational motion is handled in the same way. The angular momentum about an origin is L = r × p, and differentiating gives dL/dt = v × mv + r × F = r × F, the torque N. Where the torque has no component along some direction, the angular momentum in that direction is conserved. A central force, which always points towards or away from the origin, exerts no torque about it, so the angular momentum is conserved for planetary motion.
+The second law also contains conservation laws. If the force has no component along some fixed direction $\mathbf s$:
 
-The energy can be examined in the same spirit. Differentiating E = T + U along the motion gives dE/dt = v·(F + ∇U) + ∂U/∂t. For a conservative force the first term vanishes, so energy is conserved provided the potential does not change with time.
+$$\mathbf F\cdot\mathbf s = 0\quad\Longrightarrow\quad \frac{d}{dt}(\mathbf p\cdot\mathbf s) = 0$$
+
+so the momentum in that direction is constant. For a projectile, gravity acts vertically, so the horizontal momentum is conserved. Rotational motion is handled the same way. The angular momentum about an origin and the torque are
+
+$$\boxed{\mathbf L = \mathbf r\times\mathbf p,\qquad \mathbf N = \frac{d\mathbf L}{dt} = \underbrace{\mathbf v\times m\mathbf v}_{=0} + \mathbf r\times\mathbf F = \mathbf r\times\mathbf F}$$
+
+Where the torque has no component along some direction, the angular momentum in that direction is conserved. A central force, which always points towards or away from the origin, exerts no torque about it, so angular momentum is conserved for planetary motion.
+
+The energy can be examined in the same spirit. Differentiating $E = T + U(\mathbf r, t)$ along the motion:
+
+$$\frac{dE}{dt} = \mathbf v\cdot(\mathbf F + \nabla U) + \frac{\partial U}{\partial t}\quad\Longrightarrow\quad \boxed{\frac{dE}{dt} = \frac{\partial U}{\partial t}}\ \ \text{for }\mathbf F = -\nabla U$$
+
+so energy is conserved provided the potential does not change with time.
 
 ## Galilean relativity
 
-Two inertial frames moving relative to each other at constant velocity v are related by the Galilean transformation, in which positions shift by vt, times are the same, and velocities simply add, u′ = u − v. Since v is constant, accelerations are the same in both frames, and so are the forces. Newton's laws therefore take the same form in every inertial frame, and no mechanical experiment can reveal absolute motion. This principle of Galilean relativity is exactly what electromagnetism later appeared to violate, and its replacement is the subject of special relativity.
+Two inertial frames moving relative to each other at constant velocity $\mathbf v$ are related by the Galilean transformation:
+
+$$\mathbf r' = \mathbf r - \mathbf vt,\qquad t' = t,\qquad \mathbf u' = \mathbf u - \mathbf v\quad\Longrightarrow\quad \frac{d\mathbf p'}{dt} = \frac{d\mathbf p}{dt},\quad \mathbf F' = \mathbf F$$
+
+Since $\mathbf v$ is constant, accelerations and forces are the same in both frames. Newton's laws therefore take the same form in every inertial frame, and no mechanical experiment can reveal absolute motion. This principle of Galilean relativity is exactly what electromagnetism later appeared to violate, and its replacement is the subject of special relativity.
 
 ## Solving problems with constraints
 
-The Newtonian method of solving a problem is to identify all the forces, draw a free-body diagram, add whatever constraint forces are needed to keep the body on its allowed path, and then solve the equations of motion with the initial conditions. A block on a smooth incline, for instance, is held on the surface by a normal force that exactly balances the component of gravity perpendicular to the incline, leaving the parallel component g sinθ to accelerate it; with friction the acceleration becomes g(sinθ − μ cosθ). For the incline the constraint force is constant, but for a pendulum the tension changes continuously as the bob swings. Constraint forces of this kind are a nuisance in the Newtonian method, which is one motivation for the Lagrangian approach.
+**Strategy.** Identify all the forces and draw a free-body diagram; add the constraint ("balancing") forces needed to keep the body on its allowed path; set up the equations of motion (second and third laws, or conservation laws); solve with the initial conditions.
+
+A block on a smooth incline of angle $\theta$ is held on the surface by a normal force that balances the perpendicular component of gravity, leaving
+
+$$a = g\sin\theta\quad(\text{smooth}),\qquad a = g(\sin\theta - \mu\cos\theta)\quad(\text{kinetic friction } \mu)$$
+
+Other standard cases on the slides: a linear retarding force, projectile motion, and vertical motion with air resistance (terminal velocity). For the incline the constraint force is constant, but for a pendulum the tension changes continuously as the bob swings. Constraint forces of this kind are a nuisance in the Newtonian method, which is one motivation for the Lagrangian approach.
 
 ## The harmonic oscillator and small oscillations
 
-One system appears everywhere in physics: the simple harmonic oscillator. A mass on a spring obeys Hooke's law F = −kx, so mẍ = −kx, or ẍ + ω₀²x = 0 with ω₀ = √(k/m). The solution is a sinusoidal oscillation at the angular frequency ω₀, whatever the amplitude. Writing the equation as two first-order equations for x and p, its trajectories in the (x, p) phase plane are ellipses of constant energy. Measuring time in units of 1/ω₀ and distance in units of the amplitude reduces the equation to ξ″ + ξ = 0, which contains no parameters at all, so every harmonic oscillator is the same oscillator on a different scale. The reason the oscillator matters so much is that any system disturbed slightly from a stable equilibrium behaves like one. Near a minimum x₀ of a potential, U(x) ≈ U(x₀) + ½U″(x₀)(x − x₀)², which is a spring with effective constant k = U″(x₀). The frequency of small oscillations is therefore √(U″(x₀)/m).
+> ⚠ MT ch 3 is not on the endsem list. Know the small-oscillation result below; it is used in Lagrangian problems.
+
+One system appears everywhere in physics: the simple harmonic oscillator. A mass on a spring obeys Hooke's law $F = -kx$, so
+
+$$\boxed{m\ddot x = -kx\quad\Longleftrightarrow\quad \ddot x + \omega_0^2 x = 0,\qquad \omega_0 = \sqrt{k/m}}$$
+
+The solution $x(t) = A_+e^{i\omega_0 t} + A_-e^{-i\omega_0 t}$ is a sinusoidal oscillation at $\omega_0$, whatever the amplitude. Written as two first-order equations, $\dot x = p/m$ and $\dot p = -kx$, its trajectories in the $(x, p)$ plane are ellipses of constant energy $E = p^2/2m + \tfrac12 kx^2$. Measuring time in units of $1/\omega_0$ reduces the equation to $\xi'' + \xi = 0$, which contains no parameters at all.
+
+The reason the oscillator matters so much is that any system disturbed slightly from a stable equilibrium behaves like one. Near a minimum $x_0$ of a potential,
+
+$$U(x) \approx U(x_0) + \tfrac12 U''(x_0)(x - x_0)^2\quad\Longrightarrow\quad \boxed{k_\text{eff} = U''(x_0),\qquad \omega = \sqrt{\frac{U''(x_0)}{m}}}$$
 
 ## Systems of particles
 
-For a collection of particles we define the total mass M, the centre of mass R = Σmₖrₖ/M, and the total momentum P = Σpₖ, which equals MV, the total mass times the velocity of the centre of mass. The forces on each particle are of two kinds, external forces from outside the system and internal forces between its members. By the third law the internal forces cancel in pairs when summed over the whole system, so that dP/dt = MŘ = F\_ext. The centre of mass moves as though the whole mass were concentrated there and acted on by the total external force, and when there is no external force the total momentum is conserved. For central internal forces the internal torques also cancel in pairs, so the rate of change of total angular momentum equals the total external torque. Both the angular momentum and the kinetic energy split neatly into a part due to the motion of the centre of mass and a part due to motion relative to it: L = R × MV + Σr′ₖ × p′ₖ and T = ½MV² + Σ½mₖv′ₖ².
+For $N$ particles define the total mass, centre of mass and total momentum:
+
+$$\boxed{M = \sum_k m_k,\qquad \mathbf R = \frac{1}{M}\sum_k m_k\mathbf r_k,\qquad \mathbf P = \sum_k \mathbf p_k = M\dot{\mathbf R}}$$
+
+The force on each particle is external plus internal, $\mathbf F_k = \mathbf F_k^{e} + \sum_{j\ne k}\mathbf F_{k\leftarrow j}$. By the third law the internal forces cancel in pairs, $\mathbf F_{k\leftarrow j} = -\mathbf F_{j\leftarrow k}$, so
+
+$$\boxed{\frac{d\mathbf P}{dt} = M\ddot{\mathbf R} = \mathbf F_\text{ext}}$$
+
+The centre of mass moves as though the whole mass were concentrated there and acted on by the total external force; with no external force, $\mathbf P$ is conserved. For central internal forces the internal torques also cancel in pairs, so $d\mathbf L/dt = \sum_k \mathbf r_k\times\mathbf F_k^e$, the total external torque. Writing $\mathbf r_k = \mathbf R + \mathbf r_k'$, both $\mathbf L$ and $T$ split into a centre-of-mass part and a part relative to it:
+
+$$\boxed{\mathbf L = \mathbf R\times M\mathbf V + \sum_k \mathbf r_k'\times\mathbf p_k',\qquad T = \tfrac12 MV^2 + \sum_k \tfrac12 m_k v_k'^2}$$
+
+(The cross terms vanish because $\sum_k m_k\mathbf v_k' = 0$.) For a conservative system with no external forces the total energy is constant.
 
 ## Variable mass
 
-The second law in the form F = dp/dt must be applied carefully when the mass of a body changes. A rocket is the standard example. In a time dt it ejects a mass |dm| of exhaust at speed u backwards relative to itself, and conservation of momentum for the rocket and the ejected gas together gives m dv/dt = −u dm/dt + F\_ext. The first term on the right is the thrust. With no external force this integrates to v = u ln(m₀/m): the final speed depends on the exhaust speed and, only logarithmically, on the ratio of initial to final mass. In a uniform gravitational field the rocket lifts off only if the thrust exceeds its weight. Falling ropes and chains raise the same issue. When a hanging rope falls onto a table, the table must support not only the weight of the rope already on it but also stop the falling rope, and the rate at which momentum arrives adds a force equal to twice that weight, giving three times the weight of the rope already piled up.
+The second law in the form $\mathbf F = d\mathbf p/dt$ must be applied carefully when the mass changes. A rocket ejects mass $|dm|$ of exhaust at speed $u$ backwards relative to itself. Momentum conservation for rocket plus exhaust gives
+
+$$\boxed{m\frac{dv}{dt} = -u\frac{dm}{dt} + F_\text{ext}}$$
+
+The first term on the right is the thrust. With no external force this integrates to
+
+$$\boxed{v = v_0 + u\ln\frac{m_0}{m}}$$
+
+The final speed depends on the exhaust speed and only logarithmically on the mass ratio. In uniform gravity with burn rate $\alpha = -dm/dt$, $m\,dv/dt = u\alpha - mg$, and the rocket lifts off only if $u\alpha > m_0 g$. Falling ropes and chains raise the same issue: when a hanging rope falls onto a table, the table must support the weight already on it and also stop the falling rope; the arriving momentum adds twice that weight, so the force is three times the weight of the rope already piled up.
 
 ## Limits of Newtonian mechanics
 

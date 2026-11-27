@@ -1,34 +1,72 @@
 # Learn: Quantum theory of the hydrogen atom
 
-Solving the Schrödinger equation for the Coulomb potential gives three quantum numbers n, l, mₗ. n fixes the energy (the same −13.6/n² eV as Bohr), l fixes the size of the angular momentum, and mₗ its direction. The electron has no orbit, only a probability cloud. This doc covers Beiser 6.1–6.9 (6.10 Zeeman is excluded) and the slides `QM.tex:444` to `:533`. Your professor said the focus is understanding, not derivations, so the theory stresses what each result means.
+Solving the Schrödinger equation for the Coulomb potential gives three quantum numbers $n, l, m_l$. $n$ fixes the energy (the same $-13.6/n^2$ eV as Bohr), $l$ fixes the size of the angular momentum, and $m_l$ its direction. The electron has no orbit, only a probability cloud. This doc covers Beiser 6.1–6.9 and the slides `QM.tex:444` to `:533`. Your professor said the focus is understanding, not derivations, so the theory stresses what each result means.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Endsem scope.** Beiser 6.10 (the Zeeman effect) is excluded.
+
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## Why go beyond Bohr
 
-The Bohr model gave the right energy levels for hydrogen, but it did so by assuming that the electron moves in circular orbits and that its angular momentum is a whole multiple of ħ. Neither assumption had any deeper justification, and the model could say nothing about atoms with more than one electron or about why some spectral lines are brighter than others. The proper treatment is to solve Schrödinger's equation for an electron bound to a proton, and see what quantum mechanics itself predicts.
+The Bohr model gave the right energy levels for hydrogen, but it did so by assuming circular orbits and angular momentum in whole multiples of $\hbar$. Neither assumption had any deeper justification, and the model could say nothing about atoms with more than one electron or about why some spectral lines are brighter than others. The proper treatment is to solve Schrödinger's equation for an electron bound to a proton.
 
 ## Separating the Schrödinger equation
 
-The electron feels the Coulomb potential U = −e²/(4πε₀r), which depends only on its distance r from the nucleus. Because the potential has spherical symmetry, the natural coordinates are spherical polar coordinates r, θ and φ. In these coordinates the equation can be separated: we look for a wave function of the form ψ = R(r)Θ(θ)Φ(φ), and the single partial differential equation breaks into three ordinary ones, one for each variable. Each of these has acceptable solutions only for particular values of a separation constant, and these constants are the quantum numbers of the atom.
+The electron feels the Coulomb potential
 
-The azimuthal equation is the simplest. Its solution is Φ = e^(imₗφ), and because φ and φ + 2π describe the same point in space, Φ must return to its starting value after one turn. This is possible only if mₗ is an integer. The polar equation for Θ has solutions that remain finite at θ = 0 and θ = π only when a second constant takes the form l(l + 1), with l a whole number not smaller than |mₗ|. Finally, the radial equation has solutions that vanish at large r, as a bound electron's must, only when the energy takes one of the values Eₙ = −13.6 eV/n², with n an integer greater than l. In each case the quantum number appears for the same reason as in the particle in a box: a wave function that is required to be well behaved can do so only for certain values of its parameters. A problem in three dimensions simply gives three such conditions.
+$$U(r) = -\frac{e^2}{4\pi\varepsilon_0r}$$
+
+which depends only on $r$. Because of this spherical symmetry, use spherical polar coordinates $(r, \theta, \phi)$ and look for
+
+$$\boxed{\psi(r, \theta, \phi) = R(r)\,\Theta(\theta)\,\Phi(\phi)}$$
+
+The one partial differential equation then splits into three ordinary ones. Each has acceptable solutions only for particular values of a separation constant, and these constants are the quantum numbers:
+
+| Equation | Condition for a well-behaved solution | Quantum number |
+|---|---|---|
+| $\Phi(\phi)$: $\Phi = e^{im_l\phi}$ | $\Phi(\phi + 2\pi) = \Phi(\phi)$ (single-valued) | $m_l = 0, \pm1, \pm2, \dots$ |
+| $\Theta(\theta)$ | finite at $\theta = 0$ and $\pi$; constant must be $l(l + 1)$ | $l = 0, 1, 2, \dots$ with $l \ge \lvert m_l\rvert$ |
+| $R(r)$ | $R \to 0$ as $r \to \infty$ (bound) | $n = 1, 2, 3, \dots$ with $n > l$ |
+
+In each case the quantum number appears for the same reason as in the particle in a box: a wave function that must be well behaved can be so only for certain values of its parameters. Three dimensions simply give three such conditions.
+
+$$\boxed{n = 1, 2, 3, \dots;\qquad l = 0, 1, \dots, n - 1;\qquad m_l = -l, \dots, 0, \dots, +l}$$
 
 ## Energy: the principal quantum number
 
-The principal quantum number n determines the energy, and the formula is exactly Bohr's. What is different is that the energy depends on n alone, so that states with the same n but different l and mₗ have the same energy. There are n² such states for each n. This degeneracy is a special property of the 1/r potential; in atoms with more electrons the inner electrons screen the nucleus and states of different l separate in energy.
+$$\boxed{E_n = -\frac{me^4}{32\pi^2\varepsilon_0^2\hbar^2}\,\frac{1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}}$$
+
+The formula is exactly Bohr's. What is new is that the energy depends on $n$ alone, so states with the same $n$ but different $l$ and $m_l$ have the same energy:
+
+$$\text{degeneracy of level } n = \sum_{l=0}^{n-1}(2l + 1) = n^2\qquad(2n^2 \text{ with spin})$$
+
+This degeneracy is special to the $1/r$ potential; in atoms with more electrons the inner electrons screen the nucleus and states of different $l$ separate in energy.
 
 ## Angular momentum: the orbital quantum number
 
-The orbital quantum number l determines the magnitude of the electron's angular momentum, L = √(l(l + 1)) ħ. This is not Bohr's L = nħ. In particular, an electron in an s state (l = 0) has no orbital angular momentum at all, something no classical orbit can manage. States are labelled by n followed by a letter for l, so that s, p, d and f stand for l = 0, 1, 2 and 3, and a 3d electron has n = 3 and l = 2.
+$$\boxed{L = \sqrt{l(l + 1)}\,\hbar}$$
+
+This is not Bohr's $L = n\hbar$. An electron in an s state ($l = 0$) has **no** orbital angular momentum at all, something no classical orbit can manage. States are labelled by $n$ and a letter for $l$:
+
+| $l$ | 0 | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|
+| letter | s | p | d | f | g |
+
+so a $3d$ electron has $n = 3$, $l = 2$.
 
 ## Direction: the magnetic quantum number
 
-The magnetic quantum number mₗ determines the component of the angular momentum along a chosen axis, L\_z = mₗħ. Since mₗ takes only the 2l + 1 values from −l to +l, the vector L can point only in certain directions relative to that axis. This is called space quantisation. The largest possible L\_z is lħ, which is always smaller than √(l(l + 1)) ħ, so L can never lie exactly along the axis. If it could, its x and y components would both be exactly zero, and all three components would be known at once, which the uncertainty principle does not allow. Only the magnitude of L and one of its components can be definite at the same time.
+$$\boxed{L_z = m_l\hbar,\qquad m_l = -l, \dots, +l\ \ (2l + 1 \text{ values}),\qquad \cos\theta = \frac{m_l}{\sqrt{l(l + 1)}}}$$
+
+Since $L_z$ takes only $2l + 1$ values, $\mathbf L$ can point only in certain directions relative to the axis: **space quantisation**. The largest $L_z = l\hbar$ is always smaller than $\sqrt{l(l + 1)}\,\hbar$, so $\mathbf L$ can never lie exactly along the axis. If it could, $L_x$ and $L_y$ would both be exactly zero, and all three components would be known at once, which the uncertainty principle forbids. Only $|\mathbf L|$ and one component can be definite at the same time.
 
 ## Probability density
 
-The wave function does not describe a path. It gives the probability |ψ|² dV of finding the electron in a small volume, and the electron may be found at any distance from the nucleus. The probability of finding it between r and r + dr is P(r) dr = r²|R|² dr, the factor r² coming from the volume of a thin spherical shell. For the ground state this function has its maximum at r = a₀, the Bohr radius. The Bohr orbit therefore survives, but only as the most probable distance of the electron, not as a track it follows. The angular parts of ψ give the familiar shapes: s states are spherical, and p and d states have lobes in definite directions, which is why chemical bonds have definite directions.
+The wave function does not describe a path. It gives the probability $|\psi|^2dV$ of finding the electron in a small volume. The probability of finding it between $r$ and $r + dr$ is
+
+$$\begin{gathered}\boxed{P(r)\,dr = r^2|R(r)|^2\,dr} \\[4pt] (\text{the } r^2 \text{ is from the volume } 4\pi r^2dr \text{ of a thin shell})\end{gathered}$$
+
+For the ground state $R \propto e^{-r/a_0}$, so $P(r) \propto r^2e^{-2r/a_0}$, whose maximum is at $r = a_0$, the Bohr radius. The Bohr orbit survives, but only as the **most probable distance**, not as a track. The angular parts give the familiar shapes: s states are spherical, and p and d states have lobes in definite directions, which is why chemical bonds have definite directions.
 
 ![Radial probability and the angular momentum vector model](fig/orbitals-angular-momentum.svg)
 
@@ -36,11 +74,19 @@ The wave function does not describe a path. It gives the probability |ψ|² dV o
 
 ## Radiative transitions
 
-Quantum mechanics also explains why atoms are stable and how they radiate. In a stationary state |Ψ|² does not change with time, so the electron's charge distribution is static and, unlike Bohr's orbiting electron, it does not radiate. During a transition the electron is in a mixture of the initial and final states, and |Ψ|² then oscillates at the frequency (Eᵢ − E\_f)/h. An oscillating charge distribution radiates at its oscillation frequency, so the emitted photon has exactly the energy Eᵢ − E\_f. What Bohr had to postulate now follows from the theory.
+In a stationary state $|\Psi|^2$ does not change with time, so the charge distribution is static and, unlike Bohr's orbiting electron, it does not radiate. During a transition the electron is in a mixture of the two states,
+
+$$\Psi = a\,\psi_ie^{-iE_it/\hbar} + b\,\psi_fe^{-iE_ft/\hbar}\quad\Longrightarrow\quad |\Psi|^2 \text{ oscillates at } \nu = \frac{E_i - E_f}{h}$$
+
+An oscillating charge distribution radiates at its oscillation frequency, so the emitted photon has exactly $h\nu = E_i - E_f$. What Bohr had to postulate now follows from the theory.
 
 ## Selection rules
 
-Not every pair of levels is connected by such a transition. The rate depends on an integral of the dipole moment between the two states, and this integral vanishes unless Δl = ±1 and Δmₗ = 0 or ±1. These are the selection rules. The rule on l has a simple meaning: the photon carries away one unit of angular momentum, so the atom's angular momentum must change by one unit. A striking consequence is that an electron in the 2s state cannot fall to 1s by emitting a photon, since that would require Δl = 0, and so the 2s state is unusually long-lived.
+The transition rate depends on the dipole integral $\int\psi_f^*\,x\,\psi_i\,dV$ between the states, and this vanishes unless
+
+$$\boxed{\Delta l = \pm1,\qquad \Delta m_l = 0, \pm1}$$
+
+The rule on $l$ has a simple meaning: the photon carries away one unit of angular momentum. A striking consequence: an electron in $2s$ cannot fall to $1s$ by emitting a photon ($\Delta l = 0$), so the $2s$ state is unusually long-lived (metastable).
 
 # Reference: Quantum theory of the hydrogen atom
 

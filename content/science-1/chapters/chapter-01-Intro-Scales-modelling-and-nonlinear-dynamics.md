@@ -1,26 +1,157 @@
 # Learn: Scales, modelling and nonlinear dynamics
 
-The first four lectures: what science is, orders of magnitude, and two nonlinear models, the logistic map and the Lotka–Volterra prey–predator equations. Sources: lectures 1–4, slides `maps.tex`, notes in `03-lecture-notes/nonlinear-dynamics`, HW lectures 1–4. Questions follow Quiz-1, the 2026 midsem Q8 and Q9, and Sections A and B of the practice set.
+The first four lectures: what science is and how the scientific method works, orders of magnitude, mathematics as the language of science, non-dimensionalisation, and two nonlinear models, the logistic map and the Lotka–Volterra prey–predator equations. All of it is on the endsem syllabus (mathematical modelling, the scientific method, math as the language of the sciences). Sources: lectures 1–4, slides `maps.tex`, the decks `overleaf/Sci1-IntroLecture` and `overleaf/Sci1-MathModeling`, notes in `03-lecture-notes/nonlinear-dynamics`, HW lectures 1–4. Questions follow Quiz-1, the 2026 midsem Q8 and Q9, and Sections A and B of the practice set.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## What science is
 
-In everyday speech a "theory" is a guess. In science the word means almost the opposite: a well-tested explanation of a wide range of phenomena, which makes definite predictions that could in principle be shown false, and which has survived repeated attempts to do so. The scientific method is the cycle by which such theories are built: observe, propose a hypothesis, deduce its consequences, test them by experiment, and revise the hypothesis when it fails. Three kinds of reasoning take part. Induction generalises from many observations to a rule, as when repeated sunrises suggest that the sun always rises. Deduction derives particular consequences from general laws, as when Newton's laws predict an eclipse. Abduction infers the most plausible explanation of an observation, as a doctor does from symptoms. Reductionism explains a system through its parts, for example a gas through its molecules, while holism holds that some properties belong only to the whole, as an ecosystem's stability or a mind does. The relation between science and computing runs both ways: computers simulate physical systems, and physical systems can compute, as in Adleman's 1994 experiment, which solved a small Hamiltonian-path problem with strands of DNA, or in quantum computers.
+In everyday speech a "theory" is a guess. In science the word means almost the opposite: a well-tested explanation of a wide range of phenomena, which makes definite predictions that could in principle be shown false, and which has survived repeated attempts to do so. The intro lecture rests scientific knowledge on three pillars.
+
+> **The three pillars of scientific knowledge**
+> 1. **Empirical grounding:** knowledge comes from observation and measurement, not intuition or authority.
+> 2. **Logical consistency:** hypotheses are stated in logical or mathematical form so their consequences can be deduced.
+> 3. **Falsifiability:** a claim must say something an experiment could, in principle, show to be false.
+
+Because of the third pillar, science limits itself to natural phenomena. A supernatural claim relies on causes that cannot be observed or tested, so it is not wrong in a scientific sense; it is outside what science can address.
+
+Science, engineering and technology are often confused. The slides separate them by their goal:
+
+| | Science | Engineering | Technology |
+|---|---|---|---|
+| Core goal | understand natural laws ("why") | design practical solutions under constraints ("how to apply") | provide usable tools |
+| Starting point | an unanswered question | an unsolved problem | available principles |
+| Key output | theories and laws | designs and prototypes | products, devices, software |
+
+The relation between science and computing runs both ways: computers simulate physical systems, and physical systems can compute, as in Adleman's 1994 experiment, which solved a small Hamiltonian-path problem with strands of DNA, or in quantum computers.
+
+## Three kinds of reasoning
+
+| | Deduction | Induction | Abduction |
+|---|---|---|---|
+| Starts from | a rule and a case | many cases | an observation |
+| Gives | a consequence | a general rule | the best explanation |
+| Certainty | certain (if premises true) | probable | plausible, to be tested |
+| Example | all metals expand when heated; copper is a metal; so copper expands | every copper sample expanded, so copper always does | the grass is wet, so it probably rained |
+| Role in science | derive testable predictions | build empirical laws (Hume's problem of induction) | generate hypotheses (Peirce) |
+
+Deduction adds no new information but is truth-preserving; induction adds information but is never certain. The scientific cycle uses all three: **abduce** a hypothesis, **deduce** its predictions, **induce** support from the tests. Reductionism explains a system through its parts, for example a gas through its molecules, while holism holds that some properties belong only to the whole ("more is different", P. W. Anderson).
+
+## The scientific method in five steps
+
+The method is a self-correcting process designed to reduce human bias. Each step has a test of whether it was done correctly:
+
+| Step | What it is | Correctness criteria |
+|---|---|---|
+| 1. Problem | a clear, specific question about nature | testable, grounded in what is known, no vague language ("why is nature beautiful?" fails) |
+| 2. Hypothesis | a tentative explanation, often "if … then …" | falsifiable, gives explicit predictions, consistent with established laws unless challenging them with evidence |
+| 3. Experiment | a controlled test | controls confounding variables (independent vs dependent), calibrated instruments, reproducible by others |
+| 4. Data analysis | statistics and error analysis | statistical significance, random and systematic errors accounted for, no cherry-picking |
+| 5. Conclusion | does the data support the hypothesis? | follows from the data alone, speaks of support not proof, open to peer review |
+
+In practice the steps loop: results feed back into new questions and hypotheses.
 
 ## Orders of magnitude
 
-A physicist's first step with a new problem is often an estimate. Nature spans an enormous range of scales, from nuclei of 10⁻¹⁵ m to the observable universe at about 10²⁶ m, and from nuclear times of 10⁻²³ s to the age of the universe at about 10¹⁷ s. A Fermi estimate breaks a question into factors whose sizes can be guessed to within a factor of a few, and multiplies them. The answer is rarely exact, but it is seldom wrong by more than a factor of ten, which is often enough to tell whether an idea is feasible. The number of cells in a human body, for instance, is roughly the body's mass divided by that of one cell, about 70 kg / 10⁻¹² kg ≈ 10¹³–10¹⁴. Dimensional analysis serves a similar purpose: an equation must balance in its units, and the combination of quantities that can appear in an answer is often fixed by dimensions alone. Non-dimensionalising a model, by measuring each variable in units natural to the problem, reveals how many independent parameters actually control its behaviour.
+A physicist's first step with a new problem is often an estimate. Nature spans an enormous range of scales:
+
+| Quantity | Smallest | Largest | Span |
+|---|---|---|---|
+| Length | proton, $10^{-15}\ \text{m}$ | observable universe, $10^{26}\ \text{m}$ | over 40 orders |
+| Time | Planck time, $10^{-44}\ \text{s}$ | age of the universe, $10^{17}\ \text{s}$ | about 60 orders |
+| Energy | a chemical bond, $10^{-19}\ \text{J}$ | a supernova, $10^{44}\ \text{J}$ | over 60 orders |
+
+A Fermi estimate breaks a question into factors whose sizes can be guessed to within a factor of a few, and multiplies them. The answer is rarely exact, but it is seldom wrong by more than a factor of ten, which is often enough to tell whether an idea is feasible. The number of cells in a human body, for instance, is roughly the body's mass divided by that of one cell, $70\ \text{kg}/10^{-12}\ \text{kg} \approx 10^{13}\text{–}10^{14}$. Dimensional analysis serves a similar purpose: an equation must balance in its units, and the combination of quantities that can appear in an answer is often fixed by dimensions alone.
+
+## Mathematics as the language of science
+
+One law can be read three equivalent ways: as a differential equation, as an algebraic solution, and as a graph. The simplest case is a constant rate:
+
+$$\frac{dx}{dt} = c \quad\Longrightarrow\quad x(t) = x(0) + ct \qquad(\text{a straight line of slope } c)$$
+
+If the rate depends on the state itself, as for a radioactive sample, separating variables gives an exponential:
+
+$$\boxed{\frac{dx}{dt} = cx \quad\Longrightarrow\quad x(t) = x_0\,e^{ct}}$$
+
+- $c > 0$: monotonic exponential growth, **asymptotically unstable**.
+- $c = 0$: constant, $x(t) = x_0$.
+- $c < 0$: monotonic decay to zero, **asymptotically stable**.
+
+Letting $c$ be complex, $c = a + ib$, adds oscillation. Euler's formula gives
+
+$$\boxed{x(t) = x_0\,e^{at}\,e^{ibt} = x_0\,e^{at}\left(\cos bt + i\sin bt\right)}$$
+
+The real part $a$ sets the **envelope** $e^{at}$: growing oscillations for $a > 0$ (unstable), sustained oscillations for $a = 0$ (a centre), damped oscillations for $a < 0$ (stable). The imaginary part $b$ sets the **frequency**. This is exactly the language used later for the eigenvalues of the Lotka–Volterra Jacobian.
+
+Higher-order equations reduce to first-order systems. For $\ddot x = -\alpha x$, set $x_1 = x$ and $x_2 = \dot x$:
+
+$$\frac{d}{dt}\begin{pmatrix}x_1\\x_2\end{pmatrix} = \begin{pmatrix}x_2\\-\alpha x_1\end{pmatrix},\qquad\text{in general}\quad \frac{d\mathbf R}{dt} = \mathbf F(\mathbf R)$$
+
+$\mathbf F$ is a **vector field**: it assigns a velocity to every state, and the motion follows the arrows.
+
+The deck ends with the mathematical toolkit of science: **geometry** (linear algebra: patterns, state spaces), **change** (calculus: ODEs, PDEs, variational principles) and **chance** (probability and statistics, with deterministic chaos and quantum mechanics as special cases).
+
+## Non-dimensionalisation
+
+Non-dimensionalising an equation means removing its units by measuring each variable in a characteristic scale. It reduces the number of parameters to a few dimensionless groups, shows which effects dominate, lets a small experiment stand for a large system (dynamic similarity, as in wind tunnels), and avoids numerical trouble from very large or very small numbers.
+
+**Procedure.** (1) List the variables. (2) Choose scales $L_0$, $T_0$, $U_0$. (3) Define $x^* = x/L_0$, $t^* = t/T_0$, $u^* = u/U_0$. (4) Rewrite derivatives by the chain rule, e.g. $\dfrac{du}{dt} = \dfrac{U_0}{T_0}\dfrac{du^*}{dt^*}$. (5) Divide by one coefficient so the rest become dimensionless groups.
+
+**Worked example: the damped oscillator** $m\ddot x + c\dot x + kx = 0$. Put $x = Xx^*$, $t = Tt^*$:
+
+$$\frac{mX}{T^2}\ddot x^* + \frac{cX}{T}\dot x^* + kX\,x^* = 0$$
+
+Choose $T = \sqrt{m/k}$ and divide by $kX$:
+
+$$\boxed{\ddot x^* + 2\zeta\,\dot x^* + x^* = 0,\qquad \zeta = \frac{c}{2\sqrt{mk}}\ \ (\text{damping ratio})}$$
+
+Three parameters collapse into one, and $X$ drops out because the equation is linear. Other dimensionless numbers are ratios of two effects:
+
+| Number | Formula | Ratio of |
+|---|---|---|
+| Reynolds | $Re = \rho uL/\mu$ | inertial / viscous forces |
+| Mach | $Ma = u/c$ | flow speed / speed of sound |
+| Froude | $Fr = u/\sqrt{gL}$ | inertia / gravity |
+| Péclet | $Pe = uL/\alpha$ | advection / diffusion |
+
+## The pillars of modelling
+
+1. **Scales and separation of effects.** Systems have micro, meso and macro scales; when $\varepsilon = \ell_\text{micro}/L_\text{macro} \ll 1$, microscopic fluctuations average out into continuum equations (the gas laws from molecular collisions).
+2. **Underlying principles.** Start from fundamental laws: conservation of mass, momentum, energy, or reaction rates.
+3. **Mathematical formulation.** Translate them into equations, often a conservation law $\dfrac{\partial\psi}{\partial t} + \nabla\cdot\mathbf F(\psi) = S(\psi)$.
+4. **Prediction and its limits.** A model allows interpolation, extrapolation, scenario testing and optimisation, but carries measurement and parameter uncertainty, fails outside its assumed scales, and may be chaotic.
+5. **Reductionism vs holism.** "The whole is the sum of its parts" vs "more is different".
+
+The course's two worked examples follow: the logistic map (discrete) and the Lotka–Volterra model (continuous).
 
 ## Iterated maps
 
-Many systems change in discrete steps, such as a population counted once a generation. They can be described by a map xₙ₊₁ = f(xₙ), and the question is how the sequence x₀, x₁, x₂, … behaves in the long run. A fixed point satisfies x\* = f(x\*); if the sequence starts there, it stays there. Whether nearby points approach the fixed point or move away is decided by the slope of the map. Writing xₙ = x\* + εₙ and expanding gives εₙ₊₁ ≈ f′(x\*)εₙ, so the fixed point is stable if |f′(x\*)| < 1 and unstable if |f′(x\*)| > 1. A positive slope gives monotonic approach or escape, a negative slope gives oscillation about the fixed point. The linear map f(x) = mx + c shows all four kinds of behaviour as m varies, and its constant c only moves the fixed point, to c/(1 − m), without affecting stability. A cobweb plot, drawn by moving alternately to the curve y = f(x) and the line y = x, shows the iteration graphically.
+Many systems change in discrete steps, such as a population counted once a generation. They can be described by a map $x_{n+1} = f(x_n)$, and the question is how the sequence $x_0, x_1, x_2, \dots$ behaves in the long run. A **fixed point** satisfies $x^* = f(x^*)$; if the sequence starts there, it stays there. Whether nearby points approach it is decided by the slope of the map. Writing $x_n = x^* + \varepsilon_n$ and expanding gives $\varepsilon_{n+1} \approx f'(x^*)\,\varepsilon_n$, so
+
+$$\boxed{x^* \text{ is stable if } |f'(x^*)| < 1,\qquad \text{unstable if } |f'(x^*)| > 1}$$
+
+A positive slope gives monotonic approach or escape, a negative slope gives oscillation about the fixed point. The linear map $f(x) = mx + c$ shows all four kinds of behaviour as $m$ varies, and its constant $c$ only moves the fixed point, to $x^* = c/(1 - m)$, without affecting stability. A cobweb plot, drawn by moving alternately to the curve $y = f(x)$ and the line $y = x$, shows the iteration graphically.
 
 ## The logistic map
 
-The logistic map xₙ₊₁ = rxₙ(1 − xₙ), with 0 ≤ x ≤ 1 the population as a fraction of its maximum, is the simplest model of a population that grows when small but is limited by crowding. The factor rxₙ describes growth, and the factor (1 − xₙ) the effect of limited resources. It is the discrete counterpart of the logistic equation dN/dt = rN(1 − N/K). The map has two fixed points, x\* = 0 and x\* = 1 − 1/r. Since f′(x) = r(1 − 2x), the origin is stable for r < 1, when the population dies out. For 1 < r < 3 the second fixed point, at which f′ = 2 − r, is stable, and the population settles to a steady value. At r = 3 the slope there passes through −1 and the fixed point becomes unstable. The population then alternates between two values, a 2-cycle, which corresponds to a stable fixed point of the twice-iterated map f(f(x)). As r increases further the 2-cycle itself becomes unstable at r = 1 + √6 ≈ 3.45 and gives way to a 4-cycle, then an 8-cycle, and so on, the successive values of r crowding together by a factor of about 4.67, Feigenbaum's constant. Beyond r∞ ≈ 3.57 the motion is chaotic.
+The logistic map
 
-Chaos here means deterministic chaos. The rule is completely determined, with no randomness, yet the sequence never repeats, and two starting values that differ by a tiny amount soon lead to completely different sequences. Long-term prediction is therefore impossible in practice, because the initial state can never be known exactly. Within the chaotic region there are still windows of order, notably a 3-cycle near r ≈ 3.83, and at r = 4 the map is fully chaotic, equivalent under x = sin²θ to doubling an angle at each step. The striking lesson is that a nonlinear term as simple as −rx² is enough to produce all this, whereas a linear map can only converge, diverge or oscillate.
+$$\boxed{x_{n+1} = r\,x_n(1 - x_n),\qquad 0 \le x \le 1,\ 0 < r \le 4}$$
+
+is the simplest model of a population that grows when small but is limited by crowding: $rx_n$ describes growth and $(1 - x_n)$ the effect of limited resources. It is the discrete counterpart of the logistic equation $dN/dt = rN(1 - N/K)$. Since $f'(x) = r(1 - 2x)$:
+
+$$\boxed{x^* = 0\ \ (f' = r),\qquad x^* = 1 - \frac1r\ \ (f' = 2 - r)}$$
+
+| Range of $r$ | Long-term behaviour |
+|---|---|
+| $0 < r < 1$ | $x^* = 0$ stable: the population dies out |
+| $1 < r < 3$ | $x^* = 1 - 1/r$ stable: a steady population (monotonic for $r < 2$, oscillating for $2 < r < 3$) |
+| $r = 3$ | slope at $x^*$ passes through $-1$: the fixed point becomes unstable |
+| $3 < r < 1 + \sqrt6 \approx 3.45$ | a stable 2-cycle (a fixed point of $f(f(x))$) |
+| $3.45 < r < r_\infty \approx 3.57$ | 4-cycle, 8-cycle, …: period doubling, gaps shrinking by Feigenbaum's $\approx 4.67$ |
+| $r > 3.57$ | chaos, with periodic windows (a 3-cycle near $r \approx 3.83$); fully chaotic at $r = 4$ |
+
+Chaos here means **deterministic chaos**. The rule is completely determined, with no randomness, yet the sequence never repeats, and two starting values that differ by a tiny amount soon lead to completely different sequences. Long-term prediction is therefore impossible in practice, because the initial state can never be known exactly. At $r = 4$ the map is equivalent under $x = \sin^2\theta$ to doubling an angle at each step. The striking lesson is that a nonlinear term as simple as $-rx^2$ is enough to produce all this, whereas a linear map can only converge, diverge or oscillate.
 
 ![Cobweb diagrams for r = 2.5, 3.3 and 3.9](fig/logistic-cobweb.svg)
 
@@ -32,9 +163,30 @@ Chaos here means deterministic chaos. The rule is completely determined, with no
 
 ## The prey–predator model
 
-Continuous change is described by differential equations. Lotka and Volterra modelled a prey population X and a predator population Y by dX/dt = αX − βXY and dY/dt = γXY − δY. Prey grow at rate α when there are no predators; they are eaten at a rate proportional to encounters, βXY; predators grow in proportion to the food they catch, γXY; and predators die at rate δ when there is no food. Measuring the populations and time in natural units reduces the four parameters to a single ratio, a = δ/α.
+Continuous change is described by differential equations. Lotka and Volterra modelled a prey population $X$ and a predator population $Y$ by
 
-The steady states are found by setting both rates to zero. One is (0, 0), the extinction of both. The other is the coexistence point (δ/γ, α/β). Their stability is decided by linearising the equations, that is, by the eigenvalues of the Jacobian matrix of partial derivatives at each point. If both eigenvalues are real and negative, nearby states approach the point; if one is positive, they move away; if the eigenvalues are complex, the motion spirals, inwards or outwards according to the sign of the real part; and if they are purely imaginary, the motion circles the point. At the origin the eigenvalues are α and −δ, a saddle: a few prey would multiply, so extinction is unstable. At the coexistence point they are ±i√(αδ), so populations near it oscillate with period 2π/√(αδ). The full nonlinear equations have a conserved quantity, and their orbits are closed loops: prey increase, predators follow, prey decline, predators decline, and the cycle repeats. Because the eigenvectors at the coexistence point are complex, the actual real populations are obtained by combining the complex solution with its conjugate, which produces sines and cosines.
+$$\boxed{\frac{dX}{dt} = \alpha X - \beta XY,\qquad \frac{dY}{dt} = \gamma XY - \delta Y}$$
+
+Prey grow at rate $\alpha$ when there are no predators; they are eaten at a rate proportional to encounters, $\beta XY$; predators grow in proportion to the food they catch, $\gamma XY$; and predators die at rate $\delta$ when there is no food. Measuring the populations and time in natural units reduces the four parameters to a single ratio, $a = \delta/\alpha$.
+
+**Steady states** come from setting both rates to zero:
+
+$$\boxed{(X^*, Y^*) = (0, 0)\qquad\text{and}\qquad (X^*, Y^*) = \left(\frac{\delta}{\gamma},\ \frac{\alpha}{\beta}\right)}$$
+
+**Stability** comes from linearising (a Taylor expansion about the point), that is, from the eigenvalues of the Jacobian
+
+$$J = \begin{pmatrix} \alpha - \beta Y & -\beta X \\ \gamma Y & \gamma X - \delta \end{pmatrix}$$
+
+| Eigenvalues | Behaviour near the point |
+|---|---|
+| both real and negative | stable node: states approach |
+| one positive | unstable (a saddle if the other is negative) |
+| complex, real part $\neq 0$ | spiral, in (negative) or out (positive) |
+| purely imaginary | centre: closed cycles |
+
+At the origin $J = \text{diag}(\alpha, -\delta)$, eigenvalues $\alpha$ and $-\delta$: a saddle, so a few prey would multiply and extinction is unstable. At the coexistence point the eigenvalues are $\lambda = \pm i\sqrt{\alpha\delta}$, so populations near it oscillate with period $T = 2\pi/\sqrt{\alpha\delta}$. The full nonlinear equations have a conserved quantity, and their orbits are closed loops: prey increase, predators follow, prey decline, predators decline, and the cycle repeats. Because the eigenvectors at the coexistence point are complex, the real populations are obtained by combining the complex solution with its conjugate, which produces sines and cosines.
+
+**On a computer** (slides "Velocity vector field" and "Numerical integration"): plotting $(dX/dt, dY/dt)$ as an arrow at each grid point gives the vector field; for $(\alpha, \beta, \gamma, \delta) = (2, 1, 1, 2)$ the flow circles $(2, 2)$. Integrating numerically from $(X_0, Y_0) = (0.75, 2)$ gives oscillations in which the prey peak comes before the predator peak: the rabbits lead the foxes in phase.
 
 Small changes to the model can change its behaviour qualitatively. If prey are harvested at a constant rate, for example, the coexistence point keeps the same prey level but has fewer predators, and the closed cycles are replaced by oscillations that grow, so the system is no longer stable.
 

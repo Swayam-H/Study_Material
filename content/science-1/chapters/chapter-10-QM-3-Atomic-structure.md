@@ -1,40 +1,79 @@
 # Learn: Atomic structure
 
-An atom is a tiny nucleus with electrons in allowed orbits that fit a whole number of de Broglie wavelengths. That gives hydrogen's levels Eₙ = −13.6 eV/n², and jumps between levels produce the line spectra. This doc covers Beiser ch 4 (4.1–4.9; the Rutherford-scattering appendix is excluded) and the slides `QM.tex:224` to `:257`, plus the laser frame in `StatMech.tex`.
+An atom is a tiny nucleus with electrons in allowed orbits that fit a whole number of de Broglie wavelengths. That gives hydrogen's levels $E_n = -13.6\ \text{eV}/n^2$, and jumps between levels produce the line spectra. This doc covers Beiser ch 4 (4.1–4.9; the Rutherford-scattering appendix is excluded) and the slides `QM.tex:224` to `:257`, plus the laser frame in `StatMech.tex`.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## The nuclear atom
 
-An atom is electrically neutral, yet it contains negatively charged electrons, so it must also contain positive charge. Rutherford's scattering of alpha particles from thin gold foil showed where that charge is. Most alpha particles passed straight through, but a few were deflected through large angles, some almost straight back. Such violent deflections can only come from a very strong force acting at close range, and Rutherford concluded that all the positive charge and nearly all the mass of an atom are concentrated in a tiny nucleus, about 10⁻¹⁴ m across, with the electrons spread over a region ten thousand times larger.
+An atom is electrically neutral, yet it contains negatively charged electrons, so it must also contain positive charge. Rutherford's scattering of alpha particles from thin gold foil showed where that charge is. Most alpha particles passed straight through, but a few were deflected through large angles, some almost straight back. Such violent deflections can only come from a very strong force acting at close range, which Thomson's "plum pudding" of spread-out charge cannot supply. Rutherford concluded that all the positive charge and nearly all the mass are concentrated in a tiny nucleus, about $10^{-14}\ \text{m}$ across, with the electrons spread over a region about $10^{-10}\ \text{m}$ across, ten thousand times larger. (The scattering formula itself, Beiser's appendix, is not on the syllabus.)
 
 ## Why the planetary model fails
 
-This nuclear atom raises an immediate question: what keeps the electrons from falling into the nucleus? A stationary electron would be pulled in, so it seems natural to imagine it circling the nucleus as a planet circles the sun, with the electric attraction supplying the centripetal force. For hydrogen this gives a total energy E = −e²/(8πε₀r), negative because the electron is bound. The planetary model, however, fails at once. An electron moving in a circle is accelerating, and classical electromagnetism says an accelerated charge radiates. The electron should lose energy continuously and spiral into the nucleus in a tiny fraction of a second (about 10⁻¹¹ s by the classical radiation formula). Atoms would not exist.
+What keeps the electrons from falling into the nucleus? It seems natural to imagine the electron circling the nucleus as a planet circles the sun, with the electric attraction supplying the centripetal force:
+
+$$\frac{mv^2}{r} = \frac{e^2}{4\pi\varepsilon_0r^2}\quad\Longrightarrow\quad \boxed{E = \tfrac12mv^2 - \frac{e^2}{4\pi\varepsilon_0r} = -\frac{e^2}{8\pi\varepsilon_0r}}$$
+
+The energy is negative because the electron is bound. The planetary model, however, fails at once. An electron moving in a circle is accelerating, and classical electromagnetism says an accelerated charge radiates. The electron should lose energy continuously and spiral into the nucleus in about $10^{-11}\ \text{s}$. Atoms would not exist.
 
 ## Atomic spectra
 
-The spectra of atoms gave a second clue. A heated gas does not emit a continuous range of wavelengths but a set of sharp lines that are characteristic of the element. The lines of hydrogen fall into series, and the wavelengths of each series fit the simple formula 1/λ = R(1/n\_f² − 1/n\_i²), with n\_f = 1 for the Lyman series in the ultraviolet, 2 for the Balmer series in the visible, 3 for the Paschen series in the infrared, and so on. Any successful theory of the atom must explain this formula and the value of the Rydberg constant R.
+The spectra of atoms gave a second clue. A heated gas emits not a continuous range of wavelengths but sharp lines characteristic of the element. The lines of hydrogen fall into series that all fit one formula:
+
+$$\boxed{\frac1\lambda = R\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right),\qquad R = 1.097\times10^7\ \text{m}^{-1}}$$
+
+| $n_f$ | Series | Region |
+|---|---|---|
+| 1 | Lyman | ultraviolet |
+| 2 | Balmer | visible |
+| 3 | Paschen | infrared |
+| 4, 5 | Brackett, Pfund | infrared |
+
+Any successful theory of the atom must explain this formula and the value of the Rydberg constant $R$.
 
 ## The Bohr atom
 
-Bohr's theory combined the nuclear atom with the wave nature of the electron. If the electron is a wave, an orbit can only be stable if the wave joins up smoothly with itself after one circuit, which means the circumference must contain a whole number of de Broglie wavelengths: 2πrₙ = nλ. Combined with the force balance, this gives orbit radii rₙ = n²a₀, where a₀ = 0.0529 nm is the Bohr radius, and energies Eₙ = −13.6 eV/n². The integer n is a quantum number, and the allowed orbits correspond to the allowed energy levels of the atom. An electron in one of these stationary states does not radiate. Light is emitted only when the electron drops from a higher level to a lower one, and the photon carries away the difference in energy, hν = Eᵢ − E\_f. Putting the formula for Eₙ into this condition reproduces the observed spectral series and gives the Rydberg constant in terms of e, m, h and ε₀, in excellent agreement with experiment.
+Bohr's theory combined the nuclear atom with the wave nature of the electron. An orbit is stable only if the electron wave joins up with itself after one circuit:
+
+$$\begin{gathered}\boxed{2\pi r_n = n\lambda = \frac{nh}{mv}\quad\Longleftrightarrow\quad mvr_n = n\hbar} \\[4pt] (\text{quantised angular momentum})\end{gathered}$$
+
+Combined with the force balance $mv^2 = e^2/4\pi\varepsilon_0r$ (the slides write $K = 1/4\pi\varepsilon_0$, so $mv^2 = Ke^2/r$):
+
+$$\begin{gathered}v_n = \frac{Ke^2}{n\hbar} \\[4pt] \boxed{r_n = n^2a_0,\quad a_0 = \frac{4\pi\varepsilon_0\hbar^2}{me^2} = 0.0529\ \text{nm}} \\[4pt] \boxed{E_n = -\frac{me^4}{8\varepsilon_0^2h^2}\frac{1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}}\end{gathered}$$
+
+The integer $n$ is a quantum number. An electron in one of these stationary states does not radiate. Light is emitted only when the electron drops from a higher level to a lower one, and the photon carries away the difference:
+
+$$\boxed{h\nu = E_i - E_f}$$
+
+Putting $E_n$ into this condition reproduces the observed series and gives $R = me^4/8\varepsilon_0^2h^3c$, in excellent agreement with experiment.
 
 ![Hydrogen energy levels and spectral series](fig/hydrogen-levels.svg)
 
 *Figure. Hydrogen energy levels $E_n=-13.6/n^2$ eV. Lyman lines end on $n=1$ (ultraviolet), Balmer on $n=2$ (visible), Paschen on $n=3$ (infrared).*
 
+**Old quantum theory and its limits** (slides "Old Quantum Theory"). Planck (1900) quantised oscillator energy, $E = nh\nu$; Bohr (1913) quantised angular momentum, $mvr = n\hbar$; Sommerfeld's group added further rules for many-electron atoms. Each rule was ad hoc, with no underlying theory, which is why wave mechanics (Schrödinger, 1926) was needed.
+
 ## Correspondence principle and nuclear motion
 
-Bohr was guided by the correspondence principle, which says that a quantum theory must agree with classical physics in the limit where classical physics is known to work. For very large n the energy levels are so close together that they are almost continuous, and the frequency of the photon emitted in a jump from n to n − 1 becomes equal to the frequency with which the electron goes round its orbit, which is just what classical theory predicts. The small difference between the observed and predicted spectra is removed by noting that the nucleus is not infinitely heavy. Electron and nucleus both move about their common centre of mass, and the electron mass in the formulas should be replaced by the reduced mass m′ = mM/(m + M). This correction explains, among other things, the slight difference between the spectra of hydrogen and deuterium.
+Bohr was guided by the **correspondence principle**: a quantum theory must agree with classical physics in the limit where classical physics is known to work. For very large $n$ the levels are almost continuous, and the frequency of the photon emitted in a jump from $n$ to $n - 1$ equals the frequency with which the electron goes round its orbit, as classical theory predicts.
+
+The small difference between observed and predicted spectra is removed by noting that the nucleus is not infinitely heavy. Electron and nucleus both move about their common centre of mass, and the electron mass in the formulas is replaced by the reduced mass:
+
+$$\boxed{m' = \frac{mM}{m + M}},\qquad E_n' = \frac{m'}{m}E_n$$
+
+This explains, among other things, the slight difference between the spectra of hydrogen and deuterium.
 
 ## Atomic excitation and Franck–Hertz
 
-The energy levels of an atom can be raised in several ways. The atom can absorb a photon of exactly the right energy, or it can be struck by another particle and take up part of its kinetic energy. Franck and Hertz demonstrated the second process directly. They accelerated electrons through mercury vapour and measured the current that reached a collector. As the accelerating voltage was raised the current increased, but it fell sharply each time the voltage passed a multiple of 4.9 V. At those energies the electrons could excite mercury atoms in inelastic collisions, losing 4.9 eV and no longer reaching the collector. The excited atoms then emitted ultraviolet light of exactly the wavelength corresponding to 4.9 eV. The experiment showed that atomic energy levels are real and discrete, independently of any spectrum.
+The energy levels of an atom can be raised in two ways: by absorbing a photon of exactly the right energy, or by a collision that transfers part of another particle's kinetic energy. Franck and Hertz (1913) demonstrated the second directly. They accelerated electrons through mercury vapour and measured the current reaching a collector. The current fell sharply each time the voltage passed a multiple of $4.9\ \text{V}$: at those energies the electrons excite mercury atoms in inelastic collisions, lose $4.9\ \text{eV}$, and no longer reach the collector. The excited atoms then emit ultraviolet light of exactly the matching wavelength:
+
+$$\lambda = \frac{hc}{E} = \frac{1240\ \text{eV nm}}{4.9\ \text{eV}} \approx 253.6\ \text{nm}$$
+
+The experiment showed that atomic energy levels are real and discrete, independently of any spectrum.
 
 ## The laser
 
-The laser is a practical application of these ideas. An atom in an excited state can drop to a lower state spontaneously, or it can be stimulated to do so by a passing photon of the same energy. In stimulated emission the new photon has the same frequency, direction and phase as the one that triggered it, so the light is amplified. Normally most atoms are in the lower state and absorption outweighs emission. A laser works by producing a population inversion, in which more atoms occupy a metastable upper level than the level below it. Placed between two mirrors, the medium then amplifies light travelling back and forth along the axis, and the result is an intense, monochromatic and coherent beam.
+The laser is a practical application of these ideas. An atom in an excited state can drop to a lower state **spontaneously**, or it can be **stimulated** to do so by a passing photon of the same energy. In stimulated emission the new photon has the same frequency, direction and phase as the one that triggered it, so the light is amplified. Normally most atoms are in the lower state and absorption outweighs emission. A laser works by producing a **population inversion**, in which more atoms occupy a metastable upper level than the level below it (pumped via a third level in a three-level laser, or a fourth in a four-level laser). Placed between two mirrors, the medium amplifies light travelling back and forth along the axis, and the result is an intense, monochromatic and coherent beam.
 
 # Reference: Atomic structure
 

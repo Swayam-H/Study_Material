@@ -106,7 +106,7 @@ $$
 The **efficiency** is what you get (work) divided by what you pay for (heat from the hot reservoir, which is where the fuel goes):
 
 $$
-\eta = \frac{W}{Q_{\mathrm{H}}} = \frac{Q_{\mathrm{H}} - Q_{\mathrm{C}}}{Q_{\mathrm{H}}} = 1 - \frac{Q_{\mathrm{C}}}{Q_{\mathrm{H}}}
+\boxed{\eta = \frac{W}{Q_{\mathrm{H}}} = \frac{Q_{\mathrm{H}} - Q_{\mathrm{C}}}{Q_{\mathrm{H}}} = 1 - \frac{Q_{\mathrm{C}}}{Q_{\mathrm{H}}}}
 $$
 
 The first law alone would allow Q\_C = 0 and η = 1. The second law will forbid that (section 4). Atkins writes the same thing as η = |w|/|q\_h| (3A.7) and η = 1 − |q\_c|/|q\_h| (3A.8), using modulus signs because his heats are signed.
@@ -140,7 +140,7 @@ $$
 **COP = what you want ÷ what you pay for.** You always pay W. What you want depends on the job:
 
 $$
-\text{COP}_{\text{fridge}} = \frac{Q_{\mathrm{C}}}{W} \qquad\qquad \text{COP}_{\text{heat pump}} = \frac{Q_{\mathrm{H}}}{W}
+\boxed{\text{COP}_{\text{fridge}} = \frac{Q_{\mathrm{C}}}{W} \qquad\qquad \text{COP}_{\text{heat pump}} = \frac{Q_{\mathrm{H}}}{W}}
 $$
 
 Because Q\_H = Q\_C + W, the two are related by COP\_heat pump = COP\_fridge + 1 (a one-line consequence, not on the slides).
@@ -150,7 +150,7 @@ Because Q\_H = Q\_C + W, the two are related by COP\_heat pump = COP\_fridge + 1
 **The best possible COP.** Section 6 shows that a reversible (Carnot) device has Q\_C/Q\_H = T\_C/T\_H. Putting that in gives the slide limits:
 
 $$
-\text{COP}_{\text{fridge, max}} = \frac{T_{\mathrm{C}}}{T_{\mathrm{H}} - T_{\mathrm{C}}} \qquad\qquad \text{COP}_{\text{heat pump, max}} = \frac{T_{\mathrm{H}}}{T_{\mathrm{H}} - T_{\mathrm{C}}}
+\boxed{\text{COP}_{\text{fridge, max}} = \frac{T_{\mathrm{C}}}{T_{\mathrm{H}} - T_{\mathrm{C}}} \qquad\qquad \text{COP}_{\text{heat pump, max}} = \frac{T_{\mathrm{H}}}{T_{\mathrm{H}} - T_{\mathrm{C}}}}
 $$
 
 Read them physically. A small temperature gap T\_H − T\_C makes pumping cheap, so the COP is large. Cooling something very cold (small T\_C) makes a fridge's COP small: each joule removed near absolute zero costs a lot of work.
@@ -296,7 +296,7 @@ $$
 **Step 2: the adiabats link the volumes.** For a reversible adiabatic change of a perfect gas, TV^(γ−1) = constant (Topic 2E). A quick reminder of where this comes from: dU = đw gives nC\_V,m dT = −(nRT/V) dV, so C\_V,m dT/T = −R dV/V. Integrating gives T V^(R/C\_V,m) = constant, and R/C\_V,m = γ − 1. Atkins writes the same thing as VT^c = constant with c = C\_V,m/R. Apply it to the two adiabats:
 
 $$
-\text{stage } 2\to3:\; T_{\mathrm{H}}V_2^{\gamma-1} = T_{\mathrm{C}}V_3^{\gamma-1} \qquad\qquad \text{stage } 4\to1:\; T_{\mathrm{H}}V_1^{\gamma-1} = T_{\mathrm{C}}V_4^{\gamma-1}
+\begin{gathered}\text{stage } 2\to3:\; T_{\mathrm{H}}V_2^{\gamma-1} = T_{\mathrm{C}}V_3^{\gamma-1} \\[4pt] \text{stage } 4\to1:\; T_{\mathrm{H}}V_1^{\gamma-1} = T_{\mathrm{C}}V_4^{\gamma-1}\end{gathered}
 $$
 
 Divide the first equation by the second. T\_H and T\_C cancel:
@@ -316,7 +316,7 @@ $$
 **Step 4: efficiency.**
 
 $$
-\eta_{\text{Carnot}} = 1 - \frac{Q_{\mathrm{C}}}{Q_{\mathrm{H}}} = 1 - \frac{T_{\mathrm{C}}}{T_{\mathrm{H}}} \qquad (3\text{A}.9)
+\boxed{\eta_{\text{Carnot}} = 1 - \frac{Q_{\mathrm{C}}}{Q_{\mathrm{H}}} = 1 - \frac{T_{\mathrm{C}}}{T_{\mathrm{H}}} \qquad (3\text{A}.9)}
 $$
 
 **The adiabatic works cancel.** On stage 2→3 the gas does work nC\_V,m(T\_H − T\_C); on stage 4→1 exactly the same amount is done on it. So the net work comes only from the isotherms: W = Q\_H − Q\_C.
@@ -330,7 +330,7 @@ $$
 **Best COP, now derived.** For a Carnot fridge or heat pump, Q\_C/Q\_H = T\_C/T\_H still holds, and W = Q\_H − Q\_C:
 
 $$
-\text{COP}_{\text{fridge}} = \frac{Q_{\mathrm{C}}}{Q_{\mathrm{H}} - Q_{\mathrm{C}}} = \frac{T_{\mathrm{C}}}{T_{\mathrm{H}} - T_{\mathrm{C}}} \qquad \text{COP}_{\text{heat pump}} = \frac{Q_{\mathrm{H}}}{Q_{\mathrm{H}} - Q_{\mathrm{C}}} = \frac{T_{\mathrm{H}}}{T_{\mathrm{H}} - T_{\mathrm{C}}}
+\begin{gathered}\text{COP}_{\text{fridge}} = \frac{Q_{\mathrm{C}}}{Q_{\mathrm{H}} - Q_{\mathrm{C}}} = \frac{T_{\mathrm{C}}}{T_{\mathrm{H}} - T_{\mathrm{C}}} \\[4pt] \text{COP}_{\text{heat pump}} = \frac{Q_{\mathrm{H}}}{Q_{\mathrm{H}} - Q_{\mathrm{C}}} = \frac{T_{\mathrm{H}}}{T_{\mathrm{H}} - T_{\mathrm{C}}}\end{gathered}
 $$
 
 ### Quick examples
@@ -455,7 +455,7 @@ Q\_C/Q\_H = 1 − 0.40 = 0.60 = T\_C/T\_H, so T\_H = 300/0.60 = 500 K.
 A petrol engine is modelled as two reversible adiabats joined by two constant-volume steps. Its ideal efficiency depends only on the compression ratio r = V\_max/V\_min:
 
 $$
-\eta_{\text{Otto}} = 1 - r^{\,1-\gamma}
+\boxed{\eta_{\text{Otto}} = 1 - r^{\,1-\gamma}}
 $$
 
 **Intuition: the four strokes.** Fuel and air are drawn in. The piston compresses them so quickly that there is no time for heat to flow, so the compression is adiabatic. A spark ignites the mixture, which burns so fast that the piston barely moves: heat enters at constant volume, and pressure and temperature jump. The hot gas pushes the piston out in the power stroke, again adiabatically. Finally the exhaust valve opens and the hot gas is swapped for a cool fresh charge; the model treats this as cooling at constant volume back to the start.
@@ -561,7 +561,7 @@ $$
 It rejects more heat than a reversible engine would, so the signed sum of q/T goes negative. The general statement is the **Clausius inequality**:
 
 $$
-\oint \frac{\text{đ}q}{T} \le 0 \qquad (= 0 \text{ only for a reversible cycle})
+\boxed{\oint \frac{\text{đ}q}{T} \le 0 \qquad (= 0 \text{ only for a reversible cycle})}
 $$
 
 Here T is the temperature of the reservoir that supplies or receives each bit of heat. During an irreversible change the system may not even have a single temperature, but the reservoir always does.
@@ -591,7 +591,7 @@ The equality holds for a reversible process and the inequality for an irreversib
 An isolated system exchanges no heat, so đq = 0 and the inequality becomes dS ≥ 0 (3A.12). The system together with its surroundings ("the universe") is isolated, so
 
 $$
-\Delta S_{\text{isolated}} \ge 0, \qquad \Delta S_{\text{tot}} = \Delta S_{\text{sys}} + \Delta S_{\text{sur}} \ge 0
+\boxed{\Delta S_{\text{isolated}} \ge 0, \qquad \Delta S_{\text{tot}} = \Delta S_{\text{sys}} + \Delta S_{\text{sur}} \ge 0}
 $$
 
 The equality holds only for reversible processes. This is the **entropy form of the second law**. What follows from it:
@@ -606,7 +606,7 @@ The equality holds only for reversible processes. This is the **entropy form of 
 Entropy is the state function whose change is the reversible heat divided by the temperature at which that heat is transferred:
 
 $$
-\mathrm{d}S = \frac{\text{đ}q_{\text{rev}}}{T} \quad (3\text{A}.1\text{a}) \qquad\qquad \Delta S = \int_i^f \frac{\text{đ}q_{\text{rev}}}{T} \quad (3\text{A}.1\text{b})
+\boxed{\mathrm{d}S = \frac{\text{đ}q_{\text{rev}}}{T} \quad (3\text{A}.1\text{a}) \qquad\qquad \Delta S = \int_i^f \frac{\text{đ}q_{\text{rev}}}{T} \quad (3\text{A}.1\text{b})}
 $$
 
 Units are J K⁻¹. Entropy is **extensive**: double the sample and you double S. The molar entropy S\_m = S/n (J K⁻¹ mol⁻¹) is intensive.
@@ -643,7 +643,7 @@ $$
 Now it passes, so it is the differential of a function. Integrating (with C\_V constant) gives that function:
 
 $$
-S(T,V) = C_V\ln T + nR\ln V + \text{const} \quad\Longrightarrow\quad \Delta S = C_V\ln\frac{T_f}{T_i} + nR\ln\frac{V_f}{V_i}
+\boxed{S(T,V) = C_V\ln T + nR\ln V + \text{const} \quad\Longrightarrow\quad \Delta S = C_V\ln\frac{T_f}{T_i} + nR\ln\frac{V_f}{V_i}}
 $$
 
 This single formula holds every perfect-gas result in Topic 3B: isothermal expansion (first term zero), heating at constant volume (second term zero), and the composite processes of section 18.
@@ -708,7 +708,7 @@ The even split is the most likely (6/16). "All on the left" happens 1 time in 16
 ### The Boltzmann formula
 
 $$
-S = k\ln W \qquad (3\text{A}.4), \qquad k = \frac{R}{N_{\mathrm{A}}} = 1.381\times10^{-23}\ \mathrm{J\,K^{-1}}
+\boxed{S = k\ln W \qquad (3\text{A}.4), \qquad k = \frac{R}{N_{\mathrm{A}}} = 1.381\times10^{-23}\ \mathrm{J\,K^{-1}}}
 $$
 
 **Why a logarithm?** Entropy must be extensive. Put two independent systems side by side. Every microstate of the first can pair with every microstate of the second, so W = W₁W₂. The logarithm turns that product into a sum:
@@ -1006,7 +1006,7 @@ For any isothermal expansion of a perfect gas, reversible or not, ΔS\_sys = nR 
 **The system.** From section 11:
 
 $$
-\Delta S_{\text{sys}} = nR\ln\frac{V_f}{V_i} = nR\ln\frac{p_i}{p_f} \qquad (3\text{B}.2)
+\boxed{\Delta S_{\text{sys}} = nR\ln\frac{V_f}{V_i} = nR\ln\frac{p_i}{p_f} \qquad (3\text{B}.2)}
 $$
 
 The dependence is logarithmic (Atkins Fig. 3B.1). Every doubling adds R ln 2 = 5.76 J K⁻¹ per mole, whatever the starting volume. A tenfold expansion adds R ln 10 = 19.1 J K⁻¹ mol⁻¹.
@@ -1056,7 +1056,7 @@ At the transition temperature, Δ\_trs S = Δ\_trs H/T\_trs. Melting and boiling
 3. Therefore
 
 $$
-\Delta_{\text{trs}}S = \frac{\Delta_{\text{trs}}H}{T_{\text{trs}}} \qquad \text{(at } T_{\text{trs}}\text{ only)} \qquad (3\text{B}.4)
+\boxed{\Delta_{\text{trs}}S = \frac{\Delta_{\text{trs}}H}{T_{\text{trs}}} \qquad \text{(at } T_{\text{trs}}\text{ only)} \qquad (3\text{B}.4)}
 $$
 
 Δ\_trs H is per mole, so Δ\_trs S is a molar quantity too.
@@ -1070,7 +1070,7 @@ $$
 ### Slide examples: melting ice and boiling water
 
 $$
-\Delta_{\text{fus}}S(\mathrm{H_2O}) = \frac{6010\ \mathrm{J\,mol^{-1}}}{273.15\ \mathrm{K}} \approx 22.0\ \mathrm{J\,K^{-1}\,mol^{-1}} \qquad \Delta_{\text{vap}}S(\mathrm{H_2O}) = \frac{40\,700\ \mathrm{J\,mol^{-1}}}{373.15\ \mathrm{K}} \approx 109\ \mathrm{J\,K^{-1}\,mol^{-1}}
+\begin{gathered}\Delta_{\text{fus}}S(\mathrm{H_2O}) = \frac{6010\ \mathrm{J\,mol^{-1}}}{273.15\ \mathrm{K}} \approx 22.0\ \mathrm{J\,K^{-1}\,mol^{-1}} \\[4pt] \Delta_{\text{vap}}S(\mathrm{H_2O}) = \frac{40\,700\ \mathrm{J\,mol^{-1}}}{373.15\ \mathrm{K}} \approx 109\ \mathrm{J\,K^{-1}\,mol^{-1}}\end{gathered}
 $$
 
 **Vaporisation is far larger than fusion.** Melting loosens a structure, but the molecules stay packed together. Boiling spreads them into a volume about a thousand times larger, so they have vastly more arrangements available.
@@ -1109,7 +1109,7 @@ $$
 3. Substitute (3B.6), then take C\_p out of the integral if it is constant over the range (3B.7):
 
 $$
-S(T_f) = S(T_i) + \int_{T_i}^{T_f} \frac{C_p\,\mathrm{d}T}{T} = S(T_i) + C_p\ln\frac{T_f}{T_i}
+\boxed{S(T_f) = S(T_i) + \int_{T_i}^{T_f} \frac{C_p\,\mathrm{d}T}{T} = S(T_i) + C_p\ln\frac{T_f}{T_i}}
 $$
 
 4. At constant volume, đq\_rev = dU = C\_V dT, giving the same result with C\_V in place of C\_p.
@@ -1149,7 +1149,7 @@ When several things change at once, split the change into simple reversible step
 **The general perfect-gas result** (the integrated form from section 11):
 
 $$
-\Delta S = nR\ln\frac{V_f}{V_i} + nC_{V,\mathrm{m}}\ln\frac{T_f}{T_i}
+\boxed{\Delta S = nR\ln\frac{V_f}{V_i} + nC_{V,\mathrm{m}}\ln\frac{T_f}{T_i}}
 $$
 
 The order of the steps does not matter: expand first and then heat, or heat first and then expand. You get the same total either way.
@@ -1530,31 +1530,101 @@ $$
 
 # Learn: Free energy and phases
 
-Your existing thermo notes (`notes/10-thermo-quiz2-notes.md`, the cheatsheet, formula sheet, definitions and `practice/quiz2-*`) cover Atkins 1A–3B, the Quiz-2 range, and are complete for that range. The gap is Thermo-5 (17 Oct), which came after the quiz: the third law (3C), Helmholtz and Gibbs energies (3D), the fundamental equation and Maxwell relations (3E), phase diagrams and the phase rule (4A), and the Clapeyron equations (4B). There are no slides for that lecture (`thermo-l4.tex:413` only previews it), so this doc follows Atkins and the HW list, whose items for Focus 3 and 4 are used in the questions below.
+This page covers Thermo-5 (17 Oct), which came after Quiz 2: the third law (3C), Helmholtz and Gibbs energies (3D), and the fundamental equation and Maxwell relations (3E). There are no slides for that lecture (`thermo-l4.tex:413` only previews it), so this follows Atkins and the HW list.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Endsem scope.** Atkins 3C, 3D and 3E are **in the syllabus**. Atkins Focus 4 (4A phase diagrams and the phase rule, 4B Clapeyron equations) is **not**, so the last two sections below are marked ❌ and can be skipped.
 
-## The third law and absolute entropies
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
-The second law tells us how to calculate a change in entropy, but not the entropy itself. To find the entropy of a substance at a temperature T we measure its heat capacity from very low temperatures upwards and add up the contributions dS = C\_p dT/T, together with ΔH/T for each phase transition on the way. This gives S(T) − S(0). The third law fixes the starting point: the entropy of every perfect crystalline substance is zero at T = 0. In statistical terms a perfect crystal at absolute zero has only one possible arrangement, W = 1, and S = k ln W = 0. Entropies measured on this basis are called third-law entropies. Heat capacities cannot be measured right down to zero, so the last few kelvin are covered by the Debye law C\_p = aT³, for which the entropy at a low temperature is simply S(T) = C\_p(T)/3. With standard molar entropies tabulated, the entropy change of a reaction follows as Δ\_rS° = ΣνS°(products) − ΣνS°(reactants). Reactions that produce gas generally have positive Δ\_rS°, and those that consume gas negative ones.
+## 3C The third law and absolute entropies
 
-## Helmholtz and Gibbs energies
+The second law gives entropy *changes*, not the entropy itself. To find $S$ at temperature $T$, measure the heat capacity from very low temperatures upwards and add every contribution, including $\Delta H/T$ for each phase transition on the way:
 
-The second law says that a change is spontaneous if the total entropy of system and surroundings increases. This is inconvenient, because it requires us to keep track of the surroundings. Under the conditions most common in practice the surroundings can be accounted for automatically. If heat dq enters the system from surroundings at the same temperature, the Clausius inequality dS ≥ dq/T can be rearranged. At constant volume dq = dU, and the condition becomes dU − TdS ≤ 0. At constant pressure dq = dH, and the condition becomes dH − TdS ≤ 0. These suggest two new state functions, the Helmholtz energy A = U − TS and the Gibbs energy G = H − TS. At constant temperature and volume a spontaneous change lowers A, and at constant temperature and pressure it lowers G. Equilibrium is reached when A or G has its minimum value. Chemistry is usually done at constant pressure, so G is the more useful of the two.
+$$S(T) = S(0) + \int_0^{T_\text{f}}\frac{C_p^{\text{s}}}{T}\,dT + \frac{\Delta_\text{fus}H}{T_\text{f}} + \int_{T_\text{f}}^{T_\text{b}}\frac{C_p^{\text{l}}}{T}\,dT + \frac{\Delta_\text{vap}H}{T_\text{b}} + \int_{T_\text{b}}^{T}\frac{C_p^{\text{g}}}{T}\,dT$$
 
-The relation ΔG = ΔH − TΔS shows the balance between energy and entropy. A reaction that releases heat (ΔH < 0) and increases entropy (ΔS > 0) is spontaneous at every temperature. One with ΔH > 0 and ΔS < 0 is never spontaneous. In the other two cases the sign of ΔG depends on T, and the entropy term dominates at high temperature. The two functions also have a direct meaning in terms of work. The change in A is the maximum total work a process can do, and the change in G is the maximum non-expansion work, such as electrical work in a cell or the work a cell's chemistry does in building molecules. This is why A is sometimes called the work function and G the free energy.
+The third law fixes the starting point:
 
-## The fundamental equation and Maxwell relations
+$$\begin{gathered}\boxed{S(0) = 0\ \text{ for every perfect crystalline substance}} \\[4pt] (\text{statistically: } W = 1 \Rightarrow S = k\ln W = 0)\end{gathered}$$
 
-Combining the first law with dq\_rev = TdS and dw\_rev = −pdV gives the fundamental equation dU = TdS − pdV. Although derived for a reversible change, it involves only state functions, so it holds for any change of a closed system doing no non-expansion work. It shows that U is naturally a function of S and V. The definitions of H, A and G then give similar equations: dH = TdS + Vdp, dA = −SdT − pdV and dG = −SdT + Vdp. Because each is an exact differential, the mixed second derivatives must be equal, and this produces four Maxwell relations, such as (∂S/∂V)\_T = (∂p/∂T)\_V. Their value is that they convert quantities that are hard to measure, such as how entropy changes with volume, into quantities that are easy to measure, such as how pressure changes with temperature. One immediate use is the thermodynamic equation of state, π\_T = T(∂p/∂T)\_V − p, which gives the internal pressure from the equation of state alone. For a perfect gas it is zero; for a van der Waals gas it is a/V\_m².
+Entropies on this basis are **third-law entropies**. The last few kelvin are covered by the Debye law:
 
-The equation dG = −SdT + Vdp shows how the Gibbs energy depends on temperature and pressure. G falls as temperature rises, at a rate equal to the entropy, and rises with pressure, at a rate equal to the volume. The Gibbs–Helmholtz equation, (∂(G/T)/∂T)\_p = −H/T², puts the temperature dependence in the form most useful for reactions: if ΔH is known, the change of ΔG/T with temperature follows. For pressure, a liquid or solid has a small, nearly constant volume, so G changes only slightly, by about V\_mΔp. A perfect gas has V = nRT/p, and integrating gives G\_m(p) = G\_m° + RT ln(p/p°), so a gas's Gibbs energy depends strongly on pressure.
+$$\boxed{C_p = aT^3\quad\Longrightarrow\quad S(T) = \int_0^T\frac{aT^3}{T}\,dT = \frac{aT^3}{3} = \frac{C_p(T)}{3}}$$
+
+With standard molar entropies tabulated, a reaction's entropy change is
+
+$$\boxed{\Delta_\text{r}S^\circ = \sum\nu\,S_\text{m}^\circ(\text{products}) - \sum\nu\,S_\text{m}^\circ(\text{reactants})}$$
+
+Reactions that produce gas generally have $\Delta_\text{r}S^\circ > 0$; those that consume gas, $\Delta_\text{r}S^\circ < 0$.
+
+## 3D Helmholtz and Gibbs energies
+
+The second law says a change is spontaneous if $\Delta S_\text{tot} > 0$, which means tracking the surroundings. For a system in thermal contact with surroundings at the same $T$, the Clausius inequality $dS \ge dq/T$ removes that need:
+
+| Condition | $dq$ equals | Clausius becomes | New function |
+|---|---|---|---|
+| constant $V$ (no extra work) | $dU$ | $dU - T\,dS \le 0$ | $A = U - TS$ |
+| constant $p$ (no extra work) | $dH$ | $dH - T\,dS \le 0$ | $G = H - TS$ |
+
+$$\boxed{A = U - TS,\qquad G = H - TS}$$
+
+$$\begin{gathered}\boxed{dA_{T,V} \le 0,\qquad dG_{T,p} \le 0} \\[4pt] (\text{spontaneous change lowers } A \text{ or } G;\ \text{equilibrium at the minimum})\end{gathered}$$
+
+Chemistry is usually done at constant pressure, so $G$ is the more useful. At constant $T$:
+
+$$\boxed{\Delta G = \Delta H - T\Delta S}$$
+
+| $\Delta H$ | $\Delta S$ | Spontaneous? |
+|---|---|---|
+| $< 0$ | $> 0$ | at every $T$ |
+| $> 0$ | $< 0$ | never |
+| $< 0$ | $< 0$ | at low $T$ |
+| $> 0$ | $> 0$ | at high $T$ (entropy term dominates) |
+
+**Meaning in terms of work.**
+
+$$\boxed{w_\text{max} = \Delta A\ \ (\text{constant } T),\qquad w_\text{add,max} = \Delta G\ \ (\text{constant } T, p)}$$
+
+$\Delta A$ is the maximum total work, which is why $A$ is called the work function. $\Delta G$ is the maximum **non-expansion** work, such as electrical work in a cell ($\Delta G = -nFE$), which is why $G$ is called the free energy. Standard Gibbs energies of formation combine like enthalpies: $\Delta_\text{r}G^\circ = \sum\nu\,\Delta_\text{f}G^\circ(\text{products}) - \sum\nu\,\Delta_\text{f}G^\circ(\text{reactants})$.
+
+## 3E The fundamental equation and Maxwell relations
+
+Combining the first law with $dq_\text{rev} = T\,dS$ and $dw_\text{rev} = -p\,dV$:
+
+$$\boxed{dU = T\,dS - p\,dV}\qquad(\text{fundamental equation})$$
+
+It involves only state functions, so it holds for **any** change of a closed system doing no non-expansion work, and it shows $U$ is naturally a function of $S$ and $V$. The definitions of $H$, $A$ and $G$ give its three partners:
+
+$$\begin{aligned} dU &= T\,dS - p\,dV & &U(S, V)\\ dH &= T\,dS + V\,dp & &H(S, p)\\ dA &= -S\,dT - p\,dV & &A(T, V)\\ dG &= -S\,dT + V\,dp & &G(T, p) \end{aligned}$$
+
+Each is an exact differential, so the mixed second derivatives are equal. That gives the four **Maxwell relations**:
+
+$$\boxed{\begin{aligned} \left(\frac{\partial T}{\partial V}\right)_S &= -\left(\frac{\partial p}{\partial S}\right)_V & \left(\frac{\partial T}{\partial p}\right)_S &= \left(\frac{\partial V}{\partial S}\right)_p\\[4pt] \left(\frac{\partial S}{\partial V}\right)_T &= \left(\frac{\partial p}{\partial T}\right)_V & \left(\frac{\partial S}{\partial p}\right)_T &= -\left(\frac{\partial V}{\partial T}\right)_p \end{aligned}}$$
+
+They convert hard-to-measure quantities (how $S$ changes with $V$) into easy ones (how $p$ changes with $T$). One immediate use is the **thermodynamic equation of state**:
+
+$$\begin{gathered}\boxed{\pi_T = \left(\frac{\partial U}{\partial V}\right)_T = T\left(\frac{\partial p}{\partial T}\right)_V - p} \\[4pt] (\pi_T = 0 \text{ for a perfect gas},\ \ a/V_\text{m}^2 \text{ for van der Waals})\end{gathered}$$
+
+**How $G$ depends on $T$ and $p$.** From $dG = -S\,dT + V\,dp$:
+
+$$\boxed{\left(\frac{\partial G}{\partial T}\right)_p = -S,\qquad \left(\frac{\partial G}{\partial p}\right)_T = V}$$
+
+$G$ falls as $T$ rises (at a rate equal to $S$) and rises with $p$ (at a rate equal to $V$). The **Gibbs–Helmholtz equation** puts the $T$ dependence in the form most useful for reactions:
+
+$$\boxed{\left(\frac{\partial(G/T)}{\partial T}\right)_p = -\frac{H}{T^2}}$$
+
+For pressure:
+
+$$\boxed{\text{liquid or solid: } \Delta G \approx V_\text{m}\,\Delta p,\qquad \text{perfect gas: } G_\text{m}(p) = G_\text{m}^\circ + RT\ln\frac{p}{p^\circ}}$$
+
+A condensed phase has a small, nearly constant volume, so $G$ hardly changes; a gas has $V = nRT/p$, so its $G$ depends strongly on pressure.
 
 ## Phase diagrams and the phase rule
 
-For a pure substance the molar Gibbs energy is called the chemical potential, μ. At given temperature and pressure the stable phase is the one with the lowest chemical potential, and two phases can coexist only where their chemical potentials are equal. A phase diagram maps out these regions in the p–T plane. Each area is a region where one phase is stable, the lines between areas are phase boundaries where two phases coexist, and three boundaries meet at the triple point, where solid, liquid and vapour coexist at a single temperature and pressure. The liquid–vapour line ends at the critical point, beyond which liquid and vapour can no longer be distinguished. Water is unusual in that its solid–liquid boundary slopes backwards, because ice is less dense than water, so increasing the pressure lowers the melting point. Carbon dioxide has its triple point above 1 atm, which is why dry ice sublimes instead of melting.
+> ❌ **Not in the endsem** (Atkins Focus 4). Read for background only.
 
-Gibbs's phase rule counts how many intensive variables can be changed freely while keeping a given number of phases in equilibrium. For C components and P phases the number of degrees of freedom is F = C − P + 2. For a pure substance, C = 1, so a single phase has F = 2 and occupies an area; two phases have F = 1 and lie on a line; and three phases have F = 0, a single point. Four phases of one substance can never be in equilibrium.
+For a pure substance the molar Gibbs energy is the chemical potential, $\mu = G_\text{m}$. The stable phase is the one with the lowest $\mu$, and two phases coexist only where their $\mu$ are equal. In the $p$–$T$ phase diagram, areas are one phase, lines are two-phase boundaries, three lines meet at the triple point, and the liquid–vapour line ends at the critical point. Water's solid–liquid line slopes backwards because ice is less dense than water; CO$_2$ has its triple point above 1 atm, which is why dry ice sublimes.
+
+Gibbs's phase rule for $C$ components and $P$ phases: $F = C - P + 2$. For a pure substance one phase has $F = 2$ (area), two have $F = 1$ (line), three have $F = 0$ (point), and four can never coexist.
 
 ![Schematic phase diagram of water](fig/phase-diagram-water.svg)
 
@@ -1562,7 +1632,13 @@ Gibbs's phase rule counts how many intensive variables can be changed freely whi
 
 ## The Clapeyron equations
 
-The slopes of the phase boundaries follow from the fact that μ changes with temperature at the rate −S\_m and with pressure at the rate V\_m. Along a boundary the two chemical potentials must remain equal, and this requires dp/dT = Δ\_trsS/Δ\_trsV = Δ\_trsH/(TΔ\_trsV), the Clapeyron equation. For melting ΔV is small, so the solid–liquid line is steep. For vaporisation the vapour volume is so much larger than the liquid's that ΔV ≈ RT/p, and the equation becomes the Clausius–Clapeyron equation, d ln p/dT = Δ\_vapH/RT². Integrated, ln(p₂/p₁) = −(Δ\_vapH/R)(1/T₂ − 1/T₁). A plot of ln p against 1/T is therefore a straight line of slope −Δ\_vapH/R, which is how enthalpies of vaporisation are measured from vapour pressures.
+> ❌ **Not in the endsem** (Atkins 4B). Read for background only.
+
+Along a phase boundary the two chemical potentials stay equal, and since $d\mu = -S_\text{m}\,dT + V_\text{m}\,dp$ this requires
+
+$$\begin{gathered}\frac{dp}{dT} = \frac{\Delta_\text{trs}S}{\Delta_\text{trs}V} = \frac{\Delta_\text{trs}H}{T\,\Delta_\text{trs}V}\quad(\text{Clapeyron}) \\[4pt] \frac{d\ln p}{dT} = \frac{\Delta_\text{vap}H}{RT^2}\quad(\text{Clausius–Clapeyron})\end{gathered}$$
+
+Integrated, $\ln(p_2/p_1) = -(\Delta_\text{vap}H/R)(1/T_2 - 1/T_1)$, so $\ln p$ against $1/T$ is a straight line of slope $-\Delta_\text{vap}H/R$.
 
 # Reference: Free energy and phases
 

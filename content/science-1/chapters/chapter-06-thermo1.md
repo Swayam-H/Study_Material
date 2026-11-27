@@ -1,136 +1,198 @@
 # Learn: Thermodynamics in one pass (Atkins 1A to 3B)
 
 Sources: slides `thermo.tex` (L1-2 plus extras), `thermo-l3.tex`, `thermo-l4.tex`; tutorial problem set; Atkins 11e (Atkins, de Paula, Keeler).
-Page numbers are the book's printed pages. Study order and homework: [10a-quiz2-plan.md](10a-quiz2-plan.md). Anything marked **[beyond slides]** is Atkins only.
+Page numbers are the book's printed pages. Study order and homework: [10a-quiz2-plan.md](10a-quiz2-plan.md). Anything marked **[beyond slides]** is Atkins only. The third law, free energies and Maxwell relations (Atkins 3C–3E) are on the *Free energy and phases* page of the next chapter.
 
 ## Sign convention (get this right first)
-- Slides and Atkins: `ΔU = Q + W`, **W = work done ON the system**. So `W = -∫P dV`; expansion gives W < 0.
-- The tutorial slides ("First law and heat capacities") say W > 0 = work done BY the gas. If a question says "work done by", flip the sign.
-- Engines (L3): Q_H, Q_C, W are **magnitudes**, with W = Q_H − Q_C.
-- In Clausius-inequality formulas (L4) heats are **signed**, with Q > 0 meaning heat in.
+
+$$\begin{gathered}\boxed{\Delta U = Q + W,\qquad W = -\int P_\text{ext}\,dV} \\[4pt] (W = \text{work done ON the system; expansion gives } W < 0)\end{gathered}$$
+
+- The tutorial slides ("First law and heat capacities") say $W > 0$ = work done BY the gas. If a question says "work done by", flip the sign.
+- Engines (L3): $Q_H$, $Q_C$, $W$ are **magnitudes**, with $W = Q_H - Q_C$.
+- In Clausius-inequality formulas (L4) heats are **signed**, with $Q > 0$ meaning heat in.
 
 ---
 ## 1. State, temperature, perfect gas (Atkins 1A, p.4-10)
 - System types: open (matter and energy cross), closed (energy only), isolated (neither).
-- Intensive: P, T, density. Extensive: V, n, U, S. State function: U, S, H, P, V, T. Path function: Q, W.
-- **Zeroth law**: if A~C and B~C are in thermal equilibrium, then A~B. This is why a thermometer works. A metal bench feels colder because it conducts heat away faster; both are at the same T.
-- Constant-volume gas thermometer: P ∝ T, so `T = T₃ (P/P₃)` with T₃ = 273.16 K. All gases extrapolate to P = 0 at −273.15 °C, which defines absolute zero.
-- `PV = nRT = N k_B T`, R = 8.314 J/K/mol = 0.08314 L·bar/K/mol, k_B = 1.381e-23 J/K.
-- Dalton's law: p_total = Σ p_i, where p_i = x_i·p. It is exact only in the perfect-gas limit.
-- Trap: when using R = 0.08314, keep V in L and P in bar.
+- Intensive: $P$, $T$, density. Extensive: $V$, $n$, $U$, $S$. State functions: $U, S, H, P, V, T$. Path functions: $Q$, $W$.
+- **Zeroth law**: if A and B are each in thermal equilibrium with C, then A and B are in equilibrium. This is why a thermometer works. A metal bench feels colder because it conducts heat away faster; both are at the same $T$.
+- Constant-volume gas thermometer: $P \propto T$, so $T = T_3\,(P/P_3)$ with $T_3 = 273.16$ K. All gases extrapolate to $P = 0$ at $-273.15\ ^\circ$C, which defines absolute zero.
+
+$$\begin{gathered}\boxed{PV = nRT = Nk_BT} \\[4pt] R = 8.314\ \text{J K}^{-1}\text{mol}^{-1} = 0.08314\ \text{L bar K}^{-1}\text{mol}^{-1},\quad k_B = 1.381\times10^{-23}\ \text{J K}^{-1}\end{gathered}$$
+
+- Dalton's law: $p_\text{total} = \sum_i p_i$, with $p_i = x_ip$. Exact only in the perfect-gas limit.
+- Trap: when using $R = 0.08314$, keep $V$ in L and $P$ in bar.
 
 ## 2. Kinetic theory (Atkins 1B, p.11-18)
 Assumptions: point-like molecules, no forces except elastic collisions, random motion.
-- One molecule: Δp = 2m v_x per hit, time between hits on the same wall 2L/v_x, so F = m v_x²/L.
-- N molecules and ⟨v_x²⟩ = ⟨v²⟩/3 give **PV = ⅓ N m⟨v²⟩ = ⅔ N⟨E_k⟩**.
-- Compare with PV = N k_B T: **⟨E_k⟩ = (3/2) k_B T**. This depends on T only, not on the mass.
-- **v_rms = √(3RT/M)**; v_mp = √(2RT/M); v̄ = √(8RT/πM). Order: v_mp < v̄ < v_rms. For N₂ at 300 K these are 422, 476 and 517 m/s.
-- M in **kg/mol** (N₂ = 0.028).
-- Maxwell-Boltzmann: f(v) = 4π(M/2πRT)^{3/2} v² e^{−Mv²/2RT}. The v² factor means more ways to have a high speed; the exponential means high energy is rare. Raising T moves the peak right and flattens the curve. Lighter molecules have a broader curve and a higher peak speed.
-- v_mp derivation: d/dv(v² e^{−Mv²/2RT}) = 0 gives v² = 2RT/M.
-- Fraction in a narrow window ≈ f(v)·Δv.
-- Escape of He: v_rms at 300 K is 1.37 km/s, far below 11.2 km/s. Even so, the high-speed tail of the distribution lets a small fraction escape, and collisions refill the tail.
-- Equal T means equal ⟨E_k⟩ (H₂ and O₂ in one box). H₂ is 4× faster because M differs by 16.
-- **[beyond slides]** Collisions (1B.2): cross-section σ = πd², mean relative speed v_rel = √2 v̄, collision frequency z = σ v_rel N/V = σ v_rel p/(k_B T), mean free path **λ = v_rel/z = k_B T/(σp)**. At fixed T, λ ∝ 1/p (homework E1B.8).
+- One molecule: $\Delta p = 2mv_x$ per hit, time between hits on the same wall $2L/v_x$, so $F = mv_x^2/L$.
+- $N$ molecules and $\langle v_x^2\rangle = \langle v^2\rangle/3$ give
+
+$$\boxed{PV = \tfrac13Nm\langle v^2\rangle = \tfrac23N\langle E_k\rangle}\quad\xrightarrow{\ PV = Nk_BT\ }\quad \boxed{\langle E_k\rangle = \tfrac32k_BT}$$
+
+The mean kinetic energy depends on $T$ only, not on the mass.
+
+$$\boxed{v_\text{rms} = \sqrt{\frac{3RT}{M}},\qquad v_\text{mp} = \sqrt{\frac{2RT}{M}},\qquad \bar v = \sqrt{\frac{8RT}{\pi M}}}\qquad v_\text{mp} < \bar v < v_\text{rms}$$
+
+- For N$_2$ at 300 K these are 422, 476 and 517 m/s. $M$ in **kg/mol** (N$_2$ = 0.028).
+- Maxwell–Boltzmann:
+
+$$\boxed{f(v) = 4\pi\left(\frac{M}{2\pi RT}\right)^{3/2}v^2\,e^{-Mv^2/2RT}}$$
+
+  The $v^2$ factor means more ways to have a high speed; the exponential means high energy is rare. Raising $T$ moves the peak right and flattens it.
+- $v_\text{mp}$ derivation: $\dfrac{d}{dv}\left(v^2e^{-Mv^2/2RT}\right) = 0$ gives $v^2 = 2RT/M$.
+- Fraction in a narrow window $\approx f(v)\,\Delta v$.
+- Escape of He: $v_\text{rms}$ at 300 K is 1.37 km/s, far below 11.2 km/s. Even so, the high-speed tail lets a small fraction escape, and collisions refill the tail.
+- Equal $T$ means equal $\langle E_k\rangle$ (H$_2$ and O$_2$ in one box). H$_2$ is $4\times$ faster because $M$ differs by 16.
+- **[beyond slides]** Collisions (1B.2): cross-section $\sigma = \pi d^2$, $v_\text{rel} = \sqrt2\,\bar v$, collision frequency $z = \sigma v_\text{rel}N/V = \sigma v_\text{rel}\,p/k_BT$, mean free path
+
+$$\lambda = \frac{v_\text{rel}}{z} = \frac{k_BT}{\sigma p}$$
 
 ## 3. Real gases (Atkins 1C, p.19-27)
-- **Z = PV_m/RT** (Z = 1 is ideal). Z < 1 means attraction dominates; Z > 1 means repulsion (size) dominates, which happens at high P.
-- **vdW**: `(P + a/V_m²)(V_m − b) = RT`, or `P = RT/(V_m − b) − a/V_m²`. b is the excluded volume (repulsion). a/V_m² is the pressure reduction from attraction.
-- Why a/V_m² and not a/V_m: attraction needs pairs of molecules, so it scales as (n/V)².
-- Tutorial 4 (5 mol in 1 L, 298 K): ideal 124 bar; N₂ 119 bar (Z = 0.96); He 140 bar (Z = 1.13).
-- **[beyond slides]** Critical point: T_c = 8a/(27Rb), V_c = 3b, p_c = a/(27b²). Virial: Z = 1 + B/V_m + C/V_m² + .... Corresponding states: gases at the same reduced (p_r, T_r, V_r) behave alike. Boyle temperature T_B = a/(Rb).
-- Ideal law fails at high P (finite size) and low T (attraction).
+
+$$\boxed{Z = \frac{PV_m}{RT}}$$
+
+$Z = 1$ is ideal; $Z < 1$ means attraction dominates; $Z > 1$ means repulsion (size) dominates, which happens at high $P$.
+
+$$\begin{gathered}\boxed{\left(P + \frac{a}{V_m^2}\right)(V_m - b) = RT\quad\Longleftrightarrow\quad P = \frac{RT}{V_m - b} - \frac{a}{V_m^2}} \\[4pt] (\text{van der Waals})\end{gathered}$$
+
+- $b$ is the excluded volume (repulsion). $a/V_m^2$ is the pressure reduction from attraction; it goes as $(n/V)^2$ because attraction needs pairs of molecules.
+- Tutorial 4 (5 mol in 1 L, 298 K): ideal 124 bar; N$_2$ 119 bar ($Z = 0.96$); He 140 bar ($Z = 1.13$).
+- **[beyond slides]** Critical constants and virial expansion:
+
+$$T_c = \frac{8a}{27Rb},\quad V_c = 3b,\quad p_c = \frac{a}{27b^2},\qquad Z = 1 + \frac{B}{V_m} + \frac{C}{V_m^2} + \cdots$$
+
+  Corresponding states: gases at the same reduced $(p_r, T_r, V_r)$ behave alike.
+- The ideal law fails at high $P$ (finite size) and low $T$ (attraction).
 
 ## 4. Work, heat, first law (Atkins 2A.1-2A.3, p.34-42)
-- **W = −∫P_ext dV**. |W| is the area under the P-V path, so it is a path function. Heat Q is also a path function. Their sum ΔU is a state function.
+- $|W|$ is the area under the $P$–$V$ path, so it is a path function. $Q$ is also a path function. Their sum $\Delta U$ is a state function.
 - Quasi-static means a sequence of equilibrium states. Reversible = quasi-static + no friction.
-- Reversible isothermal (ideal gas): `W = −nRT ln(V₂/V₁)`, ΔU = 0, Q = −W. (1 mol, 300 K, 10→20 L: W = −1.73 kJ.)
-- **Free expansion** (insulated, into vacuum): Q = 0, W = 0, ΔU = 0, so ΔT = 0 for an ideal gas.
-- Expansion against a constant external P: W = −P_ext ΔV, which is less work than reversible.
-- Heat is energy in transit, not something a body contains. Joule's paddle wheel gives 4.18 J = 1 cal.
-- dU is exact and dQ, dW are inexact: ∮dU = 0 but ∮dQ ≠ 0.
-- Other work: dW = F dL (wire; plus sign), γ dA (film has two surfaces, so dA = 2ℓ dx), E dZ (cell, W = nFE), E dΠ, μ₀H dM. Generalised: dW = Y dX. Atkins separates expansion work from additional (non-expansion) work.
-- **[beyond slides]** Calorimetry (2A.4): a bomb calorimeter works at constant volume, so q_V = ΔU. Calibrate it once (C_cal = q/ΔT from a known heat), then ΔU = C_cal ΔT (homework E2C.4).
+
+$$\begin{gathered}\boxed{W_\text{rev,iso} = -nRT\ln\frac{V_2}{V_1}},\quad \Delta U = 0,\quad Q = -W \\[4pt] (1\text{ mol, 300 K, 10}\to\text{20 L}: W = -1.73\text{ kJ})\end{gathered}$$
+
+- **Free expansion** (insulated, into vacuum): $Q = 0$, $W = 0$, $\Delta U = 0$, so $\Delta T = 0$ for an ideal gas.
+- Against a constant external pressure: $W = -P_\text{ext}\Delta V$, which is less work than reversible.
+- Heat is energy in transit, not something a body contains. Joule's paddle wheel: 4.18 J = 1 cal.
+- $dU$ is exact and $dQ$, $dW$ are inexact: $\oint dU = 0$ but $\oint dQ \ne 0$.
+- Other work: $dW = F\,dL$ (wire; plus sign), $\gamma\,dA$ (a film has two surfaces, so $dA = 2\ell\,dx$), $E\,dZ$ (cell, $W = nFE$), $E\,d\Pi$, $\mu_0H\,dM$. Generalised: $dW = Y\,dX$.
+- **[beyond slides]** Calorimetry (2A.4): a bomb calorimeter works at constant volume, so $q_V = \Delta U$. Calibrate once ($C_\text{cal} = q/\Delta T$), then $\Delta U = C_\text{cal}\Delta T$ (homework E2C.4).
 
 ## 5. Heat capacity and enthalpy (Atkins 2A.4, 2B, p.42-50)
-- `C_V = (∂U/∂T)_V`, `C_P = (∂H/∂T)_P`. `H = U + PV`, and **ΔH = Q_P** (constant P, no extra work).
-- Ideal gas: `C_P,m − C_V,m = R`, γ = C_P/C_V.
-- Equipartition (each quadratic term gives ½kT): monatomic C_V = 3R/2, C_P = 5R/2, γ = 5/3. Diatomic (vibration frozen at room T) C_V = 5R/2, C_P = 7R/2, γ = 7/5.
-- For an ideal gas **ΔU = nC_V ΔT for every process**, because U depends on T only.
-- Constant-P heating of 1 mol monatomic gas by 100 K: Q = +2.08 kJ, W = −0.83 kJ, ΔU = +1.25 kJ.
-- **[beyond slides]** Reactions with gases: **ΔH = ΔU + Δn_g RT**, where Δn_g is the change in moles of gas (2B.1; homework E2B.2, E2C.6). Real heat capacities vary with T: C_p,m = a + bT + c/T², so integrate (2B.2; homework Ex 2B.2, E2B.3).
+
+$$\boxed{C_V = \left(\frac{\partial U}{\partial T}\right)_V,\qquad C_P = \left(\frac{\partial H}{\partial T}\right)_P}\qquad \boxed{H = U + PV,\qquad \Delta H = Q_P}$$
+
+($\Delta H = Q_P$ holds at constant $P$ with no extra work.)
+
+$$\boxed{C_{P,m} - C_{V,m} = R,\qquad \gamma = \frac{C_P}{C_V}}\qquad(\text{ideal gas})$$
+
+| Gas (equipartition, $\tfrac12kT$ per quadratic term) | $C_{V,m}$ | $C_{P,m}$ | $\gamma$ |
+|---|---|---|---|
+| monatomic | $\tfrac32R$ | $\tfrac52R$ | $5/3$ |
+| diatomic (vibration frozen at room $T$) | $\tfrac52R$ | $\tfrac72R$ | $7/5$ |
+
+- For an ideal gas $\boxed{\Delta U = nC_V\Delta T}$ for **every** process, because $U$ depends on $T$ only.
+- Constant-$P$ heating of 1 mol monatomic gas by 100 K: $Q = +2.08$ kJ, $W = -0.83$ kJ, $\Delta U = +1.25$ kJ.
+- **[beyond slides]** Reactions with gases: $\boxed{\Delta H = \Delta U + \Delta n_gRT}$, where $\Delta n_g$ is the change in moles of gas (2B.1; homework E2B.2, E2C.6). Real heat capacities vary with $T$: $C_{p,m} = a + bT + c/T^2$, so integrate (2B.2; homework Ex 2B.2, E2B.3).
 
 ## 6. Ideal-gas processes (Atkins 2E, p.67-69)
-| Process | W (on gas) | Q | ΔU |
-|---|---|---|---|
-| Isochoric | 0 | nC_VΔT | nC_VΔT |
-| Isobaric | −PΔV = −nRΔT | nC_PΔT | nC_VΔT |
-| Isothermal (rev) | −nRT ln(V₂/V₁) | −W | 0 |
-| Adiabatic (rev) | nC_VΔT | 0 | nC_VΔT |
 
-- Reversible adiabatic: **TV^{γ−1} = const, PV^γ = const**. Derivation: nC_V dT = −(nRT/V)dV, then integrate using R/C_V = γ − 1.
-- The adiabat is steeper than the isotherm because γ > 1. Compression heats the gas. Fire syringe: T₂ = 300·10^0.4 = 754 K, P₂ = 25 bar.
-- Same Q = 0 gives different outcomes: free expansion has ΔT = 0, while reversible adiabatic expansion cools.
-- Atkins writes the adiabat as V_i T_i^c = V_f T_f^c with c = C_V,m/R (2E.2b), and w_ad = C_V ΔT (2E.1).
+| Process | $W$ (on gas) | $Q$ | $\Delta U$ |
+|---|---|---|---|
+| Isochoric | $0$ | $nC_V\Delta T$ | $nC_V\Delta T$ |
+| Isobaric | $-P\Delta V = -nR\Delta T$ | $nC_P\Delta T$ | $nC_V\Delta T$ |
+| Isothermal (rev) | $-nRT\ln(V_2/V_1)$ | $-W$ | $0$ |
+| Adiabatic (rev) | $nC_V\Delta T$ | $0$ | $nC_V\Delta T$ |
+
+$$\boxed{TV^{\gamma - 1} = \text{const},\qquad PV^\gamma = \text{const}}\qquad(\text{reversible adiabatic})$$
+
+- Derivation: $nC_V\,dT = -(nRT/V)\,dV$, then integrate using $R/C_V = \gamma - 1$.
+- The adiabat is steeper than the isotherm because $\gamma > 1$. Compression heats the gas. Fire syringe: $T_2 = 300\cdot10^{0.4} = 754$ K, $P_2 = 25$ bar.
+- Same $Q = 0$, different outcomes: free expansion has $\Delta T = 0$, while reversible adiabatic expansion cools.
+- Atkins writes the adiabat as $V_iT_i^c = V_fT_f^c$ with $c = C_{V,m}/R$ (2E.2b), and $w_\text{ad} = C_V\Delta T$ (2E.1).
 
 ![Isotherm and adiabat, the Carnot cycle and the Otto cycle on p–V diagrams](fig/pv-cycles.svg)
 
 *Figure. Left panel: an adiabat is steeper than an isotherm through the same point. (The Carnot and Otto cycles are used in Chapter 7.)*
 
 ## 7. Differentials, Joule and Joule-Thomson (Atkins 2D, p.59-66)
-- dU = C_V dT + π_T dV, with **π_T = (∂U/∂V)_T = T(∂p/∂T)_V − p**. Perfect gas: π_T = 0. vdW: **π_T = a/V_m²** > 0 (attractions).
-- Joule's experiment saw no ΔT only because the water bath swamped it. Real gases cool slightly on free expansion (N₂ doubling: ΔT ≈ −0.13 K in the gas alone).
-- **Joule-Thomson**: steady throttling through a plug, Q = 0, so **H_i = H_f** (isenthalpic). μ = (∂T/∂p)_H. μ > 0 means the gas cools, μ < 0 means it warms.
-- Molecular picture: attractions dominate, so molecules climb out of potential wells and slow down (cooling). Repulsions dominate, so the gas warms. High T favours repulsions.
-- vdW low pressure: μ ≈ (1/C_P,m)(2a/RT − b), with **inversion temperature T_I = 2a/(Rb)**. For N₂ this gives about 850 K (measured 621 K).
-- Data: CO₂ μ = +1.1 K/atm; N₂ +0.27; H₂ −0.03 (T_I ~200 K); He −0.06 (T_I ~40 K). H₂ and He warm when throttled at room T.
-- μ_T = (∂H/∂p)_T = −C_P μ. Both π_T and μ_T are 0 for a perfect gas.
+
+$$\begin{gathered}dU = C_V\,dT + \pi_T\,dV \\[4pt] \boxed{\pi_T = \left(\frac{\partial U}{\partial V}\right)_T = T\left(\frac{\partial p}{\partial T}\right)_V - p} \\[4pt] (\text{perfect gas } 0;\ \text{vdW } a/V_m^2 > 0)\end{gathered}$$
+
+- Joule's experiment saw no $\Delta T$ only because the water bath swamped it. Real gases cool slightly on free expansion (N$_2$ doubling: $\Delta T \approx -0.13$ K in the gas alone).
+- **Joule–Thomson**: steady throttling through a plug, $Q = 0$, so $H_i = H_f$ (isenthalpic).
+
+$$\begin{gathered}\boxed{\mu_{JT} = \left(\frac{\partial T}{\partial p}\right)_H} \\[4pt] (\mu > 0: \text{cools};\ \mu < 0: \text{warms}) \\[4pt] \mu \approx \frac{1}{C_{P,m}}\left(\frac{2a}{RT} - b\right) \\[4pt] \boxed{T_I = \frac{2a}{Rb}}\end{gathered}$$
+
+- Molecular picture: when attractions dominate, molecules climb out of potential wells and slow down (cooling); when repulsions dominate, the gas warms. High $T$ favours repulsions. For N$_2$, $T_I \approx 850$ K from vdW (measured 621 K).
+- Data: CO$_2$ $\mu = +1.1$ K/atm; N$_2$ $+0.27$; H$_2$ $-0.03$ ($T_I \sim 200$ K); He $-0.06$ ($T_I \sim 40$ K). H$_2$ and He warm when throttled at room $T$.
+- $\mu_T = (\partial H/\partial p)_T = -C_P\,\mu$. Both $\pi_T$ and $\mu_T$ are 0 for a perfect gas.
 - Linde refrigerator: compress, throttle, counter-current heat exchange, repeat.
-- Exact versus inexact differentials (Atkins 2D.1): dU, dH are exact; test with the cross-derivative condition ∂M/∂y = ∂N/∂x **[beyond slides]**.
-- **[beyond slides]** Expansion coefficient α = (1/V)(∂V/∂T)_p and isothermal compressibility κ_T = −(1/V)(∂V/∂p)_T (2D.2). Perfect gas: α = 1/T, κ_T = 1/p (homework Ex 2D.2, P2D.2).
+- Exact versus inexact differentials (2D.1): $dU$, $dH$ are exact; test $M\,dx + N\,dy$ with $\partial M/\partial y = \partial N/\partial x$ **[beyond slides]**.
+- **[beyond slides]** $\alpha = \dfrac1V\left(\dfrac{\partial V}{\partial T}\right)_p$, $\kappa_T = -\dfrac1V\left(\dfrac{\partial V}{\partial p}\right)_T$ (2D.2). Perfect gas: $\alpha = 1/T$, $\kappa_T = 1/p$ (homework Ex 2D.2, P2D.2).
 
 ## 8. Second law and engines (Atkins 3A.1, 3A.3, p.78-86; slides L3)
-- Over a cycle ΔU = 0, so Q_net = −W_net. The work equals the enclosed area (clockwise is an engine).
-- **η = W/Q_H = 1 − Q_C/Q_H**. Fridge COP = Q_C/W. Heat pump COP = Q_H/W. COP can exceed 1.
-- **Kelvin-Planck**: no cyclic device converts heat from a single reservoir entirely into work. **Clausius**: no cyclic device moves heat cold → hot with no other effect.
-- Equivalence: a perfect fridge combined with an ordinary engine gives a 100% engine.
-- Irreversibility sources: friction, finite ΔT heat flow, free expansion, mixing, fast change.
-- **Carnot cycle**: isothermal expansion at T_H (Q_H = nRT_H ln(V₂/V₁)), adiabatic expansion, isothermal compression at T_C, adiabatic compression. The adiabats force V₂/V₁ = V₃/V₄. This gives Q_C/Q_H = T_C/T_H and **η = 1 − T_C/T_H**.
-- Carnot's theorem: no engine beats a reversible one, and all reversible engines between the same two reservoirs are equally efficient. The proof runs the Carnot engine backwards and uses the Clausius statement.
-- Kelvin scale: T_C/T_H ≡ Q_C/Q_H for a reversible engine.
-- COP_max: fridge T_C/(T_H − T_C), heat pump T_H/(T_H − T_C).
-- Otto: η = 1 − r^{1−γ}. Fridge door open in a closed kitchen: the room **warms**, because W ends up as heat.
-- Check an inventor's claim in two steps: first law (W = Q_H − Q_C), then compare η with 1 − T_C/T_H.
+- Over a cycle $\Delta U = 0$, so $Q_\text{net} = -W_\text{net}$. The work equals the enclosed area (clockwise is an engine).
+
+$$\begin{gathered}\boxed{\eta = \frac{W}{Q_H} = 1 - \frac{Q_C}{Q_H}} \\[4pt] \boxed{\text{COP}_\text{fridge} = \frac{Q_C}{W},\qquad \text{COP}_\text{heat pump} = \frac{Q_H}{W}} \\[4pt] (\text{COP can exceed } 1)\end{gathered}$$
+
+- **Kelvin–Planck**: no cyclic device converts heat from a single reservoir entirely into work. **Clausius**: no cyclic device moves heat cold $\to$ hot with no other effect. A perfect fridge combined with an ordinary engine gives a 100% engine, so the two are equivalent.
+- Irreversibility sources: friction, finite-$\Delta T$ heat flow, free expansion, mixing, fast change.
+- **Carnot cycle**: isothermal expansion at $T_H$ ($Q_H = nRT_H\ln(V_2/V_1)$), adiabatic expansion, isothermal compression at $T_C$, adiabatic compression. The adiabats force $V_2/V_1 = V_3/V_4$, so
+
+$$\begin{gathered}\boxed{\frac{Q_C}{Q_H} = \frac{T_C}{T_H},\qquad \eta_\text{Carnot} = 1 - \frac{T_C}{T_H}} \\[4pt] \boxed{\text{COP}_\text{fridge,max} = \frac{T_C}{T_H - T_C},\quad \text{COP}_\text{hp,max} = \frac{T_H}{T_H - T_C}}\end{gathered}$$
+
+- Carnot's theorem: no engine beats a reversible one, and all reversible engines between the same two reservoirs are equally efficient (proof: run the Carnot engine backwards and use the Clausius statement).
+- Kelvin scale: $T_C/T_H \equiv Q_C/Q_H$ for a reversible engine.
+- Otto: $\eta = 1 - r^{1-\gamma}$. Fridge door open in a closed kitchen: the room **warms**, because $W$ ends up as heat.
+- Check an inventor's claim in two steps: first law ($W = Q_H - Q_C$), then compare $\eta$ with $1 - T_C/T_H$.
 
 ## 9. Entropy (Atkins 3A.2, 3A.3(c), 3B, p.80-91; slides L4)
-- Carnot gives Q_H/T_H + Q_C/T_C = 0 (signed heats), so ∮dQ_rev/T = 0. In general **Clausius inequality: ∮dQ/T ≤ 0**.
-- **dS = dQ_rev/T** (state function, J/K). 1/T is the integrating factor. For any process, invent a reversible path between the same end states.
-- Isothermal ideal gas: **ΔS = nR ln(V_f/V_i)**. Heating: **ΔS = C ln(T_f/T_i)** (C_P at constant P, C_V at constant V). Phase change: **ΔS = ΔH_trs/T_trs**.
-- Trouton: ΔS_vap ≈ 85 J/K/mol. Water is higher (109) because of hydrogen bonding. Vaporisation ≫ fusion (22 J/K/mol for ice).
-- ΔS_gas is the same for reversible and free expansion; only ΔS_surr and ΔS_univ differ (reversible: ΔS_univ = 0; free: ΔS_univ = +nR ln 2).
-- Heat flow Q from T_H to T_C: ΔS_univ = Q(1/T_C − 1/T_H) > 0.
-- **ΔS_isolated ≥ 0**, and ΔS_univ = ΔS_sys + ΔS_surr ≥ 0. A system can lose entropy if the surroundings gain more (freezing water).
-- **Boltzmann S = k_B ln W**, with W = N!/(n!(N−n)!) for the left/right box. Doubling the volume gives W_f/W_i = 2^N, so ΔS = Nk ln2 = nR ln2, matching Clausius. The log makes S additive.
-- For large N the width is ~1/√N, so "irreversible" means overwhelmingly improbable to reverse.
-- Entropy is not just "disorder": a shuffled deck has no ΔS_thermo, and crystallisation can be spontaneous because S_surr rises more.
-- **[beyond slides]** Composite processes (3B.4): split the change into reversible steps and add the ΔS values. Gas changing both V and T: **ΔS = nR ln(V_f/V_i) + nC_V,m ln(T_f/T_i)** (homework Ex 3B.1). Phase change away from T_trs (e.g. supercooled water freezing at −10 °C): heat to T_trs, transform, cool back.
-- Third law (Atkins 3C, p.92, after the Quiz-2 range): S → 0 as T → 0 for a perfect crystal.
+- Carnot gives $Q_H/T_H + Q_C/T_C = 0$ (signed heats), so $\oint dQ_\text{rev}/T = 0$. In general:
+
+$$\begin{gathered}\boxed{\oint\frac{dQ}{T} \le 0\ \ (\text{Clausius}),\qquad dS = \frac{dQ_\text{rev}}{T}} \\[4pt] (1/T \text{ is the integrating factor; for any process, invent a reversible path})\end{gathered}$$
+
+| Process | $\Delta S$ |
+|---|---|
+| isothermal ideal gas | $\boxed{nR\ln(V_f/V_i)}$ |
+| heating ($C$ constant) | $\boxed{C\ln(T_f/T_i)}$ ($C_P$ at constant $P$, $C_V$ at constant $V$) |
+| phase change at $T_\text{trs}$ | $\boxed{\Delta H_\text{trs}/T_\text{trs}}$ |
+| both $V$ and $T$ change | $nR\ln(V_f/V_i) + nC_{V,m}\ln(T_f/T_i)$ **[beyond slides]** |
+
+- Trouton: $\Delta S_\text{vap} \approx 85$ J K$^{-1}$ mol$^{-1}$. Water is higher (109) because of hydrogen bonding. Vaporisation $\gg$ fusion (22 for ice).
+- $\Delta S_\text{gas}$ is the same for reversible and free expansion; only $\Delta S_\text{surr}$ and $\Delta S_\text{univ}$ differ (reversible: $\Delta S_\text{univ} = 0$; free: $\Delta S_\text{univ} = +nR\ln2$).
+- Heat flow $Q$ from $T_H$ to $T_C$: $\Delta S_\text{univ} = Q\left(\dfrac1{T_C} - \dfrac1{T_H}\right) > 0$.
+
+$$\boxed{\Delta S_\text{isolated} \ge 0,\qquad \Delta S_\text{univ} = \Delta S_\text{sys} + \Delta S_\text{surr} \ge 0}$$
+
+  A system can lose entropy if the surroundings gain more (freezing water).
+
+$$\boxed{S = k_B\ln W},\qquad W = \frac{N!}{n!\,(N - n)!}\ (\text{left/right box})$$
+
+- Doubling the volume gives $W_f/W_i = 2^N$, so $\Delta S = Nk\ln2 = nR\ln2$, matching Clausius. The log makes $S$ additive.
+- For large $N$ the width is $\sim 1/\sqrt N$, so "irreversible" means overwhelmingly improbable to reverse.
+- Entropy is not just "disorder": a shuffled deck has no thermodynamic $\Delta S$, and crystallisation can be spontaneous because $S_\text{surr}$ rises more.
+- **[beyond slides]** Composite processes (3B.4): split the change into reversible steps and add. Phase change away from $T_\text{trs}$ (supercooled water freezing at $-10\ ^\circ$C): heat to $T_\text{trs}$, transform, cool back.
+- Third law (Atkins 3C, p.92): $S \to 0$ as $T \to 0$ for a perfect crystal. See *Free energy and phases*.
 
 ## 10. Thermochemistry (Atkins 2C, p.51-58) **[beyond slides, but in the homework]**
-- Standard state (°): pure substance at exactly 1 bar, at the stated temperature (tables use 298.15 K).
-- Physical change: Δ_subH° = Δ_fusH° + Δ_vapH° at the same T. Reversing a process flips the sign of ΔH.
+- Standard state ($^\circ$): pure substance at exactly 1 bar, at the stated temperature (tables use 298.15 K).
+- Physical change: $\Delta_\text{sub}H^\circ = \Delta_\text{fus}H^\circ + \Delta_\text{vap}H^\circ$ at the same $T$. Reversing a process flips the sign of $\Delta H$.
 - **Hess's law**: the standard enthalpy of an overall reaction is the sum of those of the steps it can be split into (homework Ex 2C.1).
-- **Formation**: Δ_fH° of an element in its reference state is 0, and **Δ_rH° = Σν Δ_fH°(products) − Σν Δ_fH°(reactants)** (homework P2C.8).
-- **Kirchhoff's law**: Δ_rH°(T₂) = Δ_rH°(T₁) + ∫Δ_rC_p° dT, with Δ_rC_p° = Σν C_p,m°(products) − Σν C_p,m°(reactants). Constant Δ_rC_p°: Δ_rH°(T₂) = Δ_rH°(T₁) + Δ_rC_p°(T₂ − T₁) (homework Ex 2C.2).
-- A bomb calorimeter gives Δ_rU; convert with Δ_rH = Δ_rU + Δn_g RT (homework E2C.4, E2C.6).
-- DSC: integrating the excess heat capacity C_p,ex over the transition gives the transition enthalpy (homework P2C.10).
+
+$$\begin{gathered}\boxed{\Delta_\text{r}H^\circ = \sum\nu\,\Delta_\text{f}H^\circ(\text{products}) - \sum\nu\,\Delta_\text{f}H^\circ(\text{reactants})} \\[4pt] (\Delta_\text{f}H^\circ = 0 \text{ for an element in its reference state})\end{gathered}$$
+
+$$\begin{gathered}\boxed{\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \int_{T_1}^{T_2}\Delta_\text{r}C_p^\circ\,dT} \\[4pt] (\text{Kirchhoff; constant } \Delta_\text{r}C_p^\circ: + \Delta_\text{r}C_p^\circ(T_2 - T_1))\end{gathered}$$
+
+- A bomb calorimeter gives $\Delta_\text{r}U$; convert with $\Delta_\text{r}H = \Delta_\text{r}U + \Delta n_gRT$ (homework E2C.4, E2C.6).
+- DSC: integrating the excess heat capacity $C_{p,\text{ex}}$ over the transition gives the transition enthalpy (homework P2C.10).
 
 ---
 ## Exam traps
-1. Sign of W (see the top section). 2. M in kg/mol. 3. T in kelvin everywhere. 4. R in J versus L·bar. 5. ΔU = nC_VΔT even at constant P. 6. ΔS_gas for free expansion is not 0. 7. v_rms ∝ √T (doubling T gives √2, not 2). 8. Adiabatic does not mean isothermal. 9. Carnot efficiency uses kelvin. 10. Isothermal Q = −W, not 0.
+1. Sign of $W$ (see the top section). 2. $M$ in kg/mol. 3. $T$ in kelvin everywhere. 4. $R$ in J versus L bar. 5. $\Delta U = nC_V\Delta T$ even at constant $P$. 6. $\Delta S_\text{gas}$ for free expansion is not 0. 7. $v_\text{rms} \propto \sqrt T$ (doubling $T$ gives $\sqrt2$, not 2). 8. Adiabatic does not mean isothermal. 9. Carnot efficiency uses kelvin. 10. Isothermal $Q = -W$, not 0.
 
 ## Check-your-understanding
-Why does a gas that expands freely into vacuum have ΔS_univ > 0 even though Q = 0? (Answer in `practice/quiz2-answer-key.md`, Q-C1.)
+Why does a gas that expands freely into vacuum have $\Delta S_\text{univ} > 0$ even though $Q = 0$? (Answer in `practice/quiz2-answer-key.md`, Q-C1.)
 
 # Learn: Gases (Atkins 1A to 1C)
 
@@ -149,7 +211,7 @@ Scope: Thermo-1 (slides `thermo.tex` 62–595) plus tutorial P1–P4. Anything m
 **Key equations**
 
 $$
-PV = nRT = Nk_BT, \qquad T/\mathrm{K} = \theta/{}^\circ\mathrm{C} + 273.15, \qquad T = T_3\,\frac{P}{P_3}\;\;(T_3 = 273.16\ \mathrm{K})
+\boxed{PV = nRT = Nk_BT, \qquad T/\mathrm{K} = \theta/{}^\circ\mathrm{C} + 273.15, \qquad T = T_3\,\frac{P}{P_3}\;\;(T_3 = 273.16\ \mathrm{K})}
 $$
 
 **Worked example (tutorial P1).** A constant-volume thermometer reads 6.69 kPa at the triple point. Find the reading at 100 °C, and the temperature when it reads 8.00 kPa.
@@ -200,15 +262,15 @@ It is exact only in the perfect-gas limit.
 **Key equations**
 
 $$
-PV = \tfrac13 Nm\langle v^2\rangle = \tfrac23 N\langle E_k\rangle, \qquad \langle E_k\rangle = \tfrac32 k_BT, \qquad E_{k,\mathrm{molar}} = \tfrac32 RT
+\boxed{PV = \tfrac13 Nm\langle v^2\rangle = \tfrac23 N\langle E_k\rangle, \qquad \langle E_k\rangle = \tfrac32 k_BT, \qquad E_{k,\mathrm{molar}} = \tfrac32 RT}
 $$
 
 $$
-f(v) = 4\pi\left(\frac{M}{2\pi RT}\right)^{3/2} v^2 e^{-Mv^2/2RT}
+\boxed{f(v) = 4\pi\left(\frac{M}{2\pi RT}\right)^{3/2} v^2 e^{-Mv^2/2RT}}
 $$
 
 $$
-v_{mp}=\sqrt{\frac{2RT}{M}}\;<\;\bar v=\sqrt{\frac{8RT}{\pi M}}\;<\;v_{rms}=\sqrt{\frac{3RT}{M}}
+\boxed{v_{mp}=\sqrt{\frac{2RT}{M}}\;<\;\bar v=\sqrt{\frac{8RT}{\pi M}}\;<\;v_{rms}=\sqrt{\frac{3RT}{M}}}
 $$
 
 For N₂ at 300 K: 422, 476, 517 m/s. All scale as √(T/M).
@@ -238,7 +300,7 @@ The roots v = 0 and v → ∞ are minima, so the non-trivial root is the maximum
 (b) Fraction with 290–300 m s⁻¹ ≈ f(v)Δv at v = 295, Δv = 10:
 
 $$
-\frac{Mv^2}{2RT} = \frac{0.0280\times295^2}{2\times8.314\times500} = 0.293, \qquad f \approx 9.1\times10^{-4}\ \mathrm{s\,m^{-1}} \;\Rightarrow\; f\Delta v \approx 0.9\%
+\begin{gathered}\frac{Mv^2}{2RT} = \frac{0.0280\times295^2}{2\times8.314\times500} = 0.293 \\[4pt] f \approx 9.1\times10^{-4}\ \mathrm{s\,m^{-1}} \;\Rightarrow\; f\Delta v \approx 0.9\%\end{gathered}
 $$
 
 (c) At 1000 K the fraction is smaller (about 0.37%): the peak moves to about 770 m/s and the curve flattens, leaving fewer molecules at 295 m/s.
@@ -255,7 +317,7 @@ $$
 Treat molecules as hard spheres with collision cross-section σ = πd². A molecule sweeps volume σ v\_rel per unit time, with relative speed v\_rel = √2 ̄v. Then:
 
 $$
-z = \frac{\sigma v_{rel} N}{V} = \frac{\sigma v_{rel}\,p}{k_BT}, \qquad \lambda = \frac{v_{rel}}{z} = \frac{k_BT}{\sigma p}
+\boxed{z = \frac{\sigma v_{rel} N}{V} = \frac{\sigma v_{rel}\,p}{k_BT}, \qquad \lambda = \frac{v_{rel}}{z} = \frac{k_BT}{\sigma p}}
 $$
 
 z is collisions per second per molecule; λ is the mean free path. At fixed T, λ ∝ 1/p. At fixed V, λ is independent of T, since p ∝ T. Atkins' N₂ example at 1 atm, 25 °C with σ = 0.45 nm²: z ≈ 7×10⁹ s⁻¹ and λ ≈ 90 nm.
@@ -284,7 +346,7 @@ z is collisions per second per molecule; λ is the mean free path. At fixed T, �
 **Key equations**
 
 $$
-Z = \frac{PV_m}{RT}, \qquad \left(P + \frac{a}{V_m^2}\right)(V_m - b) = RT \;\Longleftrightarrow\; P = \frac{RT}{V_m - b} - \frac{a}{V_m^2}
+\boxed{Z = \frac{PV_m}{RT}, \qquad \left(P + \frac{a}{V_m^2}\right)(V_m - b) = RT \;\Longleftrightarrow\; P = \frac{RT}{V_m - b} - \frac{a}{V_m^2}}
 $$
 
 | Gas | a (L² bar mol⁻²) | b (L mol⁻¹) |
@@ -316,14 +378,14 @@ Slide example: 1.00 mol CO₂ in 0.500 L at 300 K gives P\_ideal = 49.9 bar but 
 - **Virial equation.** Expand Z in powers of the density. B and C depend on temperature and are fitted from Z data. B is usually the dominant correction.
 
 $$
-Z = 1 + \frac{B}{V_m} + \frac{C}{V_m^2} + \dots \qquad \text{(or } Z = 1 + B'p + C'p^2 + \dots)
+\boxed{Z = 1 + \frac{B}{V_m} + \frac{C}{V_m^2} + \dots \qquad \text{(or } Z = 1 + B'p + C'p^2 + \dots)}
 $$
 
 - **Boyle temperature.** At T\_B the second virial coefficient is zero, so Z → 1 with zero slope as p → 0 and the gas is nearly perfect over a wide range. For vdW, T\_B = a/(Rb), which gives about 426 K for N₂.
 - **Critical constants.** Below T\_c, compressing a gas along an isotherm condenses it to a liquid. At T\_c the two phases merge at the critical point and above T\_c there is only one (supercritical) phase. For vdW the critical point is where the isotherm has an inflection with zero slope:
 
 $$
-T_c = \frac{8a}{27Rb}, \qquad V_c = 3b, \qquad p_c = \frac{a}{27b^2}, \qquad Z_c = \frac{p_cV_c}{RT_c} = \frac38
+\boxed{T_c = \frac{8a}{27Rb}, \qquad V_c = 3b, \qquad p_c = \frac{a}{27b^2}, \qquad Z_c = \frac{p_cV_c}{RT_c} = \frac38}
 $$
 
 For CO₂ this gives T\_c ≈ 304 K and p\_c ≈ 74 bar, close to the measured 304 K and 74 bar.
@@ -477,7 +539,7 @@ Experiments show two facts. First, heating a system and doing work on it change 
 Together these give the first law:
 
 $$
-\Delta U = q + w \qquad \text{(closed system)}
+\boxed{\Delta U = q + w \qquad \text{(closed system)}}
 $$
 
 In words: U changes only by heat added to the system and by work done on it. Think of U as a bank balance that accepts deposits in two currencies (heat, work) but stores only one thing (energy).
@@ -577,7 +639,7 @@ $$
 3. Add up the small steps from V\_i to V\_f:
 
 $$
-w = -\int_{V_i}^{V_f} p_\mathrm{ex}\,\mathrm{d}V
+\boxed{w = -\int_{V_i}^{V_f} p_\mathrm{ex}\,\mathrm{d}V}
 $$
 
 Check the signs. In an expansion dV > 0, so w < 0: the gas does work and loses energy. In a compression dV < 0, so w > 0.
@@ -625,7 +687,7 @@ Now p is the gas's own pressure, so you need its **equation of state** to do the
 **Isothermal reversible expansion of a perfect gas.** Keep the gas in a constant-temperature bath. At every stage p = nRT/V, and n, R and T are constants, so they come out of the integral:
 
 $$
-w = -\int_{V_i}^{V_f}\frac{nRT}{V}\,\mathrm{d}V = -nRT\int_{V_i}^{V_f}\frac{\mathrm{d}V}{V} = -nRT\ln\frac{V_f}{V_i}
+\boxed{w = -\int_{V_i}^{V_f}\frac{nRT}{V}\,\mathrm{d}V = -nRT\int_{V_i}^{V_f}\frac{\mathrm{d}V}{V} = -nRT\ln\frac{V_f}{V_i}}
 $$
 
 Because p\_i V\_i = p\_f V\_f at constant T, you can also write w = −nRT ln(p\_i/p\_f).
@@ -736,7 +798,7 @@ $$
 3. What is left is dU = δq\_V, where the subscript V marks the constant-volume condition. Integrate from i to f:
 
 $$
-\Delta U = q_V
+\boxed{\Delta U = q_V}
 $$
 
 On the left we write ΔU because U is a state function. On the right we write q, never Δq, because a state has no "q" to take a difference of.
@@ -773,7 +835,7 @@ You find C by **calibration**, in one of two ways:
 U depends on both T and V. At constant volume only its T-dependence matters, so the **heat capacity at constant volume** is a partial derivative, the slope of U against T with V held fixed:
 
 $$
-C_V = \left(\frac{\partial U}{\partial T}\right)_V
+\boxed{C_V = \left(\frac{\partial U}{\partial T}\right)_V}
 $$
 
 - C\_V is **extensive** (100 g of water has 100 times the heat capacity of 1 g). The **molar** heat capacity C\_V,m = C\_V/n is intensive.
@@ -1063,7 +1125,7 @@ $$
 5. **Result.**
 
 $$
-w = -nRT\ln\frac{V_f}{V_i} + n^2 a\left(\frac{1}{V_i} - \frac{1}{V_f}\right)
+\boxed{w = -nRT\ln\frac{V_f}{V_i} + n^2 a\left(\frac{1}{V_i} - \frac{1}{V_f}\right)}
 $$
 
 6. **Comparison.** In an expansion V\_f > V\_i, so 1/V\_i − 1/V\_f > 0 and the correction is positive. It makes w less negative, so the gas does **less** work on the surroundings than a perfect gas. Physically, the attractions pull the molecules together and lower the pressure at every volume, so the gas pushes less hard on the piston.
@@ -1103,7 +1165,7 @@ It would be convenient to have a quantity whose change **is** the heat at consta
 ### Definition
 
 $$
-H \equiv U + pV
+\boxed{H \equiv U + pV}
 $$
 
 Here p and V are the system's own pressure and volume. U, p and V are all state functions, so H is a state function too, and ΔH is independent of path.
@@ -1132,7 +1194,7 @@ $$
 5. **Constant pressure.** dp = 0, so dH = δq\_p. Integrate:
 
 $$
-\Delta H = q_p \qquad \text{(constant } p\text{, no additional work)}
+\boxed{\Delta H = q_p \qquad \text{(constant } p\text{, no additional work)}}
 $$
 
 Both conditions matter. If the system also does electrical work (a battery discharging at constant p), then ΔH ≠ q\_p.
@@ -1167,7 +1229,7 @@ Take a reaction at constant temperature T. From the definition, ΔH = ΔU + Δ(p
 3. **Result.**
 
 $$
-\Delta H = \Delta U + \Delta n_g RT \qquad\text{or, per mole of reaction,}\qquad \Delta H_\mathrm{m} = \Delta U_\mathrm{m} + \Delta\nu_g RT
+\boxed{\Delta H = \Delta U + \Delta n_g RT \qquad\text{or, per mole of reaction,}\qquad \Delta H_\mathrm{m} = \Delta U_\mathrm{m} + \Delta\nu_g RT}
 $$
 
 **Physical meaning.** If the reaction makes gas (Δn\_g > 0), the system must push back the atmosphere, so it needs more heat at constant p than at constant V: ΔH > ΔU. If it consumes gas (Δn\_g < 0), the atmosphere pushes in and does work on the system, so ΔH < ΔU. This is the same −nRT expansion work you met in Atkins Example 2A.1.
@@ -1187,7 +1249,7 @@ C\_p = (∂H/∂T)\_p is the slope of H against T at constant pressure. For a pe
 ### The heat capacity at constant pressure
 
 $$
-C_p = \left(\frac{\partial H}{\partial T}\right)_p
+\boxed{C_p = \left(\frac{\partial H}{\partial T}\right)_p}
 $$
 
 It is the constant-pressure partner of C\_V = (∂U/∂T)\_V. It is extensive; C\_p,m = C\_p/n is intensive. At constant pressure
@@ -1465,7 +1527,7 @@ Because U is a state function, you can compute ΔU along any convenient path bet
 So ΔU = C\_V ΔT whatever the real path. If the real path is adiabatic, q = 0 and ΔU = w, so
 
 $$
-w_\mathrm{ad} = C_V\,\Delta T = nC_{V,\mathrm{m}}\,\Delta T
+\boxed{w_\mathrm{ad} = C_V\,\Delta T = nC_{V,\mathrm{m}}\,\Delta T}
 $$
 
 This holds for reversible **and** irreversible adiabatic changes. The catch is that you need T\_f, and T\_f depends on how the change happens. For the reversible case we can find it.
@@ -1499,7 +1561,7 @@ $$
 5. **Switch to p and V.** Put T = pV/(nR) into TV^(γ−1) = constant. The constant nR can be absorbed, leaving
 
 $$
-TV^{\gamma-1} = \text{const}, \qquad pV^{\gamma} = \text{const}
+\boxed{TV^{\gamma-1} = \text{const}, \qquad pV^{\gamma} = \text{const}}
 $$
 
 In practice: T\_f = T\_i (V\_i/V\_f)^(γ−1) and p\_f = p\_i (V\_i/V\_f)^γ.
@@ -1577,7 +1639,7 @@ $$
 - Adiabat: pV^γ = constant. Differentiate: V^γ dp + γpV^(γ−1) dV = 0. Divide by V^γ:
 
 $$
-\left(\frac{\mathrm{d}p}{\mathrm{d}V}\right)_\text{adiabat} = -\gamma\,\frac{p}{V}
+\boxed{\left(\frac{\mathrm{d}p}{\mathrm{d}V}\right)_\text{adiabat} = -\gamma\,\frac{p}{V}}
 $$
 
 The adiabat's slope is γ times the isotherm's, and γ > 1 always (C\_p > C\_V). So the adiabat is **steeper**: it falls faster on expansion and rises faster on compression.
@@ -1821,7 +1883,7 @@ The common transitions and their symbols (all molar quantities):
 Both routes start in the same state and end in the same state. H is a state function, so ΔH is the same on both:
 
 $$
-\Delta_\text{sub}H^\circ = \Delta_\text{fus}H^\circ + \Delta_\text{vap}H^\circ \qquad (\text{all at the same } T)
+\boxed{\Delta_\text{sub}H^\circ = \Delta_\text{fus}H^\circ + \Delta_\text{vap}H^\circ \qquad (\text{all at the same } T)}
 $$
 
 Every Δ\_fusH° is positive (melting always absorbs heat), so Δ\_subH° > Δ\_vapH° at a given temperature.
@@ -1941,7 +2003,7 @@ Picture the reaction as a two-step route through the elements:
 The atoms are conserved, so the elements at the halfway point are exactly the ones needed. H is a state function, so the direct route has the same ΔH as this detour:
 
 $$
-\Delta_\text{r}H^\circ = \sum_\text{products} \nu\, \Delta_\text{f}H^\circ - \sum_\text{reactants} \nu\, \Delta_\text{f}H^\circ
+\boxed{\Delta_\text{r}H^\circ = \sum_\text{products} \nu\, \Delta_\text{f}H^\circ - \sum_\text{reactants} \nu\, \Delta_\text{f}H^\circ}
 $$
 
 A compact form uses **stoichiometric numbers** ν\_J, which carry a sign: positive for products, negative for reactants.
@@ -2001,7 +2063,7 @@ $$
 **Step 2. Combine with signed coefficients.** Multiply by ν\_J (positive for products, negative for reactants) and sum over all species. The left side becomes Δ\_rH°(T₂) and the first term on the right becomes Δ\_rH°(T₁):
 
 $$
-\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \int_{T_1}^{T_2} \Delta_\text{r}C_p^\circ\, \mathrm{d}T \qquad \text{(Kirchhoff's law)}
+\boxed{\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \int_{T_1}^{T_2} \Delta_\text{r}C_p^\circ\, \mathrm{d}T \qquad \text{(Kirchhoff's law)}}
 $$
 
 **Step 3. Define the reaction heat capacity:**
@@ -2015,7 +2077,7 @@ In differential form the law says d(Δ\_rH°)/dT = Δ\_rC\_p°: the slope of Δ\
 **Step 4. Constant Δ\_rC\_p°.** Individual heat capacities change with T, but their difference changes much less. Over a modest range, take Δ\_rC\_p° as constant and pull it out of the integral:
 
 $$
-\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \Delta_\text{r}C_p^\circ\,(T_2 - T_1)
+\boxed{\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \Delta_\text{r}C_p^\circ\,(T_2 - T_1)}
 $$
 
 **Same result as a Hess cycle (a good alternative derivation).** To react at T₂: cool the reactants from T₂ to T₁, react at T₁, then heat the products from T₁ back to T₂. The three steps start and end in the same states as the direct reaction at T₂, so
@@ -2092,7 +2154,7 @@ $$
 **Step 3.** Treat the gases as perfect: pV = n\_g RT. At a fixed temperature, Δ(pV) = Δn\_g RT, so
 
 $$
-\Delta_\text{r}H = \Delta_\text{r}U + \Delta n_\text{g}\,RT
+\boxed{\Delta_\text{r}H = \Delta_\text{r}U + \Delta n_\text{g}\,RT}
 $$
 
 Here Δn\_g = (moles of gaseous products) − (moles of gaseous reactants) per mole of reaction as written. It is a pure number in this formula, and RT ≈ 2.48 kJ mol⁻¹ at 298 K.
@@ -2197,7 +2259,7 @@ $$
 **Step 2. Heat released by the naphthalene.**
 
 $$
-n = \frac{0.120\ \text{g}}{128.18\ \text{g mol}^{-1}} = 9.36\times10^{-4}\ \text{mol}, \qquad q = n\,|\Delta_\text{c}U| = (9.36\times10^{-4})(5152) = 4.82\ \text{kJ}
+\begin{gathered}n = \frac{0.120\ \text{g}}{128.18\ \text{g mol}^{-1}} = 9.36\times10^{-4}\ \text{mol} \\[4pt] q = n\,|\Delta_\text{c}U| = (9.36\times10^{-4})(5152) = 4.82\ \text{kJ}\end{gathered}
 $$
 
 **Step 3. Calorimeter constant.**
@@ -2209,7 +2271,7 @@ $$
 **Step 4. Heat released by the phenol.** C₆H₅OH(s) + 7O₂(g) → 6CO₂(g) + 3H₂O(l), so Δn\_g = 6 − 7 = −1. Then Δ\_cU = −3054 + 2.48 = −3051.5 kJ mol⁻¹.
 
 $$
-n = \frac{0.150\ \text{g}}{94.12\ \text{g mol}^{-1}} = 1.594\times10^{-3}\ \text{mol}, \qquad q = (1.594\times10^{-3})(3051.5) = 4.86\ \text{kJ}
+\begin{gathered}n = \frac{0.150\ \text{g}}{94.12\ \text{g mol}^{-1}} = 1.594\times10^{-3}\ \text{mol} \\[4pt] q = (1.594\times10^{-3})(3051.5) = 4.86\ \text{kJ}\end{gathered}
 $$
 
 **Step 5. Temperature rise.**
@@ -2279,7 +2341,7 @@ $$
 **Step 5. Amount, then mass.**
 
 $$
-n = \frac{1.0\times10^{7}\ \text{J}}{4.40\times10^{4}\ \text{J mol}^{-1}} = 227\ \text{mol}, \qquad m = (227\ \text{mol})(18.02\ \text{g mol}^{-1}) = 4.1\times10^{3}\ \text{g} = 4.1\ \text{kg}
+\begin{gathered}n = \frac{1.0\times10^{7}\ \text{J}}{4.40\times10^{4}\ \text{J mol}^{-1}} = 227\ \text{mol} \\[4pt] m = (227\ \text{mol})(18.02\ \text{g mol}^{-1}) = 4.1\times10^{3}\ \text{g} = 4.1\ \text{kg}\end{gathered}
 $$
 
 Using 43.5 kJ mol⁻¹ gives 4.14 kg, the same to two significant figures. **Assumptions:** all the heat leaves by evaporation, and the heat capacity is constant over the range.
@@ -2480,7 +2542,7 @@ $$
 **Test:** df is exact if and only if
 
 $$
-\left(\frac{\partial M}{\partial y}\right)_x = \left(\frac{\partial N}{\partial x}\right)_y
+\boxed{\left(\frac{\partial M}{\partial y}\right)_x = \left(\frac{\partial N}{\partial x}\right)_y}
 $$
 
 **Why.** If df is exact, a function f exists with M = (∂f/∂x)\_y and N = (∂f/∂y)\_x. Then ∂M/∂y and ∂N/∂x are both the mixed second derivative ∂²f/∂x∂y, and mixed derivatives don't depend on the order. If the cross-derivatives differ, no such f can exist, so the differential is inexact.
@@ -2530,7 +2592,7 @@ C_V = \left(\frac{\partial U}{\partial T}\right)_V \qquad\qquad \pi_T \equiv \le
 $$
 
 $$
-\mathrm{d}U = C_V\,\mathrm{d}T + \pi_T\,\mathrm{d}V
+\boxed{\mathrm{d}U = C_V\,\mathrm{d}T + \pi_T\,\mathrm{d}V}
 $$
 
 - **π\_T has units of pressure**: J m⁻³ = N m⁻² = Pa. That is why it is called the internal pressure.
@@ -2550,7 +2612,7 @@ At constant T, the average kinetic energy of the molecules is fixed. So any chan
 A general result, derived in Atkins **Topic 3E** (after the quiz range), lets you calculate π\_T from any equation of state. Use it; you don't need to derive it.
 
 $$
-\pi_T = T\left(\frac{\partial p}{\partial T}\right)_V - p \qquad (\text{thermodynamic equation of state})
+\boxed{\pi_T = T\left(\frac{\partial p}{\partial T}\right)_V - p \qquad (\text{thermodynamic equation of state})}
 $$
 
 **Perfect gas.** p = nRT/V, so (∂p/∂T)\_V = nR/V. Then
@@ -2625,7 +2687,7 @@ $$
 **Step 2.** The derivative on the right is a measurable material property. Define two of them:
 
 $$
-\alpha = \frac{1}{V}\left(\frac{\partial V}{\partial T}\right)_p \quad (\text{expansion coefficient}) \qquad \kappa_T = -\frac{1}{V}\left(\frac{\partial V}{\partial p}\right)_T \quad (\text{isothermal compressibility})
+\begin{gathered}\alpha = \frac{1}{V}\left(\frac{\partial V}{\partial T}\right)_p \quad (\text{expansion coefficient}) \\[4pt] \kappa_T = -\frac{1}{V}\left(\frac{\partial V}{\partial p}\right)_T \quad (\text{isothermal compressibility})\end{gathered}
 $$
 
 - α is the **fractional** change in volume per kelvin at constant pressure. Units: K⁻¹.
@@ -2710,7 +2772,7 @@ $$
 The new derivative is the **Joule–Thomson coefficient**, the rate at which temperature changes with pressure when H is held fixed:
 
 $$
-\mu = \left(\frac{\partial T}{\partial p}\right)_H
+\boxed{\mu = \left(\frac{\partial T}{\partial p}\right)_H}
 $$
 
 **Step 4.** Substitute back into Step 1:
@@ -2802,7 +2864,7 @@ $$
 **Step 4. Rearrange** into the definition of H:
 
 $$
-U_\text{f} + p_\text{f}V_\text{f} = U_\text{i} + p_\text{i}V_\text{i} \quad\Longrightarrow\quad H_\text{f} = H_\text{i}
+\boxed{U_\text{f} + p_\text{f}V_\text{f} = U_\text{i} + p_\text{i}V_\text{i} \quad\Longrightarrow\quad H_\text{f} = H_\text{i}}
 $$
 
 The expansion is **isenthalpic**. The measured ratio ΔT/Δp is therefore a temperature change at constant H. In the limit of a small pressure drop, it is the Joule–Thomson coefficient
@@ -2867,7 +2929,7 @@ T\left(\frac{\partial V_\text{m}}{\partial T}\right)_p - V_\text{m} = \frac{RT}{
 $$
 
 $$
-\mu \approx \frac{1}{C_{p,\text{m}}}\left(\frac{2a}{RT} - b\right)
+\boxed{\mu \approx \frac{1}{C_{p,\text{m}}}\left(\frac{2a}{RT} - b\right)}
 $$
 
 - **2a/RT** comes from attractions and drives **cooling**. It shrinks as T rises.
@@ -2875,7 +2937,7 @@ $$
 - μ changes sign when the two terms balance. That is the **inversion temperature**:
 
 $$
-\frac{2a}{RT_\text{I}} = b \quad\Longrightarrow\quad T_\text{I} = \frac{2a}{Rb}
+\boxed{\frac{2a}{RT_\text{I}} = b \quad\Longrightarrow\quad T_\text{I} = \frac{2a}{Rb}}
 $$
 
 Below T\_I the gas cools on throttling; above T\_I it warms.
@@ -2990,7 +3052,7 @@ w = -\int_{V_\text{i}}^{V_\text{f}} p\,\mathrm{d}V_\text{m} = -RT\ln\frac{V_\tex
 $$
 
 $$
-\ln\frac{20.00 - 0.0387}{1.00 - 0.0387} = \ln 20.77 = 3.033, \qquad RT = (8.3145)(298) = 2478\ \text{J mol}^{-1}
+\begin{gathered}\ln\frac{20.00 - 0.0387}{1.00 - 0.0387} = \ln 20.77 = 3.033 \\[4pt] RT = (8.3145)(298) = 2478\ \text{J mol}^{-1}\end{gathered}
 $$
 
 $$

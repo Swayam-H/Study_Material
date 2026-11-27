@@ -1,16 +1,30 @@
 # Learn: Particle properties of waves
 
-Light behaves as a wave when it travels (interference, diffraction) and as a stream of photons, each with E = hν and p = h/λ, when it gives or takes energy (blackbody, photoelectric, Compton, pair production). This doc covers Beiser ch 2 (all of 2.1–2.9) and the matching slides `QM.tex:1` to `:136`. No formula sheet is allowed, so the boxed results are the ones to know by heart.
+Light behaves as a wave when it travels (interference, diffraction) and as a stream of photons, each with $E = h\nu$ and $p = h/\lambda$, when it gives or takes energy (blackbody, photoelectric, Compton, pair production). This doc covers Beiser ch 2 (all of 2.1–2.9) and the matching slides `QM.tex:1` to `:136`. No formula sheet is allowed, so the boxed results are the ones to know by heart.
 
 > **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
 
 ## Light as a wave
 
-By the end of the nineteenth century the nature of light seemed settled. Maxwell had shown that a changing electric field produces a magnetic field and a changing magnetic field produces an electric one, and that together they can travel through empty space as a wave moving at c = 1/√(ε₀μ₀). Hertz produced such waves in the laboratory, and interference and diffraction, which only waves can show, had long been observed for light. A handful of experiments, however, refused to fit this picture, and each of them pointed the same way: in its interaction with matter, light behaves as if its energy came in separate lumps.
+By the end of the nineteenth century the nature of light seemed settled. Young's double slit (1801) and Fresnel's theory (1818) had established it as a wave, and Maxwell showed that a changing electric field produces a magnetic field and vice versa. In vacuum his equations give a wave equation:
+
+$$\frac{\partial^2\mathbf E}{\partial t^2} = \frac{1}{\mu_0\varepsilon_0}\nabla^2\mathbf E\quad(\text{same for }\mathbf B),\qquad \boxed{c = \frac{1}{\sqrt{\mu_0\varepsilon_0}},\qquad c = \nu\lambda}$$
+
+A plane wave along $z$ is $\mathbf E = \mathbf E_0\,e^{i(kz - \omega t)}$ with $\mathbf B = \frac{k}{\omega}\,\hat{\mathbf z}\times\mathbf E_0$: the waves are **transverse** ($\mathbf E \perp \mathbf B \perp$ direction of travel, $|\mathbf B_0| = |\mathbf E_0|/c$), and superposing plane waves gives polarisation. Hertz produced such waves in the laboratory. A handful of experiments, however, refused to fit this picture, and each pointed the same way: in its interaction with matter, light behaves as if its energy came in separate lumps.
 
 ## Blackbody radiation
 
-The first difficulty concerned blackbody radiation, the light given off by an ideal absorber held at a temperature T. Its spectrum depends only on T, rising to a peak whose wavelength falls as T increases (Wien's law) and carrying a total power proportional to T⁴ (the Stefan–Boltzmann law). Rayleigh and Jeans calculated the spectrum by treating the radiation inside a cavity as a set of standing waves, each with average energy kT. Since the number of possible standing waves grows without limit at short wavelengths, their result predicted infinite energy in the ultraviolet, which is plainly wrong. Planck removed the trouble by assuming that an oscillator of frequency ν can have only the energies 0, hν, 2hν, and so on. At high frequency hν is much larger than kT, such oscillators are seldom excited, and the spectrum falls back to zero as observed. The constant h was chosen to fit the data and turned out to be one of the fundamental constants of nature.
+The first difficulty concerned blackbody radiation, the light given off by an ideal absorber held at a temperature $T$. Its spectrum depends only on $T$ (not on the material):
+
+$$\begin{gathered}\boxed{\lambda_\text{max}T = \text{const} = 2.898\times10^{-3}\ \text{m K}}\ \ (\text{Wien}) \\[4pt] \boxed{P = \sigma T^4}\ \ (\text{Stefan–Boltzmann, per unit area})\end{gathered}$$
+
+Two early formulas each fitted half the spectrum: Wien's distribution $I(\nu) \propto \nu^3e^{-b\nu/T}$ at high $\nu$, and Rayleigh–Jeans $I(\nu) \propto \nu^2T$ at low $\nu$. Rayleigh and Jeans treated the cavity radiation as standing waves, each with average energy $kT$. Since the number of standing waves grows without limit at short wavelengths, their result predicted infinite energy in the ultraviolet (the **ultraviolet catastrophe**).
+
+Planck removed the trouble by assuming that an oscillator of frequency $\nu$ can have only the energies $E = nh\nu$, $n = 0, 1, 2, \dots$ The average energy per mode is then $h\nu/(e^{h\nu/kT} - 1)$ instead of $kT$, and
+
+$$\boxed{u(\nu)\,d\nu = \frac{8\pi h\nu^3}{c^3}\,\frac{d\nu}{e^{h\nu/kT} - 1}}\qquad\left(\text{slides: } I(\nu) = \frac{2h\nu^3}{c^2}\frac{1}{e^{h\nu/kT} - 1}\right)$$
+
+At high frequency $h\nu \gg kT$, such oscillators are seldom excited, and the spectrum falls back to zero; for $h\nu \ll kT$ it reduces to Rayleigh–Jeans. This was the first instance of quantised energy, and $h = 6.63\times10^{-34}\ \text{J s}$ turned out to be one of the fundamental constants of nature.
 
 ![Blackbody spectra and the ultraviolet catastrophe](fig/blackbody.svg)
 
@@ -18,7 +32,17 @@ The first difficulty concerned blackbody radiation, the light given off by an id
 
 ## The photoelectric effect
 
-The photoelectric effect made the idea of quanta unavoidable. When light falls on a metal surface, electrons are emitted, and the experiments showed three things that the wave theory could not explain. The electrons come out at once, with no delay even in very weak light. Their maximum kinetic energy depends on the frequency of the light and not on its intensity. And below a certain threshold frequency no electrons are emitted however bright the light. Einstein explained all three by supposing that light itself consists of quanta, now called photons, each of energy hν. A single photon gives all its energy to a single electron, which uses part of it, the work function φ, to escape the surface. The rest appears as kinetic energy, so that hν = KE\_max + φ. Brighter light means more photons and therefore more electrons, but not faster ones.
+The photoelectric effect made the idea of quanta unavoidable. When light falls on a metal surface, electrons are emitted, and the experiments showed three things that the wave theory could not explain:
+
+1. The electrons come out at once, with no delay even in very weak light.
+2. Their maximum kinetic energy depends on the **frequency** of the light, not its intensity.
+3. Below a threshold frequency $\nu_0$ no electrons are emitted, however bright the light.
+
+Einstein (1905) explained all three by supposing that light consists of quanta, now called photons, each of energy $h\nu$. A single photon gives all its energy to a single electron, which uses part of it, the work function $\phi$, to escape the surface:
+
+$$\boxed{h\nu = KE_\text{max} + \phi,\qquad KE_\text{max} = eV_0,\qquad \phi = h\nu_0}$$
+
+Brighter light means more photons and therefore more electrons, but not faster ones.
 
 ![Stopping potential against frequency](fig/photoelectric.svg)
 
@@ -26,15 +50,29 @@ The photoelectric effect made the idea of quanta unavoidable. When light falls o
 
 ## Wave–particle duality
 
-It does not follow that the wave theory of light is wrong. Light still shows interference and diffraction, and these can only be understood with waves. The two descriptions are complementary. The wave picture tells us how light travels and where it is likely to be found, while the photon picture describes how it gives up or takes on energy when it meets matter. Neither alone is complete.
+It does not follow that the wave theory of light is wrong. Light still shows interference and diffraction (Young's slits, X-ray diffraction), and these can only be understood with waves; the photoelectric and Compton effects need particles. The two descriptions are complementary: the wave picture tells us how light travels and where it is likely to be found, the photon picture how it gives up or takes on energy when it meets matter. For a photon,
+
+$$\boxed{E = h\nu,\qquad m = 0,\qquad E = pc\quad\Longrightarrow\quad p = \frac{h\nu}{c} = \frac{h}{\lambda}}$$
 
 ## X-rays and X-ray diffraction
 
-X-rays provide the photoelectric effect in reverse. When fast electrons strike a target they are decelerated and emit radiation, and the shortest wavelength in the resulting spectrum corresponds to an electron that gives all its kinetic energy eV to a single photon, so that λ\_min = hc/eV. Because X-ray wavelengths are comparable to the spacing of atoms in a crystal, the regular planes of atoms act as a diffraction grating. Waves reflected from successive planes reinforce one another when the extra path 2d sinθ is a whole number of wavelengths, which is Bragg's law. X-ray diffraction is at once a proof that X-rays are waves and a tool for measuring crystal structures.
+X-rays provide the photoelectric effect in reverse. When fast electrons strike a target they are decelerated and emit radiation. The shortest wavelength corresponds to an electron that gives all its kinetic energy $eV$ to a single photon:
+
+$$\boxed{\lambda_\text{min} = \frac{hc}{eV}}$$
+
+Because X-ray wavelengths ($\sim 0.1\ \text{nm}$) are comparable to the spacing of atoms in a crystal, the regular planes of atoms act as a diffraction grating. Waves reflected from successive planes a distance $d$ apart reinforce when the extra path is a whole number of wavelengths:
+
+$$\boxed{2d\sin\theta = n\lambda}\qquad(\text{Bragg; } \theta \text{ measured from the plane})$$
+
+X-ray diffraction is at once a proof that X-rays are waves and a tool for measuring crystal structures.
 
 ## The Compton effect
 
-The Compton effect shows that a photon carries momentum as well as energy. When X-rays are scattered by the loosely bound electrons in a target, the scattered rays have a longer wavelength than the incident ones, and the shift depends on the scattering angle. Treating the event as a collision between a photon of momentum p = h/λ and an electron at rest, and applying conservation of energy and of momentum, gives λ′ − λ = (h/mc)(1 − cosφ). The quantity h/mc = 2.43 pm is the Compton wavelength of the electron. The agreement of this formula with experiment is the most direct evidence that photons behave like particles in collisions.
+The Compton effect shows that a photon carries momentum as well as energy. X-rays scattered by loosely bound electrons come out with a longer wavelength, and the shift depends on the scattering angle $\phi$. Treating the event as a collision between a photon of momentum $h/\lambda$ and an electron at rest, and conserving energy and momentum (relativistically), gives
+
+$$\boxed{\lambda' - \lambda = \frac{h}{mc}\,(1 - \cos\phi)},\qquad \lambda_C = \frac{h}{mc} = 2.43\ \text{pm}$$
+
+The maximum shift, $2\lambda_C$, is at $\phi = 180^\circ$. The agreement of this formula with experiment is the most direct evidence that photons behave like particles in collisions.
 
 ![Compton scattering and Bragg reflection geometry](fig/compton-bragg.svg)
 
@@ -42,7 +80,11 @@ The Compton effect shows that a photon carries momentum as well as energy. When 
 
 ## Pair production and photons in gravity
 
-At still higher energies a photon can disappear entirely and create matter. In pair production a photon passing near a nucleus turns into an electron and a positron. Its energy must be at least 2mc² = 1.02 MeV, and the presence of the nucleus is needed so that momentum can be conserved. The reverse process, annihilation, turns an electron and positron into two photons. These processes show that the photon is a particle in the full sense of relativity, with energy E = hν, momentum p = hν/c and zero rest mass. Since a photon has energy it also behaves as if it had a mass hν/c² in a gravitational field, and light rising out of a gravitational field loses energy and so shifts to lower frequency.
+At still higher energies a photon can disappear entirely and create matter. In pair production a photon passing near a nucleus turns into an electron and a positron:
+
+$$\boxed{h\nu_\text{min} = 2mc^2 = 1.02\ \text{MeV}}$$
+
+The nucleus is needed so that momentum can be conserved (a photon alone cannot make a pair in empty space). The reverse process, annihilation, turns an electron and positron into two photons. These processes show that the photon is a particle in the full sense of relativity, with $E = h\nu$, $p = h\nu/c$ and zero rest mass. Since a photon has energy it behaves as if it had a mass $h\nu/c^2$ in a gravitational field, and light rising out of a gravitational field loses energy and so shifts to lower frequency (gravitational red shift).
 
 # Reference: Particle properties of waves
 

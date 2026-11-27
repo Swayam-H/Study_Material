@@ -1,22 +1,50 @@
 # Learn: Hamiltonian dynamics and the two-body problem
 
-The Hamiltonian rewrites Lagrangian mechanics in terms of positions and momenta, giving two first-order equations per coordinate and the picture of motion as flow in phase space. The two-body problem is the great application: it reduces to one body in a central potential, and gravity then gives Kepler's laws. Sources: slides `Lagrangian.tex:335` to `:443` and `STR.tex:14` to `:107`, MT 7.10–7.12 and ch 8, HW lectures 6–8 (MT E7.11, E8.2). Questions follow the 2025 midsem Q7, the 2026 midsem Q3, Q10 and Q11, and the practice set.
+The Hamiltonian rewrites Lagrangian mechanics in terms of positions and momenta, giving two first-order equations per coordinate. The two-body problem is the great application: it reduces to one body in a central potential, and gravity then gives Kepler's laws. Sources: slides `Lagrangian.tex:335` to `:443` and `STR.tex:14` to `:107`, MT 7.10–7.11 and 8.1–8.7, HW lectures 6–8 (MT E7.11, E8.2). Questions follow the 2025 midsem Q7, the 2026 midsem Q3, Q10 and Q11, and the practice set.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Endsem scope.** MT 7.12 (phase space and Liouville's theorem) and 7.13 (virial theorem) are excluded, so the phase-space section below is marked ❌ and can be skipped. MT 8.8–8.10 (orbital dynamics, apsidal angles and precession, stability of circular orbits) are also excluded. The three-body remarks are background only.
+
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## From the Lagrangian to the Hamiltonian
 
-Lagrange's equations describe a system with n degrees of freedom by n second-order differential equations for the generalised coordinates qₖ. Hamilton showed that the same motion can be described by 2n first-order equations, in which the coordinates and their conjugate momenta appear on an equal footing. The conjugate momentum of a coordinate is defined from the Lagrangian as pₖ = ∂L/∂q̇ₖ. For a particle in Cartesian coordinates it is the ordinary momentum mv, and for an angle it is an angular momentum, but in general it need not be either. For a charged particle in a magnetic field, for example, p = mv + qA, which is not the mechanical momentum.
+Lagrange's equations describe a system with $n$ degrees of freedom by $n$ second-order equations for the generalised coordinates $q_k$. Hamilton showed that the same motion can be described by $2n$ first-order equations, in which the coordinates and their conjugate momenta appear on an equal footing.
 
-The Hamiltonian is defined as H = Σpₖq̇ₖ − L, with every velocity re-expressed in terms of the momenta, so that H is a function of the qₖ, the pₖ and possibly t. This change of variables from q̇ to p is a Legendre transformation, the same operation that turns U(S, V) into H(S, p) in thermodynamics. When the coordinates do not depend explicitly on time and the potential depends only on position, the kinetic energy is quadratic in the velocities and H turns out to be T + U, the total energy. If in addition H does not depend explicitly on time, it is conserved.
+**Step 1: conjugate momenta.**
 
-Taking the differential of H and comparing it with the Lagrange equations gives Hamilton's canonical equations, q̇ₖ = ∂H/∂pₖ and ṗₖ = −∂H/∂qₖ. The first returns the relation between velocity and momentum, and the second plays the role of Newton's second law. If a coordinate does not appear in H, its momentum is constant, just as for a cyclic coordinate in the Lagrangian. A good illustration is a particle constrained to a cylinder of radius R and pulled towards the origin by a force −kr (MT E7.11). In cylindrical coordinates H = p\_θ²/2mR² + p\_z²/2m + ½kz². Since θ does not appear, p\_θ is constant and the particle turns about the axis at a steady rate, while the z-equations describe simple harmonic motion along the axis.
+$$\boxed{p_k = \frac{\partial L}{\partial\dot q_k}}$$
+
+For a particle in Cartesian coordinates it is the ordinary momentum $m\mathbf v$, and for an angle it is an angular momentum, but in general it need not be either. For a charged particle in a magnetic field, $\mathbf p = m\mathbf v + q\mathbf A$, which is not the mechanical momentum.
+
+**Step 2: the Hamiltonian** (a Legendre transformation that swaps $\dot q$ for $p$):
+
+$$\begin{gathered}\boxed{H(q, p, t) = \sum_k p_k\dot q_k - L(q, \dot q, t)} \\[4pt] (\text{every }\dot q_k\text{ re-expressed through the }p\text{'s})\end{gathered}$$
+
+This is the same operation that turns $U(S, V)$ into $H(S, p)$ in thermodynamics. When the coordinates do not depend explicitly on time and the potential depends only on position, $T$ is quadratic in the velocities and $H = T + U$, the total energy. If in addition $\partial H/\partial t = 0$, $H$ is conserved.
+
+**Step 3: Hamilton's canonical equations.** Taking the differential of $H$ and comparing with Lagrange's equations:
+
+$$\boxed{\dot q_k = \frac{\partial H}{\partial p_k},\qquad \dot p_k = -\frac{\partial H}{\partial q_k}}$$
+
+The first returns the relation between velocity and momentum; the second plays the role of Newton's second law. If a coordinate does not appear in $H$, its momentum is constant, just as for a cyclic coordinate in the Lagrangian.
+
+**Worked example (MT E7.11).** A particle on a cylinder of radius $R$, pulled towards the origin by $\mathbf F = -k\mathbf r$. In cylindrical coordinates:
+
+$$L = \tfrac12 m\left(R^2\dot\theta^2 + \dot z^2\right) - \tfrac12 k\left(R^2 + z^2\right),\qquad p_\theta = mR^2\dot\theta,\quad p_z = m\dot z$$
+
+$$H = \frac{p_\theta^2}{2mR^2} + \frac{p_z^2}{2m} + \tfrac12 kz^2\ (+\ \text{const})$$
+
+$$\dot p_\theta = -\frac{\partial H}{\partial\theta} = 0,\quad \dot\theta = \frac{p_\theta}{mR^2};\qquad \dot p_z = -kz,\quad \dot z = \frac{p_z}{m}$$
+
+So $p_\theta$ is constant and the particle turns about the axis at a steady rate, while $z$ oscillates harmonically with $\omega = \sqrt{k/m}$.
 
 ## Phase space and Liouville's theorem
 
-Because Hamilton's equations are first order, the state of a system at any instant is fixed by its q's and p's together. These can be treated as the coordinates of a single point in a 2n-dimensional phase space, and as time passes the point moves along a trajectory determined by the equations. For a one-dimensional harmonic oscillator the trajectories are ellipses of constant energy in the (x, p) plane, and a damped oscillator spirals inwards to the origin.
+> ❌ **Not in the endsem** (MT 7.12 is excluded). Read for background only.
 
-Suppose now that we do not know the initial state exactly, but only that it lies in some small region of phase space. Each point of the region moves according to Hamilton's equations, and the region is carried along and deformed. Liouville's theorem states that for Hamiltonian motion its volume never changes. The region may be stretched in one direction and squeezed in another, but its volume is conserved. The proof uses the fact that the flow velocity (q̇, ṗ) has zero divergence, since ∂q̇/∂q + ∂ṗ/∂p = ∂²H/∂q∂p − ∂²H/∂p∂q = 0, so phase-space points behave like an incompressible fluid. The theorem has two important consequences. A frictionless system cannot settle into a resting state, since that would shrink a region of phase space to a point, and it is only dissipation that does this. And uncertainty about the initial state is never removed by the motion itself, only reshaped. Liouville's theorem is also the starting point of statistical mechanics.
+Because Hamilton's equations are first order, the state at any instant is fixed by the $q$'s and $p$'s together: a point in a $2n$-dimensional phase space, moving along a trajectory. For a one-dimensional harmonic oscillator the trajectories are ellipses of constant energy in the $(x, p)$ plane, of area $2\pi E/\omega$; a damped oscillator spirals inwards to the origin.
+
+Liouville's theorem states that under Hamiltonian motion the volume of any region of phase space never changes: it may stretch and squeeze, but its volume is conserved. The proof is that the flow has zero divergence, $\dfrac{\partial\dot q}{\partial q} + \dfrac{\partial\dot p}{\partial p} = \dfrac{\partial^2 H}{\partial q\,\partial p} - \dfrac{\partial^2 H}{\partial p\,\partial q} = 0$. Consequences: a frictionless system cannot settle to rest, and uncertainty in the initial state is never removed, only reshaped.
 
 ![Phase-space trajectories of a harmonic oscillator](fig/phase-space.svg)
 
@@ -24,9 +52,25 @@ Suppose now that we do not know the initial state exactly, but only that it lies
 
 ## Reducing two bodies to one
 
-Two bodies interacting through a force that depends only on their separation, such as the sun and a planet, are described by six coordinates. A good choice of coordinates simplifies the problem greatly. Using the position of the centre of mass R and the relative position r = r₁ − r₂, the Lagrangian separates into L = ½MṘ² + ½μṙ² − U(r), where M is the total mass and μ = m₁m₂/(m₁ + m₂) is the reduced mass. R does not appear, so the centre of mass moves uniformly and we can work in the frame where it is at rest. What remains is the motion of a single particle of mass μ in the central potential U(r).
+Two bodies interacting through a force that depends only on their separation, such as the sun and a planet, need six coordinates. Use the centre of mass and the relative position:
 
-For a central force the angular momentum is conserved, so the motion stays in the plane perpendicular to it, and plane polar coordinates (r, θ) suffice. The Lagrangian becomes L = ½μ(ṙ² + r²θ̇²) − U(r). Since θ is cyclic, its conjugate momentum ℓ = μr²θ̇ is constant. In a short time dt the line joining the bodies sweeps out an area dA = ½r²dθ, so the areal velocity dA/dt = ℓ/2μ is constant. This is Kepler's second law, and it holds for any central force, not only gravity.
+$$\mathbf R = \frac{m_1\mathbf r_1 + m_2\mathbf r_2}{M},\qquad \mathbf r = \mathbf r_1 - \mathbf r_2$$
+
+The Lagrangian then separates:
+
+$$\boxed{L = \tfrac12 M\dot{\mathbf R}^2 + \tfrac12\mu\dot{\mathbf r}^2 - U(r),\qquad \mu = \frac{m_1m_2}{m_1 + m_2}}$$
+
+$\mathbf R$ is cyclic, so the centre of mass moves uniformly and we can work in the frame where $\dot{\mathbf R} = 0$. What remains is a single particle of reduced mass $\mu$ in the central potential $U(r)$. For a central force the angular momentum is conserved, so the motion stays in a plane and polar coordinates $(r, \theta)$ suffice:
+
+$$L = \tfrac12\mu\left(\dot r^2 + r^2\dot\theta^2\right) - U(r)$$
+
+$\theta$ is cyclic, so its conjugate momentum is constant, and in time $dt$ the radius sweeps an area $dA = \tfrac12 r^2d\theta$:
+
+$$\begin{gathered}\boxed{\ell = \mu r^2\dot\theta = \text{const}\quad\Longrightarrow\quad \frac{dA}{dt} = \tfrac12 r^2\dot\theta = \frac{\ell}{2\mu} = \text{const}} \\[4pt] (\text{Kepler II, any central force})\end{gathered}$$
+
+The radial Euler–Lagrange equation is
+
+$$\mu\ddot r = \frac{\ell^2}{\mu r^3} - U'(r)$$
 
 ![Two bodies orbiting their centre of mass](fig/two-body.svg)
 
@@ -34,9 +78,28 @@ For a central force the angular momentum is conserved, so the motion stays in th
 
 ## The effective potential and the orbits
 
-The energy is E = ½μṙ² + ℓ²/(2μr²) + U(r). The middle term is the kinetic energy of the angular motion, but since ℓ is fixed it depends on r alone and acts like an extra repulsive potential, the centrifugal barrier. The radial motion is therefore that of a particle in one dimension moving in the effective potential U\_eff = ℓ²/(2μr²) − k/r for gravity, with k = Gm₁m₂. This function rises steeply at small r, falls to a minimum, and approaches zero from below at large r. If E equals the minimum, r cannot change and the orbit is a circle. If E lies between the minimum and zero, r oscillates between two turning points and the orbit is bound. If E is zero or positive, the body comes in from infinity, turns at a closest approach and escapes again.
+The energy is
 
-Solving the equations with the substitution u = 1/r gives the orbit explicitly: α/r = 1 + ε cosθ, with α = ℓ²/μk and eccentricity ε = √(1 + 2Eℓ²/μk²). This is a conic section with the centre of force at a focus. For E < 0, ε < 1 and the orbit is an ellipse, which is Kepler's first law; the special case ε = 0 is a circle. For E = 0 it is a parabola, and for E > 0 a hyperbola. For an ellipse the period satisfies T² ∝ a³, Kepler's third law. Bound orbits close on themselves only for two power laws, the inverse-square force and the linear force of the harmonic oscillator; for any other force law the orbit precesses.
+$$\boxed{E = \tfrac12\mu\dot r^2 + U_\text{eff}(r),\qquad U_\text{eff}(r) = \frac{\ell^2}{2\mu r^2} - \frac kr,\quad k = Gm_1m_2}$$
+
+The centrifugal term $\ell^2/2\mu r^2$ is the kinetic energy of the angular motion, but since $\ell$ is fixed it depends on $r$ alone and acts as a repulsive barrier. (The slides write $\ell^2/\mu r^2$; the factor $\tfrac12$ belongs.) The radial motion is that of a particle in one dimension in $U_\text{eff}$, which rises steeply at small $r$, has a minimum at $r_0 = \ell^2/\mu k$, and approaches zero from below:
+
+| Energy | Radial motion | Orbit |
+|---|---|---|
+| $E = U_\text{eff,min} = -\mu k^2/2\ell^2$ | $r$ fixed | circle |
+| $U_\text{eff,min} < E < 0$ | $r$ oscillates between two turning points | ellipse (bound) |
+| $E = 0$ | comes from infinity, turns, escapes | parabola |
+| $E > 0$ | same, with speed left over | hyperbola |
+
+Solving with the substitution $u = 1/r$ gives the orbit explicitly:
+
+$$\boxed{\frac{\alpha}{r} = 1 + \varepsilon\cos\theta,\qquad \alpha = \frac{\ell^2}{\mu k},\qquad \varepsilon = \sqrt{1 + \frac{2E\ell^2}{\mu k^2}}}$$
+
+This is a conic with the centre of force at a focus: $\varepsilon = 0$ circle, $\varepsilon < 1$ ellipse (Kepler I), $\varepsilon = 1$ parabola, $\varepsilon > 1$ hyperbola. For an ellipse the period obeys Kepler III:
+
+$$\boxed{T^2 = \frac{4\pi^2}{G(m_1 + m_2)}\,a^3}$$
+
+⚠ Background only: bound orbits close on themselves for every initial condition only for $U \propto -1/r$ and $U \propto r^2$ (Bertrand).
 
 ![Effective potential and the conic-section orbits](fig/effective-potential-orbits.svg)
 
@@ -44,7 +107,7 @@ Solving the equations with the substitution u = 1/r gives the orbit explicitly: 
 
 ## Beyond two bodies
 
-Newton's achievement was to show that his law of gravitation implies Kepler's three laws for any two-body system. The planets disturb one another slightly, and the small departures from Kepler's ellipses led to the discovery of Neptune at the position predicted from the irregularities of Uranus's orbit. With three or more bodies, however, no general closed-form solution exists. The three-body problem has exact solutions only in special configurations, and in general its motion can be chaotic, a fact that Poincaré's study of it first revealed.
+⚠ Background only. Newton showed that his law of gravitation implies Kepler's three laws for any two-body system. The planets disturb one another slightly, and the departures from Kepler's ellipses led to the discovery of Neptune at the position predicted from the irregularities of Uranus's orbit. With three or more bodies no general closed-form solution exists; special configurations have exact solutions, and in general the motion can be chaotic, as Poincaré first found.
 
 # Reference: Hamiltonian dynamics and the two-body problem
 

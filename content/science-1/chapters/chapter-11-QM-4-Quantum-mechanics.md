@@ -1,40 +1,129 @@
 # Learn: Quantum mechanics
 
-The Schrödinger equation is to quantum mechanics what F = ma is to classical mechanics: you solve it with the right potential and boundary conditions, and the allowed wave functions and energies come out. This doc covers all of Beiser ch 5 (5.1–5.11, including the tunnel-effect appendix) and the slides `QM.tex:258` to `:443`.
+The Schrödinger equation is to quantum mechanics what $F = ma$ is to classical mechanics: you solve it with the right potential and boundary conditions, and the allowed wave functions and energies come out. This doc covers all of Beiser ch 5 (5.1–5.11, including the tunnel-effect appendix) and the slides `QM.tex:258` to `:443`. The professor wants understanding over derivations, so for each derivation learn the idea and the boxed result first.
 
-> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution.
+> **Study path.** Read *Learn* once, keep *Reference* open for the formulas and the "what to do without notes" list, then do *Practice*: try each question on paper before you open its solution. Boxed equations are the ones to know by heart.
 
 ## The wave function
 
-Classical mechanics answers questions with certainties: given the initial position and velocity of a body and the forces on it, Newton's laws predict exactly where it will be at any later time. Quantum mechanics cannot do this, because the uncertainty principle forbids us to know the initial position and momentum exactly. What it predicts instead are probabilities. For a particle the central object is the wave function Ψ(x, t), and the probability of finding the particle between x and x + dx at time t is |Ψ|² dx. Since the particle must be somewhere, the integral of |Ψ|² over all space must equal one, and a wave function that satisfies this is said to be normalised. A wave function must also be single-valued and continuous, together with its first derivative, wherever the potential is finite. These requirements turn out to be what produces quantisation.
+Classical mechanics answers questions with certainties: given the initial position and velocity of a body and the forces on it, Newton's laws predict exactly where it will be at any later time. Quantum mechanics cannot do this, because the uncertainty principle forbids us to know the initial position and momentum exactly. What it predicts instead are probabilities. The central object is the wave function $\Psi(x, t)$, which may be complex:
+
+$$\boxed{P(x)\,dx = |\Psi(x, t)|^2\,dx = \Psi^*\Psi\,dx,\qquad \int_{-\infty}^{\infty}|\Psi|^2\,dx = 1\ \ (\text{normalised})}$$
+
+A wave function must also be single-valued and continuous, together with its first derivative $\partial\Psi/\partial x$, wherever the potential is finite. These requirements turn out to be what produces quantisation.
+
+## The postulates (slides "math formulation")
+
+| # | Postulate |
+|---|---|
+| 1 | The state of a particle is a wave function $\Psi(x, t)$. |
+| 2 | It evolves by the Schrödinger equation $i\hbar\,\partial\Psi/\partial t = \hat H\Psi$. |
+| 3 | **Born:** $\lvert\Psi\rvert^2dx$ is the probability of finding the particle in $dx$. |
+| 4 | Each observable $A$ has an operator $\hat A$; $\langle A\rangle = \int\Psi^*\hat A\,\Psi\,dx$. |
+| 5 | **Collapse:** a measurement gives one definite value, and immediately afterwards the state is the one matching that value. |
+| 6 | **Superposition:** if $\Psi_1, \Psi_2$ are normalised solutions with $\int\Psi_1^*\Psi_2\,dx = 0$, then $a_1\Psi_1 + a_2\Psi_2$ is a solution, normalised when $\lvert a_1\rvert^2 + \lvert a_2\rvert^2 = 1$. |
+| 7 | **Correspondence:** results go over to classical ones for large quantum numbers. |
 
 ## Schrödinger's equation
 
-The wave function itself obeys an equation that plays the role Newton's second law plays in classical mechanics. Schrödinger's equation cannot be derived from anything more basic; it is a postulate, justified by the success of its predictions. It can, however, be made plausible. For a free particle the wave function should be a travelling wave Ψ = A e^(−i(ωt − kx)), with energy E = ħω and momentum p = ħk. Differentiating this twice with respect to x brings down a factor p², and differentiating once with respect to t brings down a factor E. Substituting these into the energy relation E = p²/2m + U gives the time-dependent Schrödinger equation, iħ ∂Ψ/∂t = −(ħ²/2m) ∂²Ψ/∂x² + UΨ. The equation is linear in Ψ, which means that if Ψ₁ and Ψ₂ are solutions, so is any combination of them. When two solutions are added, the probability density contains a cross term in addition to |Ψ₁|² and |Ψ₂|², and this interference term is what produces the bright and dark fringes in the double-slit experiment with electrons.
+Schrödinger's equation cannot be derived from anything more basic; it is a postulate, justified by its predictions. It can be made plausible in two ways.
+
+**Route 1: from a free-particle wave.** Take $\Psi = A\,e^{-(i/\hbar)(Et - px)}$, using $E = \hbar\omega$ and $p = \hbar k$. Then
+
+$$\frac{\partial^2\Psi}{\partial x^2} = -\frac{p^2}{\hbar^2}\Psi\ \Rightarrow\ p^2\Psi = -\hbar^2\frac{\partial^2\Psi}{\partial x^2},\qquad \frac{\partial\Psi}{\partial t} = -\frac{iE}{\hbar}\Psi\ \Rightarrow\ E\Psi = i\hbar\frac{\partial\Psi}{\partial t}$$
+
+Multiply $E = p^2/2m + U$ by $\Psi$ and substitute:
+
+$$\boxed{i\hbar\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi}\qquad(\text{time-dependent})$$
+
+**Route 2: from the classical wave equation** (slides "Motivate proof"). A wave of fixed wavelength satisfies $\nabla^2\psi + k^2\psi = 0$ with $k = 2\pi/\lambda$. De Broglie gives $k = p/\hbar$, and $p^2 = 2m(E - V)$:
+
+$$\nabla^2\psi + \frac{2m(E - V)}{\hbar^2}\psi = 0\quad\Longleftrightarrow\quad \left[-\frac{\hbar^2}{2m}\nabla^2 + V\right]\psi = E\psi$$
+
+The equation is **linear** in $\Psi$, so any combination of solutions is a solution. When two solutions are added, $|\Psi_1 + \Psi_2|^2 = |\Psi_1|^2 + |\Psi_2|^2 + 2\,\text{Re}(\Psi_1^*\Psi_2)$, and the cross term is the interference that makes the double-slit fringes for electrons.
 
 ## Expectation values and operators
 
-A quantum calculation does not predict the result of a single measurement, but it does predict the average of many. The expectation value of x is ⟨x⟩ = ∫ x|Ψ|² dx, the average position found if the measurement is repeated on many identically prepared particles. Other quantities are found in the same way with the help of operators. Momentum corresponds to the operator −iħ ∂/∂x, and energy to iħ ∂/∂t, and the expectation value of any quantity is obtained by sandwiching its operator between Ψ\* and Ψ and integrating.
+A quantum calculation does not predict the result of a single measurement, but it does predict the average of many identically prepared particles:
+
+$$\boxed{\langle x\rangle = \int_{-\infty}^{\infty}x\,|\Psi|^2\,dx,\qquad \langle G(x)\rangle = \int_{-\infty}^{\infty}G(x)\,|\Psi|^2\,dx}$$
+
+Other quantities need operators, sandwiched between $\Psi^*$ and $\Psi$:
+
+$$\boxed{\hat p = -i\hbar\frac{\partial}{\partial x} = \frac{\hbar}{i}\frac{\partial}{\partial x},\qquad \hat E = i\hbar\frac{\partial}{\partial t},\qquad \hat H = -\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + U}$$
+
+**Where $\hat p$ comes from** (slides "Momentum operator"). Start from $\langle p\rangle = m\,d\langle x\rangle/dt$.
+
+1. $\dfrac{d\langle x\rangle}{dt} = \displaystyle\int x\left(\Psi^*\partial_t\Psi + \Psi\,\partial_t\Psi^*\right)dx$.
+2. Use the Schrödinger equation and its conjugate: the $V$ terms cancel, leaving $\dfrac{d\langle x\rangle}{dt} = \dfrac{i\hbar}{2m}\displaystyle\int x\,\partial_x\left(\Psi^*\Psi_x - \Psi\Psi^*_x\right)dx$.
+3. Integrate by parts twice ($\Psi \to 0$ at $\pm\infty$): $\dfrac{d\langle x\rangle}{dt} = -\dfrac{i\hbar}{m}\displaystyle\int\Psi^*\frac{\partial\Psi}{\partial x}\,dx$.
+4. Hence $\langle p\rangle = \displaystyle\int\Psi^*\left(-i\hbar\frac{\partial}{\partial x}\right)\Psi\,dx$.
+
+Every other operator is built from $\hat x$ and $\hat p$, e.g. $\hat K = \hat p^2/2m = -(\hbar^2/2m)\,\partial^2/\partial x^2$.
 
 ## Stationary states
 
-In most problems of interest the potential does not depend on time. The wave function can then be written as Ψ = ψ(x) e^(−iEt/ħ), and the time-dependent equation reduces to the steady-state Schrödinger equation for ψ(x) alone. For such a state |Ψ|² = |ψ|² does not change in time, which is why these are called stationary states. The steady-state equation generally has acceptable solutions only for certain values of E. These values are the eigenvalues of the energy, and the corresponding ψ are the eigenfunctions. Quantisation of energy is not put in by hand, as it was in the Bohr model; it emerges from the requirement that ψ be well behaved.
+In most problems the potential does not depend on time. Separate the variables:
+
+$$\begin{gathered}\Psi(x, t) = \psi(x)\,e^{-iEt/\hbar}\quad\Longrightarrow\quad \boxed{-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + U\psi = E\psi} \\[4pt] (\text{steady-state, } \hat H\psi = E\psi)\end{gathered}$$
+
+Then $|\Psi|^2 = |\psi|^2$ does not change in time, which is why these are called stationary states. The equation has acceptable solutions only for certain $E$: these are the **eigenvalues**, and the matching $\psi$ the **eigenfunctions**. Quantisation is not put in by hand, as in the Bohr model; it emerges from the requirement that $\psi$ be well behaved.
 
 ## Particle in a box
 
-The simplest application is a particle in a box with infinitely high walls a distance L apart. Inside the box U = 0, and outside the particle can never be found, so ψ must vanish at the walls. The solutions are sine waves ψₙ = √(2/L) sin(nπx/L), and the allowed energies are Eₙ = n²π²ħ²/(2mL²), the same result obtained earlier by fitting de Broglie waves into the box. The probability density, however, now has a definite shape. In the ground state the particle is most likely to be found near the centre, while in the state n = 2 it is never found at the centre at all, behaviour quite unlike a classical particle, which is equally likely to be anywhere in the box.
+Infinitely high walls a distance $L$ apart: $U = 0$ inside, and $\psi = 0$ at $x = 0$ and $x = L$. Inside, $\psi'' = -k^2\psi$ with $k = \sqrt{2mE}/\hbar$, so $\psi = A\sin kx$, and $\psi(L) = 0$ forces $kL = n\pi$:
+
+$$\boxed{\psi_n = \sqrt{\frac2L}\,\sin\frac{n\pi x}{L},\qquad E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2},\qquad n = 1, 2, 3, \dots}$$
+
+This matches the de Broglie result, but the probability density now has a definite shape. In the ground state the particle is most likely found near the centre; for $n = 2$ it is never found at the centre at all, quite unlike a classical particle, which is equally likely to be anywhere. For large $n$ the density evens out (correspondence principle).
 
 ## Finite potential well
 
-If the walls are of finite height U, the wave function no longer has to vanish at them. Outside the box, where E < U, the solutions of the Schrödinger equation decay exponentially, and ψ leaks a short way into the walls. The particle therefore has a small probability of being found in a region where classical physics says it cannot go, and because the wave is less confined, the energy levels are slightly lower than in the infinite box. Only a finite number of bound states exist.
+If the walls have finite height $U$, then outside the box, where $E < U$,
+
+$$\psi'' = a^2\psi,\qquad a = \frac{\sqrt{2m(U - E)}}{\hbar},\qquad \psi \propto e^{-a|x|}\ \ (\text{decaying})$$
+
+So $\psi$ leaks a short way into the walls: the particle has a small probability of being where classical physics says it cannot go. Because the wave is less confined, the wavelengths are longer and **the levels are slightly lower** than in the infinite box. Only a **finite number** of bound states exist.
 
 ## Tunnelling
 
-The same exponential decay leads to tunnelling. When a particle meets a barrier of height U greater than its energy, the wave function decreases exponentially inside the barrier, but if the barrier is thin it has not fallen to zero by the far side, and a small transmitted wave emerges. The transmission probability is roughly T ≈ e^(−2κL), with κ = √(2m(U − E))/ħ, so it depends very sensitively on the barrier width and height. Tunnelling explains the alpha decay of nuclei and is the working principle of the scanning tunnelling microscope.
+**Set-up** (slides "Tunneling"). A particle of energy $E$ meets a barrier of height $U > E$ and width $L$:
+
+| Region | Wave function | Wave number |
+|---|---|---|
+| I, $x < 0$ | $\psi = Ae^{ik_1x} + Be^{-ik_1x}$ (incident + reflected) | $k_1 = \sqrt{2mE}/\hbar$ |
+| II, $0 < x < L$ | $\psi = Ce^{k_2x} + De^{-k_2x}$ | $k_2 = \sqrt{2m(U - E)}/\hbar$ |
+| III, $x > L$ | $\psi = Fe^{ik_1x}$ (transmitted only) | $k_1$ |
+
+Matching $\psi$ and $d\psi/dx$ at $x = 0$ and $x = L$ gives four equations:
+
+$$\begin{aligned} A + B &= C + D, & ik_1(A - B) &= k_2(C - D),\\ Ce^{k_2L} + De^{-k_2L} &= Fe^{ik_1L}, & k_2\left(Ce^{k_2L} - De^{-k_2L}\right) &= ik_1Fe^{ik_1L}. \end{aligned}$$
+
+For a wide barrier the transmission probability is
+
+$$\boxed{T = \frac{|F|^2}{|A|^2} \approx e^{-2k_2L},\qquad k_2 = \frac{\sqrt{2m(U - E)}}{\hbar}}$$
+
+It depends very sensitively on the width and height. Tunnelling explains the alpha decay of nuclei and is the working principle of the **scanning tunnelling microscope** (STM; the slide's "SEM" is a slip).
 
 ## Harmonic oscillator
 
-The last important system is the harmonic oscillator, in which the potential is U = ½kx². This describes any system vibrating about a stable equilibrium, such as the atoms in a molecule. Solving the Schrödinger equation gives energies Eₙ = (n + ½)hν, with n = 0, 1, 2, …. The levels are equally spaced by hν, as Planck had assumed for his oscillators, but there is an important difference: the lowest energy is not zero but ½hν. This zero-point energy is required by the uncertainty principle, since an oscillator at rest at the bottom of its well would have both a definite position and a definite momentum.
+The potential $U = \tfrac12kx^2$, with $\omega = \sqrt{k/m}$, describes any system vibrating about a stable equilibrium, such as the atoms in a molecule.
+
+**How it is solved** (slides; know the steps, not every line).
+
+1. Put $x = by$ with $b = \sqrt{\hbar/m\omega}$: the equation becomes $\psi_{yy} + (\alpha - y^2)\psi = 0$, with $\alpha = 2E/\hbar\omega$.
+2. For large $|y|$, $\psi_{yy} \approx y^2\psi$, so $\psi \sim e^{-y^2/2}$ (the decaying choice).
+3. Try $\psi = f(y)\,e^{-y^2/2}$: this gives $f'' - 2yf' + (\alpha - 1)f = 0$.
+4. A power series $f = \sum a_ny^n$ gives the recursion
+$$a_{n+2} = \frac{2n + 1 - \alpha}{(n + 1)(n + 2)}\,a_n$$
+5. If the series never stops, $f \sim e^{y^2}$ and $\psi$ blows up. So it must stop: $\alpha = 2n + 1$.
+
+$$\boxed{E_n = \left(n + \tfrac12\right)\hbar\omega = \left(n + \tfrac12\right)h\nu,\qquad n = 0, 1, 2, \dots,\qquad E_0 = \tfrac12h\nu}$$
+
+The polynomials are the Hermite polynomials $f_0 = 1$, $f_1 = 2y$, $f_2 = 4y^2 - 2$ (the slide labels $n = 2$ with $\alpha = 4$; it should be $\alpha = 5$).
+
+- The levels are **equally spaced** by $h\nu$, as Planck assumed, but the lowest is **not zero**: the zero-point energy $\tfrac12h\nu$ is required by the uncertainty principle, since an oscillator at rest at the bottom would have definite $x$ and $p$.
+- The particle has a non-zero chance of being found **beyond the classical turning points**: the slides say about 10% for $n = 0$ (exact value $\text{erfc}(1) \approx 16\%$). This falls as $n$ grows, and the classical distribution returns as $n \to \infty$.
 
 # Reference: Quantum mechanics
 
