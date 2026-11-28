@@ -182,7 +182,7 @@ $$W = \int_1^2 \vec F\cdot d\vec r = K_2 - K_1,\qquad K = \tfrac12 mv^2$$
 
 **Conservative force** (equivalent statements; then $K + U$ is constant):
 
-$$\boxed{\vec F = -\nabla U \iff \nabla\times\vec F = 0 \iff W\ \text{path-independent}}$$
+$${\vec F = -\nabla U \iff \nabla\times\vec F = 0 \iff W\ \text{path-independent}}$$
 
 In two dimensions the test is $\dfrac{\partial F_y}{\partial x} = \dfrac{\partial F_x}{\partial y}$.
 
@@ -209,7 +209,7 @@ $$\vec L = \vec r\times\vec p,\qquad \vec N = \frac{d\vec L}{dt} = \vec r\times\
 
 ## Harmonic oscillator
 
-$$\boxed{\ddot x + \omega_0^2 x = 0,\quad \omega_0 = \sqrt{\frac km},\quad x = A\cos(\omega_0 t + \varphi)}$$
+$${\ddot x + \omega_0^2 x = 0,\quad \omega_0 = \sqrt{\frac km},\quad x = A\cos(\omega_0 t + \varphi)}$$
 
 First-order form and energy (phase-plane ellipses):
 
@@ -219,11 +219,11 @@ Non-dimensional form with $\tau = \omega_0 t$, $\xi = x/x_0$: $\ \xi'' + \xi = 0
 
 **Small oscillations about a minimum $x_0$ of $U$:**
 
-$$\boxed{k_\text{eff} = U''(x_0),\qquad \omega = \sqrt{\frac{U''(x_0)}{m}}}$$
+$${k_\text{eff} = U''(x_0),\qquad \omega = \sqrt{\frac{U''(x_0)}{m}}}$$
 
 ## Systems of particles
 
-$$\boxed{\vec R = \frac{\sum_k m_k\vec r_k}{M},\qquad \vec P = \sum_k\vec p_k = M\dot{\vec R},\qquad \frac{d\vec P}{dt} = \vec F_\text{ext}}$$
+$${\vec R = \frac{\sum_k m_k\vec r_k}{M},\qquad \vec P = \sum_k\vec p_k = M\dot{\vec R},\qquad \frac{d\vec P}{dt} = \vec F_\text{ext}}$$
 
 Internal forces cancel in pairs by the third law. Splitting about the centre of mass ($\vec r_k = \vec R + \vec r_k'$):
 
@@ -235,7 +235,7 @@ $$T = \tfrac12 M\dot R^2 + \sum_k\tfrac12 m_k v_k'^2\qquad\text{(the cross term 
 
 With exhaust speed $u$ relative to the rocket:
 
-$$\boxed{m\frac{dv}{dt} = -u\frac{dm}{dt} + F_\text{ext}}$$
+$${m\frac{dv}{dt} = -u\frac{dm}{dt} + F_\text{ext}}$$
 
 | Situation | Result |
 |---|---|

@@ -170,7 +170,7 @@ $$
 
 ## Hamilton's equations
 
-$$\boxed{p_k = \frac{\partial L}{\partial\dot q_k},\qquad H(q, p, t) = \sum_k p_k\dot q_k - L,\qquad \dot q_k = \frac{\partial H}{\partial p_k},\quad \dot p_k = -\frac{\partial H}{\partial q_k}}$$
+$${p_k = \frac{\partial L}{\partial\dot q_k},\qquad H(q, p, t) = \sum_k p_k\dot q_k - L,\qquad \dot q_k = \frac{\partial H}{\partial p_k},\quad \dot p_k = -\frac{\partial H}{\partial q_k}}$$
 
 Express every $\dot q$ through $p$ before writing $H$. With $n$ degrees of freedom you get $2n$ first-order equations (Lagrange gives $n$ second-order ones).
 
@@ -195,7 +195,7 @@ A state is one point $(q_1,\dots,q_n,p_1,\dots,p_n)$ in $2n$-dimensional phase s
 | 1-D SHO | ellipses $\dfrac{p^2}{2m} + \tfrac12 kx^2 = E$, enclosing area $\dfrac{2\pi E}{\omega}$ |
 | damped oscillator | spiral into the origin |
 
-$$\boxed{\frac{\partial\dot q}{\partial q} + \frac{\partial\dot p}{\partial p} = \frac{\partial^2H}{\partial q\,\partial p} - \frac{\partial^2H}{\partial p\,\partial q} = 0}\quad\Rightarrow\quad\text{phase-space volume is conserved (Liouville)}$$
+$${\frac{\partial\dot q}{\partial q} + \frac{\partial\dot p}{\partial p} = \frac{\partial^2H}{\partial q\,\partial p} - \frac{\partial^2H}{\partial p\,\partial q} = 0}\quad\Rightarrow\quad\text{phase-space volume is conserved (Liouville)}$$
 
 ## Two-body problem
 
@@ -205,11 +205,11 @@ $$\vec R = \frac{m_1\vec r_1 + m_2\vec r_2}{M},\quad \vec r = \vec r_1 - \vec r_
 
 $\vec R$ is cyclic, so the centre of mass moves uniformly. $\vec L$ is conserved, so motion is planar:
 
-$$L = \tfrac12\mu(\dot r^2 + r^2\dot\theta^2) - U(r),\qquad \boxed{\ell = \mu r^2\dot\theta = \text{const}},\qquad \frac{dA}{dt} = \frac{\ell}{2\mu}\ \ \text{(Kepler II)}$$
+$$L = \tfrac12\mu(\dot r^2 + r^2\dot\theta^2) - U(r),\qquad {\ell = \mu r^2\dot\theta = \text{const}},\qquad \frac{dA}{dt} = \frac{\ell}{2\mu}\ \ \text{(Kepler II)}$$
 
 **Radial motion:**
 
-$$\mu\ddot r = \frac{\ell^2}{\mu r^3} - U'(r),\qquad \boxed{E = \tfrac12\mu\dot r^2 + U_\text{eff}(r),\quad U_\text{eff} = \frac{\ell^2}{2\mu r^2} - \frac kr,\quad k = Gm_1m_2}$$
+$$\mu\ddot r = \frac{\ell^2}{\mu r^3} - U'(r),\qquad {E = \tfrac12\mu\dot r^2 + U_\text{eff}(r),\quad U_\text{eff} = \frac{\ell^2}{2\mu r^2} - \frac kr,\quad k = Gm_1m_2}$$
 
 Circular orbit at the minimum of $U_\text{eff}$:
 
@@ -223,7 +223,7 @@ $$r_0 = \frac{\ell^2}{\mu k},\qquad U_\text{eff,min} = -\frac{\mu k^2}{2\ell^2}$
 
 **Shape of the orbit:**
 
-$$\boxed{\frac{\alpha}{r} = 1 + \varepsilon\cos\theta,\qquad \alpha = \frac{\ell^2}{\mu k},\qquad \varepsilon = \sqrt{1 + \frac{2E\ell^2}{\mu k^2}}}$$
+$${\frac{\alpha}{r} = 1 + \varepsilon\cos\theta,\qquad \alpha = \frac{\ell^2}{\mu k},\qquad \varepsilon = \sqrt{1 + \frac{2E\ell^2}{\mu k^2}}}$$
 
 | $\varepsilon$ | Conic |
 |---|---|

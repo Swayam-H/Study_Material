@@ -260,7 +260,7 @@ Everything you need to write down in this chapter, with the condition under whic
 
 A map takes the state at step $n$ to the state at step $n+1$. A fixed point is a state the map leaves unchanged, and it is stable when nearby states are pulled towards it.
 
-$$\boxed{x_{n+1} = f(x_n),\qquad x^* = f(x^*),\qquad \text{stable} \iff |f'(x^*)| < 1}$$
+$${x_{n+1} = f(x_n),\qquad x^* = f(x^*),\qquad \text{stable} \iff |f'(x^*)| < 1}$$
 
 Sign of the slope: $f'(x^*) > 0$ gives monotonic approach, $f'(x^*) < 0$ gives oscillating approach (the cobweb spirals).
 
@@ -279,7 +279,7 @@ The constant $c$ never changes stability. Only $m$ does.
 
 ## Logistic map
 
-$$\boxed{x_{n+1} = r\,x_n(1 - x_n),\qquad 0 < r \le 4}$$
+$${x_{n+1} = r\,x_n(1 - x_n),\qquad 0 < r \le 4}$$
 
 Fixed points and the slope that decides their stability:
 
@@ -316,7 +316,7 @@ $$\frac{dN}{dt} = rN\left(1 - \frac NK\right)$$
 
 Prey $X$, predator $Y$:
 
-$$\boxed{\frac{dX}{dt} = \alpha X - \beta XY,\qquad \frac{dY}{dt} = \gamma XY - \delta Y}$$
+$${\frac{dX}{dt} = \alpha X - \beta XY,\qquad \frac{dY}{dt} = \gamma XY - \delta Y}$$
 
 | Term | Meaning |
 |---|---|

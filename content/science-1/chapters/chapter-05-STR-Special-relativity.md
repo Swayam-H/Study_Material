@@ -218,7 +218,7 @@ Frame $K'$ moves at $v$ along $+x$ of $K$, origins coincide at $t = t' = 0$.
 
 ## Setup
 
-$$\boxed{\beta = \frac vc,\qquad \gamma = \frac{1}{\sqrt{1 - \beta^2}} \ge 1}$$
+$${\beta = \frac vc,\qquad \gamma = \frac{1}{\sqrt{1 - \beta^2}} \ge 1}$$
 
 | $\beta$ | 0.6 | 0.8 | 0.9 | 0.99 | 0.998 |
 |---|---|---|---|---|---|
@@ -228,7 +228,7 @@ $$\gamma^2(1 - \beta^2) = 1,\qquad \gamma^2\beta^2 = \gamma^2 - 1,\qquad \gamma 
 
 ## Lorentz transformation
 
-$$\boxed{x' = \gamma(x - vt),\quad y' = y,\quad z' = z,\quad t' = \gamma\left(t - \frac{vx}{c^2}\right)}$$
+$${x' = \gamma(x - vt),\quad y' = y,\quad z' = z,\quad t' = \gamma\left(t - \frac{vx}{c^2}\right)}$$
 
 Inverse: swap primed and unprimed and put $v \to -v$. For events use differences:
 
@@ -238,15 +238,15 @@ $$\Delta x' = \gamma(\Delta x - v\Delta t),\qquad \Delta t' = \gamma\left(\Delta
 
 $$\Delta t = 0\ \text{in } K \text{ with separation } \Delta x\ \Rightarrow\ \Delta t' = -\frac{\gamma v\Delta x}{c^2}$$
 
-$$\boxed{\Delta t = \gamma\,\Delta t_0}\qquad(\Delta t_0\ \text{proper time: both events at the same place})$$
+$${\Delta t = \gamma\,\Delta t_0}\qquad(\Delta t_0\ \text{proper time: both events at the same place})$$
 
-$$\boxed{L = \frac{L_0}{\gamma}}\qquad(L_0\ \text{proper length; along the motion only; ends measured simultaneously})$$
+$${L = \frac{L_0}{\gamma}}\qquad(L_0\ \text{proper length; along the motion only; ends measured simultaneously})$$
 
 Twin paradox: $t_\text{traveller} = t_\text{home}/\gamma$.
 
 ## Velocity addition and Doppler
 
-$$\boxed{u = \frac{u' + v}{1 + u'v/c^2}},\qquad u_x' = \frac{u_x - v}{1 - u_xv/c^2},\qquad u_y' = \frac{u_y}{\gamma\left(1 - u_xv/c^2\right)}$$
+$${u = \frac{u' + v}{1 + u'v/c^2}},\qquad u_x' = \frac{u_x - v}{1 - u_xv/c^2},\qquad u_y' = \frac{u_y}{\gamma\left(1 - u_xv/c^2\right)}$$
 
 | Doppler (light) | Observed frequency |
 |---|---|
@@ -259,7 +259,7 @@ At $\beta = 0.8$: receding $\nu_0/3$, approaching $3\nu_0$, transverse $0.6\,\nu
 
 ## Momentum and energy
 
-$$\boxed{\vec p = \gamma m\vec u,\qquad E = \gamma mc^2,\qquad K = (\gamma - 1)mc^2,\qquad E^2 = (pc)^2 + (mc^2)^2}$$
+$${\vec p = \gamma m\vec u,\qquad E = \gamma mc^2,\qquad K = (\gamma - 1)mc^2,\qquad E^2 = (pc)^2 + (mc^2)^2}$$
 
 $$\beta = \frac{pc}{E},\qquad \gamma = \frac{E}{mc^2},\qquad \beta\gamma = \frac{p}{mc},\qquad K \approx \tfrac12 mu^2 + \tfrac38\frac{mu^4}{c^2}\ \ (u \ll c)$$
 
@@ -273,7 +273,7 @@ A massless particle has $E = pc$ and speed $c$. $\vec F = d\vec p/dt$, which is 
 
 ## Spacetime interval
 
-$$\boxed{(\Delta s)^2 = \Delta x^2 + \Delta y^2 + \Delta z^2 - c^2\Delta t^2}\quad\text{(same in all frames; Beiser uses the opposite sign, so say which you use)}$$
+$${(\Delta s)^2 = \Delta x^2 + \Delta y^2 + \Delta z^2 - c^2\Delta t^2}\quad\text{(same in all frames; Beiser uses the opposite sign, so say which you use)}$$
 
 | Interval | Condition | Meaning |
 |---|---|---|
@@ -808,7 +808,7 @@ $$\Delta t' = 0\ \text{in } K' \text{ with separation } \Delta x'\ \Rightarrow\ 
 - On the platform, the rear flash happened **first**. The light has speed $c$ in both frames, and the train moves towards the front flash.
 
 ## 5. Time dilation (Beiser 1.2, eq. 1.3; slides `STR.tex:200`)
-$$\boxed{\Delta t = \gamma\,\Delta t_0 = \frac{\Delta t_0}{\sqrt{1 - v^2/c^2}}}$$
+$${\Delta t = \gamma\,\Delta t_0 = \frac{\Delta t_0}{\sqrt{1 - v^2/c^2}}}$$
 
 $\Delta t_0$ is the proper time, measured by the clock at rest. Every other observer measures a longer time: **a moving clock runs slow.**
 
@@ -824,7 +824,7 @@ $\Delta t_0$ is the proper time, measured by the clock at rest. Every other obse
     - In the muon's frame, the atmosphere's 10.4 km is length-contracted to 0.66 km.
 
 ## 6. Length contraction (Beiser 1.4, eq. 1.9; slides `STR.tex:216`)
-$$\boxed{L = \frac{L_0}{\gamma} = L_0\sqrt{1 - v^2/c^2}}$$
+$${L = \frac{L_0}{\gamma} = L_0\sqrt{1 - v^2/c^2}}$$
 
 - It applies only along the direction of motion. Perpendicular lengths are unchanged.
 - **The ends must be measured simultaneously in the measuring frame.** That is why the slides use the inverse transformation: with $\Delta t' = 0$, $\Delta x = \gamma\Delta x'$, so $L_0 = \gamma L'$.
@@ -878,7 +878,7 @@ For light only the **relative** velocity matters, because there is no medium.
 - **Slide derivation:** an observer moves at $v$ away from a source emitting pulses every $t_0$. The pulses reach them at $ct_n = nct_0\,c/(c - v)$. Transform to the observer's frame. There the pulses arrive $\Delta t' = \dfrac{t_0}{\gamma(1 - \beta)} = t_0\sqrt{\dfrac{1 + \beta}{1 - \beta}}$ apart, so $\nu' = \nu\sqrt{(1 - \beta)/(1 + \beta)}$.
 
 ## 10. Relativistic momentum (Beiser 1.7, eqs 1.10–1.19; slides `STR.tex:282`)
-$$\boxed{\vec p = \gamma m\vec v = \frac{m\vec v}{\sqrt{1 - v^2/c^2}}}$$
+$${\vec p = \gamma m\vec v = \frac{m\vec v}{\sqrt{1 - v^2/c^2}}}$$
 
 - **Why the definition changes:** in a glancing elastic collision viewed from two frames, the transverse velocity of the other particle is reduced by $1/\gamma$, because of time dilation. So $p = mv$ is not conserved in all frames, but $p = \gamma mv$ is.
 - $m$ is the (invariant) rest mass. Beiser 6e does not use "relativistic mass".
@@ -902,7 +902,7 @@ $$KE = \int\vec F\cdot d\vec r = \int\frac{d(\gamma m\vec u)}{dt}\cdot\vec u\,dt
 - $KE = mc^2$ means $\gamma = 2$ and $v = 0.866c$.
 
 ## 12. Energy–momentum relation (Beiser 1.9, eqs 1.24–1.25; slides `STR.tex:297`)
-$$\boxed{E^2 = (pc)^2 + (mc^2)^2}\qquad\text{since } E^2 - p^2c^2 = \gamma^2m^2c^4\left(1 - \frac{u^2}{c^2}\right) = m^2c^4$$
+$${E^2 = (pc)^2 + (mc^2)^2}\qquad\text{since } E^2 - p^2c^2 = \gamma^2m^2c^4\left(1 - \frac{u^2}{c^2}\right) = m^2c^4$$
 
 - **Massless particle** ($m = 0$, e.g. a photon): $E = pc$, and it must travel at $c$.
 - **Ultra-relativistic** ($KE \gg mc^2$): $E \approx pc$.

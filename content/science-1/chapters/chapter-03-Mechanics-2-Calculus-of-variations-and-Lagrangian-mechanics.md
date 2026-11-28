@@ -207,7 +207,7 @@ $$
 
 To make $J = \int_{x_1}^{x_2} f(y, y'; x)\,dx$ stationary with fixed end points, vary $y \to y + \alpha\eta$ with $\eta(x_1) = \eta(x_2) = 0$, set $\partial J/\partial\alpha = 0$ at $\alpha = 0$, and integrate by parts:
 
-$$\boxed{\frac{\partial f}{\partial y} - \frac{d}{dx}\frac{\partial f}{\partial y'} = 0}$$
+$${\frac{\partial f}{\partial y} - \frac{d}{dx}\frac{\partial f}{\partial y'} = 0}$$
 
 Two shortcuts:
 
@@ -221,7 +221,7 @@ $$\frac{\partial f}{\partial y} = 0\ \Rightarrow\ \frac{\partial f}{\partial y'}
 
 ## Hamilton's principle and Lagrange's equations
 
-$$\boxed{S = \int_{t_1}^{t_2} L\,dt,\quad L = T - U,\qquad \delta S = 0 \iff \frac{d}{dt}\frac{\partial L}{\partial\dot q_k} = \frac{\partial L}{\partial q_k}}$$
+$${S = \int_{t_1}^{t_2} L\,dt,\quad L = T - U,\qquad \delta S = 0 \iff \frac{d}{dt}\frac{\partial L}{\partial\dot q_k} = \frac{\partial L}{\partial q_k}}$$
 
 Degrees of freedom $= 3N - (\text{number of constraints})$. Recipe: choose $q$'s, write $T$ and $U$ in them, form $L$, apply the equation to each $q_k$. Constraint forces that do no work never appear.
 
@@ -236,7 +236,7 @@ Degrees of freedom $= 3N - (\text{number of constraints})$. Recipe: choose $q$'s
 
 For constraints $f_k(q, t) = 0$:
 
-$$\boxed{\frac{\partial L}{\partial q_j} - \frac{d}{dt}\frac{\partial L}{\partial\dot q_j} + \sum_k\lambda_k\frac{\partial f_k}{\partial q_j} = 0}$$
+$${\frac{\partial L}{\partial q_j} - \frac{d}{dt}\frac{\partial L}{\partial\dot q_j} + \sum_k\lambda_k\frac{\partial f_k}{\partial q_j} = 0}$$
 
 The term $\lambda_k\,\partial f_k/\partial q_j$ is the generalised constraint force.
 

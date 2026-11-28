@@ -572,29 +572,29 @@ $$c = \frac{1}{\sqrt{\mu_0\varepsilon_0}} = \nu\lambda,\qquad \vec E = \vec E_0\
 
 ## Blackbody radiation
 
-$$\boxed{\frac{P}{A} = \sigma T^4,\qquad \lambda_\text{max}T = 2.898\times10^{-3}\ \text{m K}}\qquad(\sigma = 5.67\times10^{-8}\ \text{W m}^{-2}\text{K}^{-4})$$
+$${\frac{P}{A} = \sigma T^4,\qquad \lambda_\text{max}T = 2.898\times10^{-3}\ \text{m K}}\qquad(\sigma = 5.67\times10^{-8}\ \text{W m}^{-2}\text{K}^{-4})$$
 
 Planck: an oscillator of frequency $\nu$ has energies $E = nh\nu$, so
 
-$$\boxed{u(\nu)\,d\nu = \frac{8\pi h}{c^3}\,\frac{\nu^3\,d\nu}{e^{h\nu/kT} - 1}},\qquad \bar\varepsilon = \frac{h\nu}{e^{h\nu/kT} - 1}$$
+$${u(\nu)\,d\nu = \frac{8\pi h}{c^3}\,\frac{\nu^3\,d\nu}{e^{h\nu/kT} - 1}},\qquad \bar\varepsilon = \frac{h\nu}{e^{h\nu/kT} - 1}$$
 
 Limits: $h\nu \ll kT$ gives $\bar\varepsilon \to kT$ (Rayleigh–Jeans); $h\nu \gg kT$ gives $\bar\varepsilon \approx h\nu\,e^{-h\nu/kT}$.
 
 ## Photoelectric effect
 
-$$\boxed{h\nu = KE_\text{max} + \phi,\qquad \phi = h\nu_0,\qquad eV_0 = KE_\text{max}}$$
+$${h\nu = KE_\text{max} + \phi,\qquad \phi = h\nu_0,\qquad eV_0 = KE_\text{max}}$$
 
 Photon: $E = h\nu = pc$, $p = h/\lambda$.
 
 ## X-rays
 
-$$\boxed{\lambda_\text{min} = \frac{hc}{eV} = \frac{1.24\times10^{-6}\ \text{V m}}{V}},\qquad \boxed{2d\sin\theta = n\lambda}\quad(n = 1, 2, \dots)$$
+$${\lambda_\text{min} = \frac{hc}{eV} = \frac{1.24\times10^{-6}\ \text{V m}}{V}},\qquad {2d\sin\theta = n\lambda}\quad(n = 1, 2, \dots)$$
 
 ## Compton scattering
 
 Conserve $x$- and $y$-momentum and total energy (relativistic electron):
 
-$$\boxed{\lambda' - \lambda = \frac{h}{m_ec}(1 - \cos\phi) = \lambda_C(1 - \cos\phi),\qquad \lambda_C = 2.426\ \text{pm}}$$
+$${\lambda' - \lambda = \frac{h}{m_ec}(1 - \cos\phi) = \lambda_C(1 - \cos\phi),\qquad \lambda_C = 2.426\ \text{pm}}$$
 
 Maximum shift $2\lambda_C$ at $\phi = 180^\circ$; no shift at $\phi = 0$.
 

@@ -408,7 +408,7 @@ Nothing in Beiser ch 3 is dropped by the course.
 
 ## de Broglie waves
 
-$$\boxed{\lambda = \frac hp = \frac{h}{\gamma mv} \approx \frac{h}{mv}\ (v \ll c)}$$
+$${\lambda = \frac hp = \frac{h}{\gamma mv} \approx \frac{h}{mv}\ (v \ll c)}$$
 
 An electron accelerated through $V$ volts (non-relativistic):
 
@@ -420,7 +420,7 @@ $$y = A\cos(\omega t - kx),\qquad \omega = 2\pi\nu,\quad k = \frac{2\pi}{\lambda
 
 ## Phase and group velocity
 
-$$\boxed{v_g = \frac{d\omega}{dk},\qquad v_p = \frac{c^2}{v},\qquad v_pv_g = c^2,\qquad v_g = v}$$
+$${v_g = \frac{d\omega}{dk},\qquad v_p = \frac{c^2}{v},\qquad v_pv_g = c^2,\qquad v_g = v}$$
 
 A single de Broglie wave travels faster than light ($v_p = c^2/v$), so a particle must be a wave packet, which moves at $v_g = v$. With dispersion $v_p$ depends on $k$ and $v_g \ne v_p$.
 
@@ -434,13 +434,13 @@ Davisson–Germer (nickel, $d = 0.215$ nm, 54 V): $d\sin\varphi = n\lambda$ give
 
 ## Particle in a box (wave picture)
 
-$$\boxed{\lambda_n = \frac{2L}{n},\qquad p_n = \frac{nh}{2L},\qquad E_n = \frac{n^2h^2}{8mL^2},\qquad n = 1, 2, 3, \dots}$$
+$${\lambda_n = \frac{2L}{n},\qquad p_n = \frac{nh}{2L},\qquad E_n = \frac{n^2h^2}{8mL^2},\qquad n = 1, 2, 3, \dots}$$
 
 $n = 0$ is not allowed, so the lowest energy is $E_1 = h^2/8mL^2$: a confined particle is never at rest.
 
 ## Uncertainty principle
 
-$$\boxed{\Delta x\,\Delta p \ge \frac\hbar2,\qquad \Delta E\,\Delta t \ge \frac\hbar2,\qquad \hbar = \frac{h}{2\pi} = 1.055\times10^{-34}\ \text{J s}}$$
+$${\Delta x\,\Delta p \ge \frac\hbar2,\qquad \Delta E\,\Delta t \ge \frac\hbar2,\qquad \hbar = \frac{h}{2\pi} = 1.055\times10^{-34}\ \text{J s}}$$
 
 Estimates: $p \approx \Delta p \approx \hbar/2\Delta x$ and $E \approx p^2/2m$ give the order of magnitude of zero-point energies. A state of lifetime $\Delta t$ has natural line width $\Delta E \ge \hbar/2\Delta t$ (for $\Delta t \approx 10^{-8}$ s, about $3\times10^{-8}$ eV).
 

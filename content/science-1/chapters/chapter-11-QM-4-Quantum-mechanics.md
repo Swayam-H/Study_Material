@@ -896,11 +896,11 @@ Every section and example of Beiser ch 5 and its appendix, and every slide frame
 
 ## Schrödinger equation
 
-$$\boxed{i\hbar\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi}\qquad\text{(time-dependent, 1-D)}$$
+$${i\hbar\frac{\partial\Psi}{\partial t} = -\frac{\hbar^2}{2m}\frac{\partial^2\Psi}{\partial x^2} + U\Psi}\qquad\text{(time-dependent, 1-D)}$$
 
 For $U = U(x)$ separate $\Psi = \psi(x)e^{-iEt/\hbar}$:
 
-$$\boxed{-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + U\psi = E\psi}\qquad\text{(steady-state)}$$
+$${-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2} + U\psi = E\psi}\qquad\text{(steady-state)}$$
 
 Acceptable $\psi$: continuous, single-valued, normalisable ($\int|\Psi|^2dx = 1$), with $d\psi/dx$ continuous where $U$ is finite. Energy quantisation comes from these conditions alone.
 
@@ -917,7 +917,7 @@ $e^{ikx}$ is an eigenfunction of $\hat p$ with $p = \hbar k$. $\sin kx$ is not (
 
 ## Particle in an infinite box (width $L$)
 
-$$\boxed{\psi_n = \sqrt{\frac2L}\sin\frac{n\pi x}{L},\qquad E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2},\qquad n = 1, 2, \dots}$$
+$${\psi_n = \sqrt{\frac2L}\sin\frac{n\pi x}{L},\qquad E_n = \frac{n^2\pi^2\hbar^2}{2mL^2} = \frac{n^2h^2}{8mL^2},\qquad n = 1, 2, \dots}$$
 
 $\langle x\rangle = L/2$ for every state. Normalisation of $\psi = A x(L - x)$: $A = \sqrt{30/L^5}$.
 
@@ -937,13 +937,13 @@ Join $\psi$ and $d\psi/dx$ at each wall. Levels lie below those of an infinite w
 
 ## Tunnelling
 
-$$\boxed{T \approx e^{-2k_2L},\qquad k_2 = \frac{\sqrt{2m(U - E)}}{\hbar}}$$
+$${T \approx e^{-2k_2L},\qquad k_2 = \frac{\sqrt{2m(U - E)}}{\hbar}}$$
 
 Doubling the width squares $T$; a heavier particle (larger $m$) tunnels far less.
 
 ## Harmonic oscillator ($U = \tfrac12 kx^2$)
 
-$$\boxed{E_n = \left(n + \tfrac12\right)h\nu = \left(n + \tfrac12\right)\hbar\omega,\qquad n = 0, 1, 2, \dots}$$
+$${E_n = \left(n + \tfrac12\right)h\nu = \left(n + \tfrac12\right)\hbar\omega,\qquad n = 0, 1, 2, \dots}$$
 
 Zero-point energy $\tfrac12h\nu$; level spacing $h\nu$. Near any minimum $x_0$: $U \approx U(x_0) + \tfrac12U''(x_0)(x - x_0)^2$, so $k = U''(x_0)$.
 

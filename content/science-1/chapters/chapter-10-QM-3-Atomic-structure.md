@@ -388,7 +388,7 @@ $E < 0$ because the electron is bound.
 
 ## Hydrogen spectrum
 
-$$\boxed{\frac1\lambda = R\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right),\qquad R = 1.097\times10^7\ \text{m}^{-1}}$$
+$${\frac1\lambda = R\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right),\qquad R = 1.097\times10^7\ \text{m}^{-1}}$$
 
 Series limit ($n_i \to \infty$): Lyman 91.2 nm, Balmer 365 nm.
 
@@ -396,11 +396,11 @@ Series limit ($n_i \to \infty$): Lyman 91.2 nm, Balmer 365 nm.
 
 Quantisation: standing electron waves, $2\pi r_n = n\lambda = nh/mv$, equivalently
 
-$$\boxed{L = mvr_n = n\hbar}$$
+$${L = mvr_n = n\hbar}$$
 
-$$\boxed{r_n = n^2a_0,\qquad a_0 = \frac{4\pi\varepsilon_0\hbar^2}{me^2} = 0.0529\ \text{nm}},\qquad v_n = \frac{\alpha c}{n},\ \ \alpha \approx \frac1{137}$$
+$${r_n = n^2a_0,\qquad a_0 = \frac{4\pi\varepsilon_0\hbar^2}{me^2} = 0.0529\ \text{nm}},\qquad v_n = \frac{\alpha c}{n},\ \ \alpha \approx \frac1{137}$$
 
-$$\boxed{E_n = -\frac{me^4}{8\varepsilon_0^2h^2}\frac{1}{n^2} = \frac{E_1}{n^2},\qquad E_1 = -13.6\ \text{eV}}$$
+$${E_n = -\frac{me^4}{8\varepsilon_0^2h^2}\frac{1}{n^2} = \frac{E_1}{n^2},\qquad E_1 = -13.6\ \text{eV}}$$
 
 Ionisation from the ground state needs 13.6 eV. A transition emits
 

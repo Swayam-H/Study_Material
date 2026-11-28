@@ -469,7 +469,7 @@ $$U(r) = -\frac{e^2}{4\pi\varepsilon_0r}\ \text{(spherically symmetric)},\qquad 
 
 Use spherical polar coordinates $(r, \theta, \phi)$ and separate:
 
-$$\boxed{\psi(r, \theta, \phi) = R(r)\,\Theta(\theta)\,\Phi(\phi)}$$
+$${\psi(r, \theta, \phi) = R(r)\,\Theta(\theta)\,\Phi(\phi)}$$
 
 | Equation | Condition | Quantum number |
 |---|---|---|
@@ -489,11 +489,11 @@ For each $l$ there are $2l + 1$ values of $m_l$, so each $n$ has $\sum_{l=0}^{n-
 
 ## Energy and angular momentum
 
-$$\boxed{E_n = -\frac{me^4}{32\pi^2\varepsilon_0^2\hbar^2}\frac{1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}}$$
+$${E_n = -\frac{me^4}{32\pi^2\varepsilon_0^2\hbar^2}\frac{1}{n^2} = -\frac{13.6\ \text{eV}}{n^2}}$$
 
 Energy depends only on $n$, so states with the same $n$ are degenerate (special to the $1/r$ potential).
 
-$$\boxed{L = \sqrt{l(l + 1)}\,\hbar,\qquad L_z = m_l\hbar,\qquad \cos\theta = \frac{m_l}{\sqrt{l(l + 1)}}}$$
+$${L = \sqrt{l(l + 1)}\,\hbar,\qquad L_z = m_l\hbar,\qquad \cos\theta = \frac{m_l}{\sqrt{l(l + 1)}}}$$
 
 For $l = 2$: $L = \sqrt6\hbar$ and $L_z = -2\hbar, \dots, +2\hbar$ (5 orientations). Since $|m_l| \le l < \sqrt{l(l + 1)}$, $L$ can never point exactly along $z$. For $s$ states $L = 0$.
 
@@ -507,7 +507,7 @@ $$|\Phi|^2 = \text{constant},\qquad P(r)\,dr = r^2|R(r)|^2dr,\qquad \text{radial
 
 $$h\nu = E_i - E_f,\qquad \nu = \frac{E_i - E_f}{h}\ \text{(frequency at which } |\Psi|^2 \text{ oscillates)}$$
 
-$$\boxed{\Delta l = \pm1,\qquad \Delta m_l = 0, \pm1,\qquad \Delta n\ \text{any}}$$
+$${\Delta l = \pm1,\qquad \Delta m_l = 0, \pm1,\qquad \Delta n\ \text{any}}$$
 
 A photon carries one unit of angular momentum. 2p $\to$ 1s and 3d $\to$ 2p are allowed. 2s $\to$ 1s ($\Delta l = 0$) and 3d $\to$ 1s ($\Delta l = 2$) are forbidden; 2s is metastable (about 0.1 s instead of $10^{-8}$ s).
 
