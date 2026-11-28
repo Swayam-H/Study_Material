@@ -10,6 +10,12 @@
       "about": "The 12 endsem topics, what each covers, slides, textbook sections and homework for every subtopic, and the video list"
     },
     {
+      "slug": "last-look",
+      "file": "chapters/last-look.md",
+      "title": "Last 5-minute reads",
+      "about": "One sheet per chapter with the core results, the traps and the past-paper favourites, for a final look before the exam"
+    },
+    {
       "slug": "videos-ftlop",
       "file": "chapters/videos-ftlop.md",
       "title": "Reference: For the Love of Physics videos",
