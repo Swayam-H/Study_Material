@@ -94,6 +94,30 @@
       "about": "A 50-point, 120-minute paper across all 12 chapters, then the marking scheme, worked solutions and a score sheet by chapter"
     },
     {
+      "slug": "endsem-pattern",
+      "file": "chapters/endsem-pattern-pyq.md",
+      "title": "Reference: Endsem pattern and repeated PYQs",
+      "about": "How the 2024 and 2025 endsems were built (19 of 20 questions repeated), with corrected answers to every repeated question"
+    },
+    {
+      "slug": "endsem-set-1",
+      "file": "chapters/endsem-practice-set-1.md",
+      "title": "Practice: Endsem set 1 (PYQ variants)",
+      "about": "A 50-mark, 2025-format paper made of variants of the repeated questions, with worked solutions"
+    },
+    {
+      "slug": "endsem-set-2",
+      "file": "chapters/endsem-practice-set-2.md",
+      "title": "Practice: Endsem set 2 (new syllabus areas)",
+      "about": "A 50-mark paper on modelling, Atkins thermo, central force, rockets and calculus of variations, with worked solutions"
+    },
+    {
+      "slug": "endsem-long",
+      "file": "chapters/endsem-long-answer-bank.md",
+      "title": "Practice: Endsem long-answer bank",
+      "about": "15 five-mark questions in the 2024 Part II style, numerical and conceptual, with no derivations"
+    },
+    {
       "slug": "hw-mechanics",
       "file": "chapters/hw-practice-mechanics.md",
       "title": "HW practice: Mechanics (lectures 1-8, Marion & Thornton)",
