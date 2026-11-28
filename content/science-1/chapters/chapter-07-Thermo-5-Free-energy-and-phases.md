@@ -1149,7 +1149,7 @@ When several things change at once, split the change into simple reversible step
 **The general perfect-gas result** (the integrated form from section 11):
 
 $$
-\boxed{\Delta S = nR\ln\frac{V_f}{V_i} + nC_{V,\mathrm{m}}\ln\frac{T_f}{T_i}}
+{\Delta S = nR\ln\frac{V_f}{V_i} + nC_{V,\mathrm{m}}\ln\frac{T_f}{T_i}}
 $$
 
 The order of the steps does not matter: expand first and then heat, or heat first and then expand. You get the same total either way.
@@ -1715,11 +1715,11 @@ $$
 
 ## Engines and the second law
 
-$$\boxed{\eta = \frac{W}{Q_H} = 1 - \frac{Q_C}{Q_H},\qquad \eta_\text{Carnot} = 1 - \frac{T_C}{T_H}}\qquad \text{COP}_\text{fridge}^\text{max} = \frac{T_C}{T_H - T_C}$$
+$${\eta = \frac{W}{Q_H} = 1 - \frac{Q_C}{Q_H},\qquad \eta_\text{Carnot} = 1 - \frac{T_C}{T_H}}\qquad \text{COP}_\text{fridge}^\text{max} = \frac{T_C}{T_H - T_C}$$
 
 ## Entropy
 
-$$\boxed{dS = \frac{dq_\text{rev}}{T},\qquad \oint\frac{dq}{T} \le 0,\qquad \Delta S_\text{univ} \ge 0}\qquad S = k_B\ln W$$
+$${dS = \frac{dq_\text{rev}}{T},\qquad \oint\frac{dq}{T} \le 0,\qquad \Delta S_\text{univ} \ge 0}\qquad S = k_B\ln W$$
 
 | Process | $\Delta S$ |
 |---|---|
@@ -1739,7 +1739,7 @@ $$\Delta_rS^\circ = \sum\nu S_m^\circ(\text{products}) - \sum\nu S_m^\circ(\text
 
 ## Helmholtz and Gibbs energies
 
-$$\boxed{A = U - TS,\qquad G = H - TS = A + pV,\qquad \Delta G = \Delta H - T\Delta S}$$
+$${A = U - TS,\qquad G = H - TS = A + pV,\qquad \Delta G = \Delta H - T\Delta S}$$
 
 | $\Delta H$ | $\Delta S$ | Spontaneous? |
 |---|---|---|
@@ -1751,7 +1751,7 @@ $\Delta A$ is the maximum total work and $\Delta G$ the maximum non-expansion wo
 
 ## Fundamental equations and Maxwell relations
 
-$$\boxed{dU = T\,dS - p\,dV,\quad dH = T\,dS + V\,dp,\quad dA = -S\,dT - p\,dV,\quad dG = -S\,dT + V\,dp}$$
+$${dU = T\,dS - p\,dV,\quad dH = T\,dS + V\,dp,\quad dA = -S\,dT - p\,dV,\quad dG = -S\,dT + V\,dp}$$
 
 $$\left(\frac{\partial T}{\partial V}\right)_S = -\left(\frac{\partial p}{\partial S}\right)_V,\quad \left(\frac{\partial T}{\partial p}\right)_S = \left(\frac{\partial V}{\partial S}\right)_p,\quad \left(\frac{\partial S}{\partial V}\right)_T = \left(\frac{\partial p}{\partial T}\right)_V,\quad \left(\frac{\partial S}{\partial p}\right)_T = -\left(\frac{\partial V}{\partial T}\right)_p$$
 
@@ -1761,11 +1761,11 @@ $\pi_T = 0$ for a perfect gas and $a/V_m^2$ for a van der Waals gas. Pressure de
 
 ## Phases
 
-$$\boxed{F = C - P + 2},\qquad \mu = G_m,\qquad \left(\frac{\partial\mu}{\partial T}\right)_p = -S_m,\quad \left(\frac{\partial\mu}{\partial p}\right)_T = V_m$$
+$${F = C - P + 2},\qquad \mu = G_m,\qquad \left(\frac{\partial\mu}{\partial T}\right)_p = -S_m,\quad \left(\frac{\partial\mu}{\partial p}\right)_T = V_m$$
 
 For $C = 1$: one phase has $F = 2$ (area), two phases $F = 1$ (line), three phases $F = 0$ (point).
 
-$$\text{Clapeyron: }\frac{dp}{dT} = \frac{\Delta_\text{trs}H}{T\,\Delta_\text{trs}V},\qquad \boxed{\frac{d\ln p}{dT} = \frac{\Delta_\text{vap}H}{RT^2},\quad \ln\frac{p_2}{p_1} = -\frac{\Delta_\text{vap}H}{R}\left(\frac1{T_2} - \frac1{T_1}\right)}$$
+$$\text{Clapeyron: }\frac{dp}{dT} = \frac{\Delta_\text{trs}H}{T\,\Delta_\text{trs}V},\qquad {\frac{d\ln p}{dT} = \frac{\Delta_\text{vap}H}{RT^2},\quad \ln\frac{p_2}{p_1} = -\frac{\Delta_\text{vap}H}{R}\left(\frac1{T_2} - \frac1{T_1}\right)}$$
 
 Trouton's rule: $\Delta_\text{vap}S \approx 85\ \text{J K}^{-1}\text{mol}^{-1}$.
 

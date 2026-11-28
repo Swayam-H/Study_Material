@@ -118,7 +118,7 @@ $$pV = \tfrac13 Nm\langle v^2\rangle = \tfrac23 N\langle E_k\rangle$$
 
 4. Compare with $pV = Nk_BT$:
 
-$$\boxed{\langle E_k\rangle = \tfrac12 m\langle v^2\rangle = \tfrac32 k_BT}\qquad \text{(per mole: } \tfrac32 RT\text{)}$$
+$${\langle E_k\rangle = \tfrac12 m\langle v^2\rangle = \tfrac32 k_BT}\qquad \text{(per mole: } \tfrac32 RT\text{)}$$
 
 $T$ measures the average translational KE. It is independent of mass.
 
@@ -503,7 +503,7 @@ A process is reversible if it can be run backwards with **both** the system and 
 
 The adiabats give $T_HV_2^{\gamma-1} = T_CV_3^{\gamma-1}$ and $T_HV_1^{\gamma-1} = T_CV_4^{\gamma-1}$. Dividing one by the other gives $V_2/V_1 = V_3/V_4$, so:
 
-$$\frac{Q_C}{Q_H} = \frac{T_C}{T_H}\quad\Rightarrow\quad \boxed{\eta_\text{Carnot} = 1 - \frac{T_C}{T_H}}\qquad \text{COP}_\text{fridge,max} = \frac{T_C}{T_H - T_C},\quad \text{COP}_\text{hp,max} = \frac{T_H}{T_H - T_C}$$
+$$\frac{Q_C}{Q_H} = \frac{T_C}{T_H}\quad\Rightarrow\quad {\eta_\text{Carnot} = 1 - \frac{T_C}{T_H}}\qquad \text{COP}_\text{fridge,max} = \frac{T_C}{T_H - T_C},\quad \text{COP}_\text{hp,max} = \frac{T_H}{T_H - T_C}$$
 
 - 500 K / 300 K gives $\eta = 0.40$. Per 1000 J in: $W$ = 400 J and $Q_C$ = 600 J.
 - **P3A.3 numbers** (0.10 mol between 373 K and 273 K, $V_1 = 1.00$ L doubling, $VT^{3/2}$ = const on the adiabats):

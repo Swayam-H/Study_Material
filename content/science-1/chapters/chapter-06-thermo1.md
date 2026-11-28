@@ -5,7 +5,7 @@ Page numbers are the book's printed pages. Study order and homework: [10a-quiz2-
 
 ## Sign convention (get this right first)
 
-$$\begin{gathered}\boxed{\Delta U = Q + W,\qquad W = -\int P_\text{ext}\,dV} \\[4pt] (W = \text{work done ON the system; expansion gives } W < 0)\end{gathered}$$
+$$\begin{gathered}{\Delta U = Q + W,\qquad W = -\int P_\text{ext}\,dV} \\[4pt] (W = \text{work done ON the system; expansion gives } W < 0)\end{gathered}$$
 
 - The tutorial slides ("First law and heat capacities") say $W > 0$ = work done BY the gas. If a question says "work done by", flip the sign.
 - Engines (L3): $Q_H$, $Q_C$, $W$ are **magnitudes**, with $W = Q_H - Q_C$.
@@ -18,7 +18,7 @@ $$\begin{gathered}\boxed{\Delta U = Q + W,\qquad W = -\int P_\text{ext}\,dV} \\[
 - **Zeroth law**: if A and B are each in thermal equilibrium with C, then A and B are in equilibrium. This is why a thermometer works. A metal bench feels colder because it conducts heat away faster; both are at the same $T$.
 - Constant-volume gas thermometer: $P \propto T$, so $T = T_3\,(P/P_3)$ with $T_3 = 273.16$ K. All gases extrapolate to $P = 0$ at $-273.15\ ^\circ$C, which defines absolute zero.
 
-$$\begin{gathered}\boxed{PV = nRT = Nk_BT} \\[4pt] R = 8.314\ \text{J K}^{-1}\text{mol}^{-1} = 0.08314\ \text{L bar K}^{-1}\text{mol}^{-1},\quad k_B = 1.381\times10^{-23}\ \text{J K}^{-1}\end{gathered}$$
+$$\begin{gathered}{PV = nRT = Nk_BT} \\[4pt] R = 8.314\ \text{J K}^{-1}\text{mol}^{-1} = 0.08314\ \text{L bar K}^{-1}\text{mol}^{-1},\quad k_B = 1.381\times10^{-23}\ \text{J K}^{-1}\end{gathered}$$
 
 - Dalton's law: $p_\text{total} = \sum_i p_i$, with $p_i = x_ip$. Exact only in the perfect-gas limit.
 - Trap: when using $R = 0.08314$, keep $V$ in L and $P$ in bar.
@@ -28,16 +28,16 @@ Assumptions: point-like molecules, no forces except elastic collisions, random m
 - One molecule: $\Delta p = 2mv_x$ per hit, time between hits on the same wall $2L/v_x$, so $F = mv_x^2/L$.
 - $N$ molecules and $\langle v_x^2\rangle = \langle v^2\rangle/3$ give
 
-$$\boxed{PV = \tfrac13Nm\langle v^2\rangle = \tfrac23N\langle E_k\rangle}\quad\xrightarrow{\ PV = Nk_BT\ }\quad \boxed{\langle E_k\rangle = \tfrac32k_BT}$$
+$${PV = \tfrac13Nm\langle v^2\rangle = \tfrac23N\langle E_k\rangle}\quad\xrightarrow{\ PV = Nk_BT\ }\quad {\langle E_k\rangle = \tfrac32k_BT}$$
 
 The mean kinetic energy depends on $T$ only, not on the mass.
 
-$$\boxed{v_\text{rms} = \sqrt{\frac{3RT}{M}},\qquad v_\text{mp} = \sqrt{\frac{2RT}{M}},\qquad \bar v = \sqrt{\frac{8RT}{\pi M}}}\qquad v_\text{mp} < \bar v < v_\text{rms}$$
+$${v_\text{rms} = \sqrt{\frac{3RT}{M}},\qquad v_\text{mp} = \sqrt{\frac{2RT}{M}},\qquad \bar v = \sqrt{\frac{8RT}{\pi M}}}\qquad v_\text{mp} < \bar v < v_\text{rms}$$
 
 - For N$_2$ at 300 K these are 422, 476 and 517 m/s. $M$ in **kg/mol** (N$_2$ = 0.028).
 - Maxwell–Boltzmann:
 
-$$\boxed{f(v) = 4\pi\left(\frac{M}{2\pi RT}\right)^{3/2}v^2\,e^{-Mv^2/2RT}}$$
+$${f(v) = 4\pi\left(\frac{M}{2\pi RT}\right)^{3/2}v^2\,e^{-Mv^2/2RT}}$$
 
   The $v^2$ factor means more ways to have a high speed; the exponential means high energy is rare. Raising $T$ moves the peak right and flattens it.
 - $v_\text{mp}$ derivation: $\dfrac{d}{dv}\left(v^2e^{-Mv^2/2RT}\right) = 0$ gives $v^2 = 2RT/M$.
@@ -50,11 +50,11 @@ $$\lambda = \frac{v_\text{rel}}{z} = \frac{k_BT}{\sigma p}$$
 
 ## 3. Real gases (Atkins 1C, p.19-27)
 
-$$\boxed{Z = \frac{PV_m}{RT}}$$
+$${Z = \frac{PV_m}{RT}}$$
 
 $Z = 1$ is ideal; $Z < 1$ means attraction dominates; $Z > 1$ means repulsion (size) dominates, which happens at high $P$.
 
-$$\begin{gathered}\boxed{\left(P + \frac{a}{V_m^2}\right)(V_m - b) = RT\quad\Longleftrightarrow\quad P = \frac{RT}{V_m - b} - \frac{a}{V_m^2}} \\[4pt] (\text{van der Waals})\end{gathered}$$
+$$\begin{gathered}{\left(P + \frac{a}{V_m^2}\right)(V_m - b) = RT\quad\Longleftrightarrow\quad P = \frac{RT}{V_m - b} - \frac{a}{V_m^2}} \\[4pt] (\text{van der Waals})\end{gathered}$$
 
 - $b$ is the excluded volume (repulsion). $a/V_m^2$ is the pressure reduction from attraction; it goes as $(n/V)^2$ because attraction needs pairs of molecules.
 - Tutorial 4 (5 mol in 1 L, 298 K): ideal 124 bar; N$_2$ 119 bar ($Z = 0.96$); He 140 bar ($Z = 1.13$).
@@ -69,7 +69,7 @@ $$T_c = \frac{8a}{27Rb},\quad V_c = 3b,\quad p_c = \frac{a}{27b^2},\qquad Z = 1 
 - $|W|$ is the area under the $P$–$V$ path, so it is a path function. $Q$ is also a path function. Their sum $\Delta U$ is a state function.
 - Quasi-static means a sequence of equilibrium states. Reversible = quasi-static + no friction.
 
-$$\begin{gathered}\boxed{W_\text{rev,iso} = -nRT\ln\frac{V_2}{V_1}},\quad \Delta U = 0,\quad Q = -W \\[4pt] (1\text{ mol, 300 K, 10}\to\text{20 L}: W = -1.73\text{ kJ})\end{gathered}$$
+$$\begin{gathered}{W_\text{rev,iso} = -nRT\ln\frac{V_2}{V_1}},\quad \Delta U = 0,\quad Q = -W \\[4pt] (1\text{ mol, 300 K, 10}\to\text{20 L}: W = -1.73\text{ kJ})\end{gathered}$$
 
 - **Free expansion** (insulated, into vacuum): $Q = 0$, $W = 0$, $\Delta U = 0$, so $\Delta T = 0$ for an ideal gas.
 - Against a constant external pressure: $W = -P_\text{ext}\Delta V$, which is less work than reversible.
@@ -80,7 +80,7 @@ $$\begin{gathered}\boxed{W_\text{rev,iso} = -nRT\ln\frac{V_2}{V_1}},\quad \Delta
 
 ## 5. Heat capacity and enthalpy (Atkins 2A.4, 2B, p.42-50)
 
-$$\boxed{C_V = \left(\frac{\partial U}{\partial T}\right)_V,\qquad C_P = \left(\frac{\partial H}{\partial T}\right)_P}\qquad \boxed{H = U + PV,\qquad \Delta H = Q_P}$$
+$${C_V = \left(\frac{\partial U}{\partial T}\right)_V,\qquad C_P = \left(\frac{\partial H}{\partial T}\right)_P}\qquad {H = U + PV,\qquad \Delta H = Q_P}$$
 
 ($\Delta H = Q_P$ holds at constant $P$ with no extra work.)
 
@@ -91,9 +91,9 @@ $$\boxed{C_{P,m} - C_{V,m} = R,\qquad \gamma = \frac{C_P}{C_V}}\qquad(\text{idea
 | monatomic | $\tfrac32R$ | $\tfrac52R$ | $5/3$ |
 | diatomic (vibration frozen at room $T$) | $\tfrac52R$ | $\tfrac72R$ | $7/5$ |
 
-- For an ideal gas $\boxed{\Delta U = nC_V\Delta T}$ for **every** process, because $U$ depends on $T$ only.
+- For an ideal gas ${\Delta U = nC_V\Delta T}$ for **every** process, because $U$ depends on $T$ only.
 - Constant-$P$ heating of 1 mol monatomic gas by 100 K: $Q = +2.08$ kJ, $W = -0.83$ kJ, $\Delta U = +1.25$ kJ.
-- **[beyond slides]** Reactions with gases: $\boxed{\Delta H = \Delta U + \Delta n_gRT}$, where $\Delta n_g$ is the change in moles of gas (2B.1; homework E2B.2, E2C.6). Real heat capacities vary with $T$: $C_{p,m} = a + bT + c/T^2$, so integrate (2B.2; homework Ex 2B.2, E2B.3).
+- **[beyond slides]** Reactions with gases: ${\Delta H = \Delta U + \Delta n_gRT}$, where $\Delta n_g$ is the change in moles of gas (2B.1; homework E2B.2, E2C.6). Real heat capacities vary with $T$: $C_{p,m} = a + bT + c/T^2$, so integrate (2B.2; homework Ex 2B.2, E2B.3).
 
 ## 6. Ideal-gas processes (Atkins 2E, p.67-69)
 
@@ -104,7 +104,7 @@ $$\boxed{C_{P,m} - C_{V,m} = R,\qquad \gamma = \frac{C_P}{C_V}}\qquad(\text{idea
 | Isothermal (rev) | $-nRT\ln(V_2/V_1)$ | $-W$ | $0$ |
 | Adiabatic (rev) | $nC_V\Delta T$ | $0$ | $nC_V\Delta T$ |
 
-$$\boxed{TV^{\gamma - 1} = \text{const},\qquad PV^\gamma = \text{const}}\qquad(\text{reversible adiabatic})$$
+$${TV^{\gamma - 1} = \text{const},\qquad PV^\gamma = \text{const}}\qquad(\text{reversible adiabatic})$$
 
 - Derivation: $nC_V\,dT = -(nRT/V)\,dV$, then integrate using $R/C_V = \gamma - 1$.
 - The adiabat is steeper than the isotherm because $\gamma > 1$. Compression heats the gas. Fire syringe: $T_2 = 300\cdot10^{0.4} = 754$ K, $P_2 = 25$ bar.
@@ -117,12 +117,12 @@ $$\boxed{TV^{\gamma - 1} = \text{const},\qquad PV^\gamma = \text{const}}\qquad(\
 
 ## 7. Differentials, Joule and Joule-Thomson (Atkins 2D, p.59-66)
 
-$$\begin{gathered}dU = C_V\,dT + \pi_T\,dV \\[4pt] \boxed{\pi_T = \left(\frac{\partial U}{\partial V}\right)_T = T\left(\frac{\partial p}{\partial T}\right)_V - p} \\[4pt] (\text{perfect gas } 0;\ \text{vdW } a/V_m^2 > 0)\end{gathered}$$
+$$\begin{gathered}dU = C_V\,dT + \pi_T\,dV \\[4pt] {\pi_T = \left(\frac{\partial U}{\partial V}\right)_T = T\left(\frac{\partial p}{\partial T}\right)_V - p} \\[4pt] (\text{perfect gas } 0;\ \text{vdW } a/V_m^2 > 0)\end{gathered}$$
 
 - Joule's experiment saw no $\Delta T$ only because the water bath swamped it. Real gases cool slightly on free expansion (N$_2$ doubling: $\Delta T \approx -0.13$ K in the gas alone).
 - **Joule–Thomson**: steady throttling through a plug, $Q = 0$, so $H_i = H_f$ (isenthalpic).
 
-$$\begin{gathered}\boxed{\mu_{JT} = \left(\frac{\partial T}{\partial p}\right)_H} \\[4pt] (\mu > 0: \text{cools};\ \mu < 0: \text{warms}) \\[4pt] \mu \approx \frac{1}{C_{P,m}}\left(\frac{2a}{RT} - b\right) \\[4pt] \boxed{T_I = \frac{2a}{Rb}}\end{gathered}$$
+$$\begin{gathered}{\mu_{JT} = \left(\frac{\partial T}{\partial p}\right)_H} \\[4pt] (\mu > 0: \text{cools};\ \mu < 0: \text{warms}) \\[4pt] \mu \approx \frac{1}{C_{P,m}}\left(\frac{2a}{RT} - b\right) \\[4pt] {T_I = \frac{2a}{Rb}}\end{gathered}$$
 
 - Molecular picture: when attractions dominate, molecules climb out of potential wells and slow down (cooling); when repulsions dominate, the gas warms. High $T$ favours repulsions. For N$_2$, $T_I \approx 850$ K from vdW (measured 621 K).
 - Data: CO$_2$ $\mu = +1.1$ K/atm; N$_2$ $+0.27$; H$_2$ $-0.03$ ($T_I \sim 200$ K); He $-0.06$ ($T_I \sim 40$ K). H$_2$ and He warm when throttled at room $T$.
@@ -134,13 +134,13 @@ $$\begin{gathered}\boxed{\mu_{JT} = \left(\frac{\partial T}{\partial p}\right)_H
 ## 8. Second law and engines (Atkins 3A.1, 3A.3, p.78-86; slides L3)
 - Over a cycle $\Delta U = 0$, so $Q_\text{net} = -W_\text{net}$. The work equals the enclosed area (clockwise is an engine).
 
-$$\begin{gathered}\boxed{\eta = \frac{W}{Q_H} = 1 - \frac{Q_C}{Q_H}} \\[4pt] \boxed{\text{COP}_\text{fridge} = \frac{Q_C}{W},\qquad \text{COP}_\text{heat pump} = \frac{Q_H}{W}} \\[4pt] (\text{COP can exceed } 1)\end{gathered}$$
+$$\begin{gathered}{\eta = \frac{W}{Q_H} = 1 - \frac{Q_C}{Q_H}} \\[4pt] {\text{COP}_\text{fridge} = \frac{Q_C}{W},\qquad \text{COP}_\text{heat pump} = \frac{Q_H}{W}} \\[4pt] (\text{COP can exceed } 1)\end{gathered}$$
 
 - **Kelvin–Planck**: no cyclic device converts heat from a single reservoir entirely into work. **Clausius**: no cyclic device moves heat cold $\to$ hot with no other effect. A perfect fridge combined with an ordinary engine gives a 100% engine, so the two are equivalent.
 - Irreversibility sources: friction, finite-$\Delta T$ heat flow, free expansion, mixing, fast change.
 - **Carnot cycle**: isothermal expansion at $T_H$ ($Q_H = nRT_H\ln(V_2/V_1)$), adiabatic expansion, isothermal compression at $T_C$, adiabatic compression. The adiabats force $V_2/V_1 = V_3/V_4$, so
 
-$$\begin{gathered}\boxed{\frac{Q_C}{Q_H} = \frac{T_C}{T_H},\qquad \eta_\text{Carnot} = 1 - \frac{T_C}{T_H}} \\[4pt] \boxed{\text{COP}_\text{fridge,max} = \frac{T_C}{T_H - T_C},\quad \text{COP}_\text{hp,max} = \frac{T_H}{T_H - T_C}}\end{gathered}$$
+$$\begin{gathered}{\frac{Q_C}{Q_H} = \frac{T_C}{T_H},\qquad \eta_\text{Carnot} = 1 - \frac{T_C}{T_H}} \\[4pt] {\text{COP}_\text{fridge,max} = \frac{T_C}{T_H - T_C},\quad \text{COP}_\text{hp,max} = \frac{T_H}{T_H - T_C}}\end{gathered}$$
 
 - Carnot's theorem: no engine beats a reversible one, and all reversible engines between the same two reservoirs are equally efficient (proof: run the Carnot engine backwards and use the Clausius statement).
 - Kelvin scale: $T_C/T_H \equiv Q_C/Q_H$ for a reversible engine.
@@ -150,24 +150,24 @@ $$\begin{gathered}\boxed{\frac{Q_C}{Q_H} = \frac{T_C}{T_H},\qquad \eta_\text{Car
 ## 9. Entropy (Atkins 3A.2, 3A.3(c), 3B, p.80-91; slides L4)
 - Carnot gives $Q_H/T_H + Q_C/T_C = 0$ (signed heats), so $\oint dQ_\text{rev}/T = 0$. In general:
 
-$$\begin{gathered}\boxed{\oint\frac{dQ}{T} \le 0\ \ (\text{Clausius}),\qquad dS = \frac{dQ_\text{rev}}{T}} \\[4pt] (1/T \text{ is the integrating factor; for any process, invent a reversible path})\end{gathered}$$
+$$\begin{gathered}{\oint\frac{dQ}{T} \le 0\ \ (\text{Clausius}),\qquad dS = \frac{dQ_\text{rev}}{T}} \\[4pt] (1/T \text{ is the integrating factor; for any process, invent a reversible path})\end{gathered}$$
 
 | Process | $\Delta S$ |
 |---|---|
-| isothermal ideal gas | $\boxed{nR\ln(V_f/V_i)}$ |
-| heating ($C$ constant) | $\boxed{C\ln(T_f/T_i)}$ ($C_P$ at constant $P$, $C_V$ at constant $V$) |
-| phase change at $T_\text{trs}$ | $\boxed{\Delta H_\text{trs}/T_\text{trs}}$ |
+| isothermal ideal gas | ${nR\ln(V_f/V_i)}$ |
+| heating ($C$ constant) | ${C\ln(T_f/T_i)}$ ($C_P$ at constant $P$, $C_V$ at constant $V$) |
+| phase change at $T_\text{trs}$ | ${\Delta H_\text{trs}/T_\text{trs}}$ |
 | both $V$ and $T$ change | $nR\ln(V_f/V_i) + nC_{V,m}\ln(T_f/T_i)$ **[beyond slides]** |
 
 - Trouton: $\Delta S_\text{vap} \approx 85$ J K$^{-1}$ mol$^{-1}$. Water is higher (109) because of hydrogen bonding. Vaporisation $\gg$ fusion (22 for ice).
 - $\Delta S_\text{gas}$ is the same for reversible and free expansion; only $\Delta S_\text{surr}$ and $\Delta S_\text{univ}$ differ (reversible: $\Delta S_\text{univ} = 0$; free: $\Delta S_\text{univ} = +nR\ln2$).
 - Heat flow $Q$ from $T_H$ to $T_C$: $\Delta S_\text{univ} = Q\left(\dfrac1{T_C} - \dfrac1{T_H}\right) > 0$.
 
-$$\boxed{\Delta S_\text{isolated} \ge 0,\qquad \Delta S_\text{univ} = \Delta S_\text{sys} + \Delta S_\text{surr} \ge 0}$$
+$${\Delta S_\text{isolated} \ge 0,\qquad \Delta S_\text{univ} = \Delta S_\text{sys} + \Delta S_\text{surr} \ge 0}$$
 
   A system can lose entropy if the surroundings gain more (freezing water).
 
-$$\boxed{S = k_B\ln W},\qquad W = \frac{N!}{n!\,(N - n)!}\ (\text{left/right box})$$
+$${S = k_B\ln W},\qquad W = \frac{N!}{n!\,(N - n)!}\ (\text{left/right box})$$
 
 - Doubling the volume gives $W_f/W_i = 2^N$, so $\Delta S = Nk\ln2 = nR\ln2$, matching Clausius. The log makes $S$ additive.
 - For large $N$ the width is $\sim 1/\sqrt N$, so "irreversible" means overwhelmingly improbable to reverse.
@@ -180,9 +180,9 @@ $$\boxed{S = k_B\ln W},\qquad W = \frac{N!}{n!\,(N - n)!}\ (\text{left/right box
 - Physical change: $\Delta_\text{sub}H^\circ = \Delta_\text{fus}H^\circ + \Delta_\text{vap}H^\circ$ at the same $T$. Reversing a process flips the sign of $\Delta H$.
 - **Hess's law**: the standard enthalpy of an overall reaction is the sum of those of the steps it can be split into (homework Ex 2C.1).
 
-$$\begin{gathered}\boxed{\Delta_\text{r}H^\circ = \sum\nu\,\Delta_\text{f}H^\circ(\text{products}) - \sum\nu\,\Delta_\text{f}H^\circ(\text{reactants})} \\[4pt] (\Delta_\text{f}H^\circ = 0 \text{ for an element in its reference state})\end{gathered}$$
+$$\begin{gathered}{\Delta_\text{r}H^\circ = \sum\nu\,\Delta_\text{f}H^\circ(\text{products}) - \sum\nu\,\Delta_\text{f}H^\circ(\text{reactants})} \\[4pt] (\Delta_\text{f}H^\circ = 0 \text{ for an element in its reference state})\end{gathered}$$
 
-$$\begin{gathered}\boxed{\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \int_{T_1}^{T_2}\Delta_\text{r}C_p^\circ\,dT} \\[4pt] (\text{Kirchhoff; constant } \Delta_\text{r}C_p^\circ: + \Delta_\text{r}C_p^\circ(T_2 - T_1))\end{gathered}$$
+$$\begin{gathered}{\Delta_\text{r}H^\circ(T_2) = \Delta_\text{r}H^\circ(T_1) + \int_{T_1}^{T_2}\Delta_\text{r}C_p^\circ\,dT} \\[4pt] (\text{Kirchhoff; constant } \Delta_\text{r}C_p^\circ: + \Delta_\text{r}C_p^\circ(T_2 - T_1))\end{gathered}$$
 
 - A bomb calorimeter gives $\Delta_\text{r}U$; convert with $\Delta_\text{r}H = \Delta_\text{r}U + \Delta n_gRT$ (homework E2C.4, E2C.6).
 - DSC: integrating the excess heat capacity $C_{p,\text{ex}}$ over the transition gives the transition enthalpy (homework P2C.10).
@@ -2154,7 +2154,7 @@ $$
 **Step 3.** Treat the gases as perfect: pV = n\_g RT. At a fixed temperature, Δ(pV) = Δn\_g RT, so
 
 $$
-\boxed{\Delta_\text{r}H = \Delta_\text{r}U + \Delta n_\text{g}\,RT}
+{\Delta_\text{r}H = \Delta_\text{r}U + \Delta n_\text{g}\,RT}
 $$
 
 Here Δn\_g = (moles of gaseous products) − (moles of gaseous reactants) per mole of reaction as written. It is a pure number in this formula, and RT ≈ 2.48 kJ mol⁻¹ at 298 K.
