@@ -56,6 +56,7 @@ Some answers in the 2024 handwritten key are off. Corrected values are marked **
 
 ## 4. Practice pages
 
+- **Practice: 2025 endsem** and **Practice: 2024 endsem**: the original papers (in-syllabus questions only) with worked solutions.
 - **Practice: Endsem set 1**: a full 50-mark paper in the 2025 format, built as variants of the repeated questions.
 - **Practice: Endsem set 2**: a full 50-mark paper on this year's new syllabus areas (modelling, Atkins thermo, central force, rocket, calculus of variations).
 - **Practice: Endsem long-answer bank**: 15 five-mark questions in the 2024 Part II style.

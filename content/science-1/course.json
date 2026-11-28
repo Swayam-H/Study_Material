@@ -100,6 +100,18 @@
       "about": "How the 2024 and 2025 endsems were built (19 of 20 questions repeated), with corrected answers to every repeated question"
     },
     {
+      "slug": "pyq-2025",
+      "file": "chapters/pyq-2025-endsem.md",
+      "title": "Practice: 2025 endsem (original paper)",
+      "about": "The 2025 paper's in-syllabus questions as set, with worked solutions. This is the format to expect"
+    },
+    {
+      "slug": "pyq-2024",
+      "file": "chapters/pyq-2024-endsem.md",
+      "title": "Practice: 2024 endsem (original paper)",
+      "about": "The 2024 paper's in-syllabus questions, Part I and Part II, with worked solutions and corrections to the circulated key"
+    },
+    {
       "slug": "endsem-set-1",
       "file": "chapters/endsem-practice-set-1.md",
       "title": "Practice: Endsem set 1 (PYQ variants)",
